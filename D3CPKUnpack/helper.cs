@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 
 namespace D3CPKUnpack
@@ -251,6 +252,21 @@ namespace D3CPKUnpack
         public ulong GetFileHash(string szFilename)
         {
             return Hash64(szFilename.ToLower());
-        }                
+        }
+
+        public static byte[] DecompressZlib(byte[] input)
+        {
+            MemoryStream source = new MemoryStream(input);
+            byte[] result = null;
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                using (InflaterInputStream inf = new InflaterInputStream(source))
+                {
+                    inf.CopyTo(outStream);
+                }
+                result = outStream.ToArray();
+            }
+            return result;
+        }
     }
 }

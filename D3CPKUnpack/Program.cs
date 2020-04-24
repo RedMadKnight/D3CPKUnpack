@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace D3CPKUnpack
@@ -11,6 +12,7 @@ namespace D3CPKUnpack
         public static cpk.CompressedSectorToDecompressedOffset[] CompressedSectorToDecompressedOffset;
         public static cpk.DecompressedSectorToCompressedSector[] DecompressedSectorToCompressedSector;
         public static cpk.FileName[] FileName;
+        public static Dictionary<uint, cpk.CompressedSectorChunk> DictCompressedSectorChunk;
         public static int rev;
 
 
@@ -72,8 +74,8 @@ namespace D3CPKUnpack
         {
             string path = "";
             if (args.Length == 0)
-                 //path = "C:\\ServerCommon.cpk";
-            path = "C:\\plPL_CacheCommon.cpk";
+                 path = "C:\\ServerCommon.cpk";
+            //path = "C:\\plPL_CacheCommon.cpk";
             else
                 path = args[0];
             helper help = new helper();
@@ -86,6 +88,7 @@ namespace D3CPKUnpack
             CompressedSectorToDecompressedOffset = cpk.CompressedSectorToDecompressedOffset.Read_CompressedSectorToDecompressedOffset(fs);
             DecompressedSectorToCompressedSector = cpk.DecompressedSectorToCompressedSector.Read_DecompressedSectorToCompressedSector(fs);
             FileName = cpk.FileName.Read_FileName(fs);
+            DictCompressedSectorChunk = cpk.CompressedSectorChunk.ReadSectors(fs);
             WriteHeader();        
             //WriteLocations(10);
             //WriteCompressedSectorToDecompressedOffset(CompressedSectorToDecompressedOffset.Length-1);

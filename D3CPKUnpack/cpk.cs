@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace D3CPKUnpack
@@ -245,6 +246,60 @@ namespace D3CPKUnpack
                     result[i].filename = help.ReadString(s);
                     result[i].fileHash = help.GetFileHash(result[i].filename);
                     break;
+                }
+                return result;
+            }
+        }
+
+        public class CompressedSectorChunk
+        {
+            public uint nr = 0;
+            public uint position = 0;
+            public ushort CompChunkSize = 0;
+            public ushort DecompChunkSize = 0;
+            public ushort flag = 0;
+            public uint CompSector = 0;
+
+            public static Dictionary<uint, CompressedSectorChunk> ReadSectors(Stream s)
+            {
+                helper help = new helper();
+                CompressedSectorChunk csc = new CompressedSectorChunk();
+                uint a = 0;
+                uint pos = (uint)s.Position & 0xFFFF0000;
+                if ((s.Position % 0x10000) != 0)
+                    pos += 0x10000;
+                uint sector = 1;
+                uint next_sector = pos + 0x4000;
+                Dictionary<uint, CompressedSectorChunk> result = new Dictionary<uint, CompressedSectorChunk>();
+                pos += 6; //skip first empty record
+                s.Seek(pos, 0); 
+                while (true)
+                {
+                    pos = (uint)s.Position;
+                    if (pos + 0xf > next_sector)
+                    {
+                        pos = next_sector;
+                        next_sector += 0x4000;
+                        s.Seek(pos, 0);
+                        sector++;
+                        if (next_sector > s.Length)
+                            break;
+                    }
+                    a++;
+                    ushort Size = help.ReadU16(s);
+                    ushort flag = help.ReadU16(s);
+                    ushort ComSectorSize = help.ReadU16(s);
+                    if (ComSectorSize == 0)
+                        break;
+                    csc = new CompressedSectorChunk();
+                    csc.nr = a;
+                    csc.position = pos;
+                    csc.CompChunkSize = ComSectorSize;
+                    csc.DecompChunkSize = Size;
+                    csc.flag = flag;
+                    csc.CompSector = sector;
+                    result.Add(pos, csc);
+                    s.Seek(ComSectorSize, SeekOrigin.Current);
                 }
                 return result;
             }
