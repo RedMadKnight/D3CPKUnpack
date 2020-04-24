@@ -85,9 +85,9 @@ namespace D3CPKUnpack
         {
             string path = "";
             if (args.Length == 0)
-                //path = "C:\\ServerCommon.cpk";
+                path = "C:\\ServerCommon.cpk";
                 //path = "C:\\enUS_CacheCommon.cpk";
-                path = "C:\\plPL_CacheCommon.cpk";
+                //path = "C:\\plPL_CacheCommon.cpk";
             else
                 path = args[0];
             helper help = new helper();
@@ -108,7 +108,7 @@ namespace D3CPKUnpack
             WriteCompressedSectorToDecompressedOffset(CompressedSectorToDecompressedOffset.Length-1);
             WriteDecompressedSectorToCompressedSector(10);
             WriteFileName(0);
-            WriteFileName(1);
+            WriteFileName(13078);
             WriteChunckSectorInfo(0);
 
             fs.Close();

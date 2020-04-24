@@ -270,8 +270,7 @@ namespace D3CPKUnpack
                 uint sector = 0;
                 uint next_sector = pos + 0x4000;
                 s.Seek(pos, 0);
-                Dictionary<uint, CompressedSectorChunk> result = new Dictionary<uint, CompressedSectorChunk>();
-                help.ReadU16(s); help.ReadU16(s); s.Seek(help.ReadU16(s), SeekOrigin.Current);
+                Dictionary<uint, CompressedSectorChunk> result = new Dictionary<uint, CompressedSectorChunk>();               
                 if (Header.MagicNumber.ToString("X8").Equals("A1B2C3D4"))
                 {
                     help.ReadU16(s); help.ReadU16(s); s.Seek(help.ReadU16(s), SeekOrigin.Current);
