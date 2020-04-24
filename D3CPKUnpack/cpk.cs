@@ -34,7 +34,7 @@ namespace D3CPKUnpack
                 FileSize = (uint)s.Position;
                 helper help = new helper();
                 s.Seek(0, 0);
-                MagicNumber = help.RUInt32(s, rev);
+                MagicNumber = help.ReadU32(s);
                 PackageVersion = help.RUInt32(s, rev);
                 DecompressedFileSize = help.RUInt64(s, rev);
                 Flags = help.RUInt32(s, rev);
@@ -234,9 +234,9 @@ namespace D3CPKUnpack
                 {
                     FileName fn = new FileName();
                     if (Header.MagicNumber.ToString("X8").Equals("A1B2C3D4"))
-                        fn.offset = help.ReverseUInt32(help.ReadU32(s));
-                    if (Header.MagicNumber.ToString("X8").Equals("D4C3B2A1"))
                         fn.offset = help.ReadU32(s);
+                    if (Header.MagicNumber.ToString("X8").Equals("D4C3B2A1"))           
+                        fn.offset = help.ReverseUInt32(help.ReadU32(s));
                     result[i] = fn;
                 }
                 long pos = s.Position;
@@ -245,7 +245,6 @@ namespace D3CPKUnpack
                     s.Seek(pos + result[i].offset, 0);
                     result[i].filename = help.ReadString(s);
                     result[i].fileHash = help.GetFileHash(result[i].filename);
-                    break;
                 }
                 return result;
             }
@@ -268,11 +267,19 @@ namespace D3CPKUnpack
                 uint pos = (uint)s.Position & 0xFFFF0000;
                 if ((s.Position % 0x10000) != 0)
                     pos += 0x10000;
-                uint sector = 1;
+                uint sector = 0;
                 uint next_sector = pos + 0x4000;
+                s.Seek(pos, 0);
                 Dictionary<uint, CompressedSectorChunk> result = new Dictionary<uint, CompressedSectorChunk>();
-                pos += 6; //skip first empty record
-                s.Seek(pos, 0); 
+                help.ReadU16(s); help.ReadU16(s); s.Seek(help.ReadU16(s), SeekOrigin.Current);
+                if (Header.MagicNumber.ToString("X8").Equals("A1B2C3D4"))
+                {
+                    help.ReadU16(s); help.ReadU16(s); s.Seek(help.ReadU16(s), SeekOrigin.Current);
+                }
+                if (Header.MagicNumber.ToString("X8").Equals("D4C3B2A1"))
+                {
+                    help.ReverseUInt16(help.ReadU16(s)); help.ReverseUInt16(help.ReadU16(s)); s.Seek(help.ReverseUInt16(help.ReadU16(s)), SeekOrigin.Current);
+                }
                 while (true)
                 {
                     pos = (uint)s.Position;
@@ -298,8 +305,23 @@ namespace D3CPKUnpack
                     csc.DecompChunkSize = Size;
                     csc.flag = flag;
                     csc.CompSector = sector;
-                    result.Add(pos, csc);
+                    result.Add(a, csc);
                     s.Seek(ComSectorSize, SeekOrigin.Current);
+                }
+                return result;
+            }
+
+            public static CompressedSectorChunk[] Read_CompressedSectorChunk(Dictionary<uint, CompressedSectorChunk> d)
+            {
+                uint count = 0;
+                CompressedSectorChunk csc = new CompressedSectorChunk();
+                CompressedSectorChunk[] result = new CompressedSectorChunk[d.Count];
+                foreach (KeyValuePair<uint, cpk.CompressedSectorChunk> pair in d)
+                {
+                    csc = new CompressedSectorChunk();
+                    csc = pair.Value;
+                    result[count] = csc;
+                    count++;
                 }
                 return result;
             }

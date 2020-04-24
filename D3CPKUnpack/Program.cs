@@ -13,6 +13,7 @@ namespace D3CPKUnpack
         public static cpk.DecompressedSectorToCompressedSector[] DecompressedSectorToCompressedSector;
         public static cpk.FileName[] FileName;
         public static Dictionary<uint, cpk.CompressedSectorChunk> DictCompressedSectorChunk;
+        public static cpk.CompressedSectorChunk[] CompressedSectorChunk;
         public static int rev;
 
 
@@ -65,17 +66,28 @@ namespace D3CPKUnpack
 
         public static void WriteFileName(int i)
         {
-            Console.WriteLine(i.ToString("d3") + ": offset :\t" + FileName[i].offset.ToString("X8"));
+          //  Console.WriteLine(i.ToString("d3") + ": offset :\t" + FileName[i].offset.ToString("X8"));
             Console.WriteLine(i.ToString("d3") + ": fileHash :\t" + FileName[i].fileHash.ToString("X16"));
             Console.WriteLine(i.ToString("d3") + ": filename :\t" + FileName[i].filename.ToString());
+        }
+
+        public static void WriteChunckSectorInfo(int i)
+        {
+            Console.WriteLine(i.ToString("d3") + ": nr :\t" + CompressedSectorChunk[i].nr.ToString("d6"));
+            Console.WriteLine(i.ToString("d3") + ": position :\t" + CompressedSectorChunk[i].position.ToString("X10"));
+            Console.WriteLine(i.ToString("d3") + ": CompChunkSize :\t" + CompressedSectorChunk[i].CompChunkSize.ToString("d6"));
+            Console.WriteLine(i.ToString("d3") + ": DecompChunkSize :\t" + CompressedSectorChunk[i].DecompChunkSize.ToString("d6"));
+            Console.WriteLine(i.ToString("d3") + ": flag :\t" + CompressedSectorChunk[i].flag.ToString("d6"));
+            Console.WriteLine(i.ToString("d3") + ": CompSector :\t" + CompressedSectorChunk[i].CompSector.ToString("d6"));
         }
 
         static void Main(string[] args)
         {
             string path = "";
             if (args.Length == 0)
-                 path = "C:\\ServerCommon.cpk";
-            //path = "C:\\plPL_CacheCommon.cpk";
+                //path = "C:\\ServerCommon.cpk";
+                //path = "C:\\enUS_CacheCommon.cpk";
+                path = "C:\\plPL_CacheCommon.cpk";
             else
                 path = args[0];
             helper help = new helper();
@@ -89,11 +101,16 @@ namespace D3CPKUnpack
             DecompressedSectorToCompressedSector = cpk.DecompressedSectorToCompressedSector.Read_DecompressedSectorToCompressedSector(fs);
             FileName = cpk.FileName.Read_FileName(fs);
             DictCompressedSectorChunk = cpk.CompressedSectorChunk.ReadSectors(fs);
-            WriteHeader();        
-            //WriteLocations(10);
-            //WriteCompressedSectorToDecompressedOffset(CompressedSectorToDecompressedOffset.Length-1);
-            //WriteDecompressedSectorToCompressedSector(10);
-            //WriteFileName(0);
+            CompressedSectorChunk = cpk.CompressedSectorChunk.Read_CompressedSectorChunk(DictCompressedSectorChunk);
+
+            WriteHeader();
+            WriteLocations(10);
+            WriteCompressedSectorToDecompressedOffset(CompressedSectorToDecompressedOffset.Length-1);
+            WriteDecompressedSectorToCompressedSector(10);
+            WriteFileName(0);
+            WriteFileName(1);
+            WriteChunckSectorInfo(0);
+
             fs.Close();
             Console.ReadKey();
         }
