@@ -19,6 +19,7 @@ namespace D3CPKUnpack
 
         public static void WriteHeader()
         {
+            Console.WriteLine("Header");
             Console.WriteLine("MagicNumber :\t" + HeaderStruct.MagicNumber.ToString("X8"));
             Console.WriteLine("PackageVersion :\t" + HeaderStruct.PackageVersion.ToString());
             Console.WriteLine("DecompressedFileSize :\t" + HeaderStruct.DecompressedFileSize.ToString());
@@ -39,15 +40,16 @@ namespace D3CPKUnpack
 
         public static void WriteFileInfo(int i)
         {
+            Console.WriteLine("FileInfo");
             Console.WriteLine(i.ToString("d5") + ": dwHash :\t" + SortedFileInfo[i].dwHash.ToString("X16"));
             Console.WriteLine(i.ToString("d5") + ": nSize :\t" + SortedFileInfo[i].nSize.ToString());
             Console.WriteLine(i.ToString("d5") + ": nLocationCount :\t" + SortedFileInfo[i].nLocationCount.ToString());
             Console.WriteLine(i.ToString("d5") + ": nLocationIndex :\t" + SortedFileInfo[i].nLocationIndex.ToString());
-            Console.ReadKey();
         }
 
         public static void WriteLocations(int i)
         {
+            Console.WriteLine("Location");
             Console.WriteLine(i.ToString("d3") + ": index :\t" + Locations[i].index.ToString("d5"));
             Console.WriteLine(i.ToString("d3") + ": offset :\t" + Locations[i].offset.ToString("X16"));
         }
@@ -75,6 +77,7 @@ namespace D3CPKUnpack
 
         public static void WriteFileName(int i)
         {
+            Console.WriteLine("FileeName");
             Console.WriteLine(i.ToString("d3") + ": offset :\t" + FileName[i].offset.ToString("X8"));
             Console.WriteLine(i.ToString("d3") + ": fileHash :\t" + FileName[i].fileHash.ToString("X16"));
             Console.WriteLine(i.ToString("d3") + ": filename :\t" + FileName[i].filename.ToString());
@@ -82,6 +85,7 @@ namespace D3CPKUnpack
 
         public static void WriteChunckSectorInfo(int i)
         {
+            Console.WriteLine("ChunckSector");
             Console.WriteLine(i.ToString("d3") + ": nr :\t" + CompressedSectorChunk[i].nr.ToString("d6"));
             Console.WriteLine(i.ToString("d3") + ": position :\t" + CompressedSectorChunk[i].position.ToString("X10"));
             Console.WriteLine(i.ToString("d3") + ": CompChunkSize :\t" + CompressedSectorChunk[i].CompChunkSize.ToString("d6"));
@@ -101,8 +105,8 @@ namespace D3CPKUnpack
         {
             string path = "";
             if (args.Length == 0)
-                path = "C:\\ServerCommon.cpk";
-            //path = "C:\\enUS_CacheCommon.cpk";
+            //path = "C:\\ServerCommon.cpk";
+            path = "C:\\enUS_CacheCommon.cpk";
             //path = "C:\\plPL_CacheCommon.cpk";
             else
                 path = args[0];
@@ -120,15 +124,26 @@ namespace D3CPKUnpack
             CompressedSectorChunk = cpk.CompressedSectorChunk.Read_CompressedSectorChunk(DictCompressedSectorChunk);
 
             WriteHeader();
-            WriteLocations(10);
-            WriteCompressedSectorToDecompressedOffset(CompressedSectorToDecompressedOffset.Length - 1);
-            WriteDecompressedSectorToCompressedSector(10);
-            WriteFileName(0);
-            WriteFileName(13078);
-            WriteChunckSectorInfo(0);
-            uint idx = 0;
-            string[] split = FileName[FindLocationIndex(idx)].filename.Split(new Char[] { '\\' });
-            File.WriteAllBytes(split[1], GetChunck(fs, (int)idx, rev));
+            uint idx = 200;
+            uint udx = FindLocationIndex(idx);
+            WriteFileInfo((int)idx);
+            WriteLocations((int)udx);
+            //WriteCompressedSectorToDecompressedOffset(0);
+            //WriteDecompressedSectorToCompressedSector(0);
+            WriteFileName((int)udx);
+            WriteChunckSectorInfo((int)udx);
+ 
+            byte[] buff = GetChunck(fs, (int)idx, rev);
+
+            string[] split = FileName[udx].filename.Split(new Char[] { '\\' });
+            if (CompressedSectorChunk[udx].DecompChunkSize == SortedFileInfo[idx].nSize)
+            {
+                if (!Directory.Exists(split[0]))
+                {
+                    Directory.CreateDirectory(split[0]);                   
+                }
+                File.WriteAllBytes(FileName[udx].filename, buff);
+            }
             fs.Close();
             Console.ReadKey();
         }
