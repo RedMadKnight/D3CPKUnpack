@@ -118,7 +118,7 @@ namespace D3CPKUnpack
         {
             char[] dest = source.ToArray();
             string result = "";
-            for (int i = dest.Length -1; i >= 0; i--)
+            for (int i = dest.Length - 1; i >= 0; i--)
                 result += dest[i];
             return result;
         }
@@ -254,7 +254,7 @@ namespace D3CPKUnpack
             return Hash64(szFilename.ToLower());
         }
 
-        public static byte[] DecompressZlib(byte[] input)
+        public byte[] DecompressZlib(byte[] input)
         {
             MemoryStream source = new MemoryStream(input);
             byte[] result = null;
@@ -267,6 +267,38 @@ namespace D3CPKUnpack
                 result = outStream.ToArray();
             }
             return result;
+        }
+
+        public byte[] DecompressChunk(Stream fs, int offset, int rev)
+        {
+            //CPK_MAX_DECOMP_BUFFER_SIZE = 0x10000
+            helper help = new helper();
+            fs.Seek(offset, 0);
+            uint DecompressedSize, Flag, CompressedSize;
+            if (rev == 0)
+            {
+                DecompressedSize = help.ReadU16(fs);
+                Flag = help.ReadU16(fs);
+                CompressedSize = help.ReadU16(fs);
+            }
+            else
+            {
+                DecompressedSize = help.ReverseUInt16(help.ReadU16(fs));
+                Flag = help.ReverseUInt16(help.ReadU16(fs));
+                CompressedSize = help.ReverseUInt16(help.ReadU16(fs));
+            }
+            byte[] buff = new byte[CompressedSize];
+            fs.Read(buff, 0, (int)CompressedSize);
+            byte[] tmp = { };
+            try
+            {
+                tmp = DecompressZlib(buff);
+            }
+            catch
+            {
+                tmp = buff;
+            }
+            return tmp;
         }
     }
 }

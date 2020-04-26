@@ -52,6 +52,15 @@ namespace D3CPKUnpack
             Console.WriteLine(i.ToString("d3") + ": offset :\t" + Locations[i].offset.ToString("X16"));
         }
 
+        public static uint FindLocationIndex(uint i)
+        {
+            uint a;
+            for (a = 0; a < Locations.Length; a++)
+                if (Locations[a].index == i)
+                    break;
+            return a;
+        }
+
         public static void WriteCompressedSectorToDecompressedOffset(int i)
         {
             Console.WriteLine(i.ToString("d3") + ": SectorIndex :\t" + CompressedSectorToDecompressedOffset[i].SectorIndex.ToString("d5"));
@@ -66,7 +75,7 @@ namespace D3CPKUnpack
 
         public static void WriteFileName(int i)
         {
-          //  Console.WriteLine(i.ToString("d3") + ": offset :\t" + FileName[i].offset.ToString("X8"));
+            Console.WriteLine(i.ToString("d3") + ": offset :\t" + FileName[i].offset.ToString("X8"));
             Console.WriteLine(i.ToString("d3") + ": fileHash :\t" + FileName[i].fileHash.ToString("X16"));
             Console.WriteLine(i.ToString("d3") + ": filename :\t" + FileName[i].filename.ToString());
         }
@@ -81,13 +90,20 @@ namespace D3CPKUnpack
             Console.WriteLine(i.ToString("d3") + ": CompSector :\t" + CompressedSectorChunk[i].CompSector.ToString("d6"));
         }
 
+        public static byte[] GetChunck(FileStream s, int i, int rev)
+        {
+            helper help = new helper();
+            return help.DecompressChunk(s, (int)CompressedSectorChunk[i].position, rev);
+        }
+
+
         static void Main(string[] args)
         {
             string path = "";
             if (args.Length == 0)
                 path = "C:\\ServerCommon.cpk";
-                //path = "C:\\enUS_CacheCommon.cpk";
-                //path = "C:\\plPL_CacheCommon.cpk";
+            //path = "C:\\enUS_CacheCommon.cpk";
+            //path = "C:\\plPL_CacheCommon.cpk";
             else
                 path = args[0];
             helper help = new helper();
@@ -105,12 +121,14 @@ namespace D3CPKUnpack
 
             WriteHeader();
             WriteLocations(10);
-            WriteCompressedSectorToDecompressedOffset(CompressedSectorToDecompressedOffset.Length-1);
+            WriteCompressedSectorToDecompressedOffset(CompressedSectorToDecompressedOffset.Length - 1);
             WriteDecompressedSectorToCompressedSector(10);
             WriteFileName(0);
             WriteFileName(13078);
             WriteChunckSectorInfo(0);
-
+            uint idx = 0;
+            string[] split = FileName[FindLocationIndex(idx)].filename.Split(new Char[] { '\\' });
+            File.WriteAllBytes(split[1], GetChunck(fs, (int)idx, rev));
             fs.Close();
             Console.ReadKey();
         }
