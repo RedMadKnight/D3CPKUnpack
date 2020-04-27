@@ -101,7 +101,7 @@ namespace D3CPKUnpack
                 for (uint i = 0; i < Header.FileCount; i++)
                 {
                     result[i] = new SortedFileInfo();
-                    result[i].dwHash = (uint)help.ReadBits(Htable, position, 64);
+                    result[i].dwHash = help.ReadBits(Htable, position, 64);
                     position += 64;
                     result[i].nSize = (uint)help.ReadBits(Htable, position, Header.FileSizeBitCount);
                     position += Header.FileSizeBitCount;
@@ -153,6 +153,9 @@ namespace D3CPKUnpack
             }
         }
 
+        //sum of decompressed file sizes in sector starting from first sector
+        //sector 1 => sum of decompressed chunk file sizes in sector 1
+        //sector 2 => sum of decompressed chunk file sizes in sector 2 + sector 1 result etc...
         public class CompressedSectorToDecompressedOffset
         {
             public uint SizeOf;
@@ -268,7 +271,7 @@ namespace D3CPKUnpack
                 if ((s.Position % 0x10000) != 0)
                     pos += 0x10000;
                 uint sector = 0;
-                uint next_sector = pos + 0x4000;
+                uint next_sector = pos + Header.CompSectorSize;
                 s.Seek(pos, 0);
                 Dictionary<uint, CompressedSectorChunk> result = new Dictionary<uint, CompressedSectorChunk>();               
                 if (Header.MagicNumber.ToString("X8").Equals("A1B2C3D4"))
@@ -285,7 +288,7 @@ namespace D3CPKUnpack
                     if (pos + 0xf > next_sector)
                     {
                         pos = next_sector;
-                        next_sector += 0x4000;
+                        next_sector += Header.CompSectorSize;
                         s.Seek(pos, 0);
                         sector++;
                         if (next_sector > s.Length)
@@ -296,7 +299,14 @@ namespace D3CPKUnpack
                     ushort flag = help.ReadU16(s);
                     ushort ComSectorSize = help.ReadU16(s);
                     if (ComSectorSize == 0)
-                        break;
+                    {
+                        pos = next_sector;
+                        next_sector += Header.CompSectorSize;
+                        s.Seek(pos, 0);
+                        sector++;
+                        if (next_sector > s.Length)
+                            break;
+                    }
                     csc = new CompressedSectorChunk();
                     csc.nr = a;
                     csc.position = pos;

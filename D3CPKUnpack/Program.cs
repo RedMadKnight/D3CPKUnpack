@@ -36,6 +36,7 @@ namespace D3CPKUnpack
             Console.WriteLine("CRC :\t" + HeaderStruct.CRC.ToString());
             Console.WriteLine("ReadSectorSize :\t0x" + HeaderStruct.ReadSectorSize.ToString("X4"));
             Console.WriteLine("CompSectorSize :\t0x" + HeaderStruct.CompSectorSize.ToString("X4"));
+            Console.WriteLine("Total sectors :\t0x" + HeaderStruct.CompSectorCount.ToString());
         }
 
         public static void WriteFileInfo(int i)
@@ -63,6 +64,7 @@ namespace D3CPKUnpack
             return a;
         }
 
+
         public static void WriteCompressedSectorToDecompressedOffset(int i)
         {
             Console.WriteLine(i.ToString("d3") + ": SectorIndex :\t" + CompressedSectorToDecompressedOffset[i].SectorIndex.ToString("d5"));
@@ -77,7 +79,7 @@ namespace D3CPKUnpack
 
         public static void WriteFileName(int i)
         {
-            Console.WriteLine("FileeName");
+            Console.WriteLine("FileName");
             Console.WriteLine(i.ToString("d3") + ": offset :\t" + FileName[i].offset.ToString("X8"));
             Console.WriteLine(i.ToString("d3") + ": fileHash :\t" + FileName[i].fileHash.ToString("X16"));
             Console.WriteLine(i.ToString("d3") + ": filename :\t" + FileName[i].filename.ToString());
@@ -105,9 +107,9 @@ namespace D3CPKUnpack
         {
             string path = "";
             if (args.Length == 0)
-            //path = "C:\\ServerCommon.cpk";
-            path = "C:\\enUS_CacheCommon.cpk";
-            //path = "C:\\plPL_CacheCommon.cpk";
+                // path = "C:\\ServerCommon.cpk";
+                path = "C:\\enUS_CacheCommon.cpk";
+                //path = "C:\\plPL_CacheCommon.cpk";
             else
                 path = args[0];
             helper help = new helper();
@@ -124,25 +126,34 @@ namespace D3CPKUnpack
             CompressedSectorChunk = cpk.CompressedSectorChunk.Read_CompressedSectorChunk(DictCompressedSectorChunk);
 
             WriteHeader();
-            uint idx = 200;
-            uint udx = FindLocationIndex(idx);
-            WriteFileInfo((int)idx);
-            WriteLocations((int)udx);
-            //WriteCompressedSectorToDecompressedOffset(0);
-            //WriteDecompressedSectorToCompressedSector(0);
-            WriteFileName((int)udx);
-            WriteChunckSectorInfo((int)udx);
- 
-            byte[] buff = GetChunck(fs, (int)idx, rev);
+            uint udx;
 
-            string[] split = FileName[udx].filename.Split(new Char[] { '\\' });
-            if (CompressedSectorChunk[udx].DecompChunkSize == SortedFileInfo[idx].nSize)
+            //etracting test for package version 6
+            for (int idx = 0; idx < HeaderStruct.FileCount; idx++)
             {
-                if (!Directory.Exists(split[0]))
+                udx = FindLocationIndex((uint)Locations[idx].index);
                 {
-                    Directory.CreateDirectory(split[0]);                   
+                    WriteFileInfo((int)Locations[idx].index);
+                    WriteLocations((int)udx);
+                    WriteFileName((int)Locations[idx].index);
+                    WriteChunckSectorInfo((int)udx);
+
+                    if (CompressedSectorChunk[udx].DecompChunkSize == SortedFileInfo[Locations[idx].index].nSize)
+                    {
+                        byte[] buff = GetChunck(fs, (int)udx, rev);
+
+                        string[] split = FileName[Locations[idx].index].filename.Split(new Char[] { '\\' });
+                        {
+                            if (!Directory.Exists(split[0]))
+                            {
+                                Directory.CreateDirectory(split[0]);
+                            }
+                            File.WriteAllBytes(FileName[Locations[idx].index].filename, buff);
+                        }
+                    }
+                    else
+                        break;
                 }
-                File.WriteAllBytes(FileName[udx].filename, buff);
             }
             fs.Close();
             Console.ReadKey();
