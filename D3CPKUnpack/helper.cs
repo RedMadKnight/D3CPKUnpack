@@ -254,6 +254,16 @@ namespace D3CPKUnpack
             return Hash64(szFilename.ToLower());
         }
 
+        public byte[] AddByteArray(byte[] source1, byte[] source2)
+        {
+            int newSize = source1.Length + source2.Length;
+            var ms = new MemoryStream(new byte[newSize], 0, newSize, true, true);
+            ms.Write(source1, 0, source1.Length);
+            ms.Write(source2, 0, source2.Length);
+            byte[] result = ms.GetBuffer();
+            return result;
+        }
+
         public byte[] DecompressZlib(byte[] input)
         {
             MemoryStream source = new MemoryStream(input);

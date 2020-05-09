@@ -261,12 +261,14 @@ namespace D3CPKUnpack
             public ushort DecompChunkSize = 0;
             public ushort flag = 0;
             public uint CompSector = 0;
+            public ulong DecompOffset = 0;
 
             public static Dictionary<uint, CompressedSectorChunk> ReadSectors(Stream s)
             {
                 helper help = new helper();
                 CompressedSectorChunk csc = new CompressedSectorChunk();
                 uint a = 0;
+                ulong doffset = 0;
                 uint pos = (uint)s.Position & 0xFFFF0000;
                 if ((s.Position % 0x10000) != 0)
                     pos += 0x10000;
@@ -314,6 +316,8 @@ namespace D3CPKUnpack
                     csc.DecompChunkSize = Size;
                     csc.flag = flag;
                     csc.CompSector = sector;
+                    doffset += Size;
+                    csc.DecompOffset = doffset- Size;
                     result.Add(a, csc);
                     s.Seek(ComSectorSize, SeekOrigin.Current);
                 }

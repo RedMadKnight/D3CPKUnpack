@@ -94,6 +94,7 @@ namespace D3CPKUnpack
             Console.WriteLine(i.ToString("d3") + ": DecompChunkSize :\t" + CompressedSectorChunk[i].DecompChunkSize.ToString("d6"));
             Console.WriteLine(i.ToString("d3") + ": flag :\t" + CompressedSectorChunk[i].flag.ToString("d6"));
             Console.WriteLine(i.ToString("d3") + ": CompSector :\t" + CompressedSectorChunk[i].CompSector.ToString("d6"));
+            Console.WriteLine(i.ToString("d3") + ": DecompOffset :\t" + CompressedSectorChunk[i].DecompOffset.ToString("X10"));
         }
 
         public static byte[] GetChunck(FileStream s, int i, int rev)
@@ -102,14 +103,25 @@ namespace D3CPKUnpack
             return help.DecompressChunk(s, (int)CompressedSectorChunk[i].position, rev);
         }
 
+        //return chunk index for decompressed start offset location 
+        public static int FindChunkStartIndexOfLocation(ulong offset)
+        {
+            int result = -1;
+            for (int a = 0; a < CompressedSectorChunk.Length; a++)
+                if (CompressedSectorChunk[a].DecompOffset == offset)
+                {
+                    result = a;
+                    break;
+                }
+            return result;
+        }
+
 
         static void Main(string[] args)
         {
             string path = "";
-            if (args.Length == 0)
-                // path = "C:\\ServerCommon.cpk";
+            if (args.Length == 0)               
                 path = "C:\\enUS_CacheCommon.cpk";
-                //path = "C:\\plPL_CacheCommon.cpk";
             else
                 path = args[0];
             helper help = new helper();
@@ -126,33 +138,31 @@ namespace D3CPKUnpack
             CompressedSectorChunk = cpk.CompressedSectorChunk.Read_CompressedSectorChunk(DictCompressedSectorChunk);
 
             WriteHeader();
-            uint udx;
-
+            uint idx, udx;
+            int sdx;
             //etracting test for package version 6
-            for (int idx = 0; idx < HeaderStruct.FileCount; idx++)
+            for (idx = 0; idx < HeaderStruct.FileCount; idx++)
             {
-                udx = FindLocationIndex((uint)Locations[idx].index);
+                udx = FindLocationIndex(idx);
+                sdx = FindChunkStartIndexOfLocation(Locations[udx].offset);
+                if (sdx == -1) continue;
+                WriteFileInfo((int)idx);
+                WriteLocations((int)udx);
+                WriteFileName((int)idx);
+                WriteChunckSectorInfo((int)sdx);
+                byte[] buff = GetChunck(fs, (int)sdx, rev);
+                string[] split = FileName[(int)idx].filename.Split(new Char[] { '\\' });
+                //temp = help.AddByteArray(temp, buff);
+                String cpath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                if (split.Length == 2) cpath = cpath + "\\" + split[0];
+                if (split.Length == 3) cpath = cpath + "\\" + split[0] + "\\" + split[1];
+                if (CompressedSectorChunk[sdx].DecompChunkSize == SortedFileInfo[(int)idx].nSize)
                 {
-                    WriteFileInfo((int)Locations[idx].index);
-                    WriteLocations((int)udx);
-                    WriteFileName((int)Locations[idx].index);
-                    WriteChunckSectorInfo((int)udx);
-
-                    if (CompressedSectorChunk[udx].DecompChunkSize == SortedFileInfo[Locations[idx].index].nSize)
+                    if (!Directory.Exists(cpath))
                     {
-                        byte[] buff = GetChunck(fs, (int)udx, rev);
-
-                        string[] split = FileName[Locations[idx].index].filename.Split(new Char[] { '\\' });
-                        {
-                            if (!Directory.Exists(split[0]))
-                            {
-                                Directory.CreateDirectory(split[0]);
-                            }
-                            File.WriteAllBytes(FileName[Locations[idx].index].filename, buff);
-                        }
+                        Directory.CreateDirectory(cpath);
                     }
-                    else
-                        break;
+                    File.WriteAllBytes(FileName[(int)idx].filename, buff);
                 }
             }
             fs.Close();
