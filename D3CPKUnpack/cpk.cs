@@ -8,25 +8,26 @@ namespace D3CPKUnpack
     {
         public class HeaderStruct
         {
-            public uint MagicNumber;
-            public uint PackageVersion;
-            public ulong DecompressedFileSize;
-            public uint Flags;
-            public uint FileCount;
-            public uint LocationCount;
-            public uint HeaderSector;
-            public uint FileSizeBitCount;
-            public uint FileLocationCountBitCount;
-            public uint FileLocationIndexBitCount;
-            public uint LocationBitCount;
-            public uint CompSectorToDecomOffsetBitCount;
-            public uint DecompSectorToCompSectorBitCount;
-            public uint CRC;
-            public uint Unknown;
-            public uint ReadSectorSize;
-            public uint CompSectorSize;
-            public uint CompSectorCount;
+            public uint MagicNumber;                           // 4 - bits ->  0 -  3
+            public uint PackageVersion;                        // 4 - bits ->  4 -  7
+            public ulong DecompressedFileSize;                 // 8 - bits ->  8 - 15
+            public uint Flags;                                 // 4 - bits -> 16 - 19 | P1
+            public uint FileCount;                             // 4 - bits -> 20 - 23 | P1
+            public uint LocationCount;                         // 4 - bits -> 24 - 27
+            public uint HeaderSector;                          // 4 - bits -> 28 - 31
+            public uint FileSizeBitCount;                      // 4 - bits -> 32 - 35 | P2
+            public uint FileLocationCountBitCount;             // 4 - bits -> 36 - 39 | P2
+            public uint FileLocationIndexBitCount;             // 4 - bits -> 40 - 43 | P3
+            public uint LocationBitCount;                      // 4 - bits -> 44 - 47 | P3
+            public uint CompSectorToDecomOffsetBitCount;       // 4 - bits -> 48 - 51 | P4
+            public uint DecompSectorToCompSectorBitCount;      // 4 - bits -> 52 - 55 | P4
+            public uint CRC;                                   // 4 - bits -> 56 - 59 |
+            public uint Unknown;                               
+            public uint ReadSectorSize;                        // 4 - bits -> 60 - 63 | P5
+            public uint CompSectorSize;                        // 4 - bits -> 64 - 67 | P5
+            public uint CompSectorCount;                       
             public uint FileSize;
+            public uint FirstSectorPosition;
 
             public HeaderStruct(Stream s, int rev)
             {
@@ -62,6 +63,9 @@ namespace D3CPKUnpack
                     HeaderSize = 72;
                 }
                 CompSectorCount = ((uint)CompSectorSize + FileSize - 1 - (uint)ReadSectorSize * HeaderSector) / (uint)CompSectorSize;
+                FirstSectorPosition = (uint)(ReadSectorSize * HeaderSector) & 0xFFFF0000;
+                if ((FirstSectorPosition % ReadSectorSize) != 0)
+                    FirstSectorPosition += ReadSectorSize;
             }
 
             public static HeaderStruct ReadHeader(Stream s, int rev)
@@ -153,9 +157,7 @@ namespace D3CPKUnpack
             }
         }
 
-        //sum of decompressed file sizes in sector starting from first sector
-        //sector 1 => sum of decompressed chunk file sizes in sector 1
-        //sector 2 => sum of decompressed chunk file sizes in sector 2 + sector 1 result etc...
+
         public class CompressedSectorToDecompressedOffset
         {
             public uint SizeOf;
@@ -261,20 +263,16 @@ namespace D3CPKUnpack
             public ushort DecompChunkSize = 0;
             public ushort flag = 0;
             public uint CompSector = 0;
-            public ulong DecompOffset = 0;
+            public ulong StartDecompOffset = 0;
 
             public static Dictionary<uint, CompressedSectorChunk> ReadSectors(Stream s)
             {
                 helper help = new helper();
                 CompressedSectorChunk csc = new CompressedSectorChunk();
-                uint a = 0;
+                uint ChunkNumber = 0;
                 ulong doffset = 0;
-                uint pos = (uint)s.Position & 0xFFFF0000;
-                if ((s.Position % 0x10000) != 0)
-                    pos += 0x10000;
-                uint sector = 0;
-                uint next_sector = pos + Header.CompSectorSize;
-                s.Seek(pos, 0);
+  
+                s.Seek(Header.FirstSectorPosition, 0);
                 Dictionary<uint, CompressedSectorChunk> result = new Dictionary<uint, CompressedSectorChunk>();               
                 if (Header.MagicNumber.ToString("X8").Equals("A1B2C3D4"))
                 {
@@ -284,42 +282,30 @@ namespace D3CPKUnpack
                 {
                     help.ReverseUInt16(help.ReadU16(s)); help.ReverseUInt16(help.ReadU16(s)); s.Seek(help.ReverseUInt16(help.ReadU16(s)), SeekOrigin.Current);
                 }
-                while (true)
+
+                for (uint sector = 0; sector <= Header.CompSectorCount; sector++)
                 {
-                    pos = (uint)s.Position;
-                    if (pos + 0xf > next_sector)
+                    uint SectorStartPosition = Header.FirstSectorPosition + sector * Header.CompSectorSize;
+                    uint NextSectorPosition = SectorStartPosition + Header.CompSectorSize;
+                    s.Seek(SectorStartPosition, 0);
+                    while (s.Position + 0xf < NextSectorPosition)
                     {
-                        pos = next_sector;
-                        next_sector += Header.CompSectorSize;
-                        s.Seek(pos, 0);
-                        sector++;
-                        if (next_sector > s.Length)
-                            break;
+                        csc = new CompressedSectorChunk();
+                        csc.position = (uint)s.Position;
+                        ushort Size = help.ReadU16(s);
+                        ushort flag = help.ReadU16(s);
+                        ushort CompChunkSize = help.ReadU16(s);
+                        csc.nr = ChunkNumber;
+                        csc.CompChunkSize = CompChunkSize;
+                        csc.DecompChunkSize = Size;
+                        csc.flag = flag;
+                        csc.CompSector = sector;
+                        doffset += Size;
+                        csc.StartDecompOffset = doffset - Size;
+                        result.Add(ChunkNumber, csc);
+                        ChunkNumber++;
+                        s.Seek(CompChunkSize, SeekOrigin.Current);
                     }
-                    a++;
-                    ushort Size = help.ReadU16(s);
-                    ushort flag = help.ReadU16(s);
-                    ushort ComSectorSize = help.ReadU16(s);
-                    if (ComSectorSize == 0)
-                    {
-                        pos = next_sector;
-                        next_sector += Header.CompSectorSize;
-                        s.Seek(pos, 0);
-                        sector++;
-                        if (next_sector > s.Length)
-                            break;
-                    }
-                    csc = new CompressedSectorChunk();
-                    csc.nr = a;
-                    csc.position = pos;
-                    csc.CompChunkSize = ComSectorSize;
-                    csc.DecompChunkSize = Size;
-                    csc.flag = flag;
-                    csc.CompSector = sector;
-                    doffset += Size;
-                    csc.DecompOffset = doffset- Size;
-                    result.Add(a, csc);
-                    s.Seek(ComSectorSize, SeekOrigin.Current);
                 }
                 return result;
             }
