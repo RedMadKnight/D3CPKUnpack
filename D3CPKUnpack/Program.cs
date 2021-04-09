@@ -16,7 +16,6 @@ namespace D3CPKUnpack
         public static cpk.CompressedSectorChunk[] CompressedSectorChunk;
         public static int rev;
 
-
         public static void WriteHeader()
         {
             Console.WriteLine("Header");
@@ -56,12 +55,22 @@ namespace D3CPKUnpack
             Console.WriteLine(i.ToString("d3") + ": offset :\t" + Locations[i].offset.ToString("X16"));
         }
 
-        public static uint FindLocationIndex(uint i)
+        public static int GetLocationIndex(int i)
         {
-            uint a;
-            for (a = 0; a < Locations.Length; a++)
-                if (Locations[a].index == i)
-                    break;
+            int a = -1;
+            int tmp = i;
+            {
+                for (a = 0; a < SortedFileInfo.Length; a++)
+                {
+                    tmp = i;
+                    for (uint b = 0; b < SortedFileInfo[a].nLocationCount; b++)
+                    {
+                        if (SortedFileInfo[a].nLocationIndex == tmp)
+                            return a;
+                        tmp--;
+                    }
+                }
+            }
             return a;
         }
 
@@ -126,15 +135,15 @@ namespace D3CPKUnpack
             CompressedSectorChunk = cpk.CompressedSectorChunk.Read_CompressedSectorChunk(DictCompressedSectorChunk);
 
             WriteHeader();
-            WriteLocations(1171);
-            WriteFileInfo(1171);
-            WriteFileName(1171);
-            for (uint idx = 2; idx < 78; idx++)
-                if (CompressedSectorChunk[idx].flag != 3)
-                {
-                    Console.WriteLine(idx.ToString("d3"));
-                    break;
-                }
+            for (int idx = 0; idx < Locations.Length; idx++)
+            {
+                int i = (int)Locations[idx].index;
+                int a = GetLocationIndex(i);
+                    WriteFileInfo(a);
+                    WriteLocations((idx));
+                    WriteFileName(a);
+            }
+
             fs.Close();
             Console.ReadKey();
         }
