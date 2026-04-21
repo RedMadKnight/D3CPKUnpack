@@ -195,6 +195,8 @@ keystream bytes derived from the fixed initial state
 (`0x78 ⊕ 0xE1 = 0x99`, subsequently flipped by the sign of the
 `zsize_raw` field, yielding `0x19`).
 
+Known-plaintext attack via cross-platform corpus diff: the same logical asset appears in both big-endian and little-endian archive variants. A subset of chunks is stored as raw zlib on one variant and as the encrypted form on the other. Aligning a known-plain chunk with its encrypted counterpart yields the keystream by a single XOR operation over the full chunk length. Validating the recovered keystream against additional chunks confirms (a) whether the cipher carries internal state feedback, and (b) whether any IV or per-chunk nonce is in use.
+
 ### 3.5 Two additional format invariants worth noting
 
 1. **Zero-fill on zlib short output.** Some chunks decompress to fewer
