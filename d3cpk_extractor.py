@@ -31,6 +31,17 @@ archives:
       SortedFileInfo entries extract as zero-filled placeholders
       rather than producing errors.
 
+  (4) Decompressed sectors do NOT pack tightly into the global
+      stream. Each compressed sector slot is `comp_sector` bytes
+      (e.g. 0x4000) on disk, but a single sector can decompress to
+      anywhere from ~15K to ~50K bytes. The CompSectorToDecompOffset
+      (cs2do) table gives the authoritative offset of each sector's
+      output in the global stream; sectors must be written at those
+      offsets, with gaps zero-filled. Naively concatenating sector
+      outputs (assuming a fixed ratio) drifts file positions and is
+      what produced the "weird / cut out / sometimes empty" strings
+      reported in issue #1 against CoreCommon.cpk.
+
 Usage:
     python3 d3cpk_extractor.py <file.cpk> [<output_dir>]
 """
@@ -370,22 +381,52 @@ def decompress_sector(sec_idx):
 
 print(f"\n=== SECTOR DECOMPRESSION ===")
 t0 = time.time()
-global_stream_parts = []
-current_global_offset = 0
+
+# IMPORTANT — sectors are placed in the global stream at the offsets given by
+# the CompSectorToDecompOffset (cs2do) table, NOT by naive concatenation.
+#
+# Each compressed sector slot is `comp_sector` bytes (e.g. 0x4000), but a
+# sector can decompress to a wildly different number of bytes — empirically
+# 15K..50K for CoreCommon.cpk, with no fixed ratio. The Locations table holds
+# absolute offsets into the global decompressed stream, so we MUST honor cs2do
+# when assembling that stream. Otherwise files extracted via raw_locs land
+# at drifting positions and yield mid-string garbage / "kinda weird and
+# cut out" output (D3CPKUnpack issue #1).
+#
+# Strategy: pre-allocate a bytearray of size at least decomp_fs, then write
+# each decompressed sector at its cs2do[s] offset. Gaps (where a sector is
+# shorter than cs2do[s+1] - cs2do[s]) remain zero-filled, matching the
+# behavior the original engine relies on.
+
+initial_stream_size = max(decomp_fs, (cs2do[-1] if cs2do else 0) + comp_sector * 4)
+global_stream_buf = bytearray(initial_stream_size)
+sector_actual_sizes = []
 
 for s in range(comp_sector_count):
     sector_bytes, sector_unknowns = decompress_sector(s)
+    target_offset = cs2do[s]
+
+    # Translate per-sector chunk offsets to the global stream
     for uk in sector_unknowns:
-        uk['global_stream_offset'] = current_global_offset + uk['local_stream_offset']
+        uk['global_stream_offset'] = target_offset + uk['local_stream_offset']
         uk['sector_index'] = s
         del uk['local_stream_offset']
         unknown_chunks.append(uk)
-    global_stream_parts.append(sector_bytes)
-    current_global_offset += len(sector_bytes)
 
-global_stream = b''.join(global_stream_parts)
+    end = target_offset + len(sector_bytes)
+    # Extend the buffer if a sector reaches further than we pre-allocated.
+    if end > len(global_stream_buf):
+        global_stream_buf.extend(b'\x00' * (end - len(global_stream_buf)))
+    global_stream_buf[target_offset:end] = sector_bytes
+    sector_actual_sizes.append(len(sector_bytes))
+
+global_stream = bytes(global_stream_buf)
 print(f"Decompressed {comp_sector_count:,} sectors in {time.time()-t0:.2f}s")
 print(f"Global stream: {len(global_stream):,} B (expected {decomp_fs:,})")
+if sector_actual_sizes:
+    print(f"Sector decomp sizes: min={min(sector_actual_sizes):,} "
+          f"max={max(sector_actual_sizes):,} "
+          f"avg={sum(sector_actual_sizes)//len(sector_actual_sizes):,}")
 print(f"Encrypted chunks: {encryption_stats['encrypted']:,}")
 print(f"  Decrypted successfully:   {encryption_stats['encrypted_ok']:,}")
 print(f"  Decrypt/decompress fail:  {encryption_stats['encrypted_fail']:,}")
