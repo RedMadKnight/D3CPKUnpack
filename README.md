@@ -228,10 +228,10 @@ fields:
 | `0x00` | 4 | `magic` | `0xA1B2C3D4` (byte order on disk reveals endianness) |
 | `0x04` | 4 | `version` | `6` (v6, BE) or `7` (v7, LE on observed builds) |
 | `0x08` | 8 | `decomp_fs` | total bytes in the decompressed global stream |
-| `0x10` | 4 | `fmt_const` | always `0x00000002` on every archive examined |
+| `0x10` | 4 | `fmt_const` | layout discriminator. `2` = legacy layout (RoS, Act\*.cpk, CoreCommon.cpk). `10` = new layout introduced with **Patch 2.6.7** (May 2019). See §3.3.1.1 |
 | `0x14` | 4 | `file_count` | number of `SortedFileInfo` entries |
 | `0x18` | 4 | `loc_count` | number of `Locations` entries (= `file_count` when each file occupies one contiguous run) |
-| `0x1C` | 4 | `header_sector` | `(first_compressed_sector_offset / read_sector)`; `first_sec = header_sector × read_sector` |
+| `0x1C` | 4 | `header_sector` | legacy (`fmt_const=2`): `(first_compressed_sector_offset / read_sector)` so `first_sec = header_sector × read_sector` rounded up to a `read_sector` boundary. New (`fmt_const=10`): direct byte offset (`first_sec = header_sector`). |
 | `0x20` | 4 | `fs_bc` | bit-width of size field in `SortedFileInfo` |
 | `0x24` | 4 | `flcnt_bc` | bit-width of run-count field in `SortedFileInfo` (always 1 in observed data — every file is a single contiguous run) |
 | `0x28` | 4 | `flidx_bc` | bit-width of first-Locations-index field in `SortedFileInfo` |
@@ -247,6 +247,30 @@ v6 archives end the header at offset `0x40` (64 bytes); v7 extends to `0x48`
 (72 bytes) to make `read_sector` and `comp_sector` explicit, since both are
 runtime-defined on v7 (in practice every observed v7 archive uses the same
 v6 values).
+
+#### 3.3.1.1 Two layouts: `fmt_const` discriminator
+
+Patch 2.6.7 (Necromancer balance pass) introduced a refactored archive
+layout that ships side-by-side with the legacy one. The **only** byte that
+distinguishes them is `fmt_const` at `0x10`. Two semantic differences
+follow from it:
+
+| Aspect | Legacy (`fmt_const = 2`) | New (`fmt_const = 10`) |
+|---|---|---|
+| Meaning of `header_sector` | multiple of `read_sector`; first_sec is rounded up to next `read_sector` boundary | direct **byte offset** to the first compressed chunk; no rounding |
+| Sector 0 layout | Begins with a 6-byte chunk header whose `zsize_raw` field is reinterpreted as a *skip preamble length* — leftover bit-packed table data sits between the sector start and the first real chunk | Begins immediately with the first chunk; no preamble |
+
+Everything else — table order, bit-packing, FNV-1a 64-bit hashing, the
+encrypted-zlib chunk format, sector-CRC32 location, name-string layout —
+is unchanged. A reader that branches on `fmt_const` for those two
+differences handles both layouts uniformly.
+
+Observed archives by layout:
+
+| Archive group | `fmt_const` |
+|---|:-:|
+| `Act1.cpk` … `Act4.cpk`, `CacheActN.cpk`, `Common.cpk`, `CacheCommon.cpk`, `CoreCommon.cpk` | `2` |
+| `Patch2_6_7.cpk`, `Patch2_6_8.cpk`, `Patch2_7_3.cpk` … `Patch2_7_7.cpk` | `10` |
 
 ### 3.4 Chunk compression and encryption
 
@@ -1004,7 +1028,7 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 | CPK `read_sector` (read unit size) | `0x10000` | Header (implicit on v6, explicit on v7 at offset `0x3C`) |
 | CPK `comp_sector` (compressed sector size) | `0x4000` | Header (implicit on v6, explicit on v7 at offset `0x40`) |
 | CPK header size | 64 bytes (v6) / 72 bytes (v7) | Header |
-| CPK header field `fmt_const` at `0x10` | `0x00000002` (invariant on observed archives) | §3.3.1 |
+| CPK header field `fmt_const` at `0x10` | `0x2` (legacy) / `0xA` (new layout, Patch 2.6.7+) — see §3.3.1.1 | §3.3.1 |
 | CPK header field `cs2do_bc` at `0x30` | = `loc_bc` = `bit_length(decomp_fs)` | §3.3.1 |
 | CPK header field `ds2cs_bc` at `0x34` | = `bit_length(comp_sector_count)` | §3.3.1 |
 | CPK header field `sector_crc32` at `0x38` | CRC32 of `data[first_sec:]` (zlib polynomial) | §3.5.3 |
@@ -1061,6 +1085,14 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 - **Bit-packer invariant** — MSB-first within each byte for the
   bit-stream covering `SortedFileInfo` / `Locations` / `cs2do` /
   `ds2cs`.
+- **Two on-disk layouts** discriminated by `fmt_const` at header
+  offset `0x10` (legacy `2` vs new `10`, the latter introduced with
+  Patch 2.6.7). Differences confined to (a) the encoding of
+  `header_sector` — multiple of `read_sector` vs direct byte offset —
+  and (b) the absence of a sector-0 skip preamble in the new layout.
+  Reader and writer in `cpklib.py` branch on `fmt_const`; round-trip
+  identity holds for both layouts on every shipped archive tested
+  (Act\*.cpk, CoreCommon.cpk, Patch2_6_7…2_7_7.cpk).
 
 ### 21.2 Open
 
