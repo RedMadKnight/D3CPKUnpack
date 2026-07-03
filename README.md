@@ -38,8 +38,8 @@ expected to possess a lawful copy of the game.
 
 ## Quickstart
 
-The repository ships three self-contained Python files (stdlib only — no
-external dependencies; Python 3.10+):
+The repository ships self-contained Python files (stdlib only — no external
+dependencies; Python 3.10+):
 
 ```
 cpklib.py       — reader + writer library (CPKArchive + CPKWriter,
@@ -48,6 +48,10 @@ cpkrebuild.py   — extension layer: replace_file / delete_file / add_file /
                   set_zlib_level / CPKWriter.create_new(version=6|7, endian=…)
 cpk_tool.py     — command-line front-end: info / list / extract / replace /
                   delete / add / create
+d3cutscene.py   — reader for the raw cutscene CPK variant
+d3cutscene_tool.py
+                — command-line front-end for cutscene info / list / validate /
+                  extract
 ```
 
 Common operations:
@@ -72,11 +76,37 @@ python3 cpk_tool.py replace Act3.cpk 'Anim\bigger.ans' bigger.ans --out modded.c
 
 # build a fresh archive from a directory tree
 python3 cpk_tool.py create ./assets --out fresh.cpk --version 6 --endian big
+
+# inspect the raw Ogg cutscene archive
+python3 d3cutscene_tool.py info enUS_Cutscene.cpk --scan-ogg
+
+# list class creation and Act 1 wizard interstitial movies
+python3 d3cutscene_tool.py list enUS_Cutscene.cpk --long --groups \
+  --iname 'Hero_Create|Interstitial_Act1_00_Wiz_M'
+
+# validate every declared cutscene as a complete Ogg stream
+python3 d3cutscene_tool.py validate enUS_Cutscene.cpk --progress
+
+# extract the full Data_D3/Locale/... tree
+python3 d3cutscene_tool.py extract enUS_Cutscene.cpk --out ./cutscenes \
+  --validate --progress
+
+# or extract only basenames, useful for quick media inspection
+python3 d3cutscene_tool.py extract enUS_Cutscene.cpk --out ./hero --flat \
+  --iname Hero_Create --validate
 ```
 
 `replace` chooses the fastest path automatically: same-size replacements are
 patched in-place; size-changing replacements trigger a full rebuild via the
 extension layer.
+
+The cutscene tool targets the raw cutscene CPK layout observed in localized
+`*_Cutscene.cpk` archives. These archives reuse the normal CPK header, bit-packed
+file table, Locations table, and filename table, but the payload region is a raw
+concatenation of complete Ogg/Theora/Vorbis files rather than encrypted zlib
+sectors. The extractor derives byte ranges from the table data, preserves the
+stored `Data_D3\Locale\...\Cutscenes\*.ogv` paths by default, and can validate
+each range as an Ogg stream before writing it.
 
 ---
 
