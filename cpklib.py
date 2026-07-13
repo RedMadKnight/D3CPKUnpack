@@ -66,7 +66,7 @@ def _highest_bit(u: int) -> int:
 # Stream cipher
 # --------------------------------------------------------------------- #
 
-_STREAM_CIPHER_INITIAL_STATE = 0x872DCDA7A97A7EE1
+_STREAM_CIPHER_INITIAL_STATE = 0x873AE8E53C11D761
 
 
 def _decrypt_chunk(ct: bytes) -> bytes:
