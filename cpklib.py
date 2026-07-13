@@ -368,7 +368,15 @@ class CPKArchive:
                     dec = dec + b"\x00" * (decomp_size - len(dec))
                 out.extend(dec)
             except Exception:
-                out.extend(b"\x00" * decomp_size)
+                # zlib failed — try stateful then give up
+                try:
+                    dc = zlib.decompressobj()
+                    dec = dc.decompress(chunk)
+                    if len(dec) < decomp_size:
+                        dec = dec + b'\x00' * (decomp_size - len(dec))
+                    out.extend(dec)
+                except Exception:
+                    out.extend(b'\x00' * decomp_size)
             p = de
         return bytes(out)
 
