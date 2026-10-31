@@ -14,8 +14,7 @@ Version history:
           XOR-encrypted with a stream cipher before zlib. Must DECRYPT
           first, then zlib decompress.
 
-          Algorithm identified via Switch NSO disassembly (branch 2_6_2,
-          file ConsoleIO_Decompress.cpp, function DecompressData):
+          Algorithm:
 
             state := 0x873AE8E53C11D761  (init)
             for each byte ct in encrypted_data:
@@ -28,8 +27,7 @@ Version history:
       (2) When zlib decompresses a chunk to FEWER bytes than the packet
           header promised (decomp_size), zero-fill the delta to keep
           file offsets aligned. Per-chunk zlib works — stream does NOT
-          actually span packets/sectors in practice, despite NSO code
-          looking like it could.
+          actually span packets/sectors in practice.
 
       (3) Switch CoreCommon.cpk has orphaned SFI entries whose data was
           never written — decomp_fs in the header promises ~29,805 more

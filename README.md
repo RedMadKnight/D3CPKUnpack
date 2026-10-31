@@ -18,7 +18,7 @@ exclusively from:
   modified, or truncated inputs;
 - correlation across multiple sample datasets;
 - cross-reference against publicly available open-source projects describing
-  related Blizzard formats (see §20).
+  related Blizzard formats (see §19.2).
 
 No executable binaries, symbol tables, debug information, assertion strings,
 source paths, or disassembly artefacts were used in preparing this
@@ -55,6 +55,10 @@ d3cutscene.py   — reader for the raw cutscene CPK variant
 d3cutscene_tool.py
                 — command-line front-end for cutscene info / list / validate /
                   extract
+coretoc_parser.py
+                — parse CoreTOC.dat into CSV / JSON (§4)
+prefetch_parser.py
+                — parse Prefetch.dat into a dependency graph (§5)
 ```
 
 The files work as they are, or `pip install .` adds the commands `cpk-tool`,
@@ -81,10 +85,17 @@ python3 cpk_tool.py replace Act3.cpk 'AnimSet\Goblin.ans' new.ans --out modded.c
 # resize-replace, delete, or add a file (forces full rebuild; --level 0..9)
 python3 cpk_tool.py add Act3.cpk 'Test\Note.txt' note.txt --out modded.cpk --level 9
 python3 cpk_tool.py delete Act3.cpk 'Some\Old.tex' --out modded.cpk
-python3 cpk_tool.py replace Act3.cpk 'Anim\bigger.ans' bigger.ans --out modded.cpk --level 6
+python3 cpk_tool.py replace Act3.cpk 'Anim\bigger.ans' bigger.ans --out modded.cpk --resize --level 6
 
 # build a fresh archive from a directory tree
 python3 cpk_tool.py create ./assets --out fresh.cpk --version 6 --endian big
+
+# extract everything, with a report and dumps of unreadable chunks
+python3 d3cpk_extractor.py Act3.cpk ./output
+
+# parse the two index files
+python3 coretoc_parser.py CoreTOC.dat ./toc
+python3 prefetch_parser.py Prefetch.dat CoreTOC.dat ./prefetch
 
 # inspect the raw Ogg cutscene archive
 python3 d3cutscene_tool.py info enUS_Cutscene.cpk --scan-ogg
@@ -105,10 +116,11 @@ python3 d3cutscene_tool.py extract enUS_Cutscene.cpk --out ./hero --flat \
   --iname Hero_Create --validate
 ```
 
-`replace` chooses the fastest path automatically: same-size replacements are
-patched in-place; size-changing replacements, and same-size ones that no
-longer fit in their sector slots, trigger a full rebuild via the extension
-layer.
+`replace` patches same-size replacements in-place and falls back to a full
+rebuild via the extension layer when the new data no longer fits in its sector
+slots. A replacement of a different size needs `--resize`, which always
+rebuilds. Write commands produce a new file: `--out` cannot be the source
+archive.
 
 `extract` and `read()` memory-map the archive and inflate only the sectors a
 file overlaps, located with a binary search of `cs2do`. A chunk that will not
@@ -120,7 +132,8 @@ names the affected files.
 archives and hand them to `d3cutscene.py`, where `verify` validates each Ogg
 stream. `d3cutscene_tool.py` offers the Ogg-specific options.
 
-Tests use synthetic archives only (no game data):
+Tests use synthetic archives only (no game data). CI runs them on Ubuntu and
+Windows with Python 3.10 and 3.14:
 
 ```
 python3 -m unittest discover -s tests
@@ -142,7 +155,7 @@ each range as an Ogg stream before writing it.
 |---|---|---|
 | Game | Diablo III | Packaging |
 | Target platform | Console release (7th generation) | File naming, packaging, archive variant |
-| Archive variant examined | CPK v6 (big-endian) | Magic + version byte in the archive header |
+| Archive variant examined | CPK v6 (big-endian) | Magic + version field in the archive header |
 
 The observations in this document apply to the big-endian console CPK v6
 data distribution. A v7 little-endian variant is also supported by the
@@ -184,8 +197,7 @@ The low byte carries the group; the upper three bytes carry the handle.
 
 - The packed encoding allocates 8 bits to the group → at most 256 groups
   representable; the empirically observed populated range is 0..68 with
-  some gaps (roughly 55 groups carry entries in `CoreTOC.dat` plus five
-  more slots observed but not definitively named — see §4).
+  five gaps (§4.4 lists 64 IDs, five of them not definitively named).
 - The packed encoding allocates 24 bits to the handle → at most
   16,777,216 assets per group.
 - Combined theoretical address space: ≈ 1.17 billion slots.
@@ -205,13 +217,13 @@ entries; the game treats any record containing them as unresolved.
 
 | Field | Value | Notes |
 |---|---|---|
-| Magic | `0xA1B2C3D4` (big-endian) | First 4 bytes of the file |
-| Format version | 6 (BE) or 7 (LE on observed builds) | First byte after magic, in the header |
+| Magic | `0xA1B2C3D4` | First 4 bytes of the file, in the archive's byte order |
+| Format version | 6 (BE) or 7 (LE on observed builds) | `uint32` right after the magic, at `0x04` |
 
 ### 3.2 General archive layout
 
-The archive consists of a fixed header followed by **six** bit-packed index
-tables and a fixed-width sector region for compressed payloads. The layout —
+The archive consists of a fixed header followed by **six** index tables (four
+of them bit-packed) and a fixed-width sector region for compressed payloads. The layout —
 confirmed by a round-trip parser exercised on every archive in the shipped
 distribution — is:
 
@@ -235,11 +247,11 @@ distribution — is:
 │ FileName offsets[]      │  uint32 array, one entry per SFI record,
 │  (1 × uint32 per file)  │  pointing into FileName data
 ├─────────────────────────┤
-│ FileName data           │  null-terminated forward-slash paths
+│ FileName data           │  null-terminated backslash-separated paths
 │  (latin-1, NUL-term.)   │
 ├─────────────────────────┤
-│ (alignment padding to   │  zero-filled to header_sector × read_sector
-│  next read_sector)      │
+│ (alignment padding to   │  zero-filled up to first_sec; legacy layout
+│  next read_sector)      │  only (§3.3.1.1)
 ├─────────────────────────┤
 │ Compressed sector data  │  comp_sector_count × comp_sector bytes; chunks
 │  (fixed-width slots)    │  of zlib data, optionally encrypted
@@ -248,29 +260,29 @@ distribution — is:
 
 Differences vs. earlier descriptions of this format in the wild:
 
-- **`ds2cs`** (DecompSectorToCompSector) is required for `O(1)` random
-  access into the global decompressed stream. Without it, locating the
-  compressed sector that backs a given decompressed offset would be `O(n)`
-  in the number of sectors.
+- **`ds2cs`** (DecompSectorToCompSector) gives `O(1)` random access into the
+  global decompressed stream by mapping an offset straight to its compressed
+  sector. A reader can do without it at `O(log n)` by binary-searching
+  `cs2do`, which is what `cpklib.py` does.
 - The `FileName` section is two tables, not one: a `uint32` offset array
   followed by a NUL-terminated string blob.
 
 The four bit-packed index tables (`SortedFileInfo`, `Locations`, `cs2do`,
-`ds2cs`) are packed into a single contiguous bit-stream using per-field bit
-widths declared in the header (§3.3.1).
+`ds2cs`) use per-field bit widths declared in the header (§3.3.1). Each table
+starts on a byte boundary; unused bits in its last byte are padding.
 
 ### 3.3 Format parameters
 
 | Parameter | Value |
 |---|---|
 | Endianness (word-level) | big-endian (v6) / little-endian (v7) |
-| Magic bytes on disk | `A1 B2 C3 D4` |
+| Magic bytes on disk | `A1 B2 C3 D4` (BE) / `D4 C3 B2 A1` (LE) |
 | `read_sector` (read unit size) | `0x10000` |
 | `comp_sector` (compressed sector size) | `0x4000` |
 | Header size | 64 bytes (v6) / 72 bytes (v7) |
 
-**Bit-packer note.** The bit-stream covering `SortedFileInfo` /
-`Locations` / `cs2do` / `ds2cs` is MSB-first within each byte — the same
+**Bit-packer note.** The `SortedFileInfo`, `Locations`, `cs2do` and `ds2cs`
+tables are MSB-first within each byte — the same
 convention used by Luigi Auriemma's QuickBMS script for this format.
 
 ### 3.3.1 Header byte-level layout
@@ -287,7 +299,7 @@ fields:
 | `0x10` | 4 | `fmt_const` | layout discriminator. `2` = legacy layout (RoS, Act\*.cpk, CoreCommon.cpk). `10` = new layout introduced with **Patch 2.6.7** (May 2019). `0` = raw cutscene archive (plain Ogg payload, no zlib sectors). See §3.3.1.1 |
 | `0x14` | 4 | `file_count` | number of `SortedFileInfo` entries |
 | `0x18` | 4 | `loc_count` | number of `Locations` entries (= `file_count` when each file occupies one contiguous run) |
-| `0x1C` | 4 | `header_sector` | legacy (`fmt_const=2`): `(first_compressed_sector_offset / read_sector)` so `first_sec = header_sector × read_sector` rounded up to a `read_sector` boundary. New (`fmt_const=10`): direct byte offset (`first_sec = header_sector`). |
+| `0x1C` | 4 | `header_sector` | legacy (`fmt_const=2`): `(first_compressed_sector_offset / read_sector)` so `first_sec = header_sector × read_sector`, always on a `read_sector` boundary. New (`fmt_const=10`): direct byte offset (`first_sec = header_sector`). |
 | `0x20` | 4 | `fs_bc` | bit-width of size field in `SortedFileInfo` |
 | `0x24` | 4 | `flcnt_bc` | bit-width of run-count field in `SortedFileInfo` (always 1 in observed data — every file is a single contiguous run) |
 | `0x28` | 4 | `flidx_bc` | bit-width of first-Locations-index field in `SortedFileInfo` |
@@ -313,7 +325,7 @@ follow from it:
 
 | Aspect | Legacy (`fmt_const = 2`) | New (`fmt_const = 10`) |
 |---|---|---|
-| Meaning of `header_sector` | multiple of `read_sector`; first_sec is rounded up to next `read_sector` boundary | direct **byte offset** to the first compressed chunk; no rounding |
+| Meaning of `header_sector` | count of `read_sector` units; `first_sec` always falls on a `read_sector` boundary | direct **byte offset** to the first compressed chunk; no rounding |
 | Sector 0 layout | Begins with a 6-byte chunk header whose `zsize_raw` field is reinterpreted as a *skip preamble length* — leftover bit-packed table data sits between the sector start and the first real chunk | Begins immediately with the first chunk; no preamble |
 
 Everything else — table order, bit-packing, FNV-1a 64-bit hashing, the
@@ -339,6 +351,17 @@ algorithm. Some chunks carry an additional **encryption** layer; the
 |---|---|
 | `zsize_raw & 0x8000 == 0` | `zlib.decompress(chunk)` |
 | `zsize_raw & 0x8000 != 0` | `zlib.decompress(stream_cipher_decrypt(chunk))` |
+
+Each sector slot holds a run of chunks. Every chunk starts with a 6-byte
+header of three `uint16` fields in the archive's byte order:
+
+| Off. | Field | Meaning |
+|---|---|---|
+| `+0` | `decomp_low` | low 16 bits of the decompressed size |
+| `+2` | `decomp_high` | high 16 bits of the decompressed size |
+| `+4` | `zsize_raw` | bits 0–14: stored chunk size; bit 15 (`0x8000`): encrypted |
+
+A `zsize_raw` of zero ends the sector's list of chunks.
 
 **Stream cipher** — derived by analysing paired ciphertext / known-plaintext
 samples (zlib streams have highly constrained initial bytes, making the
@@ -405,7 +428,7 @@ confirms (a) whether the cipher carries internal state feedback, and
    chunks by a small margin (low tens of kilobytes), leaving a handful
    of file entries that address a region the archive never actually
    filled. A correct extractor zero-fills the global stream up to
-   `decomp_fs`, producing those entries as zero-length placeholders
+   `decomp_fs`, producing those entries as zero-filled placeholders
    rather than erroring.
 
 ### 3.5.3 Sector CRC32
@@ -539,13 +562,13 @@ sample entries of the console `CoreTOC.dat`):
 
 **Summary:**
 
-- 49 groups are fully named via the PC-shared core.
+- 53 IDs come from the PC-shared core: 52 named groups plus the empty slot 0.
 - 6 additional console-only groups have confirmed names and extensions.
 - 5 groups (`35`, `54`, `65`, `67`, `68`) have confirmed IDs but working
   or absent names.
-- **60 distinct group IDs identified.** Several IDs within the 0..68
-  observed range have no entries in `CoreTOC.dat` and appear to be empty
-  or retired.
+- **64 distinct group IDs identified.** IDs 10, 16, 30, 50 and 53 within the
+  0..68 observed range have no entries in `CoreTOC.dat` and appear to be
+  empty or retired.
 
 ---
 
@@ -651,9 +674,9 @@ The four uint32s constitute a 16-byte universal prefix.
 ### 7.2 Payload organisation
 
 The remainder of an SNO file after its 16-byte header is a
-type-specific body (see §13 and §14 for concrete examples). The body is
+type-specific body (see §12 and §13 for concrete examples). The body is
 read in a single pass for most asset types; for types with auxiliary buffers
-(notably `.app` files, §14) the body references further buffers whose sizes
+(notably `.app` files, §13) the body references further buffers whose sizes
 are given in the fixed section.
 
 ---
@@ -683,10 +706,20 @@ The choice of FNV-1a is directly verifiable from the CPK archive
 
 ### 8.2 FNV-1a constants (verifiable from CPK name hashes)
 
-CPK archives store `hash → file name` mappings in the `FileName` section
-(§3.2). Computing the 32-bit FNV-1a over the forward-slash path yields the
-stored hash for every tested entry, establishing both the algorithm and
-its constants beyond reasonable doubt:
+The `SortedFileInfo` table (§3.2) stores a **64-bit** FNV-1a hash for every
+path in the `FileName` section. Hashing the lower-cased ASCII path, separators
+as stored, yields the stored value for every entry (cross-validated across
+every archive examined), which establishes both the algorithm and its
+constants:
+
+```
+FNV1A64_OFFSET_BASIS = 0xCBF29CE484222325
+FNV1A64_PRIME        = 0x100000001B3
+```
+
+The lookup model in §8.1 uses the **32-bit** variant with its standard
+constants. No CPK table stores a 32-bit hash, so this part of the model cannot
+be confirmed from the archives:
 
 ```
 FNV1A_OFFSET_BASIS = 0x811C9DC5
@@ -706,10 +739,6 @@ def fnv1a_32(data: bytes) -> int:
 For lookup purposes, `fnv1a_32_uint32(handle)` is the four-byte
 little-endian representation of the handle fed into the same function.
 
-The `SortedFileInfo` table in CPK archives (§3.2) uses the **64-bit**
-FNV-1a variant over the lower-cased ASCII path (`offset_basis = 0xCBF29CE484222325`,
-`prime = 0x100000001B3`). Cross-validated across every archive examined.
-
 ---
 
 ## 9. Asset sourcing and locales (observations)
@@ -728,7 +757,7 @@ SNO key itself:
 2. **Locale tag** — per-asset locale distinguishes language variants for
    text and voice. Locale tagging is evidenced in asset naming (e.g.
    trailing `|xxYY` suffixes in archive entry names such as
-   `StringList/Foo.stl|jpJP`) and in the per-locale audio packaging.
+   `StringList\Foo.stl|jpJP`) and in the per-locale audio packaging.
    See §17 for the set of locales observed.
 
 Neither a runtime manifest structure combining these attributes with the
@@ -742,7 +771,7 @@ SNO key nor its specific binary layout is part of the data-file format
 Each observed `snoGroup` has a canonical textual name. These names appear
 verbatim in `CoreTOC.dat` entries (the 128-byte name field in each record;
 see §4.1) and also in asset path prefixes inside CPK archives (e.g. paths
-of the form `Actor/...`, `Power/...`, `Monster/...`). The table in §4.4
+of the form `Actor\...`, `Power\...`, `Monster\...`). The table in §4.4
 compiles those names for every identified group.
 
 Beyond the name, the game appears to associate additional metadata with
@@ -1009,7 +1038,7 @@ asset classes appear only in certain packaging subsets.
 
 Assets can exist in locale-variant form, typically for text and voice.
 This is observable directly in archive entry names: localized variants
-are tagged with a `|xxYY` suffix (e.g. `StringList/Foo.stl|jpJP`) that
+are tagged with a `|xxYY` suffix (e.g. `StringList\Foo.stl|jpJP`) that
 marks the locale code. Per-locale audio packaging is visible in the
 distribution as separate locale subsets.
 
@@ -1040,7 +1069,7 @@ shipped game and are out of scope for this document.
 
 ## 19. Tools
 
-### 19.1 Reference parsers (author's, publishable)
+### 19.1 Reference parsers (RedMadKnight, publishable)
 
 Built and exercised against shipped data files during the preparation of
 this document:
@@ -1050,10 +1079,14 @@ this document:
 | `cpklib.py` | Reference Python library: archive reader (full parser for v6/v7), `CPKWriter` with byte-identical round-trip, same-size in-place file replacement | `*.cpk` ↔ Python objects | Round-trip verified on every observed archive |
 | `cpkrebuild.py` | Extension layer adding full-rebuild operations: `replace_file` (size-changing), `delete_file`, `add_file`, configurable zlib level (`set_zlib_level(0..9)`), and `CPKWriter.create_new(version=6\|7, endian=…)` for from-scratch construction | live `CPKWriter` | Validated on archives from 4 MB to 80 MB; from-scratch archives reopen and round-trip cleanly |
 | `cpk_tool.py` | Command-line front-end: `info` / `list` / `extract` (with extension/regex/size/locale filters) / `verify` / `replace` / `delete` / `add` / `create` (build new archive from a directory tree) | shell | All subcommands round-trip-verified |
-| `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` | `*.cpk` → directory tree | Tested on synthetic archives |
+| `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Tested on synthetic archives |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
 | `coretoc_parser.py` | Global asset index parser | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser | `Prefetch.dat` + `CoreTOC.dat` | Format invariants validated |
+
+The status column records the checks made against shipped archives. `verify`,
+on-demand reading, the faster decryption and the rebuilt `d3cpk_extractor.py`
+came later and have only run against the synthetic test suite so far.
 
 ### 19.2 Reference open-source projects (cross-reference)
 
@@ -1063,10 +1096,10 @@ cross-check independent observations:
 | Project | Author | Relevance |
 |---|---|---|
 | `diablo3_xbox.bms` | Luigi Auriemma | QuickBMS script demonstrating CPK extraction with `zlib_noerror` on magic `\xA1\xB2\xC3\xD4` |
-| CPKReaderWV | RedMadKnight | CPK header parser (header-info only) |
+| CPKReaderWV | zeroKilo | CPK header parser (header-info only); full extraction is in this repository (§19.1) |
 | jybp/casc | jybp | Open-source `SnoExtensions` table for the PC CASC build — shares its core with the console mapping (see §4.4) |
-| StormLib | Ladislav Zezula | Reference MPQ implementation — not directly applicable, but useful for cross-checking hypotheses about compression algorithms (its `CascDecompress` is zlib-only) |
-| CascLib | Ladislav Zezula | Reference CASC implementation |
+| StormLib | Ladislav Zezula | Reference MPQ implementation — not directly applicable |
+| CascLib | Ladislav Zezula | Reference CASC implementation — useful for cross-checking hypotheses about compression algorithms (its `CascDecompress` is zlib-only) |
 
 ---
 
@@ -1091,12 +1124,12 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 | CPK `read_sector` (read unit size) | `0x10000` | Header (implicit on v6, explicit on v7 at offset `0x3C`) |
 | CPK `comp_sector` (compressed sector size) | `0x4000` | Header (implicit on v6, explicit on v7 at offset `0x40`) |
 | CPK header size | 64 bytes (v6) / 72 bytes (v7) | Header |
-| CPK header field `fmt_const` at `0x10` | `0x2` (legacy) / `0xA` (new layout, Patch 2.6.7+) — see §3.3.1.1 | §3.3.1 |
+| CPK header field `fmt_const` at `0x10` | `0x2` (legacy) / `0xA` (new layout, Patch 2.6.7+) / `0x0` (raw cutscene) — see §3.3.1.1 | §3.3.1 |
 | CPK header field `cs2do_bc` at `0x30` | = `loc_bc` = `bit_length(decomp_fs)` | §3.3.1 |
 | CPK header field `ds2cs_bc` at `0x34` | = `bit_length(comp_sector_count)` | §3.3.1 |
 | CPK header field `sector_crc32` at `0x38` | CRC32 of `data[first_sec:]` (zlib polynomial) | §3.5.3 |
-| FNV-1a 32-bit offset basis | `0x811C9DC5` | Cross-validated on CPK `FileName` entries |
-| FNV-1a 32-bit prime | `0x01000193` (16,777,619) | Cross-validated on CPK `FileName` entries |
+| FNV-1a 32-bit offset basis | `0x811C9DC5` | Standard value; lookup model (§8.1) |
+| FNV-1a 32-bit prime | `0x01000193` (16,777,619) | Standard value; lookup model (§8.1) |
 | FNV-1a 64-bit offset basis | `0xCBF29CE484222325` | Cross-validated on CPK `SortedFileInfo` hashes |
 | FNV-1a 64-bit prime | `0x100000001B3` | Cross-validated on CPK `SortedFileInfo` hashes |
 | Lua bytecode signature | `1B 4C 75 61 51` | On-disk prefix of script blobs |
@@ -1131,9 +1164,10 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 - **`Prefetch.dat`** — fully parsed, format invariants validated
   against `CoreTOC.dat`.
 - **`snoGroup → (name, extension)` mapping** — every populated group
-  observed in the shipped data is named (via the PC-shared core for most
-  groups, plus console-only extensions identified empirically from the
-  sample names in `CoreTOC.dat`).
+  observed in the shipped data has an entry (via the PC-shared core for
+  most groups, plus console-only extensions identified empirically from
+  the sample names in `CoreTOC.dat`); five carry working names only
+  (§21.2).
 - **SNO key representation** (expanded / packed) and its range limits.
 - **Universal SNO file header** (16 bytes, §7.1).
 - **Shared deserialization framework as an observation** — verified by
@@ -1142,12 +1176,11 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 - **Embedded scripting identified as Lua 5.1** — signature and opcode
   count both match the 5.1 baseline exactly, making the shipped
   bytecode decompilable with off-the-shelf tools.
-- **Hashing algorithm** (FNV-1a with the standard 32-bit and 64-bit
-  constants) verified against the `FileName` and `SortedFileInfo`
-  sections of CPK archives.
-- **Bit-packer invariant** — MSB-first within each byte for the
-  bit-stream covering `SortedFileInfo` / `Locations` / `cs2do` /
-  `ds2cs`.
+- **Hashing algorithm** — 64-bit FNV-1a with the standard constants,
+  verified against the `FileName` and `SortedFileInfo` sections of CPK
+  archives.
+- **Bit-packer invariant** — MSB-first within each byte in the
+  `SortedFileInfo`, `Locations`, `cs2do` and `ds2cs` tables.
 - **Two on-disk layouts** discriminated by `fmt_const` at header
   offset `0x10` (legacy `2` vs new `10`, the latter introduced with
   Patch 2.6.7). Differences confined to (a) the encoding of
@@ -1205,7 +1238,7 @@ On asset request (snoGroup, snoHandle):
         · allocate payload record
         · resolve the (CPK archive, byte range) for this asset
         · read the 16-byte file header
-        · validate magic/version and schema fingerprint (§7, §11)
+        · validate version and schema fingerprint (§7, §11)
         · read the body (single pass for most types)
     → if the type has auxiliary buffers (e.g. `.app`):
         · read each buffer at the offset/size declared in the fixed section
