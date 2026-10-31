@@ -59,7 +59,10 @@ from pathlib import Path
 
 
 def parse_coretoc(path):
-    """Parse console CoreTOC.dat → dict[snoID] = (groupID, name)."""
+    """Parse console CoreTOC.dat → dict[(groupID, snoID)] = (groupID, name).
+
+    Handles are unique only within a group, so the group is part of the key.
+    """
     with open(path, 'rb') as f:
         data = f.read()
     count = struct.unpack('>I', data[:4])[0]
@@ -73,7 +76,7 @@ def parse_coretoc(path):
         null_pos = name_bytes.find(b'\x00')
         if null_pos == -1: null_pos = 128
         name = name_bytes[:null_pos].decode('latin-1', errors='replace')
-        out[sid] = (gid, name)
+        out[(gid, sid)] = (gid, name)
     return out
 
 
@@ -149,9 +152,9 @@ def export_csv(graph, sno_map, out_path):
             'dep_snoID', 'dep_groupID', 'dep_name',
         ])
         for p in graph:
-            pname = sno_map.get(p['snoID'], (None, '???'))[1]
+            pname = sno_map.get((p['snoGroupID'], p['snoID']), (None, '???'))[1]
             for dgid, dsno in p['deps']:
-                dname = sno_map.get(dsno, (None, '???'))[1]
+                dname = sno_map.get((dgid, dsno), (None, '???'))[1]
                 w.writerow([
                     p['snoID'], p['snoGroupID'], pname,
                     dsno, dgid, dname,
@@ -161,10 +164,10 @@ def export_csv(graph, sno_map, out_path):
 def export_parents_json(graph, sno_map, out_path):
     out = []
     for p in graph:
-        pname = sno_map.get(p['snoID'], (None, '???'))[1] if sno_map else ''
+        pname = sno_map.get((p['snoGroupID'], p['snoID']), (None, '???'))[1] if sno_map else ''
         deps_out = []
         for dgid, dsno in p['deps']:
-            dname = sno_map.get(dsno, (None, '???'))[1] if sno_map else ''
+            dname = sno_map.get((dgid, dsno), (None, '???'))[1] if sno_map else ''
             deps_out.append({
                 'snoGroupID': dgid,
                 'snoID': dsno,
@@ -208,7 +211,7 @@ def export_summary(graph, meta, sno_map, out_path):
 
     lines.append("Top 15 parents by dep count:")
     for p in sorted_by_deps[:15]:
-        pname = sno_map.get(p['snoID'], (None, '???'))[1]
+        pname = sno_map.get((p['snoGroupID'], p['snoID']), (None, '???'))[1]
         gname = get_group_name(p['snoGroupID'])
         lines.append(f"  {p['dep_count']:>4}  {gname:>14}  {pname}")
     lines.append("")

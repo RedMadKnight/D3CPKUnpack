@@ -18,13 +18,17 @@ The library understands:
     (CacheCommon.cpk, <locale>_CacheCommon.cpk) — read() returns bytes that
     are intentionally zero in the source archive.
 
-Write-side (CPKWriter) lives in this module too but is implemented later;
-this file currently provides only the reader.
+Write-side: CPKWriter lives in this module too (byte-identical clone and
+same-size in-place replace); cpkrebuild.py adds full rebuild on top of it.
+
+Raw cutscene archives (*_Cutscene.cpk, fmt_const 0) are a different payload
+format and are handled by d3cutscene.py.
 """
 from __future__ import annotations
 
 import os
 import struct
+import sys
 import zlib
 from collections import Counter
 from dataclasses import dataclass
@@ -161,6 +165,7 @@ class CPKArchive:
         self._raw_locs: list[int] = []
         self._cs2do: list[int] = []
         self._global_stream: Optional[bytes] = None  # lazy
+        self.chunk_errors = 0  # chunks zero-filled because they would not inflate
         self._parse_tables()
 
     @classmethod
@@ -212,6 +217,12 @@ class CPKArchive:
             raise ValueError(
                 f"Implausible header (file_count={file_count}, decomp_fs={decomp_fs}). "
                 f"Bit-stream byte order may differ in this build."
+            )
+
+        if fmt_const == 0 and len(d) - header_sector * read_sector == decomp_fs:
+            raise ValueError(
+                "Raw cutscene archive (fmt_const=0): payload is plain Ogg, "
+                "not zlib sectors. Use d3cutscene_tool.py instead."
             )
 
         return CPKHeader(
@@ -376,6 +387,7 @@ class CPKArchive:
                         dec = dec + b'\x00' * (decomp_size - len(dec))
                     out.extend(dec)
                 except Exception:
+                    self.chunk_errors += 1
                     out.extend(b'\x00' * decomp_size)
             p = de
         return bytes(out)
@@ -401,6 +413,14 @@ class CPKArchive:
         if self._global_stream is None:
             self._global_stream = self._build_global_stream()
         return self._global_stream
+
+    def warn_chunk_errors(self) -> None:
+        """Warn on stderr if the global stream contains zero-filled chunks."""
+        if self.chunk_errors:
+            sys.stderr.write(
+                f"  WARNING: {self.chunk_errors:,} chunk(s) failed to decompress "
+                f"and were zero-filled\n"
+            )
 
     # --- public lookup / extraction ---
 
@@ -471,6 +491,8 @@ class CPKArchive:
     def _write_entry(e: CPKEntry, payload: bytes, out_dir: str,
                      flat: bool, sanitize_pipe: bool) -> str:
         name = e.name.replace("\\", "/").lstrip("/")
+        if ".." in name.split("/"):
+            raise ValueError(f"unsafe path in archive entry: {e.name!r}")
         if sanitize_pipe:
             name = name.replace("|", "__")
         # Forbidden chars on Windows
@@ -668,6 +690,7 @@ class CPKWriter:
             return self.save_as_clone(out_path)
 
         gs = bytearray(src.global_stream)
+        src.warn_chunk_errors()
         for _, (e, new_bytes) in self._replacements.items():
             gs[e.offset : e.offset + e.size] = new_bytes
 
@@ -706,6 +729,9 @@ class CPKWriter:
 
             sec_off = src._first_sec + s * slot_size
             out[sec_off : sec_off + slot_size] = slot
+
+        crc = zlib.crc32(bytes(out[src._first_sec:])) & 0xFFFFFFFF
+        struct.pack_into(h.endian + "I", out, 56, crc)
 
         with open(out_path, "wb") as f:
             f.write(out)

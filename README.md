@@ -97,8 +97,15 @@ python3 d3cutscene_tool.py extract enUS_Cutscene.cpk --out ./hero --flat \
 ```
 
 `replace` chooses the fastest path automatically: same-size replacements are
-patched in-place; size-changing replacements trigger a full rebuild via the
-extension layer.
+patched in-place; size-changing replacements, and same-size ones that no
+longer fit in their sector slots, trigger a full rebuild via the extension
+layer.
+
+Tests use synthetic archives only (no game data):
+
+```
+python3 -m unittest discover -s tests
+```
 
 The cutscene tool targets the raw cutscene CPK layout observed in localized
 `*_Cutscene.cpk` archives. These archives reuse the normal CPK header, bit-packed
@@ -258,7 +265,7 @@ fields:
 | `0x00` | 4 | `magic` | `0xA1B2C3D4` (byte order on disk reveals endianness) |
 | `0x04` | 4 | `version` | `6` (v6, BE) or `7` (v7, LE on observed builds) |
 | `0x08` | 8 | `decomp_fs` | total bytes in the decompressed global stream |
-| `0x10` | 4 | `fmt_const` | layout discriminator. `2` = legacy layout (RoS, Act\*.cpk, CoreCommon.cpk). `10` = new layout introduced with **Patch 2.6.7** (May 2019). See §3.3.1.1 |
+| `0x10` | 4 | `fmt_const` | layout discriminator. `2` = legacy layout (RoS, Act\*.cpk, CoreCommon.cpk). `10` = new layout introduced with **Patch 2.6.7** (May 2019). `0` = raw cutscene archive (plain Ogg payload, no zlib sectors). See §3.3.1.1 |
 | `0x14` | 4 | `file_count` | number of `SortedFileInfo` entries |
 | `0x18` | 4 | `loc_count` | number of `Locations` entries (= `file_count` when each file occupies one contiguous run) |
 | `0x1C` | 4 | `header_sector` | legacy (`fmt_const=2`): `(first_compressed_sector_offset / read_sector)` so `first_sec = header_sector × read_sector` rounded up to a `read_sector` boundary. New (`fmt_const=10`): direct byte offset (`first_sec = header_sector`). |
@@ -301,6 +308,7 @@ Observed archives by layout:
 |---|:-:|
 | `Act1.cpk` … `Act4.cpk`, `CacheActN.cpk`, `Common.cpk`, `CacheCommon.cpk`, `CoreCommon.cpk` | `2` |
 | `Patch2_6_7.cpk`, `Patch2_6_8.cpk`, `Patch2_7_3.cpk` … `Patch2_7_7.cpk` | `10` |
+| `<locale>_Cutscene.cpk` (raw Ogg payload, read with `d3cutscene.py`) | `0` |
 
 ### 3.4 Chunk compression and encryption
 
@@ -319,7 +327,7 @@ keystream recoverable for the first tens of bytes and then extending
 algorithmically). The recovered scheme is:
 
 ```
-CIPHER_INIT_STATE = 0x872DCDA7A97A7EE1   # 64-bit constant, global to all chunks
+CIPHER_INIT_STATE = 0x873AE8E53C11D761   # 64-bit constant, global to all chunks
 
 def decrypt_chunk(ciphertext: bytes) -> bytes:
     state = CIPHER_INIT_STATE
@@ -348,10 +356,12 @@ This explains two earlier red herrings. The observed Shannon entropy of
 "encrypted" chunks (≈ 7.84 bits/byte) is close to maximum because zlib
 output itself is near-maximum entropy, and XOR with a keystream preserves
 that. Similarly, the frequently seen prefix `19 0d` on encrypted chunks is
-an artefact of XOR-ing a typical `78 9C` zlib header with the first two
-keystream bytes derived from the fixed initial state
-(`0x78 ⊕ 0xE1 = 0x99`, subsequently flipped by the sign of the
-`zsize_raw` field, yielding `0x19`).
+simply a `78 DA` zlib header XOR-ed with the two low bytes of the initial
+state (`0x78 ⊕ 0x61 = 0x19`, `0xDA ⊕ 0xD7 = 0x0D`).
+
+Because of the feedback, the initial state only influences the first 8
+bytes of a chunk — but those include the zlib header, so with a wrong
+constant every encrypted chunk fails to inflate as a whole.
 
 Known-plaintext attack via cross-platform corpus diff: the same logical
 asset appears in both big-endian and little-endian archive variants. A
@@ -368,7 +378,9 @@ confirms (a) whether the cipher carries internal state feedback, and
    bytes than `decomp_size` declares. The shortfall must be zero-padded
    so that byte offsets in the global decompressed stream stay in sync
    with the `Locations` table. Chunks do not span sector boundaries in
-   practice.
+   practice. A few chunks hold an incomplete zlib stream that one-shot
+   `zlib.decompress` rejects; a streaming `decompressobj` still returns
+   their data, and it must be kept (zero-padded the same way).
 2. **Orphaned SortedFileInfo entries.** Some archives declare a
    `decomp_fs` in the header that exceeds the sum of physically present
    chunks by a small margin (low tens of kilobytes), leaving a handful
@@ -382,7 +394,7 @@ confirms (a) whether the cipher carries internal state feedback, and
 The 4 bytes at header offset `0x38` carry a CRC32 (standard zlib
 polynomial, `crc32` in any common library) computed over the contiguous
 compressed-sector payload — i.e. `data[first_sec:]` where
-`first_sec = header_sector × read_sector`.
+`first_sec` is the start of the first compressed sector (§3.3.1.1).
 
 Verified on every shipped archive examined: stored value matches recomputed
 CRC exactly. This implies the engine validates archive integrity at load
@@ -397,7 +409,7 @@ import struct, zlib
 with open("Archive.cpk", "rb") as f:
     data = f.read()
 # … parse header to recover header_sector and read_sector …
-first_sec = header_sector * read_sector
+first_sec = header_sector if fmt_const == 10 else header_sector * read_sector
 assert struct.unpack(endian + "I", data[0x38:0x3C])[0] \
        == zlib.crc32(data[first_sec:]) & 0xFFFFFFFF
 ```
@@ -1019,6 +1031,7 @@ this document:
 | `cpklib.py` | Reference Python library: archive reader (full parser for v6/v7), `CPKWriter` with byte-identical round-trip, same-size in-place file replacement | `*.cpk` ↔ Python objects | Round-trip verified on every observed archive |
 | `cpkrebuild.py` | Extension layer adding full-rebuild operations: `replace_file` (size-changing), `delete_file`, `add_file`, configurable zlib level (`set_zlib_level(0..9)`), and `CPKWriter.create_new(version=6\|7, endian=…)` for from-scratch construction | live `CPKWriter` | Validated on archives from 4 MB to 80 MB; from-scratch archives reopen and round-trip cleanly |
 | `cpk_tool.py` | Command-line front-end: `info` / `list` / `extract` (with extension/regex/size/locale filters) / `replace` / `delete` / `add` / `create` (build new archive from a directory tree) | shell | All subcommands round-trip-verified |
+| `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
 | `coretoc_parser.py` | Global asset index parser | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser | `Prefetch.dat` + `CoreTOC.dat` | Format invariants validated |
 
@@ -1053,7 +1066,7 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 | `.app` index width | 16 bits | §13.4 |
 | CPK magic | `0xA1B2C3D4` | Empirical |
 | CPK format version | 6 (BE) / 7 (LE) | Empirical |
-| CPK cipher initial state | `0x872DCDA7A97A7EE1` | Recovered by known-plaintext attack against zlib prefixes (see §3.4) |
+| CPK cipher initial state | `0x873AE8E53C11D761` | Recovered by known-plaintext attack against zlib prefixes (see §3.4) |
 | CPK encryption flag | bit `0x8000` in `zsize_raw` | Empirical + cipher verification |
 | CPK `read_sector` (read unit size) | `0x10000` | Header (implicit on v6, explicit on v7 at offset `0x3C`) |
 | CPK `comp_sector` (compressed sector size) | `0x4000` | Header (implicit on v6, explicit on v7 at offset `0x40`) |
@@ -1080,7 +1093,7 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 ### 21.1 Solved
 
 - **CPK archive format** — compression (zlib) and encryption (stream
-  cipher with fixed initial state `0x872DCDA7A97A7EE1`) both recovered
+  cipher with fixed initial state `0x873AE8E53C11D761`) both recovered
   and round-trip-verified against shipped archives.
 - **Complete byte-level header layout** (v6: 64 B, v7: 72 B) — every byte
   accounted for; see §3.3.1.

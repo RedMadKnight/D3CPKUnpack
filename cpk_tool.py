@@ -156,6 +156,7 @@ def cmd_extract(args):
             print(f"    {i}/{n}  elapsed {time.time()-t0:.1f}s")
     print(f"  done: {written:,} written, {zeros:,} mostly-zero, "
           f"{failed:,} failed, {time.time()-t0:.1f}s")
+    ar.warn_chunk_errors()
 
 
 def cmd_replace(args):
@@ -180,7 +181,15 @@ def cmd_replace(args):
     else:
         w.replace_file(args.name, new_bytes)
     _maybe_set_level(w, args)
-    w.save(args.out)
+    try:
+        w.save(args.out)
+    except ValueError as ex:
+        if len(new_bytes) != e.size:
+            raise
+        # Less compressible data can overflow the fixed-width sector slots.
+        print(f"  in-place replace failed ({ex}); doing a full rebuild")
+        w.replace_file(args.name, new_bytes)
+        w.save(args.out)
     print(f"  saved in {time.time()-t0:.1f}s -> {args.out}")
     re_ar = cpklib.CPKArchive.open(args.out)
     if re_ar.read(args.name) != new_bytes:

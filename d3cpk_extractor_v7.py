@@ -17,7 +17,7 @@ Version history:
           Algorithm identified via Switch NSO disassembly (branch 2_6_2,
           file ConsoleIO_Decompress.cpp, function DecompressData):
 
-            state := 0x872DCDA7A97A7EE1  (init)
+            state := 0x873AE8E53C11D761  (init)
             for each byte ct in encrypted_data:
                 pt := ct XOR (state & 0xFF)
                 state := (ct << 56) | (state >> 8)    # CT-feedback
@@ -50,7 +50,7 @@ import struct, zlib, os, sys, time, json
 from collections import Counter, defaultdict
 
 if len(sys.argv) < 2:
-    print("Usage: python3 d3cpk_extractor_v5.py <file.cpk> [<output_dir>]")
+    print("Usage: python3 d3cpk_extractor_v7.py <file.cpk> [<output_dir>]")
     sys.exit(1)
 
 PATH = sys.argv[1]
@@ -240,7 +240,7 @@ print(f"Loc_count: {Counter(e['loc_count'] for e in sfi).most_common(5)}")
 # Blizzard CPK encryption (stream cipher with CT-feedback)
 # ====================================================================
 
-CIPHER_KEY_INIT = (-8702387258687105183) & 0xFFFFFFFFFFFFFFFF  # 0x872DCDA7A97A7EE1
+CIPHER_KEY_INIT = 0x873AE8E53C11D761
 
 def decrypt_cpk_chunk(ciphertext):
     """
@@ -248,7 +248,7 @@ def decrypt_cpk_chunk(ciphertext):
 
     Algorithm from Switch NSO disassembly (D3 branch 2_6_2,
     ConsoleIO_Decompress.cpp::DecompressData):
-      state := 0x872DCDA7A97A7EE1
+      state := 0x873AE8E53C11D761
       for byte ct in ciphertext:
           pt := ct XOR (state & 0xFF)
           state := (ct << 56) | (state >> 8)    # CT feedback

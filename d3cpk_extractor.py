@@ -126,6 +126,7 @@ def highest_bit(u):
 
 ver = u32(4)
 decomp_fs = u64(8)
+fmt_const = u32(16)        # 2 = legacy layout, 10 = new layout (Patch 2.6.7+)
 file_count = u32(20)
 loc_count = u32(24)
 header_sector = u32(28)
@@ -149,10 +150,15 @@ elif ver == 7:
 else:
     sys.exit(f"Unsupported CPK version {ver}")
 
-first_sec = (read_sector * header_sector) & 0xFFFF0000
-if first_sec % read_sector != 0:
-    first_sec += read_sector
-comp_sector_count = (comp_sector + len(data) - 1 - read_sector * header_sector) // comp_sector
+if fmt_const == 10:
+    first_sec = header_sector
+else:
+    first_sec = (read_sector * header_sector) & 0xFFFF0000
+    if first_sec % read_sector != 0:
+        first_sec += read_sector
+comp_sector_count = (comp_sector + len(data) - 1 - first_sec) // comp_sector
+if comp_sector_count < 0:
+    comp_sector_count = 0
 ds2cs_bc = highest_bit(comp_sector_count)
 ds_sector_count = (decomp_fs + comp_sector - 1) // comp_sector
 
@@ -225,7 +231,7 @@ print(f"Loc_count: {Counter(e['loc_count'] for e in sfi).most_common(5)}")
 # CPK chunk cipher (stream cipher with ciphertext feedback)
 # ====================================================================
 
-STREAM_CIPHER_INITIAL_STATE = 0x872DCDA7A97A7EE1
+STREAM_CIPHER_INITIAL_STATE = 0x873AE8E53C11D761
 
 def decrypt_stream_cipher_chunk(ciphertext):
     """
@@ -288,7 +294,7 @@ def decompress_sector(sec_idx):
     debug_this = (sec_idx >= comp_sector_count - DEBUG_LAST_SECTORS)
 
     p = sec_start
-    if sec_idx == 0:
+    if sec_idx == 0 and fmt_const != 10:
         if p + 6 > len(data):
             return b'', []
         skip = u16(p + 4)

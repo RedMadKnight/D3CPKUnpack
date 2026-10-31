@@ -85,17 +85,19 @@ def _is_new_archive(self):
 def replace_file(self, name, new_content):
     if _is_new_archive(self):
         raise RuntimeError("replace_file not valid on a new archive (use add_file)")
-    if self._src.get(name) is None:
+    e = self._src.get(name)
+    if e is None:
         raise KeyError(name)
-    _ensure_mods(self)["replace"][name] = bytes(new_content)
+    _ensure_mods(self)["replace"][e.name] = bytes(new_content)
 
 
 def delete_file(self, name):
     if _is_new_archive(self):
         raise RuntimeError("delete_file not valid on a new archive")
-    if self._src.get(name) is None:
+    e = self._src.get(name)
+    if e is None:
         raise KeyError(name)
-    _ensure_mods(self)["delete"].add(name)
+    _ensure_mods(self)["delete"].add(e.name)
 
 
 def add_file(self, name, content):
@@ -157,8 +159,11 @@ def _build_model(self):
     if not _is_new_archive(self):
         src = self._src
         delete = mods["delete"]
-        replace = mods["replace"]
+        # Same-size replacements staged on CPKWriter must survive a rebuild.
+        replace = {e.name: data for e, data in self._replacements.values()}
+        replace.update(mods["replace"])
         gs = src.global_stream
+        src.warn_chunk_errors()
         for e in src.entries:
             if e.name in delete:
                 continue
@@ -242,11 +247,14 @@ def _full_rebuild(self, out_path):
         bw.write(o, loc_bc)
     loc_block = bw.finish()
 
+    # New layout (fmt_const == 10): direct byte offset, no sector-0 preamble.
+    new_layout = (h.fmt_const == 10)
+
     sectors = []
     p = 0
     while p < decomp_fs:
         size = min(comp_sector, decomp_fs - p)
-        first = (len(sectors) == 0)
+        first = (len(sectors) == 0) and not new_layout
         prelude = 6 if first else 0
         capacity = comp_sector - prelude
         while True:
@@ -310,12 +318,16 @@ def _full_rebuild(self, out_path):
     names_off_pos = pos;      pos += len(names_offset_block)
     names_data_pos = pos;     pos += len(name_data)
 
-    needed_blocks = (pos + read_sector - 1) // read_sector
-    header_sector = needed_blocks
-    first_sec = read_sector * header_sector
-    if first_sec < pos:
-        header_sector += 1
+    if new_layout:
+        header_sector = pos
+        first_sec = pos
+    else:
+        needed_blocks = (pos + read_sector - 1) // read_sector
+        header_sector = needed_blocks
         first_sec = read_sector * header_sector
+        if first_sec < pos:
+            header_sector += 1
+            first_sec = read_sector * header_sector
 
     # Build header from scratch (avoids depending on src._data)
     hdr = bytearray(h.header_size)
