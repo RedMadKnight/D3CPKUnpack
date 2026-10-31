@@ -81,6 +81,10 @@ class CutsceneEntry:
     def basename(self) -> str:
         return self.name.replace("\\", "/").rsplit("/", 1)[-1]
 
+    @property
+    def ext(self) -> str:
+        return self.basename.rsplit(".", 1)[1].lower() if "." in self.basename else ""
+
 
 @dataclass(frozen=True)
 class OggPage:

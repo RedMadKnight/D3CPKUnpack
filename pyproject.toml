@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "d3cpkunpack"
+version = "1.2.0"
+description = "Reader, writer and format reference for Diablo III console CPK archives"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Krzysztof Janiszewski" }]
+
+[project.urls]
+Repository = "https://github.com/RedMadKnight/D3CPKUnpack"
+
+[project.scripts]
+cpk-tool = "cpk_tool:main"
+d3cutscene-tool = "d3cutscene_tool:main"
+d3cpk-extractor = "d3cpk_extractor:main"
+
+[tool.setuptools]
+py-modules = [
+    "coretoc_parser",
+    "cpk_tool",
+    "cpklib",
+    "cpkrebuild",
+    "d3cpk_extractor",
+    "d3cpk_extractor_v7",
+    "d3cutscene",
+    "d3cutscene_tool",
+    "prefetch_parser",
+]

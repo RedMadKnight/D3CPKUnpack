@@ -187,6 +187,7 @@ def _full_rebuild(self, out_path):
     sys.stderr.write(f'[rebuild] enter, out={out_path}\n')
     sys.stderr.flush()
 
+    self._refuse_source_path(out_path)
     new_archive = _is_new_archive(self)
     if new_archive:
         h = self._new_template

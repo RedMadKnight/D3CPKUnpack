@@ -3,11 +3,15 @@
 cpklib — Diablo III console CPK archive library.
 
 Reader-side API:
-    archive = CPKArchive.open(path)
-    for entry in archive.iter_files():
-        print(entry.name, entry.size)
-    data = archive.read(name)         # extract one file
-    archive.extract_all(out_dir)      # extract everything
+    with CPKArchive.open(path) as archive:
+        for entry in archive.iter_files():
+            print(entry.name, entry.size)
+        data = archive.read(name)     # extract one file
+        archive.extract_all(out_dir)  # extract everything
+        report = archive.verify()     # check CRC, tables and every chunk
+
+open() memory-maps the file and read() inflates only the sectors a file
+overlaps, so the source must not be overwritten while the archive is open.
 
 The library understands:
   * CPK v6 (Xbox 360 / PS3, big-endian) and v7 (Switch / PS4, little-endian)
@@ -26,12 +30,14 @@ format and are handled by d3cutscene.py.
 """
 from __future__ import annotations
 
+import mmap
 import os
 import struct
 import sys
 import zlib
-from collections import Counter
-from dataclasses import dataclass
+from bisect import bisect_left, bisect_right
+from collections import Counter, OrderedDict
+from dataclasses import dataclass, field
 from typing import Iterator, Optional
 
 
@@ -71,6 +77,13 @@ def _highest_bit(u: int) -> int:
 # --------------------------------------------------------------------- #
 
 _STREAM_CIPHER_INITIAL_STATE = 0x873AE8E53C11D761
+_STREAM_CIPHER_KEY = _STREAM_CIPHER_INITIAL_STATE.to_bytes(8, "little")
+
+
+def _xor_bytes(a: bytes, b: bytes) -> bytes:
+    """XOR two byte strings of equal length."""
+    return (int.from_bytes(a, "little") ^ int.from_bytes(b, "little")).to_bytes(
+        len(a), "little")
 
 
 def _decrypt_chunk(ct: bytes) -> bytes:
@@ -80,15 +93,12 @@ def _decrypt_chunk(ct: bytes) -> bytes:
     the high byte:
         plaintext_n  = ciphertext_n XOR (state_n & 0xFF)
         state_{n+1}  = ((ciphertext_n & 0xFF) << 56) | (state_n >> 8)
+    The state is a shift register, so its low byte is simply the ciphertext
+    byte from 8 positions back; the keystream is the initial state followed
+    by the ciphertext, which lets us XOR the whole chunk at once.
     Output is a conformant zlib stream.
     """
-    state = _STREAM_CIPHER_INITIAL_STATE
-    pt = bytearray(len(ct))
-    for i, c in enumerate(ct):
-        pt[i] = c ^ (state & 0xFF)
-        state = ((c & 0xFF) << 56) | (state >> 8)
-        state &= 0xFFFFFFFFFFFFFFFF
-    return bytes(pt)
+    return _xor_bytes(ct, (_STREAM_CIPHER_KEY + ct)[:len(ct)])
 
 
 # --------------------------------------------------------------------- #
@@ -146,6 +156,43 @@ class CPKHeader:
                          #            preamble).
 
 
+@dataclass(frozen=True)
+class ChunkFailure:
+    """A chunk that would not inflate and was zero-filled."""
+    sector: int
+    header_offset: int   # file offset of the 6-byte chunk header
+    zsize: int
+    zsize_raw: int       # zsize plus the 0x8000 encryption flag
+    decomp_size: int
+    stream_offset: int   # offset of its output in the global stream
+    error: str
+
+    @property
+    def data_offset(self) -> int:
+        return self.header_offset + 6
+
+
+@dataclass
+class VerifyReport:
+    """Result of CPKArchive.verify(). `problems` means the archive is damaged
+    or read wrongly; `warnings` are oddities that lose no known data."""
+    crc_stored: int
+    crc_actual: int
+    sectors: int
+    problems: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    failures: list[ChunkFailure] = field(default_factory=list)
+    affected_files: list[str] = field(default_factory=list)
+
+    @property
+    def ok(self) -> bool:
+        return not self.problems
+
+
+class RawCutsceneArchive(ValueError):
+    """The file is a raw cutscene CPK; d3cutscene.py reads those."""
+
+
 # --------------------------------------------------------------------- #
 # Reader
 # --------------------------------------------------------------------- #
@@ -154,6 +201,7 @@ class CPKArchive:
     """Read-only access to a Diablo III console CPK archive."""
 
     MAGIC = 0xA1B2C3D4
+    _SECTOR_CACHE_SIZE = 16
 
     # --- construction ---
 
@@ -162,22 +210,39 @@ class CPKArchive:
         self.path = path
         self.header: CPKHeader = self._parse_header()
         self.entries: list[CPKEntry] = []
+        self.unmatched_names: list[str] = []  # names with no SFI row
         self._raw_locs: list[int] = []
         self._cs2do: list[int] = []
         self._global_stream: Optional[bytes] = None  # lazy
-        self.chunk_errors = 0  # chunks zero-filled because they would not inflate
+        self._sector_cache: "OrderedDict[int, bytes]" = OrderedDict()
+        self._sector_failures: dict[int, list[ChunkFailure]] = {}
+        self._overrun_sectors: set[int] = set()  # chunk ran past the sector end
         self._parse_tables()
 
     @classmethod
     def open(cls, path: str) -> "CPKArchive":
         with open(path, "rb") as f:
-            data = f.read()
+            size = os.fstat(f.fileno()).st_size
+            data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) if size else b""
         return cls(data, path=path)
+
+    def close(self) -> None:
+        """Release the memory map. The archive is unusable afterwards."""
+        if isinstance(self._data, mmap.mmap):
+            self._data.close()
+
+    def __enter__(self) -> "CPKArchive":
+        return self
+
+    def __exit__(self, *exc) -> None:
+        self.close()
 
     # --- header / tables ---
 
     def _parse_header(self) -> CPKHeader:
         d = self._data
+        if len(d) < 64:
+            raise ValueError(f"Not a CPK archive: only {len(d)} B long")
         magic_be = struct.unpack(">I", d[:4])[0]
         magic_le = struct.unpack("<I", d[:4])[0]
         if magic_be == self.MAGIC:
@@ -220,7 +285,7 @@ class CPKArchive:
             )
 
         if fmt_const == 0 and len(d) - header_sector * read_sector == decomp_fs:
-            raise ValueError(
+            raise RawCutsceneArchive(
                 "Raw cutscene archive (fmt_const=0): payload is plain Ogg, "
                 "not zlib sectors. Use d3cutscene_tool.py instead."
             )
@@ -291,8 +356,12 @@ class CPKArchive:
         pos += cs2do_bytes
         self._first_sec = first_sec
         self._comp_sector_count = comp_sector_count
+        # Only a strictly increasing cs2do can be searched by read().
+        self._cs2do_increasing = all(
+            a < b for a, b in zip(self._cs2do, self._cs2do[1:])
+        )
 
-        # --- DecompSectorToCompSector (skipped, we don't use it) ---
+        # --- DecompSectorToCompSector (skipped, cs2do alone locates sectors) ---
         # ds2cs_bc is stored in the header and equals _highest_bit(comp_sector_count)
         # for well-formed archives — trust the header value when set.
         ds2cs_bc = h.ds2cs_bc if h.ds2cs_bc > 0 else _highest_bit(comp_sector_count)
@@ -319,6 +388,7 @@ class CPKArchive:
             if nh not in hash_to_sfi:
                 # Name with no SFI row — should never happen in shipped archives;
                 # skip rather than fail.
+                self.unmatched_names.append(name)
                 continue
             sfi_idx = hash_to_sfi[nh]
             hh, sz, lc, li = sfi_raw[sfi_idx]
@@ -354,6 +424,7 @@ class CPKArchive:
             p += 6 + skip
 
         out = bytearray()
+        failures: list[ChunkFailure] = []
         while p + 6 <= sec_end:
             nlow = u16(p); nhigh = u16(p + 2); zsize_raw = u16(p + 4)
             if zsize_raw == 0:
@@ -364,15 +435,11 @@ class CPKArchive:
             ds = p + 6
             de = ds + zsize
             if de > sec_end:
+                self._overrun_sectors.add(sec_idx)
                 break
             chunk = d[ds:de]
             if encrypted:
-                try:
-                    chunk = _decrypt_chunk(chunk)
-                except Exception:
-                    out.extend(b"\x00" * decomp_size)
-                    p = de
-                    continue
+                chunk = _decrypt_chunk(chunk)
             try:
                 dec = zlib.decompress(chunk)
                 if len(dec) < decomp_size:
@@ -386,10 +453,44 @@ class CPKArchive:
                     if len(dec) < decomp_size:
                         dec = dec + b'\x00' * (decomp_size - len(dec))
                     out.extend(dec)
-                except Exception:
-                    self.chunk_errors += 1
+                except Exception as ex:
+                    failures.append(ChunkFailure(
+                        sector=sec_idx, header_offset=p, zsize=zsize,
+                        zsize_raw=zsize_raw, decomp_size=decomp_size,
+                        stream_offset=self._cs2do[sec_idx] + len(out),
+                        error=str(ex),
+                    ))
                     out.extend(b'\x00' * decomp_size)
             p = de
+        if failures:
+            self._sector_failures[sec_idx] = failures
+        return bytes(out)
+
+    def _load_sector(self, sec_idx: int) -> bytes:
+        """_decompress_sector with a small LRU, as neighbours share sectors."""
+        cache = self._sector_cache
+        sb = cache.get(sec_idx)
+        if sb is not None:
+            cache.move_to_end(sec_idx)
+            return sb
+        sb = cache[sec_idx] = self._decompress_sector(sec_idx)
+        if len(cache) > self._SECTOR_CACHE_SIZE:
+            cache.popitem(last=False)
+        return sb
+
+    def _read_range(self, offset: int, size: int) -> bytes:
+        """Global-stream slice built from only the sectors that overlap it."""
+        out = bytearray(size)
+        end = offset + size
+        s = max(bisect_right(self._cs2do, offset) - 1, 0)
+        while s < self._comp_sector_count and self._cs2do[s] < end:
+            sb = self._load_sector(s)
+            start = self._cs2do[s]
+            lo = max(start, offset)
+            hi = min(start + len(sb), end)
+            if lo < hi:
+                out[lo - offset:hi - offset] = sb[lo - start:hi - start]
+            s += 1
         return bytes(out)
 
     def _build_global_stream(self) -> bytes:
@@ -414,13 +515,103 @@ class CPKArchive:
             self._global_stream = self._build_global_stream()
         return self._global_stream
 
+    @property
+    def chunk_failures(self) -> list[ChunkFailure]:
+        """Zero-filled chunks seen so far, by global-stream offset."""
+        return sorted(
+            (f for fs in self._sector_failures.values() for f in fs),
+            key=lambda f: f.stream_offset,
+        )
+
+    @property
+    def chunk_errors(self) -> int:
+        return sum(len(fs) for fs in self._sector_failures.values())
+
+    def failed_chunks_by_file(self) -> dict[str, list[int]]:
+        """Map file name -> indices into chunk_failures it overlaps."""
+        failures = self.chunk_failures
+        starts = [f.stream_offset for f in failures]
+        ends = [f.stream_offset + f.decomp_size for f in failures]
+        out = {}
+        for e in self.entries:
+            if e.loc_count == 0 or e.size == 0:
+                continue
+            lo = bisect_right(ends, e.offset)
+            hi = bisect_left(starts, e.offset + e.size)
+            if lo < hi:
+                out[e.name] = list(range(lo, hi))
+        return out
+
     def warn_chunk_errors(self) -> None:
-        """Warn on stderr if the global stream contains zero-filled chunks."""
+        """Warn on stderr if the data read so far has zero-filled chunks."""
         if self.chunk_errors:
             sys.stderr.write(
                 f"  WARNING: {self.chunk_errors:,} chunk(s) failed to decompress "
                 f"and were zero-filled\n"
             )
+
+    # --- integrity check ---
+
+    def verify(self) -> VerifyReport:
+        """Check the sector CRC and tables, then inflate every sector.
+
+        Zero-filled chunks are otherwise invisible in the output, which is
+        how a wrong cipher constant once went unnoticed. Sectors are not kept
+        in memory, so this works on archives of any size.
+        """
+        h = self.header
+        with memoryview(self._data) as view:
+            crc = zlib.crc32(view[self._first_sec:]) & 0xFFFFFFFF
+        report = VerifyReport(h.sector_crc32, crc, self._comp_sector_count)
+
+        if crc != h.sector_crc32:
+            report.problems.append(
+                f"sector CRC32 mismatch: stored {h.sector_crc32:08X}, "
+                f"computed {crc:08X}")
+        if h.decomp_fs and not self._comp_sector_count:
+            report.problems.append(
+                f"no compressed sectors: file ends before first_sec "
+                f"0x{self._first_sec:X}")
+        if self.unmatched_names:
+            report.problems.append(
+                f"{len(self.unmatched_names):,} name(s) have no SortedFileInfo row")
+        bad_locs = sum(
+            e.loc_count > 0 and e.loc_idx >= len(self._raw_locs)
+            for e in self.entries)
+        if bad_locs:
+            report.problems.append(
+                f"{bad_locs:,} file(s) point past the Locations table")
+        out_of_range = sum(
+            e.loc_count > 0 and e.offset + e.size > h.decomp_fs
+            for e in self.entries)
+        if out_of_range:
+            report.problems.append(
+                f"{out_of_range:,} file(s) end past decomp_fs ({h.decomp_fs:,} B)")
+
+        if not self._cs2do_increasing:
+            report.warnings.append("cs2do is not strictly increasing")
+        overlaps = 0
+        for s in range(self._comp_sector_count):
+            sb = self._decompress_sector(s)
+            if (s + 1 < self._comp_sector_count
+                    and self._cs2do[s] + len(sb) > self._cs2do[s + 1]):
+                overlaps += 1
+        if overlaps:
+            report.warnings.append(
+                f"{overlaps:,} sector(s) inflate past the next cs2do offset")
+        if self._overrun_sectors:
+            report.warnings.append(
+                f"{len(self._overrun_sectors):,} sector(s) end with a chunk "
+                f"that overruns the sector")
+
+        report.failures = self.chunk_failures
+        if report.failures:
+            report.affected_files = sorted(self.failed_chunks_by_file())
+            report.problems.append(
+                f"{len(report.failures):,} chunk(s) failed to decompress and "
+                f"were zero-filled ({len(report.affected_files):,} file(s) "
+                f"affected)")
+        return report
 
     # --- public lookup / extraction ---
 
@@ -449,8 +640,11 @@ class CPKArchive:
             raise KeyError(name_or_entry)
         if e.loc_count == 0 or e.size == 0:
             return b""
-        gs = self.global_stream
         end = e.offset + e.size
+        if (self._global_stream is None and self._cs2do_increasing
+                and end <= self.header.decomp_fs):
+            return self._read_range(e.offset, e.size)
+        gs = self.global_stream
         if end > len(gs):
             # Should not happen now that we honor cs2do; surface the corruption.
             raise IOError(
@@ -472,7 +666,8 @@ class CPKArchive:
         """Write matching files to disk. Returns a small stats dict."""
         os.makedirs(out_dir, exist_ok=True)
         stats = Counter()
-        for e in self.entries:
+        # Stream order keeps neighbouring files inside the sector cache.
+        for e in sorted(self.entries, key=lambda e: e.offset):
             if filter_fn is not None and not filter_fn(e):
                 stats["skipped_filter"] += 1
                 continue
@@ -565,13 +760,13 @@ class _BitWriter:
 # --------------------------------------------------------------------- #
 
 def _encrypt_chunk(plaintext: bytes) -> bytes:
-    state = _STREAM_CIPHER_INITIAL_STATE
-    ct = bytearray(len(plaintext))
-    for i, p in enumerate(plaintext):
-        c = p ^ (state & 0xFF)
-        ct[i] = c
-        state = ((c & 0xFF) << 56) | (state >> 8)
-        state &= 0xFFFFFFFFFFFFFFFF
+    # Every 8 output bytes key the next 8 (see _decrypt_chunk).
+    ct = bytearray()
+    key = _STREAM_CIPHER_KEY
+    for i in range(0, len(plaintext), 8):
+        block = plaintext[i:i + 8]
+        key = _xor_bytes(block, key[:len(block)])
+        ct += key
     return bytes(ct)
 
 
@@ -614,6 +809,12 @@ class CPKWriter:
     def from_archive(cls, archive: CPKArchive) -> "CPKWriter":
         return cls(archive)
 
+    def _refuse_source_path(self, out_path: str) -> None:
+        """The source stays memory-mapped, so it cannot be its own target."""
+        src_path = self._src.path if self._src is not None else None
+        if src_path and os.path.abspath(out_path) == os.path.abspath(src_path):
+            raise ValueError(f"refusing to overwrite source archive: {out_path}")
+
     # --- byte-identical save ---
 
     def save_as_clone(self, out_path: str) -> None:
@@ -629,6 +830,7 @@ class CPKWriter:
         are re-encoded; all tables (SFI / Locations / cs2do / Names) and
         every other sector remain byte-identical.
         """
+        self._refuse_source_path(out_path)
         if not self._replacements:
             return self.save_as_clone(out_path)
         self._save_with_replacements(out_path)
@@ -834,4 +1036,4 @@ def replace_file_test(*args, **kwargs) -> dict:
 
 
 # end of file marker for sync verification
-_CPKLIB_VERSION = "1.1-fmt10"
+_CPKLIB_VERSION = "1.2-fmt10"

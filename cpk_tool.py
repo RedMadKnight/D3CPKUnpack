@@ -6,11 +6,14 @@ Subcommands:
     info     <archive>
     list     <archive> [filters]
     extract  <archive> [filters] --out DIR
+    verify   <archive> [--verbose]
     replace  <archive> <internal-name> <src> --out OUT [--resize] [--level N]
     delete   <archive> <internal-name>       --out OUT          [--level N]
     add      <archive> <internal-name> <src> --out OUT          [--level N]
     create   <dir>                           --out OUT [--version 6|7]
                                              [--endian big|little] [--level N]
+
+info, list, extract and verify also accept raw cutscene archives.
 """
 from __future__ import annotations
 
@@ -23,6 +26,8 @@ import time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cpklib  # noqa: E402
 import cpkrebuild  # noqa: E402
+import d3cutscene  # noqa: E402
+import d3cutscene_tool  # noqa: E402
 
 
 _SIZE_SUFFIXES = {"": 1, "k": 1024, "m": 1024**2, "g": 1024**3}
@@ -75,6 +80,13 @@ def _sort_entries(entries, field, reverse):
     return sorted(entries, key=keys[field], reverse=reverse)
 
 
+def _select(entries, args):
+    keep = _build_filter(args)
+    rows = [e for e in entries if keep(e)]
+    rows = _sort_entries(rows, args.sort, args.reverse)
+    return rows[:args.limit] if args.limit else rows
+
+
 def _check_out_path(args):
     if os.path.abspath(args.out) == os.path.abspath(args.archive):
         print("  refusing to overwrite source; use --out something else",
@@ -101,12 +113,10 @@ def cmd_info(args):
 
 
 def cmd_list(args):
-    ar = cpklib.CPKArchive.open(args.archive)
-    keep = _build_filter(args)
-    rows = [e for e in ar if keep(e)]
-    rows = _sort_entries(rows, args.sort, args.reverse)
-    if args.limit:
-        rows = rows[:args.limit]
+    _print_rows(_select(cpklib.CPKArchive.open(args.archive), args), args)
+
+
+def _print_rows(rows, args):
     if not rows:
         print("  (no matching entries)")
         return
@@ -123,11 +133,7 @@ def cmd_list(args):
 
 def cmd_extract(args):
     ar = cpklib.CPKArchive.open(args.archive)
-    keep = _build_filter(args)
-    selected = [e for e in ar if keep(e)]
-    selected = _sort_entries(selected, args.sort, args.reverse)
-    if args.limit:
-        selected = selected[:args.limit]
+    selected = _select(ar, args)
     if not selected:
         print("  (no matching entries)")
         return
@@ -138,7 +144,8 @@ def cmd_extract(args):
     print(f"  extracting {n:,} files ({total_size:,} B) -> {out_dir}/")
     t0 = time.time()
     written = zeros = failed = 0
-    for i, e in enumerate(selected, 1):
+    # Stream order keeps neighbouring files inside the sector cache.
+    for i, e in enumerate(sorted(selected, key=lambda e: e.offset), 1):
         try:
             payload = ar.read(e)
         except IOError as ex:
@@ -157,6 +164,30 @@ def cmd_extract(args):
     print(f"  done: {written:,} written, {zeros:,} mostly-zero, "
           f"{failed:,} failed, {time.time()-t0:.1f}s")
     ar.warn_chunk_errors()
+
+
+def cmd_verify(args):
+    ar = cpklib.CPKArchive.open(args.archive)
+    t0 = time.time()
+    report = ar.verify()
+    print(f"  archive:        {args.archive}")
+    print(f"  sector CRC32:   {report.crc_actual:08X} "
+          f"({'OK' if report.crc_actual == report.crc_stored else 'MISMATCH'})")
+    print(f"  sectors read:   {report.sectors:,}")
+    print(f"  failed chunks:  {len(report.failures):,}")
+    for w in report.warnings:
+        print(f"  warning: {w}")
+    for p in report.problems:
+        print(f"  PROBLEM: {p}")
+    shown = report.affected_files if args.verbose else report.affected_files[:20]
+    for name in shown:
+        print(f"    {name}")
+    if len(shown) < len(report.affected_files):
+        print(f"    ... and {len(report.affected_files) - len(shown):,} more "
+              f"(use --verbose)")
+    print(f"  {'OK' if report.ok else 'FAILED'} ({time.time()-t0:.1f}s)")
+    if not report.ok:
+        sys.exit(1)
 
 
 def cmd_replace(args):
@@ -286,6 +317,48 @@ def cmd_create(args):
     print(f"  verified: {len(re_ar):,} files round-trip OK")
 
 
+# Raw cutscene archives have no sectors to rewrite, so only the read-side
+# commands exist for them.
+
+def _cutscene_info(args):
+    args.scan_ogg = False
+    d3cutscene_tool.cmd_info(args)
+
+
+def _cutscene_list(args):
+    _print_rows(_select(d3cutscene.CutsceneCPK(args.archive).entries, args), args)
+
+
+def _cutscene_extract(args):
+    ar = d3cutscene.CutsceneCPK(args.archive)
+    selected = _select(ar.entries, args)
+    if not selected:
+        print("  (no matching entries)")
+        return
+    total_size = sum(e.size for e in selected)
+    print(f"  extracting {len(selected):,} files ({total_size:,} B) -> {args.out}/")
+    for e in selected:
+        path = ar.extract_entry(e, args.out, flat=args.flat)
+        if args.verbose:
+            print(f"    {path}")
+    print(f"  done: {len(selected):,} written")
+
+
+def _cutscene_verify(args):
+    d3cutscene_tool.cmd_validate(argparse.Namespace(
+        archive=args.archive, name=None, iname=None, sort="index",
+        reverse=False, limit=None, verbose=args.verbose, progress=False,
+    ))
+
+
+_CUTSCENE_COMMANDS = {
+    "info": _cutscene_info,
+    "list": _cutscene_list,
+    "extract": _cutscene_extract,
+    "verify": _cutscene_verify,
+}
+
+
 def _add_filter_args(p):
     p.add_argument("--ext", nargs="+", help="filter by extension(s)")
     p.add_argument("--name", help="regex against full path")
@@ -322,6 +395,12 @@ def main():
     _add_filter_args(p)
     p.set_defaults(func=cmd_extract)
 
+    p = sub.add_parser("verify", help="check CRC, tables and every chunk")
+    p.add_argument("archive")
+    p.add_argument("--verbose", "-v", action="store_true",
+                   help="list every affected file")
+    p.set_defaults(func=cmd_verify)
+
     p = sub.add_parser("replace", help="replace one file")
     p.add_argument("archive"); p.add_argument("name"); p.add_argument("source")
     p.add_argument("--out", "-o", required=True)
@@ -351,7 +430,14 @@ def main():
     p.set_defaults(func=cmd_create)
 
     args = ap.parse_args()
-    args.func(args)
+    try:
+        args.func(args)
+    except cpklib.RawCutsceneArchive:
+        if args.cmd not in _CUTSCENE_COMMANDS:
+            print(f"  {args.cmd} is not supported on raw cutscene archives",
+                  file=sys.stderr)
+            sys.exit(2)
+        _CUTSCENE_COMMANDS[args.cmd](args)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+
+# packaging
+build/
+dist/
+*.egg-info/
+.venv/
+
+# tool output
+d3cpk_output/
+prefetch_out/
+
+# game data must never be committed
+*.cpk

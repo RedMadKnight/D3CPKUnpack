@@ -46,19 +46,28 @@ cpklib.py       — reader + writer library (CPKArchive + CPKWriter,
                   byte-identical round-trip, same-size in-place replace)
 cpkrebuild.py   — extension layer: replace_file / delete_file / add_file /
                   set_zlib_level / CPKWriter.create_new(version=6|7, endian=…)
-cpk_tool.py     — command-line front-end: info / list / extract / replace /
-                  delete / add / create
+cpk_tool.py     — command-line front-end: info / list / extract / verify /
+                  replace / delete / add / create
+d3cpk_extractor.py
+                — extract everything, with a report and dumps of unreadable
+                  chunks (d3cpk_extractor_v7.py is the same tool)
 d3cutscene.py   — reader for the raw cutscene CPK variant
 d3cutscene_tool.py
                 — command-line front-end for cutscene info / list / validate /
                   extract
 ```
 
+The files work as they are, or `pip install .` adds the commands `cpk-tool`,
+`d3cutscene-tool` and `d3cpk-extractor`.
+
 Common operations:
 
 ```bash
 # inspect an archive
 python3 cpk_tool.py info Act3.cpk
+
+# check it: CRC, tables, and that every chunk really inflates
+python3 cpk_tool.py verify Act3.cpk
 
 # list contents — filter by extension, sort by uncompressed size
 python3 cpk_tool.py list Act3.cpk --ext stl --sort size --reverse
@@ -100,6 +109,16 @@ python3 d3cutscene_tool.py extract enUS_Cutscene.cpk --out ./hero --flat \
 patched in-place; size-changing replacements, and same-size ones that no
 longer fit in their sector slots, trigger a full rebuild via the extension
 layer.
+
+`extract` and `read()` memory-map the archive and inflate only the sectors a
+file overlaps, located with a binary search of `cs2do`. A chunk that will not
+inflate is zero-filled so that offsets stay aligned, which looks like success
+in the output; `verify` is the check for that. It exits with status 1 and
+names the affected files.
+
+`info`, `list`, `extract` and `verify` in `cpk_tool.py` recognise raw cutscene
+archives and hand them to `d3cutscene.py`, where `verify` validates each Ogg
+stream. `d3cutscene_tool.py` offers the Ogg-specific options.
 
 Tests use synthetic archives only (no game data):
 
@@ -1030,7 +1049,8 @@ this document:
 |---|---|---|---|
 | `cpklib.py` | Reference Python library: archive reader (full parser for v6/v7), `CPKWriter` with byte-identical round-trip, same-size in-place file replacement | `*.cpk` ↔ Python objects | Round-trip verified on every observed archive |
 | `cpkrebuild.py` | Extension layer adding full-rebuild operations: `replace_file` (size-changing), `delete_file`, `add_file`, configurable zlib level (`set_zlib_level(0..9)`), and `CPKWriter.create_new(version=6\|7, endian=…)` for from-scratch construction | live `CPKWriter` | Validated on archives from 4 MB to 80 MB; from-scratch archives reopen and round-trip cleanly |
-| `cpk_tool.py` | Command-line front-end: `info` / `list` / `extract` (with extension/regex/size/locale filters) / `replace` / `delete` / `add` / `create` (build new archive from a directory tree) | shell | All subcommands round-trip-verified |
+| `cpk_tool.py` | Command-line front-end: `info` / `list` / `extract` (with extension/regex/size/locale filters) / `verify` / `replace` / `delete` / `add` / `create` (build new archive from a directory tree) | shell | All subcommands round-trip-verified |
+| `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` | `*.cpk` → directory tree | Tested on synthetic archives |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
 | `coretoc_parser.py` | Global asset index parser | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser | `Prefetch.dat` + `CoreTOC.dat` | Format invariants validated |
