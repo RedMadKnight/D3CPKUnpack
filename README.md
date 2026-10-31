@@ -59,10 +59,13 @@ coretoc_parser.py
                 — parse CoreTOC.dat into CSV / JSON (§4)
 prefetch_parser.py
                 — parse Prefetch.dat into a dependency graph (§5)
+lua_tool.py     — recover embedded Lua scripts as pseudo-Lua (§14)
+lua51.py, luadec.py
+                — Lua 5.1 chunk reader / disassembler, and decompiler
 ```
 
 The files work as they are, or `pip install .` adds the commands `cpk-tool`,
-`d3cutscene-tool` and `d3cpk-extractor`.
+`d3cutscene-tool`, `d3cpk-extractor` and `lua-tool`.
 
 Common operations:
 
@@ -96,6 +99,9 @@ python3 d3cpk_extractor.py Act3.cpk ./output
 # parse the two index files
 python3 coretoc_parser.py CoreTOC.dat ./toc
 python3 prefetch_parser.py Prefetch.dat CoreTOC.dat ./prefetch
+
+# recover the embedded Lua scripts, with listings and the original chunks
+python3 lua_tool.py extract Common.cpk CacheAct1.cpk --out ./scripts --asm --raw
 
 # inspect the raw Ogg cutscene archive
 python3 d3cutscene_tool.py info enUS_Cutscene.cpk --scan-ogg
@@ -876,8 +882,8 @@ clean-room parser should read.
 
 **Auxiliary buffer referenced from the fixed section:**
 
-- A trailing Lua 5.1 bytecode chunk addressed by `compiledScriptRange`
-  (see §14).
+- A trailing Lua 5.1 bytecode chunk addressed by `compiledScriptRange`, stored
+  at file offset 0x190 (see §14).
 - A per-power formula table — a 16-byte descriptor whose payload is an
   array of formula entries referenced by its own offset + size pair:
 
@@ -967,23 +973,46 @@ emit `.app` files for interoperability should preserve this alignment.
 
 ### 14.1 Version identification
 
-The compiled script blobs embedded in `.pow` files (§12) begin with the
+The compiled script blobs embedded in SNO files begin with the
 standard Lua chunk signature `1B 4C 75 61 51` (`\x1BLuaQ`), which
 identifies **Lua 5.1** specifically. The opcode set used in these blobs
 enumerates 38 opcodes in the exact Lua 5.1 order (distinguishable from
-5.2, 5.3, and LuaJIT by both count and ordering). Compiled chunks carry
-the debug information that the reference Lua 5.1 compiler emits by
-default. Not every power has a script: 75 of 252 `.pow` files in `Common.cpk`
-and 33 of 95 in `CacheAct1.cpk` contain a blob.
+5.2, 5.3, and LuaJIT by both count and ordering). The chunk header declares big-endian data, 4-byte integers, 4-byte
+`size_t` and 8-byte floating-point numbers. Every chunk is stripped: there are
+no source names, line numbers or local variable names, while global names,
+field names and strings survive.
+
+Scripts occur in four file types. Each stores an offset + size pair at a fixed
+position, and the offset counts from the end of the 16-byte file header:
+
+| Type | Pair at | Blobs in `Common.cpk` + `CacheAct1.cpk` | Content |
+|---|---|---|---|
+| `.pow` (Power) | `0x190` | 108 | Skill logic; most `.pow` files have no blob |
+| `.scr` (Script) | `0x20` | 261 | Actor and event scripts |
+| `.con` (Conductor) | `0x48` | 101 | Scripted sequences, as `Phase_<n>_Sequence_<n>_Start` handlers |
+| `.cnv` (Conversation) | `0x1E8` | 655 | Nearly always empty: 653 chunks hold only `RETURN` |
+
+Scripts reach the engine through one global table, `Hydra`, of which 597 names
+are used in these two archives, such as `Hydra.PowerGetFormulaValue` or
+`Hydra.ActorPlaySimpleConversation`. The engine calls back into functions the
+script defines as globals, such as `OnStart` and `OnContact0`.
 
 ### 14.2 Practical consequences for tooling
 
-- Extract the bytecode blob referenced from `.pow` fixed-section fields
-  (`compiledScriptRange`; see §12).
-- Feed it to any open-source Lua 5.1 decompiler (`unluac`, `luadec`) —
-  no custom decoder is required.
-- Expect per-skill source-level logic to be recoverable as readable Lua,
-  including variable and function names where the compiler preserved them.
+- `lua_tool.py extract` finds the chunks by parsing them, decompiles each one
+  and skips the empty ones. Paths follow the internal names, so
+  `Power\Foo.pow` becomes `<out>/Power/Foo.pow.lua`. `--asm` adds a `.lst`
+  disassembly and `--raw` the original `.luac` chunk, which standard Lua 5.1
+  decompilers such as `unluac` and `luadec` can also read.
+- The output is pseudo-Lua: logic and names are recovered, but because the
+  chunks are stripped, parameters print as `a0`, other locals as `r<register>`
+  and captured variables as `up<depth>_r<register>`. A jump that fits no
+  structure prints as `goto L<pc>` with a Lua 5.2 style label.
+- All 472 non-empty chunks in `Common.cpk` and `CacheAct1.cpk` decompile, with
+  no function left as disassembly and only 34 `goto` statements in 17,289
+  lines. Every string constant and each of the 9,736 calls in the bytecode
+  appears in the text. The output has not been recompiled or executed, so
+  treat `.lst` as authoritative where the two seem to disagree.
 
 ### 14.3 Parameter tagging
 
@@ -1110,6 +1139,7 @@ this document:
 | `cpk_tool.py` | Command-line front-end: `info` / `list` / `extract` (with extension/regex/size/locale filters) / `verify` / `replace` / `delete` / `add` / `create` (build new archive from a directory tree) | shell | All subcommands round-trip-verified |
 | `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Run on `Common.cpk`: all 28,394 files extracted |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
+| `lua51.py` / `luadec.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompiler to pseudo-Lua, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 1,125 chunks in `Common.cpk` and `CacheAct1.cpk` |
 | `coretoc_parser.py` | Global asset index parser | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser | `Prefetch.dat` + `CoreTOC.dat` | Format invariants validated |
 
@@ -1132,6 +1162,7 @@ cross-check independent observations:
 | CPKReaderWV | zeroKilo | CPK header parser (header-info only); full extraction is in this repository (§19.1) |
 | jybp/casc | jybp | Open-source `SnoExtensions` table for the PC CASC build — shares its core with the console mapping (see §4.4) |
 | StormLib | Ladislav Zezula | Reference MPQ implementation — not directly applicable |
+| unluac, luadec | tehtmi; viruscamp and others | General-purpose Lua 5.1 decompilers, usable on the chunks from `lua_tool.py --raw`. No public project found that targets the Diablo III scripts themselves |
 | CascLib | Ladislav Zezula | Reference CASC implementation — useful for cross-checking hypotheses about compression algorithms (its `CascDecompress` is zlib-only) |
 
 ---
@@ -1209,6 +1240,9 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 - **Embedded scripting identified as Lua 5.1** — signature and opcode
   count both match the 5.1 baseline exactly, making the shipped
   bytecode decompilable with off-the-shelf tools.
+- **Script recovery** — every Lua chunk in `.pow`, `.scr`, `.con` and `.cnv`
+  files located and decompiled to pseudo-Lua (§14), checked on `Common.cpk`
+  and `CacheAct1.cpk`.
 - **Hashing algorithm** — 64-bit FNV-1a with the standard constants,
   verified against the `FileName` and `SortedFileInfo` sections of CPK
   archives.
@@ -1244,13 +1278,10 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 
 ### 21.3 Highest-leverage next steps
 
-1. **Lua bytecode recovery.** Extract the compiled-script blob from each
-   `.pow` file and run it through `unluac`. Result: readable logic for
-   all shipped skills.
-2. **Extend the corpus** across all shipped CPK archives (per-act
+1. **Extend the corpus** across all shipped CPK archives (per-act
    archives, language packs) — broader sampling is the cheapest way to
    close most open items.
-3. **Cross-platform corpus diff** — compare PC CASC-resident assets
+2. **Cross-platform corpus diff** — compare PC CASC-resident assets
    (via the public `SnoExtensions` table) against the console mapping
    in §4.4 to confirm the working names for the remaining console-only
    groups.

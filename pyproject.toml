@@ -18,6 +18,7 @@ Repository = "https://github.com/RedMadKnight/D3CPKUnpack"
 [project.scripts]
 cpk-tool = "cpk_tool:main"
 d3cutscene-tool = "d3cutscene_tool:main"
+lua-tool = "lua_tool:main"
 d3cpk-extractor = "d3cpk_extractor:main"
 
 [tool.setuptools]
@@ -30,5 +31,8 @@ py-modules = [
     "d3cpk_extractor_v7",
     "d3cutscene",
     "d3cutscene_tool",
+    "lua51",
+    "lua_tool",
+    "luadec",
     "prefetch_parser",
 ]
