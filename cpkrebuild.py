@@ -17,59 +17,48 @@ from cpklib import (
     fnv_hash64,
     _BitWriter,
     _highest_bit,
-    _encrypt_chunk,
 )
 
 
-def _encode_sector_payload_fast(decompressed, capacity, endian, encrypt,
-                                level=6):
+# A chunk stays well under the largest one seen in shipped archives (~940 KB).
+_MAX_CHUNK_DECOMP = 0x40000
+# Stop probing once the compressed data is this close to filling the slot.
+_SLOT_SLACK = 256
+_MAX_PROBES = 12
+
+
+def _fill_sector(stream, pos, capacity, endian, level=6):
+    """Compress as much of stream[pos:] as fits one slot as a single chunk.
+
+    Each probe guesses the size from the last compression ratio, so both
+    audio that will not shrink and text that shrinks tenfold settle in a few
+    tries. Returns (payload of `capacity` bytes, stream bytes consumed).
+    """
     HEADER = 6
-    if not decompressed:
-        return b"\x00" * capacity
-    chunks = [decompressed]
-    while True:
-        encoded = []
-        total = 0
-        too_big = False
-        for c in chunks:
-            cz = zlib.compress(c, level)
-            flag = 0
-            if encrypt:
-                cz = _encrypt_chunk(cz)
-                flag = 0x8000
-            zsize = len(cz)
-            if zsize > 0x7FFF:
-                too_big = True
+    limit = min(capacity - HEADER, 0x7FFF)
+    view = memoryview(stream)
+    largest = min(len(stream) - pos, _MAX_CHUNK_DECOMP)
+    n = min(capacity, largest)
+    fits, too_big, best = 0, None, None
+    for _ in range(_MAX_PROBES):
+        cz = zlib.compress(view[pos:pos + n], level)
+        if len(cz) > limit:
+            too_big = n
+        else:
+            fits, best = n, cz
+            if n == largest or limit - len(cz) <= _SLOT_SLACK:
                 break
-            decomp_size = len(c)
-            nlow = decomp_size & 0xFFFF
-            nhigh = (decomp_size >> 16) & 0xFFFF
-            zsize_raw = zsize | flag
-            header = struct.pack(endian + "HHH", nlow, nhigh, zsize_raw)
-            encoded.append(header + cz)
-            total += HEADER + zsize
-        if not too_big and total <= capacity:
-            blob = b"".join(encoded)
-            if total + HEADER <= capacity:
-                blob += b"\x00" * HEADER
-                total += HEADER
-            blob += b"\x00" * (capacity - total)
-            return blob
-        new_chunks = []
-        progressed = False
-        for c in chunks:
-            if len(c) <= 1:
-                new_chunks.append(c)
-                continue
-            mid = len(c) // 2
-            new_chunks.append(c[:mid])
-            new_chunks.append(c[mid:])
-            progressed = True
-        if not progressed:
-            raise ValueError(
-                f"Cannot fit {len(decompressed):,} B in {capacity:,}-byte slot"
-            )
-        chunks = new_chunks
+        guess = n * (limit - _SLOT_SLACK // 2) // max(len(cz), 1)
+        guess = min(guess, n * 8, largest)
+        if guess <= fits or (too_big is not None and guess >= too_big):
+            guess = (fits + (too_big or largest)) // 2
+        if guess in (n, fits):
+            break
+        n = guess
+    if best is None:
+        raise ValueError(f"Cannot fit data in {capacity:,}-byte slot")
+    header = struct.pack(endian + "HHH", fits & 0xFFFF, fits >> 16, len(best))
+    return (header + best).ljust(capacity, b"\x00"), fits
 
 
 def _ensure_mods(self):
@@ -254,26 +243,14 @@ def _full_rebuild(self, out_path):
     sectors = []
     p = 0
     while p < decomp_fs:
-        size = min(comp_sector, decomp_fs - p)
         first = (len(sectors) == 0) and not new_layout
         prelude = 6 if first else 0
-        capacity = comp_sector - prelude
-        while True:
-            try:
-                payload = _encode_sector_payload_fast(
-                    bytes(global_stream[p:p + size]),
-                    capacity, endian=endian, encrypt=False,
-                    level=level,
-                )
-                slot = (b"\x00" * 6 + payload) if first else payload
-                assert len(slot) == comp_sector
-                sectors.append((p, size, slot))
-                p += size
-                break
-            except ValueError:
-                size //= 2
-                if size < 1:
-                    raise
+        payload, size = _fill_sector(
+            global_stream, p, comp_sector - prelude, endian, level)
+        slot = (b"\x00" * 6 + payload) if first else payload
+        assert len(slot) == comp_sector
+        sectors.append((p, size, slot))
+        p += size
     comp_sector_count = len(sectors)
     _step(f'sectors ({comp_sector_count}, level={level})')
 

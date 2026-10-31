@@ -122,6 +122,11 @@ slots. A replacement of a different size needs `--resize`, which always
 rebuilds. Write commands produce a new file: `--out` cannot be the source
 archive.
 
+An in-place `replace` updates every stored copy of a file (§3.5). A full
+rebuild writes each file once, in plain chunks, so the output differs from the
+source even where the content is identical; rebuilding a 600 MB archive takes
+one to three minutes.
+
 `extract` and `read()` memory-map the archive and inflate only the sectors a
 file overlaps, located with a binary search of `cs2do`. A chunk that will not
 inflate is zero-filled so that offsets stay aligned, which looks like success
@@ -235,8 +240,8 @@ distribution — is:
 │ SortedFileInfo[]        │  per-file entries: FNV-1a name hash, decomp size,
 │  (bit-packed)           │  Locations-range count + first-index
 ├─────────────────────────┤
-│ Locations[]             │  decompressed-stream offset for every file
-│  (bit-packed)           │
+│ Locations[]             │  decompressed-stream offset of every stored
+│  (bit-packed)           │  copy of a file (§3.5)
 ├─────────────────────────┤
 │ CompSectorToDecompOff[] │  decompressed-stream offset for every compressed
 │  (bit-packed, "cs2do")  │  sector — used to locate sector boundaries
@@ -298,10 +303,10 @@ fields:
 | `0x08` | 8 | `decomp_fs` | total bytes in the decompressed global stream |
 | `0x10` | 4 | `fmt_const` | layout discriminator. `2` = legacy layout (RoS, Act\*.cpk, CoreCommon.cpk). `10` = new layout introduced with **Patch 2.6.7** (May 2019). `0` = raw cutscene archive (plain Ogg payload, no zlib sectors). See §3.3.1.1 |
 | `0x14` | 4 | `file_count` | number of `SortedFileInfo` entries |
-| `0x18` | 4 | `loc_count` | number of `Locations` entries (= `file_count` when each file occupies one contiguous run) |
+| `0x18` | 4 | `loc_count` | number of `Locations` entries: `file_count` plus any extra copies of files (§3.5) |
 | `0x1C` | 4 | `header_sector` | legacy (`fmt_const=2`): `(first_compressed_sector_offset / read_sector)` so `first_sec = header_sector × read_sector`, always on a `read_sector` boundary. New (`fmt_const=10`): direct byte offset (`first_sec = header_sector`). |
 | `0x20` | 4 | `fs_bc` | bit-width of size field in `SortedFileInfo` |
-| `0x24` | 4 | `flcnt_bc` | bit-width of run-count field in `SortedFileInfo` (always 1 in observed data — every file is a single contiguous run) |
+| `0x24` | 4 | `flcnt_bc` | bit-width of copy-count field in `SortedFileInfo` (8 in `CacheAct1.cpk`, 2 in `Common.cpk`) |
 | `0x28` | 4 | `flidx_bc` | bit-width of first-Locations-index field in `SortedFileInfo` |
 | `0x2C` | 4 | `loc_bc` | bit-width of `Locations` entries; equal to `bit_length(decomp_fs)` |
 | `0x30` | 4 | `cs2do_bc` | bit-width of `cs2do` entries; equal to `loc_bc` (both index the decompressed stream) |
@@ -405,6 +410,9 @@ Because of the feedback, the initial state only influences the first 8
 bytes of a chunk — but those include the zlib header, so with a wrong
 constant every encrypted chunk fails to inflate as a whole.
 
+Encryption is the exception: 1,316 of 73,644 chunks in `CacheAct1.cpk` and 635
+of 65,734 in `Common.cpk`.
+
 Known-plaintext attack via cross-platform corpus diff: the same logical
 asset appears in both big-endian and little-endian archive variants. A
 subset of chunks is stored as raw zlib on one variant and as the encrypted
@@ -414,15 +422,13 @@ chunk length. Validating the recovered keystream against additional chunks
 confirms (a) whether the cipher carries internal state feedback, and
 (b) whether any IV or per-chunk nonce is in use.
 
-### 3.5 Two additional format invariants worth noting
+### 3.5 Additional format invariants worth noting
 
 1. **Zero-fill on zlib short output.** Some chunks decompress to fewer
    bytes than `decomp_size` declares. The shortfall must be zero-padded
    so that byte offsets in the global decompressed stream stay in sync
    with the `Locations` table. Chunks do not span sector boundaries in
-   practice. A few chunks hold an incomplete zlib stream that one-shot
-   `zlib.decompress` rejects; a streaming `decompressobj` still returns
-   their data, and it must be kept (zero-padded the same way).
+   practice. No such chunk occurs in `Common.cpk` or `CacheAct1.cpk`.
 2. **Orphaned SortedFileInfo entries.** Some archives declare a
    `decomp_fs` in the header that exceeds the sum of physically present
    chunks by a small margin (low tens of kilobytes), leaving a handful
@@ -430,6 +436,23 @@ confirms (a) whether the cipher carries internal state feedback, and
    filled. A correct extractor zero-fills the global stream up to
    `decomp_fs`, producing those entries as zero-filled placeholders
    rather than erroring.
+3. **Chunks cut off at the slot boundary.** The last chunk of nearly every
+   sector stops exactly at the end of the slot, before its zlib stream ends
+   (35,621 of 35,640 sectors in `CacheAct1.cpk`, 37,346 of 37,357 in
+   `Common.cpk`). One-shot `zlib.decompress` rejects these chunks. A streaming
+   `decompressobj` returns exactly `decomp_size` bytes, and each sector's
+   output then matches the distance to the next `cs2do` entry. A few sectors
+   instead end in a stub of one or two zlib header bytes with `decomp_size` 0.
+4. **Repeated files.** A `SortedFileInfo` row can own several consecutive
+   `Locations` entries, each one a complete copy of the file, not a fragment:
+   `decomp_fs` equals the sum of `size × copies`, with no gaps. `CacheAct1.cpk`
+   has 38,039 locations for 22,915 files, with 2,820 files stored more than
+   once, while `Common.cpk` has two such files. Repeated files are small
+   (largest 8,061 B) and mostly actors, materials and lights; none has a
+   locale tag. Copies match byte for byte, except that in 192 files they
+   differ in the `flags` and `fileHash` header fields (§7.1). Placing shared
+   assets near the assets that use them would reduce disc seeks, but that
+   purpose is an inference. Tools that write in place must update every copy.
 
 ### 3.5.3 Sector CRC32
 
@@ -664,12 +687,15 @@ archive:
 
 | Offset | Field | Type | Meaning |
 |---|---|---|---|
-| +0x00 | `snoHandle` | uint32 | Handle component of the asset's SNO key |
-| +0x04 | `version` | uint32 | Changes between patches |
-| +0x08 | `flags` | uint32 | Per-asset flags; bit semantics not determined from data alone |
-| +0x0C | `schemaHash` | uint32 | Schema fingerprint (see §11) |
+| +0x00 | `magic` | uint32 | `0xDEADBEEF` |
+| +0x04 | `version` | uint32 | Same for every file of a group, e.g. Power `0x5A2`, Actor `0x113`, Monster `0x4D5`, Textures `0x3A` (see §11) |
+| +0x08 | `flags` | uint32 | Usually 0 or 1, rarely 2–4; bit semantics not determined from data alone |
+| +0x0C | `fileHash` | uint32 | Working name. Differs per file and is zero when `flags` is zero. Not a CRC32 or Adler-32 of the body |
 
-The four uint32s constitute a 16-byte universal prefix.
+The four big-endian uint32s constitute a 16-byte universal prefix. The word
+after it, at +0x10, is unique within each group checked, which fits the
+asset's `snoHandle`; confirming that needs `CoreTOC.dat`. Sound banks (`.fsb`)
+are plain FSB5 files without this header, and a few other files lack it too.
 
 ### 7.2 Payload organisation
 
@@ -791,21 +817,21 @@ mode produces no observable content in retail builds.
 ## 11. Shared deserialization framework (observation)
 
 Every SNO file begins with the same 16-byte universal header (§7.1), and
-every attempt to load a file whose schema fingerprint (`schemaHash` —
-the fourth word of the header) disagrees with the value the runtime
+every attempt to load a file whose schema fingerprint (`version` —
+the second word of the header) disagrees with the value the runtime
 expects for its group produces a refusal rather than a partial load.
 These two facts — identical header layout across groups and consistent
-schema-hash validation — are consistent with a single, schema-driven
+version validation — are consistent with a single, schema-driven
 deserializer parameterised by a per-group type descriptor rather than
 per-group hand-written parsers.
 
 The practical consequences for a clean-room parser are:
 
 1. **Validate the universal header first.** Reject a file immediately if
-   its `schemaHash` does not match the value established for its group
+   its `magic` or `version` does not match the value established for its group
    from known-good samples.
 2. **Expect the body layout to be stable within a patch.** The header's
-   `version` / `schemaHash` pair functions as a compatibility token: a
+   `version` functions as a compatibility token: a
    single patch ships a single body layout per group.
 3. **Expect body layouts to vary across patches.** An archive from patch
    A may not parse under a schema recovered from patch B even if both
@@ -820,7 +846,9 @@ asserted here.
 
 ## 12. Worked example: `.pow` (Power) file layout
 
-**File size of the fixed section:** 0x310 = 784 bytes.
+**File size of the fixed section:** 0x310 = 784 bytes. Some `.pow` files in
+`Common.cpk` and `CacheAct1.cpk` are smaller than that (down to 628 B), so this
+layout does not hold for every file or build (§21.2).
 
 Working names are used below for substructures; `PowerBody` is a
 placeholder for the cluster of fields describing a single power's
@@ -945,7 +973,8 @@ identifies **Lua 5.1** specifically. The opcode set used in these blobs
 enumerates 38 opcodes in the exact Lua 5.1 order (distinguishable from
 5.2, 5.3, and LuaJIT by both count and ordering). Compiled chunks carry
 the debug information that the reference Lua 5.1 compiler emits by
-default.
+default. Not every power has a script: 75 of 252 `.pow` files in `Common.cpk`
+and 33 of 95 in `CacheAct1.cpk` contain a blob.
 
 ### 14.2 Practical consequences for tooling
 
@@ -1079,14 +1108,18 @@ this document:
 | `cpklib.py` | Reference Python library: archive reader (full parser for v6/v7), `CPKWriter` with byte-identical round-trip, same-size in-place file replacement | `*.cpk` ↔ Python objects | Round-trip verified on every observed archive |
 | `cpkrebuild.py` | Extension layer adding full-rebuild operations: `replace_file` (size-changing), `delete_file`, `add_file`, configurable zlib level (`set_zlib_level(0..9)`), and `CPKWriter.create_new(version=6\|7, endian=…)` for from-scratch construction | live `CPKWriter` | Validated on archives from 4 MB to 80 MB; from-scratch archives reopen and round-trip cleanly |
 | `cpk_tool.py` | Command-line front-end: `info` / `list` / `extract` (with extension/regex/size/locale filters) / `verify` / `replace` / `delete` / `add` / `create` (build new archive from a directory tree) | shell | All subcommands round-trip-verified |
-| `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Tested on synthetic archives |
+| `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Run on `Common.cpk`: all 28,394 files extracted |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
 | `coretoc_parser.py` | Global asset index parser | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser | `Prefetch.dat` + `CoreTOC.dat` | Format invariants validated |
 
-The status column records the checks made against shipped archives. `verify`,
-on-demand reading, the faster decryption and the rebuilt `d3cpk_extractor.py`
-came later and have only run against the synthetic test suite so far.
+`verify`, on-demand reading, the faster decryption, the sector packer and the
+current `d3cpk_extractor.py` were checked on two shipped archives, `Common.cpk`
+and `CacheAct1.cpk` (v6, big-endian, `fmt_const = 2`): CRC and every chunk pass,
+each file read on demand matches the global stream, a save without changes is
+byte-identical, and rebuilt archives hold the same content. On v7 and
+`fmt_const = 10` archives they have only run against the synthetic test suite.
+Nobody has yet loaded a rebuilt archive in the game.
 
 ### 19.2 Reference open-source projects (cross-reference)
 
@@ -1111,7 +1144,7 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 |---|---|---|
 | SNO key (expanded encoding) | 8 bytes | Format layout |
 | SNO key (packed encoding) | 4 bytes | Format layout |
-| SNO file header | 16 bytes | On-disk prefix |
+| SNO file header | 16 bytes, magic `0xDEADBEEF` | On-disk prefix |
 | `.pow` fixed section | 784 bytes | §12 |
 | `.app` sub-object record | 240 bytes | §13.2 |
 | `.app` skinning record | 104 bytes | §13.3 |
@@ -1171,7 +1204,7 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 - **SNO key representation** (expanded / packed) and its range limits.
 - **Universal SNO file header** (16 bytes, §7.1).
 - **Shared deserialization framework as an observation** — verified by
-  identical header layout across groups and consistent schema-hash
+  identical header layout across groups and consistent version
   validation.
 - **Embedded scripting identified as Lua 5.1** — signature and opcode
   count both match the 5.1 baseline exactly, making the shipped
@@ -1197,7 +1230,12 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   precise content types require cross-validation against a larger body
   of sample assets.
 - **Internal layout of the `.pow` body** (the `PowerBody` placeholder
-  in §12) — requires further sample-driven per-field analysis.
+  in §12) — requires further sample-driven per-field analysis. The 784-byte
+  fixed section needs re-checking, since shipped `.pow` files can be smaller.
+- **`flags` and `fileHash` in the SNO header** (§7.1) — their meaning is
+  unknown, and so is why copies of a file can differ in them.
+- **Why files are repeated** inside an archive (§3.5), and whether the game
+  accepts a rebuilt archive that stores each file once.
 - **Per-field breakdown of the 32-byte vertex in `.app` files** —
   positions and indices are recoverable, but the exact layout of
   normals, UVs, tangent frames, and skinning weights within the 32-byte
@@ -1238,7 +1276,7 @@ On asset request (snoGroup, snoHandle):
         · allocate payload record
         · resolve the (CPK archive, byte range) for this asset
         · read the 16-byte file header
-        · validate version and schema fingerprint (§7, §11)
+        · validate magic and version (§7, §11)
         · read the body (single pass for most types)
     → if the type has auxiliary buffers (e.g. `.app`):
         · read each buffer at the offset/size declared in the fixed section

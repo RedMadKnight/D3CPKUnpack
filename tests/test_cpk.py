@@ -1,3 +1,4 @@
+import dataclasses
 import json
 import os
 import random
@@ -5,6 +6,7 @@ import struct
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 import zlib
 from unittest import mock
@@ -20,10 +22,12 @@ from cpklib import CPKArchive, CPKWriter
 from test_d3cutscene import ogg_page
 
 
+# Incompressible, so each file takes its own run of sectors.
+_rnd = random.Random(1)
 FILES = {
-    "Dir\\A.txt": b"alpha " * 3000,
-    "Dir\\B.bin": bytes(range(256)) * 400,
-    "Other\\C.dat": b"gamma" * 5000,
+    "Dir\\A.txt": _rnd.randbytes(18000),
+    "Dir\\B.bin": _rnd.randbytes(102400),
+    "Other\\C.dat": _rnd.randbytes(25000),
 }
 
 
@@ -234,10 +238,7 @@ class LazyReadTests(TempDirTest):
     def setUp(self):
         super().setUp()
         rnd = random.Random(3)
-        # Hex text compresses about 2:1, so one file spans several sectors.
-        self.files = {
-            f"F{i}.bin": rnd.randbytes(15000).hex().encode() for i in range(4)
-        }
+        self.files = {f"F{i}.bin": rnd.randbytes(30000) for i in range(4)}
         self.p = self.path("multi.cpk")
         build_legacy(self.p, self.files)
 
@@ -511,6 +512,67 @@ class WriterTests(TempDirTest):
         ar = CPKArchive.open(out)
         self.assertEqual(ar.read("Dir\\A.txt"), new)
         self.assertEqual(ar.read("Other\\C.dat"), FILES["Other\\C.dat"])
+
+
+class SectorPackingTests(TempDirTest):
+    def test_incompressible_data_round_trips_quickly(self):
+        p = self.path("a.cpk")
+        files = {"Audio.fsb": random.Random(4).randbytes(4 * 1024 * 1024)}
+        t0 = time.time()
+        build_legacy(p, files)
+        self.assertLess(time.time() - t0, 20)
+        ar = CPKArchive.open(p)
+        self.assertEqual(ar.read("Audio.fsb"), files["Audio.fsb"])
+        self.assertTrue(ar.verify().ok)
+
+    def test_compressible_data_shares_sectors(self):
+        p = self.path("a.cpk")
+        files = {"Text.txt": b"the same line of text" * 200000}
+        build_legacy(p, files)
+        ar = CPKArchive.open(p)
+        self.assertLess(ar._comp_sector_count, 40)
+        self.assertEqual(ar.read("Text.txt"), files["Text.txt"])
+
+    def test_chunks_stay_within_the_size_cap(self):
+        p = self.path("a.cpk")
+        build_legacy(p, {"Zero.bin": bytes(3 * cpkrebuild._MAX_CHUNK_DECOMP)})
+        ar = CPKArchive.open(p)
+        self.assertEqual(ar._comp_sector_count, 3)
+        self.assertTrue(ar.verify().ok)
+
+
+class MultipleCopiesTests(TempDirTest):
+    """Shipped archives can store one file at several Locations."""
+
+    def setUp(self):
+        super().setUp()
+        self.p = self.path("a.cpk")
+        self.first, self.second = _rnd.randbytes(2000), _rnd.randbytes(2000)
+        build_legacy(self.p, {"A.bin": self.first, "B.bin": self.second})
+        self.ar = CPKArchive.open(self.p)
+        self.a, self.b = self.ar.get("A.bin"), self.ar.get("B.bin")
+        # Turn B's bytes into a second copy of A.
+        a = dataclasses.replace(self.a, loc_idx=0, loc_count=2)
+        self.ar._raw_locs = [self.a.offset, self.b.offset]
+        self.ar._name_to_entry["A.bin"] = a
+        self.ar._lower_to_entry["a.bin"] = a
+
+    def test_same_size_replace_updates_every_copy(self):
+        new, out = _rnd.randbytes(2000), self.path("b.cpk")
+        w = CPKWriter.from_archive(self.ar)
+        w.replace_file_same_size("A.bin", new)
+        w.save(out)
+        stream = CPKArchive.open(out).global_stream
+        for off in (self.a.offset, self.b.offset):
+            self.assertEqual(stream[off:off + 2000], new)
+
+    def test_copies_lists_every_offset(self):
+        self.assertEqual(self.ar.copies(self.ar.get("A.bin")),
+                         [self.a.offset, self.b.offset])
+
+    def test_verify_checks_every_copy(self):
+        self.ar._raw_locs[1] = self.ar.header.decomp_fs
+        self.assertIn("past decomp_fs", self.ar.verify().problems[-1])
 
 
 class PrefetchTests(TempDirTest):

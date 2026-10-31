@@ -112,7 +112,7 @@ class CPKEntry:
     size: int            # declared size in bytes (after decompression)
     hash: int            # FNV-1a 64-bit of name.lower()
     loc_idx: int         # index into Locations[]
-    loc_count: int       # number of consecutive locations (D3 = always 1)
+    loc_count: int       # number of stored copies, see CPKArchive.copies()
     sfi_index: int       # index into SortedFileInfo[]
     offset: int          # absolute offset within the global decompressed stream
 
@@ -441,26 +441,20 @@ class CPKArchive:
             if encrypted:
                 chunk = _decrypt_chunk(chunk)
             try:
-                dec = zlib.decompress(chunk)
+                # The last chunk of most sectors is cut off at the slot
+                # boundary, which one-shot zlib.decompress would reject.
+                dec = zlib.decompressobj().decompress(chunk)
                 if len(dec) < decomp_size:
-                    dec = dec + b"\x00" * (decomp_size - len(dec))
+                    dec = dec + b'\x00' * (decomp_size - len(dec))
                 out.extend(dec)
-            except Exception:
-                # zlib failed — try stateful then give up
-                try:
-                    dc = zlib.decompressobj()
-                    dec = dc.decompress(chunk)
-                    if len(dec) < decomp_size:
-                        dec = dec + b'\x00' * (decomp_size - len(dec))
-                    out.extend(dec)
-                except Exception as ex:
-                    failures.append(ChunkFailure(
-                        sector=sec_idx, header_offset=p, zsize=zsize,
-                        zsize_raw=zsize_raw, decomp_size=decomp_size,
-                        stream_offset=self._cs2do[sec_idx] + len(out),
-                        error=str(ex),
-                    ))
-                    out.extend(b'\x00' * decomp_size)
+            except zlib.error as ex:
+                failures.append(ChunkFailure(
+                    sector=sec_idx, header_offset=p, zsize=zsize,
+                    zsize_raw=zsize_raw, decomp_size=decomp_size,
+                    stream_offset=self._cs2do[sec_idx] + len(out),
+                    error=str(ex),
+                ))
+                out.extend(b'\x00' * decomp_size)
             p = de
         if failures:
             self._sector_failures[sec_idx] = failures
@@ -527,6 +521,11 @@ class CPKArchive:
     def chunk_errors(self) -> int:
         return sum(len(fs) for fs in self._sector_failures.values())
 
+    def copies(self, e: CPKEntry) -> list[int]:
+        """Stream offset of every stored copy of a file. Small shared assets
+        repeat through an archive; read() uses the first copy."""
+        return self._raw_locs[e.loc_idx : e.loc_idx + e.loc_count]
+
     def failed_chunks_by_file(self) -> dict[str, list[int]]:
         """Map file name -> indices into chunk_failures it overlaps."""
         failures = self.chunk_failures
@@ -576,13 +575,13 @@ class CPKArchive:
             report.problems.append(
                 f"{len(self.unmatched_names):,} name(s) have no SortedFileInfo row")
         bad_locs = sum(
-            e.loc_count > 0 and e.loc_idx >= len(self._raw_locs)
+            e.loc_idx + e.loc_count > len(self._raw_locs)
             for e in self.entries)
         if bad_locs:
             report.problems.append(
                 f"{bad_locs:,} file(s) point past the Locations table")
         out_of_range = sum(
-            e.loc_count > 0 and e.offset + e.size > h.decomp_fs
+            any(off + e.size > h.decomp_fs for off in self.copies(e))
             for e in self.entries)
         if out_of_range:
             report.problems.append(
@@ -873,15 +872,15 @@ class CPKWriter:
 
         affected = set()
         for _, (e, _) in self._replacements.items():
-            f_start = e.offset
-            f_end = e.offset + e.size
-            for s in range(n_sec):
-                s_start, s_end = sec_range(s)
-                if s_end <= f_start:
-                    continue
-                if s_start >= f_end:
-                    break
-                affected.add(s)
+            for f_start in src.copies(e):
+                f_end = f_start + e.size
+                for s in range(n_sec):
+                    s_start, s_end = sec_range(s)
+                    if s_end <= f_start:
+                        continue
+                    if s_start >= f_end:
+                        break
+                    affected.add(s)
         return affected
 
     def _save_with_replacements(self, out_path: str) -> None:
@@ -894,7 +893,8 @@ class CPKWriter:
         gs = bytearray(src.global_stream)
         src.warn_chunk_errors()
         for _, (e, new_bytes) in self._replacements.items():
-            gs[e.offset : e.offset + e.size] = new_bytes
+            for off in src.copies(e):
+                gs[off : off + e.size] = new_bytes
 
         out = bytearray(src._data)
         slot_size = h.comp_sector
@@ -948,6 +948,10 @@ class CPKWriter:
         return 6 + u16
 
 
+# Splitting further only adds chunk headers: data this small will not shrink.
+_MIN_CHUNK_SPLIT = 1024
+
+
 def _encode_sector_payload(decompressed: bytes, capacity: int,
                            endian: str, encrypt: bool) -> bytes:
     """Encode arbitrary decompressed bytes into a payload of `capacity` bytes."""
@@ -988,7 +992,7 @@ def _encode_sector_payload(decompressed: bytes, capacity: int,
         new_chunks = []
         progressed = False
         for c in chunks:
-            if len(c) <= 1:
+            if len(c) <= _MIN_CHUNK_SPLIT:
                 new_chunks.append(c)
                 continue
             mid = len(c) // 2
