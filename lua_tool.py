@@ -5,11 +5,14 @@ lua_tool - recover the Lua 5.1 scripts embedded in Diablo III CPK archives.
     info     <archive>...                    count scripts per file type
     extract  <archive>... --out DIR          write pseudo-Lua for every script
                                              [--ext pow con] [--iname REGEX]
-                                             [--asm] [--raw] [--keep-empty]
+                                             [--exact] [--asm] [--raw]
+                                             [--keep-empty]
 
 Output paths follow the internal names, so Power\\Foo.pow becomes
 DIR/Power/Foo.pow.lua. --asm adds a .lst disassembly and --raw the original
-.luac chunk. Scripts compiled from an empty source are skipped by default.
+.luac chunk. --exact writes source that compiles back to the same instructions,
+with plainer names, in place of the readable pseudo-Lua. Scripts compiled from
+an empty source are skipped by default.
 """
 import argparse
 import os
@@ -20,6 +23,7 @@ from collections import Counter
 import cpklib
 import lua51
 import luadec
+import relua
 
 SCRIPT_EXTENSIONS = ("pow", "cnv", "scr", "con")
 
@@ -44,6 +48,14 @@ def output_stem(out_dir, name):
     return os.path.join(out_dir, *parts)
 
 
+def exact_source(chunk):
+    """Compilable source, or None if the code fits no known compiler pattern."""
+    try:
+        return relua.render(relua.decompile(chunk))
+    except relua.Fail:
+        return None
+
+
 def cmd_info(args):
     for path in args.archive:
         with cpklib.CPKArchive.open(path) as ar:
@@ -62,7 +74,7 @@ def cmd_info(args):
 
 def cmd_extract(args):
     pattern = re.compile(args.iname, re.IGNORECASE) if args.iname else None
-    written = skipped = fallback = 0
+    written = skipped = fallback = inexact = 0
     for path in args.archive:
         with cpklib.CPKArchive.open(path) as ar:
             for e, offset, chunk in iter_scripts(ar, args.ext, pattern):
@@ -71,7 +83,9 @@ def cmd_extract(args):
                     continue
                 stem = output_stem(args.out, e.name)
                 os.makedirs(os.path.dirname(stem), exist_ok=True)
-                text = luadec.decompile(chunk)
+                text = exact_source(chunk) if args.exact else None
+                inexact += args.exact and text is None
+                text = text or luadec.decompile(chunk)
                 fallback += text.count("-- could not decompile")
                 with open(stem + ".lua", "w", encoding="utf-8", newline="\n") as f:
                     f.write(text)
@@ -86,6 +100,8 @@ def cmd_extract(args):
     print(f"  skipped: {skipped:,} empty")
     if fallback:
         print(f"  {fallback:,} function(s) left as disassembly", file=sys.stderr)
+    if inexact:
+        print(f"  {inexact:,} script(s) written as pseudo-Lua, not exact", file=sys.stderr)
 
 
 def main(argv=None):
@@ -102,6 +118,8 @@ def main(argv=None):
     p.add_argument("--ext", nargs="+", default=list(SCRIPT_EXTENSIONS),
                    help="file types to search")
     p.add_argument("--iname", help="case-insensitive regex against full path")
+    p.add_argument("--exact", action="store_true",
+                   help="write source that recompiles to the same instructions")
     p.add_argument("--asm", action="store_true", help="also write a .lst listing")
     p.add_argument("--raw", action="store_true", help="also write the .luac chunk")
     p.add_argument("--keep-empty", action="store_true")
