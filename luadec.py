@@ -21,6 +21,7 @@ _COMPARE = {"EQ": "==", "LT": "<", "LE": "<="}
 _TESTS = ("EQ", "LT", "LE", "TEST")
 _NOT_EXPRESSIONS = ("JMP", "RETURN", "FORPREP", "FORLOOP", "TFORLOOP", "CLOSURE",
                     "TAILCALL", "SETGLOBAL", "SETUPVAL", "SETTABLE")
+_ONE_OPERAND = ("TEST", "TESTSET", "SETGLOBAL", "SETUPVAL", "UNM", "NOT", "LEN")
 _SIMPLE = re.compile(r"^[\w.]+$")
 _CALL = re.compile(r"^[\w.:]+\((?:[^()]|\([^()]*\))*\)$")
 _IDENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
@@ -49,6 +50,8 @@ def _strip_parens(text: str) -> str:
 
 def _negate(text: str) -> str:
     bare = _strip_parens(text)
+    if bare.startswith("not (") and _strip_parens(bare[4:]) != bare[4:]:
+        return bare[4:]
     if _SIMPLE.match(bare) or (bare.endswith(")") and _CALL.match(bare)):
         return f"not {bare}"
     return f"not ({bare})"
@@ -160,12 +163,24 @@ class _Decompiler:
                 and high.a == low.a)
 
     def _single_use(self, pc: int, reg: int) -> bool:
-        """True when `reg`, set at pc, is read once, soon, and then dead."""
+        """True when `reg`, set at pc, is read once, soon, and then dead.
+
+        Folding must keep calls in order: text reads left to right, so nothing
+        called in between may land to the left of the folded value.
+        """
+        called = False
         for q in range(pc + 1, len(self.code)):
             if q in self.leaders:
                 return False
             if reg in self.reads[q]:
-                if self.reads[q].count(reg) > 1:
+                # Only a named local is read through MOVE. Keeping it stops a
+                # call from moving past the others in the same statement.
+                if self.reads[q].count(reg) > 1 or self.code[q].op == "MOVE":
+                    return False
+                i = self.code[q]
+                if called and (i.op in _ONE_OPERAND or (
+                        (i.op in _ARITH or i.op in _COMPARE)
+                        and i.c == reg and reg < i.b < _RK_CONSTANT)):
                     return False
                 if reg in self.captured and reg not in self.writes[q] \
                         and not self._clobbers(q, reg):
@@ -173,6 +188,10 @@ class _Decompiler:
                 return self._dead_after(q, reg)
             if reg in self.writes[q]:
                 return False
+            if self.kills[q] is not None:
+                if self.kills[q] < reg:
+                    return False
+                called = True
         return False
 
     def _dead_after(self, q: int, reg: int) -> bool:
@@ -190,12 +209,15 @@ class _Decompiler:
 
     # --- output ---
 
+    def local_name(self, reg: int) -> str:
+        kind = "a" if reg < self.fn.num_params else "r"
+        prefix = f"up{self.depth}_" if reg in self.captured else ""
+        return f"{prefix}{kind}{reg}"
+
     def name(self, reg: int) -> str:
-        if reg < self.fn.num_params:
-            return f"a{reg}"
-        if reg not in self.loop_vars:
+        if reg >= self.fn.num_params and reg not in self.loop_vars:
             self.declared.add(reg)
-        return f"r{reg}"
+        return self.local_name(reg)
 
     def line(self, text: str):
         self.out.append("    " * self.indent + text)
@@ -309,6 +331,10 @@ class _Decompiler:
             return i.pc + 2
         elif op == "RETURN":
             values = self.arguments(a, i.b - 1 if i.b else -1)
+            last = self.code[i.pc - 1]
+            if i.b == 2 and i.pc and last.op == "CALL" and last.a == a \
+                    and last.c == 2:
+                values = [f"({values[0]})"]  # keeps it to one result
             if values or i.pc != len(self.code) - 1:
                 self.emit(f"return {', '.join(values)}".rstrip())
         elif op == "SETLIST":
@@ -360,7 +386,7 @@ class _Decompiler:
         for k in range(proto.num_upvalues):
             capture = self.code[i.pc + 1 + k]
             if capture.op == "MOVE":
-                names.append(f"up{self.depth}_{self.name(capture.b)}")
+                names.append(self.name(capture.b))
             else:
                 names.append(self.upvalues[capture.b])
         next_pc = i.pc + 1 + proto.num_upvalues
@@ -556,8 +582,6 @@ class _Decompiler:
         pattern = f"{source} = "
         if self.out and self.out[-1].lstrip().startswith(pattern):
             source = self.out.pop().split(" = ", 1)[1]
-            for n in range(3):
-                self.declared.discard(loop.a + n)
         self.line(f"for {names} in {source} do")
         saved = self.loop_exit
         self.loop_exit = target + 2
@@ -614,23 +638,29 @@ class _Decompiler:
             self.indent = self.depth
             self.block(0, len(self.code))
             self.flush()
-        if self.declared:
-            names = ", ".join(f"r{r}" for r in sorted(self.declared))
+        text = "\n".join(self.out)
+        names = ", ".join(
+            self.local_name(r) for r in sorted(self.declared)
+            if re.search(rf"\b{self.local_name(r)}\b", text))
+        if names:
             self.out.insert(0, "    " * self.depth + f"local {names}")
         return self.out
 
 
 def _function_text(fn: LuaFunction, upvalues: list[str], depth: int):
-    names = [f"a{n}" for n in range(fn.num_params)]
-    if fn.is_vararg:
-        names.append("...")
-    params = ", ".join(names)
+    worker = None
     try:
-        return params, _Decompiler(fn, upvalues, depth).run()
+        worker = _Decompiler(fn, upvalues, depth)
+        body = worker.run()
     except (ValueError, IndexError, KeyError) as ex:
         pad = "    " * depth
-        lines = [f"{pad}-- could not decompile: {ex or type(ex).__name__}"]
-        return params, lines + [f"{pad}-- {t}" for t in disassemble(fn)]
+        body = [f"{pad}-- could not decompile: {ex or type(ex).__name__}"]
+        body += [f"{pad}-- {t}" for t in disassemble(fn)]
+    names = [worker.local_name(n) if worker else f"a{n}"
+             for n in range(fn.num_params)]
+    if fn.is_vararg:
+        names.append("...")
+    return ", ".join(names), body
 
 
 def decompile(chunk: LuaChunk) -> str:

@@ -178,8 +178,32 @@ class DecompilerTests(unittest.TestCase):
             abx("GETGLOBAL", 0, 0), abx("CLOSURE", 1, 0), abc("MOVE", 0, 0, 0),
             abx("SETGLOBAL", 1, 1), self.RET,
         ], ("helper", "Run"), protos=[inner])
-        self.assertIn("r0 = helper", text)
+        self.assertIn("up0_r0 = helper", text)
         self.assertIn("result = up0_r0(1)", text)
+
+    def test_named_local_is_not_folded_into_a_call(self):
+        text = decompile([
+            abx("GETGLOBAL", 0, 0), abc("CALL", 0, 1, 2),
+            abx("GETGLOBAL", 1, 1), abc("MOVE", 2, 0), abc("CALL", 1, 2, 1),
+            self.RET,
+        ], ("first", "second"))
+        self.assertEqual(text, "local r0\nr0 = first()\nsecond(r0)\n")
+
+    def test_folding_keeps_calls_in_order(self):
+        # x = first(); y = second(); total = y * x
+        text = decompile([
+            abx("GETGLOBAL", 0, 0), abc("CALL", 0, 1, 2),
+            abx("GETGLOBAL", 1, 1), abc("CALL", 1, 1, 2),
+            abc("MUL", 2, 1, 0), abx("SETGLOBAL", 2, 2), self.RET,
+        ], ("first", "second", "total"))
+        self.assertLess(text.index("first()"), text.index("second()"))
+
+    def test_return_of_one_call_result_stays_truncated(self):
+        text = decompile([
+            abx("GETGLOBAL", 0, 0), abc("CALL", 0, 1, 2),
+            abc("RETURN", 0, 2, 0), self.RET,
+        ], ("first",))
+        self.assertIn("return (first())", text)
 
     def test_unstructured_jump_prints_goto(self):
         code = [abc("TEST", 0, 0, 0), sbx("JMP", 0, -2), self.RET]
