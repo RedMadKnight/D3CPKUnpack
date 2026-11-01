@@ -19,9 +19,11 @@ Repository = "https://github.com/RedMadKnight/D3CPKUnpack"
 cpk-tool = "cpk_tool:main"
 d3cutscene-tool = "d3cutscene_tool:main"
 lua-tool = "lua_tool:main"
+d3sno = "d3sno.cli:main"
 d3cpk-extractor = "d3cpk_extractor:main"
 
 [tool.setuptools]
+packages = ["d3sno"]
 py-modules = [
     "coretoc_parser",
     "cpk_tool",
