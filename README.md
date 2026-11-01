@@ -101,6 +101,7 @@ python3 coretoc_parser.py CoreTOC.dat ./toc
 python3 prefetch_parser.py Prefetch.dat CoreTOC.dat ./prefetch
 
 # recover the embedded Lua scripts, with listings and the original chunks
+# (add --exact for source that recompiles to the same instructions)
 python3 lua_tool.py extract Common.cpk CacheAct1.cpk --out ./scripts --asm --raw
 
 # inspect the raw Ogg cutscene archive
@@ -1092,8 +1093,15 @@ script defines as globals, such as `OnStart` and `OnContact0`.
   | `goto` into a nested block, does not compile | 19 |
 
   7,505 of 7,527 compiled functions match. This covers call order, not the full
-  logic, and no script has been executed. Treat `.lst` as authoritative where the
-  two seem to disagree.
+  logic: the pseudo-Lua can lose a local assignment that no call depends on. Treat
+  `.lst` as authoritative where the two seem to disagree.
+- `lua_tool.py extract --exact` writes real Lua 5.1 source instead, through
+  `relua.py`. It recovers `local` scopes from register allocation and never prints
+  `goto`, at the cost of plain names (`v<id>`). All 1,571 files recompile with
+  Lua 5.1 to the same instructions, registers, jumps and constant values as the
+  original, ignoring the order of the constant table and stack size. Where the
+  bytecode cannot tell two forms apart, one is chosen: `if a then if b` prints as
+  `if a and b`. The scripts have only been compiled, never executed.
 
 ### 14.3 Parameter tagging
 
@@ -1218,7 +1226,7 @@ this document:
 | `cpk_tool.py` | Command-line front-end: `info` / `list` / `extract` (with extension/regex/size/locale filters) / `verify` / `replace` / `delete` / `add` / `create` (build new archive from a directory tree) | shell | All subcommands round-trip-verified |
 | `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Run on `Common.cpk`: all 28,394 files extracted |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
-| `lua51.py` / `luadec.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompiler to pseudo-Lua, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 4,755 chunks of the corpus (§14.2) |
+| `lua51.py` / `luadec.py` / `relua.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompilers to pseudo-Lua and to compilable source, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 4,755 chunks of the corpus (§14.2) |
 | `coretoc_parser.py` | Global asset index parser | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser | `Prefetch.dat` + `CoreTOC.dat` | Format invariants validated |
 
@@ -1322,7 +1330,8 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   bytecode decompilable with off-the-shelf tools.
 - **Script recovery** — every Lua chunk in `.pow`, `.scr`, `.con` and `.cnv`
   files located and decompiled to pseudo-Lua, and the result recompiled and
-  compared with the bytecode across the corpus (§14.2).
+  compared with the bytecode across the corpus (§14.2). `--exact` output matches
+  the original instructions in all 1,571 files.
 - **`.pow` layout** — fixed section, tag maps, record types and formula lookup,
   checked on all 1,021 files (§12).
 - **`.app` vertex layout** — record sizes and stream strides on all 126,953

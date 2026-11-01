@@ -35,4 +35,5 @@ py-modules = [
     "lua_tool",
     "luadec",
     "prefetch_parser",
+    "relua",
 ]
