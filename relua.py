@@ -753,6 +753,8 @@ class Fn:
                     continue
                 if cap.b in self.pending:
                     self.promote(cap.b)
+                if cap.b >= self.nact:          # the compiler drops LOADNIL at pc 0
+                    self.declare_to(cap.b)
                 ups.append(self.regvar[cap.b])
             else:
                 ups.append(self.upvars[cap.b])
