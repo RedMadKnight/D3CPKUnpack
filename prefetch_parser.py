@@ -2,42 +2,29 @@
 r"""
 prefetch_parser.py — parser for Diablo III console Prefetch.dat
 
-Format (reverse-engineered empirically, big-endian throughout):
+Format, in the build's byte order (big-endian on PS3, little on Switch):
 
-  SECTION 1: 16-byte parent records
-    uint32 BE: unknown_32          (engine metric — size/priority/handle?)
-    uint32 BE: snoGroupID          (type of the parent asset)
-    uint32 BE: snoID               (ID of the parent asset)
-    uint32 BE: dep_count           (number of dependencies this parent triggers)
+  uint32: parent_count
+  <parent_count> 16-byte parent records:
+    uint32: snoGroupID             (type of the parent asset)
+    uint32: snoID                  (ID of the parent asset)
+    uint32: dep_count              (number of dependencies of this parent)
+    uint32: first_dep              (index of its first dependency)
+  uint32: total_deps_count         (sum of all dep_counts)
+  <total_deps_count> 8-byte dependency records:
+    uint32: snoGroupID
+    uint32: snoID
 
-    The first uint32 of the file (= unknown_32 of record 0) also happens to
-    equal the count of SECTION 1 records.
-
-  SECTION 2 HEADER: 8 bytes
-    uint32 BE: unknown_32          (possibly sum/count of something)
-    uint32 BE: total_deps_count    (total # of 8-byte records that follow,
-                                    equals sum of all dep_counts from Section 1)
-
-  SECTION 2 BODY: 8-byte dependency records
-    uint32 BE: snoGroupID
-    uint32 BE: snoID
-
-    Dependencies are consumed sequentially per Section 1 record, i.e. record
-    i's deps are at positions [sum(dep_counts[0..i-1]), sum(dep_counts[0..i])).
+A parent's dependencies are records [first_dep, first_dep + dep_count). The
+ranges partition the list without gaps or overlaps, but not in parent order.
 
 Semantically this is a prefetch dependency graph: "when the engine loads
-asset X, it should also preload assets Y, Z, W...". Confirmed by spot-checks:
-  - AnimSet\Monk_Male pulls 406 deps (textures, actors, sounds for the
-    full monk character package)
-  - Power\EmoteWait pulls 1 dep: Textures\Overlay_sandDeath
-  - Globals\globals pulls 371 deps (level lighting, player lights, textures)
+asset X, it should also preload assets Y, Z, W...". For example,
+AnimSet\Monk_Male pulls its 406 animations.
 
-Verified invariants on the input file:
-  - b (groupID field) matches CoreTOC.groupID for 77,186/77,186 parent records
-    (100%)
-  - sum(dep_count) == section 2 header count (376,385 == 376,385)
-  - All 113,380-range snoIDs resolve to valid names when cross-referenced
-    with CoreTOC.dat
+Verified on the PS3 and Switch files: every byte is accounted for, and the
+ranges partition the list. Dependencies need not resolve in CoreTOC.dat: 420
+of 376,385 do not on PS3, nor do 24,872 of 844,045 on Switch.
 
 Outputs:
   prefetch.csv          — one row per dependency edge (parent → child)
@@ -57,89 +44,72 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 
+import coretoc_parser
+
 
 def parse_coretoc(path):
-    """Parse console CoreTOC.dat → dict[(groupID, snoID)] = (groupID, name).
+    """Parse CoreTOC.dat → dict[(groupID, snoID)] = (groupID, name).
 
     Handles are unique only within a group, so the group is part of the key.
     """
     with open(path, 'rb') as f:
-        data = f.read()
-    count = struct.unpack('>I', data[:4])[0]
-    if 4 + count * 136 != len(data):
-        raise ValueError(f"CoreTOC size mismatch: expected {4+count*136}, got {len(data)}")
-    out = {}
-    for i in range(count):
-        off = 4 + i * 136
-        gid, sid = struct.unpack('>II', data[off:off+8])
-        name_bytes = data[off+8:off+136]
-        null_pos = name_bytes.find(b'\x00')
-        if null_pos == -1: null_pos = 128
-        name = name_bytes[:null_pos].decode('latin-1', errors='replace')
-        out[(gid, sid)] = (gid, name)
-    return out
+        entries = coretoc_parser.parse_coretoc(f.read())
+    return {(gid, sid): (gid, name) for gid, sid, name in entries}
 
 
 def parse_prefetch(path):
-    """Parse console Prefetch.dat → list of (parent_sno, parent_gid, deps)."""
+    """Parse Prefetch.dat → (parent records with their deps, totals)."""
     with open(path, 'rb') as f:
         data = f.read()
 
-    parent_count = struct.unpack('>I', data[:4])[0]
-    section1_end = parent_count * 16
-    if section1_end + 8 > len(data):
-        raise ValueError("file too small for declared parent count")
+    for endian in '><':
+        parent_count = struct.unpack_from(endian + 'I', data, 0)[0]
+        deps_pos = 4 + parent_count * 16 + 4
+        if deps_pos > len(data):
+            continue
+        total = struct.unpack_from(endian + 'I', data, deps_pos - 4)[0]
+        if deps_pos + total * 8 == len(data):
+            break
+    else:
+        raise ValueError("size does not fit a Prefetch.dat in either byte order")
 
-    # Parse section 1
     parents = []
     for i in range(parent_count):
-        off = i * 16
-        unk, gid, sno, dep_count = struct.unpack('>IIII', data[off:off+16])
+        gid, sno, dep_count, first_dep = struct.unpack_from(
+            endian + 'IIII', data, 4 + i * 16)
         parents.append({
-            'unknown32': unk,
             'snoGroupID': gid,
             'snoID': sno,
             'dep_count': dep_count,
+            'first_dep': first_dep,
         })
 
-    # Parse section 2 header + pairs
-    sec2_unk, sec2_count = struct.unpack('>II', data[section1_end:section1_end+8])
-    expected_sec2_bytes = 8 + sec2_count * 8
-    if section1_end + expected_sec2_bytes != len(data):
+    deps_flat = list(struct.iter_unpack(endian + 'II', data[deps_pos:]))
+
+    declared = sum(p['dep_count'] for p in parents)
+    if declared != total:
         raise ValueError(
-            f"Section 2 size mismatch: "
-            f"expected {section1_end+expected_sec2_bytes}, got {len(data)}"
+            f"Dependency count mismatch: parents declare {declared} deps, "
+            f"the list has {total} records"
         )
 
-    deps_flat = []
-    for i in range(sec2_count):
-        off = section1_end + 8 + i * 8
-        g, s = struct.unpack('>II', data[off:off+8])
-        deps_flat.append((g, s))
+    position = 0
+    for p in sorted(parents, key=lambda p: p['first_dep']):
+        if not p['dep_count']:
+            continue
+        if p['first_dep'] != position:
+            raise ValueError(
+                f"Dependency ranges do not partition the list at {position}")
+        position += p['dep_count']
 
-    # Validate: sum of dep_counts must equal section 2 count
-    total_declared = sum(p['dep_count'] for p in parents)
-    if total_declared != sec2_count:
-        raise ValueError(
-            f"Dependency count mismatch: parents declare {total_declared} deps, "
-            f"section 2 has {sec2_count} records"
-        )
-
-    # Consume deps sequentially per parent
-    cursor = 0
-    graph = []
-    for p in parents:
-        dc = p['dep_count']
-        graph.append({
-            **p,
-            'deps': deps_flat[cursor:cursor+dc],
-        })
-        cursor += dc
+    graph = [{
+        **p,
+        'deps': deps_flat[p['first_dep']:p['first_dep'] + p['dep_count']],
+    } for p in parents]
 
     return graph, {
         'parent_count': parent_count,
-        'total_deps': sec2_count,
-        'section2_unknown': sec2_unk,
+        'total_deps': total,
     }
 
 
@@ -177,8 +147,8 @@ def export_parents_json(graph, sno_map, out_path):
             'snoID': p['snoID'],
             'snoGroupID': p['snoGroupID'],
             'name': pname,
-            'unknown32': p['unknown32'],
             'dep_count': p['dep_count'],
+            'first_dep': p['first_dep'],
             'deps': deps_out,
         })
     with open(out_path, 'w', encoding='utf-8') as f:
@@ -202,7 +172,6 @@ def export_summary(graph, meta, sno_map, out_path):
     lines.append(f"Parent entries:            {meta['parent_count']:,}")
     lines.append(f"Total dependency edges:    {meta['total_deps']:,}")
     lines.append(f"Unique dep snoIDs:         {len(unique_dep_snos):,}")
-    lines.append(f"Mystery sec2 header value: {meta['section2_unknown']:,}")
     lines.append("")
     lines.append(f"Average deps per parent:   {meta['total_deps']/meta['parent_count']:.2f}")
     lines.append(f"Max deps single parent:    {max(p['dep_count'] for p in graph)}")
@@ -251,7 +220,7 @@ GROUP_NAMES = {
     54: "Conductor", 55: "TimedEvent", 56: "Act", 57: "Material",
     58: "QuestRange", 59: "Lore", 60: "Reverb", 61: "PhysMesh",
     62: "Music", 63: "Tutorial", 64: "BossEncounter", 65: "ControlScheme",
-    66: "Accolade", 67: "AnimTree", 68: "Vibrations",
+    66: "Accolade", 67: "AnimTree", 68: "Vibrations", 69: "DungeonFinder",
 }
 
 

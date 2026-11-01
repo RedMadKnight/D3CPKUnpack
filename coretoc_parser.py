@@ -2,8 +2,9 @@
 """
 coretoc_parser.py — parser for Diablo III console CoreTOC.dat
 
-Format (discovered empirically + confirmed via file size math):
-  Big-endian, fixed record layout.
+Two forms, told apart by the file size.
+
+Big-endian, fixed record layout (PS3):
 
   uint32 BE:  count                        (number of SNO entries)
   for each of <count> entries (136 bytes):
@@ -11,9 +12,13 @@ Format (discovered empirically + confirmed via file size math):
     uint32 BE:  snoID                      (globally unique asset id)
     char[128]:  name (null-padded ASCII)
 
-This differs from the PC CASC variant documented in jybp/casc, which uses
-little-endian plus a 844-byte header with EntryCounts / EntryOffsets / Unks.
-The console variant is flatter and byte-swapped.
+Little-endian, segmented (Switch; the PC CASC variant in jybp/casc has the
+same 844-byte header):
+
+  int32[70] counts, int32[70] offsets, int32[70] counts2, uint32 unknown
+  at 844 + offsets[g], for each group g with entries:
+    <counts[g]> records of int32 group, int32 snoID, int32 nameOffset
+    NUL-terminated names; nameOffset counts from the end of the records
 
 Outputs:
   coretoc.csv       — groupID, snoID, extension, groupName, name
@@ -103,23 +108,53 @@ SNO_EXTENSIONS_CONSOLE_EXTRA = {
     52: ("TreasureClass", "trs"),    # MonsterDropSpellRune_Normal, LootClicky_Type1 ← CONFIRMED
     54: ("Conductor", "con"),        # Lua multi-phase event scripts: A2C2GreedyMiner
     55: ("TimedEvent", "tme"),       # ZK Random Dungeon, Jar Of Souls, AlcarnusRitual
-    65: ("ControlScheme", "ctr"),    # Inferred: only entry is "Axe Bad Data"
+    65: ("ControlScheme", "ctr"),    # Only entry is "Axe Bad Data"
     67: ("AnimTree", "ant"),         # NPC, Player, NPC_AdditiveFlinch
     68: ("Vibrations", "vib"),       # Console_LowHealth, Barbarian_WeaponThrow
+    69: ("DungeonFinder", "dfn"),    # Switch only
 }
 
 # Merged map
 SNO_EXTENSIONS = {**SNO_EXTENSIONS_PC, **SNO_EXTENSIONS_CONSOLE_EXTRA}
 
 
+SEGMENTED_HEADER = 844
+SEGMENTED_GROUPS = 70
+
+
+def parse_segmented(data: bytes):
+    """Return (snoGroupID, snoID, name) tuples from the 844-byte header form."""
+    if len(data) < SEGMENTED_HEADER:
+        raise ValueError("file too small for the segmented form")
+    counts = struct.unpack_from(f'<{SEGMENTED_GROUPS}i', data, 0)
+    offsets = struct.unpack_from(f'<{SEGMENTED_GROUPS}i', data, SEGMENTED_GROUPS * 4)
+    entries = []
+    for count, offset in zip(counts, offsets):
+        if count <= 0:
+            continue
+        base = SEGMENTED_HEADER + offset
+        names = base + count * 12
+        if names > len(data):
+            raise ValueError(f"group table at {base} runs past the end of the file")
+        for gid, sid, name_off in struct.iter_unpack('<iii', data[base:names]):
+            start = names + name_off
+            end = data.find(b'\x00', start)
+            if not names <= start < len(data) or end < 0:
+                raise ValueError(f"bad name offset {name_off} at group {gid}")
+            entries.append((gid, sid, data[start:end].decode('latin-1', errors='replace')))
+    return entries
+
+
 def parse_coretoc(data: bytes):
-    """Return list of (snoGroupID, snoID, name) tuples."""
+    """Return list of (snoGroupID, snoID, name) tuples, from either form."""
     if len(data) < 4:
         raise ValueError("file too small")
 
     count = struct.unpack('>I', data[:4])[0]
     expected_size = 4 + count * 136
     if expected_size != len(data):
+        if len(data) >= SEGMENTED_HEADER:
+            return parse_segmented(data)
         raise ValueError(
             f"File size mismatch: expected {expected_size} for count={count} "
             f"with 136-byte records, got {len(data)}. "
@@ -218,7 +253,7 @@ def main():
         data = f.read()
     print(f"  {len(data):,} B")
 
-    print(f"Parsing CoreTOC format (console big-endian)...")
+    print(f"Parsing CoreTOC...")
     entries = parse_coretoc(data)
     print(f"  Parsed {len(entries):,} SNO entries")
 

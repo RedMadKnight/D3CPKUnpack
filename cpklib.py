@@ -153,7 +153,7 @@ class CPKHeader:
                          #            10 = new layout introduced with
                          #            Patch 2.6.7 (header_sector is a direct
                          #            byte offset; sector 0 has no skip
-                         #            preamble).
+                         #            ordinary first chunk).
 
 
 @dataclass(frozen=True)
@@ -331,11 +331,10 @@ class CPKArchive:
         # Two layouts depending on header.fmt_const:
         #   * fmt_const == 2  (legacy): header_sector is in units of read_sector
         #     and the first compressed sector starts at the next read_sector
-        #     boundary, with the leading bytes of that sector reserved for
-        #     leftover index data (sector 0 carries a 2-byte "skip" preamble).
+        #     boundary.
         #   * fmt_const == 10 (new, Patch 2.6.7+): header_sector is a direct
         #     byte offset to the first compressed sector. Sectors are still
-        #     comp_sector bytes wide. There is NO skip preamble in sector 0.
+        #     comp_sector bytes wide.
         if h.fmt_const == 10:
             first_sec = h.header_sector
         else:
@@ -412,16 +411,12 @@ class CPKArchive:
         sec_end = min(sec_start + h.comp_sector, len(d))
 
         p = sec_start
-        # Legacy (fmt_const == 2) archives align first_sec UP to the next
-        # read_sector boundary, so the very first compressed sector contains a
-        # 2-byte "skip" word at offset 4 indicating how many bytes of leftover
-        # index data sit before the first chunk. The new layout (fmt_const == 10)
-        # uses an unaligned byte offset and starts with chunks immediately.
-        if sec_idx == 0 and h.fmt_const != 10:
-            if p + 6 > len(d):
-                return b""
-            skip = u16(p + 4)
-            p += 6 + skip
+        # Sector 0 holds ordinary chunks. On big-endian archives the first one
+        # happens to be an empty zlib stream, but on Switch it is real data.
+        # Rebuilt archives may instead start with an all-zero chunk header,
+        # which would otherwise end the sector.
+        if sec_idx == 0 and d[p:p + 6] == bytes(6):
+            p += 6
 
         out = bytearray()
         failures: list[ChunkFailure] = []
@@ -589,12 +584,16 @@ class CPKArchive:
 
         if not self._cs2do_increasing:
             report.warnings.append("cs2do is not strictly increasing")
-        overlaps = 0
+        overlaps = short = 0
         for s in range(self._comp_sector_count):
             sb = self._decompress_sector(s)
-            if (s + 1 < self._comp_sector_count
-                    and self._cs2do[s] + len(sb) > self._cs2do[s + 1]):
-                overlaps += 1
+            end = (self._cs2do[s + 1] if s + 1 < self._comp_sector_count
+                   else h.decomp_fs)
+            overlaps += self._cs2do[s] + len(sb) > end
+            short += self._cs2do[s] + len(sb) < end
+        if short:
+            report.problems.append(
+                f"{short:,} sector(s) inflate to less than their cs2do gap")
         if overlaps:
             report.warnings.append(
                 f"{overlaps:,} sector(s) inflate past the next cs2do offset")
@@ -906,11 +905,8 @@ class CPKWriter:
             s_end = cs2do[s + 1] if s + 1 < n_sec else h.decomp_fs
             decompressed = bytes(gs[s_start:s_end])
 
-            if s == 0 and h.fmt_const != 10:
-                # Legacy archives carry a 2-byte "skip" preamble at the start
-                # of sector 0 (followed by leftover bit-packed table data).
-                # New-format (fmt_const==10) archives place sector 0 cleanly
-                # at first_sec with no prelude.
+            if s == 0:
+                # Keep an empty leading chunk; real data is re-encoded below.
                 prelude_size = self._sector0_prelude_size()
                 prelude = bytes(src._data[
                     src._first_sec : src._first_sec + prelude_size
@@ -939,13 +935,11 @@ class CPKWriter:
             f.write(out)
 
     def _sector0_prelude_size(self) -> int:
+        """Bytes of the empty chunk at the start of sector 0, or 0 if none."""
         src = self._src
-        endian = src.header.endian
-        u16 = struct.unpack(
-            endian + "H",
-            src._data[src._first_sec + 4:src._first_sec + 6]
-        )[0]
-        return 6 + u16
+        low, high, zsize = struct.unpack_from(
+            src.header.endian + "HHH", src._data, src._first_sec)
+        return 0 if low or high else 6 + (zsize & 0x7FFF)
 
 
 # Splitting further only adds chunk headers: data this small will not shrink.
