@@ -172,6 +172,10 @@ The observations in this document apply to the big-endian console CPK v6
 data distribution. A v7 little-endian variant is also supported by the
 reference reader (see §3.3.1).
 
+Counts called corpus-wide below come from one build: all 28 CPK archives, with
+217,396 files. Other counts name the archives they cover. Nothing in this
+document that comes from data alone has been tested in the game.
+
 ---
 
 ## 2. Asset identifier — the SNO key
@@ -453,12 +457,18 @@ confirms (a) whether the cipher carries internal state feedback, and
    `Locations` entries, each one a complete copy of the file, not a fragment:
    `decomp_fs` equals the sum of `size × copies`, with no gaps. `CacheAct1.cpk`
    has 38,039 locations for 22,915 files, with 2,820 files stored more than
-   once, while `Common.cpk` has two such files. Repeated files are small
-   (largest 8,061 B) and mostly actors, materials and lights; none has a
-   locale tag. Copies match byte for byte, except that in 192 files they
-   differ in the `flags` and `fileHash` header fields (§7.1). Placing shared
-   assets near the assets that use them would reduce disc seeks, but that
-   purpose is an inference. Tools that write in place must update every copy.
+   once, while `Common.cpk` has two such files and no other non-cache archive
+   has any. Repetition follows file type: 12 extensions repeat in the five
+   `Cache*` archives, from `.acr` (85% of files) and `.mat` (72%) down to `.con`
+   (10%), while `.snd`, `.prt`, `.tex`, `.ani`, `.app` and `.pow` never do. Only
+   files listed as `Prefetch.dat` dependencies repeat (0 of the 11,462 others).
+   The largest repeated file is 22,676 B, and extra copies cost 0.5 to 1.6% of a
+   stream. None has a locale tag. Copies match byte for byte, except that in 869
+   files they differ in the `flags` and `fileHash` header fields (§7.1). With
+   all copies, 0.90 to 0.93 of a prefetch group's dependencies of these types
+   lie within 1 MiB of each other, against 0.67 to 0.72 with one copy. The rule
+   that decides when a copy is written has not been found, and the seek saving
+   has not been measured. Tools that write in place must update every copy.
 
 ### 3.5.3 Sector CRC32
 
@@ -572,29 +582,29 @@ open-source artefact):
 | 34 | SceneGroup | `.scg` | | | |
 | 36 | ShaderMap | `.shm` | | | |
 
-**Console-only groups** (identified empirically by inspecting the names in
-sample entries of the console `CoreTOC.dat`):
+**Groups outside that table.** Names come from joining the word at +0x10 of each
+file to `CoreTOC.dat`, then comparing the file stem and the archive directory.
+IDs 1 to 48 also run alphabetically, which fits 13 and 35.
 
-| ID | Name | Ext. | Status | Example names |
+| ID | Name | Ext. | Status | Evidence |
 |:-:|:--|:-:|:--|:--|
 | 3 | AiBehavior | `.aib` | confirmed | `ConstantAttack`, `PoltahrEscortFollow`, `SkeletonKing` |
 | 4 | AiState | `.ais` | confirmed | `*_Attack`, `*_Idle` |
-| 13 | NpcRole | `.npc` | confirmed | `A1C1DeckardCain`, `A1C1LostAdventurersLeader` |
+| 13 | ConversationList | `.cnl` | confirmed | 246 files; +0x30 holds a Conversation handle in 240 |
 | 18 | FlagSet | `.flg` | confirmed | `GameFlags`, `PlayerFlags` |
+| 35 | Script | `.scr` | confirmed | `Script\` directory; a Lua chunk in 794 of 794 files |
 | 52 | TreasureClass | `.trs` | confirmed | `MonsterDropSpellRune_Normal`, `LootClicky_Type1` |
-| 55 | Dungeon | `.dun` | confirmed | `ZK Random Dungeon`, `Jar Of Souls`, `AlcarnusRitual` |
-| 35 | *(working name:* `Encounter2`*)* | `.en2` | ID confirmed, semantics inferred | alternate encounter definitions (console-only range) |
-| 54 | *(working name:* `NpcRole2`*)* | `.np2` | ID confirmed, semantics inferred | `A2C2GreedyMiner`, `A2C1Poltahr` |
-| 65 | *(unknown)* | `.u65` | ID present, semantics not determined | — |
-| 67 | *(working name:* `NpcExtra`*)* | `.npx` | ID confirmed, semantics inferred | `NPC`, `Player`, `NPC_AdditiveFlinch` |
-| 68 | *(mixed)* | `.m68` | ID present, heterogeneous content | sound-related samples: `StaticShortHigh`, `Barbarian_WeaponThrow` |
+| 54 | Conductor | `.con` | confirmed | `Conductor\` directory; a Lua chunk in 250 of 250 files |
+| 55 | TimedEvent | `.tme` | confirmed | `TimedEvent\` directory; 32-byte files such as `ZK Random Dungeon` |
+| 65 | ControlScheme | `.ctr` | inferred | Only entry is the placeholder `Axe Bad Data`, whose one file has handle 0. By elimination |
+| 67 | AnimTree | `.ant` | confirmed | `AnimTree\` directory; `NPC`, `Player`, `NPC_AdditiveFlinch` |
+| 68 | Vibrations | `.vib` | confirmed | `Vibrations\` directory; `Console_LowHealth`, `Barbarian_WeaponThrow`. Rumble curves is an inference |
 
 **Summary:**
 
 - 53 IDs come from the PC-shared core: 52 named groups plus the empty slot 0.
-- 6 additional console-only groups have confirmed names and extensions.
-- 5 groups (`35`, `54`, `65`, `67`, `68`) have confirmed IDs but working
-  or absent names.
+- 11 more groups are named here: 10 confirmed by files on disk, and group 65
+  inferred.
 - **64 distinct group IDs identified.** IDs 10, 16, 30, 50 and 53 within the
   0..68 observed range have no entries in `CoreTOC.dat` and appear to be
   empty or retired.
@@ -695,13 +705,29 @@ archive:
 |---|---|---|---|
 | +0x00 | `magic` | uint32 | `0xDEADBEEF` |
 | +0x04 | `version` | uint32 | Same for every file of a group, e.g. Power `0x5A2`, Actor `0x113`, Monster `0x4D5`, Textures `0x3A` (see §11) |
-| +0x08 | `flags` | uint32 | Usually 0 or 1, rarely 2–4; bit semantics not determined from data alone |
-| +0x0C | `fileHash` | uint32 | Working name. Differs per file and is zero when `flags` is zero. Not a CRC32 or Adler-32 of the body |
+| +0x08 | `flags` | uint32 | 0 to 7, mostly 0 or 1; meaning not determined from data alone |
+| +0x0C | `fileHash` | uint32 | Working name. Zero exactly when `flags` is zero. Input unknown (below) |
+| +0x10 | `snoHandle` | uint32 | Matches `CoreTOC.dat` in 133,131 of 133,132 files; the exception is a stub with handle 0 |
+| +0x14, +0x18 | | uint32 | Zero in all 133,132 files |
 
-The four big-endian uint32s constitute a 16-byte universal prefix. The word
-after it, at +0x10, is unique within each group checked, which fits the
-asset's `snoHandle`; confirming that needs `CoreTOC.dat`. Sound banks (`.fsb`)
-are plain FSB5 files without this header, and a few other files lack it too.
+The first four big-endian uint32s form a 16-byte universal prefix, and offsets
+inside an SNO body count from its end, +0x10. The body type decides what follows
++0x1C. Files listed in §7.3 lack this header.
+
+**Why identical copies differ.** `flags` and `fileHash` are zero in every copy
+that crosses a compressed-sector boundary: 17,382 of 17,382 across the five
+`Cache*` archives. Each of the 869 files with differing copies has exactly one
+stamped state and one zero state. Another 463 zero copies lie inside one sector,
+and all of them touch a sector edge or end within 4 bytes of one. As 418 stamped
+copies also touch an edge, the exact rule is open. A rebuild changes which copies
+cross a sector, and nothing shows whether the game reads either field.
+
+**What `fileHash` is not.** Unseeded CRC, Adler-32, MD5, SHA-1, FNV, Jenkins and
+Murmur values of the body or the name do not match it, and it does not cover the
+visible bytes alone:
+479 identical bodies carry more than one hash, and 24 hashes span different
+bodies. One fitting explanation is a hash of the source asset before cooking, in
+which case it cannot be recomputed from the archives.
 
 ### 7.2 Payload organisation
 
@@ -710,6 +736,20 @@ type-specific body (see §12 and §13 for concrete examples). The body is
 read in a single pass for most asset types; for types with auxiliary buffers
 (notably `.app` files, §13) the body references further buffers whose sizes
 are given in the fixed section.
+
+### 7.3 Files without the SNO header
+
+| File | Layout |
+|---|---|
+| `.can` | `Anim\<stem>\0000.can` pairs with `Anim\<stem>.ani` (9,140 of 9,140), and `.ani` +0xC8 gives its track count. Starts with `u32 tableBytes`, then `tableBytes / 4` track-name hashes. Later sections are not decoded |
+| `.nav` | `Scene\<stem>\0000.nav` pairs with `Scene\<stem>.scn` (1,730 of 1,747 scenes have one). The size model closes for 236 files only |
+| `.dat`, magic `0xAABB0004` | SNO manifest: `{u32 group, u32 sno}` records after the magic. `Misc\ActN.app.dat` and `Misc\ActN.game.dat` together list exactly the SNOs of that act's archive and its locale archives |
+| `.dat`, magic `0xBBCC0005` | Sprite table: `{u32 nameHash, u32 texSno, u32 frame}` records after the magic. The hash is §12's, case-sensitive |
+| `.sbt` | UTF-8 subtitle text with CRLF line ends, cue lines `HH:MM:SS:cc - HH:MM:SS:cc` |
+| `.achu` | Protobuf wire format; no schema recovered |
+| `.fsb` | Plain FSB5 sound banks |
+
+`CoreTOC.dat` and `Prefetch.dat` have no magic: their first words are counts.
 
 ---
 
@@ -852,47 +892,53 @@ asserted here.
 
 ## 12. Worked example: `.pow` (Power) file layout
 
-**File size of the fixed section:** 0x310 = 784 bytes. Some `.pow` files in
-`Common.cpk` and `CacheAct1.cpk` are smaller than that (down to 628 B), so this
-layout does not hold for every file or build (§21.2).
+All 1,021 `.pow` files in the corpus share one layout. The fixed section is
+0x1A0 = 416 bytes including the 16-byte header. Tag maps, an optional list of
+Power SNOs and the script follow it, so the smallest file is 628 B. Each pair is
+`{offset, size}`, and file position = offset + 0x10.
 
-Working names are used below for substructures; `PowerBody` is a
-placeholder for the cluster of fields describing a single power's
-gameplay parameters, pending further per-field analysis.
+| File offset | Content | Notes |
+|---|---|---|
+| 0x000 | File header (§7.1) | |
+| 0x020, 0x030, 0x040 | Tag maps `M0`, `General`, `PVPGeneral`: pair + 8 zero bytes | `M0` and `PVPGeneral` always empty |
+| 0x050 to 0x068 | Tag maps `Contact0` to `Contact3`: four pairs | |
+| 0x090 to 0x0A8 | Tag maps `PVPContact0` to `3`: four pairs | Always empty; `PVP` names are guesses |
+| 0x0D0 | `powerFlags`, uint32 | Bits 0 to 16 used; meanings open |
+| 0x0D4, 0x0E4 | Two 16-byte collision blocks | Field widths open |
+| 0x0F8, 0x118 | Optional arrays of uint32 Power SNOs | Non-zero in 2 files and 1 file |
+| 0x178 | `scripted`, boolean | |
+| 0x17C | `useSecondaryResource`, boolean | |
+| 0x180 | `formulaCount`, int32 | 0 to 40 |
+| 0x190 | `compiledScriptRange` pair | Non-zero in 595 files, 3 of them empty chunks |
+| 0x198 | `questMetaDataRef` | Always −1 |
 
-```
-struct PowerFileLayout {              // 784 bytes, fixed section
-    uint8              header[16];    // file header (§7.1)
-    PowerBody          body;          // gameplay parameters (sub-layout TBD)
-    uint32             scripted;      // boolean
-    uint32             useSecondaryResource;  // boolean
-    int32              formulaCount;
-    uint64             compiledScriptField;   // 8-byte field; zero on disk
-    SerializeData      compiledScriptRange;   // offset + size of bytecode blob
-    SNOKey_Expanded    questMetaDataRef;      // 8 bytes
-    SNOKey_Expanded    scriptRef;             // 8 bytes
-};
-```
+All other bytes of the fixed section are zero, and it holds no float field. The
+Lua chunk (§14) is at `offset + 0x10` and always ends the file.
 
-The 8-byte `compiledScriptField` is a placeholder that stores zero on
-disk and is overwritten by the loader when the asset is brought into
-memory; the actual location of the bytecode blob is carried by the
-adjacent `compiledScriptRange` pair (offset + size), which is what a
-clean-room parser should read.
+**Tag maps.** A map is a `uint32 count` followed by records of
+`uint32 type, uint32 tag, value`:
 
-**Auxiliary buffer referenced from the fixed section:**
+| Type | Value | Records |
+|---|---|---|
+| 0 | int32: enum, flag or hash | 13,608 |
+| 1 | float32 | 88 |
+| 2 | SNO handle, 4 bytes | 872 |
+| 3 | 32-bit hash or −1 | 48 |
+| 4 | Formula | 13,866 |
+| 6 | Attribute id | 49 |
 
-- A trailing Lua 5.1 bytecode chunk addressed by `compiledScriptRange`, stored
-  at file offset 0x190 (see §14).
-- A per-power formula table — a 16-byte descriptor whose payload is an
-  array of formula entries referenced by its own offset + size pair:
+A formula value is five zero uint32s, `textLength`, a zero uint32 and
+`codeLength`, then the source text padded to 4 bytes, then stack bytecode. The
+text is readable, for example `Rune_A ? 3 : 1`. Of 13,456 formulas recompiled,
+13,452 gave the stored bytecode.
 
-```
-struct FormulaTable {                 // 16 bytes
-    SerializeData      entriesRange;  // offset + size of the entry array
-    uint64             entriesField;  // 8-byte placeholder, zero on disk
-};
-```
+**Script formulas.** `Hydra.PowerGetFormulaValue(n)` reads the type-4 record in
+`General` with tag `0x41100 + (n / 10) * 0x100 + (n % 10) * 0x10`. Of 2,933 such
+calls tested, 2,917 reach a non-empty formula.
+
+**String hash.** Several tags and the sprite tables (§7.3) use
+`h = (h * 33 + byte) mod 2^32`, seed 0, on case-sensitive names. The player class
+tag `0x507B0` applies it to the lower-cased name. Most hash values are unresolved.
 
 > Note. A runtime representation of an active power (on-screen, in combat)
 > does not appear in the on-disk `.pow` file and is outside the scope of
@@ -909,63 +955,88 @@ packed vertex/index buffers.
 ### 13.1 Top-level structure
 
 The file begins with the 16-byte universal header (§7.1), followed by a
-per-type fixed section. The fixed section carries two count + descriptor
-pairs addressing two sub-object arrays — a natural fit for a
-level-of-detail split (e.g. hi-res vs. proxy mesh) or a variant split;
-the exact semantics of each slot are not determined from data alone.
-
-### 13.2 Sub-object record — 240 bytes each
-
-The sub-object record is a fixed-size descriptor carrying counts and
-placeholder fields that the loader patches with in-memory addresses at
-load time. On disk, the 8-byte "pointer" fields are zero; the actual
-payload is located via adjacent offset + size pairs.
-
-| Offset | Field | Size | Notes |
-|---|---|---|---|
-| +0x04 | vertex count | int32 | |
-| +0x10 | vertex list placeholder | uint64 | zero on disk |
-| +0x28 | index count | int32 | |
-| +0x38 | index list placeholder | uint64 | zero on disk |
-| +0xA8 | packed vertex list placeholder | uint64 | zero on disk |
-| +0xB0 | packed vertex offset | int32 | offset to packed vertex blob |
-| +0xB4 | packed vertex size | int32 | size of packed vertex blob |
-| +0xBC | skinning-record count | int32 | |
-| +0xC0 | skinning-record list placeholder | uint64 | zero on disk |
-
-Vertex and index arrays are located by walking the file past the fixed
-section; the offset + size pairs in skinning records (§13.3) and in the
-sub-object itself allow direct location of each buffer.
-
-### 13.3 Skinning record — 104 bytes each
+per-type fixed section. All offsets count from +0x10. Sizes below hold across
+the corpus: 6,033 files, 114,846 sub-objects and 126,953 draws. Only the listed
+fields are decoded.
 
 | Offset | Field | Notes |
 |---|---|---|
-| +0x20 | packed vertex list placeholder | zero on disk |
-| +0x28 | packed vertex offset | |
-| +0x2C | packed vertex size | |
-| +0x38 | packed index list placeholder | zero on disk |
-| +0x40 | packed index offset | |
-| +0x44 | packed index size | |
+| +0x24 | bone count | |
+| +0x28 / +0x2C | bone array offset / size | 176 bytes per bone |
+| +0x70 / +0x74 / +0x78 | sub-object count / offset / size | 308 bytes each |
+| +0xC8 / +0xCC / +0xD0 | material count / offset / size | 40 bytes each |
+
+### 13.2 Sub-object record — 308 bytes each
+
+| Offset | Field | Notes |
+|---|---|---|
+| +0x4C | name string | Seen on a sample file only |
+| +0xD0 | bounds centre | float × 3 |
+| +0xDC | bounds half-extent | float × 3 |
+| +0xFC / +0x100 / +0x104 | draw count / offset / size | 160 bytes each |
+| +0x118 | position bias | float × 3 |
+| +0x124 | position scale | float × 3 |
+
+### 13.3 Draw record — 160 bytes each
+
+| Offset | Field | Notes |
+|---|---|---|
+| +0x08 / +0x0C | descriptor offset / size | 16 bytes. Byte 0 is the format; bytes 8 to 11 repeat the vertex and index counts as uint16 |
+| +0x10 | index count | Divisible by 3 in every draw, which points to triangle lists |
+| +0x18 / +0x1C | index buffer offset / size | |
+| +0x24 | vertex count | |
+| +0x2C / +0x30 | stream A offset / size | May be padded to 16 bytes |
+| +0x54 / +0x58 | stream B offset / size | Size 0 when rigid |
+| +0x6C / +0x70 | stream C offset / size | |
 
 ### 13.4 Vertex and index widths
 
-- **Vertex stride:** 32 bytes. Inferred from `32 × vertex_count` matching
-  the size of the vertex-list region for multiple sample files.
-- **Index width:** 16 bits. Inferred from `2 × index_count` matching the
-  size of the index-list region.
+Indices are 16 bits wide. Vertices are split into streams, and no layout has a
+32-byte vertex. Format 0x81 occurs only in files without bones and format 0x83
+only in files with bones. Stream sizes match these strides in all 126,953 draws.
 
-The exact layout within a 32-byte vertex (position, normal, UV, bone
-indices / weights, tangent frames) is **not** determinable from the
-`.app` file alone; it is implicit in the renderer's vertex declaration
-and would require shader analysis to recover. A clean-room parser can
-successfully round-trip positions, indices, and topology without the
-per-field breakdown.
+**Rigid, format 0x81: stream A 6 bytes, stream C 20 bytes**
+
+| Stream | Offset | Type | Field |
+|---|---|---|---|
+| A | +0 | int16 BE × 3 | position |
+| C | +0 | uint8 × 3 | normal |
+| C | +3 | uint8 | always 0 |
+| C | +4, +8 | uint8 × 4, twice | colour-like values, meaning unknown |
+| C | +12 | uint16 **LE** × 2 | UV1 |
+| C | +16 | uint16 **LE** × 2 | UV2, scale unknown |
+
+**Skinned, format 0x83: stream A 10 bytes, stream B 8 bytes, stream C 16 bytes**
+
+| Stream | Offset | Type | Field |
+|---|---|---|---|
+| A | +0 | int16 BE × 3 | position |
+| A | +6 | uint8 × 3 | normal |
+| A | +9 | uint8 | always 0x80 |
+| B | +0 to +7 | (uint8, uint8) × 4 | (bone weight, bone index) pairs |
+| C | +0, +4 | uint8 × 4, twice | colour-like values, meaning unknown |
+| C | +8 | uint16 **LE** × 2 | UV1 |
+| C | +12 | uint16 **LE** × 2 | UV2, scale unknown |
+
+Decoding:
+
+- **Position** is `raw × scale + bias`. The bias is required: decoded positions
+  fit the bounds tightly only with it, in all 17,030 sub-objects tested.
+- **Normal** is `(byte − 128) / 128`, axes X, Y, Z. Triangles are counter-clockwise
+  around it in index order.
+- **UV1** is `(raw − 0x8000) / 512`. The evidence is strong, but no decoded UV has
+  been checked against a texture.
+- **Bone weights** sum to 255 in descending order. At most three were non-zero
+  across the 227,439 records checked. Indices stay below the bone count and are
+  spatially coherent, but they have not been matched to skeleton positions.
+- **Tangents** are not stored: every byte has another field.
 
 ### 13.5 Alignment
 
-Sub-object and skinning buffers are 32-byte-aligned on disk. Tools that
-emit `.app` files for interoperability should preserve this alignment.
+The buffers have no 32-byte alignment. In 18,967 draws from 900 files, index and
+stream A offsets are 16-byte aligned in 8,953 and at least 4-byte aligned in all
+but 7, and many sub-object arrays are 4-byte aligned only. Tools that edit `.app`
+files should keep the offsets they find.
 
 ---
 
@@ -994,7 +1065,8 @@ position, and the offset counts from the end of the 16-byte file header:
 
 Scripts reach the engine through one global table, `Hydra`, of which 597 names
 are used in these two archives, such as `Hydra.PowerGetFormulaValue` or
-`Hydra.ActorPlaySimpleConversation`. The engine calls back into functions the
+`Hydra.ActorPlaySimpleConversation`. Across all 28 archives, scripts use 581
+`Hydra` functions and 458 named constants. The engine calls back into functions the
 script defines as globals, such as `OnStart` and `OnContact0`.
 
 ### 14.2 Practical consequences for tooling
@@ -1006,22 +1078,29 @@ script defines as globals, such as `OnStart` and `OnContact0`.
   decompilers such as `unluac` and `luadec` can also read.
 - The output is pseudo-Lua: logic and names are recovered, but because the
   chunks are stripped, parameters print as `a0`, other locals as `r<register>`
-  and captured variables as `up<depth>_r<register>`. A jump that fits no
+  and captured variables as `up<depth>_a<n>` or `up<depth>_r<register>`. A jump that fits no
   structure prints as `goto L<pc>` with a Lua 5.2 style label.
-- All 472 non-empty chunks in `Common.cpk` and `CacheAct1.cpk` decompile, with
-  no function left as disassembly and only 34 `goto` statements in 17,289
-  lines. Every string constant and each of the 9,736 calls in the bytecode
-  appears in the text. The output has not been recompiled or executed, so
-  treat `.lst` as authoritative where the two seem to disagree.
+- The 4,755 chunks of the corpus reduce to 1,501 distinct ones, of which one is
+  empty. Recompiling the text of the 1,571 script files with non-empty chunks and
+  comparing each function's call sequence with the original bytecode gives:
+
+  | Result | Files |
+  |---|---|
+  | Compiles, call order matches | 1,444 |
+  | Uses `goto`, compiles as Lua 5.2, not compared | 86 |
+  | Compiles, call order differs in places | 22 |
+  | `goto` into a nested block, does not compile | 19 |
+
+  7,505 of 7,527 compiled functions match. This covers call order, not the full
+  logic, and no script has been executed. Treat `.lst` as authoritative where the
+  two seem to disagree.
 
 ### 14.3 Parameter tagging
 
 Small-integer tags are observed on script-bound parameter fields in SNO
 bodies, distinguishing integer, float, string, and nil-valued parameters.
-The specific numeric encoding is not needed for a clean-room parser of
-the data format itself — the observation simply states that each
-script-bound parameter carries a type tag alongside its value, so the
-reader must dispatch on that tag.
+Each script-bound parameter carries a type tag alongside its value, so the
+reader must dispatch on that tag. §12 lists the record types of `.pow` tag maps.
 
 ### 14.4 Event parameters
 
@@ -1069,7 +1148,7 @@ From the shipped data, the schema exhibits three distinct dimensions:
 Full enumeration of every tag's symbolic name is not required for
 interoperability: a parser needs only (a) correct tag-to-field-width
 mappings for primitives, and (b) recognition of the SNO-reference tag
-width (an `SNOKey_Expanded`, 8 bytes).
+width: 4 bytes in `.pow` tag records (§12).
 
 ---
 
@@ -1139,7 +1218,7 @@ this document:
 | `cpk_tool.py` | Command-line front-end: `info` / `list` / `extract` (with extension/regex/size/locale filters) / `verify` / `replace` / `delete` / `add` / `create` (build new archive from a directory tree) | shell | All subcommands round-trip-verified |
 | `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Run on `Common.cpk`: all 28,394 files extracted |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
-| `lua51.py` / `luadec.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompiler to pseudo-Lua, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 1,125 chunks in `Common.cpk` and `CacheAct1.cpk` |
+| `lua51.py` / `luadec.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompiler to pseudo-Lua, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 4,755 chunks of the corpus (§14.2) |
 | `coretoc_parser.py` | Global asset index parser | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser | `Prefetch.dat` + `CoreTOC.dat` | Format invariants validated |
 
@@ -1149,6 +1228,7 @@ and `CacheAct1.cpk` (v6, big-endian, `fmt_const = 2`): CRC and every chunk pass,
 each file read on demand matches the global stream, a save without changes is
 byte-identical, and rebuilt archives hold the same content. On v7 and
 `fmt_const = 10` archives they have only run against the synthetic test suite.
+`verify` also passes on all 28 archives of the corpus (§1).
 Nobody has yet loaded a rebuilt archive in the game.
 
 ### 19.2 Reference open-source projects (cross-reference)
@@ -1176,10 +1256,11 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 | SNO key (expanded encoding) | 8 bytes | Format layout |
 | SNO key (packed encoding) | 4 bytes | Format layout |
 | SNO file header | 16 bytes, magic `0xDEADBEEF` | On-disk prefix |
-| `.pow` fixed section | 784 bytes | §12 |
-| `.app` sub-object record | 240 bytes | §13.2 |
-| `.app` skinning record | 104 bytes | §13.3 |
-| `.app` vertex stride | 32 bytes | §13.4 |
+| `.pow` fixed section | 416 bytes, including the header | §12 |
+| `.app` sub-object record | 308 bytes | §13.2 |
+| `.app` draw record | 160 bytes | §13.3 |
+| `.app` rigid vertex streams | 6 + 20 bytes | §13.4 |
+| `.app` skinned vertex streams | 10 + 8 + 16 bytes | §13.4 |
 | `.app` index width | 16 bits | §13.4 |
 | CPK magic | `0xA1B2C3D4` | Empirical |
 | CPK format version | 6 (BE) / 7 (LE) | Empirical |
@@ -1229,9 +1310,8 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   against `CoreTOC.dat`.
 - **`snoGroup → (name, extension)` mapping** — every populated group
   observed in the shipped data has an entry (via the PC-shared core for
-  most groups, plus console-only extensions identified empirically from
-  the sample names in `CoreTOC.dat`); five carry working names only
-  (§21.2).
+  most groups, plus 11 more named from files on disk, with group 65
+  inferred; §4.4).
 - **SNO key representation** (expanded / packed) and its range limits.
 - **Universal SNO file header** (16 bytes, §7.1).
 - **Shared deserialization framework as an observation** — verified by
@@ -1241,8 +1321,13 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   count both match the 5.1 baseline exactly, making the shipped
   bytecode decompilable with off-the-shelf tools.
 - **Script recovery** — every Lua chunk in `.pow`, `.scr`, `.con` and `.cnv`
-  files located and decompiled to pseudo-Lua (§14), checked on `Common.cpk`
-  and `CacheAct1.cpk`.
+  files located and decompiled to pseudo-Lua, and the result recompiled and
+  compared with the bytecode across the corpus (§14.2).
+- **`.pow` layout** — fixed section, tag maps, record types and formula lookup,
+  checked on all 1,021 files (§12).
+- **`.app` vertex layout** — record sizes and stream strides on all 126,953
+  draws, with position, normal and bone data decoded (§13).
+- **Why copies of a file differ** — header zeroing at sector crossings (§7.1).
 - **Hashing algorithm** — 64-bit FNV-1a with the standard constants,
   verified against the `FileName` and `SortedFileInfo` sections of CPK
   archives.
@@ -1259,32 +1344,28 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 
 ### 21.2 Open
 
-- **Semantics of several populated group IDs** whose names are not yet
-  confirmed (working names only in §4.4). IDs are certain; names and
-  precise content types require cross-validation against a larger body
-  of sample assets.
-- **Internal layout of the `.pow` body** (the `PowerBody` placeholder
-  in §12) — requires further sample-driven per-field analysis. The 784-byte
-  fixed section needs re-checking, since shipped `.pow` files can be smaller.
-- **`flags` and `fileHash` in the SNO header** (§7.1) — their meaning is
-  unknown, and so is why copies of a file can differ in them.
-- **Why files are repeated** inside an archive (§3.5), and whether the game
-  accepts a rebuilt archive that stores each file once.
-- **Per-field breakdown of the 32-byte vertex in `.app` files** —
-  positions and indices are recoverable, but the exact layout of
-  normals, UVs, tangent frames, and skinning weights within the 32-byte
-  stride is not determinable from `.app` data alone (it would require
-  shader analysis).
+- **Group 65** — its name is inferred; see §4.4.
+- **`.pow` details** — `powerFlags` bits, collision blocks, and the names of most
+  of the 559 tags and hash values (§12).
+- **`flags` and `fileHash` in the SNO header** (§7.1) — the meaning of both, the
+  input of the hash, and the exact zeroing rule at sector edges.
+- **Why files are repeated** inside an archive (§3.5) — the load unit behind the
+  copies, and whether the game accepts a rebuilt archive that stores each file
+  once.
+- **`.app` details** (§13) — the colour-like values, UV2, the UV1 divisor and V
+  direction, the source of tangents if any, and bone indices against skeleton
+  positions.
+- **Non-SNO files** (§7.3) — `.can` sections after the first and codec payloads,
+  and `.nav` beyond the 236 files whose size model closes.
 
 ### 21.3 Highest-leverage next steps
 
-1. **Extend the corpus** across all shipped CPK archives (per-act
-   archives, language packs) — broader sampling is the cheapest way to
-   close most open items.
-2. **Cross-platform corpus diff** — compare PC CASC-resident assets
-   (via the public `SnoExtensions` table) against the console mapping
-   in §4.4 to confirm the working names for the remaining console-only
-   groups.
+1. **Test in the game** — load a rebuilt archive and a changed script. This is the
+   only way to learn whether the header fields are read, and every result here
+   comes from data alone.
+2. **Cross-platform corpus diff** — compare PC CASC-resident assets (via the
+   public `SnoExtensions` table) against the console data, to settle group 65 and
+   the `fileHash` input.
 
 ---
 
@@ -1332,11 +1413,10 @@ observable:
 | SNO key (packed) | 4-byte compact encoding inside SNO bodies and archive index |
 | SNO file header | 16-byte prefix of an SNO file on disk (§7.1) |
 | Power file layout | `.pow` file fixed section (§12) |
-| Power body | placeholder name for the `.pow` body's core gameplay-parameter cluster |
-| Formula table | 16-byte formula-array descriptor referenced from `.pow` |
+| Tag map | `uint32 count` plus typed tag records in `.pow` (§12) |
 | Appearance file layout | `.app` file top-level structure (§13) |
-| Sub-object record | 240-byte mesh sub-object (§13.2) |
-| Skinning record | 104-byte skinning sub-descriptor (§13.3) |
+| Sub-object record | 308-byte mesh sub-object (§13.2) |
+| Draw record | 160-byte draw descriptor with its vertex streams (§13.3) |
 | Shared deserialization framework | inferred schema-driven deserializer (§11) |
 | Field tag | per-field type tag observable in SNO bodies (§15) |
 | Tag ID space | one of the observed 64 K-stride ID ranges (§15) |

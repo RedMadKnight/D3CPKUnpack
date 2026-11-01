@@ -93,19 +93,19 @@ SNO_EXTENSIONS_PC = {
     66: ("Accolade", "aco"),
 }
 
-# Console-only groups, identified by inspecting sample entries:
+# Groups outside the PC table, named from file stems and archive directories:
 SNO_EXTENSIONS_CONSOLE_EXTRA = {
     3:  ("AiBehavior", "aib"),      # ConstantAttack, PoltahrEscortFollow, SkeletonKing
     4:  ("AiState", "ais"),          # *_Attack, *_Idle, etc.
-    13: ("NpcRole", "npc"),          # A1C1DeckardCain, A1C1LostAdventurersLeader
+    13: ("ConversationList", "cnl"), # A1C1DeckardCain, A1C1LostAdventurersLeader
     18: ("FlagSet", "flg"),          # GameFlags, PlayerFlags
-    35: ("Encounter2", "en2"),       # Alternate encounter definitions (console-specific)
+    35: ("Script", "scr"),           # Lua behaviour scripts
     52: ("TreasureClass", "trs"),    # MonsterDropSpellRune_Normal, LootClicky_Type1 ← CONFIRMED
-    54: ("NpcRole2", "np2"),         # A2C2GreedyMiner, A2C1Poltahr
-    55: ("Dungeon", "dun"),          # ZK Random Dungeon, Jar Of Souls, AlcarnusRitual
-    65: ("Unknown65", "u65"),
-    67: ("NpcExtra", "npx"),         # NPC, Player, NPC_AdditiveFlinch
-    68: ("Misc68", "m68"),           # Sound-related "StaticShortHigh", Barbarian_WeaponThrow
+    54: ("Conductor", "con"),        # Lua multi-phase event scripts: A2C2GreedyMiner
+    55: ("TimedEvent", "tme"),       # ZK Random Dungeon, Jar Of Souls, AlcarnusRitual
+    65: ("ControlScheme", "ctr"),    # Inferred: only entry is "Axe Bad Data"
+    67: ("AnimTree", "ant"),         # NPC, Player, NPC_AdditiveFlinch
+    68: ("Vibrations", "vib"),       # Console_LowHealth, Barbarian_WeaponThrow
 }
 
 # Merged map

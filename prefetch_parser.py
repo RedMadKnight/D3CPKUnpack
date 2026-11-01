@@ -238,19 +238,20 @@ def export_summary(graph, meta, sno_map, out_path):
 GROUP_NAMES = {
     1: "Actor", 2: "Adventure", 3: "AiBehavior", 4: "AiState",
     5: "AmbientSound", 6: "Anim", 7: "Anim2D", 8: "AnimSet",
-    9: "Appearance", 11: "Cloth", 12: "Conversation", 13: "NpcRole",
+    9: "Appearance", 11: "Cloth", 12: "Conversation", 13: "ConversationList",
     14: "EffectGroup", 15: "Encounter", 17: "Explosion", 18: "FlagSet",
     19: "Font", 20: "GameBalance", 21: "Globals", 22: "LevelArea",
     23: "Light", 24: "MarkerSet", 25: "Monster", 26: "Observer",
     27: "Particle", 28: "Physics", 29: "Power", 31: "Quest",
-    32: "Rope", 33: "Scene", 34: "SceneGroup", 35: "Encounter2",
+    32: "Rope", 33: "Scene", 34: "SceneGroup", 35: "Script",
     36: "ShaderMap", 37: "Shaders", 38: "Shakes", 39: "SkillKit",
     40: "Sound", 41: "SoundBank", 42: "StringList", 43: "Surface",
     44: "Textures", 45: "Trail", 46: "UI", 47: "Weather",
     48: "Worlds", 49: "Recipe", 51: "Condition", 52: "TreasureClass",
-    54: "NpcRole2", 55: "Dungeon", 56: "Act", 57: "Material",
+    54: "Conductor", 55: "TimedEvent", 56: "Act", 57: "Material",
     58: "QuestRange", 59: "Lore", 60: "Reverb", 61: "PhysMesh",
-    62: "Music", 63: "Tutorial", 64: "BossEncounter", 66: "Accolade",
+    62: "Music", 63: "Tutorial", 64: "BossEncounter", 65: "ControlScheme",
+    66: "Accolade", 67: "AnimTree", 68: "Vibrations",
 }
 
 
