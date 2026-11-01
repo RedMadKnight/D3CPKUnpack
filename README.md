@@ -532,7 +532,7 @@ for each of `count` entries (136 bytes each):
     char[128]:  name (null-padded ASCII)
 ```
 
-Build B is little-endian and segmented, as on PC (211,835 entries):
+Build B is little-endian and segmented (211,835 entries):
 
 ```
 int32 count[70]; int32 offset[70]; int32 count2[70]; uint32 unknown    // 844 bytes
@@ -546,12 +546,16 @@ for each group g, at 844 + offset[g]:
 
 ### 4.2 Comparison with the PC variant
 
-| Aspect | Build A | Build B and PC (CASC) |
+| Aspect | Build A | Build B |
 |---|---|---|
 | Endianness | big-endian | little-endian |
 | Header | 4 bytes (count only) | 844 bytes (per-group entry counts, offsets, reserved fields) |
 | Layout | flat, single record type | segmented per group |
 | Record size | 136 B (fixed) | 12 B, plus names |
+
+The PC form has the same segments. The `jybp/casc` table describes an 844-byte header as
+above, while WhiteoutLib reads a 1,120-byte header with a fourth 70-entry array. Neither
+PC form was tested here.
 
 ### 4.3 Groups absent from the PC mapping
 
@@ -990,7 +994,8 @@ fields are decoded.
 | +0x24 | bone count | |
 | +0x28 / +0x2C | bone array offset / size | 176 bytes per bone |
 | +0x70 / +0x74 / +0x78 | sub-object count / offset / size | 308 bytes each |
-| +0xC8 / +0xCC / +0xD0 | material count / offset / size | 40 bytes each |
+| +0xC8 / +0xCC / +0xD0 | hardpoint count / offset / size | 40 bytes each |
+| +0x18C / +0x190 / +0x194 | material count / offset / size, build A | 20 bytes each |
 
 ### 13.2 Sub-object record — 308 bytes each
 
