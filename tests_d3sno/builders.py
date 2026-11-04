@@ -1309,3 +1309,191 @@ def build_snd(build: str, rows: list, count=None) -> bytes:
     img.pair(pair_at, bytes(table))
     img.put(count_at, "i", len(rows) if count is None else count)
     return img.done()
+
+
+# --- Gameplay records ------------------------------------------------------------------
+
+import csv as _csv
+import os as _os
+
+_LAYOUT_PATH = _os.path.join(_os.path.dirname(__file__), "..", "d3sno", "data", "layouts.tsv")
+_TABLE_BUILD = {"nx": "switch", "ps3": "ps3"}
+
+
+def _layout_rows():
+    sizes, rows = {}, {}
+    with open(_LAYOUT_PATH, encoding="utf-8", newline="") as handle:
+        for row in _csv.DictReader(handle, delimiter="\t"):
+            key = (_TABLE_BUILD[row["build"]], row["record"])
+            if row["offset"] == "-":
+                sizes[key] = int(row["bytes"])
+            else:
+                rows.setdefault(key, []).append(row)
+    result = {}
+    for key, size in sizes.items():
+        fields = sorted(rows.get(key, []), key=lambda r: int(r["offset"], 16))
+        totals = {}
+        for f in fields:
+            totals[f["name"]] = totals.get(f["name"], 0) + 1
+        seen, named = {}, []
+        for f in fields:
+            name = f["name"]
+            if totals[name] > 1:
+                seen[name] = seen.get(name, 0) + 1
+                name = f"{name}_{seen[name]}"
+            named.append((int(f["offset"], 16), int(f["bytes"]), f["type"], name))
+        result[key] = (size, named)
+    return result
+
+
+RECORD_LAYOUTS = _layout_rows()
+
+
+def _pad(img: "Image", alignment: int) -> None:
+    img.b += bytes(-len(img.b) % alignment)
+
+
+def _fill_record(img: "Image", build: str, record: str, at: int, values: dict) -> None:
+    order = img.order
+    size, fields = RECORD_LAYOUTS[(build, record)]
+    later = []
+    for offset, width, kind, name in fields:
+        if kind.startswith("pointer_slot"):
+            continue
+        if kind.startswith("file_ref,"):
+            parts = name.split(",")
+            if any(p in values for p in parts):
+                img.put(at + offset, "iiI", *(values.get(p, 0) for p in parts))
+            continue
+        if name not in values:
+            continue
+        value = values[name]
+        if kind.startswith(("array_pair", "text_pair", "tag_map_pair")):
+            later.append((offset, kind, value))
+        elif kind.startswith("char["):
+            img.raw(at + offset, value.encode("latin-1").ljust(width, b"\0")[:width])
+        elif kind.startswith("typed_ref"):
+            img.put(at + offset, "ii", *value)
+        elif kind == "zero":
+            img.raw(at + offset, value)
+        else:
+            code = "f" if kind.startswith("f32") else "I" if kind.startswith("u32") else "i"
+            items = value if isinstance(value, (list, tuple)) else [value]
+            img.put(at + offset, f"{len(items)}{code}", *items)
+    for offset, kind, value in later:
+        if kind.startswith("text_pair"):
+            _pad(img, 8)
+            img.put(at + offset, "II", *img.append(value.encode("latin-1") + b"\0"))
+        elif kind.startswith("tag_map_pair"):
+            _pad(img, 8)
+            img.put(at + offset, "II", *img.append(value))
+        else:
+            element = kind.rsplit(" ", 1)[1]
+            _pad(img, 8)
+            if element == "u8":
+                img.put(at + offset, "II", *img.append(value))
+            elif element in ("i32", "u32", "f32"):
+                code = {"i32": "i", "u32": "I", "f32": "f"}[element]
+                img.put(at + offset, "II", *img.append(struct.pack(f"{order}{len(value)}{code}", *value)))
+            else:
+                element_size = RECORD_LAYOUTS[(build, element)][0]
+                start = len(img.b)
+                img.put(at + offset, "II", *img.append(bytes(element_size * len(value))))
+                for i, item in enumerate(value):
+                    _fill_record(img, build, element, start + i * element_size, item)
+
+
+def build_record(build: str, record: str, values: dict, version: int = 1) -> bytes:
+    """A gameplay record file, laid out depth-first with 8-aligned blocks."""
+    order = order_of(build)
+    size = RECORD_LAYOUTS[(build, record)][0]
+    img = Image(0x10 + size, order)
+    img.raw(0, struct.pack(order + "4I", 0xDEADBEEF, version, 1, 0x1234))
+    _fill_record(img, build, record, 0x10, values)
+    return img.done()
+
+
+def display_time(locale: int, player_class: int, gender: int, time: int) -> int:
+    return locale | player_class << 5 | gender << 8 | time << 10
+
+
+# --- Game balance layout ---------------------------------------------------------------
+
+def build_gam_layout(build: str, kind: int, slot: int, row_size: int, rows: list,
+                     shared_name=None, trailing_slot=None) -> bytes:
+    """Rows as dicts: ``name``, ``formulas`` {position: (text, code) or None}, ``fields``
+    {position: (fmt, value)}. Laid out by the stated rule."""
+    order = order_of(build)
+    img = Image(GAM_FIXED[build], order)
+    img.raw(0, sno_head(1, order))
+    img.put(0x1C, "i", kind)
+    _pad(img, 8)
+    table = len(img.b)
+    img.b += bytes(row_size * len(rows))
+    img.put(slot, "II", table - 0x10, row_size * len(rows))
+    name_align = 4 if build == "ps3" else 8
+    shared_at = None
+    for number, row in enumerate(rows):
+        at = table + number * row_size
+        for position, (fmt, value) in row.get("fields", {}).items():
+            img.put(at + position, fmt, value)
+        if "name" in row:
+            raw = row["name"].encode("latin-1") + b"\0"
+            if shared_name and shared_at is not None:
+                img.put(at, "II", shared_at - 0x10, len(raw))
+            else:
+                _pad(img, name_align)
+                if shared_name:
+                    shared_at = len(img.b)
+                img.put(at, "II", *img.append(raw))
+        for position, formula in sorted(row.get("formulas", {}).items()):
+            _pad(img, 4)
+            if formula is None:
+                img.put(at + position, "II", len(img.b) - 0x10, 0)
+            else:
+                img.put(at + position, "II", *img.append(formula_value(*formula, order)))
+    return img.done()
+
+
+# --- Presentation ----------------------------------------------------------------------
+
+def ps3_file(size: int) -> "Image":
+    img = Image(size, ">")
+    img.raw(0, sno_head(1, ">"))
+    return img
+
+
+def path_bytes(img: "Image", at: int, nodes: list, node_size: int = 12) -> None:
+    raw = b"".join(node.ljust(node_size, b"\0") for node in nodes)
+    img.raw(at, bytes(range(40)))
+    img.put(at + 32, "II", *img.append(raw))
+
+
+def fsb5(mode: int, data: bytes, rate_index=9, stereo=True, sample_count=1000, chunks=(),
+         version=1, count=1) -> bytes:
+    chunk_raw = bytearray()
+    for i, (kind, body) in enumerate(chunks):
+        more = 1 if i + 1 < len(chunks) else 0
+        chunk_raw += struct.pack("<I", more | len(body) << 1 | kind << 25) + body
+    word = (1 if chunks else 0) | rate_index << 1 | int(stereo) << 5 | 0 << 6 | sample_count << 34
+    headers = struct.pack("<Q", word) + bytes(chunk_raw)
+    headers += bytes(-len(headers) % 16)
+    head = b"FSB5" + struct.pack("<6I", version, count, len(headers), 0, len(data), mode)
+    head = head.ljust(60, b"\0")
+    return head + headers + data
+
+
+def varint(value: int) -> bytes:
+    out = bytearray()
+    while True:
+        byte = value & 0x7F
+        value >>= 7
+        out.append(byte | (0x80 if value else 0))
+        if not value:
+            return bytes(out)
+
+
+def proto(number: int, value) -> bytes:
+    if isinstance(value, bytes):
+        return varint(number << 3 | 2) + varint(len(value)) + value
+    return varint(number << 3) + varint(value)

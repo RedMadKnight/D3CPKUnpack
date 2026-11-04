@@ -21,6 +21,10 @@ class AnimSets(unittest.TestCase):
             self.assertIsNone(read.animation(9))
             self.assertEqual(read.warnings, [])
 
+    def test_type_7_is_accepted(self):
+        read = anims.parse_anim_set(B.build_ans("ps3", [(7, 5, 700), (2, 6, 800)]))
+        self.assertEqual((read.default.get(5).value, read.animation(6)), (700, 800))
+
     def test_other_record_type_warns(self):
         read = anims.parse_anim_set(B.build_ans("switch", [(0, 5, 700)]))
         self.assertTrue(read.warnings)

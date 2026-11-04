@@ -39,6 +39,7 @@ class TextureSlot:
     type: int
     animation_raw: bytes
     handle: int
+    position: int = -1  # file offset of the handle
 
     @property
     def name(self) -> str | None:
@@ -84,7 +85,9 @@ def read_material_block(view: ByteView, position: int, build: str) -> MaterialBl
     for i in range(pair.size // width):
         at = pair.file_offset + i * width
         animation = view.pair_data(view.pair(at + animation_at), at + animation_at, "texture animation")
-        textures.append(TextureSlot(view.u32(at), animation, view.i32(at + handle_at)))
+        textures.append(TextureSlot(
+            view.u32(at), animation, view.i32(at + handle_at), at + handle_at,
+        ))
     return MaterialBlock(
         r.i32(0), colours[0], colours[1], colours[2], colours[3], r.f32(tail), r.u32(tail + 4),
         textures,

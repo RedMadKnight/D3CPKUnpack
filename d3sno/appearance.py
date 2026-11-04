@@ -111,6 +111,7 @@ class AppearanceFile:
     warnings: list[str]
     material_data: AppMaterials = field(default_factory=AppMaterials)
     extra_sub_objects: list[SubObject] = field(default_factory=list)  # low-polygon meshes
+    source: bytearray = field(default_factory=bytearray, repr=False)
 
 
 def check_float32(values: tuple[float, ...], what: str) -> None:
@@ -497,6 +498,7 @@ def parse_appearance(data: bytes, build: str | None = None, strict: bool = False
         raise FormatError(warnings[0], 0x74)
     return AppearanceFile(
         header, resolved, bones, hardpoints, subs, skipped, warnings, material_data, extra,
+        bytearray(data),
     )
 
 

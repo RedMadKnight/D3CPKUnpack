@@ -1,4 +1,4 @@
-"""Writers and edit helpers for ``.stl``, ``.pow``, ``.scr`` and ``.tex``.
+"""Writers and edit helpers for ``.stl``, ``.pow``, ``.scr``, ``.tex``, ``.gam`` and ``.app``.
 
 ``write(parsed)`` lays a parsed file out again, so parse then write gives the same bytes. The
 fixed part is kept as it was, with its revision and source hash, and only pairs change.
@@ -7,10 +7,11 @@ fixed part is kept as it was, with its revision and source hash, and only pairs 
 from __future__ import annotations
 
 import struct
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from typing import Mapping
 
-from . import archive, power, scripts, text, texture
+from . import appearance, archive, balance, material, power, scripts, text, texture
+from .transform import Transform
 from .binary import FormatError, build_order
 from .luachunk import LUA_SIGNATURE
 from .sno import hash33
@@ -284,6 +285,213 @@ def replace_pixels(
         tex.nv.image = tex.payload[start:start + len(tex.nv.image)]
 
 
+# --- .gam ---------------------------------------------------------------------------------
+
+@dataclass
+class _Block:
+    position: int  # in the row
+    kind: str  # name, formula, empty or array
+    data: bytes
+    source: int | None  # file offset in the source, which marks a shared block
+
+
+_NAME_ALIGN = {"switch": 8, "ps3": 4}
+
+
+def _is_formula(raw: bytes, order: str) -> bool:
+    if len(raw) < 32:
+        return False
+    head = struct.unpack_from(order + "8I", raw, 0)
+    if any(head[i] for i in (0, 1, 2, 3, 4, 6)) or head[5] == 0:
+        return False
+    return 32 + (head[5] + 3) // 4 * 4 + head[7] == len(raw)
+
+
+def _is_name(raw: bytes) -> bool:
+    text_part = raw.split(b"\0")[0]
+    return bool(text_part) and raw.endswith(b"\0") and all(0x20 <= b < 0x7F for b in text_part)
+
+
+def _discover(file: balance.BalanceFile) -> list[list[_Block]]:
+    """Find the pairs in each row by what they point at."""
+    source, order = file.source, file.header.order
+    table = struct.unpack_from(order + "I", source, file.slot)[0] + 0x10
+    table_end = table + file.row_size * len(file.rows)
+    found = []
+    for row in file.rows:
+        blocks = []
+        position = 0
+        while position + 8 <= file.row_size:
+            offset, size = struct.unpack_from(order + "II", row.raw, position)
+            start = offset + 0x10
+            if size and table_end <= start and start + size <= len(source):
+                raw = source[start:start + size]
+                kind = "name" if position == 0 and _is_name(raw) else (
+                    "formula" if _is_formula(raw, order) else "array"
+                )
+                blocks.append(_Block(position, kind, raw, start))
+                position += 8
+                continue
+            if not size and offset and offset % 4 == 0 and table_end <= start <= len(source):
+                blocks.append(_Block(position, "empty", b"", None))
+                position += 8
+                continue
+            position += 4
+        found.append(blocks)
+    return found
+
+
+def _lay_out_gam(file: balance.BalanceFile, rows: list[bytes], blocks: list[list[_Block]]) -> bytes:
+    order = file.header.order
+    out = bytearray(file.source[:balance.FIXED_END[file.build]])
+    _align(out, 8)
+    table = len(out)
+    out += b"".join(rows)
+    _put_pair(out, order, file.slot, table, len(out) - table)
+    placed: dict[int, int] = {}
+    for number, row_blocks in enumerate(blocks):
+        row_at = table + number * file.row_size
+        for block in row_blocks:
+            at = row_at + block.position
+            if block.kind == "empty":
+                _align(out, 4)
+                _put_pair(out, order, at, len(out), 0)
+                continue
+            if block.source is not None and block.source in placed:
+                _put_pair(out, order, at, placed[block.source], len(block.data))
+                continue
+            alignment = {"name": _NAME_ALIGN[file.build], "formula": 4}.get(block.kind, 8)
+            _align(out, alignment)
+            if block.source is not None:
+                placed[block.source] = len(out)
+            _put_pair(out, order, at, len(out), len(block.data))
+            out += block.data
+    return bytes(out)
+
+
+def _gam_blocks(file: balance.BalanceFile) -> list[list[_Block]]:
+    """The blocks of each row, checked by laying out the source again."""
+    if file.row_size is None or file.slot is None:
+        raise FormatError(f"type {file.type} has no table this writer knows")
+    blocks = getattr(file, "_write_blocks", None)
+    if blocks is None:
+        blocks = _discover(file)
+        if _lay_out_gam(file, [row.raw for row in file.rows], blocks) != file.source:
+            raise FormatError("the layout of this .gam is not understood, so it is not written")
+        file._write_blocks = blocks
+    return blocks
+
+
+def write_gam(file: balance.BalanceFile) -> bytes:
+    """Lay out a ``.gam`` again. Refuses a file whose own layout it cannot reproduce."""
+    blocks = _gam_blocks(file)
+    return _lay_out_gam(file, [row.raw for row in file.rows], blocks)
+
+
+def _row_block(file: balance.BalanceFile, row: int, position: int) -> _Block:
+    if not 0 <= row < len(file.rows):
+        raise FormatError(f"no row {row}")
+    for block in _gam_blocks(file)[row]:
+        if block.position == position:
+            return block
+    raise FormatError(f"row {row} has no pair at +0x{position:X}")
+
+
+def set_row_name(file: balance.BalanceFile, row: int, name: str) -> None:
+    """Rename a row. Its game balance id changes with it."""
+    block = _row_block(file, row, 0)
+    if block.kind != "name":
+        raise FormatError(f"row {row} has no name block")
+    block.data = name.encode("latin-1") + b"\0"
+    block.source = None
+    file.rows[row].name = name
+
+
+def set_row_formula(file: balance.BalanceFile, row: int, position: int, formula_text: str, code: bytes) -> None:
+    """Replace a formula held by a row, text and code together."""
+    block = _row_block(file, row, position)
+    if block.kind not in ("formula", "empty"):
+        raise FormatError(f"row {row} +0x{position:X} is not a formula")
+    if len(code) % 4:
+        raise FormatError(f"code length {len(code)} is not a multiple of 4")
+    block.kind = "formula"
+    block.data = _formula_bytes(power.Formula(formula_text, bytes(code)), file.header.order)
+    block.source = None
+
+
+def set_row_field(file: balance.BalanceFile, row: int, offset: int, fmt: str, value) -> None:
+    """Change a plain field of a row in place, for example ``set_row_field(f, 0, 0x14, "i", 3)``."""
+    if not 0 <= row < len(file.rows):
+        raise FormatError(f"no row {row}")
+    size = struct.calcsize(fmt)
+    if offset < 0 or offset + size > file.row_size:
+        raise FormatError(f"field +0x{offset:X} is outside the row")
+    for block in _gam_blocks(file)[row]:
+        if offset < block.position + 8 and block.position < offset + size:
+            raise FormatError(f"field +0x{offset:X} overlaps a pair; use the block helpers")
+    raw = bytearray(file.rows[row].raw)
+    try:
+        struct.pack_into(file.header.order + fmt, raw, offset, value)
+    except struct.error as exc:
+        raise FormatError(f"bad value for +0x{offset:X}: {exc}") from None
+    file.rows[row].raw = bytes(raw)
+
+
+# --- .app ----------------------------------------------------------------------------------
+
+_BONE_SIZE = {"ps3": 176, "switch": 256}
+_BONE_TRANSFORMS = {
+    "ps3": {"rest": 0x30, "rest_inverse": 0x50, "local": 0x70},
+    "switch": {"rest": 0x34, "rest_inverse": 0x54, "local": 0x74, "bind": 0x94, "bind_inverse": 0xB4},
+}
+
+
+def write_app(app: appearance.AppearanceFile) -> bytes:
+    """The file with its in-place edits. Edits that would change a size are not supported."""
+    return bytes(app.source)
+
+
+def set_bone_transform(app: appearance.AppearanceFile, index: int, which: str, value: Transform) -> None:
+    """Set one of a bone's transforms: rest, rest_inverse, local, and on switch bind, bind_inverse."""
+    if not 0 <= index < len(app.bones):
+        raise FormatError(f"no bone {index}")
+    offsets = _BONE_TRANSFORMS[app.build]
+    if which not in offsets:
+        raise FormatError(f"bones on {app.build} have no {which} transform")
+    order = app.header.order
+    table = struct.unpack_from(order + "I", app.source, 0x28)[0] + 0x10
+    at = table + index * _BONE_SIZE[app.build] + offsets[which]
+    struct.pack_into(order + "8f", app.source, at, *value.q, *value.t, value.s)
+    app.bones[index] = replace(app.bones[index], **{which: value})
+
+
+def set_hardpoint(app: appearance.AppearanceFile, index: int, rotation, position) -> None:
+    if not 0 <= index < len(app.hardpoints):
+        raise FormatError(f"no hardpoint {index}")
+    order = app.header.order
+    at = struct.unpack_from(order + "I", app.source, 0xCC)[0] + 0x10 + index * 40 + 12
+    struct.pack_into(order + "7f", app.source, at, *rotation, *position)
+    app.hardpoints[index] = replace(
+        app.hardpoints[index], rotation=tuple(rotation), position=tuple(position),
+    )
+
+
+def set_material_texture(
+    app: appearance.AppearanceFile, material_hash: int, look: int, slot_type: int, handle: int,
+) -> None:
+    """Point one texture slot of one look of a material at another texture."""
+    found = app.material_data.find(material_hash)
+    if found is None or not 0 <= look < len(found.per_look):
+        raise FormatError(f"no material 0x{material_hash:X} with look {look}")
+    block = found.per_look[look][0]
+    for i, slot in enumerate(block.textures):
+        if slot.type == slot_type:
+            struct.pack_into(app.header.order + "i", app.source, slot.position, handle)
+            block.textures[i] = replace(slot, handle=handle)
+            return
+    raise FormatError(f"material 0x{material_hash:X} look {look} has no slot type {slot_type}")
+
+
 # --- Dispatch -----------------------------------------------------------------------------
 
 def write(parsed) -> bytes:
@@ -296,6 +504,10 @@ def write(parsed) -> bytes:
         return write_scr(parsed)
     if isinstance(parsed, texture.TextureFile):
         return write_tex(parsed)
+    if isinstance(parsed, balance.BalanceFile):
+        return write_gam(parsed)
+    if isinstance(parsed, appearance.AppearanceFile):
+        return write_app(parsed)
     raise FormatError(f"no writer for {type(parsed).__name__}")
 
 

@@ -586,8 +586,8 @@ class Fn:
             self.pending[a] = Method(obj, key.value)
             self.pending[a + 1] = SelfSlot()
         elif op in _ARITH:
-            if i.b < _RK and i.c < i.b and i.c in self.pending:
-                self.promote(i.c)
+            if i.b < _RK and i.c <= i.b and i.c in self.pending:
+                self.promote(i.c)       # read twice, as in `x = x * x`, so x was a local
             c = self.rk(i.c, pc, a)
             b = self.rk(i.b, pc, a)
             self.put(pc, a, Binop(_ARITH[op], b, c))

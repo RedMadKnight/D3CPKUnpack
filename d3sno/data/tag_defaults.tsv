@@ -1,0 +1,2750 @@
+table	tag_hex	value_kind	default_raw	default_value
+actor	0x10007	float	0x3f800000	1.0
+actor	0x10008	float	0x0	0.0
+actor	0x10009	float	0x3f99999a	1.2000000476837158
+actor	0x1000a	float	0x3f800000	1.0
+actor	0x10014	int	0x0	0
+actor	0x10016	int	0x0	0
+actor	0x10023	int	0x0	0
+actor	0x10030	int	0x4b0	1200
+actor	0x10031	int	0x12c	300
+actor	0x10035	int	0x0	0
+actor	0x10037	int	0x0	0
+actor	0x10038	int	0x0	0
+actor	0x10039	int	0x1	1
+actor	0x1003a	int	0x0	0
+actor	0x1003c	int	0x0	0
+actor	0x1003d	int	0x0	0
+actor	0x1003e	int	0x0	0
+actor	0x1003f	int	0x0	0
+actor	0x10040	float	0x3c0efa35	0.008726646192371845
+actor	0x10041	float	0x3d0efa35	0.03490658476948738
+actor	0x10042	float	0x3f000000	0.5
+actor	0x10043	float	0x0	0.0
+actor	0x10044	int	0x0	0
+actor	0x10045	int	0x0	0
+actor	0x10046	int	0x2	2
+actor	0x10063	float	0x3f32b8c2	0.6981316804885864
+actor	0x10064	float	0x3c8efa35	0.01745329238474369
+actor	0x10065	float	0x3c8efa35	0.01745329238474369
+actor	0x1006a	float	0x3f4ccccd	0.800000011920929
+actor	0x10072	int	0x0	0
+actor	0x10073	int	0x0	0
+actor	0x10074	int	0x0	0
+actor	0x10076	float	0x40200000	2.5
+actor	0x10077	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10078	int	0x0	0
+actor	0x10079	int	0x0	0
+actor	0x10081	int	0xffffffff	-1
+actor	0x10082	int	0xffffffff	-1
+actor	0x10097	int	0x0	0
+actor	0x10098	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10099	int	0x0	0
+actor	0x1009a	int	0x0	0
+actor	0x1009c	float	0x3f000000	0.5
+actor	0x1009d	int	0x0	0
+actor	0x1009e	int	0xffffffff	-1
+actor	0x1009f	int	0xffffffff	-1
+actor	0x100a0	int	0x0	0
+actor	0x100a1	int	0x0	0
+actor	0x100a2	int	0x0	0
+actor	0x100a3	int	0x0	0
+actor	0x100a4	int	0x0	0
+actor	0x100b0	int	0x1	1
+actor	0x100b8	int	0x0	0
+actor	0x100c0	float	0x0	0.0
+actor	0x100c1	float	0x0	0.0
+actor	0x100d0	int	0xffffffff	-1
+actor	0x100d1	int	0x0	0
+actor	0x10100	float	0x0	0.0
+actor	0x10110	int	0x4f	79
+actor	0x10111	int	0xc7	199
+actor	0x10112	float	0x41700000	15.0
+actor	0x10117	float	0x3f400000	0.75
+actor	0x10118	int	0x0	0
+actor	0x10119	float	0x41700000	15.0
+actor	0x1011a	float	0x41200000	10.0
+actor	0x1011b	float	0x41200000	10.0
+actor	0x1011c	float	0x41200000	10.0
+actor	0x1011e	int	0x0	0
+actor	0x1011f	int	0x0	0
+actor	0x1012d	int	0x0	0
+actor	0x1012e	int	0x0	0
+actor	0x1012f	int	0x0	0
+actor	0x10130	int	0x0	0
+actor	0x1013b	int	0x3	3
+actor	0x10149	float	0x0	0.0
+actor	0x1014a	float	0x0	0.0
+actor	0x1014b	float	0x447a0000	1000.0
+actor	0x1014c	int	0xffffffff	-1
+actor	0x1014d	int	0x0	0
+actor	0x10173	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10180	int	0x0	0
+actor	0x10182	int	0x0	0
+actor	0x10183	float	0x0	0.0
+actor	0x10184	int	0x0	0
+actor	0x10200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10201	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10202	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10203	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10204	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10205	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10206	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10207	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10208	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10209	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1020a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1020b	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1020c	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1020d	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1020e	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1020f	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10221	int	_ZL39ACTOR_DEFAULT_SOUND_WARNING_CANT_PICKUP	"name ""Vox_Ranger_PickUp"""
+actor	0x10222	int	_ZL36ACTOR_DEFAULT_SOUND_WARNING_CANT_USE	"name ""Vox_Ranger_CantUse"""
+actor	0x10223	int	_ZL44ACTOR_DEFAULT_SOUND_WARNING_BELONGS_TO_OTHER	"name ""Vox_RangerBelongsToOther"""
+actor	0x10224	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10225	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10226	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10227	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10228	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10229	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1022a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10230	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10232	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10233	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10234	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10235	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10236	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10237	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10238	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10239	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10240	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10241	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10244	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10257	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10258	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1025a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10260	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10264	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10265	float	0x0	0.0
+actor	0x10268	int	0x0	0
+actor	0x10280	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10281	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10282	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10283	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10284	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10285	float	0x0	0.0
+actor	0x10286	int	0x0	0
+actor	0x1028a	float	0x3f800000	1.0
+actor	0x10290	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10301	int	0xffffffff	-1
+actor	0x10303	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10304	int	0xffffffff	-1
+actor	0x10305	float	0x0	0.0
+actor	0x10308	int	0x0	0
+actor	0x1030c	int	0x0	0
+actor	0x1030d	int	0x1	1
+actor	0x1030f	float	0x3e19999a	0.15000000596046448
+actor	0x10310	int	0x0	0
+actor	0x10318	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10319	int	0x0	0
+actor	0x1031a	int	0x0	0
+actor	0x10340	int	0xffffffff	-1
+actor	0x10350	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10360	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10361	int	0xffffffff	-1
+actor	0x10362	int	0x1	1
+actor	0x10368	int	0x1	1
+actor	0x10369	row_ref	TAG_VALUE_NULL_GBID	empty name (no file, -1)
+actor	0x10370	int	0x0	0
+actor	0x10371	int	0x0	0
+actor	0x10372	int	0xffffffff	-1
+actor	0x10374	int	0x0	0
+actor	0x10375	float	0x0	0.0
+actor	0x10378	int	0x0	0
+actor	0x10380	int	0x0	0
+actor	0x10390	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10398	int	0x0	0
+actor	0x10399	int	0x0	0
+actor	0x1039a	int	0x0	0
+actor	0x103a0	int	0x1	1
+actor	0x103a1	int	0x0	0
+actor	0x103a2	int	0x0	0
+actor	0x103a3	int	0x0	0
+actor	0x103a4	float	0x0	0.0
+actor	0x103a8	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103ac	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103ad	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103ae	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103b8	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103c0	int	0x0	0
+actor	0x103c1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103c2	int	0xffffffff	-1
+actor	0x103c3	int	0xffffffff	-1
+actor	0x103c4	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103c5	int	0x0	0
+actor	0x103c6	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x103c7	int	0x0	0
+actor	0x103c9	int	0x0	0
+actor	0x103cb	int	0x0	0
+actor	0x103d0	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x103d2	int	0x0	0
+actor	0x103d3	int	0x0	0
+actor	0x10400	int	0x0	0
+actor	0x10401	int	0x0	0
+actor	0x10404	int	0x0	0
+actor	0x10450	int	0x1	1
+actor	0x10502	int	0x0	0
+actor	0x10503	int	0x0	0
+actor	0x10505	int	0x0	0
+actor	0x10506	int	0x0	0
+actor	0x10510	int	0x0	0
+actor	0x10600	int	0x0	0
+actor	0x10603	int	0x0	0
+actor	0x10606	int	0x0	0
+actor	0x10607	int	0x0	0
+actor	0x10608	int	0x0	0
+actor	0x10609	int	0x0	0
+actor	0x1060a	int	0x0	0
+actor	0x10700	int	0x0	0
+actor	0x10703	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10705	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10706	int	0x0	0
+actor	0x10800	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10810	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10820	int	0x0	0
+actor	0x10900	int	0x0	0
+actor	0x10907	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10912	int	0xffffffff	-1
+actor	0x10915	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10916	int	0x0	0
+actor	0x10917	int	0x0	0
+actor	0x10918	int	0x0	0
+actor	0x10919	int	0xffffffff	-1
+actor	0x109a0	int	0xffffffff	-1
+actor	0x109a1	int	0x0	0
+actor	0x109a2	int	0x0	0
+actor	0x109c0	int	0x0	0
+actor	0x10a00	int	0x0	0
+actor	0x10a01	int	0x0	0
+actor	0x10b00	int	0x0	0
+actor	0x10b10	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10b20	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10b30	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10b40	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x10c00	int	0x0	0
+actor	0x10c10	int	0x0	0
+actor	0x10c20	int	0x0	0
+actor	0x10c30	int	0x0	0
+actor	0x10c40	int	0x0	0
+actor	0x10c41	int	0x0	0
+actor	0x10c50	int	0x0	0
+actor	0x11000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11003	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11004	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11005	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11006	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11007	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11008	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11009	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1100a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1100b	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1100c	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1100d	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1100e	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1100f	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11101	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11102	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11103	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11104	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11105	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11106	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11107	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11108	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11109	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1110a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1110b	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1110c	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1110d	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1110e	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1110f	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x11200	int	0x0	0
+actor	0x12000	int	ACTOR_DEFAULT_EFFECT_CHILLED_EFFECTGROUP	"name ""master_cold_dmgSwitch"""
+actor	0x12020	int	ACTOR_DEFAULT_EFFECT_POISONED_EFFECTGROUP	"name ""master_poison_dmgSwitch"""
+actor	0x12021	int	ACTOR_DEFAULT_EFFECT_POISON_DOT_EFFECTGROUP	"name ""master_poisoned_DOT"""
+actor	0x12024	int	ACTOR_DEFAULT_EFFECT_HOLY_DOT_EFFECTGROUP	"name ""master_holy_dot"""
+actor	0x12030	int	ACTOR_DEFAULT_EFFECT_SLOWED_EFFECTGROUP	"name ""actor_isSlowed_switch"""
+actor	0x120e7	int	ACTOR_DEFAULT_EFFECT_BURNING_EFFECTGROUP	"name ""master_fire_burning"""
+actor	0x12108	int	ACTOR_DEFAULT_EFFECT_FIRE_EFFECTGROUP	"name ""master_fire_dmgSwitch"""
+actor	0x1210a	int	ACTOR_DEFAULT_EFFECT_LIGHTNING_EFFECTGROUP	"name ""master_lightning_dmgSwitch"""
+actor	0x12116	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x12130	int	ACTOR_DEFAULT_EFFECT_RARITY_EFFECTGROUP	"name ""master_Champion_fxSwitch"""
+actor	0x12134	int	ACTOR_DEFAULT_EFFECT_CRITICAL_HIT_EFFECTGROUP	"name ""master_phys_critSwitch"""
+actor	0x12135	int	ACTOR_DEFAULT_EFFECT_GET_HIT_NORMAL_EFFECTGROUP	"name ""master_phys_getHit_red"""
+actor	0x12136	int	ACTOR_DEFAULT_EFFECT_SHIELD_BLOCK_EFFECTGROUP	"name ""shield_block"""
+actor	0x12150	int	ACTOR_DEFAULT_EFFECT_WEAPON_FIRE_EFFECTGROUP	"name ""Sword1h_norm_fire"""
+actor	0x12151	int	ACTOR_DEFAULT_EFFECT_WEAPON_ICE_EFFECTGROUP	"name ""Sword1h_norm_cold"""
+actor	0x12152	int	ACTOR_DEFAULT_EFFECT_WEAPON_LIGHTNING_EFFECTGROUP	"name ""Sword1h_norm_lightning"""
+actor	0x12153	int	ACTOR_DEFAULT_EFFECT_WEAPON_POISON_EFFECTGROUP	"name ""Sword1h_norm_poison"""
+actor	0x12154	int	ACTOR_DEFAULT_EFFECT_WEAPON_ARCANE_EFFECTGROUP	"name ""Sword1h_norm_arcane"""
+actor	0x12155	int	ACTOR_DEFAULT_EFFECT_WEAPON_SPELL_DAMAGE_EFFECTGROUP	"name ""WeaponArcaneDefault"""
+actor	0x12156	int	ACTOR_DEFAULT_EFFECT_WEAPON_LIFESTEAL_EFFECTGROUP	"name ""Sword1h_norm_lifeSteal"""
+actor	0x12157	int	ACTOR_DEFAULT_EFFECT_WEAPON_MANASTEAL_EFFECTGROUP	"name ""Sword1h_norm_manaSteal"""
+actor	0x12158	int	ACTOR_DEFAULT_EFFECT_WEAPON_MAGIC_FIND_EFFECTGROUP	"name ""Sword1h_norm_magicFind"""
+actor	0x12159	int	ACTOR_DEFAULT_EFFECT_WEAPON_GOLD_FIND_EFFECTGROUP	"name ""Sword1h_norm_goldFind"""
+actor	0x1215a	int	ACTOR_DEFAULT_EFFECT_WEAPON_ATTACK_SPEED_EFFECTGROUP	"name ""Sword1h_norm_attack"""
+actor	0x1215b	int	ACTOR_DEFAULT_EFFECT_WEAPON_CAST_SPEED_EFFECTGROUP	"name ""Sword1h_norm_cast"""
+actor	0x1215c	int	ACTOR_DEFAULT_EFFECT_WEAPON_HOLY_EFFECTGROUP	"name ""Sword1h_norm_holy"""
+actor	0x1215d	int	ACTOR_DEFAULT_EFFECT_WEAPON_WITCHDOCTOR_DAMAGE_EFFECTGROUP	"name ""Sword1h_norm_spell"""
+actor	0x1215e	int	ACTOR_DEFAULT_EFFECT_WEAPON_WIZARD_DAMAGE_EFFECTGROUP	"name ""Sword1h_norm_spell"""
+actor	0x12160	int	ACTOR_DEFAULT_EFFECT_ARCANE_EFFECTGROUP	"name ""master_arcane_dmgSwitch"""
+actor	0x12161	int	ACTOR_DEFAULT_EFFECT_CHILLED_CRIT_EFFECTGROUP	"name ""master_cold_critSwitch"""
+actor	0x12162	int	ACTOR_DEFAULT_EFFECT_POISONED_CRIT_EFFECTGROUP	"name ""master_poison_critSwitch"""
+actor	0x12163	int	ACTOR_DEFAULT_EFFECT_FIRE_CRIT_EFFECTGROUP	"name ""master_fire_critSwitch"""
+actor	0x12164	int	ACTOR_DEFAULT_EFFECT_LIGHTNING_CRIT_EFFECTGROUP	"name ""master_lightning_critSwitch"""
+actor	0x12165	int	ACTOR_DEFAULT_EFFECT_ARCANE_CRIT_EFFECTGROUP	"name ""master_arcane_critSwitch"""
+actor	0x12166	int	ACTOR_DEFAULT_EFFECT_HOLY_EFFECTGROUP	"name ""master_holy_dmgSwitch"""
+actor	0x12167	int	ACTOR_DEFAULT_EFFECT_HOLY_CRIT_EFFECTGROUP	"name ""master_holy_critSwitch"""
+actor	0x12170	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x12171	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x12172	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x12173	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x12174	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x12175	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x121d6	int	ACTOR_DEFAULT_EFFECT_BURROWED_EFFECTGROUP	empty name (no file, -1)
+actor	0x121dd	int	ACTOR_DEFAULT_EFFECT_FROZEN_EFFECTGROUP	"name ""master_frozen_cicles"""
+actor	0x121e2	int	ACTOR_DEFAULT_EFFECT_PLAGUED_EFFECTGROUP	"name ""master_plague_DOT"""
+actor	0x12300	int	0x0	0
+actor	0x12301	int	0x0	0
+actor	0x13500	int	ACTOR_DEFAULT_EFFECT_CRIT_DEATH_PHYSICAL	"name ""master_gib_phys"""
+actor	0x13501	int	ACTOR_DEFAULT_EFFECT_CRIT_DEATH_FIRE	"name ""master_gib_fire"""
+actor	0x13502	int	ACTOR_DEFAULT_EFFECT_CRIT_DEATH_POISON	"name ""master_gib_poison"""
+actor	0x13503	int	ACTOR_DEFAULT_EFFECT_CRIT_DEATH_ARCANE	"name ""master_gib_arcane"""
+actor	0x13504	int	ACTOR_DEFAULT_EFFECT_CRIT_DEATH_LIGHTNING	"name ""master_gib_lightning"""
+actor	0x13505	int	ACTOR_DEFAULT_EFFECT_CRIT_DEATH_COLD	"name ""master_gib_frost"""
+actor	0x13506	int	ACTOR_DEFAULT_EFFECT_CRIT_DEATH_HOLY	"name ""master_gib_holy"""
+actor	0x13550	int	ACTOR_DEFAULT_EFFECT_RARE_DEATH	"name ""master_gib_Champion"""
+actor	0x13560	int	ACTOR_DEFAULT_EFFECT_DEATH_BLEED	"name ""Barbarian_Rend_Death"""
+actor	0x13570	int	ACTOR_DEFAULT_EFFECT_DEATH_FATALITY	"name ""Barbarian_Fatality_Rune"""
+actor	0x13580	int	ACTOR_DEFAULT_EFFECT_DEATH_EXPLODING_PALM	"name ""Monk_explodingPalm_gib_fxSwitch"""
+actor	0x13590	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x13600	int	0x0	0
+actor	0x13700	int	0x0	0
+actor	0x13800	int	0x0	0
+actor	0x14000	int	0xffffffff	-1
+actor	0x14001	float	0x0	0.0
+actor	0x14002	int	0x0	0
+actor	0x14003	int	0x0	0
+actor	0x14004	int	0x0	0
+actor	0x14005	int	0x0	0
+actor	0x14006	float	DEFAULT_CRITTER_WANDER_SPEED	set at start-up, not read
+actor	0x14007	float	DEFAULT_CRITTER_RUN_SPEED	set at start-up, not read
+actor	0x14008	int	DEFAULT_CRITTER_MIN_WANDER_DELAY	30
+actor	0x14009	int	DEFAULT_CRITTER_MAX_WANDER_DELAY	420
+actor	0x14010	int	DEFAULT_CRITTER_WANDER_TOO_LONG_TIME	600
+actor	0x14011	float	DEFAULT_CRITTER_MIN_WANDER_RADIUS	5.0
+actor	0x14012	float	DEFAULT_CRITTER_MAX_WANDER_RADIUS	30.0
+actor	0x14013	float	DEFAULT_CRITTER_SCARED_RADIUS	10.0
+actor	0x14014	int	DEFAULT_CRITTER_MIN_SCARED_TIME	120
+actor	0x14015	int	DEFAULT_CRITTER_MAX_SCARED_TIME	180
+actor	0x14016	int	0x0	0
+actor	0x14017	float	DEFAULT_CRITTER_MIN_SCARED_RUN_AWAY_DISTANCE	20.0
+actor	0x14018	float	DEFAULT_CRITTER_MAX_SCARED_RUN_AWAY_DISTANCE	30.0
+actor	0x14019	int	0x0	0
+actor	0x1401a	float	DEFAULT_CRITTER_LETHAL_EXPLOSION_MAGNITUDE	0.20000000298023224
+actor	0x1401c	int	0x0	0
+actor	0x1401d	int	0x0	0
+actor	0x1401e	int	0x0	0
+actor	0x14020	float	0x0	0.0
+actor	0x14021	int	0x1	1
+actor	0x14022	int	0x1	1
+actor	0x14023	int	0x0	0
+actor	0x14100	float	0x41200000	10.0
+actor	0x14180	float	0x40000000	2.0
+actor	0x16000	int	_ZL25ACTOR_DEFAULT_SOUND_BLADE	"name ""Combat_ImpactSword"""
+actor	0x16001	int	_ZL25ACTOR_DEFAULT_SOUND_BLUNT	"name ""Combat_ImpactBlow"""
+actor	0x16002	int	_ZL23ACTOR_DEFAULT_SOUND_HTH	"name ""Combat_ImpactHtH"""
+actor	0x16003	int	_ZL25ACTOR_DEFAULT_SOUND_ARROW	"name ""Combat_ImpactArrow"""
+actor	0x16004	int	_ZL24ACTOR_DEFAULT_SOUND_FIRE	"name ""Combat_GetHitBy_Fire"""
+actor	0x16005	int	_ZL23ACTOR_DEFAULT_SOUND_ICE	"name ""Combat_GetHitBy_Ice"""
+actor	0x16006	int	_ZL29ACTOR_DEFAULT_SOUND_LIGHTNING	"name ""Combat_GetHitBy_Lightning"""
+actor	0x16007	int	_ZL26ACTOR_DEFAULT_SOUND_POISON	"name ""Combat_GetHitBy_Poison"""
+actor	0x17000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17003	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17004	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17005	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17006	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17007	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17008	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17009	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1700a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1700b	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1700c	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1700d	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17020	int	0x0	0
+actor	0x17200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17201	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17202	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17203	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17204	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17205	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17206	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17207	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17208	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x17209	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1720a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1720b	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1720c	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1720d	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1ff30	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x1ff31	int	0x0	0
+actor	0x1ff32	int	0x3c	60
+actor	0x1ff34	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1ff35	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1ff36	int	0x0	0
+actor	0x1ff37	int	0x0	0
+actor	0x1ff39	int	0x0	0
+actor	0x1ff3c	int	0x1	1
+actor	0x1ff40	int	0x0	0
+actor	0x1ff41	int	0x0	0
+actor	0x1ff42	int	0x0	0
+actor	0x1ff43	int	0xffffffff	-1
+actor	0x1ff44	int	0x0	0
+actor	0x1ff45	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1ff46	row_ref	TAG_VALUE_NULL_GBID	empty name (no file, -1)
+actor	0x1ff47	int	0x0	0
+actor	0x1ff4a	int	0x0	0
+actor	0x1ff4b	int	0x0	0
+actor	0x1ff4c	int	0xffffffff	-1
+actor	0x1ff4d	int	0x0	0
+actor	0x1ff50	float	0x0	0.0
+actor	0x1ff60	float	0x0	0.0
+actor	0x1ff70	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x1ff80	int	0x0	0
+actor	0x1ff90	int	0x0	0
+actor	0x1ffa0	int	0x0	0
+actor	0x1ffb0	row_ref	TAG_VALUE_NULL_GBID	empty name (no file, -1)
+actor	0x1ffc0	row_ref	TAG_VALUE_NULL_GBID	empty name (no file, -1)
+actor	0x1ffd0	row_ref	TAG_VALUE_NULL_GBID	empty name (no file, -1)
+actor	0x1ffe0	row_ref	TAG_VALUE_NULL_GBID	empty name (no file, -1)
+actor	0x1ffe5	int	0x0	0
+actor	0x20000	int	0x0	0
+actor	0x28000	int	0x1	1
+actor	0x38000	int	0x1	1
+actor	0x38001	int	_ZL39ACTOR_DEFAULT_ON_DEATH_FIRE_PROXY_ACTOR	"name ""On_Death_Fire_Proxy"""
+actor	0x38002	int	_ZL44ACTOR_DEFAULT_ON_DEATH_LIGHTNING_PROXY_ACTOR	"name ""On_Death_Lightning_Proxy"""
+actor	0x38003	int	_ZL39ACTOR_DEFAULT_ON_DEATH_COLD_PROXY_ACTOR	"name ""On_Death_Cold_Proxy"""
+actor	0x38004	int	_ZL41ACTOR_DEFAULT_ON_DEATH_ARCANE_PROXY_ACTOR	"name ""On_Death_Arcane_Proxy"""
+actor	0x38005	int	_ZL41ACTOR_DEFAULT_ON_DEATH_POISON_PROXY_ACTOR	"name ""On_Death_Poison_Proxy"""
+actor	0x38006	int	_ZL39ACTOR_DEFAULT_ON_DEATH_HOLY_PROXY_ACTOR	"name ""On_Death_Holy_Proxy"""
+actor	0x39000	int	0x0	0
+actor	0x39001	int	0x0	0
+actor	0x39002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x39003	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x39004	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x39005	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x39006	int	0x0	0
+actor	0x39500	int	0x0	0
+actor	0x3c000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c040	float	0x0	0.0
+actor	0x3c080	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c140	float	0x0	0.0
+actor	0x3c180	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c240	float	0x0	0.0
+actor	0x3c280	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c300	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c340	float	0x0	0.0
+actor	0x3c380	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c400	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c440	float	0x0	0.0
+actor	0x3c480	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c500	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c540	float	0x0	0.0
+actor	0x3c580	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c600	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c640	float	0x0	0.0
+actor	0x3c680	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c700	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x3c740	float	0x0	0.0
+actor	0x3c780	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40000	float	0x0	0.0
+actor	0x40100	int	0x0	0
+actor	0x40200	int	0x0	0
+actor	0x40210	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40220	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40230	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40240	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40250	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40260	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40270	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40280	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x40500	int	0x0	0
+actor	0x40504	int	0x0	0
+actor	0x41000	float	0x3f800000	1.0
+actor	0x41001	int	0x0	0
+actor	0x41002	int	0x0	0
+actor	0x41003	int	0x0	0
+actor	0x42000	int	0x1	1
+actor	0x42008	int	0x1	1
+actor	0x42010	int	0x0	0
+actor	0x42011	int	0x0	0
+actor	0x60000	int	0x0	0
+actor	0x60010	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x60020	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x60030	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x60040	int	_ZL17ACTOR_EFFECT_NONE	empty name (no file, -1)
+actor	0x60100	float	0x42200000	40.0
+actor	0x60110	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x60120	int	0x1	1
+actor	0x60130	int	0x0	0
+actor	0x60140	int	0x1	1
+actor	0x60150	int	0x1	1
+actor	0x60160	int	0x1	1
+actor	0x60170	int	0x1	1
+actor	0x60180	int	0x0	0
+actor	0x70000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x70001	int	0x0	0
+actor	0x70002	int	0x1	1
+actor	0x70003	int	0x1	1
+actor	0x70004	float	0x0	0.0
+actor	0x70005	float	0x0	0.0
+actor	0x70006	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x70007	int	0x0	0
+actor	0x70008	float	0x0	0.0
+actor	0x70009	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x7000a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x7000b	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x7000c	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+actor	0x80000	int	0x0	0
+actor	0x80010	int	0x0	0
+actor	0x80020	int	0x0	0
+anim	0x11000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11025	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11050	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11060	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11061	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11062	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11068	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11069	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1106a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11070	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11071	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11072	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11080	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11081	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11082	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11084	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11085	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11086	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11088	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11089	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1108a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11090	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11091	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11092	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110a1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110a2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110b1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110b2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c3	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c4	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c5	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c6	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c7	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110c8	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110d0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110e0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x110f0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11110	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11120	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11130	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11140	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11150	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11155	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11160	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11190	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11195	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111a1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111a2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111b1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111b2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111c0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111c1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111c2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111d0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111d1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111d2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111e0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111e1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111e2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x111f0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11210	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11220	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11230	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11240	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11250	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11260	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11270	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11280	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11290	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x112a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x112b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x112c0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11310	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11320	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11330	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11370	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11390	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11430	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11440	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11441	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11450	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11460	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11461	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11470	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11490	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11500	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11510	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11520	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11530	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11540	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11550	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11560	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11570	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11580	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11590	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x115a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x115b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x115c0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x115d0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x115e0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x115f0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11600	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11608	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11610	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11620	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11630	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11631	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11632	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11700	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11710	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11900	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11910	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11920	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x11930	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12040	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12050	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12060	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12070	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12080	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12090	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12110	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12120	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12130	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12140	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x12150	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13040	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13050	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13060	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13070	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13080	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13090	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13120	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13130	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13140	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13150	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13530	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13531	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13532	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13540	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13550	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x13560	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x135a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x135a1	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x135a2	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x14010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x14015	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x14020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x14025	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15101	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15102	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15103	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15201	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15202	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x15203	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16040	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16050	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16060	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16070	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16080	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16090	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16110	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16120	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16130	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16140	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16150	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16160	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16170	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16180	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16190	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x161a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x161b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x161c0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x161d0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x161e0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16210	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16220	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16230	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16240	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16250	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16260	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16270	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16280	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16290	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x162a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x162b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x162c0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x162d0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x162e0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x162f0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16300	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16310	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16320	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16330	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x16340	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x17000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x17001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x17002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x17100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x17101	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x17102	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x18000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x19000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x19010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x19020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x19030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x19040	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x19050	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x19060	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x19070	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1a000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1b000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1c000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1d000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1d010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1e000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1e010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1e020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x1e030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x20000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x20010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30101	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30102	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30110	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30111	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x30112	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x40000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x41000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x42000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x42010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x42020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x43000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x44000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x45000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x46000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x47000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x47100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x47108	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x47200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x48000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x48001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x48002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x50000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x51000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x60000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x60100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x61000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x61010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x61020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x61030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x62000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x63000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x63800	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x63a00	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64011	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64012	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64021	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64022	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64031	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64032	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64040	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64041	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64042	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64050	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64051	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64052	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64201	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64202	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64203	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64204	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64205	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64206	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64207	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64208	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64209	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64210	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64211	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64212	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64220	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64300	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64400	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64500	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64600	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64700	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64701	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64702	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64703	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64704	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64705	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64706	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64707	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64708	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64710	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64711	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64712	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64713	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64714	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64715	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64716	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64717	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64718	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64800	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64805	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64810	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64815	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64820	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64825	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64830	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64835	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64840	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x64845	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68210	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68230	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68240	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68250	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68260	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68270	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68280	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68290	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x682a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x682b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x682c0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x682d0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x682e0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68300	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68310	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68320	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68330	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68340	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68350	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68360	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68380	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68390	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x683a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x683b0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x683c0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x683d0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68500	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68580	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68600	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68601	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x68700	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70040	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70041	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70042	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70043	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70044	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70050	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70060	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70070	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70080	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x70090	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x700a0	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80003	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80004	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80005	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80006	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80007	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80008	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80009	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8000a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8000b	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8000c	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8000d	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8000e	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8000f	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80011	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80012	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80013	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80014	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80015	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80016	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80017	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80018	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80019	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8001a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8001b	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8001c	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8001d	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8001e	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x8001f	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80021	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80022	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80023	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80024	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80025	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80026	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80027	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80028	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80029	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80031	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80101	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80102	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80103	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80104	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80105	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x80106	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x90000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x90001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x90002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+anim	0x90003	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance_state	0xa0002	float	0x0	0.0
+appearance	0x30100	float	0x3f800000	1.0
+appearance	0x30101	float	0x3f800000	1.0
+appearance	0x30102	float	0x3f800000	1.0
+appearance	0x30103	int	0x0	0
+appearance	0x30104	int	0x0	0
+appearance	0x30105	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30106	int	0x0	0
+appearance	0x30107	int	0x0	0
+appearance	0x30200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30201	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30202	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30203	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30204	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30300	int	0x0	0
+appearance	0x30301	float	0x0	0.0
+appearance	0x30302	float	0x0	0.0
+appearance	0x30303	float	0x0	0.0
+appearance	0x30400	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30401	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30402	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30403	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30404	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+appearance	0x30405	float	0x3f000000	0.5
+marker	0x806	int	0x0	0
+marker	0x807	int	0x0	0
+marker	0x808	int	0x0	0
+marker	0x80000	float	0x3f800000	1.0
+marker	0x80001	int	0x0	0
+marker	0x80004	float	0x3f800000	1.0
+marker	0x80005	float	0x3f800000	1.0
+marker	0x80006	float	0x3f800000	1.0
+marker	0x80100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80110	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80205	float	0x41700000	15.0
+marker	0x80206	int	0x0	0
+marker	0x80207	int	0xffffffff	-1
+marker	0x80208	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80209	int	0x0	0
+marker	0x8020a	int	0x0	0
+marker	0x8020b	int	0x0	0
+marker	0x8020d	int	0x0	0
+marker	0x8020e	int	0xffffffff	-1
+marker	0x8020f	int	0xffffffff	-1
+marker	0x80230	int	0x0	0
+marker	0x80231	int	0x0	0
+marker	0x80240	int	0x0	0
+marker	0x80248	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80300	float	0x3f800000	1.0
+marker	0x80400	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80402	int	0x1	1
+marker	0x80500	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80600	int	0x0	0
+marker	0x80680	int	0x0	0
+marker	0x80700	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80800	int	0x0	0
+marker	0x80801	int	0x0	0
+marker	0x80805	int	0x0	0
+marker	0x80810	int	0x0	0
+marker	0x80815	int	0xffffffff	-1
+marker	0x80816	int	0xffffffff	-1
+marker	0x80900	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80a01	int	0x0	0
+marker	0x80a02	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80a03	int	0xffffffff	-1
+marker	0x80a04	int	0xffffffff	-1
+marker	0x80a05	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80a06	int	0x0	0
+marker	0x80a07	int	0x0	0
+marker	0x80a80	int	0x0	0
+marker	0x80a90	int	0x0	0
+marker	0x80b00	int	0x0	0
+marker	0x80c00	int	0x0	0
+marker	0x80c10	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80c80	int	0x0	0
+marker	0x80d00	int	0x1	1
+marker	0x80e00	int	0xffffffff	-1
+marker	0x80e08	int	0x1	1
+marker	0x80f00	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80f01	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80f04	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80f05	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80f06	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x80f07	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x81000	float	0x0	0.0
+marker	0x81001	int	0x0	0
+marker	0x81002	int	0x0	0
+marker	0x81003	int	0x0	0
+marker	0x81004	int	0x0	0
+marker	0x81005	int	0xffffffff	-1
+marker	0x81008	int	0x0	0
+marker	0x82000	int	0x0	0
+marker	0x82001	int	0x0	0
+marker	0x82002	int	0x0	0
+marker	0x82003	int	0x0	0
+marker	0x82004	int	0x0	0
+marker	0x82005	int	0x0	0
+marker	0x82006	int	0x0	0
+marker	0x82007	int	0x0	0
+marker	0x82009	int	0x0	0
+marker	0x82010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x82011	int	0x0	0
+marker	0x82012	int	0x0	0
+marker	0x82013	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x82014	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x82017	int	0x0	0
+marker	0x82018	int	0x0	0
+marker	0x82019	int	0x1	1
+marker	0x82020	int	0x0	0
+marker	0x82021	int	0x0	0
+marker	0x82022	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x82023	row_ref	TAG_VALUE_NULL_GBID	empty name (no file, -1)
+marker	0x82024	int	0x0	0
+marker	0x82028	int	0x0	0
+marker	0x82030	int	0x0	0
+marker	0x82032	int	0x0	0
+marker	0x82033	int	0xffffffff	-1
+marker	0x82034	int	0xffffffff	-1
+marker	0x82036	int	0x0	0
+marker	0x83000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83040	float	0x0	0.0
+marker	0x83080	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83140	float	0x0	0.0
+marker	0x83180	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83200	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83240	float	0x0	0.0
+marker	0x83280	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83300	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83340	float	0x0	0.0
+marker	0x83380	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83400	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83440	float	0x0	0.0
+marker	0x83480	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83500	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83540	float	0x0	0.0
+marker	0x83580	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83600	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83640	float	0x0	0.0
+marker	0x83680	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83700	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x83740	float	0x0	0.0
+marker	0x83780	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x84000	float	0x0	0.0
+marker	0x84800	float	0x0	0.0
+marker	0x84810	int	0x0	0
+marker	0x85000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x85001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x85002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x85003	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x85004	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x85005	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x85006	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x85007	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x85008	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x86000	int	TAG_VALUE_MINIMAP_DEFAULT_SNO	"name ""MapIconMarkerDestination"""
+marker	0x86001	int	0x0	0
+marker	0x86002	int	0x0	0
+marker	0x86003	int	0x0	0
+marker	0x86004	float	0x0	0.0
+marker	0x86005	float	0x0	0.0
+marker	0x86006	int	0x0	0
+marker	0x86007	int	0x0	0
+marker	0x86008	float	0x0	0.0
+marker	0x86010	int	0x0	0
+marker	0x87000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x87002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x87003	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x87100	int	0x1	1
+marker	0x87101	float	0x41700000	15.0
+marker	0x87102	float	0x3f800000	1.0
+marker	0x87103	float	0x3f800000	1.0
+marker	0x87104	float	0x3f800000	1.0
+marker	0x87105	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+marker	0x88000	float	0x0	0.0
+marker	0x88030	int	0xffffffff	-1
+marker	0x88040	int	0xffffffff	-1
+marker	0x88051	int	0xffffffff	-1
+marker	0x88100	int	0x5	5
+marker	0x88101	float	0x41700000	15.0
+marker	0x88102	float	0x3f800000	1.0
+marker	0x88103	float	0x3f800000	1.0
+marker	0x88104	float	0x41700000	15.0
+monster	0x10000	int	0x0	0
+monster	0x20100	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20101	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20102	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20103	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20104	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20105	int	0x0	0
+monster	0x20106	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20107	formula	_ZL44TAG_VALUE_DEFAULT_PROJECTILE_TRAVEL_DISTANCE	"formula ""100"""
+monster	0x20108	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20110	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20111	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20112	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20113	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20114	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20115	int	0x0	0
+monster	0x20116	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20117	formula	_ZL44TAG_VALUE_DEFAULT_PROJECTILE_TRAVEL_DISTANCE	"formula ""100"""
+monster	0x20118	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20200	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20300	int	0x0	0
+monster	0x20301	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20302	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20303	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20304	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20305	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20306	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20307	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20308	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20309	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20400	int	0x0	0
+monster	0x20401	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20402	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20403	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20404	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20405	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20406	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20407	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20500	int	0x0	0
+monster	0x20501	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20502	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20503	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20504	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20505	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20506	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20507	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20508	formula	_ZL36TAG_VALUE_DEFAULT_AOE_MAX_CONCURRENT	"formula ""12"""
+monster	0x20510	int	0x0	0
+monster	0x20511	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20512	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20513	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20514	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20515	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20516	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20517	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20518	formula	_ZL36TAG_VALUE_DEFAULT_AOE_MAX_CONCURRENT	"formula ""12"""
+monster	0x20600	int	0x0	0
+monster	0x20601	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20602	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20603	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20604	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20605	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20606	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20607	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20608	formula	_ZL36TAG_VALUE_DEFAULT_AOE_MAX_CONCURRENT	"formula ""12"""
+monster	0x20700	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20701	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20702	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20703	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20704	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20705	int	0x0	0
+monster	0x20706	int	0x0	0
+monster	0x20707	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20708	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20709	int	0xffffffff	-1
+monster	0x20710	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20711	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20712	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20713	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20714	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20715	int	0x0	0
+monster	0x20716	int	0x0	0
+monster	0x20717	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20718	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20719	int	0xffffffff	-1
+monster	0x20800	int	0x0	0
+monster	0x20801	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20802	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20803	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20804	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20805	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x20806	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20807	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20808	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x20809	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x2080a	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x2080b	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x2080c	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+monster	0x2080d	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+monster	0x2080e	formula	_ZL36TAG_VALUE_DEFAULT_AOE_MAX_CONCURRENT	"formula ""12"""
+monster	0x20900	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+monster	0x20a00	int	0x0	0
+power_general	0x40200	int	0x11090	69776
+power_general	0x40202	int	0xffffffff	-1
+power_general	0x40207	int	0x11090	69776
+power_general	0x40211	int	0xffffffff	-1
+power_general	0x40212	int	0xffffffff	-1
+power_general	0x40213	int	0xffffffff	-1
+power_general	0x40214	int	0xffffffff	-1
+power_general	0x40215	int	0xffffffff	-1
+power_general	0x40300	int	0x11090	69776
+power_general	0x40301	int	0x11090	69776
+power_general	0x40302	int	0x11090	69776
+power_general	0x40310	int	0x6	6
+power_general	0x40311	int	0x6	6
+power_general	0x40312	int	0x6	6
+power_general	0x40320	int	0xffffffff	-1
+power_general	0x40321	int	0xffffffff	-1
+power_general	0x40322	int	0xffffffff	-1
+power_general	0x40330	int	0xffffffff	-1
+power_general	0x40331	int	0xffffffff	-1
+power_general	0x40332	int	0xffffffff	-1
+power_general	0x40411	int	0xffffffff	-1
+power_general	0x40412	int	0xffffffff	-1
+power_general	0x40413	int	0xffffffff	-1
+power_general	0x40414	int	0xffffffff	-1
+power_general	0x40415	int	0xffffffff	-1
+power_general	0x40421	int	0xffffffff	-1
+power_general	0x40422	int	0xffffffff	-1
+power_general	0x40423	int	0xffffffff	-1
+power_general	0x40424	int	0xffffffff	-1
+power_general	0x40425	int	0xffffffff	-1
+power_general	0x40431	int	0xffffffff	-1
+power_general	0x40432	int	0xffffffff	-1
+power_general	0x40433	int	0xffffffff	-1
+power_general	0x40434	int	0xffffffff	-1
+power_general	0x40435	int	0xffffffff	-1
+power_general	0x40436	float	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x40437	float	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x40438	int	0xffffffff	-1
+power_general	0x40480	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x40482	int	0x1	1
+power_general	0x40484	int	0x0	0
+power_general	0x40500	int	0x11090	69776
+power_general	0x40501	int	0x11090	69776
+power_general	0x40502	float	0x0	0.0
+power_general	0x40860	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40861	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40862	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40870	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40871	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40872	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40880	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40881	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40882	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40890	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40891	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40892	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x4089a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x40900	int	0x0	0
+power_general	0x40901	int	0x0	0
+power_general	0x40a00	int	0x0	0
+power_general	0x40a10	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x41100	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41110	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41120	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41130	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41140	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41150	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41160	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41170	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41180	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41190	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41200	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41210	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41220	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41230	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41240	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41250	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41260	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41270	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41280	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41290	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41300	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41310	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41320	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41330	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41340	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41350	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41360	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41370	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41380	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41390	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41400	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41410	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41420	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41430	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41440	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41450	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41460	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41470	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41480	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41490	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41500	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41510	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41520	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41530	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41540	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41550	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41560	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41570	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41580	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41590	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41600	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41610	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41620	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41630	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41640	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41650	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41660	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41670	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41680	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41690	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41700	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41710	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41720	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x41730	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x42000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42003	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42004	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42005	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42006	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42007	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42008	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42009	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42011	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42012	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42013	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42014	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42015	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42016	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42017	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42018	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42019	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42021	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42022	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42023	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42024	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42025	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42026	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42027	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42028	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42029	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42031	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x42100	int	0x0	0
+power_general	0x42101	int	0x0	0
+power_general	0x42102	int	0x0	0
+power_general	0x42103	int	0x0	0
+power_general	0x42104	int	0x0	0
+power_general	0x42105	int	0x0	0
+power_general	0x42106	int	0x0	0
+power_general	0x42107	int	0x0	0
+power_general	0x42108	int	0x0	0
+power_general	0x42109	int	0x0	0
+power_general	0x42110	int	0x0	0
+power_general	0x42111	int	0x0	0
+power_general	0x42112	int	0x0	0
+power_general	0x42113	int	0x0	0
+power_general	0x42114	int	0x0	0
+power_general	0x42115	int	0x0	0
+power_general	0x42116	int	0x0	0
+power_general	0x42117	int	0x0	0
+power_general	0x42118	int	0x0	0
+power_general	0x42119	int	0x0	0
+power_general	0x42120	int	0x0	0
+power_general	0x42121	int	0x0	0
+power_general	0x42122	int	0x0	0
+power_general	0x42123	int	0x0	0
+power_general	0x42124	int	0x0	0
+power_general	0x42125	int	0x0	0
+power_general	0x42126	int	0x0	0
+power_general	0x42127	int	0x0	0
+power_general	0x42128	int	0x0	0
+power_general	0x42129	int	0x0	0
+power_general	0x42130	int	0x0	0
+power_general	0x42131	int	0x0	0
+power_general	0x42200	int	0x0	0
+power_general	0x42201	int	0x0	0
+power_general	0x42202	int	0x0	0
+power_general	0x42203	int	0x0	0
+power_general	0x42204	int	0x0	0
+power_general	0x42205	int	0x0	0
+power_general	0x42206	int	0x0	0
+power_general	0x42207	int	0x0	0
+power_general	0x42208	int	0x0	0
+power_general	0x42209	int	0x0	0
+power_general	0x42210	int	0x0	0
+power_general	0x42211	int	0x0	0
+power_general	0x42212	int	0x0	0
+power_general	0x42213	int	0x0	0
+power_general	0x42214	int	0x0	0
+power_general	0x42215	int	0x0	0
+power_general	0x42216	int	0x0	0
+power_general	0x42217	int	0x0	0
+power_general	0x42218	int	0x0	0
+power_general	0x42219	int	0x0	0
+power_general	0x42220	int	0x0	0
+power_general	0x42221	int	0x0	0
+power_general	0x42222	int	0x0	0
+power_general	0x42223	int	0x0	0
+power_general	0x42224	int	0x0	0
+power_general	0x42225	int	0x0	0
+power_general	0x42226	int	0x0	0
+power_general	0x42227	int	0x0	0
+power_general	0x42228	int	0x0	0
+power_general	0x42229	int	0x0	0
+power_general	0x42230	int	0x0	0
+power_general	0x42231	int	0x0	0
+power_general	0x42300	int	0x0	0
+power_general	0x42301	int	0x0	0
+power_general	0x42302	int	0x0	0
+power_general	0x42303	int	0x0	0
+power_general	0x42304	int	0x0	0
+power_general	0x42305	int	0x0	0
+power_general	0x42306	int	0x0	0
+power_general	0x42307	int	0x0	0
+power_general	0x42308	int	0x0	0
+power_general	0x42309	int	0x0	0
+power_general	0x42310	int	0x0	0
+power_general	0x42311	int	0x0	0
+power_general	0x42312	int	0x0	0
+power_general	0x42313	int	0x0	0
+power_general	0x42314	int	0x0	0
+power_general	0x42315	int	0x0	0
+power_general	0x42316	int	0x0	0
+power_general	0x42317	int	0x0	0
+power_general	0x42318	int	0x0	0
+power_general	0x42319	int	0x0	0
+power_general	0x42320	int	0x0	0
+power_general	0x42321	int	0x0	0
+power_general	0x42322	int	0x0	0
+power_general	0x42323	int	0x0	0
+power_general	0x42324	int	0x0	0
+power_general	0x42325	int	0x0	0
+power_general	0x42326	int	0x0	0
+power_general	0x42327	int	0x0	0
+power_general	0x42328	int	0x0	0
+power_general	0x42329	int	0x0	0
+power_general	0x42330	int	0x0	0
+power_general	0x42331	int	0x0	0
+power_general	0x42400	int	0x0	0
+power_general	0x42401	int	0x0	0
+power_general	0x42402	int	0x0	0
+power_general	0x42403	int	0x0	0
+power_general	0x42404	int	0x0	0
+power_general	0x42405	int	0x0	0
+power_general	0x42406	int	0x0	0
+power_general	0x42407	int	0x0	0
+power_general	0x42408	int	0x0	0
+power_general	0x42409	int	0x0	0
+power_general	0x42410	int	0x0	0
+power_general	0x42411	int	0x0	0
+power_general	0x42412	int	0x0	0
+power_general	0x42413	int	0x0	0
+power_general	0x42414	int	0x0	0
+power_general	0x42415	int	0x0	0
+power_general	0x42416	int	0x0	0
+power_general	0x42417	int	0x0	0
+power_general	0x42418	int	0x0	0
+power_general	0x42419	int	0x0	0
+power_general	0x42420	int	0x0	0
+power_general	0x42421	int	0x0	0
+power_general	0x42422	int	0x0	0
+power_general	0x42423	int	0x0	0
+power_general	0x42424	int	0x0	0
+power_general	0x42425	int	0x0	0
+power_general	0x42426	int	0x0	0
+power_general	0x42427	int	0x0	0
+power_general	0x42428	int	0x0	0
+power_general	0x42429	int	0x0	0
+power_general	0x42430	int	0x0	0
+power_general	0x42431	int	0x0	0
+power_general	0x42500	int	0x1	1
+power_general	0x42501	int	0x1	1
+power_general	0x42502	int	0x1	1
+power_general	0x42503	int	0x1	1
+power_general	0x42504	int	0x1	1
+power_general	0x42505	int	0x1	1
+power_general	0x42506	int	0x1	1
+power_general	0x42507	int	0x1	1
+power_general	0x42508	int	0x1	1
+power_general	0x42509	int	0x1	1
+power_general	0x42510	int	0x1	1
+power_general	0x42511	int	0x1	1
+power_general	0x42512	int	0x1	1
+power_general	0x42513	int	0x1	1
+power_general	0x42514	int	0x1	1
+power_general	0x42515	int	0x1	1
+power_general	0x42516	int	0x1	1
+power_general	0x42517	int	0x1	1
+power_general	0x42518	int	0x1	1
+power_general	0x42519	int	0x1	1
+power_general	0x42520	int	0x1	1
+power_general	0x42521	int	0x1	1
+power_general	0x42522	int	0x1	1
+power_general	0x42523	int	0x1	1
+power_general	0x42524	int	0x1	1
+power_general	0x42525	int	0x1	1
+power_general	0x42526	int	0x1	1
+power_general	0x42527	int	0x1	1
+power_general	0x42528	int	0x1	1
+power_general	0x42529	int	0x1	1
+power_general	0x42530	int	0x1	1
+power_general	0x42531	int	0x1	1
+power_general	0x42600	int	0x0	0
+power_general	0x42601	int	0x0	0
+power_general	0x42602	int	0x0	0
+power_general	0x42603	int	0x0	0
+power_general	0x42604	int	0x0	0
+power_general	0x42605	int	0x0	0
+power_general	0x42606	int	0x0	0
+power_general	0x42607	int	0x0	0
+power_general	0x42608	int	0x0	0
+power_general	0x42609	int	0x0	0
+power_general	0x42610	int	0x0	0
+power_general	0x42611	int	0x0	0
+power_general	0x42612	int	0x0	0
+power_general	0x42613	int	0x0	0
+power_general	0x42614	int	0x0	0
+power_general	0x42615	int	0x0	0
+power_general	0x42616	int	0x0	0
+power_general	0x42617	int	0x0	0
+power_general	0x42618	int	0x0	0
+power_general	0x42619	int	0x0	0
+power_general	0x42620	int	0x0	0
+power_general	0x42621	int	0x0	0
+power_general	0x42622	int	0x0	0
+power_general	0x42623	int	0x0	0
+power_general	0x42624	int	0x0	0
+power_general	0x42625	int	0x0	0
+power_general	0x42626	int	0x0	0
+power_general	0x42627	int	0x0	0
+power_general	0x42628	int	0x0	0
+power_general	0x42629	int	0x0	0
+power_general	0x42630	int	0x0	0
+power_general	0x42631	int	0x0	0
+power_general	0x42700	int	0x0	0
+power_general	0x42701	int	0x0	0
+power_general	0x42702	int	0x0	0
+power_general	0x42703	int	0x0	0
+power_general	0x42704	int	0x0	0
+power_general	0x42705	int	0x0	0
+power_general	0x42706	int	0x0	0
+power_general	0x42707	int	0x0	0
+power_general	0x42708	int	0x0	0
+power_general	0x42709	int	0x0	0
+power_general	0x42710	int	0x0	0
+power_general	0x42711	int	0x0	0
+power_general	0x42712	int	0x0	0
+power_general	0x42713	int	0x0	0
+power_general	0x42714	int	0x0	0
+power_general	0x42715	int	0x0	0
+power_general	0x42716	int	0x0	0
+power_general	0x42717	int	0x0	0
+power_general	0x42718	int	0x0	0
+power_general	0x42719	int	0x0	0
+power_general	0x42720	int	0x0	0
+power_general	0x42721	int	0x0	0
+power_general	0x42722	int	0x0	0
+power_general	0x42723	int	0x0	0
+power_general	0x42724	int	0x0	0
+power_general	0x42725	int	0x0	0
+power_general	0x42726	int	0x0	0
+power_general	0x42727	int	0x0	0
+power_general	0x42728	int	0x0	0
+power_general	0x42729	int	0x0	0
+power_general	0x42730	int	0x0	0
+power_general	0x42731	int	0x0	0
+power_general	0x42800	int	0x0	0
+power_general	0x42801	int	0x0	0
+power_general	0x42802	int	0x0	0
+power_general	0x42803	int	0x0	0
+power_general	0x42804	int	0x0	0
+power_general	0x42805	int	0x0	0
+power_general	0x42806	int	0x0	0
+power_general	0x42807	int	0x0	0
+power_general	0x42808	int	0x0	0
+power_general	0x42809	int	0x0	0
+power_general	0x4280a	int	0x0	0
+power_general	0x4280b	int	0x0	0
+power_general	0x4280c	int	0x0	0
+power_general	0x4280d	int	0x0	0
+power_general	0x4280e	int	0x0	0
+power_general	0x4280f	int	0x0	0
+power_general	0x42810	int	0x0	0
+power_general	0x42811	int	0x0	0
+power_general	0x42812	int	0x0	0
+power_general	0x42813	int	0x0	0
+power_general	0x42814	int	0x0	0
+power_general	0x42815	int	0x0	0
+power_general	0x42816	int	0x0	0
+power_general	0x42817	int	0x0	0
+power_general	0x42818	int	0x0	0
+power_general	0x42819	int	0x0	0
+power_general	0x4281a	int	0x0	0
+power_general	0x4281b	int	0x0	0
+power_general	0x4281c	int	0x0	0
+power_general	0x4281d	int	0x0	0
+power_general	0x4281e	int	0x0	0
+power_general	0x4281f	int	0x0	0
+power_general	0x42900	int	0x0	0
+power_general	0x42901	int	0x0	0
+power_general	0x42902	int	0x0	0
+power_general	0x42903	int	0x0	0
+power_general	0x42904	int	0x0	0
+power_general	0x42905	int	0x0	0
+power_general	0x42906	int	0x0	0
+power_general	0x42907	int	0x0	0
+power_general	0x42908	int	0x0	0
+power_general	0x42909	int	0x0	0
+power_general	0x4290a	int	0x0	0
+power_general	0x4290b	int	0x0	0
+power_general	0x4290c	int	0x0	0
+power_general	0x4290d	int	0x0	0
+power_general	0x4290e	int	0x0	0
+power_general	0x4290f	int	0x0	0
+power_general	0x42910	int	0x0	0
+power_general	0x42911	int	0x0	0
+power_general	0x42912	int	0x0	0
+power_general	0x42913	int	0x0	0
+power_general	0x42914	int	0x0	0
+power_general	0x42915	int	0x0	0
+power_general	0x42916	int	0x0	0
+power_general	0x42917	int	0x0	0
+power_general	0x42918	int	0x0	0
+power_general	0x42919	int	0x0	0
+power_general	0x4291a	int	0x0	0
+power_general	0x4291b	int	0x0	0
+power_general	0x4291c	int	0x0	0
+power_general	0x4291d	int	0x0	0
+power_general	0x4291e	int	0x0	0
+power_general	0x4291f	int	0x0	0
+power_general	0x43000	int	0x0	0
+power_general	0x43001	int	0x0	0
+power_general	0x43002	int	0x0	0
+power_general	0x43003	int	0x0	0
+power_general	0x43004	int	0x0	0
+power_general	0x43005	int	0x0	0
+power_general	0x43006	int	0x0	0
+power_general	0x43007	int	0x0	0
+power_general	0x43008	int	0x0	0
+power_general	0x43009	int	0x0	0
+power_general	0x4300a	int	0x0	0
+power_general	0x4300b	int	0x0	0
+power_general	0x4300c	int	0x0	0
+power_general	0x4300d	int	0x0	0
+power_general	0x4300e	int	0x0	0
+power_general	0x4300f	int	0x0	0
+power_general	0x43010	int	0x0	0
+power_general	0x43011	int	0x0	0
+power_general	0x43012	int	0x0	0
+power_general	0x43013	int	0x0	0
+power_general	0x43014	int	0x0	0
+power_general	0x43015	int	0x0	0
+power_general	0x43016	int	0x0	0
+power_general	0x43017	int	0x0	0
+power_general	0x43018	int	0x0	0
+power_general	0x43019	int	0x0	0
+power_general	0x4301a	int	0x0	0
+power_general	0x4301b	int	0x0	0
+power_general	0x4301c	int	0x0	0
+power_general	0x4301d	int	0x0	0
+power_general	0x4301e	int	0x0	0
+power_general	0x4301f	int	0x0	0
+power_general	0x43100	int	0x0	0
+power_general	0x43101	int	0x0	0
+power_general	0x43102	int	0x0	0
+power_general	0x43103	int	0x0	0
+power_general	0x43104	int	0x0	0
+power_general	0x43105	int	0x0	0
+power_general	0x43106	int	0x0	0
+power_general	0x43107	int	0x0	0
+power_general	0x43108	int	0x0	0
+power_general	0x43109	int	0x0	0
+power_general	0x4310a	int	0x0	0
+power_general	0x4310b	int	0x0	0
+power_general	0x4310c	int	0x0	0
+power_general	0x4310d	int	0x0	0
+power_general	0x4310e	int	0x0	0
+power_general	0x4310f	int	0x0	0
+power_general	0x43110	int	0x0	0
+power_general	0x43111	int	0x0	0
+power_general	0x43112	int	0x0	0
+power_general	0x43113	int	0x0	0
+power_general	0x43114	int	0x0	0
+power_general	0x43115	int	0x0	0
+power_general	0x43116	int	0x0	0
+power_general	0x43117	int	0x0	0
+power_general	0x43118	int	0x0	0
+power_general	0x43119	int	0x0	0
+power_general	0x4311a	int	0x0	0
+power_general	0x4311b	int	0x0	0
+power_general	0x4311c	int	0x0	0
+power_general	0x4311d	int	0x0	0
+power_general	0x4311e	int	0x0	0
+power_general	0x4311f	int	0x0	0
+power_general	0x44000	int	0x1	1
+power_general	0x50000	int	0x6	6
+power_general	0x50001	int	0x0	0
+power_general	0x50002	int	0x0	0
+power_general	0x50003	int	0x0	0
+power_general	0x50004	int	0x0	0
+power_general	0x50005	int	0x0	0
+power_general	0x50010	int	0xffffffff	-1
+power_general	0x50011	int	0xffffffff	-1
+power_general	0x50040	int	0xffffffff	-1
+power_general	0x50041	int	0xffffffff	-1
+power_general	0x50050	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50052	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50054	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50058	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50059	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50060	int	0x0	0
+power_general	0x50070	int	0x0	0
+power_general	0x50080	int	0x0	0
+power_general	0x50090	int	0x0	0
+power_general	0x50095	int	0x0	0
+power_general	0x50097	int	0x0	0
+power_general	0x500a0	int	0x0	0
+power_general	0x500b0	int	0x0	0
+power_general	0x500b4	int	0x0	0
+power_general	0x500b8	int	0x0	0
+power_general	0x500d0	int	0x0	0
+power_general	0x500f0	int	0x0	0
+power_general	0x50100	int	0x0	0
+power_general	0x50101	int	0x0	0
+power_general	0x50110	int	0x0	0
+power_general	0x50111	int	0x0	0
+power_general	0x50114	int	0x0	0
+power_general	0x50130	int	0x0	0
+power_general	0x50140	int	0x0	0
+power_general	0x50150	int	0x0	0
+power_general	0x50155	int	0x0	0
+power_general	0x50156	int	0x0	0
+power_general	0x50160	int	0x0	0
+power_general	0x50170	int	0x0	0
+power_general	0x50171	int	0x0	0
+power_general	0x50180	int	0x0	0
+power_general	0x50185	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x50190	int	0x1	1
+power_general	0x50191	int	0x1	1
+power_general	0x50192	int	0x0	0
+power_general	0x50193	int	0x0	0
+power_general	0x50194	int	0x1	1
+power_general	0x501a1	int	0x0	0
+power_general	0x501b1	int	0x0	0
+power_general	0x501c1	int	0x0	0
+power_general	0x501d1	int	0x0	0
+power_general	0x501e0	int	0x0	0
+power_general	0x501e1	int	0x0	0
+power_general	0x501e2	int	0x0	0
+power_general	0x501e3	int	0x0	0
+power_general	0x501e5	int	0x0	0
+power_general	0x501e9	int	0x0	0
+power_general	0x501f0	int	0x0	0
+power_general	0x501f1	int	0x0	0
+power_general	0x50200	int	0x0	0
+power_general	0x50210	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50220	int	0x0	0
+power_general	0x50230	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50238	int	0x0	0
+power_general	0x50240	int	0x0	0
+power_general	0x50250	int	0x0	0
+power_general	0x50260	int	0x0	0
+power_general	0x50264	int	0x0	0
+power_general	0x50268	int	0x0	0
+power_general	0x50270	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50280	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50282	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x50285	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x50290	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x502a0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x502b0	int	0x0	0
+power_general	0x502c0	int	0x0	0
+power_general	0x502c1	int	0x0	0
+power_general	0x502c2	int	0x0	0
+power_general	0x502d0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x502d1	int	0x0	0
+power_general	0x502e0	int	0x0	0
+power_general	0x502e4	int	0x0	0
+power_general	0x502e7	int	0x0	0
+power_general	0x502e8	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x502f0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x502f8	int	0x0	0
+power_general	0x50300	int	0x0	0
+power_general	0x50320	int	0x0	0
+power_general	0x50330	int	0x0	0
+power_general	0x50335	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50340	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50350	int	0x0	0
+power_general	0x50354	float	0x0	0.0
+power_general	0x50356	int	0xffffffff	-1
+power_general	0x50357	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50358	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x5035a	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x5035b	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x5035e	int	0x0	0
+power_general	0x50360	int	0x1	1
+power_general	0x50361	int	0x0	0
+power_general	0x50362	int	0x0	0
+power_general	0x50370	int	0x0	0
+power_general	0x50380	int	0x0	0
+power_general	0x50381	int	0x0	0
+power_general	0x50390	int	0x0	0
+power_general	0x50398	int	0x0	0
+power_general	0x50399	int	0x0	0
+power_general	0x5039a	int	0x0	0
+power_general	0x5039c	int	0x0	0
+power_general	0x5039e	int	0x1	1
+power_general	0x5039f	int	0x0	0
+power_general	0x503a0	int	0x0	0
+power_general	0x503a1	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x503a2	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x503a3	int	0x0	0
+power_general	0x503a7	int	0x0	0
+power_general	0x503a8	int	0x0	0
+power_general	0x503a9	int	0x0	0
+power_general	0x503aa	int	0x0	0
+power_general	0x503ac	int	0x0	0
+power_general	0x503af	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x503b8	int	0x0	0
+power_general	0x503c0	float	0x0	0.0
+power_general	0x503c1	int	0xffffffff	-1
+power_general	0x503c2	float	0x0	0.0
+power_general	0x503c3	int	0xffffffff	-1
+power_general	0x503c4	float	0x0	0.0
+power_general	0x503c5	int	0xffffffff	-1
+power_general	0x503c6	float	0x0	0.0
+power_general	0x503c7	int	0xffffffff	-1
+power_general	0x503c8	float	0x0	0.0
+power_general	0x503c9	int	0xffffffff	-1
+power_general	0x503d0	int	0x0	0
+power_general	0x50400	int	0xffffffff	-1
+power_general	0x50410	int	0x0	0
+power_general	0x50420	int	0xffffffff	-1
+power_general	0x50430	int	0x0	0
+power_general	0x50440	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50450	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50460	int	0x0	0
+power_general	0x50461	int	0xffffffff	-1
+power_general	0x50462	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50463	int	0x0	0
+power_general	0x50464	float	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50465	float	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50466	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50467	int	0xffffffff	-1
+power_general	0x50468	int	0x0	0
+power_general	0x50500	row_ref	TAG_VALUE_NULL_GBID	empty name (no file, -1)
+power_general	0x50510	int	0x0	0
+power_general	0x50520	int	0x0	0
+power_general	0x50580	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50600	int	0x0	0
+power_general	0x50610	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50620	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50630	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x50660	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x50700	int	0x0	0
+power_general	0x50710	int	0x0	0
+power_general	0x50720	int	0x0	0
+power_general	0x50728	int	0x0	0
+power_general	0x50730	int	0x0	0
+power_general	0x50740	int	0x0	0
+power_general	0x50790	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50791	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50798	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50799	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x5079b	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x507a0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x507a1	int	0x0	0
+power_general	0x507a2	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x507b0	int	0xffffffff	-1
+power_general	0x507c0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x507d0	int	0x0	0
+power_general	0x507e0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x507e1	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x507e2	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x507e3	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x507e4	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50810	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50811	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50850	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50851	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50852	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50853	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x50860	formula	_ZL30TAG_VALUE_DEFAULT_ATTACK_SPEED	"formula ""Attacks_Per_Second_Total"""
+power_general	0x50861	formula	_ZL30TAG_VALUE_DEFAULT_ATTACK_SPEED	"formula ""Attacks_Per_Second_Total"""
+power_general	0x50862	formula	_ZL30TAG_VALUE_DEFAULT_ATTACK_SPEED	"formula ""Attacks_Per_Second_Total"""
+power_general	0x50863	formula	_ZL30TAG_VALUE_DEFAULT_ATTACK_SPEED	"formula ""Attacks_Per_Second_Total"""
+power_general	0x50864	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x50865	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x50866	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x50867	int	0x0	0
+power_general	0x50868	int	0x0	0
+power_general	0x50869	int	0x0	0
+power_general	0x508ff	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x50f50	formula	_ZL41TAG_VALUE_DEFAULT_MANA_PERCENT_TO_RESERVE	"formula ""0.25"""
+power_general	0x510b0	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x510b8	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x51280	formula	_ZL41TAG_VALUE_DEFAULT_RUN_NEARBY_DISTANCE_MIN	"formula ""10.0"""
+power_general	0x51290	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x51440	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0x51450	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x530ad	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x530ae	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x88000	formula	_ZL38TAG_VALUE_DEFAULT_FOLLOW_STOP_DISTANCE	"formula ""9.0"""
+power_general	0x89000	formula	_ZL39TAG_VALUE_DEFAULT_FOLLOW_START_DISTANCE	"formula ""15.0"""
+power_general	0x89100	int	0x0	0
+power_general	0x89110	int	0xffffffff	-1
+power_general	0x8a000	formula	_ZL39TAG_VALUE_DEFAULT_RUN_IN_FRONT_DISTANCE	"formula ""3.0"""
+power_general	0x98000	int	0x0	0
+power_general	0x98001	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x98002	int	0x0	0
+power_general	0x98003	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x98004	formula	_ZL24TAG_VALUE_FORMULA_EIGHTY	"formula ""80"""
+power_general	0x98005	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0x99300	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0x9ab10	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa0270	int	0x0	0
+power_general	0xa6800	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa6801	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa6802	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa6803	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa6900	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa6901	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa6902	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa6903	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xa7330	int	0x0	0
+power_general	0xa7331	int	0x0	0
+power_general	0xa7332	int	0x0	0
+power_general	0xa7350	int	0x0	0
+power_general	0xa7375	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xa7376	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xae100	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae101	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae102	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae103	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae104	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae105	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae200	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xae201	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xae202	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae203	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae204	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae205	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae206	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae300	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xae310	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xaf000	int	0x0	0
+power_general	0xaf100	int	0x0	0
+power_general	0xaf200	int	0x0	0
+power_general	0xaf300	int	0x0	0
+power_general	0xaf400	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xaf401	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xaf402	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xaf403	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xb0100	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0101	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0102	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0103	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0104	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0105	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0110	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0111	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0112	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0120	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0121	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0122	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0130	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0131	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0132	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0140	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0141	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0142	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0150	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0151	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0152	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0160	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0161	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0162	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb0170	int	0xffffffff	-1
+power_general	0xb0171	int	0xffffffff	-1
+power_general	0xb0172	int	0xffffffff	-1
+power_general	0xb0173	int	0xffffffff	-1
+power_general	0xb0174	int	0xffffffff	-1
+power_general	0xb0175	int	0xffffffff	-1
+power_general	0xb0180	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_general	0xb01a0	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_general	0xb01a1	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_general	0xb01c0	int	0x0	0
+power_general	0xb01d0	int	0x0	0
+power_general	0xb01e0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x40100	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40101	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40102	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40103	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40105	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40106	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40107	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40108	int	0x0	0
+power_tuning	0x4010a	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x4010f	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40120	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40121	int	0x0	0
+power_tuning	0x40122	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40123	int	0x0	0
+power_tuning	0x40128	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40130	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40150	int	0x0	0
+power_tuning	0x40201	int	0x11090	69776
+power_tuning	0x40203	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40204	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40205	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40206	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40600	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40800	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40801	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40802	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40851	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40853	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40854	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x40855	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x45000	int	0xffffffff	-1
+power_tuning	0x50020	int	0xffffffff	-1
+power_tuning	0x50030	int	0xffffffff	-1
+power_tuning	0x500c0	int	0x0	0
+power_tuning	0x500e0	int	0x0	0
+power_tuning	0x50120	int	0x0	0
+power_tuning	0x501a0	int	0x0	0
+power_tuning	0x501b0	int	0x0	0
+power_tuning	0x501c0	int	0x0	0
+power_tuning	0x501d0	int	0x0	0
+power_tuning	0x501e8	int	0x0	0
+power_tuning	0x50220	int	0x0	0
+power_tuning	0x503a4	int	0x0	0
+power_tuning	0x503a5	int	0x0	0
+power_tuning	0x503a6	int	0x0	0
+power_tuning	0x503b0	int	0x0	0
+power_tuning	0x503ba	int	0x0	0
+power_tuning	0x50820	int	0xffffffff	-1
+power_tuning	0x50830	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50840	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50848	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x50870	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x50880	float	0x0	0.0
+power_tuning	0x50890	float	0xbccccccd	-0.02500000037252903
+power_tuning	0x50898	formula	_ZL37TAG_VALUE_FORMULA_HEIGHT_ABOVE_SOURCE	"formula ""6.0"""
+power_tuning	0x508a0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x508b0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x508b8	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x508c0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x508e0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x508f0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x508f8	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x508fb	int	0x1	1
+power_tuning	0x508fd	int	0x10000	65536
+power_tuning	0x508fe	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x50900	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50910	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50920	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50930	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50940	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50950	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50960	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50970	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50980	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50990	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x509a0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x509b0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x509c0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x509d0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x509e0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x509f0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50a00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50a10	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50a20	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50a30	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50a40	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50a50	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50a60	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50a70	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50ac0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50ad0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50ae0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50af0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b10	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b20	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b30	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b40	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b50	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b60	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b70	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50b80	int	0x0	0
+power_tuning	0x50b90	int	0x1	1
+power_tuning	0x50c00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c10	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c20	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c30	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c40	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c50	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c60	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c70	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c80	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50c90	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50ca0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50cb0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50cc0	formula	_ZL34TAG_VALUE_DEFAULT_SLOW_TIME_AMOUNT	"formula ""0.25"""
+power_tuning	0x50ce0	formula	_ZL48TAG_VALUE_DEFAULT_POISON_CLOUD_INTERVAL_DURATION	"formula ""0.25"""
+power_tuning	0x50cf0	formula	_ZL44TAG_VALUE_DEFAULT_POISON_CLOUD_NUM_INTERVALS	"formula """""
+power_tuning	0x50d00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50d20	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50d30	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x50d31	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x50d40	formula	_ZL41TAG_VALUE_DEFAULT_ARCANE_ORB_NUM_GRENADES	"formula """""
+power_tuning	0x50d50	int	0x0	0
+power_tuning	0x50d70	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x50d80	formula	TAG_VALUE_FORMULA_NEG_ONE	"formula ""-1"""
+power_tuning	0x50d81	int	0x0	0
+power_tuning	0x50d82	int	0x0	0
+power_tuning	0x50d90	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50d94	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50d98	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50d9c	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50da0	formula	_ZL47TAG_VALUE_DEFAULT_THUNDERSTORM_BOLTS_PER_SECOND	"formula ""2.0"""
+power_tuning	0x50db0	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x50db8	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50db9	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x50dba	formula	_ZL41TAG_VALUE_DEFAULT_PROJECTILE_SPREAD_ANGLE	"formula ""90.0"""
+power_tuning	0x50dbc	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50dc0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50dd0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50dd8	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50de0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50df0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50e00	formula	_ZL32TAG_VALUE_DEFAULT_HEAL_HITPOINTS	"formula ""30.0"""
+power_tuning	0x50e10	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f10	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f20	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f30	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f40	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f60	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f70	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f80	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50f90	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50fb0	formula	_ZL37TAG_VALUE_DEFAULT_KNOCKBACK_MAGNITUDE	"formula ""15.0"""
+power_tuning	0x50fb1	int	0x0	0
+power_tuning	0x50fb8	formula	_ZL34TAG_VALUE_DEFAULT_KNOCKBACK_HEIGHT	"formula ""5.0"""
+power_tuning	0x50fb9	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50fbc	formula	_ZL35TAG_VALUE_DEFAULT_KNOCKBACK_GRAVITY	"formula ""-0.05"""
+power_tuning	0x50fbd	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x50fbe	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x51040	formula	_ZL38TAG_VALUE_DEFAULT_AURA_AFFECTED_RADIUS	"formula ""15.0"""
+power_tuning	0x51050	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51080	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x510a0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x510c0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x510d0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x510e0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x510f0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x510f8	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51100	formula	_ZL41TAG_VALUE_DEFAULT_CRUSHING_BLOW_MAX_LEVEL	"formula ""10"""
+power_tuning	0x51110	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51111	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51112	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51120	formula	_ZL47TAG_VALUE_DEFAULT_ELECTROCUTE_ATTACK_DELAY_TIME	"formula ""0.25"""
+power_tuning	0x51130	formula	_ZL47TAG_VALUE_DEFAULT_BLIZZARD_INITIAL_IMPACT_DELAY	"formula ""1.0"""
+power_tuning	0x51140	formula	_ZL53TAG_VALUE_DEFAULT_FURY_GAINED_PER_PERCENT_HEALTH_LOST	"formula ""0.0"""
+power_tuning	0x51141	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51191	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51192	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51194	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51195	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51199	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x5119a	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x511e0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x511f0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51200	formula	_ZL65TAG_VALUE_DEFAULT_ELECTROCUTE_PERCENT_DAMAGE_REDUCTION_PER_BOUNCE	"formula ""0.25"""
+power_tuning	0x51210	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51220	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51221	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51230	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51231	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51232	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51235	int	0x1	1
+power_tuning	0x51248	int	0x0	0
+power_tuning	0x5124a	int	0x0	0
+power_tuning	0x51250	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51260	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51270	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x512a0	formula	_ZL39TAG_VALUE_DEFAULT_SKELETON_SUMMON_COUNT	"formula ""2.0"""
+power_tuning	0x512a1	formula	TAG_VALUE_FORMULA_NEG_ONE	"formula ""-1"""
+power_tuning	0x512a2	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x512a3	int	0xffffffff	-1
+power_tuning	0x512b0	formula	_ZL43TAG_VALUE_DEFAULT_MIRROR_IMAGE_SUMMON_COUNT	"formula ""2.0"""
+power_tuning	0x512c0	formula	_ZL49TAG_VALUE_DEFAULT_CORPULENT_CRYPT_KID_SPAWN_COUNT	"formula ""2.0"""
+power_tuning	0x512d0	formula	_ZL52TAG_VALUE_DEFAULT_SLOW_TIME_ATTACK_COOLDOWN_INCREASE	"formula ""2.0"""
+power_tuning	0x512e0	formula	_ZL55TAG_VALUE_DEFAULT_SLOW_TIME_PROJECTILE_SPEED_MULTIPLIER	"formula ""0.01"""
+power_tuning	0x512f0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51300	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51310	formula	_ZL38TAG_VALUE_DEFAULT_MAGIC_MISSILE_JITTER	"formula ""20.0"""
+power_tuning	0x51320	formula	_ZL52TAG_VALUE_DEFAULT_ENERGY_SHIELD_MANA_COST_PER_DAMAGE	"formula ""1.0"""
+power_tuning	0x51330	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51340	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51350	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51360	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51361	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51370	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51380	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51390	formula	_ZL51TAG_VALUE_DEFAULT_DISINTEGRATE_TIME_BETWEEN_UPDATES	"formula ""0.25"""
+power_tuning	0x513a0	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x513b0	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x513c0	formula	_ZL35TAG_VALUE_DEFAULT_BUFF_DURATION_MIN	"formula ""15.0"""
+power_tuning	0x513d0	formula	_ZL37TAG_VALUE_DEFAULT_BUFF_DURATION_DELTA	"formula ""0.0"""
+power_tuning	0x513e0	formula	_ZL46TAG_VALUE_DEFAULT_BUFF_DURATION_BETWEEN_PULSES	"formula ""5.0"""
+power_tuning	0x513e8	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x513f0	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51400	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51410	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51420	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51430	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51431	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x51460	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51470	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51480	formula	_ZL36TAG_VALUE_DEFAULT_SLOW_TIME_DURATION	"formula ""5.0"""
+power_tuning	0x514e0	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x51500	formula	_ZL43TAG_VALUE_DEFAULT_FURY_TIME_BETWEEN_UPDATES	"formula ""0.25"""
+power_tuning	0x51520	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x515e0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x515e8	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x515f0	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x5199b	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x52500	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x52600	formula	_ZL43TAG_VALUE_DEFAULT_SUMMONED_GHOUL_DECAY_TIME	"formula ""15.0"""
+power_tuning	0x52700	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x52800	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x52900	formula	_ZL32TAG_VALUE_DEFAULT_TOTEM_LIFESPAN	"formula ""5.0"""
+power_tuning	0x52a00	formula	_ZL40TAG_VALUE_DEFAULT_DEATH_STATUE_NUM_SHOTS	"formula """""
+power_tuning	0x52b00	formula	_ZL37TAG_VALUE_DEFAULT_DEATH_STATUE_DAMAGE	"formula ""2.0"""
+power_tuning	0x52c00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x52d00	formula	_ZL34TAG_VALUE_DEFAULT_GHOUL_BUFF_RANGE	"formula ""25.0"""
+power_tuning	0x52e00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x58000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x58100	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x58200	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x58300	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x58400	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x58410	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x58420	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x58430	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x58431	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x58440	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x58448	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x58500	formula	_ZL47TAG_VALUE_DEFAULT_ENRAGE_AMPLIFY_DAMAGE_PERCENT	"formula ""0.25"""
+power_tuning	0x58800	formula	_ZL35TAG_VALUE_DEFAULT_PET_SEARCH_RADIUS	"formula ""12.0"""
+power_tuning	0x59000	formula	_ZL50TAG_VALUE_DEFAULT_GHOST_SOULSIPHON_SLOW_MULTIPLIER	"formula ""-0.25"""
+power_tuning	0x59100	formula	_ZL55TAG_VALUE_DEFAULT_GHOST_SOULSIPHON_MAX_CHANNELLING_TIME	"formula ""3.0"""
+power_tuning	0x59200	formula	_ZL59TAG_VALUE_DEFAULT_GHOST_SOULSIPHON_MAX_CHANNELLING_DISTANCE	"formula ""30.0"""
+power_tuning	0x59300	formula	_ZL52TAG_VALUE_DEFAULT_GHOST_SOULSIPHON_DAMAGE_PER_SECOND	"formula ""2.0"""
+power_tuning	0x5a000	formula	_ZL44TAG_VALUE_DEFAULT_ROCKWORM_WEB_SPIT_DISTANCE	"formula ""10.0"""
+power_tuning	0x5a100	formula	_ZL46TAG_VALUE_DEFAULT_ROCKWORM_WEB_SLOW_MULTIPLIER	"formula ""-0.80"""
+power_tuning	0x5a180	formula	_ZL39TAG_VALUE_DEFAULT_ROCKWORM_WEB_DURATION	"formula ""5.0"""
+power_tuning	0x5a200	formula	_ZL49TAG_VALUE_DEFAULT_ROCKWORM_BURST_OUT_DISTANCE_MIN	"formula ""7.0"""
+power_tuning	0x5a300	formula	_ZL49TAG_VALUE_DEFAULT_ROCKWORM_BURST_OUT_DISTANCE_MAX	"formula ""9.0"""
+power_tuning	0x5a380	formula	_ZL42TAG_VALUE_DEFAULT_ROCKWORM_BURST_OUT_DELAY	"formula ""1.5"""
+power_tuning	0x5a400	formula	_ZL59TAG_VALUE_DEFAULT_FEASTOFSOULS_INITIAL_TARGET_SEARCH_RADIUS	"formula ""5.0"""
+power_tuning	0x5a500	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x5a600	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x5a800	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x5b000	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x60000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x61000	formula	_ZL46TAG_VALUE_DEFAULT_SPECTRALBLADE_BLEED_DURATION	"formula ""4.0"""
+power_tuning	0x61001	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x62000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x63000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x64000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x65000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x66000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x67000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x68000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x69000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x69500	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x70000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x70500	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x80000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x86000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x87000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x91000	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x91100	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x91200	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x91300	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x92800	formula	_ZL43TAG_VALUE_DEFAULT_PLAGUE_OF_TOADS_NUM_TOADS	"formula ""5.0"""
+power_tuning	0x92808	formula	_ZL47TAG_VALUE_DEFAULT_PLAGUE_OF_TOADS_TOAD_LIFESPAN	"formula ""5.0"""
+power_tuning	0x92900	formula	_ZL35TAG_VALUE_DEFAULT_FIREBATS_NUM_BATS	"formula ""5.0"""
+power_tuning	0x92901	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x92902	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x93000	formula	_ZL36TAG_VALUE_DEFAULT_CLEAVE_NUM_TARGETS	"formula """""
+power_tuning	0x94000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0x94100	int	0xffffffff	-1
+power_tuning	0x94200	int	0x0	0
+power_tuning	0x95000	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x95100	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x96000	formula	_ZL45TAG_VALUE_DEFAULT_MASSCONFUSION_BUFF_DURATION	"formula """""
+power_tuning	0x96600	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x96601	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x97000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9a000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9a001	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9a002	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9a003	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9a100	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x9a200	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x9a201	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9a300	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9a500	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x9a800	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x9aa00	int	0x0	0
+power_tuning	0x9aa01	int	0x0	0
+power_tuning	0x9aa10	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0x9ab00	int	0xffffffff	-1
+power_tuning	0x9ab01	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9ab02	int	0x0	0
+power_tuning	0x9ab03	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0x9b300	formula	_ZL33TAG_VALUE_DEFAULT_FROZEN_DURATION	"formula ""3.0"""
+power_tuning	0x9b301	formula	_ZL45TAG_VALUE_DEFAULT_FROZEN_STACKED_DURATION_MAX	"formula ""6.0"""
+power_tuning	0x9c000	formula	_ZL39TAG_VALUE_DEFAULT_DEATH_NOVA_RADIUS_MAX	"formula ""100.0"""
+power_tuning	0x9c100	formula	_ZL46TAG_VALUE_DEFAULT_DEATH_NOVA_RADIUS_FT_PER_SEC	"formula ""50.0"""
+power_tuning	0x9c200	int	0x0	0
+power_tuning	0x9d000	formula	_ZL29TAG_VALUE_DEFAULT_HEARTH_TIME	"formula ""3.0"""
+power_tuning	0x9e000	formula	_ZL40TAG_VALUE_DEFAULT_RESURRECTION_BUFF_TIME	"formula ""60.0"""
+power_tuning	0x9f000	formula	_ZL51TAG_VALUE_DEFAULT_RESURRECTION_HEALTH_MULT_TO_START	"formula ""0.1"""
+power_tuning	0xa0020	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa0021	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa0022	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa0090	int	0xffffffff	-1
+power_tuning	0xa0091	int	0xffffffff	-1
+power_tuning	0xa0100	int	0xffffffff	-1
+power_tuning	0xa0101	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa0102	formula	TAG_VALUE_FORMULA_NULL	"formula """""
+power_tuning	0xa0110	int	0xffffffff	-1
+power_tuning	0xa0111	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa0112	formula	TAG_VALUE_FORMULA_NULL	"formula """""
+power_tuning	0xa0120	int	0xffffffff	-1
+power_tuning	0xa0121	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa0122	formula	TAG_VALUE_FORMULA_NULL	"formula """""
+power_tuning	0xa0130	int	0xffffffff	-1
+power_tuning	0xa0131	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa0132	formula	TAG_VALUE_FORMULA_NULL	"formula """""
+power_tuning	0xa0140	formula	_ZL35TAG_VALUE_DEFAULT_BUFF_DURATION_MIN	"formula ""15.0"""
+power_tuning	0xa0141	formula	_ZL35TAG_VALUE_DEFAULT_BUFF_DURATION_MIN	"formula ""15.0"""
+power_tuning	0xa0170	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa0171	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa0200	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa0201	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa0271	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa1000	formula	_ZL42TAG_VALUE_DEFAULT_LIGHTNING_SPEED_DURATION	"formula ""3.0"""
+power_tuning	0xa1800	formula	_ZL55TAG_VALUE_DEFAULT_LIGHTNING_SPEED_MOVEMENT_SCALAR_BONUS	"formula ""0.5"""
+power_tuning	0xa1900	formula	_ZL45TAG_VALUE_DEFAULT_LIGHTNING_SPEED_STACK_COUNT	"formula ""1.0"""
+power_tuning	0xa2000	formula	_ZL38TAG_VALUE_DEFAULT_STATIC_CHARGE_DAMAGE	"formula ""3.0"""
+power_tuning	0xa2100	formula	_ZL47TAG_VALUE_DEFAULT_STATIC_CHARGE_DAMAGE_INTERVAL	"formula ""0.5"""
+power_tuning	0xa2200	formula	_ZL40TAG_VALUE_DEFAULT_STATIC_CHARGE_DURATION	"formula ""2.0"""
+power_tuning	0xa2300	formula	_ZL38TAG_VALUE_DEFAULT_STATIC_CHARGE_RADIUS	"formula ""10.0"""
+power_tuning	0xa3000	formula	_ZL45TAG_VALUE_DEFAULT_INTENSIFY_CRIT_CHANCE_BONUS	"formula ""0.5"""
+power_tuning	0xa3100	formula	_ZL41TAG_VALUE_DEFAULT_INTENSIFY_CRIT_DURATION	"formula ""5.0"""
+power_tuning	0xa4000	formula	_ZL46TAG_VALUE_DEFAULT_POWERED_IMPACT_MANA_INCREASE	"formula ""5.0"""
+power_tuning	0xa6000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa6100	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa6200	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa6300	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa6340	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa6380	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa6684	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa6700	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa6a00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa6b00	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7000	int	0x0	0
+power_tuning	0xa7001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xa7002	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xa7080	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xa7088	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7090	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa70c0	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7200	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7201	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7202	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7221	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7222	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7223	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7300	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7301	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7302	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7303	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7304	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7305	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7306	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7307	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7308	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7340	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7370	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7371	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7372	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa7373	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7380	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7381	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7382	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7400	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7401	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa7402	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa8000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xa8100	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa8200	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa9000	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xa9010	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xa9020	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xab000	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xab010	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xab011	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xab012	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xab013	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xab014	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xab015	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xab020	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xab021	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xac000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad008	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad009	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad010	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad020	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad030	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad050	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad060	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xad070	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xae000	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xb0000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xb0010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xb0020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xb0030	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xb0040	formula	TAG_VALUE_FORMULA_ZERO	"formula ""0"""
+power_tuning	0xb0050	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xb0051	formula	TAG_VALUE_FORMULA_ONE	"formula ""1"""
+power_tuning	0xb0060	int	0x0	0
+power_tuning	0xb0070	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xb0071	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+power_tuning	0xb0072	int	0xffffffff	-1
+power_tuning	0xb0073	int	0xffffffff	-1
+power_tuning	0xb01b0	int	0x0	0
+shader_map	0x30500	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30501	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30502	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30504	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30600	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30601	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30602	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30604	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30700	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30701	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30702	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30704	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30800	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30810	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30820	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30830	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30840	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30850	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30860	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30861	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30870	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30880	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30890	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_map	0x30891	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+shader_option	0xa0002	int	0x0	0
+shader_option	0xa0003	int	0x3	3
+shader_option	0xa0004	float	0x3f800000	1.0
+shader_option	0xa0005	int	0x0	0
+shader_option	0xa0006	int	0x0	0
+shader_option	0xa0007	int	0x1	1
+shader_option	0xa0008	int	0x1	1
+shader_option	0xa0009	int	0x0	0
+shader_option	0xa000a	int	0x0	0
+shader_option	0xa000b	int	0x4	4
+shader_option	0xa000c	int	0x1	1
+shader_option	0xa000d	int	0x7	7
+shader_option	0xa000e	int	0x0	0
+shader_option	0xa000f	int	0x1	1
+shader_option	0xa0010	int	0x1	1
+shader_option	0xa0011	int	0x1	1
+shader_option	0xa0012	int	0x1	1
+shader_option	0xa0013	int	0x8	8
+shader_option	0xa0014	int	0xa	10
+shader_option	0xa0015	int	0xa	10
+shader_option	0xa0016	int	0x0	0
+shader_option	0xa0017	int	0x0	0
+shader_option	0xa0018	int	0x0	0
+shader_option	0xa0019	int	0x0	0
+shader_option	0xa001a	int	0x0	0
+shader_option	0xa001b	int	0x0	0
+shader_option	0xa001c	int	0x0	0
+shader_option	0xa001d	int	0x0	0
+shader_option	0xa001e	int	0x0	0
+shader_option	0xa001f	int	0x0	0
+shader_option	0xa0020	int	0x0	0
+shader_option	0xa0021	int	0x0	0
+shader_option	0xa0022	int	0x0	0
+shader_option	0xa0023	int	0x0	0
+shader_option	0xa0024	int	0x0	0
+shader_option	0xa0025	int	0x0	0
+shader_option	0xa0026	int	0x0	0
+shader_option	0xa0027	float	0x3dcccccd	0.10000000149011612
+shader_option	0xa0028	float	0x40a00000	5.0
+shader_option	0xa0029	int	0x0	0
+shader_option	0xa002a	int	0x0	0
+shader_option	0xa002b	int	0x0	0
+shader_option	0xa002c	int	0x0	0
+shader_option	0xa002d	int	0x0	0
+shader_option	0xa002e	int	0x0	0
+shader_option	0xa002f	int	0x0	0
+shader_option	0xa0030	int	0x0	0
+shader_option	0xa0031	int	0x0	0
+shader_option	0xa0032	int	0x0	0
+shader_option	0xa0033	int	0x0	0
+shader_option	0xa0034	int	0x0	0
+shader_option	0xa0035	int	0x0	0
+shader_option	0xa0036	int	0x1	1
+shader_option	0xa0037	int	0x0	0
+shader_option	0xa0038	int	0x0	0
+shader_option	0xa0039	int	0x1	1
+shader_option	0xa003a	int	0x0	0
+shader_option	0xa003b	int	0x0	0
+shader_option	0xa003c	int	0x0	0
+shader_option	0xa003d	int	0x0	0
+shader_option	0xa003e	int	0x0	0
+shader_option	0xa003f	int	0x0	0
+shader_option	0xa0040	int	0xffffffff	-1
+surface	0x50000	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+surface	0x50001	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+surface	0x50004	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+surface	0x50005	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd000f	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0012	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0013	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0019	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0052	int	0xffffffff	-1
+world_layout_command	0xd0053	int	0xffffffff	-1
+world_layout_command	0xd0060	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0061	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0062	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0a54	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xd0a55	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_command	0xf8000	int	0x1	1
+world_layout_command	0xf8001	int	0x1	1
+world_layout_command	0xf8002	int	0x1	1
+world_layout_command	0xf8003	int	0x1	1
+world_layout_command	0xf8004	int	0x1	1
+world_layout_command	0xf8005	int	0x64	100
+world_layout_command	0xf8006	int	0x0	0
+world_layout_command	0xf8007	int	0x0	0
+world_layout_command	0xf8008	int	0x0	0
+world_layout_command	0xf8009	int	0x0	0
+world_layout_command	0xf800a	int	0x0	0
+world_layout_command	0xf800b	int	0x0	0
+world_layout_command	0xf800c	int	0x0	0
+world_layout_command	0xf800d	int	0x0	0
+world_layout_command	0xf800e	int	0x0	0
+world_layout_command	0xf800f	int	0x0	0
+world_layout_command	0xf8010	int	0x1	1
+world_layout_command	0xf8011	int	0x0	0
+world_layout_command	0xf8012	int	0x64	100
+world_layout_command	0xf8013	int	0x0	0
+world_layout_command	0xf8014	int	0x64	100
+world_layout_command	0xf8015	int	0x0	0
+world_layout_command	0xf8016	int	0x0	0
+world_layout_command	0xf8017	int	0x0	0
+world_layout_command	0xf8018	int	0x0	0
+world_layout_command	0xf8019	int	0x0	0
+world_layout_command	0xf801a	int	0x0	0
+world_layout_command	0xf801f	int	0x0	0
+world_layout_command	0xf8020	int	0x0	0
+world_layout_command	0xf8021	int	0x1	1
+world_layout_command	0xf8022	int	0x0	0
+world_layout_command	0xf8023	int	0x0	0
+world_layout_command	0xf8024	int	0x0	0
+world_layout_command	0xf8025	int	0x0	0
+world_layout_command	0xf8026	int	0x1	1
+world_layout_command	0xf8027	int	0x0	0
+world_layout_command	0xf9000	int	0x64	100
+world_layout_command	0xf9001	int	0x64	100
+world_layout_command	0xf9002	int	0x64	100
+world_layout_command	0xf9080	int	0x0	0
+world_layout_command	0xf9100	int	0x0	0
+world_layout_command	0xf9110	int	0x0	0
+world_layout_command	0xf9120	int	0x0	0
+world_layout_command	0xf9130	int	0xffffffff	-1
+world_layout_command	0xf9140	float	0x3f800000	1.0
+world_layout_command	0xf9150	int	0x1	1
+world_layout_command	0xf9160	int	0xffffffff	-1
+world_layout_command	0xf9200	int	0x1	1
+world_layout_command	0xf9300	int	0xffffffff	-1
+world_layout_command	0xf9310	float	0x0	0.0
+world_layout_command	0xf9400	int	0x1	1
+world_layout_command	0xf9500	int	0xffffffff	-1
+world_layout_command	0xf9600	int	0xffffffff	-1
+world_layout_command	0xf9601	int	0xffffffff	-1
+world_layout_command	0xf9602	int	0xffffffff	-1
+world_layout_command	0xf9603	int	0xffffffff	-1
+world_layout_command	0xf9700	int	0x1	1
+world_layout_command	0xf9701	int	0x0	0
+world_layout_command	0xf9702	int	0x1	1
+world_layout_command	0xf9703	int	0x1	1
+world_layout_command	0xf9704	int	0x0	0
+world_layout_command	0xf9705	int	0x1	1
+world_layout_command	0xf9706	int	0x0	0
+world_layout_command	0xf9800	int	0x0	0
+world_layout_command	0xf9900	int	0x0	0
+world_layout_command	0xfa000	int	0xffffffff	-1
+world_layout_command	0xfb000	int	0x0	0
+world_layout_command	0xfb001	int	0x0	0
+world_layout_command	0xfb002	int	0x0	0
+world_layout_command	0xfb003	int	0x0	0
+world_layout_group	0xd0002	int	0xc8	200
+world_layout_group	0xd0003	int	0xc8	200
+world_layout_group	0xd0004	int	0x4	4
+world_layout_group	0xd0005	int	0x4	4
+world_layout_group	0xd000f	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0010	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0012	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0013	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0019	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0020	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0026	int	0x0	0
+world_layout_group	0xd0027	int	0x0	0
+world_layout_group	0xd0029	int	0x0	0
+world_layout_group	0xd0030	int	0x0	0
+world_layout_group	0xd0042	int	0x1	1
+world_layout_group	0xd0050	int	0x0	0
+world_layout_group	0xd0051	int	0x0	0
+world_layout_group	0xd0056	int	0x0	0
+world_layout_group	0xd0057	int	0x0	0
+world_layout_group	0xd0060	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0061	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0062	int	TAG_VALUE_NULL_SNO	empty name (no file, -1)
+world_layout_group	0xd0063	int	0x0	0
+world_tile	0xf0001	int	0x0	0
+world_tile	0xf0002	int	0x0	0
+world_tile	0xf0003	int	0x0	0
+world_tile	0xf0004	int	0x0	0
+world_tile	0xf0005	int	0x0	0
+world_tile	0xf0006	int	0x0	0
+world_tile	0xf0007	int	0x0	0
+world_tile	0xf0008	int	0x0	0
+world_tile	0xf0009	int	0x0	0
+world_tile	0xf000a	int	0x0	0
+world_tile	0xf000b	int	0x0	0
+world_tile	0xf000c	int	0x0	0
+world_tile	0xf000d	int	0x0	0
+world_tile	0xf000e	int	0x0	0
+world_tile	0xf000f	int	0x0	0
+world_tile	0xf0010	int	0x0	0
+world_tile	0xf0011	int	0x0	0
+world_tile	0xf0100	int	0xffffffff	-1
+world_tile	0xf0101	int	0xffffffff	-1
+world_tile	0xf0102	int	0x1	1
+world_tile	0xf0103	int	0x1	1
+world_tile	0xf0200	int	0xffffffff	-1
+world_tile	0xf0201	int	0x0	0
+world_tile	0xf0202	int	0x0	0
+world_tile	0xf0300	int	0xffffffff	-1
+world_tile	0xf0301	int	0xffffffff	-1
+world_tile	0xf0400	int	0x0	0

@@ -153,18 +153,20 @@ def _read_formula(view: ByteView, pos: int, end: int) -> tuple[Formula, int]:
 
 def read_tag_map(
     view: ByteView, pair: Pair, name: str = "", position: int = 0, lenient: bool = False,
+    type_7: bool = False,
 ) -> TagMap:
     """Read a map bounded by its pair. Its declared size must be consumed exactly.
 
-    ``lenient`` is for marker maps: type 7 is then a 4-byte value, and a record that cannot be
-    read ends the list in ``error`` without hiding the records before it.
+    ``type_7`` accepts type 7 as a 4-byte value, as every map but a ``.pow`` map may hold it.
+    ``lenient`` is for marker maps: it implies ``type_7``, and a record that cannot be read
+    ends the list in ``error`` without hiding the records before it.
     """
     result = TagMap(name, pair)
     if pair.size == 0:
         return result
     result.raw = view.pair_data(pair, position, f"tag map {name}")
     if not lenient:
-        _read_records(view, pair, name, result, False)
+        _read_records(view, pair, name, result, type_7)
         return result
     try:
         _read_records(view, pair, name, result, True)
@@ -173,7 +175,7 @@ def read_tag_map(
     return result
 
 
-def _read_records(view: ByteView, pair: Pair, name: str, result: TagMap, lenient: bool) -> None:
+def _read_records(view: ByteView, pair: Pair, name: str, result: TagMap, type_7: bool) -> None:
     pos = pair.file_offset
     end = pos + pair.size
     if pair.size < 4:
@@ -189,7 +191,7 @@ def _read_records(view: ByteView, pair: Pair, name: str, result: TagMap, lenient
         pos += 8
         if kind == TAG_FORMULA:
             value, pos = _read_formula(view, pos, end)
-        elif kind in _WIDE_4 or (lenient and kind == TAG_START_LOCATION):
+        elif kind in _WIDE_4 or (type_7 and kind == TAG_START_LOCATION):
             if pos + 4 > end:
                 raise FormatError(f"record overruns tag map {name}", start)
             value = view.f32(pos) if kind == TAG_FLOAT else view.i32(pos)

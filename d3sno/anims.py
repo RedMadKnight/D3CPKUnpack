@@ -30,11 +30,13 @@ class AnimSet:
 def parse_anim_set(data: bytes, build: str | None = None) -> AnimSet:
     header = parse_header(data, build)
     view = ByteView(data, header.order)
-    default = read_tag_map(view, view.pair(0x20), "default", 0x20)
+    default = read_tag_map(view, view.pair(0x20), "default", 0x20, type_7=True)
     weapons = []
     for i in range(_WEAPON_SLOTS[header.build]):
         position = 0x30 + 16 * i
-        weapons.append(read_tag_map(view, view.pair(position), f"weapon{i}", position))
+        weapons.append(
+            read_tag_map(view, view.pair(position), f"weapon{i}", position, type_7=True),
+        )
     result = AnimSet(header, header.build, view.i32(0x1C), default, weapons)
     for tag_map in (default, *weapons):
         if any(record.type != TAG_SNO for record in tag_map.records):

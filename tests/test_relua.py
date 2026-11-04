@@ -49,6 +49,16 @@ class ReluaTests(unittest.TestCase):
         self.assertIn(".m", text)
         self.assertRegex(text, r"local v\w* = v\w*\.k")
 
+    def test_value_read_twice_is_a_local(self):
+        # local x = f(); x = x * x
+        text = source([
+            abx("GETGLOBAL", 0, 0),
+            abc("CALL", 0, 1, 2),
+            abc("MUL", 0, 0, 0),
+            abc("RETURN", 0, 1),
+        ], ("f",))
+        self.assertRegex(text, r"local (v\w*) = f\(\)\n\1 = \1 \* \1")
+
     def test_no_goto_in_a_loop(self):
         text = source([
             abc("LOADBOOL", 0, 1, 0),

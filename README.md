@@ -1168,8 +1168,9 @@ script defines as globals, such as `OnStart` and `OnContact0`.
   Lua 5.1 to the same instructions, registers, jumps and constant values as the
   original, ignoring the order of the constant table and stack size. Where the
   bytecode cannot tell two forms apart, one is chosen: `if a then if b` prints as
-  `if a and b`. On build B, 3,909 of 3,913 distinct chunks match in the same way. The
-  other four differ in a jump or an extra `LOADNIL`. The scripts have only been
+  `if a and b`. On build B, 3,910 of 3,913 distinct chunks match in the same way. The
+  other three differ in a jump or an extra `LOADNIL`: in two of them a local has no
+  `LOADNIL` where the reference compiler always writes one. The scripts have only been
   compiled, never executed.
 
 ### 14.3 Parameter tagging
@@ -1296,7 +1297,7 @@ this document:
 | `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Run on `Common.cpk`: all 28,394 files extracted |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
 | `lua51.py` / `luadec.py` / `relua.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompilers to pseudo-Lua and to compilable source, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 4,755 chunks of the corpus (§14.2) |
-| `d3sno/` | Library and command line for both builds: archives, index files, powers and formulas, meshes with OBJ and glTF export, animation, navigation, textures to PNG, text, balance tables, worlds, collision, materials, sound, and writers for `.stl`, `.pow`, `.scr` and `.tex` | `*.cpk` and files inside them | Reads all 54 archives of both builds; `.stl`, `.pow`, `.scr`, `.tex` write back byte-identical |
+| `d3sno/` | Library and command line for both builds: archives, index files, powers and formulas, meshes with OBJ and glTF export, animation, navigation, textures to PNG, text, balance tables, worlds, collision, materials, sound, gameplay records (actors, monsters, quests, conversations, scenes, recipes), shaders, FSB5 headers, and writers for `.stl`, `.pow`, `.scr`, `.tex`, `.gam` and in-place `.app` edits | `*.cpk` and files inside them | Reads all 54 archives of both builds; `.stl`, `.pow`, `.scr`, `.tex` write back byte-identical; `.gam` byte-identical for 36 of 54 (Switch) and 22 of 41 (PS3) files, the rest refused |
 | `coretoc_parser.py` | Global asset index parser, both forms | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser, both byte orders | `Prefetch.dat` + `CoreTOC.dat` | Every byte accounted for on both builds |
 

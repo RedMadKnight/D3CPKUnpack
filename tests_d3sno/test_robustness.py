@@ -228,6 +228,37 @@ class Fuzz(unittest.TestCase):
 
         self.survive(use, data, 57)
 
+    def test_records(self):
+        from d3sno import records
+        word = B.display_time(19, 7, 2, 120)
+        tree = {"root_nodes": [{"node_kind": 3, "line_uid": 1, "children": [
+            {"node_kind": 5, "display_times": [word]}]}]}
+        for build in ("ps3", "switch"):
+            self.survive(lambda d: records.parse_record_file(d, "cnv"), B.build_record(build, "conversation", tree), 60)
+            sample = B.build_record(build, "actor", {"events": [{}], "voice_role": "v"})
+            self.survive(lambda d: records.parse_record_file(d, "acr"), sample, 61)
+
+    def test_presentation(self):
+        from d3sno import presentation
+        data = B.proto(2, B.proto(1, 5)) + B.proto(4, b"x")
+        self.survive(presentation.parse_achievements, data, 62)
+        packets = struct.pack("<H", 3) + b"abc"
+        sample = B.fsb5(15, packets, chunks=[(3, struct.pack("<II", 1, 2))])
+        self.survive(lambda d: presentation.parse_fsb5(d).packets(), sample, 63)
+        self.survive(lambda d: presentation.parse_texture_animation(d, "switch"),
+                     struct.pack("<I4f", 2, 1, 1, 1, 1), 64)
+
+    def test_balance_writer(self):
+        from d3sno import balance, write
+        rows = [{"name": "Axe", "formulas": {8: ("1", B.Code("<").f(1).end())}}, {"name": "B", "formulas": {8: None}}]
+        sample = B.build_gam_layout("switch", 11, 0xB8, 32, rows)
+
+        def use(data):
+            parsed = balance.parse_balance(data)
+            write.write(parsed)
+
+        self.survive(use, sample, 65)
+
     def test_lua(self):
         inner = {"lines": (1, 2)}
         for build in ("ps3", "switch"):

@@ -15,8 +15,8 @@ GBID_ALL = 109305
 FORMULA_TYPE = 36
 FORMULA_NAME_SIZE = 1024
 FORMULA_COLUMNS = 76
+FIXED_END = {"switch": 0x248, "ps3": 0x3E8}
 _FIRST_SLOT = {"switch": 0x28, "ps3": 0x228}
-_FIXED_END = {"switch": 0x248, "ps3": 0x3E8}
 _SLOT_SIZE = 16
 MONSTER_LEVEL_TYPE = 5
 _MONSTER_HEALTH_AT = 0x14
@@ -101,6 +101,8 @@ class BalanceFile:
     rows: list[BalanceRow]
     raw_slots: dict[int, bytes] = field(default_factory=dict)  # by file position
     formula_rows: list[FormulaRow] = field(default_factory=list)
+    source: bytes = b""
+    slot: int | None = None
 
 
 def _row_name(view: ByteView, row: bytes) -> str | None:
@@ -123,7 +125,7 @@ def _read_formula_row(raw: bytes, order: str) -> FormulaRow:
 def _other_slots(view: ByteView, build: str, skip: int | None) -> dict[int, bytes]:
     """Filled slots outside the selected table. Stale pairs that do not fit are left out."""
     found = {}
-    for position in range(_FIRST_SLOT[build], _FIXED_END[build], _SLOT_SIZE):
+    for position in range(_FIRST_SLOT[build], FIXED_END[build], _SLOT_SIZE):
         pair = view.pair(position)
         if position == skip or pair.size == 0:
             continue
@@ -136,7 +138,7 @@ def parse_balance(data: bytes, build: str | None = None) -> BalanceFile:
     header = parse_header(data, build)
     resolved = header.build
     view = ByteView(data, header.order)
-    view.need(0, _FIXED_END[resolved], "fixed part")
+    view.need(0, FIXED_END[resolved], "fixed part")
     kind = view.i32(0x1C, "type word")
     known = TABLES.get(kind)
     if known is None:
@@ -155,6 +157,7 @@ def parse_balance(data: bytes, build: str | None = None) -> BalanceFile:
     parts = [raw[i:i + row_size] for i in range(0, len(raw), row_size)]
     result = BalanceFile(
         header, resolved, kind, name, row_size, [], _other_slots(view, resolved, slot),
+        source=bytes(data), slot=slot,
     )
     if kind == FORMULA_TYPE:
         result.formula_rows = [_read_formula_row(part, view.order) for part in parts]

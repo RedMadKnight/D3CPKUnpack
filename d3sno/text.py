@@ -150,7 +150,8 @@ def parse_declension(data: bytes) -> dict[tuple[str, int], str]:
         if len(columns) != 3:
             raise FormatError(f"line {number + 1} has {len(columns)} columns", number)
         try:
-            forms[(columns[0], int(columns[1]))] = columns[2]
+            # Only the first character of the case number is read.
+            forms[(columns[0], int(columns[1][:1]))] = columns[2]
         except ValueError:
             raise FormatError(f"line {number + 1}: bad case index", number) from None
     return forms
