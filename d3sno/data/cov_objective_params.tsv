@@ -1,0 +1,21 @@
+record	kind	kind_name	instances_nx	target_1_group	target_1_meaning	text_1	row_param_1	params_used	status
+objective	0	Had Conversation	227	12	conversation file	no	no	param_1,param_2 in 48	SUPPORTED
+objective	1	Possess Item	16	-	-	no	item row id	param_1,param_2 in 16	SUPPORTED
+objective	2	Kill Monster	440	1	actor file	no	no	param_2 in 440 (count), param_1 in 105	SUPPORTED
+objective	3	Interact With Actor	128	1	actor file	no	no	param_2 in 128, param_1 in 66	SUPPORTED
+objective	4	Enter Level Area	1525	22	level area file	no	no	param_1,param_2 in 919	SUPPORTED
+objective	5	Enter Scene	6	33	scene file	no	no	param_1,param_2 in 2	SUPPORTED
+objective	6	Enter World	286	48	world file	no	no	param_1,param_2 in 275	SUPPORTED
+objective	7	Enter Trigger	187	-	-	trigger name	no	param_1,param_2 in 68	SUPPORTED
+objective	8	Complete Quest	315	31	quest file	no	no	param_1,param_2 in 50	SUPPORTED
+objective	10	Timed Event Expired	66	55	timed event file	no	no	param_1,param_2 in 29	SUPPORTED
+objective	11	Kill Group	231	-	-	group name	no	param_1,param_2 in 153	SUPPORTED
+objective	12	Game Flag Set	486	-	-	game flag name	no	param_1,param_2 in 12	SUPPORTED
+objective	13	Event Received	1221	-	-	event name	no	param_2 in 1221, param_1 in 410	SUPPORTED
+objective	14	Kill Monster From Group	268	-	-	group name	no	param_2 in 268, param_1 in 25	SUPPORTED
+objective	17	Kill Any Monster In Level Area	275	22	level area file	no	no	param_2 in 275	SUPPORTED
+objective	18	Kill All Monsters In World	34	48	world file	no	no	param_1 in 25, param_2 in 34	SUPPORTED
+failure_condition	0	Monster Died	1	1	actor file	no	no	param_2	SUPPORTED
+failure_condition	2	Actor Died	2	1	actor file	no	no	param_1,param_2	SUPPORTED
+failure_condition	5	Game Flag Set	1	-	-	game flag name	no	param_1,param_2	SUPPORTED
+failure_condition	7	Event Received	63	-	-	event name	no	param_1,param_2	SUPPORTED

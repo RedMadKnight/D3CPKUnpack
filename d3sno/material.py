@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .binary import ByteView, FormatError, Pair
-from .sno import SnoHeader, parse_header
+from .binary import ByBuild, ByteView, FormatError, Pair
+from .sno import SnoHeader, parse_header, resolve_build
 
 SLOT_DIFFUSE = 1
 SLOT_LIGHTMAP = 2
@@ -13,19 +13,19 @@ SLOT_NAMES = {
     1: "diffuse", 2: "lightmap", 3: "bump", 4: "environment", 5: "gloss", 6: "glow",
     7: "reflection", 8: "irradiance", 9: "refraction", 10: "distortion", 19: "alpha",
 }
-_BLOCK_SIZE = {"switch": 104, "ps3": 72}
-_FIXED = {"switch": 0x88, "ps3": 0x68}
-_TEXTURE_LIST_AT = {"switch": 0x4C, "ps3": 0x2C}
-_TEXTURE_SIZE = {"switch": 32, "ps3": 24}
-_TEXTURE_FIELDS = {"switch": (0x08, 0x18), "ps3": (0x04, 0x14)}  # animation pair, handle
+_BLOCK_SIZE = ByBuild({"switch": 104, "ps3": 72})
+_FIXED = ByBuild({"switch": 0x88, "ps3": 0x68})
+_TEXTURE_LIST_AT = ByBuild({"switch": 0x4C, "ps3": 0x2C})
+_TEXTURE_SIZE = ByBuild({"switch": 32, "ps3": 24})
+_TEXTURE_FIELDS = ByBuild({"switch": (0x08, 0x18), "ps3": (0x04, 0x14)})  # animation pair, handle
 _BLOCK_AT = 0x20
 
 # File positions in an .app: look count, material count, materials pair, looks pair.
-_APP_FIELDS = {"switch": (0x178, 0x17C, 0x180, 0x190), "ps3": (0x188, 0x18C, 0x190, 0x1A0)}
-_MATERIAL_RECORD = {"switch": 24, "ps3": 20}
-_LOOK_RECORD = {"switch": 248, "ps3": 184}
+_APP_FIELDS = ByBuild({"switch": (0x178, 0x17C, 0x180, 0x190), "ps3": (0x188, 0x18C, 0x190, 0x1A0)})
+_MATERIAL_RECORD = ByBuild({"switch": 24, "ps3": 20})
+_LOOK_RECORD = ByBuild({"switch": 248, "ps3": 184})
 _LOOK_BLOCK_AT = 0x18
-_LOOK_HANDLE_AT = {"switch": 0x80, "ps3": 0x60}
+_LOOK_HANDLE_AT = ByBuild({"switch": 0x80, "ps3": 0x60})
 
 
 @dataclass(frozen=True)
@@ -66,7 +66,7 @@ def read_material_block(view: ByteView, position: int, build: str) -> MaterialBl
     size = _BLOCK_SIZE[build]
     raw = view.take(position, size, "material block")
     r = ByteView(raw, view.order)
-    if build == "switch":
+    if build != "ps3":
         colours = [Colour(r.f32s(0x04 + i * 16, 4), None) for i in range(4)]
         tail = 0x44
     else:
@@ -105,12 +105,13 @@ class MaterialFile:
 
 def parse_material(data: bytes, build: str | None = None) -> MaterialFile:
     header = parse_header(data, build)
+    resolved = resolve_build("mat", header, build)
     view = ByteView(data, header.order)
-    view.need(0, 0x10 + _FIXED[header.build], "material fixed part")
+    view.need(0, 0x10 + _FIXED[resolved], "material fixed part")
     tags = view.pair_data(view.pair(0x20), 0x20, "tag map")
     return MaterialFile(
-        header, header.build, view.u32(0x1C), tags,
-        read_material_block(view, 0x10 + _BLOCK_AT, header.build),
+        header, resolved, view.u32(0x1C), tags,
+        read_material_block(view, 0x10 + _BLOCK_AT, resolved),
     )
 
 

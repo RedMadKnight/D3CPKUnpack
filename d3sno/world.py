@@ -5,7 +5,7 @@ from __future__ import annotations
 import struct
 from dataclasses import dataclass, field
 
-from .binary import ByteView, FormatError, Pair
+from .binary import ByBuild, ByteView, FormatError, Pair
 from .power import TAG_FLOAT, TagMap, read_tag_map
 from .sno import SnoHeader, parse_header, resolve_build
 from .transform import Quaternion, Vector, quat_multiply, rotate
@@ -21,10 +21,10 @@ SCENE_GROUP = 33
 TYPE_ACTOR = 0
 TYPE_SUB_SCENE = 16
 ACTOR_SCALE_FLOOR = 1e-6
-_WORLD_FIXED = {"switch": 0xC0, "ps3": 0x100}
-_BLOCK_SIZE = {"switch": 144, "ps3": 112}
-_ENTRY_SIZE = {"switch": 256, "ps3": 240}
-_TILE_SIZE = {"switch": 80, "ps3": 72}
+_WORLD_FIXED = ByBuild({"switch": 0xC0, "ps3": 0x100})
+_BLOCK_SIZE = ByBuild({"switch": 144, "ps3": 112})
+_ENTRY_SIZE = ByBuild({"switch": 256, "ps3": 240})
+_TILE_SIZE = ByBuild({"switch": 80, "ps3": 72})
 _GENERATOR_SIZE = 120
 _LIST_SIZE = 24
 
@@ -72,6 +72,7 @@ class SceneInfo:
     xp_density: float | None
     appearance: int
     collision_mesh: int
+    warnings: list[str] = field(default_factory=list)
 
 
 def parse_scene_info(data: bytes, build: str | None = None, strict: bool = False) -> SceneInfo:
@@ -79,14 +80,20 @@ def parse_scene_info(data: bytes, build: str | None = None, strict: bool = False
     resolved = resolve_build("scn", header, build, strict)
     view = ByteView(data, header.order)
     view.need(0, _body(SCENE_FIXED), "scene fixed part")
+    warnings = []
     if resolved == "switch":
         xp, appearance, collision = view.f32(_body(0x208)), view.i32(_body(0x20C)), view.i32(_body(0x210))
-    else:
+    else:  # ps3, and x360 (X4: 8 zero bytes at body 0x208, the handles at the ps3 positions)
         xp, appearance, collision = None, view.i32(_body(0x210)), view.i32(_body(0x214))
+        if resolved == "x360" and any(view.take(_body(0x208), 8)):
+            warnings.append("x360 scene: body 0x208..0x20F is not zero")
+    if strict and warnings:
+        raise FormatError(warnings[0], _body(0x208))
     return SceneInfo(
         header, resolved, _bounds(view, 0x10), _bounds(view, 0x28),
         _u32_list(view, 0xA0, "exclusions"), _u32_list(view, 0xE0, "inclusions"),
         _u32_list(view, 0x120, "marker sets"), view.u32(_body(0x160)), xp, appearance, collision,
+        warnings,
     )
 
 
@@ -191,7 +198,7 @@ def parse_marker_set(data: bytes, build: str | None = None) -> MarkerSet:
         raise FormatError(f"special index size {special_pair.size}", _body(0xB4))
     special_raw = view.pair_data(special_pair, _body(0xB4), "special indices")
     return MarkerSet(
-        header, header.build, markers,
+        header, resolve_build("mrk", header, build), markers,
         list(struct.iter_unpack(view.order + "3f", circles_raw)), _bounds(view, 0x90),
         view.u32(_body(0xA8)), view.i32(_body(0xAC)),
         list(ByteView(special_raw, view.order).unpack(f"{special_count}H", 0)),
@@ -266,7 +273,7 @@ def _read_entries(view: ByteView, record: ByteView, build: str, position: int) -
         raise FormatError(f"scene chunk size {pair.size} for {count} entries", position)
     raw = view.pair_data(pair, position, "scene chunk")
     entries = []
-    cluster_at = 0xAC if build == "switch" else 0x9C
+    cluster_at = 0xAC if build != "ps3" else 0x9C
     for i in range(count):
         e = ByteView(raw[i * size:(i + 1) * size], view.order)
         entries.append(SceneEntry(
@@ -314,7 +321,7 @@ def _read_server(view: ByteView, pair: Pair, build: str, warnings: list[str]) ->
     ]
     if generators and any(scene_lists):
         warnings.append("world has both scene lists and generator data")
-    script_at, seed_at = (0x74, 0x78) if build == "switch" else (0x68, 0x6C)
+    script_at, seed_at = (0x74, 0x78) if build != "ps3" else (0x68, 0x6C)
     return ServerBlock(
         generators, scene_lists, r.i32(0x38), r.i32(0x40),
         view.pair_data(r.pair(0x50), pair.file_offset + 0x50, "clusters"), r.unpack("4i", 0x58),
@@ -324,11 +331,11 @@ def _read_server(view: ByteView, pair: Pair, build: str, warnings: list[str]) ->
 
 def parse_world(data: bytes, build: str | None = None, strict: bool = False) -> WorldFile:
     header = parse_header(data, build)
-    resolved = header.build
+    resolved = resolve_build("wrl", header, build)
     view = ByteView(data, header.order)
     view.need(0, _body(_WORLD_FIXED[resolved]), "world fixed part")
     skybox, music, ambient, reverb, weather = (
-        (0x84, 0x88, 0x98, 0x9C, 0xA0) if resolved == "switch" else (0xD4, 0xD8, 0xDC, 0xE0, 0xE4)
+        (0x84, 0x88, 0x98, 0x9C, 0xA0) if resolved != "ps3" else (0xD4, 0xD8, 0xDC, 0xE0, 0xE4)
     )
     warnings: list[str] = []
     pair = view.pair(_body(0x10), "server block pair")
@@ -336,7 +343,7 @@ def parse_world(data: bytes, build: str | None = None, strict: bool = False) -> 
     skybox_word = view.i32(_body(skybox))
     world = WorldFile(
         header, resolved, view.u32(_body(0x0C)), server, _u32_list(view, 0x20, "world marker sets"),
-        skybox_word if resolved == "switch" else None, skybox_word,
+        skybox_word if resolved != "ps3" else None, skybox_word,
         view.i32(_body(music)), view.i32(_body(ambient)),
         view.i32(_body(reverb)), view.i32(_body(weather)), warnings,
     )

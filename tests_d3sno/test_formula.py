@@ -67,7 +67,9 @@ class Decode(unittest.TestCase):
         self.assertEqual([i.name for i in ins], ["OP18"])
 
     def test_opcode_15_is_listed(self):
-        self.assertEqual(F.decode(bytes((15, 0, 0, 0)), "ps3")[0].name, "OP15")
+        self.assertEqual(F.decode(bytes((15, 0, 0, 0)), "ps3")[0].name, "POW")
+        names = [F.decode(bytes((op, 0, 0, 0)), "ps3")[0].name for op in (2, 3)]
+        self.assertEqual(names, ["PAREN", "COMMA"])
 
     def test_truncated_operand(self):
         ins = F.decode(bytes((5, 0, 0, 0)) + bytes(12), "ps3")
@@ -243,8 +245,18 @@ class Failures(unittest.TestCase):
     def test_no_end(self):
         self.check_failed(bytes(code().f(1).out))
 
-    def test_empty_code(self):
-        self.check_failed(b"")
+    def test_empty_code_is_no_formula(self):
+        ctx = F.EvalContext()
+        self.assertEqual(run(b"", ctx=ctx), 0)
+        self.assertEqual(ctx.warnings, [])
+        self.assertEqual(run(b"", strict=True), 0)
+        self.assertTrue(F.stream_ends_with_end(b"", "switch"))
+
+    def test_stream_check(self):
+        self.assertTrue(F.stream_ends_with_end(code().f(1).end(), "switch"))
+        self.assertFalse(F.stream_ends_with_end(bytes(code().f(1).out), "switch"))
+        self.assertFalse(F.stream_ends_with_end(code().end() + bytes(4), "switch"))
+        self.assertFalse(F.stream_ends_with_end(code().end() + b"\0", "ps3"))
 
     def test_operand_past_the_code(self):
         self.check_failed(bytes((6, 0, 0, 0)))

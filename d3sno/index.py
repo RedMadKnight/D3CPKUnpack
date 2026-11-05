@@ -16,18 +16,46 @@ MANIFEST_MAGIC = 0xAABB0004
 SPRITE_MAGIC = 0xBBCC0005
 
 
+def group_name(group: int) -> str | None:
+    """The ``sno_group`` constant of a group id."""
+    from .enums import enum_name
+
+    return enum_name("sno_group", group)
+
+
 @dataclass(frozen=True)
 class TocEntry:
     group: int
     handle: int
     name: str
 
+    @property
+    def group_name(self) -> str | None:
+        return group_name(self.group)
+
 
 @dataclass
 class CoreToc:
     build: str
     entries: list[TocEntry]
-    unknown: int | None = None  # switch: the open trailing word of the header
+    unknown: int | None = None  # switch: the last header word, the highest handle
+    name_padding_problems: int = 0  # ps3: names with non-zero bytes after the NUL
+    totals: tuple[int, ...] | None = None  # x360: distinct handles per group over all six TOC files (X9)
+
+    @property
+    def max_handle(self) -> int | None:
+        return self.unknown
+
+    def problems(self) -> list[str]:
+        found = []
+        # x360: the header word is the highest handle over all six TOC files, not this one's (X9).
+        if self.unknown is not None and self.entries and self.build != "x360":
+            highest = max(e.handle for e in self.entries)
+            if highest != self.unknown:
+                found.append(f"header word {self.unknown}, highest handle {highest}")
+        if self.name_padding_problems:
+            found.append(f"{self.name_padding_problems} names have bytes after the NUL")
+        return found
 
     def keys(self) -> set[tuple[int, int]]:
         return {(e.group, e.handle) for e in self.entries}
@@ -40,12 +68,22 @@ def _is_ps3_toc(data: bytes) -> bool:
 
 
 def parse_core_toc(data: bytes, build: str | None = None) -> CoreToc:
-    """Read either form. Without ``build`` the file size decides."""
+    """Read any form. Without ``build`` the file size decides ps3; otherwise the Switch form is
+    tried, then the x360 form (``CommonTOC.dat``, ``Act1TOC.dat`` .. ``Act5TOC.dat``, X9)."""
     if build is None:
-        build = "ps3" if _is_ps3_toc(data) else "switch"
-    else:
-        build_order(build)
-    return _parse_toc_ps3(data) if build == "ps3" else _parse_toc_switch(data)
+        if _is_ps3_toc(data):
+            return _parse_toc_ps3(data)
+        try:
+            return _parse_toc_switch(data)
+        except FormatError as exc:
+            try:
+                return _parse_toc_x360(data)
+            except FormatError:
+                raise exc from None
+    build_order(build)
+    if build == "ps3":
+        return _parse_toc_ps3(data)
+    return _parse_toc_x360(data) if build == "x360" else _parse_toc_switch(data)
 
 
 def _parse_toc_ps3(data: bytes) -> CoreToc:
@@ -54,15 +92,27 @@ def _parse_toc_ps3(data: bytes) -> CoreToc:
     if len(data) != 4 + count * 136:
         raise FormatError(f"CoreTOC size {len(data)} does not fit count {count}", 0)
     entries = []
+    dirty = 0
     for i in range(count):
         pos = 4 + i * 136
         group, handle = view.unpack("II", pos)
+        name = view.take(pos + 8, 128)
+        end = name.find(0)
+        if end >= 0 and any(name[end:]):
+            dirty += 1
         entries.append(TocEntry(group, handle, view.cstring(pos + 8, 128)))
-    return CoreToc("ps3", entries)
+    return CoreToc("ps3", entries, None, dirty)
 
 
-def _parse_toc_switch(data: bytes) -> CoreToc:
-    view = ByteView(data, "<")
+def _parse_toc_x360(data: bytes) -> CoreToc:
+    """X9: the Switch layout in big-endian. The third array holds per-group totals over all six
+    files (not this file's counts) and the last word the highest handle over all six."""
+    return _parse_toc_switch(data, ">")
+
+
+def _parse_toc_switch(data: bytes, order: str = "<") -> CoreToc:
+    x360 = order == ">"
+    view = ByteView(data, order)
     view.need(0, SWITCH_TOC_HEADER, "CoreTOC header")
     counts = view.unpack(f"{GROUP_SLOTS}i", 0)
     offsets = view.unpack(f"{GROUP_SLOTS}i", GROUP_SLOTS * 4)
@@ -70,7 +120,7 @@ def _parse_toc_switch(data: bytes) -> CoreToc:
     unknown = view.u32(GROUP_SLOTS * 12)
     entries = []
     for g in range(GROUP_SLOTS):
-        if counts[g] != counts2[g]:
+        if counts[g] != counts2[g] and not x360:
             raise FormatError(f"group {g}: count {counts[g]} != count2 {counts2[g]}", g * 4)
         if counts[g] < 0:
             raise FormatError(f"group {g}: negative count", g * 4)
@@ -79,6 +129,8 @@ def _parse_toc_switch(data: bytes) -> CoreToc:
         if offsets[g] < 0:
             raise FormatError(f"group {g}: negative offset", (GROUP_SLOTS + g) * 4)
         base = SWITCH_TOC_HEADER + offsets[g]
+        if x360 and offsets[g] % 4:
+            raise FormatError(f"group {g}: block offset {offsets[g]} is not 4-aligned", (GROUP_SLOTS + g) * 4)
         names_base = base + counts[g] * 12
         view.need(base, counts[g] * 12, "CoreTOC records")
         for i in range(counts[g]):
@@ -91,6 +143,8 @@ def _parse_toc_switch(data: bytes) -> CoreToc:
             if start >= len(data) or end < 0:
                 raise FormatError("CoreTOC name has no terminator", pos + 8)
             entries.append(TocEntry(group, handle, bytes(data[start:end]).decode("latin-1")))
+    if x360:
+        return CoreToc("x360", entries, unknown, totals=tuple(counts2))
     return CoreToc("switch", entries, unknown)
 
 
@@ -178,7 +232,13 @@ class DescriptorSize:
 
 
 def parse_descriptor_sizes(data: bytes) -> list[DescriptorSize]:
-    view = ByteView(data, "<")
+    """Read ``ComplexTypeDescriptorSizes.dat``. The magic gives the byte order (x360: big, X9)."""
+    if len(data) < 4:
+        raise FormatError("descriptor file too short", 0)
+    if bytes(data[:4]) == DESCRIPTOR_MAGIC.to_bytes(4, "big"):
+        view = ByteView(data, ">")
+    else:
+        view = ByteView(data, "<")
     magic = view.u32(0, "descriptor magic")
     if magic != DESCRIPTOR_MAGIC:
         raise FormatError(f"bad descriptor magic 0x{magic:08X}", 0)
@@ -191,6 +251,32 @@ def parse_descriptor_sizes(data: bytes) -> list[DescriptorSize]:
         size = view.u32(pos + 64)
         entries.append(DescriptorSize(name, size, view.unpack("256I", pos + 68)))
     return entries
+
+
+def toc_totals_problems(tocs: list[CoreToc]) -> list[str]:
+    """X9 across the six x360 TOC files: the totals and the highest-handle word are the same
+    in every file, the totals equal the distinct (group, handle) pairs per group over all
+    files, and the word equals the highest handle over all files."""
+    problems = []
+    if not tocs:
+        return problems
+    first = tocs[0]
+    for i, toc in enumerate(tocs[1:], 1):
+        if toc.totals != first.totals:
+            problems.append(f"file {i}: totals differ from file 0")
+        if toc.unknown != first.unknown:
+            problems.append(f"file {i}: highest-handle word differs from file 0")
+    keys = set().union(*(toc.keys() for toc in tocs))
+    per_group = [0] * GROUP_SLOTS
+    for group, _ in keys:
+        if 0 <= group < GROUP_SLOTS:
+            per_group[group] += 1
+    if first.totals is not None and tuple(per_group) != tuple(first.totals):
+        problems.append("totals do not equal the distinct handles per group")
+    highest = max((handle for _, handle in keys), default=None)
+    if highest is not None and first.unknown != highest:
+        problems.append(f"highest-handle word {first.unknown}, highest handle {highest}")
+    return problems
 
 
 def _magic_order(data: bytes, magic: int, what: str) -> ByteView:

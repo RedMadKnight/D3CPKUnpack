@@ -1,0 +1,1475 @@
+type	row	offset	field	field_type	element	count	sno_group	value_table
+1	ItemTypeDefinition	0x0	tHeader.serName_Console	SerializeData				
+1	ItemTypeDefinition	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+1	ItemTypeDefinition	0x10	tHeader.gbid	INT				
+1	ItemTypeDefinition	0x14	tHeader.dwPad	INT				
+1	ItemTypeDefinition	0x18	ParentType	GBID			1	
+1	ItemTypeDefinition	0x1c	LootLevelRange	INT				
+1	ItemTypeDefinition	0x20	ReqCrafterLevelForEnchant	INT				
+1	ItemTypeDefinition	0x24	MaxSockets	INT				
+1	ItemTypeDefinition	0x28	Usable	FLAG				
+1	ItemTypeDefinition	0x28	UsableHotbar	FLAG				
+1	ItemTypeDefinition	0x28	AlwaysMagic	FLAG				
+1	ItemTypeDefinition	0x28	Socketable	FLAG				
+1	ItemTypeDefinition	0x28	NeverMagic	FLAG				
+1	ItemTypeDefinition	0x28	EnchantIngredient	FLAG				
+1	ItemTypeDefinition	0x28	UsableBarbarian	FLAG				
+1	ItemTypeDefinition	0x28	UsableWizard	FLAG				
+1	ItemTypeDefinition	0x28	UsableWitchDoctor	FLAG				
+1	ItemTypeDefinition	0x28	UsableMonk	FLAG				
+1	ItemTypeDefinition	0x28	UsableDemonHunter	FLAG				
+1	ItemTypeDefinition	0x28	UsableCrusader	FLAG				
+1	ItemTypeDefinition	0x28	UsableNecromancer	FLAG				
+1	ItemTypeDefinition	0x28	UsableTemplar	FLAG				
+1	ItemTypeDefinition	0x28	UsableScoundrel	FLAG				
+1	ItemTypeDefinition	0x28	UsableEnchantress	FLAG				
+1	ItemTypeDefinition	0x2c	BodySlot1	ENUM				gBodySlots
+1	ItemTypeDefinition	0x30	BodySlot2	ENUM				gBodySlots
+1	ItemTypeDefinition	0x34	BodySlot3	ENUM				gBodySlots
+1	ItemTypeDefinition	0x38	BodySlot4	ENUM				gBodySlots
+1	ItemTypeDefinition	0x3c	InherentAffix1	GBID			8	
+1	ItemTypeDefinition	0x40	InherentAffix2	GBID			8	
+1	ItemTypeDefinition	0x44	InherentAffix3	GBID			8	
+1	ItemTypeDefinition	0x48	InherentAffixFamily1	GBID			47	
+1	ItemTypeDefinition	0x4c	Labels	FIXEDARRAY	INT	5		
+2	ItemDefinition	0x0	tHeader.serName_Console	SerializeData				
+2	ItemDefinition	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+2	ItemDefinition	0x10	tHeader.gbid	INT				
+2	ItemDefinition	0x14	tHeader.dwPad	INT				
+2	ItemDefinition	0x18	Actor	SNO			1	
+2	ItemDefinition	0x1c	ItemType1	GBID			1	
+2	ItemDefinition	0x20	Legendary	FLAG				
+2	ItemDefinition	0x20	Special	FLAG				
+2	ItemDefinition	0x20	Unique	FLAG				
+2	ItemDefinition	0x20	NeverMagic	FLAG				
+2	ItemDefinition	0x20	NoRandomDrop	FLAG				
+2	ItemDefinition	0x20	Dyeable	FLAG				
+2	ItemDefinition	0x20	CannotBeSold	FLAG				
+2	ItemDefinition	0x20	AccountBOP	FLAG				
+2	ItemDefinition	0x20	TestOnly	FLAG				
+2	ItemDefinition	0x20	Deprecated	FLAG				
+2	ItemDefinition	0x20	Irreplaceable	FLAG				
+2	ItemDefinition	0x20	SellsNormallyWhenBound	FLAG				
+2	ItemDefinition	0x20	CannotBeTransmogged	FLAG				
+2	ItemDefinition	0x20	CannotUnlockTransmog	FLAG				
+2	ItemDefinition	0x20	CannotExtractPower	FLAG				
+2	ItemDefinition	0x20	ForceExtractedPowerMinimum	FLAG				
+2	ItemDefinition	0x20	AccountWideTransmog	FLAG				
+2	ItemDefinition	0x20	NeverBOE	FLAG				
+2	ItemDefinition	0x20	CanSalvage	FLAG				
+2	ItemDefinition	0x20	HardcoreOnly	FLAG				
+2	ItemDefinition	0x20	X1Only	FLAG				
+2	ItemDefinition	0x20	TormentOnly	FLAG				
+2	ItemDefinition	0x20	ForceToLargeItem	FLAG				
+2	ItemDefinition	0x20	TieredLootRunOnly	FLAG				
+2	ItemDefinition	0x24	DyeType	INT				
+2	ItemDefinition	0x28	iLevel	INT				
+2	ItemDefinition	0x2c	MinAct	ENUM				gActs
+2	ItemDefinition	0x30	AffixLevel	INT				
+2	ItemDefinition	0x34	BonusAffixes	INT				
+2	ItemDefinition	0x38	BonusMajorAffixes	INT				
+2	ItemDefinition	0x3c	BonusMinorAffixes	INT				
+2	ItemDefinition	0x40	MaxSockets	INT				
+2	ItemDefinition	0x44	MaxStackSize	INT				
+2	ItemDefinition	0x48	Cost	INT				
+2	ItemDefinition	0x4c	CostAlt	INT				
+2	ItemDefinition	0x50	IdentifyCost	INT				
+2	ItemDefinition	0x54	SellOverrideCost	INT				
+2	ItemDefinition	0x58	RemoveGemCost	INT				
+2	ItemDefinition	0x5c	RequiredLevel	INT				
+2	ItemDefinition	0x60	CrafterRequiredLevel	INT				
+2	ItemDefinition	0x64	Base Durability	INT				
+2	ItemDefinition	0x68	DurabilityVariance	INT				
+2	ItemDefinition	0x6c	EnchantAffixCost	INT				
+2	ItemDefinition	0x70	EnchantAffixCostX1	INT				
+2	ItemDefinition	0x74	TransmogUnlockCrafterLevel	INT				
+2	ItemDefinition	0x78	TransmogCost	INT				
+2	ItemDefinition	0x7c	BaseItem	GBID			2	
+2	ItemDefinition	0x80	Set	GBID			33	
+2	ItemDefinition	0x84	RandomItemTreasureClass	SNO			52	
+2	ItemDefinition	0x88	SalvageTreasureClassNormal	SNO			52	
+2	ItemDefinition	0x8c	SalvageTreasureClassMagic	SNO			52	
+2	ItemDefinition	0x90	SalvageTreasureClassRare	SNO			52	
+2	ItemDefinition	0x94	RareNamePrefixStringList	SNO			42	
+2	ItemDefinition	0x98	RareNameSuffixStringList	SNO			42	
+2	ItemDefinition	0x9c	StartEffect	SNO			14	
+2	ItemDefinition	0xa0	EndEffect	SNO			14	
+2	ItemDefinition	0xa4	hPortraitBkgrnd	INT				
+2	ItemDefinition	0xa8	hPortraitHPBar	INT				
+2	ItemDefinition	0xac	hPortraitBanner	INT				
+2	ItemDefinition	0xb0	hPortraitFrame	INT				
+2	ItemDefinition	0xb4	Labels	FIXEDARRAY	INT	5		
+2	ItemDefinition	0xc8	dwPad	INT				
+2	ItemDefinition	0xcc	DamageMin	FLOAT				
+2	ItemDefinition	0xd0	DamageDelta	FLOAT				
+2	ItemDefinition	0xd4	DamageMinVariance	FLOAT				
+2	ItemDefinition	0xd8	DamageDeltaVariance	FLOAT				
+2	ItemDefinition	0xdc	AttacksPerSecond	FLOAT				
+2	ItemDefinition	0xe0	Armor	FLOAT				
+2	ItemDefinition	0xe4	ArmorDelta	FLOAT				
+2	ItemDefinition	0xe8	Skill0	SNO			29	
+2	ItemDefinition	0xec	Skill0Mod	INT				
+2	ItemDefinition	0xf0	Skill1	SNO			29	
+2	ItemDefinition	0xf4	Skill1Mod	INT				
+2	ItemDefinition	0xf8	Skill2	SNO			29	
+2	ItemDefinition	0xfc	Skill2Mod	INT				
+2	ItemDefinition	0x100	Skill3	SNO			29	
+2	ItemDefinition	0x104	Skill3Mod	INT				
+2	ItemDefinition	0x108	serAttributes_Console	SerializeData				
+2	ItemDefinition	0x110	ptAttributes	VARIABLEARRAY	AttributeSpecifier			
+2	ItemDefinition	0x118	DisplayedQualityLevel	ENUM				gItemQualityLevelNames
+2	ItemDefinition	0x11c	RecipeToGrant	FIXEDARRAY	GBID	10	32	
+2	ItemDefinition	0x144	TransmogsToGrant	FIXEDARRAY	GBID	8	2	
+2	ItemDefinition	0x164	LegendaryDropWeight	INT				
+2	ItemDefinition	0x168	DemonHunterDropWeight	INT				
+2	ItemDefinition	0x16c	BarbarianDropWeight	INT				
+2	ItemDefinition	0x170	WizardDropWeight	INT				
+2	ItemDefinition	0x174	WitchDoctorDropWeight	INT				
+2	ItemDefinition	0x178	MonkDropWeight	INT				
+2	ItemDefinition	0x17c	CrusaderDropWeight	INT				
+2	ItemDefinition	0x180	NecromancerDropWeight	INT				
+2	ItemDefinition	0x184	LegendaryRating	INT				
+2	ItemDefinition	0x188	LegendaryAffixFamily1	GBID			47	
+2	ItemDefinition	0x18c	LegendaryAffixFamily2	GBID			47	
+2	ItemDefinition	0x190	LegendaryAffixFamily3	GBID			47	
+2	ItemDefinition	0x194	LegendaryAffixFamily4	GBID			47	
+2	ItemDefinition	0x198	LegendaryAffixFamily5	GBID			47	
+2	ItemDefinition	0x19c	LegendaryAffixFamily6	GBID			47	
+2	ItemDefinition	0x1a0	LegendaryAffixFamilyLevel1	INT				
+2	ItemDefinition	0x1a4	LegendaryAffixFamilyLevel2	INT				
+2	ItemDefinition	0x1a8	LegendaryAffixFamilyLevel3	INT				
+2	ItemDefinition	0x1ac	LegendaryAffixFamilyLevel4	INT				
+2	ItemDefinition	0x1b0	LegendaryAffixFamilyLevel5	INT				
+2	ItemDefinition	0x1b4	LegendaryAffixFamilyLevel6	INT				
+2	ItemDefinition	0x1b8	UseLegendaryAllowedTypes1	INT				
+2	ItemDefinition	0x1bc	UseLegendaryAllowedTypes2	INT				
+2	ItemDefinition	0x1c0	UseLegendaryAllowedTypes3	INT				
+2	ItemDefinition	0x1c4	UseLegendaryAllowedTypes4	INT				
+2	ItemDefinition	0x1c8	UseLegendaryAllowedTypes5	INT				
+2	ItemDefinition	0x1cc	UseLegendaryAllowedTypes6	INT				
+2	ItemDefinition	0x1d0	LegendaryFamily	GBID				
+2	ItemDefinition	0x1d4	GemType	ENUM				gGemTypeNames
+2	ItemDefinition	0x1d8	CraftingTier	INT				
+2	ItemDefinition	0x1dc	CraftingQuality	ENUM				gCraftingQualityLevelNames
+2	ItemDefinition	0x1e0	snoActorPageOfFatePortal	SNO			1	
+2	ItemDefinition	0x1e4	snoWorldPageOfFate1	SNO			48	
+2	ItemDefinition	0x1e8	snoWorldPageOfFate2	SNO			48	
+2	ItemDefinition	0x1ec	snoLevelAreaPageOfFatePortal	SNO			22	
+2	ItemDefinition	0x1f0	nEnchantAffixIngredientsCount	INT				
+2		0x1f4	arEnchantAffixIngredients[0].gbidItem	GBID			2	
+2		0x1f8	arEnchantAffixIngredients[0].nQuantity	INT				
+2		0x1fc	arEnchantAffixIngredients[1].gbidItem	GBID			2	
+2		0x200	arEnchantAffixIngredients[1].nQuantity	INT				
+2		0x204	arEnchantAffixIngredients[2].gbidItem	GBID			2	
+2		0x208	arEnchantAffixIngredients[2].nQuantity	INT				
+2		0x20c	arEnchantAffixIngredients[3].gbidItem	GBID			2	
+2		0x210	arEnchantAffixIngredients[3].nQuantity	INT				
+2		0x214	arEnchantAffixIngredients[4].gbidItem	GBID			2	
+2		0x218	arEnchantAffixIngredients[4].nQuantity	INT				
+2		0x21c	arEnchantAffixIngredients[5].gbidItem	GBID			2	
+2		0x220	arEnchantAffixIngredients[5].nQuantity	INT				
+2	ItemDefinition	0x224	nEnchantAffixIngredientsCountX1	INT				
+2		0x228	arEnchantAffixIngredientsX1[0].gbidItem	GBID			2	
+2		0x22c	arEnchantAffixIngredientsX1[0].nQuantity	INT				
+2		0x230	arEnchantAffixIngredientsX1[1].gbidItem	GBID			2	
+2		0x234	arEnchantAffixIngredientsX1[1].nQuantity	INT				
+2		0x238	arEnchantAffixIngredientsX1[2].gbidItem	GBID			2	
+2		0x23c	arEnchantAffixIngredientsX1[2].nQuantity	INT				
+2		0x240	arEnchantAffixIngredientsX1[3].gbidItem	GBID			2	
+2		0x244	arEnchantAffixIngredientsX1[3].nQuantity	INT				
+2		0x248	arEnchantAffixIngredientsX1[4].gbidItem	GBID			2	
+2		0x24c	arEnchantAffixIngredientsX1[4].nQuantity	INT				
+2		0x250	arEnchantAffixIngredientsX1[5].gbidItem	GBID			2	
+2		0x254	arEnchantAffixIngredientsX1[5].nQuantity	INT				
+2	ItemDefinition	0x258	LegendaryPowerItemReplacement	INT				
+2	ItemDefinition	0x25c	nSeasonRequiredToDrop	INT				
+2	ItemDefinition	0x260	JewelUpgradeAttribute	TRANSLATEABLE				
+2	ItemDefinition	0x264	JewelUpgradeAttributeParam	ATTRIBUTEPARAM				
+2	ItemDefinition	0x268	JewelUpgradeAttributeFormula	FORMULA				
+2	ItemDefinition	0x270	tJewelUpgradeAttribute.serAttributeFormula	SerializeData				
+2	ItemDefinition	0x278	JewelSecondaryEffectAttribute	TRANSLATEABLE				
+2	ItemDefinition	0x27c	JewelSecondaryEffectAttributeParam	ATTRIBUTEPARAM				
+2	ItemDefinition	0x280	JewelSecondaryEffectAttributeFormula	FORMULA				
+2	ItemDefinition	0x288	tJewelSecondaryEffectAttribute.serAttributeFormula	SerializeData				
+2	ItemDefinition	0x290	JewelSecondaryEffectUnlockRank	INT				
+2	ItemDefinition	0x294	JewelMaxRank	INT				
+2	ItemDefinition	0x298	MainEffect	SNO			14	
+2	ItemDefinition	0x29c	CostAlt2	INT				
+2	ItemDefinition	0x2a0	DateReleased	INT				
+2	ItemDefinition	0x2a4	VacuumPickup	INT				
+2	ItemDefinition	0x2a8	DynamicCraftCostMagic	INT				
+2	ItemDefinition	0x2ac	DynamicCraftCostRare	INT				
+2	ItemDefinition	0x2b0	DynamicCraftAffixCount	INT				
+2	ItemDefinition	0x2b4	SeasonCacheTreasureClass	SNO			52	
+3	ExperienceLevel	0x0	DeltaXP	INT64				
+3	ExperienceLevel	0x8	DeltaXPClassic	INT				
+3	ExperienceLevel	0xc	PlayerXPValue	INT				
+3	ExperienceLevel	0x10	DurabilityLossPct	FLOAT				
+3	ExperienceLevel	0x14	LifePerVitality	FLOAT				
+3	ExperienceLevel	0x18	QuestRewardTier1	INT				
+3	ExperienceLevel	0x1c	QuestRewardTier2	INT				
+3	ExperienceLevel	0x20	QuestRewardTier3	INT				
+3	ExperienceLevel	0x24	QuestRewardTier4	INT				
+3	ExperienceLevel	0x28	QuestRewardTier5	INT				
+3	ExperienceLevel	0x2c	QuestRewardTier6	INT				
+3	ExperienceLevel	0x30	QuestRewardTier7	INT				
+3	ExperienceLevel	0x34	QuestRewardGoldTier1	INT				
+3	ExperienceLevel	0x38	QuestRewardGoldTier2	INT				
+3	ExperienceLevel	0x3c	QuestRewardGoldTier3	INT				
+3	ExperienceLevel	0x40	QuestRewardGoldTier4	INT				
+3	ExperienceLevel	0x44	QuestRewardGoldTier5	INT				
+3	ExperienceLevel	0x48	QuestRewardGoldTier6	INT				
+3	ExperienceLevel	0x4c	LoreRewardTier1	INT				
+3	ExperienceLevel	0x50	LoreRewardTier2	INT				
+3	ExperienceLevel	0x54	LoreRewardTier3	INT				
+3	ExperienceLevel	0x58	TimedDungeonBonusXP	INT				
+3	ExperienceLevel	0x5c	WaveFightBonusXP	INT				
+3	ExperienceLevel	0x60	HordeBonusXP	INT				
+3	ExperienceLevel	0x64	ZapperBonusXP	INT				
+3	ExperienceLevel	0x68	GoblinHuntBonusXP	INT				
+3	ExperienceLevel	0x6c	TimedDungeonBonusGold	INT				
+3	ExperienceLevel	0x70	WaveFightBonusGold	INT				
+3	ExperienceLevel	0x74	HordeBonusGold	INT				
+3	ExperienceLevel	0x78	ZapperBonusGold	INT				
+3	ExperienceLevel	0x7c	GoblinHuntBonusGold	INT				
+3	ExperienceLevel	0x80	BountyKillUniqueXP	INT				
+3	ExperienceLevel	0x84	BountyKillBossXP	INT				
+3	ExperienceLevel	0x88	BountyCompleteEventXP	INT				
+3	ExperienceLevel	0x8c	BountyClearDungeonXP	INT				
+3	ExperienceLevel	0x90	BountyCampsXP	INT				
+3	ExperienceLevel	0x94	BountyKillUniqueGold	INT				
+3	ExperienceLevel	0x98	BountyKillBossGold	INT				
+3	ExperienceLevel	0x9c	BountyCompleteEventGold	INT				
+3	ExperienceLevel	0xa0	BountyClearDungeonGold	INT				
+3	ExperienceLevel	0xa4	BountyCampsGold	INT				
+3	ExperienceLevel	0xa8	KillCounterReward	INT				
+3	ExperienceLevel	0xac	GenericSkillPoints	INT				
+3	ExperienceLevel	0xb0	CritMultiplier	FLOAT				
+3	ExperienceLevel	0xb4	DodgeMultiplier	FLOAT				
+3	ExperienceLevel	0xb8	LifeStealMultiplier	FLOAT				
+3	ExperienceLevel	0xbc	DemonHunterStrength	INT				
+3	ExperienceLevel	0xc0	DemonHunterDexterity	INT				
+3	ExperienceLevel	0xc4	DemonHunterIntelligence	INT				
+3	ExperienceLevel	0xc8	DemonHunterVitality	INT				
+3	ExperienceLevel	0xcc	BarbarianStrength	INT				
+3	ExperienceLevel	0xd0	BarbarianDexterity	INT				
+3	ExperienceLevel	0xd4	BarbarianIntelligence	INT				
+3	ExperienceLevel	0xd8	BarbarianVitality	INT				
+3	ExperienceLevel	0xdc	WizardStrength	INT				
+3	ExperienceLevel	0xe0	WizardDexterity	INT				
+3	ExperienceLevel	0xe4	WizardIntelligence	INT				
+3	ExperienceLevel	0xe8	WizardVitality	INT				
+3	ExperienceLevel	0xec	WitchDoctorStrength	INT				
+3	ExperienceLevel	0xf0	WitchDoctorDexterity	INT				
+3	ExperienceLevel	0xf4	WitchDoctorIntelligence	INT				
+3	ExperienceLevel	0xf8	WitchDoctorVitality	INT				
+3	ExperienceLevel	0xfc	MonkStrength	INT				
+3	ExperienceLevel	0x100	MonkDexterity	INT				
+3	ExperienceLevel	0x104	MonkIntelligence	INT				
+3	ExperienceLevel	0x108	MonkVitality	INT				
+3	ExperienceLevel	0x10c	CrusaderStrength	INT				
+3	ExperienceLevel	0x110	CrusaderDexterity	INT				
+3	ExperienceLevel	0x114	CrusaderIntelligence	INT				
+3	ExperienceLevel	0x118	CrusaderVitality	INT				
+3	ExperienceLevel	0x11c	NecromancerStrength	INT				
+3	ExperienceLevel	0x120	NecromancerDexterity	INT				
+3	ExperienceLevel	0x124	NecromancerIntelligence	INT				
+3	ExperienceLevel	0x128	NecromancerVitality	INT				
+3	ExperienceLevel	0x13c	TemplarStrength	INT				
+3	ExperienceLevel	0x140	TemplarDexterity	INT				
+3	ExperienceLevel	0x144	TemplarIntelligence	INT				
+3	ExperienceLevel	0x148	TemplarVitality	INT				
+3	ExperienceLevel	0x14c	ScoundrelStrength	INT				
+3	ExperienceLevel	0x150	ScoundrelDexterity	INT				
+3	ExperienceLevel	0x154	ScoundrelIntelligence	INT				
+3	ExperienceLevel	0x158	ScoundrelVitality	INT				
+3	ExperienceLevel	0x15c	EnchantressStrength	INT				
+3	ExperienceLevel	0x160	EnchantressDexterity	INT				
+3	ExperienceLevel	0x164	EnchantressIntelligence	INT				
+3	ExperienceLevel	0x168	EnchantressVitality	INT				
+3	ExperienceLevel	0x170	TemplarDamageAbsorbPercent	FLOAT				
+3	ExperienceLevel	0x174	ScoundrelDamageAbsorbPercent	FLOAT				
+3	ExperienceLevel	0x178	EnchantressDamageAbsorbPercent	FLOAT				
+3	ExperienceLevel	0x180	PVPXPToLevel	INT64				
+3	ExperienceLevel	0x188	PVPGoldWin	INT				
+3	ExperienceLevel	0x18c	PVPGoldWinByRank	INT				
+3	ExperienceLevel	0x190	PVPNormalXPWin	INT				
+3	ExperienceLevel	0x194	PVPXPWin	INT				
+3	ExperienceLevel	0x198	PVPTokensWin	INT				
+3	ExperienceLevel	0x19c	PVPAltXPWin	INT				
+3	ExperienceLevel	0x1a0	PVPGoldLoss	INT				
+3	ExperienceLevel	0x1a4	PVPGoldLossByRank	INT				
+3	ExperienceLevel	0x1a8	PVPNormalXPLoss	INT				
+3	ExperienceLevel	0x1ac	PVPXPLoss	INT				
+3	ExperienceLevel	0x1b0	PVPTokensLoss	INT				
+3	ExperienceLevel	0x1b4	PVPAltXPLoss	INT				
+3	ExperienceLevel	0x1b8	PVPGoldTie	INT				
+3	ExperienceLevel	0x1bc	PVPGoldTieByRank	INT				
+3	ExperienceLevel	0x1c0	PVPNormalXPTie	INT				
+3	ExperienceLevel	0x1c4	PVPXPTie	INT				
+3	ExperienceLevel	0x1c8	PVPTokensTie	INT				
+3	ExperienceLevel	0x1cc	PVPAltXPTie	INT				
+3	ExperienceLevel	0x1d0	GoldCostLevelScalar	FLOAT				
+3	ExperienceLevel	0x1d4	SidekickPrimaryStatIdeal	INT				
+3	ExperienceLevel	0x1d8	SidekickVitalityIdeal	INT				
+3	ExperienceLevel	0x1dc	SidekickTotalArmorIdeal	INT				
+3	ExperienceLevel	0x1e0	SidekickTotalResistIdeal	INT				
+3	ExperienceLevel	0x1e4	SidekickTargetLifeOnHitIdeal	INT				
+3	ExperienceLevel	0x1e8	SidekickTargetDPSIdeal	INT				
+3	ExperienceLevel	0x1ec	GearXPScalar	FLOAT				
+4	HirelingEntry	0x0	tHeader.serName_Console	SerializeData				
+4	HirelingEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+4	HirelingEntry	0x10	tHeader.gbid	INT				
+4	HirelingEntry	0x14	tHeader.dwPad	INT				
+4	HirelingEntry	0x18	Actor	SNO			1	
+4	HirelingEntry	0x1c	Proxy	SNO			1	
+4	HirelingEntry	0x20	Summoned	SNO			1	
+4	HirelingEntry	0x24	Inventory	SNO			52	
+4	HirelingEntry	0x28	PrimaryDamageAttribute	ENUM				gPrimaryDamageAttributes
+4	HirelingEntry	0x2c	Str	FLOAT				
+4	HirelingEntry	0x30	Dex	FLOAT				
+4	HirelingEntry	0x34	Int	FLOAT				
+4	HirelingEntry	0x38	Vit	FLOAT				
+4	HirelingEntry	0x3c	CritDamageCap	FLOAT				
+4	HirelingEntry	0x40	CritPercentBase	FLOAT				
+4	HirelingEntry	0x44	CritPercentCap	FLOAT				
+4	HirelingEntry	0x48	DodgeRatingBase	FLOAT				
+4	HirelingEntry	0x4c	LightLook	FLOAT				
+4	HirelingEntry	0x50	MediumLook	FLOAT				
+4	HirelingEntry	0x54	HeavyLook	FLOAT				
+5	MonsterLevelDefinition	0x0	LvlMin	INT				
+5	MonsterLevelDefinition	0x4	Str	FLOAT				
+5	MonsterLevelDefinition	0x8	Dex	FLOAT				
+5	MonsterLevelDefinition	0xc	Int	FLOAT				
+5	MonsterLevelDefinition	0x10	Vit	FLOAT				
+5	MonsterLevelDefinition	0x14	HPMin	FLOAT				
+5	MonsterLevelDefinition	0x18	HPDelta	FLOAT				
+5	MonsterLevelDefinition	0x1c	HPRegen	FLOAT				
+5	MonsterLevelDefinition	0x20	ResourceBase	FLOAT				
+5	MonsterLevelDefinition	0x24	ResourceRegen	FLOAT				
+5	MonsterLevelDefinition	0x28	Armor	FLOAT				
+5	MonsterLevelDefinition	0x2c	Dmg	FLOAT				
+5	MonsterLevelDefinition	0x30	DmgDelta	FLOAT				
+5	MonsterLevelDefinition	0x34	DmgFire	FLOAT				
+5	MonsterLevelDefinition	0x38	DmgDeltaFire	FLOAT				
+5	MonsterLevelDefinition	0x3c	DmgLightning	FLOAT				
+5	MonsterLevelDefinition	0x40	DmgDeltaLightning	FLOAT				
+5	MonsterLevelDefinition	0x44	DmgCold	FLOAT				
+5	MonsterLevelDefinition	0x48	DmgDeltaCold	FLOAT				
+5	MonsterLevelDefinition	0x4c	DmgPoison	FLOAT				
+5	MonsterLevelDefinition	0x50	DmgDeltaPoison	FLOAT				
+5	MonsterLevelDefinition	0x54	DmgArcane	FLOAT				
+5	MonsterLevelDefinition	0x58	DmgDeltaArcane	FLOAT				
+5	MonsterLevelDefinition	0x5c	DmgHoly	FLOAT				
+5	MonsterLevelDefinition	0x60	DmgDeltaHoly	FLOAT				
+5	MonsterLevelDefinition	0x64	DmgSiege	FLOAT				
+5	MonsterLevelDefinition	0x68	DmgDeltaSiege	FLOAT				
+5	MonsterLevelDefinition	0x6c	HirelingHPMin	FLOAT				
+5	MonsterLevelDefinition	0x70	HirelingHPDelta	FLOAT				
+5	MonsterLevelDefinition	0x74	HirelingHPRegen	FLOAT				
+5	MonsterLevelDefinition	0x78	HirelingDmg	FLOAT				
+5	MonsterLevelDefinition	0x7c	HirelingDmgRange	FLOAT				
+5	MonsterLevelDefinition	0x80	HirelingRetrainCost	FLOAT				
+5	MonsterLevelDefinition	0x84	GetHitDamage	FLOAT				
+5	MonsterLevelDefinition	0x88	GetHitScalar	FLOAT				
+5	MonsterLevelDefinition	0x8c	GetHitMax	FLOAT				
+5	MonsterLevelDefinition	0x90	GetHitRecovery	FLOAT				
+5	MonsterLevelDefinition	0x94	WalkSpd	FLOAT				
+5	MonsterLevelDefinition	0x98	RunSpd	FLOAT				
+5	MonsterLevelDefinition	0x9c	SprintSpd	FLOAT				
+5	MonsterLevelDefinition	0xa0	StrafeSpd	FLOAT				
+5	MonsterLevelDefinition	0xa4	AttSpd	FLOAT				
+5	MonsterLevelDefinition	0xa8	ProjSpd	FLOAT				
+5	MonsterLevelDefinition	0xac	Exp	FLOAT				
+5	MonsterLevelDefinition	0xb0	ResistPhysical	FLOAT				
+5	MonsterLevelDefinition	0xb4	ResistFire	FLOAT				
+5	MonsterLevelDefinition	0xb8	ResistLightning	FLOAT				
+5	MonsterLevelDefinition	0xbc	ResistCold	FLOAT				
+5	MonsterLevelDefinition	0xc0	ResistPoison	FLOAT				
+5	MonsterLevelDefinition	0xc4	ResistArcane	FLOAT				
+5	MonsterLevelDefinition	0xc8	ResistSiege	FLOAT				
+5	MonsterLevelDefinition	0xcc	ResistChill	FLOAT				
+5	MonsterLevelDefinition	0xd0	ResistStun	FLOAT				
+5	MonsterLevelDefinition	0xd4	ConsoleHealthScalar	FLOAT				
+5	MonsterLevelDefinition	0xd8	ConsoleDamageScalar	FLOAT				
+5	MonsterLevelDefinition	0xdc	Monster1AffixWeight	FLOAT				
+5	MonsterLevelDefinition	0xe0	Monster2AffixWeight	FLOAT				
+5	MonsterLevelDefinition	0xe4	Monster3AffixWeight	FLOAT				
+5	MonsterLevelDefinition	0xe8	Monster4AffixWeight	FLOAT				
+5	MonsterLevelDefinition	0xec	dwPad	INT				
+7	HeroData	0x0	tHeader.serName_Console	SerializeData				
+7	HeroData	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+7	HeroData	0x10	tHeader.gbid	INT				
+7	HeroData	0x14	tHeader.dwPad	INT				
+7	HeroData	0x18	MaleActor	SNO			1	
+7	HeroData	0x1c	FemaleActor	SNO			1	
+7	HeroData	0x20	Inventory SNO	SNO			52	
+7	HeroData	0x24	MaxTrainableSkills	INT				
+7	HeroData	0x28	StartingLMBSkill	SNO			29	
+7	HeroData	0x2c	StartingRMBSkill	SNO			29	
+7	HeroData	0x30	SkillKit0	SNO			39	
+7	HeroData	0x34	SkillKit1	SNO			39	
+7	HeroData	0x38	SkillKit2	SNO			39	
+7	HeroData	0x3c	SkillKit3	SNO			39	
+7	HeroData	0x40	PrimaryResourceType	ENUM				gResourceTypes
+7	HeroData	0x44	SecondaryResourceType	ENUM				gResourceTypes
+7	HeroData	0x48	PrimaryDamageAttribute	ENUM				gPrimaryDamageAttributes
+7	HeroData	0x4c	PlayerAwarenessRadius	FLOAT				
+7	HeroData	0x50	IsRanged	INT				
+7	HeroData	0x54	Str	FLOAT				
+7	HeroData	0x58	Dex	FLOAT				
+7	HeroData	0x5c	Int	FLOAT				
+7	HeroData	0x60	Vit	FLOAT				
+7	HeroData	0x64	HP	FLOAT				
+7	HeroData	0x68	HPFactorLevel	FLOAT				
+7	HeroData	0x6c	HPRegen	FLOAT				
+7	HeroData	0x70	ClassDamageReductionPercent	FLOAT				
+7	HeroData	0x74	ClassDamageReductionPercentPVP	FLOAT				
+7	HeroData	0x78	PrimaryResourceBase	FLOAT				
+7	HeroData	0x7c	PrimaryResourceFactorLevel	FLOAT				
+7	HeroData	0x80	PrimaryResourceRegen	FLOAT				
+7	HeroData	0x84	SecondaryResourceBase	FLOAT				
+7	HeroData	0x88	SecondaryResourceFactorLevel	FLOAT				
+7	HeroData	0x8c	SecondaryResourceRegen	FLOAT				
+7	HeroData	0x90	Armor	FLOAT				
+7	HeroData	0x94	Dmg	FLOAT				
+7	HeroData	0x98	WalkSpd	FLOAT				
+7	HeroData	0x9c	RunSpd	FLOAT				
+7	HeroData	0xa0	SprintSpd	FLOAT				
+7	HeroData	0xa4	ProjSpd	FLOAT				
+7	HeroData	0xa8	CritDamageCap	FLOAT				
+7	HeroData	0xac	CritPercentBase	FLOAT				
+7	HeroData	0xb0	CritPercentCap	FLOAT				
+7	HeroData	0xb4	DodgeRatingBase	FLOAT				
+7	HeroData	0xb8	GetHitMaxBase	FLOAT				
+7	HeroData	0xbc	GetHitMaxPerLevel	FLOAT				
+7	HeroData	0xc0	GetHitRecoveryBase	FLOAT				
+7	HeroData	0xc4	GetHitRecoveryPerLevel	FLOAT				
+7	HeroData	0xc8	ResistPhysical	FLOAT				
+7	HeroData	0xcc	ResistFire	FLOAT				
+7	HeroData	0xd0	ResistLightning	FLOAT				
+7	HeroData	0xd4	ResistCold	FLOAT				
+7	HeroData	0xd8	ResistPoison	FLOAT				
+7	HeroData	0xdc	ResistArcane	FLOAT				
+7	HeroData	0xe0	ResistChill	FLOAT				
+7	HeroData	0xe4	ResistStun	FLOAT				
+7	HeroData	0xe8	KnockbackWeight	FLOAT				
+7	HeroData	0xec	OOCHealthRegen	FLOAT				
+7	HeroData	0xf0	OOCManaRegen	FLOAT				
+7	HeroData	0xf4	PotionDilutionDuration	FLOAT				
+7	HeroData	0xf8	PotionDilutionScalar	FLOAT				
+7	HeroData	0xfc	DualWieldBothAttackChance	FLOAT				
+7	HeroData	0x100	Freeze_Capacity	FLOAT				
+7	HeroData	0x104	Thaw_Rate	FLOAT				
+8	AffixTableEntry	0x0	tHeader.serName_Console	SerializeData				
+8	AffixTableEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+8	AffixTableEntry	0x10	tHeader.gbid	INT				
+8	AffixTableEntry	0x14	tHeader.dwPad	INT				
+8	AffixTableEntry	0x18	dwFlags	INT				
+8	AffixTableEntry	0x1c	Frequency	INT				
+8	AffixTableEntry	0x20	DemonHunterFrequency	INT				
+8	AffixTableEntry	0x24	BarbarianFrequency	INT				
+8	AffixTableEntry	0x28	WizardFrequency	INT				
+8	AffixTableEntry	0x2c	WitchDoctorFrequency	INT				
+8	AffixTableEntry	0x30	MonkFrequency	INT				
+8	AffixTableEntry	0x34	CrusaderFrequency	INT				
+8	AffixTableEntry	0x38	NecromancerFrequency	INT				
+8	AffixTableEntry	0x3c	HirelingNoneFrequency	INT				
+8	AffixTableEntry	0x40	TemplarFrequency	INT				
+8	AffixTableEntry	0x44	ScoundrelFrequency	INT				
+8	AffixTableEntry	0x48	EnchantressFrequency	INT				
+8	AffixTableEntry	0x4c	AffixLevelMin	INT				
+8	AffixTableEntry	0x50	AffixLevelMax	INT				
+8	AffixTableEntry	0x54	Cost	INT				
+8	AffixTableEntry	0x58	IdentifyCost	INT				
+8	AffixTableEntry	0x5c	RequiredLevel	INT				
+8	AffixTableEntry	0x60	CrafterRequiredLevel	INT				
+8	AffixTableEntry	0x64	ItemEffectType	ENUM				gItemEffectTypes
+8	AffixTableEntry	0x68	ItemEffectLevel	INT				
+8	AffixTableEntry	0x6c	ConvertsTo	GBID			8	
+8	AffixTableEntry	0x70	LegendaryUprankAffix	GBID			8	
+8	AffixTableEntry	0x74	RareNamePrefixStringList	SNO			42	
+8	AffixTableEntry	0x78	RareNameSuffixStringList	SNO			42	
+8	AffixTableEntry	0x7c	AffixFamily0	GBID			47	
+8	AffixTableEntry	0x80	AffixFamily1	GBID			47	
+8	AffixTableEntry	0x84	PlayerClass	ENUM				gPlayerClasses
+8	AffixTableEntry	0x88	ExclusionCategory	GBID			8	
+8	AffixTableEntry	0x8c	arExcludedCategories	FIXEDARRAY	INT	6		
+8	AffixTableEntry	0xa4	arAllowedTypes	FIXEDARRAY	INT	24		
+8	AffixTableEntry	0x104	arLegendaryAllowedTypes	FIXEDARRAY	INT	24		
+8	AffixTableEntry	0x164	AllowedQualityLevels	INT				
+8	AffixTableEntry	0x168	AffixType	ENUM				gAffixTypes
+8	AffixTableEntry	0x16c	AssociatedAffix	GBID			8	
+8		0x170	ptAffixAttributes[0].Attribute	TRANSLATEABLE				
+8		0x174	ptAffixAttributes[0].SNOParam	ATTRIBUTEPARAM				
+8		0x178	ptAffixAttributes[0].Formula	FORMULA				
+8		0x180	ptAffixAttributes[0].serAttributeFormula	SerializeData				
+8		0x188	ptAffixAttributes[1].Attribute	TRANSLATEABLE				
+8		0x18c	ptAffixAttributes[1].SNOParam	ATTRIBUTEPARAM				
+8		0x190	ptAffixAttributes[1].Formula	FORMULA				
+8		0x198	ptAffixAttributes[1].serAttributeFormula	SerializeData				
+8		0x1a0	ptAffixAttributes[2].Attribute	TRANSLATEABLE				
+8		0x1a4	ptAffixAttributes[2].SNOParam	ATTRIBUTEPARAM				
+8		0x1a8	ptAffixAttributes[2].Formula	FORMULA				
+8		0x1b0	ptAffixAttributes[2].serAttributeFormula	SerializeData				
+8		0x1b8	ptAffixAttributes[3].Attribute	TRANSLATEABLE				
+8		0x1bc	ptAffixAttributes[3].SNOParam	ATTRIBUTEPARAM				
+8		0x1c0	ptAffixAttributes[3].Formula	FORMULA				
+8		0x1c8	ptAffixAttributes[3].serAttributeFormula	SerializeData				
+8	AffixTableEntry	0x218	AffixGroup	ENUM				gAffixGroups
+10	MovementStyleDefinition	0x0	tHeader.serName_Console	SerializeData				
+10	MovementStyleDefinition	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+10	MovementStyleDefinition	0x10	tHeader.gbid	INT				
+10	MovementStyleDefinition	0x14	tHeader.dwPad	INT				
+10	MovementStyleDefinition	0x18	WalkSwitchMoveStyle	INT				
+10	MovementStyleDefinition	0x1c	StopSwitchMoveStyle	INT				
+10	MovementStyleDefinition	0x20	WalkBlockMoveStyle	INT				
+10	MovementStyleDefinition	0x24	StopBlockMoveStyle	INT				
+10	MovementStyleDefinition	0x28	FlankMoveStyle	INT				
+10	MovementStyleDefinition	0x2c	ZigZagMoveStyle	INT				
+10	MovementStyleDefinition	0x30	SprintMoveStyle	INT				
+10	MovementStyleDefinition	0x34	SprintRunRandomStyle	INT				
+10	MovementStyleDefinition	0x38	RunTimer	FLOAT				
+10	MovementStyleDefinition	0x3c	RunDeltaTimer	FLOAT				
+10	MovementStyleDefinition	0x40	Stop/WalkTimer	FLOAT				
+10	MovementStyleDefinition	0x44	Stop/WalkDeltaTimer	FLOAT				
+10	MovementStyleDefinition	0x48	SwitchChance	FLOAT				
+10	MovementStyleDefinition	0x4c	BlockTimer	FLOAT				
+10	MovementStyleDefinition	0x50	BlockDeltaTimer	FLOAT				
+10	MovementStyleDefinition	0x54	BlockCooldown	FLOAT				
+10	MovementStyleDefinition	0x58	BlockCooldownDelta	FLOAT				
+10	MovementStyleDefinition	0x5c	BlockChance	FLOAT				
+10	MovementStyleDefinition	0x60	BlockDistance	FLOAT				
+10	MovementStyleDefinition	0x64	FlankAngle	FLOAT				
+10	MovementStyleDefinition	0x68	FlankDeltaAngle	FLOAT				
+10	MovementStyleDefinition	0x6c	FlankPeakDistance	FLOAT				
+10	MovementStyleDefinition	0x70	FlankMaxDistance	FLOAT				
+10	MovementStyleDefinition	0x74	ZigZagTimer	FLOAT				
+10	MovementStyleDefinition	0x78	ZigZagAngle	FLOAT				
+10	MovementStyleDefinition	0x7c	ZigZagDeltaAngle	FLOAT				
+10	MovementStyleDefinition	0x80	ZigZagPeakDistance	FLOAT				
+10	MovementStyleDefinition	0x84	ZigZagMaxDistance	FLOAT				
+10	MovementStyleDefinition	0x88	SpeedScalar	FLOAT				
+10	MovementStyleDefinition	0x8c	Accel	FLOAT				
+10	MovementStyleDefinition	0x90	snoPowerToBreakObjects	SNO			29	
+10	MovementStyleDefinition	0x94	dwPad	INT				
+11	LabelGBID	0x0	tHeader.serName_Console	SerializeData				
+11	LabelGBID	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+11	LabelGBID	0x10	tHeader.gbid	INT				
+11	LabelGBID	0x14	tHeader.dwPad	INT				
+11	LabelGBID	0x18	nIndex	INT				
+11	LabelGBID	0x1c	dwPad	INT				
+12	LootDistEntry	0x0	Level	INT				
+12	LootDistEntry	0x4	NoGoldWeight	INT				
+12	LootDistEntry	0x8	SmallGoldWeight	INT				
+12	LootDistEntry	0xc	LargeGoldWeight	INT				
+12	LootDistEntry	0x10	NoGoldMin	INT				
+12	LootDistEntry	0x14	SmallGoldMin	INT				
+12	LootDistEntry	0x18	LargeGoldMin	INT				
+12	LootDistEntry	0x1c	NoGoldDelta	INT				
+12	LootDistEntry	0x20	SmallGoldDelta	INT				
+12	LootDistEntry	0x24	LargeGoldDelta	INT				
+12	LootDistEntry	0x28	InferiorChance	FLOAT				
+12	LootDistEntry	0x2c	NormalChance	FLOAT				
+12	LootDistEntry	0x30	SuperiorChance	FLOAT				
+12	LootDistEntry	0x34	1-affixChance	FLOAT				
+12	LootDistEntry	0x38	2-affixChance	FLOAT				
+12	LootDistEntry	0x3c	3-affixChance	FLOAT				
+12	LootDistEntry	0x40	4-affixChance	FLOAT				
+12	LootDistEntry	0x44	5-affixChance	FLOAT				
+12	LootDistEntry	0x48	6-affixChance	FLOAT				
+12	LootDistEntry	0x4c	LegendaryChance	FLOAT				
+12	LootDistEntry	0x50	SpecialChance	FLOAT				
+12	LootDistEntry	0x54	CurseChance	INT				
+12	LootDistEntry	0x58	CurseBonus	INT				
+16	RareItemNamesEntry	0x0	tHeader.serName_Console	SerializeData				
+16	RareItemNamesEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+16	RareItemNamesEntry	0x10	tHeader.gbid	INT				
+16	RareItemNamesEntry	0x14	tHeader.dwPad	INT				
+16	RareItemNamesEntry	0x18	AffixOrItemType	ENUM				gGameBalanceTypes
+16	RareItemNamesEntry	0x1c	RelatedAffixOrItemType	GBID				
+16	RareItemNamesEntry	0x20	AffixType	ENUM				gAffixTypes
+16	RareItemNamesEntry	0x24	dwPad	INT				
+18	MonsterAffixesEntry	0x0	tHeader.serName_Console	SerializeData				
+18	MonsterAffixesEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+18	MonsterAffixesEntry	0x10	tHeader.gbid	INT				
+18	MonsterAffixesEntry	0x14	tHeader.dwPad	INT				
+18	MonsterAffixesEntry	0x18	Frequency	INT				
+18	MonsterAffixesEntry	0x1c	AffixLevelMin	INT				
+18	MonsterAffixesEntry	0x20	AffixLevelMax	INT				
+18	MonsterAffixesEntry	0x24	ValidFor	ENUM				gMonsterAffixValidFor
+18	MonsterAffixesEntry	0x28	BaseElement	ENUM				gDamageTypes
+18	MonsterAffixesEntry	0x2c	AffixType	ENUM				gAffixTypes
+18	MonsterAffixesEntry	0x30	AvailableForUniques	INT				
+18	MonsterAffixesEntry	0x34	Shown	INT				
+18	MonsterAffixesEntry	0x38	Defensive	INT				
+18	MonsterAffixesEntry	0x3c	CrowdControl	INT				
+18	MonsterAffixesEntry	0x40	Attribute0	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x44	Param0	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x48	Value0	FORMULA				
+18	MonsterAffixesEntry	0x50	ptAttributes[0].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x58	Attribute1	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x5c	Param1	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x60	Value1	FORMULA				
+18	MonsterAffixesEntry	0x68	ptAttributes[1].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x70	Attribute2	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x74	Param2	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x78	Value2	FORMULA				
+18	MonsterAffixesEntry	0x80	ptAttributes[2].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x88	Attribute3	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x8c	Param3	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x90	Value3	FORMULA				
+18	MonsterAffixesEntry	0x98	ptAttributes[3].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0xa0	Attribute4	TRANSLATEABLE				
+18	MonsterAffixesEntry	0xa4	Param4	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0xa8	Value4	FORMULA				
+18	MonsterAffixesEntry	0xb0	ptAttributes[4].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0xb8	Attribute5	TRANSLATEABLE				
+18	MonsterAffixesEntry	0xbc	Param5	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0xc0	Value5	FORMULA				
+18	MonsterAffixesEntry	0xc8	ptAttributes[5].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0xd0	Attribute6	TRANSLATEABLE				
+18	MonsterAffixesEntry	0xd4	Param6	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0xd8	Value6	FORMULA				
+18	MonsterAffixesEntry	0xe0	ptAttributes[6].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0xe8	Attribute7	TRANSLATEABLE				
+18	MonsterAffixesEntry	0xec	Param7	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0xf0	Value7	FORMULA				
+18	MonsterAffixesEntry	0xf8	ptAttributes[7].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x100	Attribute8	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x104	Param8	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x108	Value8	FORMULA				
+18	MonsterAffixesEntry	0x110	ptAttributes[8].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x118	Attribute9	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x11c	Param9	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x120	Value9	FORMULA				
+18	MonsterAffixesEntry	0x128	ptAttributes[9].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x130	MinionAttribute0	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x134	MinionParam0	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x138	MinionValue0	FORMULA				
+18	MonsterAffixesEntry	0x140	ptMinionAttributes[0].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x148	MinionAttribute1	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x14c	MinionParam1	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x150	MinionValue1	FORMULA				
+18	MonsterAffixesEntry	0x158	ptMinionAttributes[1].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x160	MinionAttribute2	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x164	MinionParam2	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x168	MinionValue2	FORMULA				
+18	MonsterAffixesEntry	0x170	ptMinionAttributes[2].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x178	MinionAttribute3	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x17c	MinionParam3	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x180	MinionValue3	FORMULA				
+18	MonsterAffixesEntry	0x188	ptMinionAttributes[3].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x190	MinionAttribute4	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x194	MinionParam4	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x198	MinionValue4	FORMULA				
+18	MonsterAffixesEntry	0x1a0	ptMinionAttributes[4].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x1a8	MinionAttribute5	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x1ac	MinionParam5	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x1b0	MinionValue5	FORMULA				
+18	MonsterAffixesEntry	0x1b8	ptMinionAttributes[5].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x1c0	MinionAttribute6	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x1c4	MinionParam6	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x1c8	MinionValue6	FORMULA				
+18	MonsterAffixesEntry	0x1d0	ptMinionAttributes[6].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x1d8	MinionAttribute7	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x1dc	MinionParam7	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x1e0	MinionValue7	FORMULA				
+18	MonsterAffixesEntry	0x1e8	ptMinionAttributes[7].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x1f0	MinionAttribute8	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x1f4	MinionParam8	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x1f8	MinionValue8	FORMULA				
+18	MonsterAffixesEntry	0x200	ptMinionAttributes[8].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x208	MinionAttribute9	TRANSLATEABLE				
+18	MonsterAffixesEntry	0x20c	MinionParam9	ATTRIBUTEPARAM				
+18	MonsterAffixesEntry	0x210	MinionValue9	FORMULA				
+18	MonsterAffixesEntry	0x218	ptMinionAttributes[9].serAttributeFormula	SerializeData				
+18	MonsterAffixesEntry	0x224	On_Spawn_Power_Minion	SNO			29	
+18	MonsterAffixesEntry	0x228	On_Spawn_Power_Champion	SNO			29	
+18	MonsterAffixesEntry	0x22c	On_Spawn_Power_Rare	SNO			29	
+18	MonsterAffixesEntry	0x230	1	BYTE				
+18	MonsterAffixesEntry	0x231	2	BYTE				
+18	MonsterAffixesEntry	0x232	3	BYTE				
+18	MonsterAffixesEntry	0x233	4	BYTE				
+18	MonsterAffixesEntry	0x234	5	BYTE				
+18	MonsterAffixesEntry	0x235	6	BYTE				
+18	MonsterAffixesEntry	0x236	7	BYTE				
+18	MonsterAffixesEntry	0x237	8	BYTE				
+18	MonsterAffixesEntry	0x238	9	BYTE				
+18	MonsterAffixesEntry	0x239	10	BYTE				
+18	MonsterAffixesEntry	0x23a	11	BYTE				
+18	MonsterAffixesEntry	0x23b	12	BYTE				
+18	MonsterAffixesEntry	0x23c	13	BYTE				
+18	MonsterAffixesEntry	0x23d	14	BYTE				
+18	MonsterAffixesEntry	0x23e	15	BYTE				
+18	MonsterAffixesEntry	0x23f	16	BYTE				
+18	MonsterAffixesEntry	0x240	17	BYTE				
+18	MonsterAffixesEntry	0x241	18	BYTE				
+18	MonsterAffixesEntry	0x242	19	BYTE				
+18	MonsterAffixesEntry	0x243	20	BYTE				
+18	MonsterAffixesEntry	0x244	21	BYTE				
+18	MonsterAffixesEntry	0x245	22	BYTE				
+18	MonsterAffixesEntry	0x246	23	BYTE				
+18	MonsterAffixesEntry	0x247	24	BYTE				
+18	MonsterAffixesEntry	0x248	25	BYTE				
+18	MonsterAffixesEntry	0x249	26	BYTE				
+18	MonsterAffixesEntry	0x24a	27	BYTE				
+18	MonsterAffixesEntry	0x24b	28	BYTE				
+18	MonsterAffixesEntry	0x24c	29	BYTE				
+18	MonsterAffixesEntry	0x24d	30	BYTE				
+18	MonsterAffixesEntry	0x24e	31	BYTE				
+18	MonsterAffixesEntry	0x24f	32	BYTE				
+18	MonsterAffixesEntry	0x250	33	BYTE				
+18	MonsterAffixesEntry	0x251	34	BYTE				
+18	MonsterAffixesEntry	0x252	35	BYTE				
+18	MonsterAffixesEntry	0x253	36	BYTE				
+18	MonsterAffixesEntry	0x254	37	BYTE				
+18	MonsterAffixesEntry	0x255	38	BYTE				
+18	MonsterAffixesEntry	0x256	39	BYTE				
+18	MonsterAffixesEntry	0x257	40	BYTE				
+18	MonsterAffixesEntry	0x258	41	BYTE				
+18	MonsterAffixesEntry	0x259	42	BYTE				
+18	MonsterAffixesEntry	0x25a	43	BYTE				
+18	MonsterAffixesEntry	0x25b	44	BYTE				
+18	MonsterAffixesEntry	0x25c	45	BYTE				
+18	MonsterAffixesEntry	0x25d	46	BYTE				
+18	MonsterAffixesEntry	0x25e	47	BYTE				
+18	MonsterAffixesEntry	0x25f	48	BYTE				
+18	MonsterAffixesEntry	0x260	49	BYTE				
+18	MonsterAffixesEntry	0x261	50	BYTE				
+18	MonsterAffixesEntry	0x262	51	BYTE				
+18	MonsterAffixesEntry	0x263	52	BYTE				
+18	MonsterAffixesEntry	0x264	53	BYTE				
+18	MonsterAffixesEntry	0x265	54	BYTE				
+18	MonsterAffixesEntry	0x266	55	BYTE				
+18	MonsterAffixesEntry	0x267	56	BYTE				
+18	MonsterAffixesEntry	0x268	57	BYTE				
+18	MonsterAffixesEntry	0x269	58	BYTE				
+18	MonsterAffixesEntry	0x26a	59	BYTE				
+18	MonsterAffixesEntry	0x26b	60	BYTE				
+18	MonsterAffixesEntry	0x26c	61	BYTE				
+18	MonsterAffixesEntry	0x26d	62	BYTE				
+18	MonsterAffixesEntry	0x26e	63	BYTE				
+18	MonsterAffixesEntry	0x26f	64	BYTE				
+18	MonsterAffixesEntry	0x270	65	BYTE				
+18	MonsterAffixesEntry	0x271	66	BYTE				
+18	MonsterAffixesEntry	0x272	67	BYTE				
+18	MonsterAffixesEntry	0x273	68	BYTE				
+18	MonsterAffixesEntry	0x274	69	BYTE				
+18	MonsterAffixesEntry	0x275	70	BYTE				
+18	MonsterAffixesEntry	0x276	71	BYTE				
+18	MonsterAffixesEntry	0x277	72	BYTE				
+18	MonsterAffixesEntry	0x278	73	BYTE				
+18	MonsterAffixesEntry	0x279	74	BYTE				
+18	MonsterAffixesEntry	0x27a	75	BYTE				
+18	MonsterAffixesEntry	0x27b	76	BYTE				
+18	MonsterAffixesEntry	0x27c	77	BYTE				
+18	MonsterAffixesEntry	0x27d	78	BYTE				
+18	MonsterAffixesEntry	0x27e	79	BYTE				
+18	MonsterAffixesEntry	0x27f	80	BYTE				
+18	MonsterAffixesEntry	0x280	81	BYTE				
+18	MonsterAffixesEntry	0x281	82	BYTE				
+18	MonsterAffixesEntry	0x282	83	BYTE				
+18	MonsterAffixesEntry	0x283	84	BYTE				
+18	MonsterAffixesEntry	0x284	85	BYTE				
+18	MonsterAffixesEntry	0x285	86	BYTE				
+18	MonsterAffixesEntry	0x286	87	BYTE				
+18	MonsterAffixesEntry	0x287	88	BYTE				
+18	MonsterAffixesEntry	0x288	89	BYTE				
+18	MonsterAffixesEntry	0x289	90	BYTE				
+18	MonsterAffixesEntry	0x28a	91	BYTE				
+18	MonsterAffixesEntry	0x28b	92	BYTE				
+18	MonsterAffixesEntry	0x28c	93	BYTE				
+18	MonsterAffixesEntry	0x28d	94	BYTE				
+18	MonsterAffixesEntry	0x28e	95	BYTE				
+18	MonsterAffixesEntry	0x28f	96	BYTE				
+18	MonsterAffixesEntry	0x290	97	BYTE				
+18	MonsterAffixesEntry	0x291	98	BYTE				
+18	MonsterAffixesEntry	0x292	99	BYTE				
+19	RareMonsterNamesEntry	0x0	tHeader.serName_Console	SerializeData				
+19	RareMonsterNamesEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+19	RareMonsterNamesEntry	0x10	tHeader.gbid	INT				
+19	RareMonsterNamesEntry	0x14	tHeader.dwPad	INT				
+19	RareMonsterNamesEntry	0x18	AffixType	ENUM				gAffixTypes
+19	RareMonsterNamesEntry	0x1c	AffixEffect	CHARARRAY		128		
+19	RareMonsterNamesEntry	0x9c	dwPad	INT				
+21	SocketedEffectsTableEntry	0x0	tHeader.serName_Console	SerializeData				
+21	SocketedEffectsTableEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+21	SocketedEffectsTableEntry	0x10	tHeader.gbid	INT				
+21	SocketedEffectsTableEntry	0x14	tHeader.dwPad	INT				
+21	SocketedEffectsTableEntry	0x18	Item	GBID			2	
+21	SocketedEffectsTableEntry	0x1c	ItemType	GBID			1	
+21	SocketedEffectsTableEntry	0x20	Attribute1	TRANSLATEABLE				
+21	SocketedEffectsTableEntry	0x24	AttributeParam1	ATTRIBUTEPARAM				
+21	SocketedEffectsTableEntry	0x28	AttributeFormula1	FORMULA				
+21	SocketedEffectsTableEntry	0x30	ptAttributes[0].serAttributeFormula	SerializeData				
+21	SocketedEffectsTableEntry	0x38	Attribute2	TRANSLATEABLE				
+21	SocketedEffectsTableEntry	0x3c	AttributeParam2	ATTRIBUTEPARAM				
+21	SocketedEffectsTableEntry	0x40	AttributeFormula2	FORMULA				
+21	SocketedEffectsTableEntry	0x48	ptAttributes[1].serAttributeFormula	SerializeData				
+21	SocketedEffectsTableEntry	0x50	Attribute3	TRANSLATEABLE				
+21	SocketedEffectsTableEntry	0x54	AttributeParam3	ATTRIBUTEPARAM				
+21	SocketedEffectsTableEntry	0x58	AttributeFormula3	FORMULA				
+21	SocketedEffectsTableEntry	0x60	ptAttributes[2].serAttributeFormula	SerializeData				
+21	SocketedEffectsTableEntry	0x68	ReqAttrib1	TRANSLATEABLE				
+21	SocketedEffectsTableEntry	0x6c	ReqAttribParam1	ATTRIBUTEPARAM				
+21	SocketedEffectsTableEntry	0x70	ReqAttribFormula1	FORMULA				
+21	SocketedEffectsTableEntry	0x78	ptRequirements[0].serAttributeFormula	SerializeData				
+21	SocketedEffectsTableEntry	0x80	ReqAttrib2	TRANSLATEABLE				
+21	SocketedEffectsTableEntry	0x84	ReqAttribParam2	ATTRIBUTEPARAM				
+21	SocketedEffectsTableEntry	0x88	ReqAttribFormula2	FORMULA				
+21	SocketedEffectsTableEntry	0x90	ptRequirements[1].serAttributeFormula	SerializeData				
+21	SocketedEffectsTableEntry	0x98	StringlistLabel	CHARARRAY		1024		
+24	HelpCode	0x0	Control	CHARARRAY		256		
+24	HelpCode	0x100	Label	CHARARRAY		256		
+24	HelpCode	0x200	Command	CHARARRAY		128		
+25	ItemDropTableEntry	0x0	tHeader.serName_Console	SerializeData				
+25	ItemDropTableEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+25	ItemDropTableEntry	0x10	tHeader.gbid	INT				
+25	ItemDropTableEntry	0x14	tHeader.dwPad	INT				
+25	ItemDropTableEntry	0x18	1	INT				
+25	ItemDropTableEntry	0x1c	2	INT				
+25	ItemDropTableEntry	0x20	3	INT				
+25	ItemDropTableEntry	0x24	4	INT				
+25	ItemDropTableEntry	0x28	5	INT				
+25	ItemDropTableEntry	0x2c	6	INT				
+25	ItemDropTableEntry	0x30	7	INT				
+25	ItemDropTableEntry	0x34	8	INT				
+25	ItemDropTableEntry	0x38	9	INT				
+25	ItemDropTableEntry	0x3c	10	INT				
+25	ItemDropTableEntry	0x40	11	INT				
+25	ItemDropTableEntry	0x44	12	INT				
+25	ItemDropTableEntry	0x48	13	INT				
+25	ItemDropTableEntry	0x4c	14	INT				
+25	ItemDropTableEntry	0x50	15	INT				
+25	ItemDropTableEntry	0x54	16	INT				
+25	ItemDropTableEntry	0x58	17	INT				
+25	ItemDropTableEntry	0x5c	18	INT				
+25	ItemDropTableEntry	0x60	19	INT				
+25	ItemDropTableEntry	0x64	20	INT				
+25	ItemDropTableEntry	0x68	21	INT				
+25	ItemDropTableEntry	0x6c	22	INT				
+25	ItemDropTableEntry	0x70	23	INT				
+25	ItemDropTableEntry	0x74	24	INT				
+25	ItemDropTableEntry	0x78	25	INT				
+25	ItemDropTableEntry	0x7c	26	INT				
+25	ItemDropTableEntry	0x80	27	INT				
+25	ItemDropTableEntry	0x84	28	INT				
+25	ItemDropTableEntry	0x88	29	INT				
+25	ItemDropTableEntry	0x8c	30	INT				
+25	ItemDropTableEntry	0x90	31	INT				
+25	ItemDropTableEntry	0x94	32	INT				
+25	ItemDropTableEntry	0x98	33	INT				
+25	ItemDropTableEntry	0x9c	34	INT				
+25	ItemDropTableEntry	0xa0	35	INT				
+25	ItemDropTableEntry	0xa4	36	INT				
+25	ItemDropTableEntry	0xa8	37	INT				
+25	ItemDropTableEntry	0xac	38	INT				
+25	ItemDropTableEntry	0xb0	39	INT				
+25	ItemDropTableEntry	0xb4	40	INT				
+25	ItemDropTableEntry	0xb8	41	INT				
+25	ItemDropTableEntry	0xbc	42	INT				
+25	ItemDropTableEntry	0xc0	43	INT				
+25	ItemDropTableEntry	0xc4	44	INT				
+25	ItemDropTableEntry	0xc8	45	INT				
+25	ItemDropTableEntry	0xcc	46	INT				
+25	ItemDropTableEntry	0xd0	47	INT				
+25	ItemDropTableEntry	0xd4	48	INT				
+25	ItemDropTableEntry	0xd8	49	INT				
+25	ItemDropTableEntry	0xdc	50	INT				
+25	ItemDropTableEntry	0xe0	51	INT				
+25	ItemDropTableEntry	0xe4	52	INT				
+25	ItemDropTableEntry	0xe8	53	INT				
+25	ItemDropTableEntry	0xec	54	INT				
+25	ItemDropTableEntry	0xf0	55	INT				
+25	ItemDropTableEntry	0xf4	56	INT				
+25	ItemDropTableEntry	0xf8	57	INT				
+25	ItemDropTableEntry	0xfc	58	INT				
+25	ItemDropTableEntry	0x100	59	INT				
+25	ItemDropTableEntry	0x104	60	INT				
+25	ItemDropTableEntry	0x108	61	INT				
+25	ItemDropTableEntry	0x10c	62	INT				
+25	ItemDropTableEntry	0x110	63	INT				
+25	ItemDropTableEntry	0x114	64	INT				
+25	ItemDropTableEntry	0x118	65	INT				
+25	ItemDropTableEntry	0x11c	66	INT				
+25	ItemDropTableEntry	0x120	67	INT				
+25	ItemDropTableEntry	0x124	68	INT				
+25	ItemDropTableEntry	0x128	69	INT				
+25	ItemDropTableEntry	0x12c	70	INT				
+25	ItemDropTableEntry	0x130	71	INT				
+25	ItemDropTableEntry	0x134	72	INT				
+25	ItemDropTableEntry	0x138	73	INT				
+25	ItemDropTableEntry	0x13c	74	INT				
+25	ItemDropTableEntry	0x140	75	INT				
+25	ItemDropTableEntry	0x144	76	INT				
+25	ItemDropTableEntry	0x148	77	INT				
+25	ItemDropTableEntry	0x14c	78	INT				
+25	ItemDropTableEntry	0x150	79	INT				
+25	ItemDropTableEntry	0x154	80	INT				
+25	ItemDropTableEntry	0x158	81	INT				
+25	ItemDropTableEntry	0x15c	82	INT				
+25	ItemDropTableEntry	0x160	83	INT				
+25	ItemDropTableEntry	0x164	84	INT				
+25	ItemDropTableEntry	0x168	85	INT				
+25	ItemDropTableEntry	0x16c	86	INT				
+25	ItemDropTableEntry	0x170	87	INT				
+25	ItemDropTableEntry	0x174	88	INT				
+25	ItemDropTableEntry	0x178	89	INT				
+25	ItemDropTableEntry	0x17c	90	INT				
+25	ItemDropTableEntry	0x180	91	INT				
+25	ItemDropTableEntry	0x184	92	INT				
+25	ItemDropTableEntry	0x188	93	INT				
+25	ItemDropTableEntry	0x18c	94	INT				
+25	ItemDropTableEntry	0x190	95	INT				
+25	ItemDropTableEntry	0x194	96	INT				
+25	ItemDropTableEntry	0x198	97	INT				
+25	ItemDropTableEntry	0x19c	98	INT				
+25	ItemDropTableEntry	0x1a0	99	INT				
+25	ItemDropTableEntry	0x1a4	100	INT				
+25	ItemDropTableEntry	0x1a8	101	INT				
+25	ItemDropTableEntry	0x1ac	102	INT				
+25	ItemDropTableEntry	0x1b0	103	INT				
+25	ItemDropTableEntry	0x1b4	104	INT				
+25	ItemDropTableEntry	0x1b8	105	INT				
+25	ItemDropTableEntry	0x1bc	106	INT				
+25	ItemDropTableEntry	0x1c0	107	INT				
+25	ItemDropTableEntry	0x1c4	108	INT				
+25	ItemDropTableEntry	0x1c8	109	INT				
+25	ItemDropTableEntry	0x1cc	110	INT				
+25	ItemDropTableEntry	0x1d0	1001	INT				
+25	ItemDropTableEntry	0x1d4	1002	INT				
+25	ItemDropTableEntry	0x1d8	1003	INT				
+25	ItemDropTableEntry	0x1dc	1004	INT				
+25	ItemDropTableEntry	0x1e0	1005	INT				
+25	ItemDropTableEntry	0x1e4	1006	INT				
+25	ItemDropTableEntry	0x1e8	1007	INT				
+25	ItemDropTableEntry	0x1ec	1008	INT				
+25	ItemDropTableEntry	0x1f0	1009	INT				
+25	ItemDropTableEntry	0x1f4	1010	INT				
+25	ItemDropTableEntry	0x1f8	1011	INT				
+25	ItemDropTableEntry	0x1fc	1012	INT				
+25	ItemDropTableEntry	0x200	1013	INT				
+25	ItemDropTableEntry	0x204	1014	INT				
+25	ItemDropTableEntry	0x208	1015	INT				
+25	ItemDropTableEntry	0x20c	1016	INT				
+25	ItemDropTableEntry	0x210	1017	INT				
+25	ItemDropTableEntry	0x214	1018	INT				
+25	ItemDropTableEntry	0x218	1019	INT				
+25	ItemDropTableEntry	0x21c	1020	INT				
+25	ItemDropTableEntry	0x220	1021	INT				
+25	ItemDropTableEntry	0x224	1022	INT				
+25	ItemDropTableEntry	0x228	1023	INT				
+25	ItemDropTableEntry	0x22c	1024	INT				
+25	ItemDropTableEntry	0x230	1025	INT				
+25	ItemDropTableEntry	0x234	1026	INT				
+25	ItemDropTableEntry	0x238	1027	INT				
+25	ItemDropTableEntry	0x23c	1028	INT				
+25	ItemDropTableEntry	0x240	1029	INT				
+25	ItemDropTableEntry	0x244	1030	INT				
+25	ItemDropTableEntry	0x248	1031	INT				
+25	ItemDropTableEntry	0x24c	1032	INT				
+25	ItemDropTableEntry	0x250	1033	INT				
+25	ItemDropTableEntry	0x254	1034	INT				
+25	ItemDropTableEntry	0x258	1035	INT				
+25	ItemDropTableEntry	0x25c	1036	INT				
+25	ItemDropTableEntry	0x260	1037	INT				
+25	ItemDropTableEntry	0x264	1038	INT				
+25	ItemDropTableEntry	0x268	1039	INT				
+25	ItemDropTableEntry	0x26c	1040	INT				
+25	ItemDropTableEntry	0x270	1041	INT				
+25	ItemDropTableEntry	0x274	1042	INT				
+25	ItemDropTableEntry	0x278	1043	INT				
+25	ItemDropTableEntry	0x27c	1044	INT				
+25	ItemDropTableEntry	0x280	1045	INT				
+25	ItemDropTableEntry	0x284	1046	INT				
+25	ItemDropTableEntry	0x288	1047	INT				
+25	ItemDropTableEntry	0x28c	1048	INT				
+25	ItemDropTableEntry	0x290	1049	INT				
+25	ItemDropTableEntry	0x294	1050	INT				
+25	ItemDropTableEntry	0x298	1051	INT				
+25	ItemDropTableEntry	0x29c	1052	INT				
+25	ItemDropTableEntry	0x2a0	1053	INT				
+25	ItemDropTableEntry	0x2a4	1054	INT				
+25	ItemDropTableEntry	0x2a8	1055	INT				
+25	ItemDropTableEntry	0x2ac	1056	INT				
+25	ItemDropTableEntry	0x2b0	1057	INT				
+25	ItemDropTableEntry	0x2b4	1058	INT				
+25	ItemDropTableEntry	0x2b8	1059	INT				
+25	ItemDropTableEntry	0x2bc	1060	INT				
+25	ItemDropTableEntry	0x2c0	1061	INT				
+25	ItemDropTableEntry	0x2c4	1062	INT				
+25	ItemDropTableEntry	0x2c8	1063	INT				
+25	ItemDropTableEntry	0x2cc	1064	INT				
+25	ItemDropTableEntry	0x2d0	1065	INT				
+25	ItemDropTableEntry	0x2d4	1066	INT				
+25	ItemDropTableEntry	0x2d8	1067	INT				
+25	ItemDropTableEntry	0x2dc	1068	INT				
+25	ItemDropTableEntry	0x2e0	1069	INT				
+25	ItemDropTableEntry	0x2e4	1070	INT				
+25	ItemDropTableEntry	0x2e8	1071	INT				
+25	ItemDropTableEntry	0x2ec	1072	INT				
+25	ItemDropTableEntry	0x2f0	1073	INT				
+25	ItemDropTableEntry	0x2f4	1074	INT				
+25	ItemDropTableEntry	0x2f8	1075	INT				
+25	ItemDropTableEntry	0x2fc	1076	INT				
+25	ItemDropTableEntry	0x300	1077	INT				
+25	ItemDropTableEntry	0x304	1078	INT				
+25	ItemDropTableEntry	0x308	1079	INT				
+25	ItemDropTableEntry	0x30c	1080	INT				
+25	ItemDropTableEntry	0x314	1082	INT				
+25	ItemDropTableEntry	0x318	1083	INT				
+25	ItemDropTableEntry	0x31c	1084	INT				
+25	ItemDropTableEntry	0x320	1085	INT				
+25	ItemDropTableEntry	0x324	1086	INT				
+25	ItemDropTableEntry	0x328	1087	INT				
+25	ItemDropTableEntry	0x32c	1088	INT				
+25	ItemDropTableEntry	0x330	1089	INT				
+25	ItemDropTableEntry	0x334	1090	INT				
+25	ItemDropTableEntry	0x338	1091	INT				
+25	ItemDropTableEntry	0x33c	1092	INT				
+25	ItemDropTableEntry	0x340	1093	INT				
+25	ItemDropTableEntry	0x344	1094	INT				
+25	ItemDropTableEntry	0x348	1095	INT				
+25	ItemDropTableEntry	0x34c	1096	INT				
+25	ItemDropTableEntry	0x350	1097	INT				
+25	ItemDropTableEntry	0x354	1098	INT				
+25	ItemDropTableEntry	0x358	1099	INT				
+25	ItemDropTableEntry	0x35c	1100	INT				
+25	ItemDropTableEntry	0x360	1101	INT				
+25	ItemDropTableEntry	0x364	1102	INT				
+25	ItemDropTableEntry	0x368	1103	INT				
+25	ItemDropTableEntry	0x36c	1104	INT				
+25	ItemDropTableEntry	0x370	1105	INT				
+25	ItemDropTableEntry	0x374	1106	INT				
+25	ItemDropTableEntry	0x378	1107	INT				
+25	ItemDropTableEntry	0x37c	1108	INT				
+25	ItemDropTableEntry	0x380	1109	INT				
+25	ItemDropTableEntry	0x384	1110	INT				
+26	ItemLevelModifier	0x0	mLvl-iLvl	INT				
+26	ItemLevelModifier	0x4	InferiorScalar	FLOAT				
+26	ItemLevelModifier	0x8	NormalScalar	FLOAT				
+26	ItemLevelModifier	0xc	SuperiorScalar	FLOAT				
+26	ItemLevelModifier	0x10	1-affixScalar	FLOAT				
+26	ItemLevelModifier	0x14	2-affixScalar	FLOAT				
+26	ItemLevelModifier	0x18	3-affixScalar	FLOAT				
+26	ItemLevelModifier	0x1c	4-affixScalar	FLOAT				
+26	ItemLevelModifier	0x20	5-affixScalar	FLOAT				
+26	ItemLevelModifier	0x24	6-affixScalar	FLOAT				
+26	ItemLevelModifier	0x28	LegendaryScalar	FLOAT				
+26	ItemLevelModifier	0x2c	SpecialScalar	FLOAT				
+26	ItemLevelModifier	0x30	Socket0	INT				
+26	ItemLevelModifier	0x34	Socket1	INT				
+26	ItemLevelModifier	0x38	Socket2	INT				
+26	ItemLevelModifier	0x3c	Socket3	INT				
+26	ItemLevelModifier	0x40	Socket4	INT				
+26	ItemLevelModifier	0x44	Socket5	INT				
+26	ItemLevelModifier	0x48	Socket6	INT				
+26	ItemLevelModifier	0x4c	Socket7	INT				
+26	ItemLevelModifier	0x50	Socket8	INT				
+26	ItemLevelModifier	0x54	Socket9	INT				
+26	ItemLevelModifier	0x58	Socket10	INT				
+27	QualityClass	0x0	tHeader.serName_Console	SerializeData				
+27	QualityClass	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+27	QualityClass	0x10	tHeader.gbid	INT				
+27	QualityClass	0x14	tHeader.dwPad	INT				
+27	QualityClass	0x1c	InferiorScalar	FLOAT				
+27	QualityClass	0x20	NormalScalar	FLOAT				
+27	QualityClass	0x24	SuperiorScalar	FLOAT				
+27	QualityClass	0x28	1-affixScalar	FLOAT				
+27	QualityClass	0x2c	2-affixScalar	FLOAT				
+27	QualityClass	0x30	3-affixScalar	FLOAT				
+27	QualityClass	0x34	4-affixScalar	FLOAT				
+27	QualityClass	0x38	5-affixScalar	FLOAT				
+27	QualityClass	0x3c	6-affixScalar	FLOAT				
+27	QualityClass	0x40	LegendaryScalar	FLOAT				
+27	QualityClass	0x44	SpecialScalar	FLOAT				
+27	QualityClass	0x48	InferiorAdd	FLOAT				
+27	QualityClass	0x4c	NormalAdd	FLOAT				
+27	QualityClass	0x50	SuperiorAdd	FLOAT				
+27	QualityClass	0x54	1-affixAdd	FLOAT				
+27	QualityClass	0x58	2-affixAdd	FLOAT				
+27	QualityClass	0x5c	3-affixAdd	FLOAT				
+27	QualityClass	0x60	4-affixAdd	FLOAT				
+27	QualityClass	0x64	5-affixAdd	FLOAT				
+27	QualityClass	0x68	6-affixAdd	FLOAT				
+27	QualityClass	0x6c	LegendaryAdd	FLOAT				
+27	QualityClass	0x70	SpecialAdd	FLOAT				
+27	QualityClass	0x74	dwPad	INT				
+28	HandicapLevel	0x0	HealthScalarNormal	FLOAT				
+28	HandicapLevel	0x4	DamageScalarNormal	FLOAT				
+28	HandicapLevel	0x8	MagicFindNormal	FLOAT				
+28	HandicapLevel	0xc	GoldFindNormal	FLOAT				
+28	HandicapLevel	0x10	XPBonusNormal	FLOAT				
+28	HandicapLevel	0x14	CrushingBlowNormal	FLOAT				
+28	HandicapLevel	0x18	SignificantKillPlatinum	INT				
+28	HandicapLevel	0x1c	dwPad	INT				
+29	ItemSalvageLevel	0x0	SalvageTreasureClassNormal	SNO			52	
+29	ItemSalvageLevel	0x4	SalvageTreasureClassMagic	SNO			52	
+29	ItemSalvageLevel	0x8	SalvageTreasureClassRare	SNO			52	
+29	ItemSalvageLevel	0xc	SalvageTreasureClassLegendary	SNO			52	
+32	RecipeEntry	0x0	tHeader.serName_Console	SerializeData				
+32	RecipeEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+32	RecipeEntry	0x10	tHeader.gbid	INT				
+32	RecipeEntry	0x14	tHeader.dwPad	INT				
+32	RecipeEntry	0x18	snoRecipe	SNO			49	
+32	RecipeEntry	0x1c	eCrafterType	ENUM				gCrafterTypes
+32	RecipeEntry	0x20	dwFlags	INT				
+32	RecipeEntry	0x24	nLevel	INT				
+32	RecipeEntry	0x28	nCost	INT				
+32	RecipeEntry	0x2c	nNumIngredients	INT				
+32		0x30	tIngredient[0].gbidItem	GBID			2	
+32		0x34	tIngredient[0].nQuantity	INT				
+32		0x38	tIngredient[1].gbidItem	GBID			2	
+32		0x3c	tIngredient[1].nQuantity	INT				
+32		0x40	tIngredient[2].gbidItem	GBID			2	
+32		0x44	tIngredient[2].nQuantity	INT				
+32		0x48	tIngredient[3].gbidItem	GBID			2	
+32		0x4c	tIngredient[3].nQuantity	INT				
+32		0x50	tIngredient[4].gbidItem	GBID			2	
+32		0x54	tIngredient[4].nQuantity	INT				
+32		0x58	tIngredient[5].gbidItem	GBID			2	
+32		0x5c	tIngredient[5].nQuantity	INT				
+33	SetItemBonusTableEntry	0x0	tHeader.serName_Console	SerializeData				
+33	SetItemBonusTableEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+33	SetItemBonusTableEntry	0x10	tHeader.gbid	INT				
+33	SetItemBonusTableEntry	0x14	tHeader.dwPad	INT				
+33	SetItemBonusTableEntry	0x18	Set	GBID			33	
+33	SetItemBonusTableEntry	0x1c	Required	INT				
+33		0x20	ptSetItemBonusAttributes[0].Attribute	TRANSLATEABLE				
+33		0x24	ptSetItemBonusAttributes[0].SNOParam	ATTRIBUTEPARAM				
+33		0x28	ptSetItemBonusAttributes[0].Formula	FORMULA				
+33		0x30	ptSetItemBonusAttributes[0].serAttributeFormula	SerializeData				
+33		0x38	ptSetItemBonusAttributes[1].Attribute	TRANSLATEABLE				
+33		0x3c	ptSetItemBonusAttributes[1].SNOParam	ATTRIBUTEPARAM				
+33		0x40	ptSetItemBonusAttributes[1].Formula	FORMULA				
+33		0x48	ptSetItemBonusAttributes[1].serAttributeFormula	SerializeData				
+33		0x50	ptSetItemBonusAttributes[2].Attribute	TRANSLATEABLE				
+33		0x54	ptSetItemBonusAttributes[2].SNOParam	ATTRIBUTEPARAM				
+33		0x58	ptSetItemBonusAttributes[2].Formula	FORMULA				
+33		0x60	ptSetItemBonusAttributes[2].serAttributeFormula	SerializeData				
+33		0x68	ptSetItemBonusAttributes[3].Attribute	TRANSLATEABLE				
+33		0x6c	ptSetItemBonusAttributes[3].SNOParam	ATTRIBUTEPARAM				
+33		0x70	ptSetItemBonusAttributes[3].Formula	FORMULA				
+33		0x78	ptSetItemBonusAttributes[3].serAttributeFormula	SerializeData				
+33		0x80	ptSetItemBonusAttributes[4].Attribute	TRANSLATEABLE				
+33		0x84	ptSetItemBonusAttributes[4].SNOParam	ATTRIBUTEPARAM				
+33		0x88	ptSetItemBonusAttributes[4].Formula	FORMULA				
+33		0x90	ptSetItemBonusAttributes[4].serAttributeFormula	SerializeData				
+33		0x98	ptSetItemBonusAttributes[5].Attribute	TRANSLATEABLE				
+33		0x9c	ptSetItemBonusAttributes[5].SNOParam	ATTRIBUTEPARAM				
+33		0xa0	ptSetItemBonusAttributes[5].Formula	FORMULA				
+33		0xa8	ptSetItemBonusAttributes[5].serAttributeFormula	SerializeData				
+33		0xb0	ptSetItemBonusAttributes[6].Attribute	TRANSLATEABLE				
+33		0xb4	ptSetItemBonusAttributes[6].SNOParam	ATTRIBUTEPARAM				
+33		0xb8	ptSetItemBonusAttributes[6].Formula	FORMULA				
+33		0xc0	ptSetItemBonusAttributes[6].serAttributeFormula	SerializeData				
+33		0xc8	ptSetItemBonusAttributes[7].Attribute	TRANSLATEABLE				
+33		0xcc	ptSetItemBonusAttributes[7].SNOParam	ATTRIBUTEPARAM				
+33		0xd0	ptSetItemBonusAttributes[7].Formula	FORMULA				
+33		0xd8	ptSetItemBonusAttributes[7].serAttributeFormula	SerializeData				
+34	EliteModifierData	0x0	tHeader.serName_Console	SerializeData				
+34	EliteModifierData	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+34	EliteModifierData	0x10	tHeader.gbid	INT				
+34	EliteModifierData	0x14	tHeader.dwPad	INT				
+34	EliteModifierData	0x18	Stun DR	FLOAT				
+34	EliteModifierData	0x1c	Stun DM	TIME				
+34	EliteModifierData	0x20	Charm DR	FLOAT				
+34	EliteModifierData	0x24	Charm DM	TIME				
+34	EliteModifierData	0x28	Consumption DR	FLOAT				
+34	EliteModifierData	0x2c	Consumption DM	TIME				
+34	EliteModifierData	0x30	Sessile DR	FLOAT				
+34	EliteModifierData	0x34	Sessile DM	TIME				
+34	EliteModifierData	0x38	Fear DR	FLOAT				
+34	EliteModifierData	0x3c	Fear DM	TIME				
+34	EliteModifierData	0x40	Root DR	FLOAT				
+34	EliteModifierData	0x44	Root DM	TIME				
+34	EliteModifierData	0x48	Movement Slow DR	FLOAT				
+34	EliteModifierData	0x4c	Movement Slow DM	TIME				
+34	EliteModifierData	0x50	Movement Slow ER	FLOAT				
+34	EliteModifierData	0x54	Attack Speed DR	FLOAT				
+34	EliteModifierData	0x58	Attack Speed DM	TIME				
+34	EliteModifierData	0x5c	Attack Speed ER	FLOAT				
+34	EliteModifierData	0x60	Knockback Resist	FLOAT				
+34	EliteModifierData	0x64	Knockback ER	FLOAT				
+34	EliteModifierData	0x68	Knockback Min	FLOAT				
+34	EliteModifierData	0x6c	dwPad	INT				
+35	ItemTierData	0x0	Head	GBID			2	
+35	ItemTierData	0x4	Torso	GBID			2	
+35	ItemTierData	0x8	Feet	GBID			2	
+35	ItemTierData	0xc	Hands	GBID			2	
+35	ItemTierData	0x10	Shoulders	GBID			2	
+35	ItemTierData	0x14	Legs	GBID			2	
+35	ItemTierData	0x18	Bracers	GBID			2	
+35	ItemTierData	0x1c	Belt	GBID			2	
+36	PowerFormulaTableEntry	0x0	Name	CHARARRAY		1024		
+36	PowerFormulaTableEntry	0x400	Value0	FLOAT				
+36	PowerFormulaTableEntry	0x404	Value1	FLOAT				
+36	PowerFormulaTableEntry	0x408	Value2	FLOAT				
+36	PowerFormulaTableEntry	0x40c	Value3	FLOAT				
+36	PowerFormulaTableEntry	0x410	Value4	FLOAT				
+36	PowerFormulaTableEntry	0x414	Value5	FLOAT				
+36	PowerFormulaTableEntry	0x418	Value6	FLOAT				
+36	PowerFormulaTableEntry	0x41c	Value7	FLOAT				
+36	PowerFormulaTableEntry	0x420	Value8	FLOAT				
+36	PowerFormulaTableEntry	0x424	Value9	FLOAT				
+36	PowerFormulaTableEntry	0x428	Value10	FLOAT				
+36	PowerFormulaTableEntry	0x42c	Value11	FLOAT				
+36	PowerFormulaTableEntry	0x430	Value12	FLOAT				
+36	PowerFormulaTableEntry	0x434	Value13	FLOAT				
+36	PowerFormulaTableEntry	0x438	Value14	FLOAT				
+36	PowerFormulaTableEntry	0x43c	Value15	FLOAT				
+36	PowerFormulaTableEntry	0x440	Value16	FLOAT				
+36	PowerFormulaTableEntry	0x444	Value17	FLOAT				
+36	PowerFormulaTableEntry	0x448	Value18	FLOAT				
+36	PowerFormulaTableEntry	0x44c	Value19	FLOAT				
+36	PowerFormulaTableEntry	0x450	Value20	FLOAT				
+36	PowerFormulaTableEntry	0x454	Value21	FLOAT				
+36	PowerFormulaTableEntry	0x458	Value22	FLOAT				
+36	PowerFormulaTableEntry	0x45c	Value23	FLOAT				
+36	PowerFormulaTableEntry	0x460	Value24	FLOAT				
+36	PowerFormulaTableEntry	0x464	Value25	FLOAT				
+36	PowerFormulaTableEntry	0x468	Value26	FLOAT				
+36	PowerFormulaTableEntry	0x46c	Value27	FLOAT				
+36	PowerFormulaTableEntry	0x470	Value28	FLOAT				
+36	PowerFormulaTableEntry	0x474	Value29	FLOAT				
+36	PowerFormulaTableEntry	0x478	Value30	FLOAT				
+36	PowerFormulaTableEntry	0x47c	Value31	FLOAT				
+36	PowerFormulaTableEntry	0x480	Value32	FLOAT				
+36	PowerFormulaTableEntry	0x484	Value33	FLOAT				
+36	PowerFormulaTableEntry	0x488	Value34	FLOAT				
+36	PowerFormulaTableEntry	0x48c	Value35	FLOAT				
+36	PowerFormulaTableEntry	0x490	Value36	FLOAT				
+36	PowerFormulaTableEntry	0x494	Value37	FLOAT				
+36	PowerFormulaTableEntry	0x498	Value38	FLOAT				
+36	PowerFormulaTableEntry	0x49c	Value39	FLOAT				
+36	PowerFormulaTableEntry	0x4a0	Value40	FLOAT				
+36	PowerFormulaTableEntry	0x4a4	Value41	FLOAT				
+36	PowerFormulaTableEntry	0x4a8	Value42	FLOAT				
+36	PowerFormulaTableEntry	0x4ac	Value43	FLOAT				
+36	PowerFormulaTableEntry	0x4b0	Value44	FLOAT				
+36	PowerFormulaTableEntry	0x4b4	Value45	FLOAT				
+36	PowerFormulaTableEntry	0x4b8	Value46	FLOAT				
+36	PowerFormulaTableEntry	0x4bc	Value47	FLOAT				
+36	PowerFormulaTableEntry	0x4c0	Value48	FLOAT				
+36	PowerFormulaTableEntry	0x4c4	Value49	FLOAT				
+36	PowerFormulaTableEntry	0x4c8	Value50	FLOAT				
+36	PowerFormulaTableEntry	0x4cc	Value51	FLOAT				
+36	PowerFormulaTableEntry	0x4d0	Value52	FLOAT				
+36	PowerFormulaTableEntry	0x4d4	Value53	FLOAT				
+36	PowerFormulaTableEntry	0x4d8	Value54	FLOAT				
+36	PowerFormulaTableEntry	0x4dc	Value55	FLOAT				
+36	PowerFormulaTableEntry	0x4e0	Value56	FLOAT				
+36	PowerFormulaTableEntry	0x4e4	Value57	FLOAT				
+36	PowerFormulaTableEntry	0x4e8	Value58	FLOAT				
+36	PowerFormulaTableEntry	0x4ec	Value59	FLOAT				
+36	PowerFormulaTableEntry	0x4f0	Value60	FLOAT				
+36	PowerFormulaTableEntry	0x4f4	Value61	FLOAT				
+36	PowerFormulaTableEntry	0x4f8	Value62	FLOAT				
+36	PowerFormulaTableEntry	0x4fc	Value63	FLOAT				
+36	PowerFormulaTableEntry	0x500	Value64	FLOAT				
+36	PowerFormulaTableEntry	0x504	Value65	FLOAT				
+36	PowerFormulaTableEntry	0x508	Value66	FLOAT				
+36	PowerFormulaTableEntry	0x50c	Value67	FLOAT				
+36	PowerFormulaTableEntry	0x510	Value68	FLOAT				
+36	PowerFormulaTableEntry	0x514	Value69	FLOAT				
+36	PowerFormulaTableEntry	0x518	Value70	FLOAT				
+36	PowerFormulaTableEntry	0x51c	Value71	FLOAT				
+36	PowerFormulaTableEntry	0x520	Value72	FLOAT				
+36	PowerFormulaTableEntry	0x524	Value73	FLOAT				
+36	PowerFormulaTableEntry	0x528	Value74	FLOAT				
+36	PowerFormulaTableEntry	0x52c	Value75	FLOAT				
+37	ScriptedAchievementEvent	0x0	tHeader.serName_Console	SerializeData				
+37	ScriptedAchievementEvent	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+37	ScriptedAchievementEvent	0x10	tHeader.gbid	INT				
+37	ScriptedAchievementEvent	0x14	tHeader.dwPad	INT				
+39	LootRunQuestTierEntry	0x0	tHeader.serName_Console	SerializeData				
+39	LootRunQuestTierEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+39	LootRunQuestTierEntry	0x10	tHeader.gbid	INT				
+39	LootRunQuestTierEntry	0x14	tHeader.dwPad	INT				
+39	LootRunQuestTierEntry	0x18	snoQuest0	SNO			31	
+39	LootRunQuestTierEntry	0x1c	Weight0	FLOAT				
+39	LootRunQuestTierEntry	0x20	Type0	GBID				
+39	LootRunQuestTierEntry	0x24	Label0	GBID			2	
+39	LootRunQuestTierEntry	0x28	snoQuest1	SNO			31	
+39	LootRunQuestTierEntry	0x2c	Weight1	FLOAT				
+39	LootRunQuestTierEntry	0x30	Type1	GBID				
+39	LootRunQuestTierEntry	0x34	Label1	GBID			2	
+39	LootRunQuestTierEntry	0x38	snoQuest2	SNO			31	
+39	LootRunQuestTierEntry	0x3c	Weight2	FLOAT				
+39	LootRunQuestTierEntry	0x40	Type2	GBID				
+39	LootRunQuestTierEntry	0x44	Label2	GBID			2	
+39	LootRunQuestTierEntry	0x48	snoQuest3	SNO			31	
+39	LootRunQuestTierEntry	0x4c	Weight3	FLOAT				
+39	LootRunQuestTierEntry	0x50	Type3	GBID				
+39	LootRunQuestTierEntry	0x54	Label3	GBID			2	
+39	LootRunQuestTierEntry	0x58	snoQuest4	SNO			31	
+39	LootRunQuestTierEntry	0x5c	Weight4	FLOAT				
+39	LootRunQuestTierEntry	0x60	Type4	GBID				
+39	LootRunQuestTierEntry	0x64	Label4	GBID			2	
+39	LootRunQuestTierEntry	0x68	snoQuest5	SNO			31	
+39	LootRunQuestTierEntry	0x6c	Weight5	FLOAT				
+39	LootRunQuestTierEntry	0x70	Type5	GBID				
+39	LootRunQuestTierEntry	0x74	Label5	GBID			2	
+39	LootRunQuestTierEntry	0x78	snoQuest6	SNO			31	
+39	LootRunQuestTierEntry	0x7c	Weight6	FLOAT				
+39	LootRunQuestTierEntry	0x80	Type6	GBID				
+39	LootRunQuestTierEntry	0x84	Label6	GBID			2	
+39	LootRunQuestTierEntry	0x88	snoQuest7	SNO			31	
+39	LootRunQuestTierEntry	0x8c	Weight7	FLOAT				
+39	LootRunQuestTierEntry	0x90	Type7	GBID				
+39	LootRunQuestTierEntry	0x94	Label7	GBID			2	
+39	LootRunQuestTierEntry	0x98	snoQuest8	SNO			31	
+39	LootRunQuestTierEntry	0x9c	Weight8	FLOAT				
+39	LootRunQuestTierEntry	0xa0	Type8	GBID				
+39	LootRunQuestTierEntry	0xa4	Label8	GBID			2	
+39	LootRunQuestTierEntry	0xa8	snoQuest9	SNO			31	
+39	LootRunQuestTierEntry	0xac	Weight9	FLOAT				
+39	LootRunQuestTierEntry	0xb0	Type9	GBID				
+39	LootRunQuestTierEntry	0xb4	Label9	GBID			2	
+39	LootRunQuestTierEntry	0xb8	snoQuest10	SNO			31	
+39	LootRunQuestTierEntry	0xbc	Weight10	FLOAT				
+39	LootRunQuestTierEntry	0xc0	Type10	GBID				
+39	LootRunQuestTierEntry	0xc4	Label10	GBID			2	
+39	LootRunQuestTierEntry	0xc8	snoQuest11	SNO			31	
+39	LootRunQuestTierEntry	0xcc	Weight11	FLOAT				
+39	LootRunQuestTierEntry	0xd0	Type11	GBID				
+39	LootRunQuestTierEntry	0xd4	Label11	GBID			2	
+39	LootRunQuestTierEntry	0xd8	snoQuest12	SNO			31	
+39	LootRunQuestTierEntry	0xdc	Weight12	FLOAT				
+39	LootRunQuestTierEntry	0xe0	Type12	GBID				
+39	LootRunQuestTierEntry	0xe4	Label12	GBID			2	
+39	LootRunQuestTierEntry	0xe8	snoQuest13	SNO			31	
+39	LootRunQuestTierEntry	0xec	Weight13	FLOAT				
+39	LootRunQuestTierEntry	0xf0	Type13	GBID				
+39	LootRunQuestTierEntry	0xf4	Label13	GBID			2	
+39	LootRunQuestTierEntry	0xf8	snoQuest14	SNO			31	
+39	LootRunQuestTierEntry	0xfc	Weight14	FLOAT				
+39	LootRunQuestTierEntry	0x100	Type14	GBID				
+39	LootRunQuestTierEntry	0x104	Label14	GBID			2	
+39	LootRunQuestTierEntry	0x108	snoQuest15	SNO			31	
+39	LootRunQuestTierEntry	0x10c	Weight15	FLOAT				
+39	LootRunQuestTierEntry	0x110	Type15	GBID				
+39	LootRunQuestTierEntry	0x114	Label15	GBID			2	
+40	ParagonBonus	0x0	tHeader.serName_Console	SerializeData				
+40	ParagonBonus	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+40	ParagonBonus	0x10	tHeader.gbid	INT				
+40	ParagonBonus	0x14	tHeader.dwPad	INT				
+40	ParagonBonus	0x18	PointsMax	INT				
+40		0x20	ptAttributes[0].Attribute	TRANSLATEABLE				
+40		0x24	ptAttributes[0].SNOParam	ATTRIBUTEPARAM				
+40		0x28	ptAttributes[0].Formula	FORMULA				
+40		0x30	ptAttributes[0].serAttributeFormula	SerializeData				
+40		0x38	ptAttributes[1].Attribute	TRANSLATEABLE				
+40		0x3c	ptAttributes[1].SNOParam	ATTRIBUTEPARAM				
+40		0x40	ptAttributes[1].Formula	FORMULA				
+40		0x48	ptAttributes[1].serAttributeFormula	SerializeData				
+40		0x50	ptAttributes[2].Attribute	TRANSLATEABLE				
+40		0x54	ptAttributes[2].SNOParam	ATTRIBUTEPARAM				
+40		0x58	ptAttributes[2].Formula	FORMULA				
+40		0x60	ptAttributes[2].serAttributeFormula	SerializeData				
+40		0x68	ptAttributes[3].Attribute	TRANSLATEABLE				
+40		0x6c	ptAttributes[3].SNOParam	ATTRIBUTEPARAM				
+40		0x70	ptAttributes[3].Formula	FORMULA				
+40		0x78	ptAttributes[3].serAttributeFormula	SerializeData				
+40	ParagonBonus	0x80	Category	INT				
+40	ParagonBonus	0x84	Index	INT				
+40	ParagonBonus	0x88	PlayerClass	ENUM				gPlayerClasses
+40	ParagonBonus	0x8c	Icon	CHARARRAY		256		
+45	LegacyItemConversion	0x0	tHeader.serName_Console	SerializeData				
+45	LegacyItemConversion	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+45	LegacyItemConversion	0x10	tHeader.gbid	INT				
+45	LegacyItemConversion	0x14	tHeader.dwPad	INT				
+45	LegacyItemConversion	0x18	OldItem	GBID			2	
+45	LegacyItemConversion	0x1c	NewItem	GBID			2	
+45	LegacyItemConversion	0x20	ConsoleIgnore	INT				
+45	LegacyItemConversion	0x24	dwPad	INT				
+46	EnchantItemAffixUseCountCostScalar	0x0	UseCount	INT				
+46	EnchantItemAffixUseCountCostScalar	0x4	CostMultiplier	FLOAT				
+48	ExperienceLevelAlt	0x0	DeltaXP	INT64				
+48	ExperienceLevelAlt	0x8	DeltaXPClassic	INT				
+48	ExperienceLevelAlt	0xc	dwPad	INT				
+48	ExperienceLevelAlt	0x10	DemonHunterStrength	INT				
+48	ExperienceLevelAlt	0x14	DemonHunterDexterity	INT				
+48	ExperienceLevelAlt	0x18	DemonHunterIntelligence	INT				
+48	ExperienceLevelAlt	0x1c	DemonHunterVitality	INT				
+48	ExperienceLevelAlt	0x20	BarbarianStrength	INT				
+48	ExperienceLevelAlt	0x24	BarbarianDexterity	INT				
+48	ExperienceLevelAlt	0x28	BarbarianIntelligence	INT				
+48	ExperienceLevelAlt	0x2c	BarbarianVitality	INT				
+48	ExperienceLevelAlt	0x30	WizardStrength	INT				
+48	ExperienceLevelAlt	0x34	WizardDexterity	INT				
+48	ExperienceLevelAlt	0x38	WizardIntelligence	INT				
+48	ExperienceLevelAlt	0x3c	WizardVitality	INT				
+48	ExperienceLevelAlt	0x40	WitchDoctorStrength	INT				
+48	ExperienceLevelAlt	0x44	WitchDoctorDexterity	INT				
+48	ExperienceLevelAlt	0x48	WitchDoctorIntelligence	INT				
+48	ExperienceLevelAlt	0x4c	WitchDoctorVitality	INT				
+48	ExperienceLevelAlt	0x50	MonkStrength	INT				
+48	ExperienceLevelAlt	0x54	MonkDexterity	INT				
+48	ExperienceLevelAlt	0x58	MonkIntelligence	INT				
+48	ExperienceLevelAlt	0x5c	MonkVitality	INT				
+48	ExperienceLevelAlt	0x60	CrusaderStrength	INT				
+48	ExperienceLevelAlt	0x64	CrusaderDexterity	INT				
+48	ExperienceLevelAlt	0x68	CrusaderIntelligence	INT				
+48	ExperienceLevelAlt	0x6c	CrusaderVitality	INT				
+48	ExperienceLevelAlt	0x70	NecromancerStrength	INT				
+48	ExperienceLevelAlt	0x74	NecromancerDexterity	INT				
+48	ExperienceLevelAlt	0x78	NecromancerIntelligence	INT				
+48	ExperienceLevelAlt	0x7c	NecromancerVitality	INT				
+49	TieredLootRunLevel	0x0	HealthScalar	FLOAT				
+49	TieredLootRunLevel	0x4	DamageScalar	FLOAT				
+49	TieredLootRunLevel	0x8	MagicFind	FLOAT				
+49	TieredLootRunLevel	0xc	GoldFind	FLOAT				
+49	TieredLootRunLevel	0x10	XPBonus	FLOAT				
+49	TieredLootRunLevel	0x14	LegendaryDropBonus	FLOAT				
+49	TieredLootRunLevel	0x18	BloodShardBonus	FLOAT				
+49	TieredLootRunLevel	0x1c	AncientLegendaryChance	FLOAT				
+49	TieredLootRunLevel	0x20	JewelUpgradeCharges	INT				
+49	TieredLootRunLevel	0x24	SignificantKillPlatinum	INT				
+49	TieredLootRunLevel	0x28	EmpowerCost	INT64				
+49	TieredLootRunLevel	0x30	MonsterHPPerAdditionalPlayer	FLOAT				
+49	TieredLootRunLevel	0x34	XPReductionScalar	FLOAT				
+50	TransmuteRecipe	0x0	tHeader.serName_Console	SerializeData				
+50	TransmuteRecipe	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+50	TransmuteRecipe	0x10	tHeader.gbid	INT				
+50	TransmuteRecipe	0x14	tHeader.dwPad	INT				
+50	TransmuteRecipe	0x18	eAction	INT				
+50	TransmuteRecipe	0x18	eAction	ENUM				gTransmuteRecipeActionTypes
+50		0x1c	tIngredients[0].eType	INT				
+50		0x20	tIngredients[0].nTypeValue	INT				
+50		0x24	tIngredients[0].nQuantity	INT				
+50		0x28	tIngredients[1].eType	INT				
+50		0x2c	tIngredients[1].nTypeValue	INT				
+50		0x30	tIngredients[1].nQuantity	INT				
+50		0x34	tIngredients[2].eType	INT				
+50		0x38	tIngredients[2].nTypeValue	INT				
+50		0x3c	tIngredients[2].nQuantity	INT				
+50		0x40	tIngredients[3].eType	INT				
+50		0x44	tIngredients[3].nTypeValue	INT				
+50		0x48	tIngredients[3].nQuantity	INT				
+50		0x4c	tIngredients[4].eType	INT				
+50		0x50	tIngredients[4].nTypeValue	INT				
+50		0x54	tIngredients[4].nQuantity	INT				
+50		0x58	tIngredients[5].eType	INT				
+50		0x5c	tIngredients[5].nTypeValue	INT				
+50		0x60	tIngredients[5].nQuantity	INT				
+50		0x64	tIngredients[6].eType	INT				
+50		0x68	tIngredients[6].nTypeValue	INT				
+50		0x6c	tIngredients[6].nQuantity	INT				
+50		0x70	tIngredients[7].eType	INT				
+50		0x74	tIngredients[7].nTypeValue	INT				
+50		0x78	tIngredients[7].nQuantity	INT				
+50	TransmuteRecipe	0x7c	nIngredientsCount	INT				
+50	TransmuteRecipe	0x80	nPage	INT				
+50	TransmuteRecipe	0x84	bHidden	INT				
+51	CurrencyConversionTableEntry	0x0	tHeader.serName_Console	SerializeData				
+51	CurrencyConversionTableEntry	0x8	tHeader.szName	VARIABLEARRAY	BYTE			
+51	CurrencyConversionTableEntry	0x10	tHeader.gbid	INT				
+51	CurrencyConversionTableEntry	0x14	tHeader.dwPad	INT				
+51	CurrencyConversionTableEntry	0x18	eCurrency	INT				
+51	CurrencyConversionTableEntry	0x18	eCurrency	ENUM				gCurrencyTypes
+51	CurrencyConversionTableEntry	0x1c	Linked Items	FIXEDARRAY	GBID	5	2	
+51	CurrencyConversionTableEntry	0x30	nSortOrder	INT				
+51	CurrencyConversionTableEntry	0x34	bHidden	INT				
+51	CurrencyConversionTableEntry	0x38	bAutoPickup	INT				

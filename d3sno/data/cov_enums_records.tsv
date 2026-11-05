@@ -1,0 +1,658 @@
+record	field	kind	value	constant	label	nx_count	ps3_count	status
+actor	flags	bit	0	ACTORDEF_SCALE_COMES_FROM_ACTOR_BIT	scale comes from actor	2071	935	PROVEN
+actor	flags	bit	1	ACTORDEF_HAS_RANDOM_FACING_BIT	has random facing	750	385	PROVEN
+actor	flags	bit	2	ACTORDEF_FADE_WHEN_NEAR_BIT	fade when near	13	5	PROVEN
+actor	flags	bit	3	ACTORDEF_NEVER_TURNS_BIT	never turns	41	7	PROVEN
+actor	flags	bit	4	ACTORDEF_SENDS_CREATION_TIME_BIT	sends creation time	4	2	PROVEN
+actor	flags	bit	5	ACTORDEF_HIGH_DYNAMIC_SHADOWS_DEPRECADED_BIT	high dynamic shadows deprecaded	653	0	PROVEN
+actor	flags	bit	6	ACTORDEF_LOAD_ALL_LOOK_TEXTURES_BIT	load all look textures	4	0	PROVEN
+actor	actor_kind	value	0	ACTORTYPE_INVALID	invalid	0	0	PROVEN
+actor	actor_kind	value	1	ACTORTYPE_MONSTER	monster	3776	1767	PROVEN
+actor	actor_kind	value	2	ACTORTYPE_GIZMO	gizmo	3328	1501	PROVEN
+actor	actor_kind	value	3	ACTORTYPE_CLIENT_EFFECT	client effect	4400	1916	PROVEN
+actor	actor_kind	value	4	ACTORTYPE_SERVER_PROP	server prop	1082	653	PROVEN
+actor	actor_kind	value	5	ACTORTYPE_ENVIRONMENT	environment	749	413	PROVEN
+actor	actor_kind	value	6	ACTORTYPE_CRITTER	critter	22	19	PROVEN
+actor	actor_kind	value	7	ACTORTYPE_PLAYER	player	26	20	PROVEN
+actor	actor_kind	value	8	ACTORTYPE_ITEM	item	5134	2294	PROVEN
+actor	actor_kind	value	9	ACTORTYPE_AXE_SYMBOL	axe symbol	50	36	PROVEN
+actor	actor_kind	value	10	ACTORTYPE_PROJECTILE	projectile	427	252	PROVEN
+actor	actor_kind	value	11	ACTORTYPE_CUSTOM_BRAIN	custom brain	15	11	PROVEN
+actor	physics_flags	bit	0	PHYSICSDEF_DO_NOT_INTEGRATE_BIT_DEPRECATED	do not integrate bit deprecated	0	0	PROVEN
+actor	physics_flags	bit	1	PHYSICSDEF_DO_NOT_AUTOSLEEP_BIT	do not autosleep	0	0	PROVEN
+actor	physics_flags	bit	2	PHYSICSDEF_AFFECTED_BY_GRAVITY_BIT	affected by gravity	0	0	PROVEN
+actor	physics_flags	bit	3	PHYSICSDEF_AFFECTED_BY_WIND_BIT	affected by wind	0	0	PROVEN
+actor	physics_flags	bit	4	PHYSICSDEF_AFFECTED_BY_EXPLOSIONS_BIT	affected by explosions	0	0	PROVEN
+actor	physics_flags	bit	5	PHYSICSDEF_AFFECTED_BY_TURBULENCE_BIT_DEPRECATED	affected by turbulence bit deprecated	0	0	PROVEN
+actor	physics_flags	bit	6	PHYSICSDEF_CONSTRAINED_TO_GROUND_BIT_DEPRECATED	constrained to ground bit deprecated	0	0	PROVEN
+actor	physics_flags	bit	7	PHYSICSDEF_AFFECTED_BY_FLOCKING_BIT_DEPRECATED	affected by flocking bit deprecated	0	0	PROVEN
+actor	physics_flags	bit	8	PHYSICSDEF_HAS_MAXIMUM_ACCELERATION_BIT	has maximum acceleration	0	0	PROVEN
+actor	physics_flags	bit	9	PHYSICSDEF_HAS_MAXIMUM_SPEED_BIT	has maximum speed	0	0	PROVEN
+actor	physics_flags	bit	10	PHYSICSDEF_UNUSED_BIT	unused	0	0	PROVEN
+actor	physics_flags	bit	11	PHYSICSDEF_CONSTRAINED_TO_ALTITUDE_BIT_DEPRECATED	constrained to altitude bit deprecated	0	0	PROVEN
+actor	physics_flags	bit	12	PHYSICSDEF_CONSTRAINED_TO_SYSTEM_RADIUS_BIT_DEPRECATED	constrained to system radius bit deprecated	0	0	PROVEN
+actor	physics_flags	bit	13	PHYSICSDEF_CONSTRAINED_TO_COLLISION_SPHERES_BIT	constrained to collision spheres	0	0	PROVEN
+actor	physics_flags	bit	14	PHYSICSDEF_AFFECTED_BY_RANDOM_ACCEL	affected by random accel	0	0	PROVEN
+actor	physics_flags	bit	15	PHYSICSDEF_AFFECTED_BY_RIPPLING_BIT_DEPRECATED	affected by rippling bit deprecated	0	0	PROVEN
+actor	physics_flags	bit	16	PHYSICSDEF_CONSTRAINED_TO_LOCAL_COLLISION_SPHERES_BIT_DEPRECATED	constrained to local collision spheres bit deprecated	0	0	PROVEN
+actor	physics_flags	bit	17	PHYSICSDEF_COLLIDE_WITH_SAME_ACTOR_BIT	collide with same actor	0	0	PROVEN
+actor	physics_flags	bit	18	PHYSICSDEF_AFFECTED_BY_BUOYANCY_BIT	affected by buoyancy	0	0	PROVEN
+actor	physics_flags	bit	19	PHYSICSDEF_AFFECTED_BY_DISTURBANCE_BIT	affected by disturbance	0	0	PROVEN
+actor	physics_flags	bit	20	PHYSICSDEF_ANIMATED_PROP	animated prop	0	0	PROVEN
+actor	coll_static_required	bit	0		ALLOW_WALK	13986	6580	PROVEN
+actor	coll_static_required	bit	1		ALLOW_FLIER	1312	639	PROVEN
+actor	coll_static_required	bit	2		ALLOW_SPIDER	1092	585	PROVEN
+actor	coll_static_required	bit	6		NO_SPAWN	72	0	PROVEN
+actor	coll_static_required	bit	10		ALLOW_PROJECTILE	805	439	PROVEN
+actor	coll_static_required	bit	11		ALLOW_GHOST	365	163	PROVEN
+actor	coll_static_required	bit	3		LEVELAREA_BIT_0	0	0	PROVEN
+actor	coll_static_required	bit	4		LEVELAREA_BIT_1	0	0	PROVEN
+actor	coll_static_required	bit	5		SUBSCENE	0	0	PROVEN
+actor	coll_static_required	bit	7		SPECIAL_0	218	105	PROVEN
+actor	coll_static_required	bit	8		SPECIAL_1	197	92	PROVEN
+actor	coll_static_required	bit	12		Rounded Corner 0	0	0	PROVEN
+actor	coll_static_required	bit	13		Rounded Corner 1	0	0	PROVEN
+actor	coll_static_required	bit	14		Rounded Corner 2	0	0	PROVEN
+actor	coll_static_required	bit	15		Rounded Corner 3	0	0	PROVEN
+actor	coll_static_prevent	bit	0		ALLOW_WALK	0	1	PROVEN
+actor	coll_static_prevent	bit	1		ALLOW_FLIER	2	11	PROVEN
+actor	coll_static_prevent	bit	2		ALLOW_SPIDER	0	1	PROVEN
+actor	coll_static_prevent	bit	6		NO_SPAWN	0	0	PROVEN
+actor	coll_static_prevent	bit	10		ALLOW_PROJECTILE	0	1	PROVEN
+actor	coll_static_prevent	bit	11		ALLOW_GHOST	0	1	PROVEN
+actor	coll_static_prevent	bit	3		LEVELAREA_BIT_0	0	0	PROVEN
+actor	coll_static_prevent	bit	4		LEVELAREA_BIT_1	0	0	PROVEN
+actor	coll_static_prevent	bit	5		SUBSCENE	0	0	PROVEN
+actor	coll_static_prevent	bit	7		SPECIAL_0	0	5	PROVEN
+actor	coll_static_prevent	bit	8		SPECIAL_1	0	1	PROVEN
+actor	coll_static_prevent	bit	12		Rounded Corner 0	0	0	PROVEN
+actor	coll_static_prevent	bit	13		Rounded Corner 1	0	0	PROVEN
+actor	coll_static_prevent	bit	14		Rounded Corner 2	0	0	PROVEN
+actor	coll_static_prevent	bit	15		Rounded Corner 3	0	0	PROVEN
+actor	coll_dynamic_no_overlap	bit	0	COLL_DYN_ACTOR	actor	5704	3049	PROVEN
+actor	coll_dynamic_no_overlap	bit	1	COLL_DYN_PET	pet	5613	3026	PROVEN
+actor	coll_dynamic_no_overlap	bit	2	COLL_DYN_PROJECTILE	projectile	25	7	PROVEN
+actor	coll_dynamic_no_overlap	bit	3	COLL_DYN_PLAYER	player	5712	3059	PROVEN
+actor	coll_dynamic_no_overlap	bit	4	COLL_DYN_GIZMO	gizmo	9450	4432	PROVEN
+actor	coll_dynamic_no_overlap	bit	5	COLL_DYN_LOS_BLOCKER	los blocker	9902	4692	PROVEN
+actor	coll_dynamic_no_overlap	bit	6	COLL_DYN_GATE	gate	7752	3321	PROVEN
+actor	coll_dynamic_no_overlap	bit	7	COLL_DYN_FLIPPY	flippy	3841	1389	PROVEN
+actor	coll_dynamic_no_overlap	bit	8	COLL_DYN_OWNED	owned	3900	1945	PROVEN
+actor	coll_dynamic_no_overlap	bit	9	COLL_DYN_WRECKABLE	wreckable	9407	4412	PROVEN
+actor	coll_dynamic_no_overlap	bit	10	COLL_DYN_PROJECTILE_BLOCKER	projectile blocker	2290	1242	PROVEN
+actor	coll_dynamic_no_overlap	bit	11	COLL_DYN_TELEPORT_BLOCKER	teleport blocker	55	23	PROVEN
+actor	coll_dynamic_no_overlap	bit	12	COLL_DYN_MALTHAEL_GHOST	malthael ghost	470	262	PROVEN
+actor	coll_dynamic_no_overlap	bit	17		unnamed bit above the 13 defined dynamic flags (retired flag)	470	264	HYPOTHESIS
+actor	coll_dynamic_own	bit	0	COLL_DYN_ACTOR	actor	7792	4021	PROVEN
+actor	coll_dynamic_own	bit	1	COLL_DYN_PET	pet	818	336	PROVEN
+actor	coll_dynamic_own	bit	2	COLL_DYN_PROJECTILE	projectile	425	262	PROVEN
+actor	coll_dynamic_own	bit	3	COLL_DYN_PLAYER	player	61	30	PROVEN
+actor	coll_dynamic_own	bit	4	COLL_DYN_GIZMO	gizmo	1796	711	PROVEN
+actor	coll_dynamic_own	bit	5	COLL_DYN_LOS_BLOCKER	los blocker	118	59	PROVEN
+actor	coll_dynamic_own	bit	6	COLL_DYN_GATE	gate	90	45	PROVEN
+actor	coll_dynamic_own	bit	7	COLL_DYN_FLIPPY	flippy	3862	1428	PROVEN
+actor	coll_dynamic_own	bit	8	COLL_DYN_OWNED	owned	276	169	PROVEN
+actor	coll_dynamic_own	bit	9	COLL_DYN_WRECKABLE	wreckable	646	165	PROVEN
+actor	coll_dynamic_own	bit	10	COLL_DYN_PROJECTILE_BLOCKER	projectile blocker	298	168	PROVEN
+actor	coll_dynamic_own	bit	11	COLL_DYN_TELEPORT_BLOCKER	teleport blocker	212	110	PROVEN
+actor	coll_dynamic_own	bit	12	COLL_DYN_MALTHAEL_GHOST	malthael ghost	2	0	PROVEN
+actor	coll_shape	value	0	COLLISION_SHAPE_NONE	none	2809	1576	PROVEN
+actor	coll_shape	value	1	COLLISION_SHAPE_CYLINDER	cylinder	15185	6797	PROVEN
+actor	coll_shape	value	2	COLLISION_SHAPE_BOX	box	1015	509	PROVEN
+actor	material	value	-1	INVALID_MATERIAL	invalid	0	0	SUPPORTED
+actor	material	value	0	DEFAULT_MATERIAL	default	16484	7608	SUPPORTED
+actor	material	value	1	METAL_MATERIAL	metal	178	79	SUPPORTED
+actor	material	value	2	WOOD_MATERIAL	wood	307	201	SUPPORTED
+actor	material	value	3	BONE_MATERIAL	bone	447	137	SUPPORTED
+actor	material	value	4	FLESH_MATERIAL	flesh	1223	618	SUPPORTED
+actor	material	value	5	WATER_MATERIAL	water	4	3	SUPPORTED
+actor	material	value	6	STONE_MATERIAL	stone	320	213	SUPPORTED
+actor	material	value	7	GLASS_MATERIAL	glass	6	3	SUPPORTED
+actor	material	value	8	PAPER_MATERIAL	paper	17	10	SUPPORTED
+actor	material	value	9	METAL2_MATERIAL	metal2	2	1	SUPPORTED
+actor	material	value	10	METAL3_MATERIAL	metal3	2	0	SUPPORTED
+actor	material	value	11	WOOD2_MATERIAL	wood2	11	6	SUPPORTED
+actor	material	value	12	WOOD3_MATERIAL	wood3	1	0	SUPPORTED
+actor	material	value	13	STONE2_MATERIAL	stone2	5	2	SUPPORTED
+actor	material	value	14	STONE3_MATERIAL	stone3	1	0	SUPPORTED
+actor	material	value	15	BONE2_MATERIAL	bone2	1	1	SUPPORTED
+actor	material	value	16	BONE3_MATERIAL	bone3	0	0	SUPPORTED
+actor_event	material	value	-1	INVALID_MATERIAL	invalid	0	0	SUPPORTED
+actor_event	material	value	0	DEFAULT_MATERIAL	default	24810	12094	SUPPORTED
+actor_event	material	value	1	METAL_MATERIAL	metal	354	125	SUPPORTED
+actor_event	material	value	2	WOOD_MATERIAL	wood	202	72	SUPPORTED
+actor_event	material	value	3	BONE_MATERIAL	bone	328	158	SUPPORTED
+actor_event	material	value	4	FLESH_MATERIAL	flesh	88	36	SUPPORTED
+actor_event	material	value	5	WATER_MATERIAL	water	225	122	SUPPORTED
+actor_event	material	value	6	STONE_MATERIAL	stone	21	10	SUPPORTED
+actor_event	material	value	7	GLASS_MATERIAL	glass	0	0	SUPPORTED
+actor_event	material	value	8	PAPER_MATERIAL	paper	16	6	SUPPORTED
+actor_event	material	value	9	METAL2_MATERIAL	metal2	140	52	SUPPORTED
+actor_event	material	value	10	METAL3_MATERIAL	metal3	40	0	SUPPORTED
+actor_event	material	value	11	WOOD2_MATERIAL	wood2	28	14	SUPPORTED
+actor_event	material	value	12	WOOD3_MATERIAL	wood3	0	0	SUPPORTED
+actor_event	material	value	13	STONE2_MATERIAL	stone2	2	2	SUPPORTED
+actor_event	material	value	14	STONE3_MATERIAL	stone3	2	2	SUPPORTED
+actor_event	material	value	15	BONE2_MATERIAL	bone2	77	43	SUPPORTED
+actor_event	material	value	16	BONE3_MATERIAL	bone3	34	26	SUPPORTED
+actor_event	trigger_kind	value	0	TRIGGEREDEVENTTYPE_ADD_OBJECT	add object	16909	8002	PROVEN
+actor_event	trigger_kind	value	1	TRIGGEREDEVENTTYPE_DETACH_OBJECT	detach object	176	62	PROVEN
+actor_event	trigger_kind	value	2	TRIGGEREDEVENTTYPE_ADD_CLOTH_DEPRECATED	add cloth deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	3	TRIGGEREDEVENTTYPE_DELETE_CLOTH_DEPRECATED	delete cloth deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	4	TRIGGEREDEVENTTYPE_ADD_TRAIL	add trail	443	233	PROVEN
+actor_event	trigger_kind	value	5	TRIGGEREDEVENTTYPE_DELETE_TRAIL_DEPRECATED	delete trail deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	6	TRIGGEREDEVENTTYPE_MSG	msg	8	0	PROVEN
+actor_event	trigger_kind	value	7	TRIGGEREDEVENTTYPE_DELETE_OBJECT	delete object	2386	1132	PROVEN
+actor_event	trigger_kind	value	8	TRIGGEREDEVENTTYPE_FOOTSTEP	footstep	0	0	PROVEN
+actor_event	trigger_kind	value	9	TRIGGEREDEVENTTYPE_ANIM	anim	433	139	PROVEN
+actor_event	trigger_kind	value	10	TRIGGEREDEVENTTYPE_TRANSPARENCY	transparency	20	17	PROVEN
+actor_event	trigger_kind	value	11	TRIGGEREDEVENTTYPE_ADD_ROPE	add rope	93	71	PROVEN
+actor_event	trigger_kind	value	12	TRIGGEREDEVENTTYPE_DELETE_ROPE_DEPRECATED	delete rope deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	13	TRIGGEREDEVENTTYPE_CHANGE_LOOK	change look	1314	627	PROVEN
+actor_event	trigger_kind	value	14	TRIGGEREDEVENTTYPE_SHADOW	shadow	251	180	PROVEN
+actor_event	trigger_kind	value	15	TRIGGEREDEVENTTYPE_CHANGE_PHYSICS_DEPRECATED	change physics deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	16	TRIGGEREDEVENTTYPE_ADD_EFFECT_GROUP	add effect group	1957	1126	PROVEN
+actor_event	trigger_kind	value	17	TRIGGEREDEVENTTYPE_DELETE_EFFECT_GROUP_DEPRECATED	delete effect group deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	18	TRIGGEREDEVENTTYPE_FROST_BREATH	frost breath	0	0	PROVEN
+actor_event	trigger_kind	value	19	TRIGGEREDEVENTTYPE_ENABLE_RIGID_ANIMATION_ANGVEL_DEPRECATED	enable rigid animation angvel deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	20	TRIGGEREDEVENTTYPE_DISABLE_RIGID_ANIMATION_ANGVEL_DEPRECATED	disable rigid animation angvel deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	21	TRIGGEREDEVENTTYPE_ENABLE_RIGID_ANIMATION_BOB_DEPRECATED	enable rigid animation bob deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	22	TRIGGEREDEVENTTYPE_DISABLE_RIGID_ANIMATION_BOB_DEPRECATED	disable rigid animation bob deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	23	TRIGGEREDEVENTTYPE_MUSIC	music	0	0	PROVEN
+actor_event	trigger_kind	value	24	TRIGGEREDEVENTTYPE_CAPTURE_BY_PARTICLE_SYSTEM_DEPRECATED	capture by particle system deprecated	0	0	PROVEN
+actor_event	trigger_kind	value	25	TRIGGEREDEVENTTYPE_SPAWN_OBJECT	spawn object	1358	741	PROVEN
+actor_event	trigger_kind	value	26	TRIGGEREDEVENTTYPE_OUTRO_OBJECT	outro object	845	360	PROVEN
+actor_event	trigger_kind	value	27	TRIGGEREDEVENTTYPE_ENABLE_RAGDOLL	enable ragdoll	0	0	PROVEN
+actor_event	trigger_kind	value	28	TRIGGEREDEVENTTYPE_DISABLE_CONSTRAINT	disable constraint	0	0	PROVEN
+actor_event	trigger_kind	value	29	TRIGGEREDEVENTTYPE_DISABLE_COLLISION_MESSAGES	disable collision messages	0	0	PROVEN
+actor_event	trigger_kind	value	30	TRIGGEREDEVENTTYPE_ATTACH_SPAWNED_ACTOR	attach spawned actor	0	0	PROVEN
+actor_event	trigger_kind	value	31	TRIGGEREDEVENTTYPE_CANCEL_LOOK	cancel look	2	2	PROVEN
+actor_event	trigger_kind	value	32	TRIGGEREDEVENTTYPE_HITFLASH	hitflash	26	11	PROVEN
+actor_event	trigger_kind	value	33	TRIGGEREDEVENTTYPE_ENABLE_RAGDOLL_ANIMATION_OVERRIDE	enable ragdoll animation override	0	0	PROVEN
+actor_event	trigger_kind	value	34	TRIGGEREDEVENTTYPE_DISABLE_RAGDOLL_ANIMATION_OVERRIDE	disable ragdoll animation override	0	0	PROVEN
+actor_event	trigger_kind	value	35	TRIGGEREDEVENTTYPE_ATTACH_CAMERA	attach camera	6	6	PROVEN
+actor_event	trigger_kind	value	36	TRIGGEREDEVENTTYPE_FRAMEOUT_ENABLE	frameout enable	0	0	PROVEN
+actor_event	trigger_kind	value	37	TRIGGEREDEVENTTYPE_FRAMEOUT_DISABLE	frameout disable	0	0	PROVEN
+actor_event	trigger_kind	value	38	TRIGGEREDEVENTTYPE_RESTORE_CAMERA	restore camera	2	2	PROVEN
+actor_event	trigger_kind	value	39	TRIGGEREDEVENTTYPE_FADE	fade	138	51	PROVEN
+actor_event	trigger_kind	value	40	TRIGGEREDEVENTTYPE_NULL	null	0	0	PROVEN
+actor_event	trigger_kind	value	41	TRIGGEREDEVENTTYPE_OUTRO_ANIMATION	outro animation	0	0	PROVEN
+actor_event	trigger_kind	value	42	TRIGGEREDEVENTTYPE_HIDE_HELM_AND_SHOULDERS	hide helm and shoulders	0	0	PROVEN
+actor_event	attach_kind	value	-1	ATTACHMENTTYPE_INVALID	invalid	0	0	PROVEN
+actor_event	attach_kind	value	0	ATTACHMENTTYPE_ACTOR	actor	4315	2601	PROVEN
+actor_event	attach_kind	value	1	ATTACHMENTTYPE_PARTICLESYSTEM	particlesystem	14479	6755	PROVEN
+actor_event	attach_kind	value	2	ATTACHMENTTYPE_LIGHT	light	255	100	PROVEN
+actor_event	attach_kind	value	3	ATTACHMENTTYPE_SOUND	sound	6207	2865	PROVEN
+actor_event	attach_kind	value	4	ATTACHMENTTYPE_UNUSED1	unused1	0	0	PROVEN
+actor_event	attach_kind	value	5	ATTACHMENTTYPE_AMBIENTSOUND	ambientsound	896	278	PROVEN
+actor_event	attach_kind	value	6	ATTACHMENTTYPE_EXPLOSION	explosion	141	98	PROVEN
+actor_event	attach_kind	value	7	ATTACHMENTTYPE_UNUSED2	unused2	0	0	PROVEN
+actor_event	attach_kind	value	8	ATTACHMENTTYPE_ACTORGROUP_DEPRECATED	actorgroup deprecated	0	0	PROVEN
+actor_event	attach_kind	value	9	ATTACHMENTTYPE_SCENE	scene	0	0	PROVEN
+actor_event	attach_kind	value	10	ATTACHMENTTYPE_UNUSED3	unused3	0	0	PROVEN
+actor_event	attach_kind	value	11	ATTACHMENTTYPE_SHAKE	shake	74	65	PROVEN
+actor_event	attach_kind	value	12	ATTACHMENTTYPE_VIBRATION	vibration	0	0	PROVEN
+actor_event	condition_flags	bit	0	TCF_USE_IMPULSE_DELTA_BIT	use impulse delta	183	77	PROVEN
+actor_event	pass_method	value	0	MSGPASS_TO_ACTORCHAIN	to actorchain	26359	12762	PROVEN
+actor_event	pass_method	value	1	MSGPASS_TO_THIS_ACTOR	to this actor	0	0	PROVEN
+actor_event	pass_method	value	2	MSGPASS_TO_SELF_AND_CHILDREN	to self and children	8	0	PROVEN
+actor_event	pass_method	value	3	MSGPASS_TO_CHILDREN_ONLY	to children only	0	0	PROVEN
+actor_event	trigger_flags	bit	0	TRIGGERFLAG_DELETE_ON_ANIMATION_END_BIT	delete on animation end	240	119	PROVEN
+actor_event	trigger_flags	bit	1	TRIGGERFLAG_DELETE_ON_OWNER_DEATH_BIT	delete on owner death	14385	5866	PROVEN
+actor_event	trigger_flags	bit	2	TRIGGERFLAG_OUTRO_ON_ANIMATION_END_BIT	outro on animation end	105	88	PROVEN
+actor_event	trigger_flags	bit	3	TRIGGERFLAG_OUTRO_ON_OWNER_DEATH_BIT	outro on owner death	2333	1617	PROVEN
+actor_event	trigger_flags	bit	4	TRIGGERFLAG_DISABLE_COLLISION_MESSAGES_BIT	disable collision messages	0	0	PROVEN
+actor_event	trigger_flags	bit	5	TRIGGERFLAG_FADE_IN	fade in	19	14	PROVEN
+actor_event	trigger_flags	bit	6	TRIGGERFLAG_FADE_AFFECTS_SHADOWS	fade affects shadows	0	0	PROVEN
+actor_event	trigger_flags	bit	7	TRIGGERFLAG_DELETE_ON_OWNER_RESURRECTION_BIT	delete on owner resurrection	243	135	PROVEN
+actor_event	trigger_flags	bit	8	TRIGGERFLAG_OUTRO_ON_OWNER_RESURRECTION_BIT	outro on owner resurrection	20	0	PROVEN
+actor_event	trigger_flags	bit	9	TRIGGERFLAG_SOUND_PLAY_AS_2D	sound play as 2d	0	0	PROVEN
+actor_event	trigger_flags	bit	10	TRIGGERFLAG_DISABLED_IN_LOWFX_MODE	disabled in lowfx mode	1861	960	PROVEN
+actor_event	trigger_flags	bit	11	TRIGGERFLAG_DISABLED_IF_OWNER_HIDDEN	disabled if owner hidden	13	8	PROVEN
+actor_event	trigger_flags	bit	12	TRIGGERFLAG_ENABLED_IN_LOWFX_MODE	enabled in lowfx mode	33	15	PROVEN
+actor_event	trigger_flags	bit	13	TRIGGERFLAG_DISABLED_IF_REMOTE_PLAYER	disabled if remote player	657	0	PROVEN
+actor_event	footstep_kind	value	0	FOOTSTEPTYPE_RUN	run	26367	12762	PROVEN
+actor_event	footstep_kind	value	1	FOOTSTEPTYPE_WALK	walk	0	0	PROVEN
+actor_event	footstep_kind	value	2	FOOTSTEPTYPE_SLIDE	slide	0	0	PROVEN
+actor_event	outro_anim_kind	value	0	OUTROANIMATIONTYPE_RUN_LEFT_FOOT	run left foot	26367	12762	PROVEN
+actor_event	outro_anim_kind	value	1	OUTROANIMATIONTYPE_RUN_RIGHT_FOOT	run right foot	0	0	PROVEN
+actor_event	outro_anim_kind	value	2	OUTROANIMATIONTYPE_WALK_LEFT_FOOT	walk left foot	0	0	PROVEN
+actor_event	outro_anim_kind	value	3	OUTROANIMATIONTYPE_WALK_RIGHT_FOOT	walk right foot	0	0	PROVEN
+actor_event	outro_anim_kind	value	4	OUTROANIMATIONTYPE_RUN_NONE	run none	0	0	PROVEN
+actor_event	outro_anim_kind	value	5	OUTROANIMATIONTYPE_WALK_NONE	walk none	0	0	PROVEN
+actor_event	rune	value	-1	RUNE_TYPE_INVALID	invalid	0	0	PROVEN
+actor_event	rune	value	0	RUNE_TYPE_A	a	26367	12762	PROVEN
+actor_event	rune	value	1	RUNE_TYPE_B	b	0	0	PROVEN
+actor_event	rune	value	2	RUNE_TYPE_C	c	0	0	PROVEN
+actor_event	rune	value	3	RUNE_TYPE_D	d	0	0	PROVEN
+actor_event	rune	value	4	RUNE_TYPE_E	e	0	0	PROVEN
+actor_event	rune	value	6	RUNE_TYPE_NONE	none	0	0	PROVEN
+actor_event	hardpoint_source	value	0	HARDPOINTSOURCE_PRIMARY	primary	52635	25493	PROVEN
+actor_event	hardpoint_source	value	1	HARDPOINTSOURCE_SECONDARY	secondary	97	31	PROVEN
+actor_event	hardpoint_source	value	2	HARDPOINTSOURCE_TERTIARY	tertiary	2	0	PROVEN
+actor_event	hardpoint_flags	bit	0	HARDPOINTHASH_FLAG_IS_DYNAMIC	is dynamic	0	0	PROVEN
+actor_event	hardpoint_flags	bit	1	HARDPOINTHASH_FLAG_IS_DAMAGE	is damage	0	0	PROVEN
+monster	flags	bit	0	MONSTERDEF_IS_UNIQUE_BIT	is unique	738	264	PROVEN
+monster	flags	bit	1	MONSTERDEF_IS_LARGE_MONSTER_BIT	is large monster	209	59	PROVEN
+monster	flags	bit	2	MONSTERDEF_IS_ELITE_BIT	is elite	769	280	PROVEN
+monster	flags	bit	3	MONSTERDEF_HIRELING_OR_PET_BIT	hireling or pet	212	49	PROVEN
+monster	flags	bit	4	MONSTERDEF_IS_FEMALE_BIT	is female	237	130	PROVEN
+monster	flags	bit	5	MONSTERDEF_IS_BOSS_BIT	is boss	103	29	PROVEN
+monster	flags	bit	6	MONSTERDEF_ALWAYS_USES_SELF_FOR_AWARENESS_RADIUS_BIT	always uses self for awareness radius	22	11	PROVEN
+monster	flags	bit	7	MONSTERDEF_FORCES_FLAVOR_TEXT_BIT	forces flavor text	538	158	PROVEN
+monster	flags	bit	8		not a flag: three NPC monsters store the numbers 10000 and 9988 here	3	0	SUPPORTED
+monster	flags	bit	9		not a flag: three NPC monsters store the numbers 10000 and 9988 here	3	0	SUPPORTED
+monster	flags	bit	10		not a flag: three NPC monsters store the numbers 10000 and 9988 here	3	0	SUPPORTED
+monster	flags	bit	13		not a flag: three NPC monsters store the numbers 10000 and 9988 here	3	0	SUPPORTED
+monster	monster_type	value	-1		none	106	63	PROVEN
+monster	monster_type	value	0		Undead	647	382	PROVEN
+monster	monster_type	value	1		Demon	634	242	PROVEN
+monster	monster_type	value	2		Beast	531	209	PROVEN
+monster	monster_type	value	3		Human	230	92	PROVEN
+monster	monster_type	value	4		Breakable	2	2	PROVEN
+monster	monster_type	value	5		Scenery	8	8	PROVEN
+monster	monster_type	value	6		Ally	501	434	PROVEN
+monster	monster_type	value	7		Team	3	3	PROVEN
+monster	monster_type	value	8		Helper	2	1	PROVEN
+monster	monster_type	value	9		CorruptedAngel	372	0	PROVEN
+monster	monster_type	value	10		Pandemonium	38	0	PROVEN
+monster	monster_type	value	11		Adria	0	0	PROVEN
+monster	monster_type	value	12		Blood Golem	28	0	PROVEN
+monster	race	value	0		none	758	0	PROVEN
+monster	race	value	1		Fallen	213	84	PROVEN
+monster	race	value	2		GoatMen	132	48	PROVEN
+monster	race	value	3		Rogue	0	0	PROVEN
+monster	race	value	4		Skeleton	428	120	PROVEN
+monster	race	value	5		Zombie	350	225	PROVEN
+monster	race	value	6		Spider	31	7	PROVEN
+monster	race	value	7		Triune	162	90	PROVEN
+monster	race	value	8		WoodWraith	16	9	PROVEN
+monster	race	value	9		Human	628	451	PROVEN
+monster	race	value	10		Animal	364	138	PROVEN
+monster	race	value	11		TreasureGoblin	18	4	PROVEN
+monster	race	value	12		CrazedAngel	2	0	PROVEN
+monster	race	value	-1		none (PS3 writes -1 where Switch writes 0)	0	260	SUPPORTED
+monster	encounter_category	value	-1		none	223	149	PROVEN
+monster	encounter_category	value	3		Big	95	35	PROVEN
+monster	encounter_category	value	4		Standard	2376	1084	PROVEN
+monster	encounter_category	value	5		Ranged	325	128	PROVEN
+monster	encounter_category	value	6		Swarm	40	20	PROVEN
+monster	encounter_category	value	7		Boss	43	20	PROVEN
+monster	base_element	value	-1		None	3101	1435	PROVEN
+monster	base_element	value	0		Physical	1	1	PROVEN
+monster	base_element	value	1		Fire	0	0	PROVEN
+monster	base_element	value	2		Lightning	0	0	PROVEN
+monster	base_element	value	3		Cold	0	0	PROVEN
+monster	base_element	value	4		Poison	0	0	PROVEN
+monster	base_element	value	5		Arcane	0	0	PROVEN
+monster	base_element	value	6		Holy	0	0	PROVEN
+monster	resource	value	0		Mana	2711	1272	PROVEN
+monster	resource	value	1		Arcanum	0	0	PROVEN
+monster	resource	value	2		Fury	0	0	PROVEN
+monster	resource	value	3		Spirit	0	0	PROVEN
+monster	resource	value	4		Power	0	0	PROVEN
+monster	resource	value	5		Hatred	0	0	PROVEN
+monster	resource	value	6		Discipline	0	0	PROVEN
+monster	resource	value	7		Faith	0	0	PROVEN
+monster	resource	value	8		Essence	0	0	PROVEN
+monster	resource	value	-1		none	391	164	SUPPORTED
+monster	target_style_normal	value	0	AITARGET_STYLE_CLOSEST_PLUS_THREATENED	closest plus threatened	3040	1408	PROVEN
+monster	target_style_normal	value	1	AITARGET_STYLE_CLOSEST	closest	11	3	PROVEN
+monster	target_style_normal	value	2	AITARGET_STYLE_CLOSEST_PLUS_ALLY	closest plus ally	0	0	PROVEN
+monster	target_style_normal	value	3	AITARGET_STYLE_CLOSEST_PLUS_NOT_KNOCKBACKABLE	closest plus not knockbackable	0	0	PROVEN
+monster	target_style_normal	value	4	AITARGET_STYLE_HIGHEST_THREAT	highest threat	0	0	PROVEN
+monster	target_style_normal	value	5	AITARGET_STYLE_SWITCH_ON_ATTACK	switch on attack	0	0	PROVEN
+monster	target_style_normal	value	6	AITARGET_STYLE_RANDOM	random	7	1	PROVEN
+monster	target_style_normal	value	7	AITARGET_STYLE_ASSASSIN	assassin	5	3	PROVEN
+monster	target_style_normal	value	8	AITARGET_STYLE_RANGED_FOCUSED	ranged focused	0	0	PROVEN
+monster	target_style_normal	value	9	AITARGET_STYLE_MELEE_FOCUSED	melee focused	38	21	PROVEN
+monster	target_style_normal	value	10	AITARGET_STYLE_MELEE_PET	melee pet	0	0	PROVEN
+monster	target_style_normal	value	11	AITARGET_STYLE_CRUSADER_HEAVENS_FURY	crusader heavens fury	1	0	PROVEN
+monster	target_style_champion	value	0	AITARGET_STYLE_CLOSEST_PLUS_THREATENED	closest plus threatened	3042	1408	PROVEN
+monster	target_style_champion	value	1	AITARGET_STYLE_CLOSEST	closest	11	3	PROVEN
+monster	target_style_champion	value	2	AITARGET_STYLE_CLOSEST_PLUS_ALLY	closest plus ally	0	0	PROVEN
+monster	target_style_champion	value	3	AITARGET_STYLE_CLOSEST_PLUS_NOT_KNOCKBACKABLE	closest plus not knockbackable	0	0	PROVEN
+monster	target_style_champion	value	4	AITARGET_STYLE_HIGHEST_THREAT	highest threat	0	0	PROVEN
+monster	target_style_champion	value	5	AITARGET_STYLE_SWITCH_ON_ATTACK	switch on attack	0	0	PROVEN
+monster	target_style_champion	value	6	AITARGET_STYLE_RANDOM	random	5	1	PROVEN
+monster	target_style_champion	value	7	AITARGET_STYLE_ASSASSIN	assassin	5	3	PROVEN
+monster	target_style_champion	value	8	AITARGET_STYLE_RANGED_FOCUSED	ranged focused	0	0	PROVEN
+monster	target_style_champion	value	9	AITARGET_STYLE_MELEE_FOCUSED	melee focused	38	21	PROVEN
+monster	target_style_champion	value	10	AITARGET_STYLE_MELEE_PET	melee pet	0	0	PROVEN
+monster	target_style_champion	value	11	AITARGET_STYLE_CRUSADER_HEAVENS_FURY	crusader heavens fury	1	0	PROVEN
+monster	target_style_rare	value	0	AITARGET_STYLE_CLOSEST_PLUS_THREATENED	closest plus threatened	3042	1408	PROVEN
+monster	target_style_rare	value	1	AITARGET_STYLE_CLOSEST	closest	11	3	PROVEN
+monster	target_style_rare	value	2	AITARGET_STYLE_CLOSEST_PLUS_ALLY	closest plus ally	0	0	PROVEN
+monster	target_style_rare	value	3	AITARGET_STYLE_CLOSEST_PLUS_NOT_KNOCKBACKABLE	closest plus not knockbackable	0	0	PROVEN
+monster	target_style_rare	value	4	AITARGET_STYLE_HIGHEST_THREAT	highest threat	0	0	PROVEN
+monster	target_style_rare	value	5	AITARGET_STYLE_SWITCH_ON_ATTACK	switch on attack	0	0	PROVEN
+monster	target_style_rare	value	6	AITARGET_STYLE_RANDOM	random	5	1	PROVEN
+monster	target_style_rare	value	7	AITARGET_STYLE_ASSASSIN	assassin	5	3	PROVEN
+monster	target_style_rare	value	8	AITARGET_STYLE_RANGED_FOCUSED	ranged focused	0	0	PROVEN
+monster	target_style_rare	value	9	AITARGET_STYLE_MELEE_FOCUSED	melee focused	38	21	PROVEN
+monster	target_style_rare	value	10	AITARGET_STYLE_MELEE_PET	melee pet	0	0	PROVEN
+monster	target_style_rare	value	11	AITARGET_STYLE_CRUSADER_HEAVENS_FURY	crusader heavens fury	1	0	PROVEN
+monster	health_drop_style_normal	value	0	HEALTH_DROP_STYLE_NEVER	never	8	3	PROVEN
+monster	health_drop_style_normal	value	1	HEALTH_DROP_STYLE_EVERY_20_PERCENT	every 20 percent	4	5	PROVEN
+monster	health_drop_style_normal	value	2	HEALTH_DROP_STYLE_EVERY_25_PERCENT	every 25 percent	9	36	PROVEN
+monster	health_drop_style_normal	value	3	HEALTH_DROP_STYLE_EVERY_33_PERCENT	every 33 percent	8	6	PROVEN
+monster	health_drop_style_normal	value	4	HEALTH_DROP_STYLE_EVERY_50_PERCENT	every 50 percent	170	170	PROVEN
+monster	health_drop_style_normal	value	5	HEALTH_DROP_STYLE_ON_DEATH_ONLY	on death only	2903	1216	PROVEN
+monster	health_drop_style_normal	value	6	HEALTH_DROP_STYLE_ON_PACK_DEATH	on pack death	0	0	PROVEN
+monster	health_drop_style_champion	value	0	HEALTH_DROP_STYLE_NEVER	never	0	3	PROVEN
+monster	health_drop_style_champion	value	1	HEALTH_DROP_STYLE_EVERY_20_PERCENT	every 20 percent	0	2	PROVEN
+monster	health_drop_style_champion	value	2	HEALTH_DROP_STYLE_EVERY_25_PERCENT	every 25 percent	0	1	PROVEN
+monster	health_drop_style_champion	value	3	HEALTH_DROP_STYLE_EVERY_33_PERCENT	every 33 percent	0	0	PROVEN
+monster	health_drop_style_champion	value	4	HEALTH_DROP_STYLE_EVERY_50_PERCENT	every 50 percent	2	1429	PROVEN
+monster	health_drop_style_champion	value	5	HEALTH_DROP_STYLE_ON_DEATH_ONLY	on death only	3076	1	PROVEN
+monster	health_drop_style_champion	value	6	HEALTH_DROP_STYLE_ON_PACK_DEATH	on pack death	24	0	PROVEN
+monster	health_drop_style_rare	value	0	HEALTH_DROP_STYLE_NEVER	never	0	0	PROVEN
+monster	health_drop_style_rare	value	1	HEALTH_DROP_STYLE_EVERY_20_PERCENT	every 20 percent	0	1	PROVEN
+monster	health_drop_style_rare	value	2	HEALTH_DROP_STYLE_EVERY_25_PERCENT	every 25 percent	2	1	PROVEN
+monster	health_drop_style_rare	value	3	HEALTH_DROP_STYLE_EVERY_33_PERCENT	every 33 percent	0	0	PROVEN
+monster	health_drop_style_rare	value	4	HEALTH_DROP_STYLE_EVERY_50_PERCENT	every 50 percent	446	1434	PROVEN
+monster	health_drop_style_rare	value	5	HEALTH_DROP_STYLE_ON_DEATH_ONLY	on death only	2654	0	PROVEN
+monster	health_drop_style_rare	value	6	HEALTH_DROP_STYLE_ON_PACK_DEATH	on pack death	0	0	PROVEN
+monster	health_drop_style_minion	value	0	HEALTH_DROP_STYLE_NEVER	never	2	0	PROVEN
+monster	health_drop_style_minion	value	1	HEALTH_DROP_STYLE_EVERY_20_PERCENT	every 20 percent	0	0	PROVEN
+monster	health_drop_style_minion	value	2	HEALTH_DROP_STYLE_EVERY_25_PERCENT	every 25 percent	0	0	PROVEN
+monster	health_drop_style_minion	value	3	HEALTH_DROP_STYLE_EVERY_33_PERCENT	every 33 percent	0	0	PROVEN
+monster	health_drop_style_minion	value	4	HEALTH_DROP_STYLE_EVERY_50_PERCENT	every 50 percent	0	0	PROVEN
+monster	health_drop_style_minion	value	5	HEALTH_DROP_STYLE_ON_DEATH_ONLY	on death only	3100	1436	PROVEN
+monster	health_drop_style_minion	value	6	HEALTH_DROP_STYLE_ON_PACK_DEATH	on pack death	0	0	PROVEN
+quest	quest_type	value	0		Main Quest	42	31	PROVEN
+quest	quest_type	value	2		Event	282	37	PROVEN
+quest	quest_type	value	4		Challenge	1	0	PROVEN
+quest	quest_type	value	5		Bounty	655	0	PROVEN
+quest	quest_type	value	6		Horadric Quest	0	0	PROVEN
+quest	quest_type	value	7		Set Dungeon	0	0	PROVEN
+quest	quest_type	value	8		Set Dungeon Bonus	56	0	PROVEN
+quest	quest_type	value	9		Set Dungeon Mastery	112	0	PROVEN
+quest	quest_type	value	10		Set Dungeon Tracker	0	0	PROVEN
+quest	flags	bit	0	QUEST_FLAG_AUTO_GENERATE_MAP_ICON	auto generate map icon	0	0	PROVEN
+quest	flags	bit	1	QUEST_FLAG_AUTO_MARK_OBJECTIVE_NPCS	auto mark objective npcs	145	53	PROVEN
+quest	flags	bit	2	QUEST_FLAG_SHOW_NEW_QUEST_BLINKER	show new quest blinker	293	63	PROVEN
+quest	flags	bit	3	QUEST_FLAG_GLOBAL_EVENT	global event	8	0	PROVEN
+quest	flags	bit	4	QUEST_FLAG_SHARED_DESCRIPTION_TEXT	shared description text	0	0	PROVEN
+quest	act	value	-1		Invalid	195	3	PROVEN
+quest	act	value	0		A1	71	26	PROVEN
+quest	act	value	100		A2	55	20	PROVEN
+quest	act	value	200		A3	26	15	PROVEN
+quest	act	value	300		A4	10	4	PROVEN
+quest	act	value	400		A5	94	0	PROVEN
+quest	act	value	3000		OpenWorld	696	0	PROVEN
+quest	act	value	1000		Test	1	0	PROVEN
+quest	unassigned_flags	bit	0	QUSF_SELECTABLE_STEP	selectable step	169	68	PROVEN
+quest	unassigned_flags	bit	1	QUSF_PREVENT_MATCHMAKING	prevent matchmaking	2	2	PROVEN
+quest	challenge_kind	value	-1		none	891	0	PROVEN
+quest	challenge_kind	value	0		Timed Dungeon	255	0	PROVEN
+quest	challenge_kind	value	1		Wave Fight	0	0	PROVEN
+quest	challenge_kind	value	2		Horde	1	0	PROVEN
+quest	challenge_kind	value	3		Zapper	1	0	PROVEN
+quest	challenge_kind	value	4		Goblin Hunt	0	0	PROVEN
+quest	bounty_act	value	-1		Invalid	362	0	PROVEN
+quest	bounty_act	value	0		A1	191	0	PROVEN
+quest	bounty_act	value	100		A2	103	0	PROVEN
+quest	bounty_act	value	200		A3	90	0	PROVEN
+quest	bounty_act	value	300		A4	177	0	PROVEN
+quest	bounty_act	value	400		A5	225	0	PROVEN
+quest	bounty_act	value	3000		OpenWorld	0	0	PROVEN
+quest	bounty_act	value	1000		Test	0	0	PROVEN
+quest	bounty_kind	value	-1		none	464	0	PROVEN
+quest	bounty_kind	value	0		Kill Unique	274	0	PROVEN
+quest	bounty_kind	value	1		Kill Boss	19	0	PROVEN
+quest	bounty_kind	value	2		Complete Event	152	0	PROVEN
+quest	bounty_kind	value	3		Clear Dungeon	54	0	PROVEN
+quest	bounty_kind	value	4		Camps	185	0	PROVEN
+quest	bounty_kind	value	5		HQ - Color Orbs	0	0	PROVEN
+quest	bounty_kind	value	6		HQ - Hot Cold	0	0	PROVEN
+quest_step	flags	bit	0	QSF_RESUMABLE_STEP	resumable step	192	158	PROVEN
+quest_step	flags	bit	1	QSF_SAVE_PARTIAL_COMPLETION	save partial completion	2476	362	PROVEN
+quest_step	flags	bit	2	QSF_TRACK_PER_PLAYER	track per player	0	0	PROVEN
+quest_step	flags	bit	3	QSF_SHARED_LOG_TEXT	shared log text	166	49	PROVEN
+quest_step	flags	bit	4	QSF_SHOW_METER	show meter	266	6	PROVEN
+quest_step	flags	bit	5	QSF_ORPHANED_STEP	orphaned step	140	28	PROVEN
+quest_step	flags	bit	6	QSF_SELECTABLE_STEP	selectable step	36	25	PROVEN
+quest_step	flags	bit	7	QSF_PREVENT_MATCHMAKING	prevent matchmaking	29	29	PROVEN
+quest_step	flags	bit	8	QSF_USE_PREVIOUS_LOG_TEXT	use previous log text	186	123	PROVEN
+quest_step	flags	bit	9	QSF_GRANT_NV_ON_COMPLETION	grant nv on completion	136	30	PROVEN
+quest_step	flags	bit	10	QSF_HIDE_BONUS_TEXT	hide bonus text	102	0	PROVEN
+quest_step	reward_kind	value	0		no item	1796	337	PROVEN
+quest_step	reward_kind	value	1		Shared Recipe	13	0	PROVEN
+quest_step	reward_kind	value	2		Class Recipe	0	0	PROVEN
+quest_step	reward_kind	value	3		Treasure Class	699	29	PROVEN
+quest_step	replay_reward_kind	value	0		no item	1834	363	PROVEN
+quest_step	replay_reward_kind	value	1		Shared Recipe	1	1	PROVEN
+quest_step	replay_reward_kind	value	2		Class Recipe	0	0	PROVEN
+quest_step	replay_reward_kind	value	3		Treasure Class	673	2	PROVEN
+objective	objective_kind	value	0		Had Conversation	227	129	PROVEN
+objective	objective_kind	value	1		Possess Item	16	15	PROVEN
+objective	objective_kind	value	2		Kill Monster	440	30	PROVEN
+objective	objective_kind	value	3		Interact With Actor	128	53	PROVEN
+objective	objective_kind	value	4		Enter Level Area	1525	17	PROVEN
+objective	objective_kind	value	5		Enter Scene	6	2	PROVEN
+objective	objective_kind	value	6		Enter World	286	71	PROVEN
+objective	objective_kind	value	7		Enter Trigger	187	21	PROVEN
+objective	objective_kind	value	8		Complete Quest	315	9	PROVEN
+objective	objective_kind	value	9		Player Flag Set	0	0	PROVEN
+objective	objective_kind	value	10		Timed Event Expired	66	5	PROVEN
+objective	objective_kind	value	11		Kill Group	231	42	PROVEN
+objective	objective_kind	value	12		Game Flag Set	486	11	PROVEN
+objective	objective_kind	value	13		Event Received	1221	165	PROVEN
+objective	objective_kind	value	14		Kill Monster From Group	268	1	PROVEN
+objective	objective_kind	value	15		Kill Monster From Family	0	0	PROVEN
+objective	objective_kind	value	16		Kill Elite Pack In Level Area	0	0	PROVEN
+objective	objective_kind	value	17		Kill Any Monster In Level Area	275	0	PROVEN
+objective	objective_kind	value	18		Kill All Monsters In World	34	0	PROVEN
+objective	objective_kind	value	19		HQ Act Reagents Collected	0	0	PROVEN
+failure_condition	failure_kind	value	0		Monster Died	1	1	PROVEN
+failure_condition	failure_kind	value	1		Player Died	0	0	PROVEN
+failure_condition	failure_kind	value	2		Actor Died	2	2	PROVEN
+failure_condition	failure_kind	value	3		Timed Event Expired	0	0	PROVEN
+failure_condition	failure_kind	value	4		Item Used	0	0	PROVEN
+failure_condition	failure_kind	value	5		Game Flag Set	1	1	PROVEN
+failure_condition	failure_kind	value	6		Player Flag Set	0	0	PROVEN
+failure_condition	failure_kind	value	7		Event Received	63	2	PROVEN
+conversation	conversation_kind	value	13		Quest Event	387	187	PROVEN
+conversation	conversation_kind	value	12		Quest Float	782	578	PROVEN
+conversation	conversation_kind	value	11		Quest Standard	111	65	PROVEN
+conversation	conversation_kind	value	10		Talk Menu Gossip	436	223	PROVEN
+conversation	conversation_kind	value	9		Ambient Gossip	223	175	PROVEN
+conversation	conversation_kind	value	8		Lore Book	457	249	PROVEN
+conversation	conversation_kind	value	7		Global Float	152	92	PROVEN
+conversation	conversation_kind	value	6		Global Chatter	13	8	PROVEN
+conversation	conversation_kind	value	5		Player Callout	61	57	PROVEN
+conversation	conversation_kind	value	4		Follower Callout	615	478	PROVEN
+conversation	conversation_kind	value	3		Follower Banter	486	452	PROVEN
+conversation	conversation_kind	value	2		Ambient Float	207	152	PROVEN
+conversation	conversation_kind	value	1		Player Emote	17	17	PROVEN
+conversation	conversation_kind	value	0		Follower Soundset	97	73	PROVEN
+conversation	icon	value	-1	CONV_ICON_INVALID	invalid	0	0	PROVEN
+conversation	icon	value	0	CONV_ICON_NONE	none	3253	2387	PROVEN
+conversation	icon	value	1	CONV_ICON_EXCLAMATION	exclamation	309	194	PROVEN
+conversation	icon	value	2	CONV_ICON_QUESTION	question	0	1	PROVEN
+conversation	icon	value	3	CONV_ICON_ASTERISK	asterisk	433	185	PROVEN
+conversation	icon	value	4	CONV_ICON_GOSSIP	gossip	0	0	PROVEN
+conversation	icon	value	5	CONV_ICON_EXCLAMATION_BONUS	exclamation bonus	49	39	PROVEN
+conversation	flags	bit	0	_DEPRECATED_CF_ACTIVATE_QUEST_BIT	activate quest (deprecated)	4	4	PROVEN
+conversation	flags	bit	1	_DEPRECATED_CF_GRANT_REWARD_BIT	grant reward (deprecated)	0	0	PROVEN
+conversation	flags	bit	2	_DEPRECATED_CF_IMPORTANT_BIT	important (deprecated)	14	14	PROVEN
+conversation	flags	bit	3	_DEPRECATED_CF_QUESTION_BIT	question (deprecated)	7	8	PROVEN
+conversation	flags	bit	4	_DEPRECATED_CF_ASTERISK_BIT	asterisk (deprecated)	1	1	PROVEN
+conversation	flags	bit	5	_DEPRECATED_CF_REOPERATE_NPC_BIT	reoperate npc (deprecated)	1	1	PROVEN
+conversation	flags	bit	6	_DEPRECATED_CF_TALK_MENU_ONLY_BIT	talk menu only (deprecated)	14	2	PROVEN
+conversation	flags	bit	7	_DEPRECATED_CF_GOSSIP_BIT	gossip (deprecated)	0	0	PROVEN
+conversation	flags	bit	8	CF_NO_VOICEOVER_BIT	no voiceover	2	1	PROVEN
+conversation	flags	bit	9	_DEPRECATED_CF_PLAY_FOR_ALL_PLAYERS_BIT	play for all players (deprecated)	40	40	PROVEN
+conversation	flags	bit	10	_DEPRECATED_CF_ZOOM_BIT	zoom (deprecated)	0	0	PROVEN
+conversation	flags	bit	11	CF_OPERATE_SPEAKER_ON_BEGIN_BIT	operate speaker on begin	55	49	PROVEN
+conversation	flags	bit	12	CF_READY_TO_RECORD_BIT	ready to record	3854	2745	PROVEN
+conversation	flags	bit	13	CF_OPERATE_SPEAKER_ON_END_BIT	operate speaker on end	21	10	PROVEN
+conversation	flags	bit	14	CF_NEVER_REPEAT_BIT	never repeat	320	232	PROVEN
+conversation	flags	bit	15	CF_CANCEL_FOR_COMBAT_BIT	cancel for combat	0	0	PROVEN
+conversation	flags	bit	16	_DEPRECATED_CF_READY_FOR_LOCALIZATION_BIT	ready for localization (deprecated)	0	0	PROVEN
+conversation	flags	bit	17	_DEPRECATED_CF_RECORDING_HAS_BEGUN_BIT	recording has begun (deprecated)	0	0	PROVEN
+conversation	flags	bit	18	_DEPRECATED_CF_LOCALIZATION_HAS_BEGUN_BIT	localization has begun (deprecated)	0	0	PROVEN
+conversation	flags	bit	19	CF_READY_FOR_REVIEW_BIT	ready for review	3	2	PROVEN
+conversation	flags	bit	20	CF_PERSIST_THROUGH_SPEAKER_DEATH	persist through speaker death	4	2	PROVEN
+conversation	flags	bit	21	CF_ALWAYS_IMPORTANT	always important	25	5	PROVEN
+conversation	flags	bit	22	CF_CONSOLE_HIDE_CLOSE_BUTTON	console hide close button	39	35	PROVEN
+conversation	flags	bit	23	CF_SHOW_ALL_LINES_IN_RECORDING_SCRIPT	show all lines in recording script	231	0	PROVEN
+conversation_node	node_kind	value	1	CONV_NODE_TYPE_CONDITIONAL	conditional	134	7	PROVEN
+conversation_node	node_kind	value	2	CONV_NODE_TYPE_CHOICE_DEPRECATED	choice deprecated	0	0	PROVEN
+conversation_node	node_kind	value	3	CONV_NODE_TYPE_CONV_LINE_GROUP	conv line group	9578	6348	PROVEN
+conversation_node	node_kind	value	4	CONV_NODE_TYPE_RANDOM	random	528	342	PROVEN
+conversation_node	node_kind	value	5	CONV_NODE_TYPE_CONV_LINE	conv line	17173	9683	PROVEN
+conversation_node	node_kind	value	6	CONV_NODE_TYPE_CONDITIONAL_PARTICIPANT	conditional participant	494	434	PROVEN
+conversation_node	flags	bit	1	CTNF_DONT_ANIMATE_BIT	dont animate	1260	1127	PROVEN
+conversation_node	flags	bit	3	CTNF_NEEDS_REVIEW_BIT	needs review	611	137	PROVEN
+conversation_node	flags	bit	4	CTNF_PLEASE_REVISE_BIT	please revise	17	12	PROVEN
+conversation_node	flags	bit	5	CTNF_DONT_PLAY_SUBTITLE_BIT	dont play subtitle	20	1	PROVEN
+conversation_node	flags	bit	6	CTNF_NEEDS_TEXT_TO_SPEECH_BIT	needs text to speech	35	0	PROVEN
+conversation_node	flags	bit	7	CTNF_RANDOM_PLAYS_ONLY_ONCE	random plays only once	459	0	PROVEN
+conversation_node	flags	bit	2		retired node flag (no constant; the list skips 2)	7	7	SUPPORTED
+conversation_node	speaker	value	-1		none	0	0	PROVEN
+conversation_node	speaker	value	0		Player	19400	11037	PROVEN
+conversation_node	speaker	value	1		Primary NPC	5197	3159	PROVEN
+conversation_node	speaker	value	2		Alt. NPC 1	879	602	PROVEN
+conversation_node	speaker	value	3		Alt. NPC 2	318	271	PROVEN
+conversation_node	speaker	value	4		Alt. NPC 3	227	205	PROVEN
+conversation_node	speaker	value	5		Alt. NPC 4	0	0	PROVEN
+conversation_node	speaker	value	6		Templar Follower	402	373	PROVEN
+conversation_node	speaker	value	7		Scoundrel Follower	780	581	PROVEN
+conversation_node	speaker	value	8		Enchantress Follower	704	586	PROVEN
+conversation_node	listener	value	-1		none	4572	5721	PROVEN
+conversation_node	listener	value	0		Player	22166	10573	PROVEN
+conversation_node	listener	value	1		Primary NPC	970	488	PROVEN
+conversation_node	listener	value	2		Alt. NPC 1	173	30	PROVEN
+conversation_node	listener	value	3		Alt. NPC 2	18	1	PROVEN
+conversation_node	listener	value	4		Alt. NPC 3	2	1	PROVEN
+conversation_node	listener	value	5		Alt. NPC 4	0	0	PROVEN
+conversation_node	listener	value	6		Templar Follower	5	0	PROVEN
+conversation_node	listener	value	7		Scoundrel Follower	0	0	PROVEN
+conversation_node	listener	value	8		Enchantress Follower	1	0	PROVEN
+conversation_node	var_check_op	value	-1		none	13727	0	PROVEN
+conversation_node	var_check_op	value	0		Equal To	14164	0	PROVEN
+conversation_node	var_check_op	value	1		Less Than	0	0	PROVEN
+conversation_node	var_check_op	value	2		Greater Than	0	0	PROVEN
+conversation_node	var_check_op	value	3		Less Than Or Equal To	0	0	PROVEN
+conversation_node	var_check_op	value	4		Greater Than Or Equal To	16	0	PROVEN
+conversation_node	var_check_op	value	5		Not Equal To	0	0	PROVEN
+conversation_node	var_set_op	value	-1		none	20920	0	PROVEN
+conversation_node	var_set_op	value	0		Incremented By	6953	0	PROVEN
+conversation_node	var_set_op	value	1		Decremented By	0	0	PROVEN
+conversation_node	var_set_op	value	2		Set To	34	0	PROVEN
+conversation_node	gender	value	-1	ACTOR_GENDER_INVALID	invalid	16052	9397	PROVEN
+conversation_node	gender	value	0	ACTOR_GENDER_MALE	male	11313	7272	PROVEN
+conversation_node	gender	value	1	ACTOR_GENDER_FEMALE	female	542	145	PROVEN
+conversation_node	player_class	value	-1	PLAYER_CLASS_NONE	none	9190	6184	PROVEN
+conversation_node	player_class	value	0	PLAYER_CLASS_DEMONHUNTER	demonhunter	11971	7950	PROVEN
+conversation_node	player_class	value	1	PLAYER_CLASS_BARBARIAN	barbarian	360	271	PROVEN
+conversation_node	player_class	value	2	PLAYER_CLASS_WIZARD	wizard	1144	789	PROVEN
+conversation_node	player_class	value	3	PLAYER_CLASS_WITCHDOCTOR	witchdoctor	1254	832	PROVEN
+conversation_node	player_class	value	4	PLAYER_CLASS_MONK	monk	1193	788	PROVEN
+conversation_node	player_class	value	5	PLAYER_CLASS_CRUSADER	crusader	1422	0	PROVEN
+conversation_node	player_class	value	6	PLAYER_CLASS_NECROMANCER	necromancer	1373	0	PROVEN
+list_entry	requirement	value	0	NO_CONDITIONS	no conditions	253	143	PROVEN
+list_entry	requirement	value	1	ALL_CONDITIONS	all conditions	1909	1391	PROVEN
+list_entry	requirement	value	2	ONE_CONDITION	one condition	8	4	PROVEN
+list_entry	flags	bit	0	CLE_CRAFTER_UNLOCK_NEGATE_BIT	crafter unlock negate	1	0	PROVEN
+list_entry	flags	bit	1	CLE_GAME_FLAG_NEGATE_BIT	game flag negate	9	6	PROVEN
+list_entry	flags	bit	2	CLE_HAS_ITEM_NEGATE_BIT	has item negate	1	0	PROVEN
+list_entry	flags	bit	3	CLE_QUEST_STEP_CURRENT_NEGATE_BIT	quest step current negate	4	4	PROVEN
+list_entry	flags	bit	4	CLE_QUEST_ASSIGNED_NEGATE_BIT	quest assigned negate	21	15	PROVEN
+list_entry	flags	bit	5	CLE_QUEST_COMPLETE_NEGATE_BIT	quest complete negate	27	22	PROVEN
+list_entry	flags	bit	6	CLE_QUEST_RANGE_NEGATE_BIT	quest range negate	5	4	PROVEN
+list_entry	flags	bit	7	CLE_NEAR_HOSTILES_NEGATE_BIT	near hostiles negate	760	725	PROVEN
+list_entry	flags	bit	8	CLE_IS_NEAR_HOSTILES_BIT	is near hostiles	761	726	PROVEN
+list_entry	flags	bit	9	CLE_CONVERSATION_UNLOCKED_NEGATE_BIT	conversation unlocked negate	3	0	PROVEN
+list_entry	flags	bit	10	CLE_IS_CONVERSATION_UNLOCKED_BIT	is conversation unlocked	184	93	PROVEN
+list_entry	flags	bit	11	CLE_CONVERSATION_HEARD_NEGATE_BIT	conversation heard negate	192	87	PROVEN
+list_entry	flags	bit	12	CLE_CONVERSATION_HEARD_BIT	conversation heard	192	86	PROVEN
+list_entry	flags	bit	13	CLE_LEVEL_AREA_NEGATE_BIT	level area negate	32	1	PROVEN
+list_entry	flags	bit	14	CLE_CONVERSATION_HAS_ALL_PARTICIPANTS_NEGATE_BIT	conversation has all participants negate	0	0	PROVEN
+list_entry	flags	bit	15	CLE_CONVERSATION_HAS_ALL_PARTICIPANTS_BIT	conversation has all participants	210	194	PROVEN
+list_entry	flags	bit	16	CLE_QUEST_ACTIVE_NEGATE_BIT	quest active negate	8	3	PROVEN
+list_entry	flags	bit	17	CLE_DIVIDER_BIT	divider	12	8	PROVEN
+list_entry	flags	bit	18	CLE_PLAYER_FLAG_NEGATE_BIT	player flag negate	4	0	PROVEN
+list_entry	flags	bit	19	CLE_SPECIAL_EVENT_FLAG_NEGATE_BIT	special event flag negate	20	0	PROVEN
+list_entry	flags	bit	20	CLE_ADVENTURE_MODE_BIT	adventure mode	1030	0	PROVEN
+list_entry	flags	bit	21	CLE_ADVENTURE_MODE_NEGATE_BIT	adventure mode negate	1030	0	PROVEN
+list_entry	flags	bit	22	CLE_DUNGEON_FINDER_BIT	dungeon finder	102	0	PROVEN
+list_entry	flags	bit	23	CLE_DUNGEON_FINDER_NEGATE_BIT	dungeon finder negate	102	0	PROVEN
+list_entry	flags	bit	24	CLE_REQUIRES_DUNGEON_FINDER_PAYMENT_BIT	requires dungeon finder payment	4	0	PROVEN
+list_entry	flags	bit	25	CLE_REQUIRES_DUNGEON_FINDER_PAYMENT_NEGATE_BIT	requires dungeon finder payment negate	0	0	PROVEN
+list_entry	crafter	value	-1	CRAFTER_TYPE_INVALID	invalid	2169	0	PROVEN
+list_entry	crafter	value	0	CRAFTER_TYPE_BLACKSMITH	blacksmith	0	0	PROVEN
+list_entry	crafter	value	1	CRAFTER_TYPE_JEWEL	jewel	0	0	PROVEN
+list_entry	crafter	value	2	CRAFTER_TYPE_MYSTIC	mystic	0	0	PROVEN
+list_entry	crafter	value	3	CRAFTER_TYPE_HORADRIM	horadrim	1	1538	PROVEN
+list_entry	crafter	value	4	CRAFTER_TYPE_JEWEL_UPGRADE	jewel upgrade	0	0	PROVEN
+list_entry	special_event	value	-1	SPECIAL_EVENT_FLAG_INVALID	invalid	2137	0	PROVEN
+list_entry	special_event	value	0	SPECIAL_EVENT_FLAG_X1_TEMPLAR	x1 templar	13	0	PROVEN
+list_entry	special_event	value	1	SPECIAL_EVENT_FLAG_X1_SCOUNDREL	x1 scoundrel	7	0	PROVEN
+list_entry	special_event	value	2	SPECIAL_EVENT_FLAG_X1_ENCHANTRESS	x1 enchantress	8	0	PROVEN
+list_entry	special_event	value	3	SPECIAL_EVENT_FLAG_X1_DEAD_KING	x1 dead king	3	0	PROVEN
+list_entry	special_event	value	4	SPECIAL_EVENT_FLAG_X1_JEWELER	x1 jeweler	2	0	PROVEN
+list_entry	special_event	value	5	SPECIAL_EVENT_FLAG_X1_BLACKSMITH	x1 blacksmith	0	0	PROVEN
+list_entry	special_event	value	6	SPECIAL_EVENT_FLAG_P1_GEMNPC	p1 gemnpc	0	0	PROVEN
+list_entry	special_event	value	7	SPECIAL_EVENT_FLAG_P1_CRAZED_HERMIT	p1 crazed hermit	0	0	PROVEN
+list_entry	class_flags	bit	0	PLAYER_CLASS_DEMONHUNTER	demonhunter	2115	0	PROVEN
+list_entry	class_flags	bit	1	PLAYER_CLASS_BARBARIAN	barbarian	2112	0	PROVEN
+list_entry	class_flags	bit	2	PLAYER_CLASS_WIZARD	wizard	2114	0	PROVEN
+list_entry	class_flags	bit	3	PLAYER_CLASS_WITCHDOCTOR	witchdoctor	2113	0	PROVEN
+list_entry	class_flags	bit	4	PLAYER_CLASS_MONK	monk	2114	0	PROVEN
+list_entry	class_flags	bit	5	PLAYER_CLASS_CRUSADER	crusader	2124	0	PROVEN
+list_entry	class_flags	bit	6	PLAYER_CLASS_NECROMANCER	necromancer	2153	0	PROVEN
+list_entry	class_flags	bit	7		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	160	0	SUPPORTED
+list_entry	class_flags	bit	8		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+list_entry	class_flags	bit	9		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+list_entry	class_flags	bit	10		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+list_entry	class_flags	bit	12		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+list_entry	class_flags	bit	13		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+list_entry	class_flags	bit	14		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+list_entry	class_flags	bit	15		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+list_entry	class_flags	bit	19		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+list_entry	class_flags	bit	20		stale editor bit: bits above the class count carry the constant pattern 0x18F780 on 170 NX entries and are ignored	170	0	SUPPORTED
+treasure_class	choose_kind	value	-1	TCC_NONE	none	0	0	PROVEN
+treasure_class	choose_kind	value	0	TCC_ONE_OF	one of	266	132	PROVEN
+treasure_class	choose_kind	value	1	TCC_ALL_OF	all of	964	314	PROVEN
+treasure_class	choose_kind	value	2	TCC_ALL_OF_SHARED	all of shared	9	0	PROVEN
+treasure_class	choose_kind	value	3	TCC_ONE_OF_SHARED	one of shared	0	0	PROVEN
+drop_modifier	drop_kind	value	-1	LDT_NONE	none	8	5	PROVEN
+drop_modifier	drop_kind	value	0	LDT_TREASURECLASS	treasureclass	2330	948	PROVEN
+drop_modifier	drop_kind	value	1	LDT_ITEMLABEL	itemlabel	2127	534	PROVEN
+drop_modifier	drop_kind	value	2	LDT_ITEM	item	2638	428	PROVEN
+drop_modifier	drop_kind	value	3	LDT_LEGENDARY	legendary	75	1	PROVEN
+drop_modifier	drop_kind	value	4	LDT_CLASS_TARGETED_LEGENDARY	class targeted legendary	49	1	PROVEN
+condition	follower	value	0		none	653	210	PROVEN
+condition	follower	value	1		Templar	0	0	PROVEN
+condition	follower	value	2		Scoundrel	0	0	PROVEN
+condition	follower	value	3		Enchantress	0	0	PROVEN
+condition	reward_act	value	-1		Invalid	653	0	PROVEN
+condition	reward_act	value	0		A1	0	0	PROVEN
+condition	reward_act	value	100		A2	0	0	PROVEN
+condition	reward_act	value	200		A3	0	0	PROVEN
+condition	reward_act	value	300		A4	0	0	PROVEN
+condition	reward_act	value	400		A5	0	0	PROVEN
+condition	reward_act	value	3000		OpenWorld	0	0	PROVEN
+condition	reward_act	value	1000		Test	0	0	PROVEN
+condition	act_min	value	-1		Invalid	627	0	PROVEN
+condition	act_min	value	0		A1	16	203	PROVEN
+condition	act_min	value	100		A2	7	7	PROVEN
+condition	act_min	value	200		A3	0	0	PROVEN
+condition	act_min	value	300		A4	0	0	PROVEN
+condition	act_min	value	400		A5	0	0	PROVEN
+condition	act_min	value	3000		OpenWorld	3	0	PROVEN
+condition	act_min	value	1000		Test	0	0	PROVEN
+condition	act_max	value	-1		Invalid	627	0	PROVEN
+condition	act_max	value	0		A1	0	193	PROVEN
+condition	act_max	value	100		A2	7	7	PROVEN
+condition	act_max	value	200		A3	9	0	PROVEN
+condition	act_max	value	300		A4	0	10	PROVEN
+condition	act_max	value	400		A5	7	0	PROVEN
+condition	act_max	value	3000		OpenWorld	3	0	PROVEN
+condition	act_max	value	1000		Test	0	0	PROVEN
+objective	flags	bit	1		unnamed objective flag; no constant in the type information	4556	444	OPEN
+objective	flags	bit	4		unnamed objective flag; no constant in the type information	5523	0	OPEN
+actor_event	pin_flags	bit	0		unnamed pin flag (one event on Switch)	1	0	OPEN

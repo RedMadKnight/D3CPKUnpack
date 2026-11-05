@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .binary import ByteView, FormatError, Pair, build_order
+from .binary import ByBuild, ByteView, FormatError, Pair, build_order
 from .luachunk import script_slice
 from .sno import SnoHeader, parse_header, resolve_build
 
@@ -31,9 +31,9 @@ MAP_POSITIONS += [(f"Contact{i}", 0x50 + i * 8) for i in range(4)]
 MAP_POSITIONS += [(f"PvpContact{i}", 0x90 + i * 8) for i in range(4)]
 
 BUFF_FILTERS_AT = 0xF8
-_FILTER_SLOTS = {"ps3": 8, "switch": 32}
-TRAILER_AT = {"ps3": 0x178, "switch": 0x2F8}
-_MAX_SLOT = {"ps3": 39, "switch": 63}
+_FILTER_SLOTS = ByBuild({"ps3": 8, "switch": 32})
+TRAILER_AT = ByBuild({"ps3": 0x178, "switch": 0x2F8})
+_MAX_SLOT = ByBuild({"ps3": 39, "switch": 63})
 
 
 @dataclass(frozen=True)
@@ -109,6 +109,18 @@ class PowerFile:
 
     def power_bit_names(self) -> list[str]:
         return [n for i, n in enumerate(POWER_BIT_NAMES) if self.power_bits >> i & 1]
+
+    def power_bit_constants(self) -> list[str]:
+        """The set bits by their ``power_bit`` constant names; unnamed bits as ``bit_<n>``."""
+        from .enums import bit_names
+
+        names, unknown = bit_names("power_bit", self.power_bits)
+        return names + [f"bit_{bit}" for bit in unknown]
+
+    @property
+    def script_reference(self) -> int:
+        """The word after the quest handle: an SNO reference (script), zero in every file."""
+        return self.padding_end
 
     def is_live_slot(self, slot: int) -> bool:
         return slot < self.formula_count

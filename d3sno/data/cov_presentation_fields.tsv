@@ -1,0 +1,81 @@
+format	offset_kind	offset	bytes	name	node_bytes	node_kind	note
+lit	body	0x38	40	state_a.inner_radius	12	float	path
+lit	body	0x60	40	state_a.radius	12	float	path
+lit	body	0x88	40	state_a.attenuation_0	12	float	path
+lit	body	0xb0	40	state_a.attenuation_1	12	float	path
+lit	body	0xd8	40	state_a.attenuation_2	12	float	path
+lit	body	0x100	40	state_a.hotspot	12	angle	path
+lit	body	0x128	40	state_a.falloff	12	angle	path
+lit	body	0x150	40	state_a.ambient_color	12	color	path
+lit	body	0x178	40	state_a.ambient_intensity	12	float	path
+lit	body	0x1a0	40	state_a.color	12	color	path
+lit	body	0x1c8	40	state_a.intensity	12	float	path
+lit	body	0x1f0	40	state_a.specular_color	12	color	path
+lit	body	0x218	40	state_a.specular_intensity	12	float	path
+lit	body	0x240	40	state_b.inner_radius	12	float	path
+lit	body	0x268	40	state_b.radius	12	float	path
+lit	body	0x290	40	state_b.attenuation_0	12	float	path
+lit	body	0x2b8	40	state_b.attenuation_1	12	float	path
+lit	body	0x2e0	40	state_b.attenuation_2	12	float	path
+lit	body	0x308	40	state_b.hotspot	12	angle	path
+lit	body	0x330	40	state_b.falloff	12	angle	path
+lit	body	0x358	40	state_b.ambient_color	12	color	path
+lit	body	0x380	40	state_b.ambient_intensity	12	float	path
+lit	body	0x3a8	40	state_b.color	12	color	path
+lit	body	0x3d0	40	state_b.intensity	12	float	path
+lit	body	0x3f8	40	state_b.specular_color	12	color	path
+lit	body	0x420	40	state_b.specular_intensity	12	float	path
+trl	body	0x28	40	color_over_time	12	color	path
+trl	body	0x50	40	color_over_length	12	color	path
+trl	body	0x78	40	alpha	12	float	path
+trl	body	0xa0	40	alpha_over_length	12	float	path
+rop	body	0x8c	40	color_over_time	12	color	path
+rop	body	0xb4	40	color_over_length	12	color	path
+rop	body	0xdc	40	alpha	12	float	path
+rop	body	0x104	40	alpha_over_length	12	float	path
+rop	body	0x12c	40	width_over_time	12	float	path
+rop	body	0x154	40	width_over_length	12	float	path
+rop	body	0x17c	40	source_world_up_motion	12	float	path
+rop	body	0x1a4	40	source_along_rope_motion	12	float	path
+rop	body	0x1cc	40	source_perpendicular_motion	12	float	path
+rop	body	0x1f4	40	dest_world_up_motion	12	float	path
+rop	body	0x21c	40	dest_along_rope_motion	12	float	path
+rop	body	0x244	40	dest_perpendicular_motion	12	float	path
+rop	body	0x26c	40	jitter_amplitude	28	vector	path
+rop	body	0x294	40	jitter_rate	12	velocity	path
+rop	body	0x2bc	4	jitter_approach_speed			f32
+rop	body	0x2c0	4	expected_length			f32
+rop	body	0x2c4	40	separation	12	float	path
+rop	body	0x2ec	40	x_amplitude_over_length	12	float	path
+rop	body	0x314	40	y_amplitude_over_length	12	float	path
+rop	body	0x33c	40	frequency_over_time	12	float	path
+rop	body	0x364	40	phase_speed_over_time	12	float	path
+mus	entry	0x0	4	sound_bank			u32 (volume_db f32)
+mus	entry	0x4	4	sample_hash			u32 (volume_db f32)
+mus	entry	0x8	4	volume_db			u32 (volume_db f32)
+mus	entry	0xc	4	start_min			u32 (volume_db f32)
+mus	entry	0x10	4	start_delta			u32 (volume_db f32)
+mus	entry	0x14	4	end			u32 (volume_db f32)
+mus	entry	0x18	4	loop_count			u32 (volume_db f32)
+mus	entry	0x1c	4	loop_start			u32 (volume_db f32)
+mus	entry	0x20	4	loop_end			u32 (volume_db f32)
+mus	entry	0x24	4	fade_in_offset			u32 (volume_db f32)
+mus	entry	0x28	4	fade_in_time			u32 (volume_db f32)
+mus	entry	0x2c	4	fade_out_offset			u32 (volume_db f32)
+mus	entry	0x30	4	fade_out_time			u32 (volume_db f32)
+mus	entry	0x34	4	fade_in_shape			u32 (volume_db f32)
+mus	entry	0x38	4	fade_out_shape			u32 (volume_db f32)
+path	path	0x0	4	node_count			path header word
+path	path	0x4	4	loop_start			path header word
+path	path	0x8	4	loop_end			path header word
+path	path	0xc	4	distribution			path header word
+path	path	0x10	4	interp_a			path header word
+path	path	0x14	4	interp_b			path header word
+path	path	0x18	4	interp_c			path header word
+path	path	0x1c	4	padding			zero
+path	path	0x20	8	nodes			pair {offset,size}; size = node_count x node size
+node	node	0	12	float			min f32, max f32, time f32
+node	node	0	12	angle			min f32, max f32, time f32
+node	node	0	12	velocity			min f32, max f32, time f32
+node	node	0	12	color			min RGBA bytes, max RGBA bytes, time f32
+node	node	0	28	vector			min xyz f32, max xyz f32, time f32

@@ -110,6 +110,13 @@ class CpkHeader:
         return 64 if self.version == 6 else 72
 
     @property
+    def build(self) -> str:
+        """Version 6 is ps3; version 7 is Switch little-endian and x360 big-endian (X2, X12)."""
+        if self.version == 6:
+            return "ps3"
+        return "x360" if self.order == ">" else "switch"
+
+    @property
     def compressed(self) -> bool:
         return bool(self.flags & FLAG_COMPRESSED)
 
@@ -200,7 +207,7 @@ def header_problems(h: CpkHeader) -> list[str]:
         problems.append(f"runtime flag bits set on disk: 0x{h.flags:X}")
     if h.flags not in (0, 2, 10):
         problems.append(f"unexpected flags value {h.flags}")
-    if (h.version, h.order) not in ((6, ">"), (7, "<")):
+    if (h.version, h.order) not in ((6, ">"), (7, "<"), (7, ">")):  # x360: version 7 big-endian (X12)
         problems.append(f"version {h.version} with byte order {h.order!r}")
     if h.read_sector > MAX_READ_SECTOR:
         problems.append(f"read sector 0x{h.read_sector:X} above 0x10000")
@@ -629,7 +636,8 @@ def _check_locations(archive: CpkArchive, check: CheckResult) -> bool:
 
 
 def _check_copies(archive: CpkArchive, check: CheckResult) -> None:
-    single_only = archive.header.version == 7
+    # Copies: ps3 (version 6) and x360 (version 7 big-endian) cache archives (X12).
+    single_only = archive.header.version == 7 and archive.header.order == "<"
     for entry in archive.files:
         if entry.count == 1:
             continue
@@ -867,7 +875,7 @@ def write_archive(
         order + "IIQ12I",
         CPK_MAGIC, version, len(stream), flags, len(entries), len(locations), header_sector,
         size_bits, copies_bits, first_bits, location_bits, location_bits, index_bits, crc,
-        read_sector if version == 7 or word_3c is None else word_3c,
+        read_sector if version == 7 else (word_3c or 0),
     )
     if version == 7:
         header += struct.pack(order + "II", comp_sector, 0)
@@ -977,3 +985,12 @@ class ArchiveOverlay:
             if hit is not None:
                 return hit
         return None
+
+
+def file_build(archive_header: CpkHeader, data: bytes, extension: str) -> str:
+    """X2 for a file read from an archive: the signature and version decide; a big-endian
+    version shared by ps3 and x360 (``.aco``, ``.adv`` ...) takes the archive's build."""
+    from .sno import detect_build, parse_header
+
+    found = detect_build(extension, parse_header(data), archive_header.build)
+    return found or archive_header.build

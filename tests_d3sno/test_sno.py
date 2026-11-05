@@ -72,7 +72,15 @@ class Versions(unittest.TestCase):
 
     def test_table(self):
         self.assertEqual(S.VERSIONS["scn"], (163, 179))
-        self.assertEqual(len(S.VERSIONS), 9)
+        self.assertEqual(len(S.VERSIONS), 64)
+        import csv
+        from d3sno.datafiles import DATA
+        with open(DATA / "cov_sno_versions.tsv", encoding="utf-8", newline="") as handle:
+            for row in csv.DictReader(handle, delimiter="\t"):
+                expected = tuple(
+                    int(row[k]) if row[k] else None for k in ("ps3_version", "switch_version")
+                )
+                self.assertEqual(S.VERSIONS[row["extension"]], expected, row["extension"])
 
 
 class Groups(unittest.TestCase):

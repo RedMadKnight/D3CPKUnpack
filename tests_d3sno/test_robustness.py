@@ -250,8 +250,10 @@ class Fuzz(unittest.TestCase):
 
     def test_balance_writer(self):
         from d3sno import balance, write
-        rows = [{"name": "Axe", "formulas": {8: ("1", B.Code("<").f(1).end())}}, {"name": "B", "formulas": {8: None}}]
-        sample = B.build_gam_layout("switch", 11, 0xB8, 32, rows)
+        rows = [{"name": "Axe", "blocks": {0x30: B.Code("<").f(1).end()}}, {"name": "B"}]
+        sample = B.build_gam_layout(
+            "switch", 40, 0x1E8, 400, rows, {0: "name", 0x30: "code", 0x48: "code"},
+        )
 
         def use(data):
             parsed = balance.parse_balance(data)

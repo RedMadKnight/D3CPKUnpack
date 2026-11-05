@@ -18,10 +18,11 @@ class Music(unittest.TestCase):
     def test_entries(self):
         volume = struct.unpack(">I", struct.pack(">f", 0.5))[0]
         entries = V.parse_music(self.build([(7, 0xABC, volume, *range(12))]))
-        self.assertEqual(entries[0].words["bank"], 7)
+        self.assertEqual(entries[0].words["sound_bank"], 7)
         self.assertEqual(entries[0].words["sample_hash"], 0xABC)
-        self.assertEqual(entries[0].as_float("volume"), 0.5)
-        self.assertEqual(entries[0].words["word_14"], 11)
+        self.assertEqual(entries[0].as_float("volume_db"), 0.5)
+        self.assertEqual(entries[0].words["fade_in_shape"], 10)
+        self.assertEqual(entries[0].words["fade_out_shape"], 11)
 
     def test_count(self):
         with self.assertRaises(FormatError):
@@ -84,12 +85,12 @@ class Paths(unittest.TestCase):
 
 class Ui(unittest.TestCase):
     def test_lists(self):
-        img = B.ps3_file(0x50)
-        for i, at in enumerate((0x10, 0x20, 0x30)):
+        img = B.ps3_file(0x10 + 0x78)
+        for i, at in enumerate((0x10, 0x20, 0x30, 0x40, 0x50)):
             img.put(0x10 + at, "i", i + 1)
             img.put(0x10 + at + 4, "II", *img.append(bytes(24 * (i + 1))))
         lists = V.parse_ui(img.done())
-        self.assertEqual([l.count for l in lists], [1, 2, 3])
+        self.assertEqual([l.count for l in lists], [1, 2, 3, 4, 5])
         self.assertEqual(len(lists[2].split(24)), 3)
         with self.assertRaises(FormatError):
             lists[0].split(16)

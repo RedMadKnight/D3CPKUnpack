@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .binary import ByteView, FormatError, build_order
-from .sno import parse_header
+from .sno import parse_header, resolve_build
 
 LUA_SIGNATURE = b"\x1BLuaQ"
 HEADER_SIZE = 12
@@ -15,6 +15,7 @@ MAX_NESTING = 200
 _HEADERS = {
     "ps3": (0, 4, 4, 4, 8, 0),
     "switch": (1, 4, 8, 4, 8, 0),
+    "x360": (0, 4, 4, 4, 8, 0),  # X8: the ps3 header (big-endian, 4-byte size_t)
 }
 
 # Position of the script pair per file type, (ps3, switch).
@@ -128,7 +129,7 @@ class _ChunkReader:
     def __init__(self, data: bytes, build: str):
         self.view = ByteView(data, build_order(build))
         self.pos = HEADER_SIZE
-        self.size_t = "I" if build == "ps3" else "Q"
+        self.size_t = "Q" if _HEADERS[build][2] == 8 else "I"
 
     def byte(self) -> int:
         value = self.view.u8(self.pos, "chunk byte")
@@ -223,7 +224,7 @@ def script_slice(data: bytes, file_type: str, build: str | None = None) -> bytes
     extension = file_type.lstrip(".")
     if extension not in SCRIPT_PAIRS:
         raise FormatError(f"no script pair known for .{extension}")
-    resolved = build or parse_header(data).build
+    resolved = build or resolve_build(extension, parse_header(data))
     view = ByteView(data, build_order(resolved))
     position = SCRIPT_PAIRS[extension][0 if resolved == "ps3" else 1]
     pair = view.pair(position, "script pair")

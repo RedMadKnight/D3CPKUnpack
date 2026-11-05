@@ -1,0 +1,319 @@
+table	message_or_enum	number_or_value	name	wire_or_note
+field	file	1	categories	message category
+field	file	2	achievements	message achievement
+field	file	3	criteria	message criteria
+field	file	4	attributes	message attribute
+field	category	1	id	varint
+field	category	2	parent_id	varint
+field	category	3	obsolete_featured_id	varint
+field	category	4	order_hint	varint
+field	category	5	attributes	message attribute
+field	achievement	1	id	varint
+field	achievement	2	superseding_id	varint
+field	achievement	3	category_id	varint
+field	achievement	4	minimum_criteria	varint
+field	achievement	5	points	varint
+field	achievement	6	flags	varint
+field	achievement	7	order_hint	varint
+field	achievement	8	shares_criteria_with	varint
+field	achievement	9	attributes	message attribute
+field	criteria	1	id	varint
+field	criteria	2	parent_achievement_id	varint
+field	criteria	3	start_event	message event
+field	criteria	4	advance_event	message event
+field	criteria	5	fail_event	message event
+field	criteria	6	necessary_quantity	varint
+field	criteria	7	order_hint	varint
+field	criteria	8	evaluation_class	fixed32
+field	criteria	9	flags	varint
+field	criteria	10	attributes	message attribute
+field	event	1	id	varint
+field	event	2	comparand	varint
+field	event	3	modifiers	message modifier
+field	event	4	timer_duration	varint
+field	modifier	1	condition_id	varint
+field	modifier	2	target	fixed32
+field	modifier	3	operand	varint
+field	modifier	4	comparand	varint
+field	attribute	1	key	bytes
+field	attribute	2	value	bytes
+achievement_flag_bit	OnlineService::AchievementFlag	0	ACHIEVEMENT_FLAG_STATISTIC	
+achievement_flag_bit	OnlineService::AchievementFlag	1	ACHIEVEMENT_FLAG_CUMULATIVE	
+achievement_flag_bit	OnlineService::AchievementFlag	2	ACHIEVEMENT_FLAG_TRACK_LOCAL_UNTIL_AWARDED	
+achievement_flag_bit	OnlineService::AchievementFlag	8	ACHIEVEMENT_FLAG_HIDDEN	
+achievement_flag_bit	OnlineService::AchievementFlag	9	ACHIEVEMENT_FLAG_HIDDEN_TILL_AWARDED	
+achievement_flag_bit	OnlineService::AchievementFlag	10	ACHIEVEMENT_FLAG_NOTOAST	
+achievement_flag_bit	OnlineService::AchievementFlag	11	ACHIEVEMENT_FLAG_DISPLAY_HIGHEST	
+achievement_flag_bit	OnlineService::AchievementFlag	12	ACHIEVEMENT_FLAG_CRITERIA_COUNT	
+achievement_flag_bit	OnlineService::AchievementFlag	13	ACHIEVEMENT_FLAG_SHOWCASEDEFAULT_0	
+achievement_flag_bit	OnlineService::AchievementFlag	14	ACHIEVEMENT_FLAG_SHOWCASEDEFAULT_1	
+achievement_flag_bit	OnlineService::AchievementFlag	15	ACHIEVEMENT_FLAG_SHOWCASEDEFAULT_2	
+achievement_flag_bit	OnlineService::AchievementFlag	16	ACHIEVEMENT_FLAG_HAS_PROGRESS_BAR	
+achievement_flag_bit	OnlineService::AchievementFlag	17	ACHIEVEMENT_FLAG_HIDE_SERIES	
+achievement_flag_bit	OnlineService::AchievementFlag	18	ACHIEVEMENT_FLAG_CONQUEST	
+achievement_flag_bit	OnlineService::AchievementFlag	19	ACHIEVEMENT_FLAG_SHOW_IN_BANNER_UI	
+achievement_flag_bit	OnlineService::AchievementFlag	20	ACHIEVEMENT_FLAG_GUARANTEE_REWARD	
+category_flag_bit	OnlineService::CategoryFlag	0	CATEGORY_FLAG_HIDDEN	
+category_flag_bit	OnlineService::CategoryFlag	1	CATEGORY_FLAG_HIDDEN_TILL_ONE_AWARDED	
+category_flag_bit	OnlineService::CategoryFlag	2	CATEGORY_FLAG_SEASON_JOURNEY	
+criteria_flag_bit	OnlineService::CriteriaFlag	0	CRITERIA_FLAG_FAIL_ACHIEVEMENT	
+criteria_flag_bit	OnlineService::CriteriaFlag	1	CRITERIA_FLAG_RESET_ON_START	
+criteria_flag_bit	OnlineService::CriteriaFlag	8	CRITERIA_FLAG_PROGRESS_BAR	
+criteria_flag_bit	OnlineService::CriteriaFlag	9	CRITERIA_FLAG_HIDDEN	
+criteria_flag_bit	OnlineService::CriteriaFlag	10	CRITERIA_FLAG_IS_ACHIEVEMENT_ID	
+criteria_flag_bit	OnlineService::CriteriaFlag	11	CRITERIA_FLAG_RETRIEVE_NAME_FROM_STRINGLIST	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	0	ACH_EVENT_NONE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	1	ACH_EVENT_EQUIP_ITEM_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	2	ACH_EVENT_ACQUIRE_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	4	ACH_EVENT_CRAFT_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	5	ACH_EVENT_SALVAGE_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	6	ACH_EVENT_ENCHANT_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	7	ACH_EVENT_DYE_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	8	ACH_EVENT_SOCKET_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	9	ACH_EVENT_RECOVERED_CRAFTING_MATERIAL	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	10	ACH_EVENT_PICKUP_GOLD	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	11	ACH_EVENT_REWARDED_GOLD	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	13	ACH_EVENT_PLAYER_FULLY_EQUIPPED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	14	ACH_EVENT_EQUIP_ALL_ITEMS_WITH_DIFFERENT_DYES	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	15	ACH_EVENT_EQUIP_ALL_ITEMS_WITH_SPECIFIC_DYE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	16	ACH_EVENT_HIRELING_FULLY_EQUIPPED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	17	ACH_EVENT_REPAIR_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	18	ACH_EVENT_UNSOCKET_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	19	ACH_EVENT_STASH_SIZE_INCREASED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	21	ACH_EVENT_ITEM_PURCHASED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	22	ACH_EVENT_LOOTED_CHEST	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	25	ACH_EVENT_COMPLETE_DEVILS_HAND_SET	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	26	ACH_EVENT_EQUIP_ALL_ITEMS_ENCHANTED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	27	ACH_EVENT_TRANSMOG_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	28	ACH_EVENT_EQUIP_ALL_ITEMS_TRANSMOG_LEGENDARY	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	29	ACH_EVENT_EQUIP_ALL_ITEMS_MAX_LEVEL_LEGENDARY	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	30	ACH_EVENT_GOLD_COUNTER_EXPIRED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	31	ACH_EVENT_EQUIP_HIRELING_ALL_ITEMS_MAX_LEVEL_LEGENDARY	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	32	ACH_EVENT_SPEND_BLOODSHARDS	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	33	ACH_EVENT_LEGENDARY_FROM_KADALA	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	34	ACH_EVENT_REROLL_AFFIX_TO_GET_SOCKET	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	101	ACH_EVENT_MONSTER_KILLED_BY_XP_ELIGIBLE_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	102	ACH_EVENT_MONSTER_SPAWNED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	103	ACH_EVENT_MONSTER_DAMAGED_BY_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	104	ACH_EVENT_MONSTER_KILLED_BY_MONSTER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	105	ACH_EVENT_ELITE_MONSTER_KILLED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	106	ACH_EVENT_MONSTER_KILLED_BY_ENVIRONMENT	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	108	ACH_EVENT_OBJECT_DESTROYED_BY_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	109	ACH_EVENT_MONSTER_KILLED_BY_PLAYER_FATAL_BLOW	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	110	ACH_EVENT_KILL_COUNTER_RESET	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	111	ACH_EVENT_MONSTER_KILLED_BY_FOLLOWER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	112	ACH_EVENT_OBJECT_DESTROYED_BY_MONSTER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	200	ACH_EVENT_EARNED_ACHIEVEMENT	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	201	ACH_EVENT_PLAYER_POWER_STARTED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	206	ACH_EVENT_USE_RESOURCE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	207	ACH_EVENT_SPEND_HEALTH	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	208	ACH_EVENT_PLAYER_BUFFED_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	209	ACH_EVENT_PLAYER_BUFFED_FOLLOWER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	210	ACH_EVENT_BRICKHOUSE_DESTROYED_DOOR	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	211	ACH_EVENT_MAXED_OUT_RESOURCE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	212	ACH_EVENT_RESOURCE_NO_LONGER_MAXED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	213	ACH_EVENT_PLAYER_BUFFED_SELF	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	215	ACH_EVENT_PLAYER_BUFF_REMOVED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	216	ACH_EVENT_MONSTER_BUFF_REMOVED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	217	ACH_EVENT_PLAYER_APPLIED_CC_TO_MONSTER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	301	ACH_EVENT_ACQUIRE_HIRELING	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	302	ACH_EVENT_ACQUIRE_CRAFTER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	304	ACH_EVENT_PET_ACQUIRED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	401	ACH_EVENT_LEVELUP_HERO	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	403	ACH_EVENT_LEVELUP_CRAFTER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	404	ACH_EVENT_TEACH_RECIPE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	405	ACH_EVENT_COMPLETE_ACT	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	406	ACH_EVENT_COMPLETE_QUEST_EVENT	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	407	ACH_EVENT_ENTER_LEVEL_AREA	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	408	ACH_EVENT_LEAVE_LEVEL_AREA	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	410	ACH_EVENT_COMPLETE_QUEST_STEP	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	411	ACH_EVENT_LEVELUP_PARAGON	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	412	ACH_EVENT_COMPLETE_BOUNTY	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	413	ACH_EVENT_COMPLETE_LOOT_RUN	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	414	ACH_EVENT_COMPLETE_CHALLENGE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	415	ACH_EVENT_STARTED_LOOT_RUN	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	416	ACH_EVENT_HAS_HERO_AT_LEVEL	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	417	ACH_EVENT_RECEIVED_REWARD	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	501	ACH_EVENT_RESURRECT_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	504	ACH_EVENT_PLAYER_DIED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	505	ACH_EVENT_PLAYER_BLOCKED_ATTACK	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	506	ACH_EVENT_PLAYER_DAMAGED_BY_POWER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	507	ACH_EVENT_BROADCAST_PLAYER_JOINED_GAME	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	508	ACH_EVENT_PLAYER_HEALED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	509	ACH_EVENT_PLAYER_HEALED_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	510	ACH_EVENT_PLAYER_DODGED_ATTACK	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	511	ACH_EVENT_SAVED_ANOTHER_PLAYER_FROM_DEATH	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	512	ACH_EVENT_SURVIVED_COMBAT_WITH_LOW_HEALTH	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	513	ACH_EVENT_PLAYER_LEAVE_GAME	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	514	ACH_EVENT_JOINED_GAME_WITH_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	516	ACH_EVENT_PLAYER_HAS_LICENSE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	517	ACH_EVENT_PLAYER_HIT_BY_POWER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	518	ACH_EVENT_PLAYER_GAINED_RESOURCE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	519	ACH_EVENT_PLAYER_ABSORBED_DAMAGE_WITH_POWER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	520	ACH_EVENT_PLAYER_USED_POWER_TO_REFLECTE_PROJECTILE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	521	ACH_EVENT_PLAYER_BLOCKED_DAMAGE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	522	ACH_EVENT_PLAYER_DEALT_DAMAGE_TO_MONSTER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	523	ACH_EVENT_PLAYER_COMPLETED_TIERED_RIFT	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	524	ACH_EVENT_PLAYER_EXTRACTED_POWER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	525	ACH_EVENT_PLAYER_UPGRADED_RARE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	526	ACH_EVENT_PLAYER_CONVERTED_SET_ITEM	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	527	ACH_EVENT_AUGMENT_ANCIENT_30_PLUS	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	528	ACH_EVENT_AUGMENT_ANCIENT_40_PLUS	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	529	ACH_EVENT_AUGMENT_ANCIENT_50_PLUS	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	530	ACH_EVENT_REFORGED_LEGENDARY	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	531	ACH_EVENT_EQUIP_THREE_CUBE_POWERS	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	550	ACH_EVENT_PLAYER_JOINED_GAME	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	551	ACH_EVENT_PLAYER_EARNED_SEASONAL_ACHIEVEMENT_POINTS	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	601	ACH_EVENT_COMPLETE_CONVERSATION	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	602	ACH_EVENT_CONVERSE_WITH_NPC	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	603	ACH_EVENT_INITIATE_CONVERSATION	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	604	ACH_EVENT_LORE_LEARNED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	605	ACH_EVENT_PLAYER_HEARD_CONVERSATION_LINE	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	700	ACH_EVENT_PVP_LEVELUP_HERO	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	701	ACH_EVENT_PVP_WIN_GAME	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	702	ACH_EVENT_PVP_LOSE_GAME	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	703	ACH_EVENT_PVP_TIE_GAME	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	704	ACH_EVENT_PVP_PLAYED_MAP	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	705	ACH_EVENT_PVP_PLAYER_KILLED_PLAYER_OF_CLASS	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	710	ACH_EVENT_PVP_PLAYER_DAMAGED_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	711	ACH_EVENT_PVP_TEAMMATE_DIED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	712	ACH_EVENT_PVP_WIN_GAME_AFTER_BEING_DOWN_BY_DEFICIT	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	713	ACH_EVENT_PVP_PLAYER_GOT_ASSIST	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	740	ACH_EVENT_PVP_CALLOUT_FIRSTBLOOD	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	741	ACH_EVENT_PVP_CALLOUT_AVENGER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	742	ACH_EVENT_PVP_CALLOUT_KILLSTREAK_3	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	743	ACH_EVENT_PVP_CALLOUT_KILLSTREAK_5	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	744	ACH_EVENT_PVP_CALLOUT_KILLSTREAK_7	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	745	ACH_EVENT_PVP_CALLOUT_KILLSTREAK_10	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	760	ACH_EVENT_PVP_PLAYER_APPLIED_STUN_TO_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	761	ACH_EVENT_PVP_PLAYER_APPLIED_FREEZE_TO_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	762	ACH_EVENT_PVP_PLAYER_APPLIED_BLIND_TO_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	763	ACH_EVENT_PVP_PLAYER_APPLIED_FEAR_TO_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	764	ACH_EVENT_PVP_PLAYER_APPLIED_IMMOBILIZE_TO_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	765	ACH_EVENT_PVP_PLAYER_APPLIED_KNOCKBACK_TO_PLAYER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	3001	ACH_EVENT_INTERACT	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	3002	ACH_EVENT_SCRIPTED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	3003	ACH_EVENT_WARPED_USING_BANNER	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	3100	ACH_EVENT_TIERED_RIFT_RESET	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	3200	ACH_EVENT_CURSED_CHEST_EVENT_COMPLETED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	3300	ACH_EVENT_LEGENDARY_GEM_UPGRADED	
+event_id	Achievement::<anon_enum:ACH_EVENT_NONE>	9999	ACH_EVENT_NEVER_FIRED	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	0	MODIFIER_NONE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	1	MODIFIER_ITEM_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	3	MODIFIER_ITEM_HAS_USE_TYPE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	4	MODIFIER_ITEM_QUALITY_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	5	MODIFIER_ITEM_QUALITY_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	6	MODIFIER_WEAPON_CLASS_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	7	MODIFIER_CRAFTER_CLASS_IS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	8	MODIFIER_GIZMO_OPERATED_BY_PLAYER	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	9	MODIFIER_GEM_QUALITY_IS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	10	MODIFIER_GEM_QUALITY_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	11	MODIFIER_ITEM_LEVEL_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	12	MODIFIER_ITEM_LEVEL_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	13	MODIFIER_ITEM_HAS_AFFIX	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	14	MODIFIER_ITEM_HAS_AFFIX_FAMILY	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	15	MODIFIER_ITEM_TYPE_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	16	MODIFIER_EQUIPMENT_LEVEL_GREATER_THAN_EQUAL_TO	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	17	MODIFIER_HAS_ITEM_TYPE_EQUIPPED	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	18	MODIFIER_GEM_TYPE_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	19	MODIFIER_GIZMO_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	20	MODIFIER_HAS_1_LEGENDARY_GEM_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	21	MODIFIER_HAS_2_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	22	MODIFIER_HAS_3_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	23	MODIFIER_HAS_4_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	24	MODIFIER_HAS_5_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	25	MODIFIER_HAS_6_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	26	MODIFIER_HAS_7_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	27	MODIFIER_HAS_8_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	28	MODIFIER_HAS_9_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	29	MODIFIER_HAS_10_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	30	MODIFIER_HAS_11_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	31	MODIFIER_HAS_12_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	32	MODIFIER_HAS_13_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	33	MODIFIER_HAS_14_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	34	MODIFIER_HAS_15_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	35	MODIFIER_HAS_16_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	36	MODIFIER_HAS_17_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	37	MODIFIER_HAS_18_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	38	MODIFIER_HAS_19_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	39	MODIFIER_HAS_20_LEGENDARY_GEMS_GREATER_THAN_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	40	MODIFIER_HAS_NO_SET_ITEMS_EQUIPPED	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	103	MODIFIER_MONSTER_RARITY_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	104	MODIFIER_MONSTER_RARITY_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	105	MODIFIER_MONSTER_BELONGS_TO_FAMILY	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	107	MODIFIER_BELONGS_TO_ACTOR_GROUP	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	108	MODIFIER_MONSTER_ACTIVE_BRAIN_COMPONENT	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	109	MODIFIER_MONSTER_TYPE_IS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	110	MODIFIER_MONSTER_HAS_BUFF	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	111	MODIFIER_MONSTER_IS_CHARMED	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	112	MODIFIER_MONSTER_IS_AT_LEAST_PLAYER_MAX_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	113	MODIFIER_PLAYER_HAS_BUFF	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	114	MODIFIER_PLAYER_NOT_HAS_BUFF	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	115	MODIFIER_MONSTER_IS_CURSED	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	201	MODIFIER_POWER_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	205	MODIFIER_POWER_DISTANCE_TO_TARGET	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	206	MODIFIER_POWER_IS_PASSIVE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	207	MODIFIER_POWER_IS_NOT_PASSIVE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	208	MODIFIER_POWER_IS_BASIC_ATTACK	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	209	MODIFIER_POWER_IS_NOT_BASIC_ATTACK	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	210	MODIFIER_POWER_BUFF_DURATION_GREATER_THAN_EQUAL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	211	MODIFIER_POWER_BUFF_DURATION_LESS_THAN_EQUAL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	212	MODIFIER_POWER_BUFF_INDEX_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	213	MODIFIER_POWER_DID_KNOCKBACK	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	301	MODIFIER_PLAYER_LEVEL_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	302	MODIFIER_PLAYER_LEVEL_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	303	MODIFIER_PLAYER_LEVEL_LESS_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	304	MODIFIER_ALL_EQUIPPED_ITEMS_DYED_SAME	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	305	MODIFIER_ALL_EQUIPPED_ITEMS_DYED_DIFF	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	306	MODIFIER_PLAYER_IS_HARDCORE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	307	MODIFIER_PLAYER_CLASS_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	308	MODIFIER_ANOTHER_PLAYER_HAS_COMPANION	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	309	MODIFIER_HAS_NOTHING_EQUIPPED	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	310	MODIFIER_IS_ANOTHER_PLAYER	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	311	MODIFIER_ACTIVE_WEAPON_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	312	MODIFIER_ALL_PLAYERS_ARE_DIFFERENT_CLASSES	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	313	MODIFIER_PLAYER_HEALTH_PERCENTAGE_IS_LESS_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	314	MODIFIER_HAS_ANYTHING_EQUIPPED	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	315	MODIFIER_PLAYER_HAS_STASH_OF_SIZE_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	316	MODIFIER_BLACKSMITH_LEVEL_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	317	MODIFIER_JEWELER_LEVEL_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	318	MODIFIER_BLACKSMITH_RECIPES_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	319	MODIFIER_JEWELER_RECIPES_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	320	MODIFIER_PLAYER_IS_DEAD	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	321	MODIFIER_PLAYER_HAS_POWER_ON_HOTBAR	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	322	MODIFIER_PLAYER_PARAGON_LEVEL_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	323	MODIFIER_PLAYER_PARAGON_LEVEL_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	324	MODIFIER_PLAYER_PARAGON_LEVEL_LESS_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	325	MODIFIER_PLAYER_IS_IN_LOOT_RUN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	326	MODIFIER_MYSTIC_LEVEL_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	327	MODIFIER_PLAYER_IS_SOFTCORE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	328	MODIFIER_PLAYER_IS_IN_ACT	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	329	MODIFIER_PLAYER_IS_IN_TIERED_LOOT_RUN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	330	MODIFIER_PLAYER_IS_NOT_IN_LEVEL_AREA	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	331	MODIFIER_PLAYER_EXTRACTED_POWERS_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	332	MODIFIER_CUBE_LEVEL_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	333	MODIFIER_PLAYER_HAS_COMPLETED_BOUNTIES_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	401	MODIFIER_CONVERSATION_TYPE_IS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	501	MODIFIER_SLAIN_BY_MONSTER	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	502	MODIFIER_SLAIN_BY_ENVIRONMENT	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	601	MODIFIER_IN_PVP_GAME	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	602	MODIFIER_NUMBER_PLAYERS_IN_GAME_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	603	MODIFIER_NUMBER_PLAYERS_IN_GAME_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	604	MODIFIER_IN_COOP_GAME	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	605	MODIFIER_DEPRECATED_GAME_DIFFICULTY_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	606	MODIFIER_GAME_IS_PUBLIC	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	607	MODIFIER_GAME_IS_PRIVATE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	608	MODIFIER_DEPRECATED_GAME_DIFFICULTY_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	609	MODIFIER_GAME_HANDICAP_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	610	MODIFIER_GAME_HANDICAP_GREATER_THAN_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	611	MODIFIER_GAME_IS_OPEN_WORLD_MODE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	612	MODIFIER_GAME_IS_SEASONAL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	613	MODIFIER_GAME_IS_AT_LEAST_LEVEL	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	614	MODIFIER_GAME_TIMESTAMP_REACHED	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	615	MODIFIER_GAME_TIME_IS_LESS_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	616	MODIFIER_GAME_IS_TIERED_LOOT_RUN_NOT_ACTIVE	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	617	MODIFIER_GAME_IS_TIERED_LOOT_RUN_SOLO	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	701	MODIFIER_HIRELING_CLASS_EQUALS	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	702	MODIFIER_NUMBER_OF_PETS_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	703	MODIFIER_NUMBER_OF_ZOMBIE_DOG_PETS_GREATER_THAN	
+modifier_condition_id	Achievement::<anon_enum:MODIFIER_NONE>	801	MODIFIER_CURSED_CHEST_EVENT_KILLED_MONSTER_COUNT_GREATER_THAN	

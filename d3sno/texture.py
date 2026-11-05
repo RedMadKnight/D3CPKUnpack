@@ -6,15 +6,15 @@ import struct
 import zlib
 from dataclasses import dataclass, field
 
-from .binary import ByteView, FormatError, Pair, build_order, to_f32
+from .binary import ByBuild, ByteView, FormatError, Pair, build_order, to_f32
 from .index import Sprite
 from .sno import SnoHeader, check_version, parse_header, resolve_build
 
-_ORDER_FIELDS = {
+_ORDER_FIELDS = ByBuild({
     # image ids pair, cube flag, import flags, machine time, console mip offset, V scale, volume
     "ps3": (0x24C, 0x254, 0x258, 0x25C, 0x260, 0x264, 0x268),
     "switch": (0x260, 0x268, 0x26C, 0x270, 0x274, 0x278, 0x27C),
-}
+})
 PAYLOAD_AT = 0x40
 FRAME_PAIR_AT = 0x224
 PS3_FIXED_SIZE = 0x270
@@ -291,7 +291,7 @@ def parse_texture(data: bytes, build: str | None = None, strict: bool = False) -
         present = [p.file_offset for p in (ids_pair, frame_pair, payload_pair) if p.size]
         fixed_size = min(present, default=len(data))
     tex.fixed = bytes(data[:fixed_size])
-    if resolved == "switch" and payload:
+    if resolved == "switch" and payload:  # x360: one opaque block, no information block (X5)
         tex.nv = _parse_nv(payload, payload_pair.file_offset)
         _check_nv(tex)
     if strict and tex.warnings:
@@ -410,6 +410,9 @@ def element_offsets(tex: TextureFile, level: int = 0, face: int = 0, z: int = 0)
         raise FormatError(f"level {level} is larger than the payload", PAYLOAD_AT)
     if tex.build == "ps3":
         return _ps3_offsets(tex, level, face, z)
+    if tex.build == "x360":
+        # X5: one opaque block, tiled; its addressing is open (x360_byte_order.tsv, OPEN).
+        raise FormatError("x360 texture payload is not decoded: its pixel layout is open", PAYLOAD_AT)
     return _switch_offsets(tex, level, face, z)
 
 

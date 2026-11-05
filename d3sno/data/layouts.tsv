@@ -1,8 +1,8 @@
 build	record	offset	bytes	type	count	name	meaning
 nx	actor	-	448	RECORD SIZE			19009 instances
 nx	actor	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
-nx	actor	0xc	4	u32 flags		flags	bit flags of the actor
-nx	actor	0x10	4	i32 enum		actor_kind	actor kind: 1 monster, 2 gizmo, 3 client effect, 4 server prop, 5 environment, 6 critter, 7 player, 8 item, 9 symbol, 10 projectile, 11 custom brain
+nx	actor	0xc	4	u32 flags		flags	bit flags of the actor; bits: 0 scale comes from actor, 1 has random facing, 2 fade when near, 3 never turns, 4 sends creation time, 5 high dynamic shadows deprecaded, 6 load all look textures
+nx	actor	0x10	4	i32 enum		actor_kind	actor kind: 1 monster, 2 gizmo, 3 client effect, 4 server prop, 5 environment, 6 critter, 7 player, 8 item, 9 symbol, 10 projectile, 11 custom brain; values: 0 invalid, 1 monster, 2 gizmo, 3 client effect, 4 server prop, 5 environment, 6 critter, 7 player, 8 item, 9 axe symbol, 10 projectile, 11 custom brain
 nx	actor	0x14	4	file_ref(group 9)		appearance_ref	appearance file (group 9)
 nx	actor	0x18	4	file_ref(group 61)		physics_mesh_ref	physics mesh file (group 61), -1 none
 nx	actor	0x1c	12	f32[3]		bound_cylinder_base	bounding cylinder base point x,y,z
@@ -23,40 +23,40 @@ nx	actor	0x80	4	i32 count of array at 0x78		event_count	number of message-trigge
 nx	actor	0x88	8	pointer_slot(8, zero)		events_ptr	pointer slot of events, zero on disk
 nx	actor	0x90	12	f32[3]		power_source_offset	location offset where powers originate
 nx	actor	0x9c	4	i32		look_hash	look name hash (8 weighted looks)
-nx	actor	0xa0	4	i32		look_hash_high	upper word of the look slot, zero
+nx	actor	0xa0	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor	0xa4	4	i32		look_weight	selection weight of the look
 nx	actor	0xa8	4	i32		look_hash	look name hash (8 weighted looks)
-nx	actor	0xac	4	i32		look_hash_high	upper word of the look slot, zero
+nx	actor	0xac	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor	0xb0	4	i32		look_weight	selection weight of the look
 nx	actor	0xb4	4	i32		look_hash	look name hash (8 weighted looks)
-nx	actor	0xb8	4	i32		look_hash_high	upper word of the look slot, zero
+nx	actor	0xb8	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor	0xbc	4	i32		look_weight	selection weight of the look
 nx	actor	0xc0	4	i32		look_hash	look name hash (8 weighted looks)
-nx	actor	0xc4	4	i32		look_hash_high	upper word of the look slot, zero
+nx	actor	0xc4	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor	0xc8	4	i32		look_weight	selection weight of the look
 nx	actor	0xcc	4	i32		look_hash	look name hash (8 weighted looks)
-nx	actor	0xd0	4	i32		look_hash_high	upper word of the look slot, zero
+nx	actor	0xd0	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor	0xd4	4	i32		look_weight	selection weight of the look
 nx	actor	0xd8	4	i32		look_hash	look name hash (8 weighted looks)
-nx	actor	0xdc	4	i32		look_hash_high	upper word of the look slot, zero
+nx	actor	0xdc	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor	0xe0	4	i32		look_weight	selection weight of the look
 nx	actor	0xe4	4	i32		look_hash	look name hash (8 weighted looks)
-nx	actor	0xe8	4	i32		look_hash_high	upper word of the look slot, zero
+nx	actor	0xe8	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor	0xec	4	i32		look_weight	selection weight of the look
 nx	actor	0xf0	4	i32		look_hash	look name hash (8 weighted looks)
-nx	actor	0xf4	4	i32		look_hash_high	upper word of the look slot, zero
+nx	actor	0xf4	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor	0xf8	4	i32		look_weight	selection weight of the look
 nx	actor	0xfc	4	file_ref(group 28)		physics_ref	physics file (group 28)
-nx	actor	0x100	4	u32 flags		physics_flags	physics bit flags
-nx	actor	0x104	4	i32		material	surface material id
+nx	actor	0x100	4	u32 flags		physics_flags	physics bit flags; bits: 0 do not integrate bit deprecated, 1 do not autosleep, 2 affected by gravity, 3 affected by wind, 4 affected by explosions, 5 affected by turbulence bit deprecated, 6 constrained to ground bit deprecated, 7 affected by flocking bit deprecated, 8 has maximum acceleration, 9 has maximum speed, 10 unused, 11 constrained to altitude bit deprecated, 12 constrained to system radius bit deprecated, 13 constrained to collision spheres, 14 affected by random accel, 15 affected by rippling bit deprecated, 16 constrained to local collision spheres bit deprecated, 17 collide with same actor, 18 affected by buoyancy, 19 affected by disturbance, 20 animated prop
+nx	actor	0x104	4	i32 enum		material	surface material id; values: -1 invalid, 0 default, 1 metal, 2 wood, 3 bone, 4 flesh, 5 water, 6 stone, 7 glass, 8 paper, 9 metal2, 10 metal3, 11 wood2, 12 wood3, 13 stone2, 14 stone3, 15 bone2, 16 bone3
 nx	actor	0x108	4	f32		explosion_factor	explosion response factor
 nx	actor	0x10c	4	f32		wind_factor	wind response factor
 nx	actor	0x110	4	f32		ragdoll_response	partial ragdoll responsiveness
-nx	actor	0x114	4	u32 flags		coll_static_required	collision: static flags of which one is required
-nx	actor	0x118	4	u32 flags		coll_static_prevent	collision: static flags that prevent
-nx	actor	0x11c	4	u32 flags		coll_dynamic_no_overlap	collision: dynamic flags that may not overlap
-nx	actor	0x120	4	u32 flags		coll_dynamic_own	collision: own dynamic flags
-nx	actor	0x124	4	i32		coll_shape	collision shape kind
+nx	actor	0x114	4	u32 flags		coll_static_required	collision: static flags of which one is required; bits: 0 ALLOW_WALK, 1 ALLOW_FLIER, 2 ALLOW_SPIDER, 6 NO_SPAWN, 10 ALLOW_PROJECTILE, 11 ALLOW_GHOST, 3 LEVELAREA_BIT_0, 4 LEVELAREA_BIT_1, 5 SUBSCENE, 7 SPECIAL_0, 8 SPECIAL_1, 12 Rounded Corner 0, 13 Rounded Corner 1, 14 Rounded Corner 2, 15 Rounded Corner 3
+nx	actor	0x118	4	u32 flags		coll_static_prevent	collision: static flags that prevent; bits: 0 ALLOW_WALK, 1 ALLOW_FLIER, 2 ALLOW_SPIDER, 6 NO_SPAWN, 10 ALLOW_PROJECTILE, 11 ALLOW_GHOST, 3 LEVELAREA_BIT_0, 4 LEVELAREA_BIT_1, 5 SUBSCENE, 7 SPECIAL_0, 8 SPECIAL_1, 12 Rounded Corner 0, 13 Rounded Corner 1, 14 Rounded Corner 2, 15 Rounded Corner 3
+nx	actor	0x11c	4	u32 flags		coll_dynamic_no_overlap	collision: dynamic flags that may not overlap; bits: 0 actor, 1 pet, 2 projectile, 3 player, 4 gizmo, 5 los blocker, 6 gate, 7 flippy, 8 owned, 9 wreckable, 10 projectile blocker, 11 teleport blocker, 12 malthael ghost
+nx	actor	0x120	4	u32 flags		coll_dynamic_own	collision: own dynamic flags; bits: 0 actor, 1 pet, 2 projectile, 3 player, 4 gizmo, 5 los blocker, 6 gate, 7 flippy, 8 owned, 9 wreckable, 10 projectile blocker, 11 teleport blocker, 12 malthael ghost
+nx	actor	0x124	4	i32 enum		coll_shape	collision shape kind; values: 0 none, 1 cylinder, 2 box
 nx	actor	0x128	12	f32[3]		coll_cylinder_base	collision cylinder base
 nx	actor	0x134	4	f32		coll_cylinder_height	collision cylinder height
 nx	actor	0x138	4	f32		coll_cylinder_radius	collision cylinder radius
@@ -86,7 +86,7 @@ nx	actor	0x1b0	8	pointer_slot(8, zero)		voice_role_ptr	pointer slot of voice_rol
 nx	actor	0x1b8	8	text_pair(offset u32, size u32)		voice_role	voice-over role text
 nx	actor_event	-	192	RECORD SIZE			26367 instances
 nx	actor_event	0x0	4	i32		message_key	message id that fires the event
-nx	actor_event	0x4	4	i32		trigger_kind	trigger event kind
+nx	actor_event	0x4	4	i32 enum		trigger_kind	trigger event kind; values: 0 add object, 1 detach object, 2 add cloth deprecated, 3 delete cloth deprecated, 4 add trail, 5 delete trail deprecated, 6 msg, 7 delete object, 8 footstep, 9 anim, 10 transparency, 11 add rope, 12 delete rope deprecated, 13 change look, 14 shadow, 15 change physics deprecated, 16 add effect group, 17 delete effect group deprecated, 18 frost breath, 19 enable rigid animation angvel deprecated, 20 disable rigid animation angvel deprecated, 21 enable rigid animation bob deprecated, 22 disable rigid animation bob deprecated, 23 music, 24 capture by particle system deprecated, 25 spawn object, 26 outro object, 27 enable ragdoll, 28 disable constraint, 29 disable collision messages, 30 attach spawned actor, 31 cancel look, 32 hitflash, 33 enable ragdoll animation override, 34 disable ragdoll animation override, 35 attach camera, 36 frameout enable, 37 frameout disable, 38 restore camera, 39 fade, 40 null, 41 outro animation, 42 hide helm and shoulders
 nx	actor_event	0x8	4	f32		chance	chance, 0..1
 nx	actor_event	0xc	4	i32		delay_min	delay, ticks
 nx	actor_event	0x10	4	i32		delay_range	random extra delay, ticks
@@ -94,29 +94,29 @@ nx	actor_event	0x14	4	i32		repeat_min	repeat time, ticks
 nx	actor_event	0x18	4	i32		repeat_range	random extra repeat time, ticks
 nx	actor_event	0x1c	4	f32		impulse_min	minimum impulse
 nx	actor_event	0x20	4	f32		impulse_range	impulse range
-nx	actor_event	0x24	4	i32		material	material condition
-nx	actor_event	0x28	4	i32		condition_flags	condition bit flags
-nx	actor_event	0x2c	4	i32		attach_kind	attachment kind
+nx	actor_event	0x24	4	i32 enum		material	material condition; values: -1 invalid, 0 default, 1 metal, 2 wood, 3 bone, 4 flesh, 5 water, 6 stone, 7 glass, 8 paper, 9 metal2, 10 metal3, 11 wood2, 12 wood3, 13 stone2, 14 stone3, 15 bone2, 16 bone3
+nx	actor_event	0x28	4	u32 flags		condition_flags	condition bit flags; bits: 0 use impulse delta
+nx	actor_event	0x2c	4	i32 enum		attach_kind	attachment kind; values: -1 invalid, 0 actor, 1 particlesystem, 2 light, 3 sound, 4 unused1, 5 ambientsound, 6 explosion, 7 unused2, 8 actorgroup deprecated, 9 scene, 10 unused3, 11 shake, 12 vibration
 nx	actor_event	0x30	8	typed_ref(group i32, handle i32)		target_file	typed file reference: group, then handle
 nx	actor_event	0x38	4	i32		id	event id
 nx	actor_event	0x3c	4	u32 flags		pin_flags	pin bit flags
-nx	actor_event	0x40	4	i32		rune	rune index
+nx	actor_event	0x40	4	i32 enum		rune	rune index; values: -1 invalid, 0 a, 1 b, 2 c, 3 d, 4 e, 6 none
 nx	actor_event	0x44	4	i32		use_rune	1 if the rune index applies
 nx	actor_event	0x48	4	i32		hardpoint_hash	hardpoint name hash (2 links)
-nx	actor_event	0x4c	4	i32		hardpoint_hash_high	second word of hardpoint hash
-nx	actor_event	0x50	4	i32		hardpoint_source	which actor owns the hardpoint
+nx	actor_event	0x4c	4	u32 flags		hardpoint_flags	hardpoint hash flags: bit 0 dynamic hardpoint, bit 1 damage hardpoint; bits: 0 is dynamic, 1 is damage
+nx	actor_event	0x50	4	i32 enum		hardpoint_source	which actor owns the hardpoint; values: 0 primary, 1 secondary, 2 tertiary
 nx	actor_event	0x54	4	i32		hardpoint_hash	hardpoint name hash (2 links)
-nx	actor_event	0x58	4	i32		hardpoint_hash_high	second word of hardpoint hash
-nx	actor_event	0x5c	4	i32		hardpoint_source	which actor owns the hardpoint
+nx	actor_event	0x58	4	u32 flags		hardpoint_flags	hardpoint hash flags: bit 0 dynamic hardpoint, bit 1 damage hardpoint; bits: 0 is dynamic, 1 is damage
+nx	actor_event	0x5c	4	i32 enum		hardpoint_source	which actor owns the hardpoint; values: 0 primary, 1 secondary, 2 tertiary
 nx	actor_event	0x60	4	i32		look_hash	look hash
-nx	actor_event	0x64	4	i32		look_hash_high	upper word, zero
+nx	actor_event	0x64	4	i32		look_hash_padding	padding word after the look hash, zero
 nx	actor_event	0x68	4	i32		constraint_hash	constraint hash
-nx	actor_event	0x6c	4	i32		constraint_hash_high	upper word, zero
+nx	actor_event	0x6c	4	i32		constraint_hash_padding	padding word after the constraint hash, zero
 nx	actor_event	0x70	4	i32		anim_tag	animation tag
 nx	actor_event	0x74	4	f32		alpha	alpha
-nx	actor_event	0x78	4	i32		pass_method	message pass method
+nx	actor_event	0x78	4	i32 enum		pass_method	message pass method; values: 0 to actorchain, 1 to this actor, 2 to self and children, 3 to children only
 nx	actor_event	0x7c	4	i32		message_key_out	message id sent
-nx	actor_event	0x80	4	u32 flags		trigger_flags	bit flags
+nx	actor_event	0x80	4	u32 flags		trigger_flags	bit flags; bits: 0 delete on animation end, 1 delete on owner death, 2 outro on animation end, 3 outro on owner death, 4 disable collision messages, 5 fade in, 6 fade affects shadows, 7 delete on owner resurrection, 8 outro on owner resurrection, 9 sound play as 2d, 10 disabled in lowfx mode, 11 disabled if owner hidden, 12 enabled in lowfx mode, 13 disabled if remote player
 nx	actor_event	0x84	4	i32		ignore_owner_scale	bool
 nx	actor_event	0x88	4	i32		ignore_owner_alpha	bool
 nx	actor_event	0x8c	4	f32		scale	scale
@@ -125,8 +125,8 @@ nx	actor_event	0x94	4	i32		use_particle_scale	bool
 nx	actor_event	0x98	4	f32		particle_scale	particle scale
 nx	actor_event	0x9c	4	i32		use_min_speed	bool
 nx	actor_event	0xa0	4	f32		min_speed	minimum speed
-nx	actor_event	0xa4	4	i32		footstep_kind	footstep kind
-nx	actor_event	0xa8	4	i32		outro_anim_kind	outro animation kind
+nx	actor_event	0xa4	4	i32 enum		footstep_kind	footstep kind; values: 0 run, 1 walk, 2 slide
+nx	actor_event	0xa8	4	i32 enum		outro_anim_kind	outro animation kind; values: 0 run left foot, 1 run right foot, 2 walk left foot, 3 walk right foot, 4 run none, 5 walk none
 nx	actor_event	0xac	4	i32		spawned_life	spawned actor lifetime, ticks
 nx	actor_event	0xb0	4	u32		color_add	colour, 4 bytes R,G,B,A in byte order (not swapped on PS3)
 nx	actor_event	0xb4	4	i32		add_flash_time	ticks
@@ -134,18 +134,18 @@ nx	actor_event	0xb8	4	u32		color_mul	colour, 4 bytes R,G,B,A in byte order
 nx	actor_event	0xbc	4	i32		mul_flash_time	ticks
 nx	monster	-	1368	RECORD SIZE			3102 instances
 nx	monster	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
-nx	monster	0xc	4	u32 flags		flags	bit flags
+nx	monster	0xc	4	u32 flags		flags	bit flags; bits: 0 is unique, 1 is large monster, 2 is elite, 3 hireling or pet, 4 is female, 5 is boss, 6 always uses self for awareness radius, 7 forces flavor text
 nx	monster	0x10	4	file_ref(group 1)		actor_ref	actor file (group 1)
 nx	monster	0x14	4	i32		look_index	look index in the actor
-nx	monster	0x18	4	i32 enum		monster_type	monster type, see symbol list
-nx	monster	0x1c	4	i32 enum		race	monster race, -1 none
-nx	monster	0x20	4	i32 enum		encounter_category	encounter category
+nx	monster	0x18	4	i32 enum		monster_type	monster type, see symbol list; values: -1 none, 0 Undead, 1 Demon, 2 Beast, 3 Human, 4 Breakable, 5 Scenery, 6 Ally, 7 Team, 8 Helper, 9 CorruptedAngel, 10 Pandemonium, 11 Adria, 12 Blood Golem
+nx	monster	0x1c	4	i32 enum		race	monster race, -1 none; values: 0 none, 1 Fallen, 2 GoatMen, 3 Rogue, 4 Skeleton, 5 Zombie, 6 Spider, 7 Triune, 8 WoodWraith, 9 Human, 10 Animal, 11 TreasureGoblin, 12 CrazedAngel, -1 none (PS3 writes -1 where Switch writes 0)
+nx	monster	0x20	4	i32 enum		encounter_category	encounter category; values: -1 none, 3 Big, 4 Standard, 5 Ranged, 6 Swarm, 7 Boss
 nx	monster	0x24	4	f32		idle_radius	awareness radius when idle
 nx	monster	0x28	4	f32		combat_radius	awareness radius in combat
 nx	monster	0x2c	4	f32		target_abandon_time	time before target is dropped
 nx	monster	0x30	4	f32		warn_radius	radius to alert allies
 nx	monster	0x34	4	i32		needs_line_of_sight	bool
-nx	monster	0x38	4	i32 enum		base_element	damage type, -1 none
+nx	monster	0x38	4	i32 enum		base_element	damage type, -1 none; values: -1 None, 0 Physical, 1 Fire, 2 Lightning, 3 Cold, 4 Poison, 5 Arcane, 6 Holy
 nx	monster	0x3c	4	i32		count_min	spawn count minimum
 nx	monster	0x40	4	i32		count_range	extra random spawn count
 nx	monster	0x44	584	f32	146	attribute_modifiers	indexed float table, see Q6
@@ -158,16 +158,16 @@ nx	monster	0x2a0	4	f32		hp_minion_range	random extra minion multiplier
 nx	monster	0x2a4	4	i32		gold	gold granted
 nx	monster	0x2a8	4	f32		health_drop_chance_normal	chance
 nx	monster	0x2ac	4	row_id		health_item_normal	item row id (items table)
-nx	monster	0x2b0	4	i32		health_drop_style_normal	drop style
+nx	monster	0x2b0	4	i32 enum		health_drop_style_normal	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
 nx	monster	0x2b4	4	f32		health_drop_chance_champion	chance
 nx	monster	0x2b8	4	row_id		health_item_champion	item row id
-nx	monster	0x2bc	4	i32		health_drop_style_champion	drop style
+nx	monster	0x2bc	4	i32 enum		health_drop_style_champion	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
 nx	monster	0x2c0	4	f32		health_drop_chance_rare	chance
 nx	monster	0x2c4	4	row_id		health_item_rare	item row id
-nx	monster	0x2c8	4	i32		health_drop_style_rare	drop style
+nx	monster	0x2c8	4	i32 enum		health_drop_style_rare	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
 nx	monster	0x2cc	4	f32		health_drop_chance_minion	chance
 nx	monster	0x2d0	4	row_id		health_item_minion	item row id
-nx	monster	0x2d4	4	i32		health_drop_style_minion	drop style
+nx	monster	0x2d4	4	i32 enum		health_drop_style_minion	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
 nx	monster	0x2d8	4	file_ref(group 39)		skill_kit_ref	skill kit file (group 39)
 nx	monster	0x2dc	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
 nx	monster	0x2e0	4	i32		skill_level_mod	level adjustment of the slot
@@ -231,7 +231,7 @@ nx	monster	0x3c4	4	f32		summon_life	summon lifetime
 nx	monster	0x3c8	4	i32		summon_max_alive	summon cap at once
 nx	monster	0x3cc	4	i32		summon_max_total	summon cap in total
 nx	monster	0x3d0	4	file_ref(group 52)		inventory	equipment treasure class (group 52)
-nx	monster	0x3d4	4	file_ref(group 52)		inventory_2	second equipment treasure class
+nx	monster	0x3d4	4	file_ref(group 52)		secondary_inventory	secondary inventory treasure class (group 52), -1 none
 nx	monster	0x3d8	4	file_ref(group 59)		lore_ref	lore file (group 59)
 nx	monster	0x3dc	24	file_ref(group 3)	6	ai_behaviours	6 AI behaviour files (group 3)
 nx	monster	0x3f4	32	row_id	8	movement_styles	8 movement style row ids
@@ -239,10 +239,10 @@ nx	monster	0x414	24	file_ref(group 1)	6	summon_actors	6 summoned actor files (gr
 nx	monster	0x42c	4	i32		random_affix_count	number of random elite affixes
 nx	monster	0x430	16	row_id	4	affixes	4 monster affix row ids
 nx	monster	0x440	24	row_id	6	disallowed_affixes	6 monster affix row ids not allowed
-nx	monster	0x458	4	i32		target_style_normal	AI target style
-nx	monster	0x45c	4	i32		target_style_champion	AI target style
-nx	monster	0x460	4	i32		target_style_rare	AI target style
-nx	monster	0x464	4	i32 enum		resource	resource kind, -1 none
+nx	monster	0x458	4	i32 enum		target_style_normal	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+nx	monster	0x45c	4	i32 enum		target_style_champion	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+nx	monster	0x460	4	i32 enum		target_style_rare	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+nx	monster	0x464	4	i32 enum		resource	resource kind, -1 none; values: 0 Mana, 1 Arcanum, 2 Fury, 3 Spirit, 4 Power, 5 Hatred, 6 Discipline, 7 Faith, 8 Essence, -1 none
 nx	monster	0x480	8	tag_map_pair(offset u32, size u32)		tag_map	monster tag map, monster tag table
 nx	monster	0x488	8	pointer_slot(8, zero)		tag_map_ptr	pointer slot of tag_map, zero on disk
 nx	monster	0x490	4	i32 count of array at 0x4a0		minion_group_count	number of minion groups
@@ -279,15 +279,15 @@ nx	champion_entry	0x0	4	file_ref(group 1)		actor_ref	spawned actor
 nx	champion_entry	0x4	4	i32		count	count
 nx	quest	-	288	RECORD SIZE			1148 instances
 nx	quest	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
-nx	quest	0xc	4	i32 enum		quest_type	quest type: 0 main, 2 event, 4 challenge, 5 bounty, 6 horadric, 7..10 set dungeon forms
+nx	quest	0xc	4	i32 enum		quest_type	quest type: 0 main, 2 event, 4 challenge, 5 bounty, 6 horadric, 7..10 set dungeon forms; values: 0 Main Quest, 2 Event, 4 Challenge, 5 Bounty, 6 Horadric Quest, 7 Set Dungeon, 8 Set Dungeon Bonus, 9 Set Dungeon Mastery, 10 Set Dungeon Tracker
 nx	quest	0x10	4	i32 count of array at 0x58		step_count	number of steps
 nx	quest	0x14	4	i32 count of array at 0x68		completion_step_count	number of completion steps
 nx	quest	0x18	4	i32		quest_uid	quest unique number
-nx	quest	0x1c	4	u32 flags		flags	bit flags
+nx	quest	0x1c	4	u32 flags		flags	bit flags; bits: 0 auto generate map icon, 1 auto mark objective npcs, 2 show new quest blinker, 3 global event, 4 shared description text
 nx	quest	0x20	4	i32		zone_label	label hash
-nx	quest	0x24	4	i32		act	act: 0, 100, 200, 300, 400; -1 none
+nx	quest	0x24	4	i32 enum		act	act: 0, 100, 200, 300, 400; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
 nx	quest	0x28	4	i32		unassigned_uid	unused uid of the unassigned step
-nx	quest	0x2c	4	u32 flags		unassigned_flags	bit flags of the unassigned step
+nx	quest	0x2c	4	u32 flags		unassigned_flags	bit flags of the unassigned step; bits: 0 selectable step, 1 prevent matchmaking
 nx	quest	0x30	8	pointer_slot(8, zero)		unassigned_objective_sets_ptr	pointer slot of unassigned_objective_sets, zero on disk
 nx	quest	0x38	8	array_pair(offset u32, size u32) of objective_set		unassigned_objective_sets	objective sets of the unassigned step
 nx	quest	0x40	8	pointer_slot(8, zero)		unassigned_failure_sets_ptr	pointer slot of unassigned_failure_sets, zero on disk
@@ -298,9 +298,9 @@ nx	quest	0x60	8	pointer_slot(8, zero)		completion_steps_ptr	pointer slot of comp
 nx	quest	0x68	8	array_pair(offset u32, size u32) of completion_step		completion_steps	array of completion steps
 nx	quest	0x70	72	file_ref(group 22)	18	extra_level_areas	18 level area files (group 22)
 nx	quest	0xb8	4	file_ref(group 48)		challenge_world	world file (group 48)
-nx	quest	0xbc	4	i32 enum		challenge_kind	challenge kind
-nx	quest	0xc0	4	i32 enum		bounty_act	act of the bounty
-nx	quest	0xc4	4	i32 enum		bounty_kind	bounty kind
+nx	quest	0xbc	4	i32 enum		challenge_kind	challenge kind; values: -1 none, 0 Timed Dungeon, 1 Wave Fight, 2 Horde, 3 Zapper, 4 Goblin Hunt
+nx	quest	0xc0	4	i32 enum		bounty_act	act of the bounty; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
+nx	quest	0xc4	4	i32 enum		bounty_kind	bounty kind; values: -1 none, 0 Kill Unique, 1 Kill Boss, 2 Complete Event, 3 Clear Dungeon, 4 Camps, 5 HQ - Color Orbs, 6 HQ - Hot Cold
 nx	quest	0xc8	4	i32		bounty_reward_tier	reward tier
 nx	quest	0xcc	4	file_ref(group 22)		bounty_level_area	level area (22)
 nx	quest	0xd0	4	file_ref(group 48)		bounty_world	world (48)
@@ -326,13 +326,13 @@ nx	quest_step	-	176	RECORD SIZE			2508 instances
 nx	quest_step	0x0	8	pointer_slot(8, zero)		name_ptr	pointer slot of name, zero on disk
 nx	quest_step	0x8	8	text_pair(offset u32, size u32)		name	step name text
 nx	quest_step	0x10	4	i32		uid	step uid
-nx	quest_step	0x14	4	u32 flags		flags	bit flags
-nx	quest_step	0x18	4	i32 enum		reward_kind	reward kind
+nx	quest_step	0x14	4	u32 flags		flags	bit flags; bits: 0 resumable step, 1 save partial completion, 2 track per player, 3 shared log text, 4 show meter, 5 orphaned step, 6 selectable step, 7 prevent matchmaking, 8 use previous log text, 9 grant nv on completion, 10 hide bonus text
+nx	quest_step	0x18	4	i32 enum		reward_kind	reward kind; values: 0 no item, 1 Shared Recipe, 2 Class Recipe, 3 Treasure Class
 nx	quest_step	0x1c	28	file_ref(group 49)	7	reward_recipes	recipe files (group 49), one per player class
 nx	quest_step	0x38	4	file_ref(group 52)		reward_treasure	treasure class (52)
 nx	quest_step	0x3c	4	i32		reward_xp_tier	experience tier
 nx	quest_step	0x40	4	i32		reward_gold_tier	gold tier
-nx	quest_step	0x44	4	i32 enum		replay_reward_kind	reward kind on replay
+nx	quest_step	0x44	4	i32 enum		replay_reward_kind	reward kind on replay; values: 0 no item, 1 Shared Recipe, 2 Class Recipe, 3 Treasure Class
 nx	quest_step	0x48	28	file_ref(group 49)	7	replay_reward_recipes	recipes, one per class
 nx	quest_step	0x64	4	file_ref(group 52)		replay_reward_treasure	treasure class
 nx	quest_step	0x68	4	i32		replay_xp_tier	experience tier
@@ -351,7 +351,7 @@ nx	objective_set	0x8	8	pointer_slot(8, zero)		objectives_ptr	pointer slot of obj
 nx	objective_set	0x10	8	array_pair(offset u32, size u32) of objective		objectives	array of objectives
 nx	objective	-	88	RECORD SIZE			5711 instances
 nx	objective	0x0	4	i32		uid	objective uid
-nx	objective	0x4	4	i32 enum		objective_kind	objective kind, see Q1 list
+nx	objective	0x4	4	i32 enum		objective_kind	objective kind, see Q1 list; values: 0 Had Conversation, 1 Possess Item, 2 Kill Monster, 3 Interact With Actor, 4 Enter Level Area, 5 Enter Scene, 6 Enter World, 7 Enter Trigger, 8 Complete Quest, 9 Player Flag Set, 10 Timed Event Expired, 11 Kill Group, 12 Game Flag Set, 13 Event Received, 14 Kill Monster From Group, 15 Kill Monster From Family, 16 Kill Elite Pack In Level Area, 17 Kill Any Monster In Level Area, 18 Kill All Monsters In World, 19 HQ Act Reagents Collected
 nx	objective	0x8	4	i32		param_1	integer parameter (count)
 nx	objective	0xc	4	i32		param_2	integer parameter
 nx	objective	0x10	8	typed_ref(group i32, handle i32)		target_1	typed file reference: group then handle
@@ -377,7 +377,7 @@ nx	failure_set	-	16	RECORD SIZE			67 instances
 nx	failure_set	0x0	8	pointer_slot(8, zero)		conditions_ptr	pointer slot of conditions, zero on disk
 nx	failure_set	0x8	8	array_pair(offset u32, size u32) of failure_condition		conditions	array of failure conditions
 nx	failure_condition	-	72	RECORD SIZE			67 instances
-nx	failure_condition	0x0	4	i32 enum		failure_kind	failure condition kind
+nx	failure_condition	0x0	4	i32 enum		failure_kind	failure condition kind; values: 0 Monster Died, 1 Player Died, 2 Actor Died, 3 Timed Event Expired, 4 Item Used, 5 Game Flag Set, 6 Player Flag Set, 7 Event Received
 nx	failure_condition	0x4	4	i32		param_1	integer
 nx	failure_condition	0x8	4	i32		param_2	integer
 nx	failure_condition	0xc	8	typed_ref(group i32, handle i32)		target_1	typed file reference
@@ -395,11 +395,11 @@ nx	completion_step	0x10	4	i32		uid	completion step uid
 nx	completion_step	0x14	4	i32		shared_log_text	bool
 nx	conversation	-	272	RECORD SIZE			4044 instances
 nx	conversation	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
-nx	conversation	0xc	4	i32 enum		conversation_kind	conversation kind 0..13
-nx	conversation	0x10	4	i32		icon	icon kind
+nx	conversation	0xc	4	i32 enum		conversation_kind	conversation kind 0..13; values: 13 Quest Event, 12 Quest Float, 11 Quest Standard, 10 Talk Menu Gossip, 9 Ambient Gossip, 8 Lore Book, 7 Global Float, 6 Global Chatter, 5 Player Callout, 4 Follower Callout, 3 Follower Banter, 2 Ambient Float, 1 Player Emote, 0 Follower Soundset
+nx	conversation	0x10	4	i32 enum		icon	icon kind; values: -1 invalid, 0 none, 1 exclamation, 2 question, 3 asterisk, 4 gossip, 5 exclamation bonus
 nx	conversation	0x14	4	file_ref(group 12)		piggyback_ref	conversation (12) played after
 nx	conversation	0x18	12	file_ref(group 12)	3	unlocks	conversations (12) unlocked
-nx	conversation	0x24	4	u32 flags		flags	bit flags
+nx	conversation	0x24	4	u32 flags		flags	bit flags; bits: 0 activate quest (deprecated), 1 grant reward (deprecated), 2 important (deprecated), 3 question (deprecated), 4 asterisk (deprecated), 5 reoperate npc (deprecated), 6 talk menu only (deprecated), 7 gossip (deprecated), 8 no voiceover, 9 play for all players (deprecated), 10 zoom (deprecated), 11 operate speaker on begin, 12 ready to record, 13 operate speaker on end, 14 never repeat, 15 cancel for combat, 16 ready for localization (deprecated), 17 recording has begun (deprecated), 18 localization has begun (deprecated), 19 ready for review, 20 persist through speaker death, 21 always important, 22 console hide close button, 23 show all lines in recording script
 nx	conversation	0x28	128	char[128]		player_flag	player flag text set when played, 128 bytes
 nx	conversation	0xa8	4	file_ref(group 1)		primary_npc	actor (1)
 nx	conversation	0xac	4	file_ref(group 1)		alt_npc_1	actor
@@ -414,23 +414,23 @@ nx	conversation	0xd8	8	array_pair(offset u32, size u32) of u8		script	compiled L
 nx	conversation	0x108	4	file_ref(group 64)		boss_encounter	boss encounter (64)
 nx	conversation	0x10c	4	i32		pad	padding, zero
 nx	conversation_node	-	136	RECORD SIZE			27907 instances
-nx	conversation_node	0x0	4	i32		node_kind	node kind, see Q1
-nx	conversation_node	0x4	4	u32 flags		flags	bit flags
+nx	conversation_node	0x0	4	i32 enum		node_kind	node kind, see Q1; values: 1 conditional, 2 choice deprecated, 3 conv line group, 4 random, 5 conv line, 6 conditional participant
+nx	conversation_node	0x4	4	u32 flags		flags	bit flags; bits: 1 dont animate, 3 needs review, 4 please revise, 5 dont play subtitle, 6 needs text to speech, 7 random plays only once, 2 retired node flag (no constant; the list skips 2)
 nx	conversation_node	0x8	4	i32		line_uid	line uid, selects text label
-nx	conversation_node	0xc	4	i32 enum		speaker	speaker: -1 none, 0 player, 1 primary NPC, 2..5 alternates, 6 templar, 7 scoundrel, 8 enchantress
-nx	conversation_node	0x10	4	i32 enum		listener	speaker code of the addressee
+nx	conversation_node	0xc	4	i32 enum		speaker	speaker: -1 none, 0 player, 1 primary NPC, 2..5 alternates, 6 templar, 7 scoundrel, 8 enchantress; values: -1 none, 0 Player, 1 Primary NPC, 2 Alt. NPC 1, 3 Alt. NPC 2, 4 Alt. NPC 3, 5 Alt. NPC 4, 6 Templar Follower, 7 Scoundrel Follower, 8 Enchantress Follower
+nx	conversation_node	0x10	4	i32 enum		listener	speaker code of the addressee; values: -1 none, 0 Player, 1 Primary NPC, 2 Alt. NPC 1, 3 Alt. NPC 2, 4 Alt. NPC 3, 5 Alt. NPC 4, 6 Templar Follower, 7 Scoundrel Follower, 8 Enchantress Follower
 nx	conversation_node	0x14	4	i32		anim_tag	animation tag, -1 none
 nx	conversation_node	0x18	4	i32		display_time_adjust	NX only: display time adjustment
 nx	conversation_node	0x1c	4	i32		last_played	NX only: runtime field, zero
-nx	conversation_node	0x20	4	i32		gender	player gender filter: -1 any, 0 male, 1 female
-nx	conversation_node	0x24	4	i32		player_class	player class filter: -1 any, else class index
+nx	conversation_node	0x20	4	i32 enum		gender	player gender filter: -1 any, 0 male, 1 female; values: -1 invalid, 0 male, 1 female
+nx	conversation_node	0x24	4	i32 enum		player_class	player class filter: -1 any, else class index; values: -1 none, 0 demonhunter, 1 barbarian, 2 wizard, 3 witchdoctor, 4 monk, 5 crusader, 6 necromancer
 nx	conversation_node	0x28	8	pointer_slot(8, zero)		display_times_ptr	pointer slot of display_times, zero on disk
-nx	conversation_node	0x30	8	array_pair(offset u32, size u32) of i32		display_times	array of packed u32: bits 0-4 locale index, 5-7 class (class count = any), 8-9 gender (2 = any), 10-31 time
+nx	conversation_node	0x30	8	array_pair(offset u32, size u32) of i32		display_times	display time words: bits 0-4 locale (C3_display_time_locales.tsv, 19 none), 5-7 class (class count = any), 8-9 gender (2 any), 10-31 time in ticks (60 per second)
 nx	conversation_node	0x38	4	i32		var_check	NX only: variable name hash to test, -1 none
-nx	conversation_node	0x3c	4	i32 enum		var_check_op	NX only: comparison
+nx	conversation_node	0x3c	4	i32 enum		var_check_op	NX only: comparison; values: -1 none, 0 Equal To, 1 Less Than, 2 Greater Than, 3 Less Than Or Equal To, 4 Greater Than Or Equal To, 5 Not Equal To
 nx	conversation_node	0x40	4	i32		var_check_value	NX only: value
 nx	conversation_node	0x44	4	i32		var_set	NX only: variable name hash to set
-nx	conversation_node	0x48	4	i32 enum		var_set_op	NX only: set operation
+nx	conversation_node	0x48	4	i32 enum		var_set_op	NX only: set operation; values: -1 none, 0 Incremented By, 1 Decremented By, 2 Set To
 nx	conversation_node	0x4c	4	i32		var_set_value	NX only: value
 nx	conversation_node	0x50	4	i32		branch_index	branch index
 nx	conversation_node	0x54	4	i32		weight	NX only: random weight, usually 100
@@ -446,9 +446,9 @@ nx	conversation_list	0x10	8	pointer_slot(8, zero)		entries_ptr	pointer slot of e
 nx	conversation_list	0x18	8	array_pair(offset u32, size u32) of list_entry		entries	array of list entries
 nx	list_entry	-	332	RECORD SIZE			2170 instances
 nx	list_entry	0x0	4	file_ref(group 12)		conversation	conversation (12)
-nx	list_entry	0x4	4	i32		requirement	requirement kind
-nx	list_entry	0x8	4	u32 flags		flags	bit flags
-nx	list_entry	0xc	4	i32		crafter	crafter kind
+nx	list_entry	0x4	4	i32 enum		requirement	requirement kind; values: 0 no conditions, 1 all conditions, 2 one condition
+nx	list_entry	0x8	4	u32 flags		flags	bit flags; bits: 0 crafter unlock negate, 1 game flag negate, 2 has item negate, 3 quest step current negate, 4 quest assigned negate, 5 quest complete negate, 6 quest range negate, 7 near hostiles negate, 8 is near hostiles, 9 conversation unlocked negate, 10 is conversation unlocked, 11 conversation heard negate, 12 conversation heard, 13 level area negate, 14 conversation has all participants negate, 15 conversation has all participants, 16 quest active negate, 17 divider, 18 player flag negate, 19 special event flag negate, 20 adventure mode, 21 adventure mode negate, 22 dungeon finder, 23 dungeon finder negate, 24 requires dungeon finder payment, 25 requires dungeon finder payment negate
+nx	list_entry	0xc	4	i32 enum		crafter	crafter kind; values: -1 invalid, 0 blacksmith, 1 jewel, 2 mystic, 3 horadrim, 4 jewel upgrade
 nx	list_entry	0x10	4	row_id		item	item row id
 nx	list_entry	0x14	128	char[128]		label	text, 128 bytes
 nx	list_entry	0x94	128	char[128]		player_flag	text, 128 bytes
@@ -459,12 +459,12 @@ nx	list_entry	0x120	4	file_ref(group 31)		quest_active	quest
 nx	list_entry	0x124	4	file_ref(group 31)		quest_complete	quest
 nx	list_entry	0x128	4	file_ref(group 58)		quest_range	quest range (58)
 nx	list_entry	0x12c	24	file_ref(group 22)	6	level_areas	level areas (22): 6 on NX, 1 on PS3
-nx	list_entry	0x144	4	i32		special_event	special event kind
-nx	list_entry	0x148	4	u32 flags		class_flags	player class bit mask
+nx	list_entry	0x144	4	i32 enum		special_event	special event kind; values: -1 invalid, 0 x1 templar, 1 x1 scoundrel, 2 x1 enchantress, 3 x1 dead king, 4 x1 jeweler, 5 x1 blacksmith, 6 p1 gemnpc, 7 p1 crazed hermit
+nx	list_entry	0x148	4	u32 flags		class_flags	player class bit mask; bits: 0 demonhunter, 1 barbarian, 2 wizard, 3 witchdoctor, 4 monk, 5 crusader, 6 necromancer; only bits below the class count are read (7 Switch, 5 PS3); higher bits are stale
 nx	treasure_class	-	56	RECORD SIZE			1239 instances
 nx	treasure_class	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
 nx	treasure_class	0xc	4	f32		no_drop_chance	chance that nothing drops
-nx	treasure_class	0x10	4	i32		choose_kind	how modifiers are picked, see Q6
+nx	treasure_class	0x10	4	i32 enum		choose_kind	how modifiers are picked: 0 one of (pick one modifier by weight), 1 all of (roll every modifier by its chance), 2 all of, shared loot, 3 one of, shared loot, -1 none
 nx	treasure_class	0x14	4	i32		forced_level	forced item level
 nx	treasure_class	0x18	4	i32		ancient_override	override
 nx	treasure_class	0x1c	4	i32 count of array at 0x28		modifier_count	number of modifiers
@@ -472,7 +472,7 @@ nx	treasure_class	0x20	8	pointer_slot(8, zero)		modifiers_ptr	pointer slot of mo
 nx	treasure_class	0x28	8	array_pair(offset u32, size u32) of drop_modifier		modifiers	array of drop modifiers
 nx	treasure_class	0x30	4	i32		pad	padding, zero
 nx	drop_modifier	-	132	RECORD SIZE			7227 instances
-nx	drop_modifier	0x0	4	i32		drop_kind	drop kind, see Q6
+nx	drop_modifier	0x0	4	i32 enum		drop_kind	drop kind, see Q6; values: -1 none, 0 treasureclass, 1 itemlabel, 2 item, 3 legendary, 4 class targeted legendary
 nx	drop_modifier	0x4	4	file_ref(group 52)		sub_treasure	treasure class (52)
 nx	drop_modifier	0x8	4	f32		chance	chance
 nx	drop_modifier	0xc	4	i32		weight	weight
@@ -535,7 +535,7 @@ nx	condition	0x78	4	file_ref(group 31)		quest	quest (31), 3 slots
 nx	condition	0x7c	4	i32		quest_step	step uid; -1 any, -2 seen as default
 nx	condition	0x80	4	i32		quest_completed	-1 any, 0, 1
 nx	condition	0x84	4	i32		quest_assigned	-1 any, 0, 1
-nx	condition	0x88	4	i32		reward_act	act
+nx	condition	0x88	4	i32 enum		reward_act	act; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
 nx	condition	0x8c	4	i32		reward_needs_bonus_act	bool
 nx	condition	0x90	4	i32		reward_needs_all_acts	bool
 nx	condition	0x94	4	row_id		item	item row id, 3 slots
@@ -558,14 +558,14 @@ nx	condition	0xd4	4	i32		difficulty_level_min	handicap (monster power or torment
 nx	condition	0xd8	4	i32		difficulty_level_max	maximum
 nx	condition	0xdc	4	i32		rift_tier_min	NX only
 nx	condition	0xe0	4	i32		rift_tier_max	NX only
-nx	condition	0xe8	4	i32		act_min	act 0..400, -1 any
-nx	condition	0xec	4	i32		act_max	act
+nx	condition	0xe8	4	i32 enum		act_min	act 0..400, -1 any; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
+nx	condition	0xec	4	i32 enum		act_max	act; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
 nx	condition	0xf0	4	i32		players_min	
 nx	condition	0xf4	4	i32		players_max	
 nx	condition	0xf8	4	file_ref(group 48)		world	world (48)
 nx	condition	0xfc	4	file_ref(group 22)		level_area	level area (22)
 nx	condition	0x100	4	file_ref(group 58)		quest_range	quest range (58)
-nx	condition	0x104	4	i32 enum		follower	follower class
+nx	condition	0x104	4	i32 enum		follower	follower class; values: 0 none, 1 Templar, 2 Scoundrel, 3 Enchantress
 nx	condition	0x108	4	i32		follower_current	-1 any
 nx	condition	0x10c	4	row_id		label	label row id, 3 slots
 nx	condition	0x110	4	i32		label_active	bool
@@ -626,8 +626,8 @@ nx	condition	0x4d0	4	i32		all_smith_recipes	bool
 nx	condition	0x4d4	4	i32		all_jeweller_recipes	bool
 ps3	actor	-	432	RECORD SIZE			8882 instances
 ps3	actor	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
-ps3	actor	0xc	4	u32 flags		flags	bit flags of the actor
-ps3	actor	0x10	4	i32 enum		actor_kind	actor kind: 1 monster, 2 gizmo, 3 client effect, 4 server prop, 5 environment, 6 critter, 7 player, 8 item, 9 symbol, 10 projectile, 11 custom brain
+ps3	actor	0xc	4	u32 flags		flags	bit flags of the actor; bits: 0 scale comes from actor, 1 has random facing, 2 fade when near, 3 never turns, 4 sends creation time, 5 high dynamic shadows deprecaded, 6 load all look textures
+ps3	actor	0x10	4	i32 enum		actor_kind	actor kind: 1 monster, 2 gizmo, 3 client effect, 4 server prop, 5 environment, 6 critter, 7 player, 8 item, 9 symbol, 10 projectile, 11 custom brain; values: 0 invalid, 1 monster, 2 gizmo, 3 client effect, 4 server prop, 5 environment, 6 critter, 7 player, 8 item, 9 axe symbol, 10 projectile, 11 custom brain
 ps3	actor	0x14	4	file_ref(group 9)		appearance_ref	appearance file (group 9)
 ps3	actor	0x18	4	file_ref(group 61)		physics_mesh_ref	physics mesh file (group 61), -1 none
 ps3	actor	0x1c	12	f32[3]		bound_cylinder_base	bounding cylinder base point x,y,z
@@ -648,40 +648,40 @@ ps3	actor	0x80	4	i32 count of array at 0x78		event_count	number of message-trigg
 ps3	actor	0x88	8	pointer_slot(8, zero)		events_ptr	pointer slot of events, zero on disk
 ps3	actor	0x90	12	f32[3]		power_source_offset	location offset where powers originate
 ps3	actor	0x9c	4	i32		look_hash	look name hash (8 weighted looks)
-ps3	actor	0xa0	4	i32		look_hash_high	upper word of the look slot, zero
+ps3	actor	0xa0	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor	0xa4	4	i32		look_weight	selection weight of the look
 ps3	actor	0xa8	4	i32		look_hash	look name hash (8 weighted looks)
-ps3	actor	0xac	4	i32		look_hash_high	upper word of the look slot, zero
+ps3	actor	0xac	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor	0xb0	4	i32		look_weight	selection weight of the look
 ps3	actor	0xb4	4	i32		look_hash	look name hash (8 weighted looks)
-ps3	actor	0xb8	4	i32		look_hash_high	upper word of the look slot, zero
+ps3	actor	0xb8	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor	0xbc	4	i32		look_weight	selection weight of the look
 ps3	actor	0xc0	4	i32		look_hash	look name hash (8 weighted looks)
-ps3	actor	0xc4	4	i32		look_hash_high	upper word of the look slot, zero
+ps3	actor	0xc4	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor	0xc8	4	i32		look_weight	selection weight of the look
 ps3	actor	0xcc	4	i32		look_hash	look name hash (8 weighted looks)
-ps3	actor	0xd0	4	i32		look_hash_high	upper word of the look slot, zero
+ps3	actor	0xd0	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor	0xd4	4	i32		look_weight	selection weight of the look
 ps3	actor	0xd8	4	i32		look_hash	look name hash (8 weighted looks)
-ps3	actor	0xdc	4	i32		look_hash_high	upper word of the look slot, zero
+ps3	actor	0xdc	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor	0xe0	4	i32		look_weight	selection weight of the look
 ps3	actor	0xe4	4	i32		look_hash	look name hash (8 weighted looks)
-ps3	actor	0xe8	4	i32		look_hash_high	upper word of the look slot, zero
+ps3	actor	0xe8	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor	0xec	4	i32		look_weight	selection weight of the look
 ps3	actor	0xf0	4	i32		look_hash	look name hash (8 weighted looks)
-ps3	actor	0xf4	4	i32		look_hash_high	upper word of the look slot, zero
+ps3	actor	0xf4	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor	0xf8	4	i32		look_weight	selection weight of the look
 ps3	actor	0xfc	4	file_ref(group 28)		physics_ref	physics file (group 28)
-ps3	actor	0x100	4	u32 flags		physics_flags	physics bit flags
-ps3	actor	0x104	4	i32		material	surface material id
+ps3	actor	0x100	4	u32 flags		physics_flags	physics bit flags; bits: 0 do not integrate bit deprecated, 1 do not autosleep, 2 affected by gravity, 3 affected by wind, 4 affected by explosions, 5 affected by turbulence bit deprecated, 6 constrained to ground bit deprecated, 7 affected by flocking bit deprecated, 8 has maximum acceleration, 9 has maximum speed, 10 unused, 11 constrained to altitude bit deprecated, 12 constrained to system radius bit deprecated, 13 constrained to collision spheres, 14 affected by random accel, 15 affected by rippling bit deprecated, 16 constrained to local collision spheres bit deprecated, 17 collide with same actor, 18 affected by buoyancy, 19 affected by disturbance, 20 animated prop
+ps3	actor	0x104	4	i32 enum		material	surface material id; values: -1 invalid, 0 default, 1 metal, 2 wood, 3 bone, 4 flesh, 5 water, 6 stone, 7 glass, 8 paper, 9 metal2, 10 metal3, 11 wood2, 12 wood3, 13 stone2, 14 stone3, 15 bone2, 16 bone3
 ps3	actor	0x108	4	f32		explosion_factor	explosion response factor
 ps3	actor	0x10c	4	f32		wind_factor	wind response factor
 ps3	actor	0x110	4	f32		ragdoll_response	partial ragdoll responsiveness
-ps3	actor	0x114	4	u32 flags		coll_static_required	collision: static flags of which one is required
-ps3	actor	0x118	4	u32 flags		coll_static_prevent	collision: static flags that prevent
-ps3	actor	0x11c	4	u32 flags		coll_dynamic_no_overlap	collision: dynamic flags that may not overlap
-ps3	actor	0x120	4	u32 flags		coll_dynamic_own	collision: own dynamic flags
-ps3	actor	0x124	4	i32		coll_shape	collision shape kind
+ps3	actor	0x114	4	u32 flags		coll_static_required	collision: static flags of which one is required; bits: 0 ALLOW_WALK, 1 ALLOW_FLIER, 2 ALLOW_SPIDER, 6 NO_SPAWN, 10 ALLOW_PROJECTILE, 11 ALLOW_GHOST, 3 LEVELAREA_BIT_0, 4 LEVELAREA_BIT_1, 5 SUBSCENE, 7 SPECIAL_0, 8 SPECIAL_1, 12 Rounded Corner 0, 13 Rounded Corner 1, 14 Rounded Corner 2, 15 Rounded Corner 3
+ps3	actor	0x118	4	u32 flags		coll_static_prevent	collision: static flags that prevent; bits: 0 ALLOW_WALK, 1 ALLOW_FLIER, 2 ALLOW_SPIDER, 6 NO_SPAWN, 10 ALLOW_PROJECTILE, 11 ALLOW_GHOST, 3 LEVELAREA_BIT_0, 4 LEVELAREA_BIT_1, 5 SUBSCENE, 7 SPECIAL_0, 8 SPECIAL_1, 12 Rounded Corner 0, 13 Rounded Corner 1, 14 Rounded Corner 2, 15 Rounded Corner 3
+ps3	actor	0x11c	4	u32 flags		coll_dynamic_no_overlap	collision: dynamic flags that may not overlap; bits: 0 actor, 1 pet, 2 projectile, 3 player, 4 gizmo, 5 los blocker, 6 gate, 7 flippy, 8 owned, 9 wreckable, 10 projectile blocker, 11 teleport blocker, 12 malthael ghost
+ps3	actor	0x120	4	u32 flags		coll_dynamic_own	collision: own dynamic flags; bits: 0 actor, 1 pet, 2 projectile, 3 player, 4 gizmo, 5 los blocker, 6 gate, 7 flippy, 8 owned, 9 wreckable, 10 projectile blocker, 11 teleport blocker, 12 malthael ghost
+ps3	actor	0x124	4	i32 enum		coll_shape	collision shape kind; values: 0 none, 1 cylinder, 2 box
 ps3	actor	0x128	12	f32[3]		coll_cylinder_base	collision cylinder base
 ps3	actor	0x134	4	f32		coll_cylinder_height	collision cylinder height
 ps3	actor	0x138	4	f32		coll_cylinder_radius	collision cylinder radius
@@ -707,7 +707,7 @@ ps3	actor	0x1a0	8	pointer_slot(8, zero)		voice_role_ptr	pointer slot of voice_ro
 ps3	actor	0x1a8	8	text_pair(offset u32, size u32)		voice_role	voice-over role text
 ps3	actor_event	-	192	RECORD SIZE			12762 instances
 ps3	actor_event	0x0	4	i32		message_key	message id that fires the event
-ps3	actor_event	0x4	4	i32		trigger_kind	trigger event kind
+ps3	actor_event	0x4	4	i32 enum		trigger_kind	trigger event kind; values: 0 add object, 1 detach object, 2 add cloth deprecated, 3 delete cloth deprecated, 4 add trail, 5 delete trail deprecated, 6 msg, 7 delete object, 8 footstep, 9 anim, 10 transparency, 11 add rope, 12 delete rope deprecated, 13 change look, 14 shadow, 15 change physics deprecated, 16 add effect group, 17 delete effect group deprecated, 18 frost breath, 19 enable rigid animation angvel deprecated, 20 disable rigid animation angvel deprecated, 21 enable rigid animation bob deprecated, 22 disable rigid animation bob deprecated, 23 music, 24 capture by particle system deprecated, 25 spawn object, 26 outro object, 27 enable ragdoll, 28 disable constraint, 29 disable collision messages, 30 attach spawned actor, 31 cancel look, 32 hitflash, 33 enable ragdoll animation override, 34 disable ragdoll animation override, 35 attach camera, 36 frameout enable, 37 frameout disable, 38 restore camera, 39 fade, 40 null, 41 outro animation, 42 hide helm and shoulders
 ps3	actor_event	0x8	4	f32		chance	chance, 0..1
 ps3	actor_event	0xc	4	i32		delay_min	delay, ticks
 ps3	actor_event	0x10	4	i32		delay_range	random extra delay, ticks
@@ -715,29 +715,29 @@ ps3	actor_event	0x14	4	i32		repeat_min	repeat time, ticks
 ps3	actor_event	0x18	4	i32		repeat_range	random extra repeat time, ticks
 ps3	actor_event	0x1c	4	f32		impulse_min	minimum impulse
 ps3	actor_event	0x20	4	f32		impulse_range	impulse range
-ps3	actor_event	0x24	4	i32		material	material condition
-ps3	actor_event	0x28	4	i32		condition_flags	condition bit flags
-ps3	actor_event	0x2c	4	i32		attach_kind	attachment kind
+ps3	actor_event	0x24	4	i32 enum		material	material condition; values: -1 invalid, 0 default, 1 metal, 2 wood, 3 bone, 4 flesh, 5 water, 6 stone, 7 glass, 8 paper, 9 metal2, 10 metal3, 11 wood2, 12 wood3, 13 stone2, 14 stone3, 15 bone2, 16 bone3
+ps3	actor_event	0x28	4	u32 flags		condition_flags	condition bit flags; bits: 0 use impulse delta
+ps3	actor_event	0x2c	4	i32 enum		attach_kind	attachment kind; values: -1 invalid, 0 actor, 1 particlesystem, 2 light, 3 sound, 4 unused1, 5 ambientsound, 6 explosion, 7 unused2, 8 actorgroup deprecated, 9 scene, 10 unused3, 11 shake, 12 vibration
 ps3	actor_event	0x30	8	typed_ref(group i32, handle i32)		target_file	typed file reference: group, then handle
 ps3	actor_event	0x38	4	i32		id	event id
 ps3	actor_event	0x3c	4	u32 flags		pin_flags	pin bit flags
-ps3	actor_event	0x40	4	i32		rune	rune index
+ps3	actor_event	0x40	4	i32 enum		rune	rune index; values: -1 invalid, 0 a, 1 b, 2 c, 3 d, 4 e, 6 none
 ps3	actor_event	0x44	4	i32		use_rune	1 if the rune index applies
 ps3	actor_event	0x48	4	i32		hardpoint_hash	hardpoint name hash (2 links)
-ps3	actor_event	0x4c	4	i32		hardpoint_hash_high	second word of hardpoint hash
-ps3	actor_event	0x50	4	i32		hardpoint_source	which actor owns the hardpoint
+ps3	actor_event	0x4c	4	u32 flags		hardpoint_flags	hardpoint hash flags: bit 0 dynamic hardpoint, bit 1 damage hardpoint; bits: 0 is dynamic, 1 is damage
+ps3	actor_event	0x50	4	i32 enum		hardpoint_source	which actor owns the hardpoint; values: 0 primary, 1 secondary, 2 tertiary
 ps3	actor_event	0x54	4	i32		hardpoint_hash	hardpoint name hash (2 links)
-ps3	actor_event	0x58	4	i32		hardpoint_hash_high	second word of hardpoint hash
-ps3	actor_event	0x5c	4	i32		hardpoint_source	which actor owns the hardpoint
+ps3	actor_event	0x58	4	u32 flags		hardpoint_flags	hardpoint hash flags: bit 0 dynamic hardpoint, bit 1 damage hardpoint; bits: 0 is dynamic, 1 is damage
+ps3	actor_event	0x5c	4	i32 enum		hardpoint_source	which actor owns the hardpoint; values: 0 primary, 1 secondary, 2 tertiary
 ps3	actor_event	0x60	4	i32		look_hash	look hash
-ps3	actor_event	0x64	4	i32		look_hash_high	upper word, zero
+ps3	actor_event	0x64	4	i32		look_hash_padding	padding word after the look hash, zero
 ps3	actor_event	0x68	4	i32		constraint_hash	constraint hash
-ps3	actor_event	0x6c	4	i32		constraint_hash_high	upper word, zero
+ps3	actor_event	0x6c	4	i32		constraint_hash_padding	padding word after the constraint hash, zero
 ps3	actor_event	0x70	4	i32		anim_tag	animation tag
 ps3	actor_event	0x74	4	f32		alpha	alpha
-ps3	actor_event	0x78	4	i32		pass_method	message pass method
+ps3	actor_event	0x78	4	i32 enum		pass_method	message pass method; values: 0 to actorchain, 1 to this actor, 2 to self and children, 3 to children only
 ps3	actor_event	0x7c	4	i32		message_key_out	message id sent
-ps3	actor_event	0x80	4	u32 flags		trigger_flags	bit flags
+ps3	actor_event	0x80	4	u32 flags		trigger_flags	bit flags; bits: 0 delete on animation end, 1 delete on owner death, 2 outro on animation end, 3 outro on owner death, 4 disable collision messages, 5 fade in, 6 fade affects shadows, 7 delete on owner resurrection, 8 outro on owner resurrection, 9 sound play as 2d, 10 disabled in lowfx mode, 11 disabled if owner hidden, 12 enabled in lowfx mode, 13 disabled if remote player
 ps3	actor_event	0x84	4	i32		ignore_owner_scale	bool
 ps3	actor_event	0x88	4	i32		ignore_owner_alpha	bool
 ps3	actor_event	0x8c	4	f32		scale	scale
@@ -746,8 +746,8 @@ ps3	actor_event	0x94	4	i32		use_particle_scale	bool
 ps3	actor_event	0x98	4	f32		particle_scale	particle scale
 ps3	actor_event	0x9c	4	i32		use_min_speed	bool
 ps3	actor_event	0xa0	4	f32		min_speed	minimum speed
-ps3	actor_event	0xa4	4	i32		footstep_kind	footstep kind
-ps3	actor_event	0xa8	4	i32		outro_anim_kind	outro animation kind
+ps3	actor_event	0xa4	4	i32 enum		footstep_kind	footstep kind; values: 0 run, 1 walk, 2 slide
+ps3	actor_event	0xa8	4	i32 enum		outro_anim_kind	outro animation kind; values: 0 run left foot, 1 run right foot, 2 walk left foot, 3 walk right foot, 4 run none, 5 walk none
 ps3	actor_event	0xac	4	i32		spawned_life	spawned actor lifetime, ticks
 ps3	actor_event	0xb0	4	u32		color_add	colour, 4 bytes R,G,B,A in byte order (not swapped on PS3)
 ps3	actor_event	0xb4	4	i32		add_flash_time	ticks
@@ -755,22 +755,22 @@ ps3	actor_event	0xb8	4	u32		color_mul	colour, 4 bytes R,G,B,A in byte order
 ps3	actor_event	0xbc	4	i32		mul_flash_time	ticks
 ps3	monster	-	1336	RECORD SIZE			1436 instances
 ps3	monster	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
-ps3	monster	0xc	4	u32 flags		flags	bit flags
+ps3	monster	0xc	4	u32 flags		flags	bit flags; bits: 0 is unique, 1 is large monster, 2 is elite, 3 hireling or pet, 4 is female, 5 is boss, 6 always uses self for awareness radius, 7 forces flavor text
 ps3	monster	0x10	4	file_ref(group 1)		actor_ref	actor file (group 1)
 ps3	monster	0x14	4	i32		look_index	look index in the actor
-ps3	monster	0x18	4	i32 enum		monster_type	monster type, see symbol list
-ps3	monster	0x1c	4	i32 enum		race	monster race, -1 none
-ps3	monster	0x20	4	i32 enum		encounter_category	encounter category
+ps3	monster	0x18	4	i32 enum		monster_type	monster type, see symbol list; values: -1 none, 0 Undead, 1 Demon, 2 Beast, 3 Human, 4 Breakable, 5 Scenery, 6 Ally, 7 Team, 8 Helper, 9 CorruptedAngel, 10 Pandemonium, 11 Adria, 12 Blood Golem
+ps3	monster	0x1c	4	i32 enum		race	monster race, -1 none; values: 0 none, 1 Fallen, 2 GoatMen, 3 Rogue, 4 Skeleton, 5 Zombie, 6 Spider, 7 Triune, 8 WoodWraith, 9 Human, 10 Animal, 11 TreasureGoblin, 12 CrazedAngel, -1 none (PS3 writes -1 where Switch writes 0)
+ps3	monster	0x20	4	i32 enum		encounter_category	encounter category; values: -1 none, 3 Big, 4 Standard, 5 Ranged, 6 Swarm, 7 Boss
 ps3	monster	0x24	4	f32		idle_radius	awareness radius when idle
 ps3	monster	0x28	4	f32		combat_radius	awareness radius in combat
 ps3	monster	0x2c	4	f32		target_abandon_time	time before target is dropped
 ps3	monster	0x30	4	f32		warn_radius	radius to alert allies
 ps3	monster	0x34	4	i32		needs_line_of_sight	bool
-ps3	monster	0x38	4	i32 enum		base_element	damage type, -1 none
+ps3	monster	0x38	4	i32 enum		base_element	damage type, -1 none; values: -1 None, 0 Physical, 1 Fire, 2 Lightning, 3 Cold, 4 Poison, 5 Arcane, 6 Holy
 ps3	monster	0x3c	4	i32		count_min	spawn count minimum
 ps3	monster	0x40	4	i32		count_range	extra random spawn count
 ps3	monster	0x44	16	i32	4	level_by_difficulty	PS3 only: monster level for difficulty 0 normal, 1 nightmare, 2 hell, 3 inferno
-ps3	monster	0x54	584	f32	146	attribute_modifiers	indexed float table, see Q6
+ps3	monster	0x54	568	f32	142	attribute_modifiers	142 floats indexed by game-balance slot (C3_monster_attribute_indices.tsv); same index order as Switch, slots 142-145 absent
 ps3	monster	0x28c	4	f32		hp_champion	champion health multiplier
 ps3	monster	0x290	4	f32		hp_champion_range	random extra champion multiplier
 ps3	monster	0x294	4	f32		hp_rare	rare health multiplier
@@ -780,16 +780,16 @@ ps3	monster	0x2a0	4	f32		hp_minion_range	random extra minion multiplier
 ps3	monster	0x2a4	4	i32		gold	gold granted
 ps3	monster	0x2a8	4	f32		health_drop_chance_normal	chance
 ps3	monster	0x2ac	4	row_id		health_item_normal	item row id (items table)
-ps3	monster	0x2b0	4	i32		health_drop_style_normal	drop style
+ps3	monster	0x2b0	4	i32 enum		health_drop_style_normal	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
 ps3	monster	0x2b4	4	f32		health_drop_chance_champion	chance
 ps3	monster	0x2b8	4	row_id		health_item_champion	item row id
-ps3	monster	0x2bc	4	i32		health_drop_style_champion	drop style
+ps3	monster	0x2bc	4	i32 enum		health_drop_style_champion	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
 ps3	monster	0x2c0	4	f32		health_drop_chance_rare	chance
 ps3	monster	0x2c4	4	row_id		health_item_rare	item row id
-ps3	monster	0x2c8	4	i32		health_drop_style_rare	drop style
+ps3	monster	0x2c8	4	i32 enum		health_drop_style_rare	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
 ps3	monster	0x2cc	4	f32		health_drop_chance_minion	chance
 ps3	monster	0x2d0	4	row_id		health_item_minion	item row id
-ps3	monster	0x2d4	4	i32		health_drop_style_minion	drop style
+ps3	monster	0x2d4	4	i32 enum		health_drop_style_minion	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
 ps3	monster	0x2d8	4	file_ref(group 39)		skill_kit_ref	skill kit file (group 39)
 ps3	monster	0x2dc	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
 ps3	monster	0x2e0	4	i32		skill_level_mod	level adjustment of the slot
@@ -853,17 +853,17 @@ ps3	monster	0x3c4	4	f32		summon_life	summon lifetime
 ps3	monster	0x3c8	4	i32		summon_max_alive	summon cap at once
 ps3	monster	0x3cc	4	i32		summon_max_total	summon cap in total
 ps3	monster	0x3d0	4	file_ref(group 52)		inventory	equipment treasure class (group 52)
-ps3	monster	0x3d4	4	file_ref(group 52)		inventory_2	second equipment treasure class
+ps3	monster	0x3d4	4	file_ref(group 52)		secondary_inventory	secondary inventory treasure class (group 52), -1 none
 ps3	monster	0x3d8	4	file_ref(group 59)		lore_ref	lore file (group 59)
 ps3	monster	0x3dc	24	file_ref(group 3)	6	ai_behaviours	6 AI behaviour files (group 3)
 ps3	monster	0x3f4	32	row_id	8	movement_styles	8 movement style row ids
 ps3	monster	0x414	24	file_ref(group 1)	6	summon_actors	6 summoned actor files (group 1)
 ps3	monster	0x42c	16	row_id	4	affixes	4 monster affix row ids
 ps3	monster	0x43c	24	row_id	6	disallowed_affixes	6 monster affix row ids not allowed
-ps3	monster	0x454	4	i32		target_style_normal	AI target style
-ps3	monster	0x458	4	i32		target_style_champion	AI target style
-ps3	monster	0x45c	4	i32		target_style_rare	AI target style
-ps3	monster	0x460	4	i32 enum		resource	resource kind, -1 none
+ps3	monster	0x454	4	i32 enum		target_style_normal	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+ps3	monster	0x458	4	i32 enum		target_style_champion	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+ps3	monster	0x45c	4	i32 enum		target_style_rare	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+ps3	monster	0x460	4	i32 enum		resource	resource kind, -1 none; values: 0 Mana, 1 Arcanum, 2 Fury, 3 Spirit, 4 Power, 5 Hatred, 6 Discipline, 7 Faith, 8 Essence, -1 none
 ps3	monster	0x480	8	tag_map_pair(offset u32, size u32)		tag_map	monster tag map, monster tag table
 ps3	monster	0x488	8	pointer_slot(8, zero)		tag_map_ptr	pointer slot of tag_map, zero on disk
 ps3	monster	0x490	4	i32 count of array at 0x4a0		minion_group_count	number of minion groups
@@ -887,15 +887,15 @@ ps3	minion_entry	0xc	4	i32		spread_min	spread minimum
 ps3	minion_entry	0x10	4	i32		spread_max	spread maximum
 ps3	quest	-	144	RECORD SIZE			68 instances
 ps3	quest	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
-ps3	quest	0xc	4	i32 enum		quest_type	quest type: 0 main, 2 event, 4 challenge, 5 bounty, 6 horadric, 7..10 set dungeon forms
+ps3	quest	0xc	4	i32 enum		quest_type	quest type: 0 main, 2 event, 4 challenge, 5 bounty, 6 horadric, 7..10 set dungeon forms; values: 0 Main Quest, 2 Event, 4 Challenge, 5 Bounty, 6 Horadric Quest, 7 Set Dungeon, 8 Set Dungeon Bonus, 9 Set Dungeon Mastery, 10 Set Dungeon Tracker
 ps3	quest	0x10	4	i32 count of array at 0x58		step_count	number of steps
 ps3	quest	0x14	4	i32 count of array at 0x68		completion_step_count	number of completion steps
 ps3	quest	0x18	4	i32		quest_uid	quest unique number
-ps3	quest	0x1c	4	u32 flags		flags	bit flags
+ps3	quest	0x1c	4	u32 flags		flags	bit flags; bits: 0 auto generate map icon, 1 auto mark objective npcs, 2 show new quest blinker, 3 global event, 4 shared description text
 ps3	quest	0x20	4	i32		zone_label	label hash
-ps3	quest	0x24	4	i32		act	act: 0, 100, 200, 300, 400; -1 none
+ps3	quest	0x24	4	i32 enum		act	act: 0, 100, 200, 300, 400; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
 ps3	quest	0x28	4	i32		unassigned_uid	unused uid of the unassigned step
-ps3	quest	0x2c	4	u32 flags		unassigned_flags	bit flags of the unassigned step
+ps3	quest	0x2c	4	u32 flags		unassigned_flags	bit flags of the unassigned step; bits: 0 selectable step, 1 prevent matchmaking
 ps3	quest	0x30	8	pointer_slot(8, zero)		unassigned_objective_sets_ptr	pointer slot of unassigned_objective_sets, zero on disk
 ps3	quest	0x38	8	array_pair(offset u32, size u32) of objective_set		unassigned_objective_sets	objective sets of the unassigned step
 ps3	quest	0x40	8	pointer_slot(8, zero)		unassigned_failure_sets_ptr	pointer slot of unassigned_failure_sets, zero on disk
@@ -908,14 +908,14 @@ ps3	quest	0x70	32	i32	8	level_range_by_difficulty	PS3 only: 4 pairs (min level, 
 ps3	quest_step	-	224	RECORD SIZE			366 instances
 ps3	quest_step	0x0	64	char[64]		name	step name, 64 bytes inline
 ps3	quest_step	0x40	4	i32		uid	step uid
-ps3	quest_step	0x44	4	u32 flags		flags	bit flags
+ps3	quest_step	0x44	4	u32 flags		flags	bit flags; bits: 0 resumable step, 1 save partial completion, 2 track per player, 3 shared log text, 4 show meter, 5 orphaned step, 6 selectable step, 7 prevent matchmaking, 8 use previous log text, 9 grant nv on completion, 10 hide bonus text
 ps3	quest_step	0x48	16	i32	4	level_by_difficulty	PS3 only: level for difficulty 0..3
-ps3	quest_step	0x58	4	i32 enum		reward_kind	reward kind
+ps3	quest_step	0x58	4	i32 enum		reward_kind	reward kind; values: 0 no item, 1 Shared Recipe, 2 Class Recipe, 3 Treasure Class
 ps3	quest_step	0x5c	20	file_ref(group 49)	5	reward_recipes	recipe files (group 49), one per player class
 ps3	quest_step	0x70	4	file_ref(group 52)		reward_treasure	treasure class (52)
 ps3	quest_step	0x74	4	i32		reward_xp_tier	experience tier
 ps3	quest_step	0x78	4	i32		reward_gold_tier	gold tier
-ps3	quest_step	0x7c	4	i32 enum		replay_reward_kind	reward kind on replay
+ps3	quest_step	0x7c	4	i32 enum		replay_reward_kind	reward kind on replay; values: 0 no item, 1 Shared Recipe, 2 Class Recipe, 3 Treasure Class
 ps3	quest_step	0x80	20	file_ref(group 49)	5	replay_reward_recipes	recipes, one per class
 ps3	quest_step	0x94	4	file_ref(group 52)		replay_reward_treasure	treasure class
 ps3	quest_step	0x98	4	i32		replay_xp_tier	experience tier
@@ -934,7 +934,7 @@ ps3	objective_set	0x8	8	pointer_slot(8, zero)		objectives_ptr	pointer slot of ob
 ps3	objective_set	0x10	8	array_pair(offset u32, size u32) of objective		objectives	array of objectives
 ps3	objective	-	564	RECORD SIZE			571 instances
 ps3	objective	0x0	4	i32		uid	objective uid
-ps3	objective	0x4	4	i32 enum		objective_kind	objective kind, see Q1 list
+ps3	objective	0x4	4	i32 enum		objective_kind	objective kind, see Q1 list; values: 0 Had Conversation, 1 Possess Item, 2 Kill Monster, 3 Interact With Actor, 4 Enter Level Area, 5 Enter Scene, 6 Enter World, 7 Enter Trigger, 8 Complete Quest, 9 Player Flag Set, 10 Timed Event Expired, 11 Kill Group, 12 Game Flag Set, 13 Event Received, 14 Kill Monster From Group, 15 Kill Monster From Family, 16 Kill Elite Pack In Level Area, 17 Kill Any Monster In Level Area, 18 Kill All Monsters In World, 19 HQ Act Reagents Collected
 ps3	objective	0x8	4	i32		param_1	integer parameter (count)
 ps3	objective	0xc	4	i32		param_2	integer parameter
 ps3	objective	0x10	8	typed_ref(group i32, handle i32)		target_1	typed file reference: group then handle
@@ -959,7 +959,7 @@ ps3	failure_set	-	16	RECORD SIZE			6 instances
 ps3	failure_set	0x0	8	pointer_slot(8, zero)		conditions_ptr	pointer slot of conditions, zero on disk
 ps3	failure_set	0x8	8	array_pair(offset u32, size u32) of failure_condition		conditions	array of failure conditions
 ps3	failure_condition	-	548	RECORD SIZE			6 instances
-ps3	failure_condition	0x0	4	i32 enum		failure_kind	failure condition kind
+ps3	failure_condition	0x0	4	i32 enum		failure_kind	failure condition kind; values: 0 Monster Died, 1 Player Died, 2 Actor Died, 3 Timed Event Expired, 4 Item Used, 5 Game Flag Set, 6 Player Flag Set, 7 Event Received
 ps3	failure_condition	0x4	4	i32		param_1	integer
 ps3	failure_condition	0x8	4	i32		param_2	integer
 ps3	failure_condition	0xc	8	typed_ref(group i32, handle i32)		target_1	typed file reference
@@ -974,11 +974,11 @@ ps3	completion_step	0x40	4	i32		uid	completion step uid
 ps3	completion_step	0x44	4	i32		shared_log_text	bool
 ps3	conversation	-	528	RECORD SIZE			2806 instances
 ps3	conversation	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
-ps3	conversation	0xc	4	i32 enum		conversation_kind	conversation kind 0..13
-ps3	conversation	0x10	4	i32		icon	icon kind
+ps3	conversation	0xc	4	i32 enum		conversation_kind	conversation kind 0..13; values: 13 Quest Event, 12 Quest Float, 11 Quest Standard, 10 Talk Menu Gossip, 9 Ambient Gossip, 8 Lore Book, 7 Global Float, 6 Global Chatter, 5 Player Callout, 4 Follower Callout, 3 Follower Banter, 2 Ambient Float, 1 Player Emote, 0 Follower Soundset
+ps3	conversation	0x10	4	i32 enum		icon	icon kind; values: -1 invalid, 0 none, 1 exclamation, 2 question, 3 asterisk, 4 gossip, 5 exclamation bonus
 ps3	conversation	0x14	4	file_ref(group 12)		piggyback_ref	conversation (12) played after
 ps3	conversation	0x18	4	file_ref(group 12)		unlocks	conversations (12) unlocked
-ps3	conversation	0x1c	4	u32 flags		flags	bit flags
+ps3	conversation	0x1c	4	u32 flags		flags	bit flags; bits: 0 activate quest (deprecated), 1 grant reward (deprecated), 2 important (deprecated), 3 question (deprecated), 4 asterisk (deprecated), 5 reoperate npc (deprecated), 6 talk menu only (deprecated), 7 gossip (deprecated), 8 no voiceover, 9 play for all players (deprecated), 10 zoom (deprecated), 11 operate speaker on begin, 12 ready to record, 13 operate speaker on end, 14 never repeat, 15 cancel for combat, 16 ready for localization (deprecated), 17 recording has begun (deprecated), 18 localization has begun (deprecated), 19 ready for review, 20 persist through speaker death, 21 always important, 22 console hide close button, 23 show all lines in recording script
 ps3	conversation	0x20	128	char[128]		player_flag	player flag text set when played, 128 bytes
 ps3	conversation	0xa0	4	file_ref(group 1)		primary_npc	actor (1)
 ps3	conversation	0xa4	4	file_ref(group 1)		alt_npc_1	actor
@@ -995,16 +995,16 @@ ps3	conversation	0x1d8	8	array_pair(offset u32, size u32) of u8		script	compiled
 ps3	conversation	0x208	4	file_ref(group 64)		boss_encounter	boss encounter (64)
 ps3	conversation	0x20c	4	i32		pad	padding, zero
 ps3	conversation_node	-	104	RECORD SIZE			16814 instances
-ps3	conversation_node	0x0	4	i32		node_kind	node kind, see Q1
-ps3	conversation_node	0x4	4	u32 flags		flags	bit flags
+ps3	conversation_node	0x0	4	i32 enum		node_kind	node kind, see Q1; values: 1 conditional, 2 choice deprecated, 3 conv line group, 4 random, 5 conv line, 6 conditional participant
+ps3	conversation_node	0x4	4	u32 flags		flags	bit flags; bits: 1 dont animate, 3 needs review, 4 please revise, 5 dont play subtitle, 6 needs text to speech, 7 random plays only once, 2 retired node flag (no constant; the list skips 2)
 ps3	conversation_node	0x8	4	i32		line_uid	line uid, selects text label
-ps3	conversation_node	0xc	4	i32 enum		speaker	speaker: -1 none, 0 player, 1 primary NPC, 2..5 alternates, 6 templar, 7 scoundrel, 8 enchantress
-ps3	conversation_node	0x10	4	i32 enum		listener	speaker code of the addressee
+ps3	conversation_node	0xc	4	i32 enum		speaker	speaker: -1 none, 0 player, 1 primary NPC, 2..5 alternates, 6 templar, 7 scoundrel, 8 enchantress; values: -1 none, 0 Player, 1 Primary NPC, 2 Alt. NPC 1, 3 Alt. NPC 2, 4 Alt. NPC 3, 5 Alt. NPC 4, 6 Templar Follower, 7 Scoundrel Follower, 8 Enchantress Follower
+ps3	conversation_node	0x10	4	i32 enum		listener	speaker code of the addressee; values: -1 none, 0 Player, 1 Primary NPC, 2 Alt. NPC 1, 3 Alt. NPC 2, 4 Alt. NPC 3, 5 Alt. NPC 4, 6 Templar Follower, 7 Scoundrel Follower, 8 Enchantress Follower
 ps3	conversation_node	0x14	4	i32		anim_tag	animation tag, -1 none
-ps3	conversation_node	0x18	4	i32		gender	player gender filter: -1 any, 0 male, 1 female
-ps3	conversation_node	0x1c	4	i32		player_class	player class filter: -1 any, else class index
+ps3	conversation_node	0x18	4	i32 enum		gender	player gender filter: -1 any, 0 male, 1 female; values: -1 invalid, 0 male, 1 female
+ps3	conversation_node	0x1c	4	i32 enum		player_class	player class filter: -1 any, else class index; values: -1 none, 0 demonhunter, 1 barbarian, 2 wizard, 3 witchdoctor, 4 monk, 5 crusader, 6 necromancer
 ps3	conversation_node	0x20	8	pointer_slot(8, zero)		display_times_ptr	pointer slot of display_times, zero on disk
-ps3	conversation_node	0x28	8	array_pair(offset u32, size u32) of i32		display_times	array of packed u32: bits 0-4 locale index, 5-7 class (class count = any), 8-9 gender (2 = any), 10-31 time
+ps3	conversation_node	0x28	8	array_pair(offset u32, size u32) of i32		display_times	display time words: bits 0-4 locale (C3_display_time_locales.tsv, 19 none), 5-7 class (class count = any), 8-9 gender (2 any), 10-31 time in ticks (60 per second)
 ps3	conversation_node	0x30	4	i32		branch_index	branch index
 ps3	conversation_node	0x34	4	zero		reserved	PS3 only: zero
 ps3	conversation_node	0x38	8	pointer_slot(8, zero)		true_nodes_ptr	pointer slot of true_nodes, zero on disk
@@ -1019,9 +1019,9 @@ ps3	conversation_list	0x10	8	pointer_slot(8, zero)		entries_ptr	pointer slot of 
 ps3	conversation_list	0x18	8	array_pair(offset u32, size u32) of list_entry		entries	array of list entries
 ps3	list_entry	-	304	RECORD SIZE			1538 instances
 ps3	list_entry	0x0	4	file_ref(group 12)		conversation	conversation (12)
-ps3	list_entry	0x4	4	i32		requirement	requirement kind
-ps3	list_entry	0x8	4	u32 flags		flags	bit flags
-ps3	list_entry	0xc	4	i32		crafter	crafter kind
+ps3	list_entry	0x4	4	i32 enum		requirement	requirement kind; values: 0 no conditions, 1 all conditions, 2 one condition
+ps3	list_entry	0x8	4	u32 flags		flags	bit flags; bits: 0 crafter unlock negate, 1 game flag negate, 2 has item negate, 3 quest step current negate, 4 quest assigned negate, 5 quest complete negate, 6 quest range negate, 7 near hostiles negate, 8 is near hostiles, 9 conversation unlocked negate, 10 is conversation unlocked, 11 conversation heard negate, 12 conversation heard, 13 level area negate, 14 conversation has all participants negate, 15 conversation has all participants, 16 quest active negate, 17 divider, 18 player flag negate, 19 special event flag negate, 20 adventure mode, 21 adventure mode negate, 22 dungeon finder, 23 dungeon finder negate, 24 requires dungeon finder payment, 25 requires dungeon finder payment negate
+ps3	list_entry	0xc	4	i32 enum		crafter	crafter kind; values: -1 invalid, 0 blacksmith, 1 jewel, 2 mystic, 3 horadrim, 4 jewel upgrade
 ps3	list_entry	0x10	4	row_id		item	item row id
 ps3	list_entry	0x14	128	char[128]		label	text, 128 bytes
 ps3	list_entry	0x94	128	char[128]		player_flag	text, 128 bytes
@@ -1035,12 +1035,12 @@ ps3	list_entry	0x12c	4	file_ref(group 22)		level_areas	level areas (22): 6 on NX
 ps3	treasure_class	-	40	RECORD SIZE			446 instances
 ps3	treasure_class	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
 ps3	treasure_class	0xc	4	f32		no_drop_chance	chance that nothing drops
-ps3	treasure_class	0x10	4	i32		choose_kind	how modifiers are picked, see Q6
+ps3	treasure_class	0x10	4	i32 enum		choose_kind	how modifiers are picked: 0 one of (pick one modifier by weight), 1 all of (roll every modifier by its chance), 2 all of, shared loot, 3 one of, shared loot, -1 none
 ps3	treasure_class	0x14	4	i32 count of array at 0x20		modifier_count	number of modifiers
 ps3	treasure_class	0x18	8	pointer_slot(8, zero)		modifiers_ptr	pointer slot of modifiers, zero on disk
 ps3	treasure_class	0x20	8	array_pair(offset u32, size u32) of drop_modifier		modifiers	array of drop modifiers
 ps3	drop_modifier	-	104	RECORD SIZE			1917 instances
-ps3	drop_modifier	0x0	4	i32		drop_kind	drop kind, see Q6
+ps3	drop_modifier	0x0	4	i32 enum		drop_kind	drop kind, see Q6; values: -1 none, 0 treasureclass, 1 itemlabel, 2 item, 3 legendary, 4 class targeted legendary
 ps3	drop_modifier	0x4	4	file_ref(group 52)		sub_treasure	treasure class (52)
 ps3	drop_modifier	0x8	4	f32		chance	chance
 ps3	drop_modifier	0xc	4	i32		weight	weight
@@ -1109,14 +1109,14 @@ ps3	condition	0xbc	4	i32		lootee_level_max
 ps3	condition	0xc0	4	i32		difficulty_level_min	handicap (monster power or torment) minimum, -1 any
 ps3	condition	0xc4	4	i32		difficulty_level_max	maximum
 ps3	condition	0xc8	4	zero		reserved	PS3 only: zero
-ps3	condition	0xcc	4	i32		act_min	act 0..400, -1 any
-ps3	condition	0xd0	4	i32		act_max	act
+ps3	condition	0xcc	4	i32 enum		act_min	act 0..400, -1 any; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
+ps3	condition	0xd0	4	i32 enum		act_max	act; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
 ps3	condition	0xd4	4	i32		players_min	
 ps3	condition	0xd8	4	i32		players_max	
 ps3	condition	0xdc	4	file_ref(group 48)		world	world (48)
 ps3	condition	0xe0	4	file_ref(group 22)		level_area	level area (22)
 ps3	condition	0xe4	4	file_ref(group 58)		quest_range	quest range (58)
-ps3	condition	0xe8	4	i32 enum		follower	follower class
+ps3	condition	0xe8	4	i32 enum		follower	follower class; values: 0 none, 1 Templar, 2 Scoundrel, 3 Enchantress
 ps3	condition	0xec	4	i32		follower_current	-1 any
 ps3	condition	0xf0	4	row_id		label	label row id, 3 slots
 ps3	condition	0xf4	4	i32		label_active	bool

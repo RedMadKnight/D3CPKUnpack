@@ -155,22 +155,23 @@ class Ps3(unittest.TestCase):
         with self.assertRaises(FormatError):
             P.parse_appearance(B.build_app_ps3(indices=(0, 1, 3)))
 
-    def test_bounds_warning_and_strict(self):
+    def test_bounds_is_a_note_not_strict(self):
+        # Stage 7, T13: the PS3 bounds rule fails in three shipped files; report it only.
         data = B.build_app_ps3(bounds_half=(1.0, 1.0, 1.0))
         app = P.parse_appearance(data)
-        self.assertTrue(app.warnings)
-        with self.assertRaises(FormatError):
-            P.parse_appearance(data, strict=True)
+        self.assertEqual(app.warnings, [])
+        self.assertIn("outside bounds", app.notes[0])
+        self.assertTrue(P.parse_appearance(data, strict=True).notes)
 
     def test_bounds_tolerance_is_two_raw_units(self):
         # The furthest vertex is at 6.0 on x with scale 0.5, so 5.0 passes with tolerance 1.
         vertices = ((10, 0, 0),)
         data = B.build_app_ps3(vertices=vertices, indices=(), index_count=0,
                                bounds_half=(5.0, 5.0, 5.0))
-        self.assertEqual(P.parse_appearance(data).warnings, [])
+        self.assertEqual(P.parse_appearance(data).notes, [])
         data = B.build_app_ps3(vertices=vertices, indices=(), index_count=0,
                                bounds_half=(4.9, 5.0, 5.0))
-        self.assertTrue(P.parse_appearance(data).warnings)
+        self.assertTrue(P.parse_appearance(data).notes)
 
     def test_weights_checked(self):
         data = B.build_app_ps3(skinned=True, bones=BONES, weights=(55, 200, 0, 0))
@@ -187,7 +188,8 @@ class Switch(unittest.TestCase):
         self.assertEqual(draw.positions[1], (6.0, 2.0, 3.0))
         self.assertEqual(draw.normals[0], (0.5, 0.0, -0.5))
         self.assertEqual(draw.indices, [0, 1, 2])
-        self.assertEqual(app.sub_objects[0].format_bits, 0x55)
+        self.assertEqual(app.sub_objects[0].format_bits, 0x55 | 1 << 15)
+        self.assertEqual(app.sub_objects[0].flags, 0x55 | 1 << 15)
 
     def test_running_index_sum(self):
         vertices = [(0, 0, 0), (1, 0, 0), (0, 1, 0), (1, 1, 0)]

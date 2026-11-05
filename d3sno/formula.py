@@ -7,7 +7,7 @@ import struct
 from dataclasses import dataclass, field
 from typing import Mapping
 
-from .binary import FormatError, build_order, to_f32
+from .binary import ByBuild, FormatError, build_order, to_f32
 from .power import (
     TAG_FLOAT, TAG_FORMULA, TAG_INT, PowerFile, TagRecord, formula_tag,
 )
@@ -22,8 +22,8 @@ _DIMINISHING_LOG4_7 = to_f32(1.4036775)
 _RANDOM_SCALE = to_f32(2.0 ** -32)
 
 OP_NAMES = {
-    0: "END", 1: "CALL", 2: "OP2", 3: "OP3", 4: "PUSHID1", 5: "PUSHID", 6: "PUSHF", 7: "LT",
-    8: "GT", 9: "EQ", 10: "NE", 11: "ADD", 12: "SUB", 13: "MUL", 14: "DIV", 15: "OP15",
+    0: "END", 1: "CALL", 2: "PAREN", 3: "COMMA", 4: "PUSHID1", 5: "PUSHID", 6: "PUSHF", 7: "LT",
+    8: "GT", 9: "EQ", 10: "NE", 11: "ADD", 12: "SUB", 13: "MUL", 14: "DIV", 15: "POW",
     16: "NEG", 17: "SELECT",
 }
 _OPERAND_WORDS = {1: 1, 4: 1, 5: 4, 6: 1}
@@ -40,13 +40,13 @@ CLASS_PREVIOUS_SKILL_LEVEL = 4
 CLASS_MONSTER_DAMAGE_TYPE = 5
 CLASS_OTHER_POWER = 22
 CLASS_FIRST_SLOT = 23
-_FIRST_TABLE = {"ps3": 63, "switch": 87}
+_FIRST_TABLE = ByBuild({"ps3": 63, "switch": 87})
 _LAST_CLASS_OFFSET = 26  # class 113 on switch
 _CLASS_NAMES = {
     0: "Attribute", 1: "SkillLevel", 2: "ItemLevel", 3: "GizmoOrMonsterLevel",
     4: "PreviousSkillLevel", 5: "MonsterDamageType", 22: "OtherPowerTag",
 }
-_DAMAGE_TYPES = ("Physical", "Fire", "Lightning", "Cold", "Poison", "Arcane")
+_DAMAGE_TYPES = ("Physical", "Fire", "Lightning", "Cold", "Poison", "Arcane", "Holy", "Siege")
 _NAMED_TABLES = {
     **{i: f"DmgTier{i + 1}" for i in range(7)},
     7: "Healing", 8: "WDCost", 9: "RuneDamageBonus", 14: "HealthMin", 15: "LegendaryProcDmg",
@@ -381,6 +381,8 @@ def _nested_value(
     if record.type == TAG_INT or record.type == TAG_FLOAT:
         return float(record.value)
     if record.type == TAG_FORMULA:
+        if not record.value.code:
+            return ctx.tag_default(tag)  # no compiled formula
         return _run(record.value.code, power.build, ctx.nested(power), power, depth, strict)
     ctx.warnings.append(f"tag 0x{record.tag:X} has type {record.type}, value taken as 0")
     return 0.0
@@ -492,7 +494,12 @@ def _execute(
 def _run(
     code: bytes, build: str, ctx: EvalContext, power: PowerFile | None, depth: int, strict: bool,
 ) -> float:
-    """Run one formula. A failure is logged and gives 0; the caller carries on."""
+    """Run one formula. A failure is logged and gives 0; the caller carries on.
+
+    Empty code is no compiled formula, which gives 0 and is not logged.
+    """
+    if not code:
+        return 0.0
     try:
         return _execute(code, build, ctx, power, depth, strict)
     except _Failed as exc:
@@ -522,8 +529,20 @@ def evaluate_tag(
     if record is None:
         return ctx.tag_default(tag)
     if record.type == TAG_FORMULA:
+        if not record.value.code:
+            return ctx.tag_default(tag)  # no compiled formula
         return _run(record.value.code, power.build, ctx, power, 1, strict)
     return _nested_value(record, tag, power, ctx, 1, strict)
+
+
+def stream_ends_with_end(code: bytes, build: str) -> bool:
+    """Every stored formula ends in an END that is its last word. Empty code is no formula."""
+    if not code:
+        return True
+    decoded = decode(code, build)
+    if not decoded or decoded[-1].truncated or decoded[-1].opcode != 0:
+        return False
+    return decoded[-1].offset + 4 == len(code)
 
 
 def evaluate_slot(

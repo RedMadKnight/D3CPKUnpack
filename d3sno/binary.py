@@ -5,8 +5,8 @@ from __future__ import annotations
 import struct
 from dataclasses import dataclass
 
-BUILDS = ("ps3", "switch")
-_ORDERS = {"ps3": ">", "switch": "<"}
+BUILDS = ("ps3", "switch", "x360")
+_ORDERS = {"ps3": ">", "switch": "<", "x360": ">"}
 
 
 class FormatError(Exception):
@@ -27,8 +27,23 @@ def build_order(build: str) -> str:
 
 
 def order_build(order: str) -> str:
-    """Return the build name of a struct byte-order prefix."""
+    """Return the build name of a struct byte-order prefix (big-endian alone gives ps3; x360 needs
+    the file version, see ``sno.resolve_build``)."""
     return "ps3" if order == ">" else "switch"
+
+
+def layout_build(build: str) -> str:
+    """The build whose record layouts a build uses: x360 uses the Switch layouts (X1)."""
+    return "ps3" if build == "ps3" else "switch"
+
+
+class ByBuild(dict):
+    """A per-build table keyed by ``ps3`` and ``switch``; x360 takes the Switch entry (X1)."""
+
+    def __missing__(self, key):
+        if key == "x360" and "switch" in self:
+            return self["switch"]
+        raise KeyError(key)
 
 
 @dataclass(frozen=True)

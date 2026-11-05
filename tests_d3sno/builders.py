@@ -232,6 +232,7 @@ def tag_map(records: list, order: str) -> bytes:
 _LAYOUT = {
     "ps3": (">", 1442, 8, 0x178, 0x1A0),
     "switch": ("<", 1722, 32, 0x2F8, 0x320),
+    "x360": (">", 1606, 32, 0x2F8, 0x320),  # the Switch layout, big-endian (X1)
 }
 
 
@@ -313,18 +314,19 @@ RETURN_WORD = 30 | (1 << 23)
 class LuaWriter:
     def __init__(self, build: str):
         self.build = build
-        self.order = ">" if build == "ps3" else "<"
+        self.order = order_of(build)
         self.out = bytearray()
 
     def header(self):
-        flag, size_t = (0, 4) if self.build == "ps3" else (1, 8)
+        # x360 uses the ps3 header: big-endian, 4-byte size_t (X8)
+        flag, size_t = (0, 4) if self.build in ("ps3", "x360") else (1, 8)
         self.out += b"\x1BLuaQ\0" + bytes((flag, 4, size_t, 4, 8, 0))
 
     def int(self, value):
         self.out += struct.pack(self.order + "i", value)
 
     def string(self, text):
-        fmt = "I" if self.build == "ps3" else "Q"
+        fmt = "I" if self.build in ("ps3", "x360") else "Q"
         if text is None:
             self.out += struct.pack(self.order + fmt, 0)
         else:
@@ -377,9 +379,9 @@ def transform_bytes(order, q=(0.0, 0.0, 0.0, 1.0), t=(0.0, 0.0, 0.0), s=1.0) -> 
     return struct.pack(order + "8f", *q, *t, s)
 
 
-def bone_record(build, name, parent, translation, parent_translation) -> bytes:
+def bone_record(build, name, parent, translation, parent_translation, order=None) -> bytes:
     """A bone with no rotation or scale, so its transforms are plain differences."""
-    order = ">" if build == "ps3" else "<"
+    order = order or (">" if build == "ps3" else "<")
     rest = transform_bytes(order, t=translation)
     inverse = transform_bytes(order, t=tuple(-c for c in translation))
     local = transform_bytes(
@@ -392,8 +394,8 @@ def bone_record(build, name, parent, translation, parent_translation) -> bytes:
             record[position:position + 32] = raw
     else:
         record = bytearray(256)
-        struct.pack_into("<Ii", record, 0, name, 0)
-        struct.pack_into("<i", record, 8, parent)
+        struct.pack_into(order + "Ii", record, 0, name, 0)
+        struct.pack_into(order + "i", record, 8, parent)
         for position, raw in (
             (0x34, rest), (0x54, inverse), (0x74, local), (0x94, rest), (0xB4, inverse),
         ):
@@ -401,11 +403,11 @@ def bone_record(build, name, parent, translation, parent_translation) -> bytes:
     return bytes(record)
 
 
-def bone_records(build, bones) -> bytes:
+def bone_records(build, bones, order=None) -> bytes:
     out = bytearray()
     for name, parent, translation in bones:
         origin = bones[parent][2] if parent >= 0 else (0.0, 0.0, 0.0)
-        out += bone_record(build, name, parent, translation, origin)
+        out += bone_record(build, name, parent, translation, origin, order)
     return bytes(out)
 
 
@@ -485,44 +487,65 @@ def build_app_ps3(version=295, skinned=False, bones=(), index_count=3, bad_descr
     return img.done()
 
 
-def switch_vertex(position, extra=b"") -> bytes:
+def switch_vertex(position, extra=b"", order="<") -> bytes:
+    """A packed vertex. ``order`` ">" gives the x360 form (X6): big-endian position, colour
+    groups and the joint and weight groups byte-reversed, normal and UV bytes as on Switch."""
+    colours = bytes((1, 2, 3, 4, 5, 6, 7, 8))
+    if order == ">":
+        colours = colours[3::-1] + colours[7:3:-1]
+        extra = b"".join(extra[i:i + 4][::-1] for i in range(0, len(extra), 4))
     return (
-        struct.pack("<3hh", *position, 0)
-        + bytes((192, 128, 64, 0, 1, 2, 3, 4, 5, 6, 7, 8))
+        struct.pack(order + "3hh", *position, 0)
+        + bytes((192, 128, 64, 0)) + colours
         + struct.pack("<4H", 0x8000 + 512, 0x8000, 9, 10)
         + extra
     )
 
 
-def build_app_switch(version=306, bones=(), sub_objects=None, pool_spare=2, indices=(0, 1, 2)):
-    """``sub_objects`` is a list of dicts: rigid, index_count, skin, influences."""
-    order = "<"
+def build_app_switch(version=306, bones=(), sub_objects=None, pool_spare=2, indices=(0, 1, 2),
+                     order="<", second=None):
+    """``sub_objects`` (and ``second``, the second list at 0x88) are lists of dicts: rigid,
+    index_count, skin, influences, flags, cloth, cloth_vertices. ``order`` ">" with an x360
+    version builds the x360 form (X6)."""
     img = Image(0x400, order)
     img.raw(0, sno_head(version, order))
     if sub_objects is None:
         sub_objects = [{"rigid": [(0, 0, 0), (10, 0, 0), (0, 10, 0)], "index_count": 3}]
-    records = bytearray(240 * len(sub_objects))
     pool = bytearray()
-    for i, spec in enumerate(sub_objects):
+
+    def sub_records(specs):
+        records = bytearray(240 * len(specs))
+        for i, spec in enumerate(specs):
+            sub_record(records, i, spec)
+        return records
+
+    def sub_record(records, i, spec):
+        nonlocal pool
         rec = Image(0, order)
         rec.b = records
         base = i * 240
-        rec.put(base, "I", 0x55)
         rigid = spec.get("rigid", [])
+        # Flag bits 15/16 follow the packed data (stage 7, T10); bit 8 marks cloth.
+        flags = 0x55 | (1 << 15 if rigid or spec.get("skin") else 0) | (1 << 16 if spec.get("skin") else 0)
+        rec.put(base, "I", spec.get("flags", flags | (1 << 8 if spec.get("cloth") else 0)))
+        if spec.get("cloth"):
+            rec.put(base + 0x40, "II", *img.append(spec["cloth"]))
+        # V7-T11: +0x04 is non-zero exactly for cloth without packed rigid vertices.
+        rec.put(base + 0x04, "I", spec.get("cloth_vertices", 3 if spec.get("cloth") and not rigid else 0))
         index_count = spec.get("index_count", 0)
         rec.put(base + 0x28, "i", index_count)
         rec.put(base + 0xA0, "i", len(rigid))
-        pool += struct.pack(f"<{index_count}H", *spec.get("indices", indices[:index_count]))
+        pool += struct.pack(f"{order}{index_count}H", *spec.get("indices", indices[:index_count]))
         if rigid:
-            rec.put(base + 0xB0, "II", *img.append(b"".join(switch_vertex(v) for v in rigid)))
+            rec.put(base + 0xB0, "II", *img.append(b"".join(switch_vertex(v, order=order) for v in rigid)))
         skin = spec.get("skin")
         if skin:
-            palette = struct.pack(f"<{len(skin['palette'])}i", *skin["palette"])
+            palette = struct.pack(f"{order}{len(skin['palette'])}i", *skin["palette"])
             verts = b"".join(
-                switch_vertex(v, bytes(skin.get("slots", (0, 1, 0, 0))) + bytes(skin.get("weights", (200, 55, 0, 0))))
+                switch_vertex(v, bytes(skin.get("slots", (0, 1, 0, 0))) + bytes(skin.get("weights", (200, 55, 0, 0))), order)
                 for v in skin["vertices"]
             )
-            ind = struct.pack(f"<{len(skin['indices'])}H", *skin["indices"])
+            ind = struct.pack(f"{order}{len(skin['indices'])}H", *skin["indices"])
             s = Image(104, order)
             s.put(0x00, "i", len(skin["palette"]))
             s.put(0x04, "II", *img.append(palette))
@@ -536,12 +559,18 @@ def build_app_switch(version=306, bones=(), sub_objects=None, pool_spare=2, indi
         rec.put(base + 0x6C, "6f", 0.0, 0.0, 0.0, *spec.get("half", (1000.0, 1000.0, 1000.0)))
         rec.put(base + 0xD8, "3f", 1.0, 2.0, 3.0)
         rec.put(base + 0xE4, "3f", 0.5, 0.5, 0.5)
+
+    records = sub_records(sub_objects)
+    second_records = sub_records(second or [])
     img.pair(0x220, bytes(pool) + bytes(pool_spare))
     img.put(0x24, "i", len(bones))
     if bones:
-        img.pair(0x28, bone_records("switch", bones))
+        img.pair(0x28, bone_records("switch", bones, order))
     img.put(0x70, "i", len(sub_objects))
     img.pair(0x74, bytes(records))
+    if second:
+        img.put(0x88, "i", len(second))
+        img.pair(0x8C, bytes(second_records))
     img.put(0xC8, "i", 0)
     return img.done()
 
@@ -647,14 +676,14 @@ def _ani_record(perm: dict, order: str) -> bytearray:
 
 
 def build_ani(build: str, perms: list, version=None, playback=2, table_size=None) -> bytes:
-    order = ">" if build == "ps3" else "<"
-    head = sno_head(version or (123 if build == "ps3" else 129), order)
-    table_at = 0x50 if build == "ps3" else 0x48
+    order = order_of(build)
+    head = sno_head(version or {"ps3": 123, "switch": 129, "x360": 128}[build], order)
+    table_at = 0x48 if build == "switch" else 0x50  # x360: the ps3 form (X5)
     img = Image(table_at + 360 * len(perms), order)
     img.raw(0, head)
     img.put(0x1C, "IIi", 0x33, playback, 4242)
     size = 360 * len(perms) if table_size is None else table_size
-    img.put(0x28, "II", 0 if build == "ps3" else table_at - 0x10, size)
+    img.put(0x28, "II", table_at - 0x10 if build == "switch" else 0, size)
     shared = {}
 
     def blob_pair(blob: bytes):
@@ -741,11 +770,11 @@ def nav_sections(order: str, inner: int, cell_flags=(0x1001, 0x0002)) -> list:
 def build_scene(build: str, width=6, height=5, top=1, bottom=1, left=2, right=1, version=None,
                 sections=None, body=None, special=b"\x21\x43\x65\x87\x09") -> tuple:
     """Returns ``(scn, nav)``. ``body`` overrides u32 words at body offsets."""
-    order = ">" if build == "ps3" else "<"
+    order = order_of(build)
     inner_w, inner_h = width - left - right, height - top - bottom
     parts = nav_sections(order, inner_w * inner_h) if sections is None else sections
     img = Image(0x228, order)
-    img.raw(0, sno_head(version or (163 if build == "ps3" else 179), order))
+    img.raw(0, sno_head(version or {"ps3": 163, "switch": 179, "x360": 165}[build], order))
 
     def word(at, *values, fmt="I"):
         img.put(0x10 + at, f"{len(values)}{fmt}", *values)
@@ -764,6 +793,9 @@ def build_scene(build: str, width=6, height=5, top=1, bottom=1, left=2, right=1,
         for at, raw in zip((0x80, 0x190, 0x1A8, 0x1D0, 0x1E8, 0x200), parts):
             img.pair(0x10 + at, raw)
         img.pair(0x10 + 0x90, special)
+    elif build == "x360":  # X4: special flags as on Switch, sections in the .nav
+        img.pair(0x10 + 0x90, special)
+        nav = b"".join(parts)
     else:
         img.b += special
         nav = b"".join(parts)
@@ -856,19 +888,19 @@ def build_tex(build, fmt, w, h, data, mip_max=0, frames=(), faces=1, depth=1, la
               container=None) -> bytes:
     """``data`` is the ps3 payload. On switch it is level 0 as linear elements, unless
     ``payload`` gives the whole container."""
-    order = ">" if build == "ps3" else "<"
+    order = order_of(build)
     img = Image(0x270 if build == "ps3" else 0x288, order)
-    img.raw(0, sno_head(version or (58 if build == "ps3" else 66), order))
+    img.raw(0, sno_head(version or {"ps3": 58, "switch": 66, "x360": 61}[build], order))
     img.put(0x20, "5I", fmt, w, h, faces, depth)
     img.put(0x38, "ii", 0, mip_max)
     ids_at, scale_at = (0x24C, 0x264) if build == "ps3" else (0x260, 0x278)
     img.put(scale_at, "f", v_scale)
     ids = list(range(len(frames))) if image_ids is None else image_ids
-    if build == "switch":
+    if build != "ps3":
         img.b += bytes(-len(img.b) % 8)
     img.pair(ids_at, struct.pack(f"{order}{len(ids)}i", *ids))
     img.put(0x220, "i", len(frames))
-    if build == "switch":
+    if build != "ps3":
         img.b += bytes(-len(img.b) % 8)
     img.pair(0x224, b"".join(struct.pack(order + "I4f", *frame) for frame in frames))
     if extra_pair:
@@ -887,7 +919,7 @@ def build_tex(build, fmt, w, h, data, mip_max=0, frames=(), faces=1, depth=1, la
 # --- Text and gameplay -----------------------------------------------------------------
 
 def order_of(build: str) -> str:
-    return ">" if build == "ps3" else "<"
+    return ">" if build in ("ps3", "x360") else "<"
 
 
 def build_stl(build: str, rows: list, array_extra=b"", revision=1, source=0x1234) -> bytes:
@@ -906,7 +938,7 @@ def build_stl(build: str, rows: list, array_extra=b"", revision=1, source=0x1234
     return img.done()
 
 
-GAM_FIXED = {"switch": 0x248, "ps3": 0x3E8}
+GAM_FIXED = {"switch": 0x248, "ps3": 0x3E8, "x360": 0x278}
 
 
 def build_gam(build: str, kind: int, slot=None, rows=(), row_size=0, extra_slots=None) -> bytes:
@@ -955,17 +987,19 @@ def build_ans(build: str, default=(), weapons=None, parent=-1) -> bytes:
     return img.done()
 
 
-def build_skl(build: str, traits=(), actives=()) -> bytes:
+def build_skl(build: str, traits=(), actives=(), fallbacks=()) -> bytes:
     order = order_of(build)
-    img = Image(0x48, order)
+    img = Image(0x40 if build == "ps3" else 0x50, order)
     img.raw(0, sno_head(1, order))
     trait_size, active_size = (12, 40) if build == "ps3" else (16, 64)
     img.pair(0x28, b"".join(
-        struct.pack(f"{order}3i", *row).ljust(trait_size, b"\0") for row in traits
+        struct.pack(f"{order}{len(row)}i", *row).ljust(trait_size, b"\0") for row in traits
     ))
     img.pair(0x38, b"".join(
-        struct.pack(f"{order}10i", *row).ljust(active_size, b"\xEE") for row in actives
+        struct.pack(f"{order}{len(row)}i", *row).ljust(active_size, b"\0") for row in actives
     ))
+    if build == "switch":
+        img.pair(0x48, b"".join(struct.pack("<i", h) for h in fallbacks))
     return img.done()
 
 
@@ -977,7 +1011,7 @@ def build_words(build: str, words: list) -> bytes:
 
 def build_scr(build: str, entries=(), chunk=b"", uid=5, quest=-1, version=None, count=None) -> bytes:
     order = order_of(build)
-    version = version or (86 if build == "ps3" else 94)
+    version = version or {"ps3": 86, "switch": 94, "x360": 93}[build]
     img = Image(0x58, order)
     img.raw(0, sno_head(version, order))
     if chunk:
@@ -1026,7 +1060,7 @@ def build_scene_info(build: str, marker_sets=(), exclusions=(), inclusions=(), a
                      collision=12, version=None, xp=1.5) -> bytes:
     order = order_of(build)
     img = Image(0x10 + 0x218, order)
-    img.raw(0, sno_head(version or (163 if build == "ps3" else 179), order))
+    img.raw(0, sno_head(version or {"ps3": 163, "switch": 179, "x360": 165}[build], order))
     img.put(0x20, "6f", 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)
     img.put(0x38, "6f", 7.0, 8.0, 9.0, 10.0, 11.0, 12.0)
     for at, values in ((0xB0, exclusions), (0xF0, inclusions), (0x130, marker_sets)):
@@ -1317,18 +1351,21 @@ import csv as _csv
 import os as _os
 
 _LAYOUT_PATH = _os.path.join(_os.path.dirname(__file__), "..", "d3sno", "data", "layouts.tsv")
-_TABLE_BUILD = {"nx": "switch", "ps3": "ps3"}
+_TABLE_BUILD = {"nx": "switch", "ps3": "ps3", "x360": "x360"}
 
 
 def _layout_rows():
     sizes, rows = {}, {}
-    with open(_LAYOUT_PATH, encoding="utf-8", newline="") as handle:
-        for row in _csv.DictReader(handle, delimiter="\t"):
-            key = (_TABLE_BUILD[row["build"]], row["record"])
-            if row["offset"] == "-":
-                sizes[key] = int(row["bytes"])
-            else:
-                rows.setdefault(key, []).append(row)
+    table_rows = []
+    for path in (_LAYOUT_PATH, _LAYOUT_PATH.replace("layouts.tsv", "x360_layouts.tsv")):
+        with open(path, encoding="utf-8", newline="") as handle:
+            table_rows += list(_csv.DictReader(handle, delimiter="\t"))
+    for row in table_rows:
+        key = (_TABLE_BUILD[row["build"]], row["record"])
+        if row["offset"] == "-":
+            sizes[key] = int(row["bytes"])
+        else:
+            rows.setdefault(key, []).append(row)
     result = {}
     for key, size in sizes.items():
         fields = sorted(rows.get(key, []), key=lambda r: int(r["offset"], 16))
@@ -1343,6 +1380,9 @@ def _layout_rows():
                 name = f"{name}_{seen[name]}"
             named.append((int(f["offset"], 16), int(f["bytes"]), f["type"], name))
         result[key] = (size, named)
+    for (build, record), value in list(result.items()):  # x360 uses the Switch rows elsewhere (X3)
+        if build == "switch":
+            result.setdefault(("x360", record), value)
     return result
 
 
@@ -1419,10 +1459,14 @@ def display_time(locale: int, player_class: int, gender: int, time: int) -> int:
 
 # --- Game balance layout ---------------------------------------------------------------
 
-def build_gam_layout(build: str, kind: int, slot: int, row_size: int, rows: list,
-                     shared_name=None, trailing_slot=None) -> bytes:
-    """Rows as dicts: ``name``, ``formulas`` {position: (text, code) or None}, ``fields``
-    {position: (fmt, value)}. Laid out by the stated rule."""
+def build_gam_layout(build: str, kind: int, slot: int, row_size: int, rows: list, slots: dict,
+                     shared_name=None) -> bytes:
+    """Lay out a ``.gam`` by the stated rule.
+
+    ``slots`` maps each pair offset of a row to its kind: name, code, text or array. Rows are
+    dicts: ``name``, ``blocks`` {offset: bytes or None}, ``arrays`` {offset: (element size,
+    [(element bytes, {nested offset: code or None})])} and ``fields`` {offset: (fmt, value)}.
+    """
     order = order_of(build)
     img = Image(GAM_FIXED[build], order)
     img.raw(0, sno_head(1, order))
@@ -1433,25 +1477,49 @@ def build_gam_layout(build: str, kind: int, slot: int, row_size: int, rows: list
     img.put(slot, "II", table - 0x10, row_size * len(rows))
     name_align = 4 if build == "ps3" else 8
     shared_at = None
+
+    def code_pair(at, data):
+        if not data:
+            _pad(img, 4)
+            img.put(at, "II", len(img.b) - 0x10, 0)
+        else:
+            _pad(img, 4)
+            img.put(at, "II", *img.append(data))
+
     for number, row in enumerate(rows):
         at = table + number * row_size
         for position, (fmt, value) in row.get("fields", {}).items():
             img.put(at + position, fmt, value)
-        if "name" in row:
-            raw = row["name"].encode("latin-1") + b"\0"
-            if shared_name and shared_at is not None:
-                img.put(at, "II", shared_at - 0x10, len(raw))
-            else:
+        for offset in sorted(slots):
+            kind_of = slots[offset]
+            if kind_of == "name":
+                if "name" not in row:
+                    img.put(at + offset, "II", 0, 0)  # V8-X7: no cursor, no alignment
+                    continue
+                raw = row["name"].encode("latin-1") + b"\0"
+                if shared_name and shared_at is not None:
+                    img.put(at + offset, "II", shared_at - 0x10, len(raw))
+                    continue
                 _pad(img, name_align)
                 if shared_name:
                     shared_at = len(img.b)
-                img.put(at, "II", *img.append(raw))
-        for position, formula in sorted(row.get("formulas", {}).items()):
-            _pad(img, 4)
-            if formula is None:
-                img.put(at + position, "II", len(img.b) - 0x10, 0)
+                img.put(at + offset, "II", *img.append(raw))
+            elif kind_of == "array":
+                array = row.get("arrays", {}).get(offset)
+                if not array:
+                    img.put(at + offset, "II", 0, 0)
+                    continue
+                size, elements = array
+                _pad(img, 8)
+                start = len(img.b)
+                img.put(at + offset, "II", *img.append(
+                    b"".join(raw.ljust(size, b"\0") for raw, _ in elements)
+                ))
+                for e, (_, codes) in enumerate(elements):
+                    for inner in sorted(codes):
+                        code_pair(start + e * size + inner, codes[inner])
             else:
-                img.put(at + position, "II", *img.append(formula_value(*formula, order)))
+                code_pair(at + offset, row.get("blocks", {}).get(offset))
     return img.done()
 
 

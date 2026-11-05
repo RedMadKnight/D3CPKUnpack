@@ -1,0 +1,131 @@
+record	offset	bytes	kind	type	name	note
+ui_dialog	0x00	12	struct		definition_header	body offsets (file position minus 0x10)
+ui_dialog	0x0C	4	prim	u32	machine_time
+ui_dialog	0x10	16	list	ui_control	controls	count 0x10, pair 0x14, slot 0x1C; elements 272 bytes
+ui_dialog	0x20	16	list	ui_style	styles	elements 112 bytes
+ui_dialog	0x30	16	list	ui_string_element	constant_strings	elements 24 bytes
+ui_dialog	0x40	16	list	ui_int32_element	constant_int32s	elements 16 bytes
+ui_dialog	0x50	16	list	ui_float32_element	constant_float32s	elements 16 bytes
+ui_dialog	0x60	24	zero		reserved	zero in all 251 files; record size 0x78, first block starts after it
+ui_list	0x00	4	prim	i32	count
+ui_list	0x04	8	pair		elements	size = count x element size
+ui_list	0x0C	4	ptr		slot	zero
+ui_string_element	0x00	8	prim	u64	key	attribute id (high word 0 in 14490 of 14494)
+ui_string_element	0x08	8	pair	text	text	NUL-terminated
+ui_string_element	0x10	4	ptr		text_slot	zero
+ui_string_element	0x14	4	hole		alignment	stale memory, non-zero in 9900 of 14494; ignore
+ui_int32_element	0x00	8	prim	u64	key	attribute id
+ui_int32_element	0x08	4	prim	i32	value
+ui_int32_element	0x0C	4	zero		pad
+ui_float32_element	0x00	8	prim	u64	key	attribute id
+ui_float32_element	0x08	4	prim	f32	value
+ui_float32_element	0x0C	4	zero		pad
+ui_style	0x00	8	prim	u64	key	name hash
+ui_style	0x08	8	pair	text	name	NUL-terminated
+ui_style	0x10	4	ptr		name_slot	zero
+ui_style	0x14	4	hole		alignment	stale, non-zero in 18 of 75 dialog styles and 5328 of 8008 inline styles
+ui_style	0x18	16	list	ui_string_element	strings
+ui_style	0x28	16	list	ui_int32_element	int32s
+ui_style	0x38	16	list	ui_float32_element	float32s
+ui_style	0x48	16	list	ui_child_spec	child_specs	elements 76 bytes
+ui_style	0x58	24	zero		reserved	zero everywhere
+ui_child_spec	0x00	8	pair	text	path_to_child	NUL-terminated
+ui_child_spec	0x08	4	ptr		path_slot	zero
+ui_child_spec	0x0C	4	hole		alignment	stale, non-zero in 307 of 520
+ui_child_spec	0x10	16	list	ui_string_element	strings
+ui_child_spec	0x20	16	list	ui_int32_element	int32s
+ui_child_spec	0x30	16	list	ui_float32_element	float32s
+ui_child_spec	0x40	12	zero		reserved	zero everywhere
+ui_control	0x00	4	prim	i32	ordinal
+ui_control	0x04	4	hole		alignment	zero in all 8008
+ui_control	0x08	8	prim	u64	key	name hash
+ui_control	0x10	8	pair	text	name	NUL-terminated
+ui_control	0x18	4	ptr		name_slot	zero
+ui_control	0x1C	4	hole		alignment	stale, non-zero in 5545 of 8008
+ui_control	0x20	8	prim	u64	parent_key	0 for a root control
+ui_control	0x28	8	pair	text	parent_name	NUL-terminated
+ui_control	0x30	4	ptr		parent_name_slot	zero
+ui_control	0x34	4	hole		alignment	stale, non-zero in 5277 of 8008
+ui_control	0x38	4	prim	i32	control_type
+ui_control	0x3C	4	hole		alignment	zero in all 8008
+ui_control	0x40	112	struct	ui_style	inline_style
+ui_control	0xB0	16	list	ui_anim_int32	anim_int32s	elements 8 bytes: f32 t, i32 value
+ui_control	0xC0	16	list	ui_anim_float	anim_floats	elements 8 bytes: f32 t, f32 value
+ui_control	0xD0	16	list	ui_anim_vector2	anim_vector2s	elements 12 bytes: f32 t, f32 x, f32 y
+ui_control	0xE0	16	list	ui_anim_description	anim_descriptions	elements 40 bytes
+ui_control	0xF0	16	list	ui_anim_binding	anim_bindings	elements 20 bytes
+ui_control	0x100	16	zero		reserved	zero everywhere
+ui_anim_description	0x00	8	prim	u64	key	name hash
+ui_anim_description	0x08	8	pair	text	name	NUL-terminated
+ui_anim_description	0x10	4	ptr		name_slot	zero
+ui_anim_description	0x14	4	hole		alignment	stale, non-zero in 264 of 381
+ui_anim_description	0x18	4	prim	i32	type	0, 1, 2 seen
+ui_anim_description	0x1C	8	prim	2i32	node_range	first and end node
+ui_anim_description	0x24	4	zero		pad
+ui_anim_binding	0x00	8	pair	text	animation_name	NUL-terminated
+ui_anim_binding	0x08	4	ptr		name_slot	zero
+ui_anim_binding	0x0C	4	hole		alignment	stale, non-zero in 384 of 448
+ui_anim_binding	0x10	4	prim	i32	property	0 to 6 seen (2 width, 3 height, 6 alpha by binding names); no scale factor on ps3
+font	0x00	12	struct		definition_header	body offsets
+font	0x0C	4	prim	u32	flags	0 in all 5
+font	0x10	64	prim	char[64]	font_face	NUL-terminated, zero after the NUL (e.g. 0000.ttf)
+font	0x50	64	prim	char[64]	original_font_file	NUL-terminated, zero after the NUL
+font	0x90	4	prim	i32	small_caps	boolean
+font	0x94	4	prim	i32	hinting_mode
+font	0x98	4	prim	i32	hinting_style
+font	0x9C	4	prim	i32	size_adjustment
+font	0xA0	4	prim	f32	line_gap_adjustment
+font	0xA4	4	prim	f32	space_scalar
+font	0xA8	4	prim	u32	texture_count
+font	0xAC	8	pair	array:font_texture	textures	40 x texture_count
+font	0xB4	4	ptr		texture_slot	zero
+font	0xB8	4	prim	u32	point_size_count
+font	0xBC	8	pair	array:font_point_size	point_sizes	72 x point_size_count
+font	0xC4	4	ptr		point_size_slot	zero
+font	0xC8	4	prim	u32	custom_data_offset	equals the offset of the first texture image block
+font_texture	0x00	4	prim	u32	resolution_flags	1 to 7
+font_texture	0x04	4	prim	i32	format	23 in all 91
+font_texture	0x08	4	prim	u32	width
+font_texture	0x0C	4	prim	u32	height
+font_texture	0x10	8	pair	blob	image	size = width x height (one byte per pixel)
+font_texture	0x18	4	prim	i32	texture_handle	-1 in all 91
+font_texture	0x1C	4	prim	u32	frame_count
+font_texture	0x20	8	pair	array:font_frame	frames	16 x frame_count
+font_frame	0x00	16	prim	4f32	u0_v0_u1_v1	texture coordinates in 0..1
+font_point_size	0x00	4	prim	i32	height	26.6 fixed point
+font_point_size	0x04	4	prim	i32	width	26.6 fixed point
+font_point_size	0x08	4	prim	i32	ascender	26.6 fixed point
+font_point_size	0x0C	4	prim	i32	max_ascender	26.6 fixed point
+font_point_size	0x10	4	prim	i32	descender	26.6 fixed point, negative
+font_point_size	0x14	4	prim	i32	line_gap	26.6 fixed point
+font_point_size	0x18	4	prim	i32	advance_y	26.6 fixed point
+font_point_size	0x1C	4	prim	u32	resolution_flags	1 to 7, same set as the textures
+font_point_size	0x20	4	prim	u32	glyph_count
+font_point_size	0x24	8	pair	array:font_glyph	glyphs	32 x glyph_count
+font_point_size	0x2C	4	ptr		glyph_slot	zero
+font_point_size	0x30	4	prim	u32	kerning_count
+font_point_size	0x34	8	pair	array:font_kerning	kernings	16 x kerning_count; empty in 65 of 69
+font_point_size	0x3C	4	ptr		kerning_slot	zero
+font_point_size	0x40	4	prim	i32	icon_height	26.6 fixed point
+font_point_size	0x44	4	prim	f32	point_size
+font_glyph	0x00	4	prim	i32	texture_handle	-1, or -2 for the line-break glyph
+font_glyph	0x04	4	prim	i32	frame	frame index in the texture, -1 none
+font_glyph	0x08	4	prim	i32	bearing_x	26.6 fixed point
+font_glyph	0x0C	4	prim	i32	bearing_y	26.6 fixed point
+font_glyph	0x10	4	prim	i32	height	26.6 fixed point
+font_glyph	0x14	4	prim	i32	advance	26.6 fixed point
+font_glyph	0x18	4	prim	i32	texture_index	index into the font's textures, -1 none
+font_glyph	0x1C	4	prim	u32	char	character code (UTF-16 value)
+font_kerning	0x00	4	prim	u32	previous_char
+font_kerning	0x04	4	prim	u32	char
+font_kerning	0x08	4	prim	i32	x	26.6 fixed point
+font_kerning	0x0C	4	prim	i32	y	26.6 fixed point, 0 in all 355
+path	0x00	4	prim	i32	node_count
+path	0x04	4	prim	f32	loop_start
+path	0x08	4	prim	f32	loop_end
+path	0x0C	4	prim	i32	distribution	enum: 0 uniform, 1 low, 2 mid, 3 high, 4 low and high, 5 smooth low, 6 smooth mid, 7 smooth high, 8 smooth low and high
+path	0x10	4	prim	i32	scalar_function	enum: 0 none, 1 message scalar, 2 weather intensity, 3 fractional radial distance, 4 attack rate, 5 actor health percent, 6 fractional height, 7 player close to death, 8 actor scale, 9 spawner countdown percent, 10 random, 11 value from bone x, 12 actor primary resource percent, 13 gold pickup radius
+path	0x14	4	prim	f32	scalar_lerp_zero
+path	0x18	4	prim	f32	scalar_lerp_one
+path	0x1C	4	ptr		nodes_slot	zero
+path	0x20	8	pair		nodes	node_count x node size

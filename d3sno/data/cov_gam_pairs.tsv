@@ -1,0 +1,161 @@
+build	type	row	row_size	offset	kind	element_size	nested_code_offsets	field
+switch	1	ItemTypeDefinition	96	0x0	name			tHeader.szName
+switch	2	ItemDefinition	696	0x0	name			tHeader.szName
+switch	2	ItemDefinition	696	0x108	array	24	0x10	ptAttributes:AttributeSpecifier
+switch	2	ItemDefinition	696	0x270	code			JewelUpgradeAttributeFormula
+switch	2	ItemDefinition	696	0x288	code			JewelSecondaryEffectAttributeFormula
+switch	4	HirelingEntry	88	0x0	name			tHeader.szName
+switch	7	HeroData	264	0x0	name			tHeader.szName
+switch	8	AffixTableEntry	544	0x0	name			tHeader.szName
+switch	8	AffixTableEntry	544	0x180	code			Formula
+switch	8	AffixTableEntry	544	0x198	code			Formula
+switch	8	AffixTableEntry	544	0x1b0	code			Formula
+switch	8	AffixTableEntry	544	0x1c8	code			Formula
+switch	10	MovementStyleDefinition	152	0x0	name			tHeader.szName
+switch	11	LabelGBID	32	0x0	name			tHeader.szName
+switch	16	RareItemNamesEntry	40	0x0	name			tHeader.szName
+switch	18	MonsterAffixesEntry	664	0x0	name			tHeader.szName
+switch	18	MonsterAffixesEntry	664	0x50	code			Value0
+switch	18	MonsterAffixesEntry	664	0x68	code			Value1
+switch	18	MonsterAffixesEntry	664	0x80	code			Value2
+switch	18	MonsterAffixesEntry	664	0x98	code			Value3
+switch	18	MonsterAffixesEntry	664	0xb0	code			Value4
+switch	18	MonsterAffixesEntry	664	0xc8	code			Value5
+switch	18	MonsterAffixesEntry	664	0xe0	code			Value6
+switch	18	MonsterAffixesEntry	664	0xf8	code			Value7
+switch	18	MonsterAffixesEntry	664	0x110	code			Value8
+switch	18	MonsterAffixesEntry	664	0x128	code			Value9
+switch	18	MonsterAffixesEntry	664	0x140	code			MinionValue0
+switch	18	MonsterAffixesEntry	664	0x158	code			MinionValue1
+switch	18	MonsterAffixesEntry	664	0x170	code			MinionValue2
+switch	18	MonsterAffixesEntry	664	0x188	code			MinionValue3
+switch	18	MonsterAffixesEntry	664	0x1a0	code			MinionValue4
+switch	18	MonsterAffixesEntry	664	0x1b8	code			MinionValue5
+switch	18	MonsterAffixesEntry	664	0x1d0	code			MinionValue6
+switch	18	MonsterAffixesEntry	664	0x1e8	code			MinionValue7
+switch	18	MonsterAffixesEntry	664	0x200	code			MinionValue8
+switch	18	MonsterAffixesEntry	664	0x218	code			MinionValue9
+switch	19	RareMonsterNamesEntry	160	0x0	name			tHeader.szName
+switch	21	SocketedEffectsTableEntry	1176	0x0	name			tHeader.szName
+switch	21	SocketedEffectsTableEntry	1176	0x30	code			AttributeFormula1
+switch	21	SocketedEffectsTableEntry	1176	0x48	code			AttributeFormula2
+switch	21	SocketedEffectsTableEntry	1176	0x60	code			AttributeFormula3
+switch	21	SocketedEffectsTableEntry	1176	0x78	code			ReqAttribFormula1
+switch	21	SocketedEffectsTableEntry	1176	0x90	code			ReqAttribFormula2
+switch	25	ItemDropTableEntry	904	0x0	name			tHeader.szName
+switch	27	QualityClass	120	0x0	name			tHeader.szName
+switch	32	RecipeEntry	96	0x0	name			tHeader.szName
+switch	33	SetItemBonusTableEntry	224	0x0	name			tHeader.szName
+switch	33	SetItemBonusTableEntry	224	0x30	code			Formula
+switch	33	SetItemBonusTableEntry	224	0x48	code			Formula
+switch	33	SetItemBonusTableEntry	224	0x60	code			Formula
+switch	33	SetItemBonusTableEntry	224	0x78	code			Formula
+switch	33	SetItemBonusTableEntry	224	0x90	code			Formula
+switch	33	SetItemBonusTableEntry	224	0xa8	code			Formula
+switch	33	SetItemBonusTableEntry	224	0xc0	code			Formula
+switch	33	SetItemBonusTableEntry	224	0xd8	code			Formula
+switch	34	EliteModifierData	112	0x0	name			tHeader.szName
+switch	37	ScriptedAchievementEvent	24	0x0	name			tHeader.szName
+switch	39	LootRunQuestTierEntry	280	0x0	name			tHeader.szName
+switch	40	ParagonBonus	400	0x0	name			tHeader.szName
+switch	40	ParagonBonus	400	0x30	code			Formula
+switch	40	ParagonBonus	400	0x48	code			Formula
+switch	40	ParagonBonus	400	0x60	code			Formula
+switch	40	ParagonBonus	400	0x78	code			Formula
+switch	45	LegacyItemConversion	40	0x0	name			tHeader.szName
+switch	50	TransmuteRecipe	136	0x0	name			tHeader.szName
+switch	51	CurrencyConversionTableEntry	64	0x0	name			tHeader.szName
+ps3	1	item_types	80	0x0	name			
+ps3	2	items	1320	0x0	name			
+ps3	2	items	1320	0x318	code			
+ps3	2	items	1320	0x330	code			
+ps3	2	items	1320	0x348	code			
+ps3	2	items	1320	0x360	code			
+ps3	2	items	1320	0x378	code			
+ps3	2	items	1320	0x390	code			
+ps3	2	items	1320	0x3a8	code			
+ps3	2	items	1320	0x3c0	code			
+ps3	2	items	1320	0x3d8	code			
+ps3	2	items	1320	0x3f0	code			
+ps3	2	items	1320	0x408	code			
+ps3	2	items	1320	0x420	code			
+ps3	2	items	1320	0x438	code			
+ps3	2	items	1320	0x450	code			
+ps3	2	items	1320	0x468	code			
+ps3	2	items	1320	0x480	code			
+ps3	4	hirelings	604	0x0	name			
+ps3	7	heroes	648	0x0	name			
+ps3	8	affixes	512	0x0	name			
+ps3	8	affixes	512	0x168	code			
+ps3	8	affixes	512	0x180	code			
+ps3	8	affixes	512	0x198	code			
+ps3	8	affixes	512	0x1b0	code			
+ps3	10	movement_styles	144	0x0	name			
+ps3	11	labels	24	0x0	name			
+ps3	16	rare_item_names	32	0x0	name			
+ps3	18	monster_affixes	552	0x0	name			
+ps3	18	monster_affixes	552	0x48	code			
+ps3	18	monster_affixes	552	0x60	code			
+ps3	18	monster_affixes	552	0x78	code			
+ps3	18	monster_affixes	552	0x90	code			
+ps3	18	monster_affixes	552	0xa8	code			
+ps3	18	monster_affixes	552	0xc0	code			
+ps3	18	monster_affixes	552	0xd8	code			
+ps3	18	monster_affixes	552	0xf0	code			
+ps3	18	monster_affixes	552	0x108	code			
+ps3	18	monster_affixes	552	0x120	code			
+ps3	18	monster_affixes	552	0x138	code			
+ps3	18	monster_affixes	552	0x150	code			
+ps3	18	monster_affixes	552	0x168	code			
+ps3	18	monster_affixes	552	0x180	code			
+ps3	18	monster_affixes	552	0x198	code			
+ps3	18	monster_affixes	552	0x1b0	code			
+ps3	18	monster_affixes	552	0x1c8	code			
+ps3	18	monster_affixes	552	0x1e0	code			
+ps3	18	monster_affixes	552	0x1f8	code			
+ps3	18	monster_affixes	552	0x210	code			
+ps3	19	monster_names	152	0x0	name			
+ps3	21	socketed_effects	1176	0x0	name			
+ps3	21	socketed_effects	1176	0x30	code			
+ps3	21	socketed_effects	1176	0x48	code			
+ps3	21	socketed_effects	1176	0x60	code			
+ps3	21	socketed_effects	1176	0x78	code			
+ps3	21	socketed_effects	1176	0x90	code			
+ps3	23	open_23	456	0x0	name			
+ps3	23	open_23	456	0x38	code			
+ps3	23	open_23	456	0x50	code			
+ps3	23	open_23	456	0x68	code			
+ps3	23	open_23	456	0x80	code			
+ps3	23	open_23	456	0x98	code			
+ps3	23	open_23	456	0xb0	code			
+ps3	23	open_23	456	0xc8	code			
+ps3	23	open_23	456	0xe0	code			
+ps3	23	open_23	456	0xf8	code			
+ps3	23	open_23	456	0x110	code			
+ps3	23	open_23	456	0x128	code			
+ps3	23	open_23	456	0x140	code			
+ps3	23	open_23	456	0x158	code			
+ps3	23	open_23	456	0x170	code			
+ps3	23	open_23	456	0x188	code			
+ps3	23	open_23	456	0x1a0	code			
+ps3	25	item_drops	900	0x0	name			
+ps3	27	quality_classes	112	0x0	name			
+ps3	28	handicap_levels	60	0x0	name			
+ps3	32	recipes	92	0x0	name			
+ps3	33	set_bonuses	224	0x0	name			
+ps3	33	set_bonuses	224	0x30	code			
+ps3	33	set_bonuses	224	0x48	code			
+ps3	33	set_bonuses	224	0x60	code			
+ps3	33	set_bonuses	224	0x78	code			
+ps3	33	set_bonuses	224	0x90	code			
+ps3	33	set_bonuses	224	0xa8	code			
+ps3	33	set_bonuses	224	0xc0	code			
+ps3	33	set_bonuses	224	0xd8	code			
+ps3	34	elite_modifiers	104	0x0	name			
+ps3	37	achievement_events	40	0x0	name			
+ps3	37	achievement_events	40	0x14	text			
+ps3	40	paragon_bonuses	392	0x0	name			
+ps3	40	paragon_bonuses	392	0x28	code			
+ps3	40	paragon_bonuses	392	0x40	code			
+ps3	40	paragon_bonuses	392	0x58	code			
+ps3	40	paragon_bonuses	392	0x70	code			

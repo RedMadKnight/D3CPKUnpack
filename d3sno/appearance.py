@@ -8,16 +8,16 @@ import math
 import struct
 from dataclasses import dataclass, field
 
-from .binary import ByteView, FormatError, Pair, build_order
+from .binary import ByBuild, ByteView, FormatError, Pair, build_order
 from .material import AppMaterials, read_app_materials, sub_object_texture
 from .sno import SnoHeader, parse_header, resolve_build
 from .transform import Transform, quat_normalise, read_transform, transforms_match
 
-_BONE_RECORD = {"ps3": 176, "switch": 256}
-_SUB_RECORD = {"ps3": 308, "switch": 240}
-_BONE_PARENT = {"ps3": 4, "switch": 8}
+_BONE_RECORD = ByBuild({"ps3": 176, "switch": 256})
+_SUB_RECORD = ByBuild({"ps3": 308, "switch": 240})
+_BONE_PARENT = ByBuild({"ps3": 4, "switch": 8})
 # Positions of the rest transform, its inverse and the parent-relative transform.
-_BONE_TRANSFORMS = {"ps3": (0x30, 0x50, 0x70), "switch": (0x34, 0x54, 0x74)}
+_BONE_TRANSFORMS = ByBuild({"ps3": (0x30, 0x50, 0x70), "switch": (0x34, 0x54, 0x74)})
 _BONE_BIND = 0x94
 _BONE_BIND_INVERSE = 0xB4
 BONE_RANGE_UNIT = 48
@@ -89,6 +89,16 @@ class SubObject:
     influences: list[tuple[tuple[int, int], ...]] = field(default_factory=list)
     material_hash: int | None = None
     sub_hash: int | None = None
+    flags: int = 0  # dwFlags (on Switch also in ``format_bits``)
+    has_cloth: bool = False  # the cloth pair is not empty
+    cloth_only: bool = False  # indices whose vertices live in the cloth record (T11)
+    cloth_vertex_count: int = 0  # Switch/x360 +0x04: non-zero exactly for cloth without packed rigid vertices (V7-T11)
+    list_name: str = "main list"  # "main list" or "second list" (V7-T13)
+
+    @property
+    def label(self) -> str:
+        """How messages name the sub-object: its list and index (V7-T13)."""
+        return f"{self.list_name}, sub-object {self.index}"
 
 
 @dataclass(frozen=True)
@@ -112,6 +122,34 @@ class AppearanceFile:
     material_data: AppMaterials = field(default_factory=AppMaterials)
     extra_sub_objects: list[SubObject] = field(default_factory=list)  # low-polygon meshes
     source: bytearray = field(default_factory=bytearray, repr=False)
+    notes: list[str] = field(default_factory=list)  # reported, never a strict failure
+
+
+# Sub-object flag bits (stage 7, T10).
+SUB_CLOTH_BIT = 8
+SUB_PACK_GEOMETRY_BIT = 15
+SUB_PACK_SKIN_BIT = 16
+
+
+def sub_object_flag_problems(sub: SubObject, build: str, packed: bool = False, skinned: bool = False) -> list[str]:
+    """T10: cloth data implies bit 8 (not the reverse). On Switch, bit 16 is set exactly when
+    skinning records exist, and packed rigid vertices exist exactly when bit 15 is set and
+    bit 16 is clear."""
+    found = []
+    bit = lambda n: bool(sub.flags >> n & 1)  # noqa: E731
+    if sub.has_cloth and not bit(SUB_CLOTH_BIT):
+        found.append(f"{sub.label}: cloth data without flag bit 8")
+    if build != "ps3":  # Switch and x360
+        if bit(SUB_PACK_SKIN_BIT) != skinned:
+            found.append(f"{sub.label}: flag bit 16 does not match the skinning records")
+        if packed != (bit(SUB_PACK_GEOMETRY_BIT) and not bit(SUB_PACK_SKIN_BIT)):
+            found.append(f"{sub.label}: flag bits 15/16 do not match the packed vertices")
+        if bool(sub.cloth_vertex_count) != (sub.has_cloth and not packed):
+            cloth = "present" if sub.has_cloth else "absent"
+            rigid = "present" if packed else "absent"
+            found.append(f"{sub.label}: word +0x04 is {sub.cloth_vertex_count}, cloth data {cloth}, "
+                         f"packed rigid vertices {rigid} (V7-T11)")
+    return found
 
 
 def check_float32(values: tuple[float, ...], what: str) -> None:
@@ -178,7 +216,7 @@ def _read_bones(view: ByteView, build: str) -> list[Bone]:
         rest = read_transform(inner, base + rest_at)
         check_float32(rest.t, f"bone {i} translation")
         bind = bind_inverse = None
-        if build == "switch":
+        if build != "ps3":  # Switch and x360
             bind = read_transform(inner, base + _BONE_BIND)
             bind_inverse = read_transform(inner, base + _BONE_BIND_INVERSE)
         bones.append(Bone(
@@ -302,7 +340,7 @@ def _read_ps3_draw(
             draw.local_joints.append(tuple(influence[1::2]))
             draw.joints.append(_translate_joints(influence[1::2], weights, draw.palette, base))
             if sum(weights) != 255 or list(weights) != sorted(weights, reverse=True):
-                warning = f"sub-object {sub.index}: weights not descending or not summing to 255"
+                warning = f"{sub.label}: weights not descending or not summing to 255"
         else:
             draw.normals.append(_normal(*c_raw[c_at:c_at + 3]))
             draw.colours_1.append(c_raw[c_at + 4:c_at + 8])
@@ -314,19 +352,29 @@ def _read_ps3_draw(
     return draw, warning
 
 
-def _check_bounds(sub: SubObject, warnings: list[str]) -> None:
+def _check_bounds(sub: SubObject, warnings: list[str], notes: list[str] | None = None) -> None:
+    """The vertex-within-bounds rule (2 raw units), for the main list only (V7-T13).
+
+    The stored bounds of second-list sub-objects do not enclose their vertices on any build;
+    the skipped check is a note. On PS3 the caller passes the notes list as ``warnings``.
+    """
+    if sub.list_name != "main list":
+        if notes is not None and any(d.positions for d in sub.draws):
+            notes.append(f"{sub.label}: bounds check skipped (V7-T13)")
+        return
     tolerance = [2 * abs(s) for s in sub.scale]
     for draw in sub.draws:
         for position in draw.positions:
             for axis in range(3):
                 reach = sub.bounds_half[axis] + tolerance[axis]
                 if abs(position[axis] - sub.bounds_centre[axis]) > reach:
-                    warnings.append(f"sub-object {sub.index}: vertex outside bounds")
+                    warnings.append(f"{sub.label}: vertex outside bounds")
                     return
 
 
 def _read_ps3_sub_objects(
     view: ByteView, raw: bytes, count: int, bone_count: int, warnings: list[str],
+    notes: list[str] | None = None, list_name: str = "main list",
 ) -> list[SubObject]:
     size = _SUB_RECORD["ps3"]
     subs = []
@@ -336,7 +384,9 @@ def _read_ps3_sub_objects(
             i, record.cstring(0x48, 128) or None, None, record.f32s(0x118, 3),
             record.f32s(0x124, 3), record.f32s(0xD0, 3), record.f32s(0xDC, 3), [],
             material_hash=record.u32(0xC8), sub_hash=record.u32(0xCC),
+            flags=record.u32(0x00), has_cloth=record.pair(0x30).size > 0, list_name=list_name,
         )
+        warnings.extend(sub_object_flag_problems(sub, "ps3"))
         draw_count = record.i32(0xFC)
         draw_pair = record.pair(0x100)
         draws_raw = _section(view, draw_count, draw_pair, DRAW_RECORD, 0x78, "draw array")
@@ -348,22 +398,27 @@ def _read_ps3_sub_objects(
             sub.draws.append(draw)
             if warning:
                 warnings.append(warning)
-        _check_bounds(sub, warnings)
+        _check_bounds(sub, warnings if notes is None else notes, notes)
         subs.append(sub)
     return subs
 
 
 def _switch_vertices(
-    raw: bytes, count: int, stride: int, sub: SubObject,
+    raw: bytes, count: int, stride: int, sub: SubObject, order: str = "<",
 ) -> Draw:
+    """Packed vertices. On x360 (``order`` big-endian) positions are big-endian and the colour
+    groups are byte-reversed (X6); colours are returned in the Switch byte order. Normals and
+    texture coordinates are the same bytes on both."""
     draw = Draw(stride == 36, [], [], [], [], [], [], [])
+    flip = order == ">"
     for i in range(count):
         at = i * stride
-        raw_pos = struct.unpack_from("<3h", raw, at)
+        raw_pos = struct.unpack_from(f"{order}3h", raw, at)
         draw.positions.append(_position(raw_pos, sub.scale, sub.bias))
         draw.normals.append(_normal(*raw[at + 8:at + 11]))
-        draw.colours_1.append(raw[at + 12:at + 16])
-        draw.colours_2.append(raw[at + 16:at + 20])
+        colour_1, colour_2 = raw[at + 12:at + 16], raw[at + 16:at + 20]
+        draw.colours_1.append(colour_1[::-1] if flip else colour_1)
+        draw.colours_2.append(colour_2[::-1] if flip else colour_2)
         u1, v1, u2, v2 = struct.unpack_from("<4H", raw, at + 20)
         draw.uv1.append(_uv1(u1, v1))
         draw.uv2_raw.append((u2, v2))
@@ -378,7 +433,7 @@ def _read_switch_skin(
     palette_raw = _section(
         view, palette_count, r.pair(0x04), 4, base + 0x04, "palette",
     )
-    palette = list(struct.unpack_from(f"<{palette_count}i", palette_raw, 0))
+    palette = list(struct.unpack_from(f"{view.order}{palette_count}i", palette_raw, 0))
     vertex_count = r.i32(0x18)
     vertices = _section(view, vertex_count, r.pair(0x28), 36, base + 0x28, "skinned vertices")
     index_count = r.i32(0x30)
@@ -386,13 +441,17 @@ def _read_switch_skin(
     if index_count < 0 or len(index_raw) < index_count * 2:
         raise FormatError(f"skinned index pair too small for {index_count}", base + 0x40)
 
-    draw = _switch_vertices(vertices, vertex_count, 36, sub)
-    draw.indices = _read_indices(index_raw, "<", index_count, vertex_count, base + 0x30)
+    draw = _switch_vertices(vertices, vertex_count, 36, sub, view.order)
+    draw.indices = _read_indices(index_raw, view.order, index_count, vertex_count, base + 0x30)
     draw.joints, draw.weights, draw.palette = [], [], palette
+    flip = view.order == ">"  # x360: joint and weight groups byte-reversed (X6)
     for i in range(vertex_count):
         at = i * 36 + 28
-        weights = tuple(vertices[at + 4:at + 8])
-        joints = _translate_joints(vertices[at:at + 4], weights, palette, base)
+        slots, raw_weights = vertices[at:at + 4], vertices[at + 4:at + 8]
+        if flip:
+            slots, raw_weights = slots[::-1], raw_weights[::-1]
+        weights = tuple(raw_weights)
+        joints = _translate_joints(slots, weights, palette, base)
         for joint, weight in zip(joints, weights):
             if weight and not 0 <= joint < bone_count:
                 raise FormatError(f"palette entry {joint} is not a bone", base)
@@ -403,7 +462,8 @@ def _read_switch_skin(
 
 def _read_switch_sub_objects(
     view: ByteView, raw: bytes, count: int, bone_count: int,
-    skipped: list[int], warnings: list[str], running: int = 0,
+    skipped: list[int], warnings: list[str], running: int = 0, notes: list[str] | None = None,
+    list_name: str = "main list",
 ) -> tuple[list[SubObject], int]:
     size = _SUB_RECORD["switch"]
     pool_pair = view.pair(SWITCH_INDEX_POOL_AT, "index pool pair")
@@ -415,11 +475,13 @@ def _read_switch_sub_objects(
             i, None, record.u32(0x00), record.f32s(0xD8, 3), record.f32s(0xE4, 3),
             record.f32s(0x6C, 3), record.f32s(0x78, 3), [],
             material_hash=record.u32(0x64), sub_hash=record.u32(0x68),
+            flags=record.u32(0x00), has_cloth=record.pair(0x40).size > 0,
+            cloth_vertex_count=record.u32(0x04), list_name=list_name,
         )
         index_count = record.i32(0x28)
         vertex_count = record.i32(0xA0)
         if index_count < 0 or vertex_count < 0:
-            raise FormatError(f"sub-object {i}: negative count", 0x78)
+            raise FormatError(f"{sub.label}: negative count", 0x78)
         start = running
         running += index_count
         skin_pair = record.pair(0xB8)
@@ -431,15 +493,23 @@ def _read_switch_sub_objects(
                 view, vertex_count, record.pair(0xB0), 28, 0x78, "rigid vertices",
             )
             if (start + index_count) * 2 > len(pool):
-                raise FormatError(f"sub-object {i}: indices past the pool", SWITCH_INDEX_POOL_AT)
-            draw = _switch_vertices(vertices, vertex_count, 28, sub)
+                raise FormatError(f"{sub.label}: indices past the pool", SWITCH_INDEX_POOL_AT)
+            draw = _switch_vertices(vertices, vertex_count, 28, sub, view.order)
             draw.indices = _read_indices(
                 pool[start * 2:], view.order, index_count, vertex_count, SWITCH_INDEX_POOL_AT,
             )
             sub.draws.append(draw)
         elif index_count and not skin_raw:
             skipped.append(i)
-            warnings.append(f"sub-object {i}: {index_count} indices but no vertices, skipped")
+            if sub.has_cloth and record.pair(0x08).size == 0:
+                # T11: the vertices are the cloth simulation's; not damage, in strict mode too.
+                sub.cloth_only = True
+                (notes if notes is not None else []).append(
+                    f"{sub.label}: {index_count} indices with cloth vertices (layout open), skipped"
+                )
+            else:
+                warnings.append(f"{sub.label}: {index_count} indices but no vertices, skipped")
+        warnings.extend(sub_object_flag_problems(sub, "switch", vertex_count > 0, bool(skin_raw)))
         for k in range(len(skin_raw) // SKIN_RECORD):
             sub.draws.append(_read_switch_skin(
                 view, skin_raw[k * SKIN_RECORD:(k + 1) * SKIN_RECORD], sub, bone_count,
@@ -452,7 +522,7 @@ def _read_switch_sub_objects(
             sub.influences.append(tuple(
                 (influence[at + n], influence[at + n + 1]) for n in (0, 2, 4)
             ))
-        _check_bounds(sub, warnings)
+        _check_bounds(sub, warnings, notes)
         subs.append(sub)
     return subs, running
 
@@ -473,9 +543,12 @@ def parse_appearance(data: bytes, build: str | None = None, strict: bool = False
     extra_raw = _section(
         view, extra_count, view.pair(0x8C), _SUB_RECORD[resolved], 0x8C, "second sub-object list",
     )
+    notes: list[str] = []
     if resolved == "ps3":
-        subs = _read_ps3_sub_objects(view, subs_raw, sub_count, len(bones), warnings)
-        extra = _read_ps3_sub_objects(view, extra_raw, extra_count, len(bones), warnings)
+        subs = _read_ps3_sub_objects(view, subs_raw, sub_count, len(bones), warnings, notes)
+        extra = _read_ps3_sub_objects(
+            view, extra_raw, extra_count, len(bones), warnings, notes, "second list",
+        )
         kinds = {draw.skinned for sub in subs + extra for draw in sub.draws}
         if kinds == {True, False}:
             raise FormatError("rigid and skinned draws mixed in one file", 0x74)
@@ -483,10 +556,11 @@ def parse_appearance(data: bytes, build: str | None = None, strict: bool = False
             raise FormatError("skinned draws in a file without bones", 0x24)
     else:
         subs, running = _read_switch_sub_objects(
-            view, subs_raw, sub_count, len(bones), skipped, warnings,
+            view, subs_raw, sub_count, len(bones), skipped, warnings, notes=notes,
         )
         extra, _ = _read_switch_sub_objects(
-            view, extra_raw, extra_count, len(bones), skipped, warnings, running,
+            view, extra_raw, extra_count, len(bones), skipped, warnings, running, notes,
+            "second list",
         )
     material_data = AppMaterials()
     try:
@@ -498,7 +572,7 @@ def parse_appearance(data: bytes, build: str | None = None, strict: bool = False
         raise FormatError(warnings[0], 0x74)
     return AppearanceFile(
         header, resolved, bones, hardpoints, subs, skipped, warnings, material_data, extra,
-        bytearray(data),
+        bytearray(data), notes,
     )
 
 

@@ -12,7 +12,7 @@ from typing import Mapping
 
 from . import appearance, archive, balance, material, power, scripts, text, texture
 from .transform import Transform
-from .binary import FormatError, build_order
+from .binary import ByBuild, FormatError, build_order
 from .luachunk import LUA_SIGNATURE
 from .sno import hash33
 
@@ -248,7 +248,7 @@ def set_handler(file: scripts.ScriptFile, index: int, name: str) -> None:
 def write_tex(tex: texture.TextureFile) -> bytes:
     order = build_order(tex.build)
     out = bytearray(tex.fixed)
-    aligned = tex.build == "switch"
+    aligned = tex.build != "ps3"  # Switch and x360 (X5)
     for raw, at in (
         (tex.image_ids_raw, texture.image_id_pair_at(tex.build)),
         (tex.frames_raw, texture.FRAME_PAIR_AT),
@@ -286,164 +286,180 @@ def replace_pixels(
 
 
 # --- .gam ---------------------------------------------------------------------------------
+# Layout procedure D6: fixed part, row table at the next multiple of 8, then the blocks of each
+# row in row order and, within a row, in increasing pair offset. A block that shares its source
+# position with one placed before points at that copy.
 
-@dataclass
-class _Block:
-    position: int  # in the row
-    kind: str  # name, formula, empty or array
-    data: bytes
-    source: int | None  # file offset in the source, which marks a shared block
-
-
-_NAME_ALIGN = {"switch": 8, "ps3": 4}
+_NAME_ALIGN = ByBuild({"switch": 8, "ps3": 4})
+_CODE_ALIGN = 4
+_ARRAY_ALIGN = 8
 
 
-def _is_formula(raw: bytes, order: str) -> bool:
-    if len(raw) < 32:
-        return False
-    head = struct.unpack_from(order + "8I", raw, 0)
-    if any(head[i] for i in (0, 1, 2, 3, 4, 6)) or head[5] == 0:
-        return False
-    return 32 + (head[5] + 3) // 4 * 4 + head[7] == len(raw)
+class _GamLayout:
+    def __init__(self, file: balance.BalanceFile) -> None:
+        self.file = file
+        self.order = file.header.order
+        self.out = bytearray(file.source[:balance.FIXED_END[file.build]])
+        self.placed: dict[int, int] = {}
 
+    def place(self, at: int, block: balance.GamBlock | None, alignment: int) -> int | None:
+        """Write the pair at ``at``. Returns where a new copy went, None when reused or empty."""
+        out = self.out
+        if block is None or not block.data:
+            _align(out, _CODE_ALIGN)
+            _put_pair(out, self.order, at, len(out), 0)
+            return None
+        if block.source is not None and block.source in self.placed:
+            _put_pair(out, self.order, at, self.placed[block.source], len(block.data))
+            return None
+        _align(out, alignment)
+        position = len(out)
+        if block.source is not None:
+            self.placed[block.source] = position
+        _put_pair(out, self.order, at, position, len(block.data))
+        out += block.data
+        return position
 
-def _is_name(raw: bytes) -> bool:
-    text_part = raw.split(b"\0")[0]
-    return bool(text_part) and raw.endswith(b"\0") and all(0x20 <= b < 0x7F for b in text_part)
+    def run(self) -> bytes:
+        file, out = self.file, self.out
+        _align(out, 8)
+        table = len(out)
+        out += b"".join(row.raw for row in file.rows)
+        _put_pair(out, self.order, file.slot, table, len(out) - table)
+        slots = balance.gam_pair_slots(file.build, file.type)
+        for number, row in enumerate(file.rows):
+            row_at = table + number * file.row_size
+            for slot in slots:
+                at = row_at + slot.offset
+                block = row.blocks.get(slot.offset)
+                if slot.kind == "array":
+                    self._array(at, slot, block)
+                elif slot.kind == "name":
+                    if block is None or not block.data:
+                        # V8-X7: an empty name pair is {0, 0}; the cursor is not aligned or used.
+                        struct.pack_into(self.order + "II", out, at, 0, 0)
+                    else:
+                        self.place(at, block, _NAME_ALIGN[file.build])
+                else:
+                    self.place(at, block, _CODE_ALIGN)
+        return bytes(out)
 
-
-def _discover(file: balance.BalanceFile) -> list[list[_Block]]:
-    """Find the pairs in each row by what they point at."""
-    source, order = file.source, file.header.order
-    table = struct.unpack_from(order + "I", source, file.slot)[0] + 0x10
-    table_end = table + file.row_size * len(file.rows)
-    found = []
-    for row in file.rows:
-        blocks = []
-        position = 0
-        while position + 8 <= file.row_size:
-            offset, size = struct.unpack_from(order + "II", row.raw, position)
-            start = offset + 0x10
-            if size and table_end <= start and start + size <= len(source):
-                raw = source[start:start + size]
-                kind = "name" if position == 0 and _is_name(raw) else (
-                    "formula" if _is_formula(raw, order) else "array"
-                )
-                blocks.append(_Block(position, kind, raw, start))
-                position += 8
-                continue
-            if not size and offset and offset % 4 == 0 and table_end <= start <= len(source):
-                blocks.append(_Block(position, "empty", b"", None))
-                position += 8
-                continue
-            position += 4
-        found.append(blocks)
-    return found
-
-
-def _lay_out_gam(file: balance.BalanceFile, rows: list[bytes], blocks: list[list[_Block]]) -> bytes:
-    order = file.header.order
-    out = bytearray(file.source[:balance.FIXED_END[file.build]])
-    _align(out, 8)
-    table = len(out)
-    out += b"".join(rows)
-    _put_pair(out, order, file.slot, table, len(out) - table)
-    placed: dict[int, int] = {}
-    for number, row_blocks in enumerate(blocks):
-        row_at = table + number * file.row_size
-        for block in row_blocks:
-            at = row_at + block.position
-            if block.kind == "empty":
-                _align(out, 4)
-                _put_pair(out, order, at, len(out), 0)
-                continue
-            if block.source is not None and block.source in placed:
-                _put_pair(out, order, at, placed[block.source], len(block.data))
-                continue
-            alignment = {"name": _NAME_ALIGN[file.build], "formula": 4}.get(block.kind, 8)
-            _align(out, alignment)
-            if block.source is not None:
-                placed[block.source] = len(out)
-            _put_pair(out, order, at, len(out), len(block.data))
-            out += block.data
-    return bytes(out)
-
-
-def _gam_blocks(file: balance.BalanceFile) -> list[list[_Block]]:
-    """The blocks of each row, checked by laying out the source again."""
-    if file.row_size is None or file.slot is None:
-        raise FormatError(f"type {file.type} has no table this writer knows")
-    blocks = getattr(file, "_write_blocks", None)
-    if blocks is None:
-        blocks = _discover(file)
-        if _lay_out_gam(file, [row.raw for row in file.rows], blocks) != file.source:
-            raise FormatError("the layout of this .gam is not understood, so it is not written")
-        file._write_blocks = blocks
-    return blocks
+    def _array(self, at: int, slot: balance.GamPairSlot, block: balance.GamBlock | None) -> None:
+        if block is None or not block.data:
+            struct.pack_into(self.order + "II", self.out, at, 0, 0)
+            return
+        position = self.place(at, block, _ARRAY_ALIGN)
+        if position is None:
+            return  # shared with an array placed before, nested pairs already written
+        size = slot.element_size or 1
+        for number, nested in enumerate(block.elements):
+            for offset in slot.nested_code_offsets:
+                self.place(position + number * size + offset, nested.get(offset), _CODE_ALIGN)
 
 
 def write_gam(file: balance.BalanceFile) -> bytes:
-    """Lay out a ``.gam`` again. Refuses a file whose own layout it cannot reproduce."""
-    blocks = _gam_blocks(file)
-    return _lay_out_gam(file, [row.raw for row in file.rows], blocks)
+    """Lay out a ``.gam`` by rule D6. A file with no table, or an empty slot, is copied."""
+    if file.row_size is None or file.slot is None or not file.rows:
+        if not file.source:
+            raise FormatError("this balance file holds no source bytes to copy")
+        return bytes(file.source)
+    return _GamLayout(file).run()
 
 
-def _row_block(file: balance.BalanceFile, row: int, position: int) -> _Block:
+def _row(file: balance.BalanceFile, row: int) -> balance.BalanceRow:
     if not 0 <= row < len(file.rows):
         raise FormatError(f"no row {row}")
-    for block in _gam_blocks(file)[row]:
-        if block.position == position:
-            return block
-    raise FormatError(f"row {row} has no pair at +0x{position:X}")
+    return file.rows[row]
+
+
+def _slot(file: balance.BalanceFile, offset: int) -> balance.GamPairSlot:
+    for slot in balance.gam_pair_slots(file.build, file.type):
+        if slot.offset == offset:
+            return slot
+    raise FormatError(f"type {file.type} rows have no pair at +0x{offset:X}")
 
 
 def set_row_name(file: balance.BalanceFile, row: int, name: str) -> None:
     """Rename a row. Its game balance id changes with it."""
-    block = _row_block(file, row, 0)
-    if block.kind != "name":
-        raise FormatError(f"row {row} has no name block")
-    block.data = name.encode("latin-1") + b"\0"
-    block.source = None
-    file.rows[row].name = name
+    target = _row(file, row)
+    if _slot(file, 0).kind != "name":
+        raise FormatError(f"type {file.type} rows have no name")
+    target.blocks[0] = balance.GamBlock("name", name.encode("latin-1") + b"\0")
+    target.name = name
+
+
+def set_row_code(
+    file: balance.BalanceFile, row: int, offset: int, code: bytes, element: int | None = None,
+) -> None:
+    """Replace formula bytecode held by a row; balance tables hold no formula text.
+
+    ``element`` picks an element of the switch item attribute array (pair at +0x108); then
+    ``offset`` is the code pair inside the element. Empty code means no formula.
+    """
+    from .formula import stream_ends_with_end
+
+    target = _row(file, row)
+    if len(code) % 4:
+        raise FormatError(f"code length {len(code)} is not a multiple of 4")
+    if not stream_ends_with_end(bytes(code), file.build):
+        raise FormatError("code does not end in END as its last word")
+    block = balance.GamBlock("code", bytes(code))
+    if element is None:
+        if _slot(file, offset).kind != "code":
+            raise FormatError(f"row {row} +0x{offset:X} is not a code pair")
+        target.blocks[offset] = block
+        return
+    arrays = [
+        s for s in balance.gam_pair_slots(file.build, file.type)
+        if s.kind == "array" and offset in s.nested_code_offsets
+    ]
+    if not arrays:
+        raise FormatError(f"no array element has a code pair at +0x{offset:X}")
+    array = target.blocks.get(arrays[0].offset)
+    if array is None or not 0 <= element < len(array.elements):
+        raise FormatError(f"row {row} has no element {element}")
+    array.source = None  # the array is now its own copy
+    array.elements[element][offset] = block
 
 
 def set_row_formula(file: balance.BalanceFile, row: int, position: int, formula_text: str, code: bytes) -> None:
-    """Replace a formula held by a row, text and code together."""
-    block = _row_block(file, row, position)
-    if block.kind not in ("formula", "empty"):
-        raise FormatError(f"row {row} +0x{position:X} is not a formula")
-    if len(code) % 4:
-        raise FormatError(f"code length {len(code)} is not a multiple of 4")
-    block.kind = "formula"
-    block.data = _formula_bytes(power.Formula(formula_text, bytes(code)), file.header.order)
-    block.source = None
+    """Old name of ``set_row_code``. The text is not stored: balance tables hold bytecode only."""
+    del formula_text
+    set_row_code(file, row, position, code)
+
+
+def set_row_text(file: balance.BalanceFile, row: int, offset: int, value: str) -> None:
+    """Replace a ``text`` block, such as the event name of ps3 type 37 at +0x14."""
+    target = _row(file, row)
+    if _slot(file, offset).kind != "text":
+        raise FormatError(f"row {row} +0x{offset:X} is not a text pair")
+    target.blocks[offset] = balance.GamBlock("text", value.encode("latin-1") + b"\0")
 
 
 def set_row_field(file: balance.BalanceFile, row: int, offset: int, fmt: str, value) -> None:
     """Change a plain field of a row in place, for example ``set_row_field(f, 0, 0x14, "i", 3)``."""
-    if not 0 <= row < len(file.rows):
-        raise FormatError(f"no row {row}")
+    target = _row(file, row)
     size = struct.calcsize(fmt)
-    if offset < 0 or offset + size > file.row_size:
+    if file.row_size is None or offset < 0 or offset + size > file.row_size:
         raise FormatError(f"field +0x{offset:X} is outside the row")
-    for block in _gam_blocks(file)[row]:
-        if offset < block.position + 8 and block.position < offset + size:
+    for slot in balance.gam_pair_slots(file.build, file.type):
+        if offset < slot.offset + 8 and slot.offset < offset + size:
             raise FormatError(f"field +0x{offset:X} overlaps a pair; use the block helpers")
-    raw = bytearray(file.rows[row].raw)
+    raw = bytearray(target.raw)
     try:
         struct.pack_into(file.header.order + fmt, raw, offset, value)
     except struct.error as exc:
         raise FormatError(f"bad value for +0x{offset:X}: {exc}") from None
-    file.rows[row].raw = bytes(raw)
+    target.raw = bytes(raw)
 
 
 # --- .app ----------------------------------------------------------------------------------
 
-_BONE_SIZE = {"ps3": 176, "switch": 256}
-_BONE_TRANSFORMS = {
+_BONE_SIZE = ByBuild({"ps3": 176, "switch": 256})
+_BONE_TRANSFORMS = ByBuild({
     "ps3": {"rest": 0x30, "rest_inverse": 0x50, "local": 0x70},
     "switch": {"rest": 0x34, "rest_inverse": 0x54, "local": 0x74, "bind": 0x94, "bind_inverse": 0xB4},
-}
+})
 
 
 def write_app(app: appearance.AppearanceFile) -> bytes:

@@ -1,0 +1,14 @@
+name_table	applies_to_x360	evidence_on_every_x360_file	x360_table	status
+cov_tags.tsv power_general and power_tuning	yes, unchanged (ids and names)	89,537 of 89,537 power tag-map records named; every id also in X1_tags.tsv with the same constant name	X1_tags.tsv (power, 1,110 rows) gives the same names	PROVEN
+cov_tags.tsv record type of four power tags	no: 0x50210, 0x50230, 0x502F0 and 0x50335 are integer tags on x360 (X1_tags.tsv type code 28), formulas on Switch; 0x502D0 is a formula on x360 too (type code 85)	three of these tags (0x502F0 in 322 files, 0x50210 in 26, 0x50230 in 20) store record type 0 where the Switch table declares a formula; 0x50335 raised no mismatch	apply the existing ps3 rule (trust the stored record type) to x360 too	PROVEN
+cov_tags.tsv actor	yes, unchanged	90,161 of 90,161 actor tag-map records named	none needed (X1_tags.tsv holds only power, vertex-shader and shader-map tags)	PROVEN
+cov_tags.tsv monster	yes, unchanged	611 of 611 records named	none needed	PROVEN
+cov_tags.tsv anim	yes, unchanged	37,923 of 37,923 records named	none needed	PROVEN
+cov_tags.tsv marker	yes, unchanged	129,048 of 129,048 records named	none needed	PROVEN
+cov_enums_core.tsv tag_value:* (enum-valued tags)	yes, unchanged	every distinct value has a row except the sentinels already unnamed on Switch: actor 0x10023 = 39, actor 0x10301 = 22 and 45, marker 0x80001 = -1, marker 0x81005 = -2147483648	none needed	PROVEN
+cov_enums_records.tsv (record enums and flag bits)	yes, unchanged (x360 uses the Switch numbering)	453,634 enum values named, none unnamed; open flag bits only the ones already open on Switch (dynamic-collision bit 17, objective flag bits 1 and 4)	none needed	PROVEN
+cov_enums_core.tsv script_event	yes, unchanged (Switch ids)	1,285 of 1,285 message entries named	X1_script_events.tsv (0..59) equals the Switch ids	PROVEN
+cov_enums_core.tsv formula_identifier_class_switch	yes, unchanged	4,341 tag-map and 1,092 balance identifier uses, all named	X1_formula_source_names.tsv equals the Switch numbering	PROVEN
+cov_enums_core.tsv game_balance_type	yes for the shared ids; four x360-only ids have no Switch name	types 38, 42, 43, 44 occur only on x360	names from the table-field order (X2_gam_tables.tsv column type_name)	SUPPORTED
+attribute ids (Switch attributes table, ps3_attributes.tsv)	no	only 39 of 1,346 x360 ids name the same attribute as the Switch id; 1,336 x360 names exist on Switch under other ids	X1_attributes_tu1.tsv (id, name, switch_id)	PROVEN
+cov_enums_geometry.tsv	yes, unchanged	geometry types parse with the Switch layouts; the enum fields are those of Switch	none needed	SUPPORTED

@@ -1,0 +1,1347 @@
+id	id_hex	name	parameter_type	operator	data_type	default_raw	sync_flags	formula_item	formula_character	switch_id
+0	0x0	Axe_Bad_Data	4294967295	0	0	0	0			0
+1	0x1	Attribute_Timer	5	0	1	0	222			1
+2	0x2	Attribute_Pool	4294967295	0	1	0	0			2
+3	0x3	Death_Count	4294967295	0	1	0	1			3
+4	0x4	DualWield_Hand	4294967295	0	1	0	128			4
+5	0x5	DualWield_Hand_Next	4294967295	0	1	0	1			5
+6	0x6	DualWield_Hands_Swapped	4294967295	0	1	0	1			6
+7	0x7	Respawn_Game_Time	4294967295	0	1	0	1			7
+8	0x8	Backpack_Slots	4294967295	0	1	0	1			8
+9	0x9	Shared_Stash_Slots	4294967295	0	1	0	1			9
+10	0xa	Strength	4294967295	0	0	0	136			10
+11	0xb	Dexterity	4294967295	0	0	0	136			11
+12	0xc	Intelligence	4294967295	0	0	0	136			12
+13	0xd	Vitality	4294967295	0	0	0	136			13
+14	0xe	Strength_Total	4294967295	0	0	0	136		((Strength + Stats_All_Bonus + Strength_Bonus + (Strength_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Strength_Bonus_Percent)) * (1 - Strength_Reduction_Percent)	14
+15	0xf	Dexterity_Total	4294967295	0	0	0	136		((Dexterity + Stats_All_Bonus + Dexterity_Bonus + (Dexterity_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Dexterity_Bonus_Percent)) * (1 - Dexterity_Reduction_Percent)	15
+16	0x10	Intelligence_Total	4294967295	0	0	0	136		((Intelligence + Stats_All_Bonus + Intelligence_Bonus + (Intelligence_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Intelligence_Bonus_Percent)) * (1 - Intelligence_Reduction_Percent)	16
+17	0x11	Vitality_Total	4294967295	0	0	0	136		((Vitality + Stats_All_Bonus + Vitality_Bonus + (Vitality_Item * Core_Attributes_From_Item_Bonus_Multiplier)) * (1 + Vitality_Bonus_Percent)) * (1 - Vitality_Reduction_Percent)	17
+18	0x12	Strength_Bonus	4294967295	0	0	0	136			18
+19	0x13	Dexterity_Bonus	4294967295	0	0	0	136			19
+20	0x14	Intelligence_Bonus	4294967295	0	0	0	136			20
+21	0x15	Vitality_Bonus	4294967295	0	0	0	136			21
+22	0x16	Strength_Bonus_Percent	4294967295	0	0	0	136			22
+23	0x17	Dexterity_Bonus_Percent	4294967295	0	0	0	136			23
+24	0x18	Intelligence_Bonus_Percent	4294967295	0	0	0	136			24
+25	0x19	Vitality_Bonus_Percent	4294967295	0	0	0	136			25
+26	0x1a	Strength_Reduction_Percent	4294967295	1	0	0	136			26
+27	0x1b	Dexterity_Reduction_Percent	4294967295	1	0	0	136			27
+28	0x1c	Intelligence_Reduction_Percent	4294967295	1	0	0	136			28
+29	0x1d	Vitality_Reduction_Percent	4294967295	1	0	0	136			29
+30	0x1e	Primary_Damage_Attribute	4294967295	3	1	4294967295	222			30
+31	0x1f	Armor	4294967295	0	0	0	136			31
+32	0x20	Armor_Bonus_Percent	4294967295	0	0	0	136			32
+33	0x21	Armor_Item	4294967295	0	0	0	136		0	33
+34	0x22	Armor_Bonus_Item	4294967295	0	0	0	136			34
+35	0x23	Armor_Item_Percent	4294967295	0	0	0	136		0	35
+36	0x24	Armor_Item_SubTotal	4294967295	0	0	0	136	FLOOR((Armor_Item + Armor_Bonus_Item) * (Armor_Item_Percent + 1))		36
+37	0x25	Armor_Item_Total	4294967295	0	0	0	136	(Armor_Item > 0)?(Max(Armor_Item_SubTotal, 1)):Armor_Item_SubTotal		37
+38	0x26	Armor_Total	4294967295	0	0	0	136		FLOOR((Armor + Armor_Item_Total + Strength_Total) * (Armor_Bonus_Percent + 1))	38
+39	0x27	Experience_Granted	4294967295	0	1	0	1			
+40	0x28	Experience_Next_Hi	4294967295	0	1	0	1			41
+41	0x29	Experience_Next_Lo	4294967295	0	1	0	1			42
+42	0x2a	Alt_Experience_Next_Hi	4294967295	0	1	0	1			43
+43	0x2b	Alt_Experience_Next_Lo	4294967295	0	1	0	1			44
+44	0x2c	Rest_Experience_Hi	4294967295	0	1	0	1			45
+45	0x2d	Rest_Experience_Lo	4294967295	0	1	0	1			46
+46	0x2e	Rest_Experience_Bonus_Percent	4294967295	1	0	0	1			47
+47	0x2f	Gold_Granted	4294967295	0	1	0	136			48
+48	0x30	Gold	4294967295	0	1	0	136			49
+49	0x31	Gold_Find	4294967295	0	0	0	136			50
+50	0x32	Gold_Find_Uncapped	4294967295	0	0	0	136			51
+51	0x33	Gold_Find_Handicap	4294967295	0	0	0	136			52
+52	0x34	Gold_Find_Alt_Levels_Total	4294967295	0	0	0	136		Alt_Level * 0.00	53
+53	0x35	Gold_Find_Community_Buff	4294967295	0	0	0	136			54
+54	0x36	Gold_Find_Total	4294967295	0	0	0	136		((1.0 + Gold_Find_Uncapped + Gold_Find_Alt_Levels_Total + Gold_Find + Gold_Find_Community_Buff) * (1.0 + Gold_Find_Handicap)) - 1.0	56
+55	0x37	Level	4294967295	0	1	0	222			57
+56	0x38	Level_Cap	4294967295	0	1	0	1			58
+57	0x39	Alt_Level	4294967295	0	1	0	1			59
+58	0x3a	Magic_Find	4294967295	0	0	0	136			60
+59	0x3b	Magic_Find_Uncapped	4294967295	0	0	0	136			61
+60	0x3c	Magic_Find_Handicap	4294967295	0	0	0	136			62
+61	0x3d	Magic_Find_Alt_Levels_Total	4294967295	0	0	0	136		Alt_Level * 0.00	63
+62	0x3e	Magic_Find_Capped_Subtotal	4294967295	0	0	0	136		Min((Magic_Find_Alt_Levels_Total + Magic_Find), 3.0)	64
+63	0x3f	Magic_Find_Total	4294967295	0	0	0	136		Magic_Find_Uncapped + Magic_Find_Handicap + Magic_Find_Capped_Subtotal	65
+64	0x40	Magic_And_Gold_Find_Suppressed	4294967295	1	1	0	222			66
+65	0x41	Treasure_Find	14	0	0	0	136			67
+66	0x42	Legendary_Find_Community_Buff	4294967295	0	0	0	136			68
+67	0x43	Resource_Cost_Reduction_Amount	10	0	1	0	136			69
+68	0x44	Resource_Cost_Reduction_Total	10	0	0	0	136		Resource_Cost_Reduction_Amount	70
+69	0x45	Resource_Set_Point_Bonus	10	0	0	0	136			71
+70	0x46	Faster_Healing_Percent	4294967295	0	0	0	136			72
+71	0x47	Spending_Resource_Heals_Percent	10	0	0	0	136			73
+72	0x48	Bonus_Healing_Received_Percent	4294967295	0	0	0	136			74
+73	0x49	Reduced_Healing_Received_Percent	4294967295	0	0	0	136			75
+74	0x4a	Healing_Well_Restores_Resource	4294967295	1	1	0	136			76
+75	0x4b	Experience_Bonus	4294967295	0	0	0	136			77
+76	0x4c	Experience_Bonus_Percent	4294967295	0	0	0	136			78
+77	0x4d	Experience_Bonus_Percent_Handicap	4294967295	0	0	0	136			79
+78	0x4e	Experience_Bonus_Percent_Total	4294967295	0	0	0	136		Experience_Bonus_Percent + Experience_Bonus_Percent_Handicap	80
+79	0x4f	Health_Globe_Bonus_Chance	4294967295	0	0	0	136			82
+80	0x50	Health_Globe_Bonus_Mult_Chance	4294967295	0	0	0	136			83
+81	0x51	Powerup_Globe_Bonus_Chance	4294967295	0	0	0	136			84
+82	0x52	Powerup_Globe_Bonus_Mult_Chance	4294967295	0	0	0	136			85
+83	0x53	Health_Globe_Bonus_Health	4294967295	0	0	0	136			86
+84	0x54	Increased_Health_From_Globes_Percent	4294967295	0	0	0	136			87
+85	0x55	Increased_Health_From_Globes_Percent_Total	4294967295	0	0	0	136		Increased_Health_From_Globes_Percent	88
+86	0x56	Bonus_Health_Percent_Per_Second_From_Globes	4294967295	0	0	0	136			89
+87	0x57	Bonus_Health_Percent_Per_Second_From_Globes_Total	4294967295	0	0	0	136		Bonus_Health_Percent_Per_Second_From_Globes	90
+88	0x58	Mana_Gained_From_Globes_Percent	4294967295	0	0	0	136			91
+89	0x59	Mana_Gained_From_Globes	4294967295	0	0	0	136			92
+90	0x5a	Resistance	0	0	0	0	136			93
+91	0x5b	Resistance_Percent	0	0	0	0	136			94
+92	0x5c	Resistance_Total	0	0	0	0	222		(Resistance + Resistance_All#NONE + Resistance_From_Intelligence#NONE) * ((Resistance_Percent_All#NONE + Resistance_Percent + 1))	95
+93	0x5d	Resistance_All	4294967295	0	0	0	136			96
+94	0x5e	Resistance_Percent_All	4294967295	0	0	0	136			97
+95	0x5f	Resistance_From_Intelligence	4294967295	0	0	0	128		(Intelligence_Total * 0.1)	98
+96	0x60	Class_Damage_Reduction_Percent	4294967295	0	0	0	128			99
+97	0x61	Skill	4	0	1	0	136			100
+98	0x62	Skill_Total	4	0	1	0	136		Skill	102
+99	0x63	TeamID	4294967295	1	1	4294967295	222			103
+100	0x64	Team_Override	4294967295	1	1	4294967295	222			104
+101	0x65	Invulnerable	4294967295	1	1	0	222			105
+102	0x66	Loading	4294967295	1	1	0	222			106
+103	0x67	Loading_Player_ACD	4294967295	3	1	4294967295	0			107
+104	0x68	Loading_Power_SNO	4294967295	3	1	4294967295	0			108
+105	0x69	Loading_Anim_Tag	4294967295	3	1	4294967295	1			109
+106	0x6a	Loading_NewGame	4294967295	1	1	0	0			110
+107	0x6b	Auto_Porting_To_Save_Point	4294967295	1	1	0	0			111
+108	0x6c	No_Damage	4294967295	1	1	0	222			112
+109	0x6d	No_AutoPickup	4294967295	1	1	0	8			113
+110	0x6e	Light_Radius_Percent_Bonus	0	0	0	0	136			114
+111	0x6f	Hitpoints_Cur	4294967295	0	0	0	222		Min(Hitpoints_Cur.Agg, Hitpoints_Max_Total)	115
+112	0x70	Hitpoints_Factor_Level	4294967295	0	0	0	222			116
+113	0x71	Hitpoints_Factor_Vitality	4294967295	0	0	0	222			117
+114	0x72	Hitpoints_Total_From_Vitality	4294967295	0	0	0	222		Vitality_Total * Hitpoints_Factor_Vitality	118
+115	0x73	Hitpoints_Total_From_Level	4294967295	0	0	0	222		(Level - 1) * Hitpoints_Factor_Level	119
+116	0x74	Hitpoints_Granted	4294967295	0	0	0	222			120
+117	0x75	Hitpoints_Granted_Duration	4294967295	0	1	0	222			121
+118	0x76	Hitpoints_Max	4294967295	0	0	0	222			122
+119	0x77	Hitpoints_Max_Bonus	4294967295	0	0	0	222			123
+120	0x78	Hitpoints_Max_Total	4294967295	0	0	0	222		Max((Hitpoints_Max + Hitpoints_Total_From_Level + Hitpoints_Total_From_Vitality + Hitpoints_Max_Bonus) * (Hitpoints_Max_Percent_Bonus + Hitpoints_Max_Percent_Bonus_Item + 1), 1)	124
+121	0x79	Hitpoints_Percent	4294967295	0	0	0	222			125
+122	0x7a	Hitpoints_Regen_Per_Second	4294967295	0	0	0	222			126
+123	0x7b	Hitpoints_Regen_Per_Second_Bonus	4294967295	0	0	0	222			127
+124	0x7c	Hitpoints_Regen_Bonus_Percent	4294967295	0	0	0	222			129
+125	0x7d	Hitpoints_Regen_Per_Second_Subtotal	4294967295	0	0	0	222		(Hitpoints_Regen_Per_Second + Hitpoints_Regen_Per_Second_Bonus) * (1 + Hitpoints_Regen_Bonus_Percent)	130
+126	0x7e	Hitpoints_Regen_Reduction_Percent	4294967295	0	0	0	222			131
+127	0x7f	Hitpoints_Regen_Per_Second_Health_Globe	4294967295	0	0	0	0			132
+128	0x80	Hitpoints_Regen_Per_Second_Total	4294967295	0	0	0	222		(Hitpoints_Regen_Per_Second_Subtotal * Pin(1 - Hitpoints_Regen_Reduction_Percent, 0, 1)) + Hitpoints_Regen_Per_Second_Health_Globe	133
+129	0x81	Hitpoints_Max_Percent_Bonus	4294967295	0	0	0	222			134
+130	0x82	Hitpoints_Max_Percent_Bonus_Item	4294967295	0	0	0	222			135
+131	0x83	Hitpoints_Healed_Target	4294967295	0	0	0	128			137
+132	0x84	Hitpoints_Frozen	4294967295	1	1	0	222			138
+133	0x85	DOT_Damage_Taken_Queued	12	1	0	0	0			140
+134	0x86	DOT_Damage_Taken_Queued_Tick	12	1	1	0	0			141
+135	0x87	DOT_Damage_Taken_Queued_Player	4294967295	1	0	0	0			142
+136	0x88	DOT_Damage_Taken_Queued_Player_Tick	4294967295	1	1	0	0			143
+137	0x89	Healing_Received_Queued	4294967295	1	0	0	0			144
+138	0x8a	Healing_Received_Queued_Tick	4294967295	1	1	0	0			145
+139	0x8b	Resource_Type_Primary	4294967295	3	1	4294967295	128			148
+140	0x8c	Resource_Type_Secondary	4294967295	3	1	4294967295	128			149
+141	0x8d	Resource_Cur	10	0	0	0	128		Max(Resource_Cur.Agg, 0)	150
+142	0x8e	Resource_Max	10	0	0	0	128			151
+143	0x8f	Resource_Max_Bonus	10	0	0	0	222			152
+144	0x90	Resource_Max_Total	10	0	0	0	136		Max((Resource_Max + ((Level#NONE - 1) * Resource_Factor_Level) + Resource_Max_Bonus) * (Resource_Max_Percent_Bonus + 1), 0)	153
+145	0x91	Resource_Factor_Level	10	0	0	0	128			154
+146	0x92	Resource_Granted	10	0	0	0	136			155
+147	0x93	Resource_Granted_Duration	10	0	1	0	136			156
+148	0x94	Resource_Percent	10	0	0	0	136			157
+149	0x95	Resource_Regen_Per_Second	10	0	0	0	136			158
+150	0x96	Resource_Regen_Bonus_Percent	10	0	0	0	136			159
+151	0x97	Resource_Regen_Total	10	0	0	0	136		Resource_Regen_Per_Second * (1 + Resource_Regen_Bonus_Percent) + (Resource_Regen_Percent_Per_Second * Resource_Max_Total)	160
+152	0x98	Resource_Max_Percent_Bonus	10	0	0	0	136		Resource_Percent	162
+153	0x99	Resource_Capacity_Used	10	0	0	0	136			163
+154	0x9a	Resource_Effective_Max	10	0	0	0	136		Resource_Max_Total - Resource_Capacity_Used	164
+155	0x9b	Resource_Regen_Percent_Per_Second	10	0	0	0	136			165
+156	0x9c	Resource_Degeneration_Stop_Point	10	0	0	0	136			166
+157	0x9d	Movement_Scalar	4294967295	0	0	0	136			171
+158	0x9e	Walking_Rate	4294967295	0	0	0	136			172
+159	0x9f	Running_Rate	4294967295	0	0	0	136			173
+160	0xa0	Sprinting_Rate	4294967295	0	0	0	136			174
+161	0xa1	Strafing_Rate	4294967295	0	0	0	136			175
+162	0xa2	Walking_Rate_Total	4294967295	0	0	0	136		Walking_Rate * Movement_Scalar_Total	176
+163	0xa3	Running_Rate_Total	4294967295	0	0	0	168		Running_Rate * Movement_Scalar_Total	177
+164	0xa4	Last_Running_Rate	4294967295	0	0	0	0			178
+165	0xa5	Sprinting_Rate_Total	4294967295	0	0	0	136		Sprinting_Rate * Movement_Scalar_Total	179
+166	0xa6	Strafing_Rate_Total	4294967295	0	0	0	136		Strafing_Rate * Movement_Scalar_Total	180
+167	0xa7	Movement_Bonus_Total	4294967295	4294967295	0	0	136	0	Movement_Bonus_Run_Speed	181
+168	0xa8	Movement_Scalar_Subtotal	4294967295	0	0	0	136	0	Max(0.1, Movement_Scalar) * (1 + Movement_Bonus_Total) * (1 - Movement_Scalar_Reduction_Percent * (1 - Min(1, Movement_Scalar_Reduction_Resistance)))	182
+169	0xa9	Movement_Scalar_Capped_Total	4294967295	0	0	0	136	0	Min(Movement_Scalar_Cap, Movement_Scalar_Subtotal)	183
+170	0xaa	Movement_Scalar_Uncapped_Bonus	4294967295	0	0	0	136			184
+171	0xab	Movement_Scalar_Total	4294967295	0	0	0	136	0	Movement_Scalar_Capped_Total + Movement_Scalar_Uncapped_Bonus	185
+172	0xac	Movement_Bonus_Run_Speed	4294967295	1	0	0	136			186
+173	0xad	Movement_Scalar_Cap	4294967295	0	0	0	136			187
+174	0xae	Casting_Speed	4294967295	0	0	0	136			188
+175	0xaf	Casting_Speed_Bonus	4294967295	0	0	0	136			189
+176	0xb0	Casting_Speed_Total	4294967295	0	0	0	136		(Casting_Speed + Casting_Speed_Bonus) * Max(0.1, 1 + Casting_Speed_Percent)	190
+177	0xb1	Always_Hits	4294967295	1	1	0	130			191
+178	0xb2	Hit_Chance	4294967295	0	0	0	136			192
+179	0xb3	Knockback_Attack_Scalar	4294967295	0	0	0	136			193
+180	0xb4	Attacks_Per_Second_Item	4294967295	0	0	0	136		0	194
+181	0xb5	Attacks_Per_Second_Item_Percent	4294967295	0	0	0	136		0	195
+182	0xb6	Attacks_Per_Second_Item_Subtotal	4294967295	0	0	0	136	Attacks_Per_Second_Item * (1 + Attacks_Per_Second_Item_Percent)	0	196
+183	0xb7	Attacks_Per_Second_Item_Bonus	4294967295	0	0	0	136			197
+184	0xb8	Attacks_Per_Second_Item_Total	4294967295	0	0	0	136	(Attacks_Per_Second_Item_Subtotal + Attacks_Per_Second_Item_Bonus)		198
+185	0xb9	Attacks_Per_Second	4294967295	0	0	0	136	0		199
+186	0xba	Attacks_Per_Second_Bonus	4294967295	0	0	0	136	0		200
+187	0xbb	Attacks_Per_Second_Total	4294967295	0	0	0	136	0	Max(0.01, (((Attacks_Per_Second_Item_CurrentHand > 0.0) ? Attacks_Per_Second_Item_CurrentHand : Attacks_Per_Second) + Attacks_Per_Second_Bonus + Attacks_Per_Second_Item_Bonus) * Attacks_Per_Second_Percent_Subtotal)	201
+188	0xbc	Attacks_Per_Second_Percent_Cap	4294967295	0	0	0	136			202
+189	0xbd	Attacks_Per_Second_Percent	4294967295	0	0	0	136			203
+190	0xbe	Attacks_Per_Second_Percent_Uncapped	4294967295	0	0	0	136			204
+191	0xbf	Attacks_Per_Second_Percent_Reduction	4294967295	0	0	0	136			205
+192	0xc0	Attacks_Per_Second_Percent_Subtotal	4294967295	0	0	0	136	0	Max(0.1, (1 + (Min(Attacks_Per_Second_Percent_Cap, Attacks_Per_Second_Percent)) + Attacks_Per_Second_Percent_Uncapped) * (1 - Attacks_Per_Second_Percent_Reduction))	206
+193	0xc1	AI_Cooldown_Reduction_Percent	4294967295	0	0	0	0	0		207
+194	0xc2	Power_Cooldown_Reduction_Percent_Cap	4294967295	0	0	0	136			
+195	0xc3	Power_Cooldown_Reduction_Percent	4	7	0	0	136			209
+196	0xc4	Power_Cooldown_Reduction_Percent_All	4294967295	7	0	0	136			210
+197	0xc5	Power_Cooldown_Reduction_Percent_All_Capped	4294967295	7	0	0	136	0	Min(Power_Cooldown_Reduction_Percent_Cap, Power_Cooldown_Reduction_Percent_All)	211
+198	0xc6	Damage_Delta	0	0	0	0	136			212
+199	0xc7	Damage_Delta_Total	0	0	0	0	136	Max(Damage_Delta - Damage_Bonus_Min + Damage_Weapon_Delta_Total_CurrentHand, 0)	Max(Damage_Delta - Damage_Bonus_Min + Damage_Weapon_Delta_Total_CurrentHand, 0)	213
+200	0xc8	Damage_Min	0	0	0	0	136			214
+201	0xc9	Damage_Bonus_Min	0	0	0	0	136			215
+202	0xca	Damage_Min_Total	0	0	0	0	136	Damage_Min_Subtotal	Damage_Min_Subtotal	216
+203	0xcb	Damage_Delta_Total_All	4294967295	0	0	0	136	(Damage_Delta_Total#Physical + Damage_Delta_Total#Fire + Damage_Delta_Total#Cold + Damage_Delta_Total#Lightning + Damage_Delta_Total#Poison + Damage_Delta_Total#Arcane + Damage_Delta_Total#Holy)		217
+204	0xcc	Damage_Min_Total_All	4294967295	0	0	0	136	(Damage_Min_Total#Physical + Damage_Min_Total#Fire + Damage_Min_Total#Cold + Damage_Min_Total#Lightning + Damage_Min_Total#Poison + Damage_Min_Total#Arcane + Damage_Min_Total#Holy)		218
+205	0xcd	Damage_Average_Total_All	4294967295	0	0	0	136	(Damage_Min_Total_All + (Damage_Delta_Total_All/2))		219
+206	0xce	Damage_Min_Subtotal	0	0	0	0	136	Damage_Min + Damage_Bonus_Min + Damage_Weapon_Min_Total_CurrentHand	Damage_Min + Damage_Bonus_Min + Damage_Weapon_Min_Total_CurrentHand	220
+207	0xcf	Damage_Percent_All_From_Skills	4294967295	0	0	0	136			221
+208	0xd0	Damage_Weapon_Delta	0	0	0	0	136			222
+209	0xd1	Damage_Weapon_Delta_SubTotal	0	0	0	0	136	(Damage_Weapon_Delta > 0.0) ? (Max(1, Damage_Weapon_Delta - Damage_Weapon_Bonus_Min)) : Damage_Weapon_Delta		223
+210	0xd2	Damage_Weapon_Max	0	0	0	0	136	(Damage_Weapon_Min + Damage_Weapon_Delta)		224
+211	0xd3	Damage_Weapon_Max_Total	0	0	0	0	136	(Damage_Weapon_Min_Total + Damage_Weapon_Delta_Total)		225
+212	0xd4	Damage_Weapon_Max_Total_All	4294967295	0	0	0	136	(Damage_Weapon_Max_Total#Physical + Damage_Weapon_Max_Total#Fire + Damage_Weapon_Max_Total#Cold + Damage_Weapon_Max_Total#Lightning + Damage_Weapon_Max_Total#Poison + Damage_Weapon_Max_Total#Arcane + Damage_Weapon_Max_Total#Holy)		226
+213	0xd5	Damage_Weapon_Delta_Total	0	0	0	0	136	Max((Damage_Weapon_Delta_SubTotal + Damage_Weapon_Bonus_Delta + Damage_Weapon_Bonus_Delta_X1) * (1 + Damage_Weapon_Percent_Total), 0)		227
+214	0xd6	Damage_Weapon_Delta_Total_All	4294967295	0	0	0	136	(Damage_Weapon_Delta_Total#Physical + Damage_Weapon_Delta_Total#Fire + Damage_Weapon_Delta_Total#Cold + Damage_Weapon_Delta_Total#Lightning + Damage_Weapon_Delta_Total#Poison + Damage_Weapon_Delta_Total#Arcane + Damage_Weapon_Delta_Total#Holy)		228
+215	0xd7	Damage_Weapon_Bonus_Delta	0	0	0	0	136			229
+216	0xd8	Damage_Weapon_Bonus_Delta_X1	0	0	0	0	136			230
+217	0xd9	Damage_Weapon_Min	0	0	0	0	136			231
+218	0xda	Damage_Weapon_Min_Total	0	0	0	0	136	(Damage_Weapon_Min + Damage_Weapon_Bonus_Min + Damage_Weapon_Bonus_Min_X1 + Damage_Weapon_Bonus_Flat) * (1 + Damage_Weapon_Percent_Total)		232
+219	0xdb	Damage_Weapon_Min_Total_All	4294967295	0	0	0	136	(Damage_Weapon_Min_Total#Physical + Damage_Weapon_Min_Total#Fire + Damage_Weapon_Min_Total#Cold + Damage_Weapon_Min_Total#Lightning + Damage_Weapon_Min_Total#Poison + Damage_Weapon_Min_Total#Arcane + Damage_Weapon_Min_Total#Holy)		233
+220	0xdc	Damage_Weapon_Average	0	0	0	0	136	(Damage_Weapon_Min + (Damage_Weapon_Delta/2))		234
+221	0xdd	Damage_Weapon_Average_Total	0	0	0	0	136	(Damage_Weapon_Min_Total + (Damage_Weapon_Delta_Total/2))		235
+222	0xde	Damage_Weapon_Average_Total_All	4294967295	0	0	0	136	(Damage_Weapon_Min_Total_All + (Damage_Weapon_Delta_Total_All/2))		236
+223	0xdf	Damage_Weapon_Bonus_Min	0	0	0	0	136			237
+224	0xe0	Damage_Weapon_Bonus_Min_X1	0	0	0	0	136			238
+225	0xe1	Damage_Weapon_Bonus_Flat	0	0	0	0	136			239
+226	0xe2	Damage_Weapon_Percent_Bonus	0	0	0	0	136			240
+227	0xe3	Damage_Weapon_Percent_All	4294967295	0	0	0	136			241
+228	0xe4	Damage_Weapon_Percent_Total	0	0	0	0	136	Damage_Weapon_Percent_Bonus + Damage_Weapon_Percent_All#NONE		242
+229	0xe5	Damage_Type_Percent_Bonus	0	0	0	0	136			243
+230	0xe6	Damage_Dealt_Percent_Bonus	0	0	0	0	136			244
+231	0xe7	Damage_Percent_Bonus_Witchdoctor	4294967295	0	0	0	136			245
+232	0xe8	Damage_Percent_Bonus_Wizard	4294967295	0	0	0	136			246
+233	0xe9	Crit_Percent_Base	4294967295	0	0	0	136			247
+234	0xea	Crit_Percent_Bonus_Capped	4294967295	0	0	0	136			248
+235	0xeb	Crit_Percent_Bonus_Uncapped	4294967295	0	0	0	136			249
+236	0xec	Crit_Percent_Bonus_Hide_From_DPS	4294967295	0	0	0	136			250
+237	0xed	Crit_Percent_Cap	4294967295	0	0	0	136			251
+238	0xee	Crit_Damage_Cap	4294967295	0	0	0	136			252
+239	0xef	Crit_Damage_Percent	4294967295	0	0	0	136			253
+240	0xf0	Crit_Damage_Percent_Uncapped	4294967295	0	0	0	136			254
+241	0xf1	Crit_Effect_Time	4294967295	3	1	0	136			255
+242	0xf2	Pierce_Chance	4294967295	0	0	0	136			256
+243	0xf3	Damage_Absorb_Percent	4294967295	0	0	0	136			257
+244	0xf4	Damage_Reduction_Total	0	0	0	0	136			258
+245	0xf5	Damage_Reduction_Current	0	0	0	0	136			259
+246	0xf6	Damage_Reduction_Last_Tick	0	3	1	0	136			260
+247	0xf7	Block_Chance	4294967295	0	0	0	136			261
+248	0xf8	Block_Chance_Sub_Total	4294967295	0	0	0	136		Min(0.75, Block_Chance + Block_Chance_Item_Total)	262
+249	0xf9	Block_Chance_Bonus_Item	4294967295	0	0	0	136			263
+250	0xfa	Block_Chance_Item	4294967295	0	0	0	136		0	264
+251	0xfb	Block_Chance_Item_Total	4294967295	0	0	0	136	Block_Chance_Item + Block_Chance_Bonus_Item		265
+252	0xfc	Block_Chance_Uncapped_Bonus	4294967295	0	0	0	136			266
+253	0xfd	Block_Chance_Capped_Total	4294967295	0	0	0	136		Min(1.0, Block_Chance_Sub_Total + Block_Chance_Uncapped_Bonus)	267
+254	0xfe	Block_Amount	4294967295	0	0	0	136			268
+255	0xff	Block_Amount_Bonus_Percent	4294967295	0	0	0	136			269
+256	0x100	Block_Amount_Total_Min	4294967295	0	0	0	136		(Block_Amount + Block_Amount_Item_Min + Block_Amount_Item_Bonus) * (1 + Block_Amount_Bonus_Percent)	270
+257	0x101	Block_Amount_Total_Max	4294967295	0	0	0	136		(Block_Amount + Block_Amount_Item_Min + Block_Amount_Item_Delta + Block_Amount_Item_Bonus) * (1 + Block_Amount_Bonus_Percent)	271
+258	0x102	Block_Amount_Item_Min	4294967295	0	0	0	136			272
+259	0x103	Block_Amount_Item_Delta	4294967295	0	0	0	136			273
+260	0x104	Block_Amount_Item_Bonus	4294967295	0	0	0	136			274
+261	0x105	Dodge_Chance_Bonus	4294967295	7	0	0	136			275
+262	0x106	Dodge_Chance_Bonus_Melee	4294967295	7	0	0	136			276
+263	0x107	Dodge_Chance_Bonus_Ranged	4294967295	7	0	0	136			277
+264	0x108	Dodge_Chance_Bonus_Additive	4294967295	0	0	0	136			278
+265	0x109	Dodge_Chance_Bonus_Hide_From_Toughness	4294967295	0	0	0	136			279
+266	0x10a	Cannot_Dodge	4294967295	1	1	0	136			280
+267	0x10b	Get_Hit_Current	4294967295	0	0	0	1			281
+268	0x10c	Get_Hit_Max_Base	4294967295	0	0	0	1			282
+269	0x10d	Get_Hit_Max_Per_Level	4294967295	0	0	0	1			283
+270	0x10e	Get_Hit_Max	4294967295	0	0	0	1		Get_Hit_Max_Base + (Get_Hit_Max_Per_Level * Level)	284
+271	0x10f	Get_Hit_Recovery_Base	4294967295	0	0	0	1			285
+272	0x110	Get_Hit_Recovery_Per_Level	4294967295	0	0	0	1			286
+273	0x111	Get_Hit_Recovery	4294967295	0	0	0	136		Get_Hit_Recovery_Base + (Get_Hit_Recovery_Per_Level * Level)	287
+274	0x112	Get_Hit_Damage	4294967295	0	0	0	136			288
+275	0x113	Get_Hit_Damage_Scalar	4294967295	0	0	0	1			289
+276	0x114	Last_Damage_MainActor	4294967295	3	1	4294967295	1			290
+277	0x115	Last_ACD_Attacked	4294967295	3	1	4294967295	1			291
+278	0x116	Ignores_Critical_Hits	4294967295	1	1	0	0			292
+279	0x117	Immunity	0	1	1	0	222			293
+280	0x118	Untargetable	4294967295	1	1	0	222			294
+281	0x119	Immobolize	4294967295	1	1	0	1			295
+282	0x11a	Immune_To_Knockback	4294967295	1	1	0	0			296
+283	0x11b	Power_Immobilize	4294967295	1	1	0	1			297
+284	0x11c	Stun_Chance	4294967295	0	0	0	136			298
+285	0x11d	Stun_Length	4294967295	0	0	0	136			299
+286	0x11e	Stun_Recovery	4294967295	0	0	0	136			300
+287	0x11f	Stun_Recovery_Speed	4294967295	0	0	0	136			301
+288	0x120	Stunned	4294967295	1	1	0	222			302
+289	0x121	Stun_Immune	4294967295	1	1	0	0			303
+290	0x122	Poison_Length_Reduction	4294967295	0	0	0	136			304
+291	0x123	Bleeding	4294967295	1	1	0	222			305
+292	0x124	Bleed_Duration	4294967295	0	0	0	1			306
+293	0x125	Chilled	4294967295	1	1	0	222			307
+294	0x126	Freeze_Length_Reduction	4294967295	0	0	0	128			308
+295	0x127	Freeze_Immune	4294967295	1	1	0	0			309
+296	0x128	Chill_Duration_Bonus_Percent	4294967295	0	0	0	136			310
+297	0x129	Freeze_Duration_Bonus_Percent	4294967295	0	0	0	136			311
+298	0x12a	Stun_Duration_Bonus_Percent	4294967295	0	0	0	136			312
+299	0x12b	Immobilize_Duration_Bonus_Percent	4294967295	0	0	0	136			313
+300	0x12c	Fear_Duration_Bonus_Percent	4294967295	0	0	0	136			314
+301	0x12d	Blind_Duration_Bonus_Percent	4294967295	0	0	0	136			315
+302	0x12e	Charm_Duration_Bonus_Percent	4294967295	0	0	0	136			316
+303	0x12f	Slow_Duration_Bonus_Percent	4294967295	0	0	0	136			317
+304	0x130	Webbed	4294967295	1	1	0	222			318
+305	0x131	Slow	4294967295	1	1	0	222			319
+306	0x132	FireAura	4294967295	1	1	0	222			320
+307	0x133	LightningAura	4294967295	1	1	0	222			321
+308	0x134	ColdAura	4294967295	1	1	0	222			322
+309	0x135	PoisonAura	4294967295	1	1	0	222			323
+310	0x136	Blind	4294967295	1	1	0	222			324
+311	0x137	Enraged	4294967295	1	1	0	222			325
+312	0x138	Slowdown_Immune	4294967295	1	1	0	0			326
+313	0x139	Gethit_Immune	4294967295	1	1	0	0			327
+314	0x13a	AttackSpeed_Reduction_Immune	4294967295	1	1	0	0			328
+315	0x13b	Suffocation_Per_Second	4294967295	0	0	0	1			329
+316	0x13c	Suffocation_Unit_Value	4294967295	1	0	0	1			330
+317	0x13d	Thorns_Percent	0	0	0	0	136			331
+318	0x13e	Thorns_Percent_All	4294967295	0	0	0	136			332
+319	0x13f	Thorns_Percent_Total	0	0	0	0	136		Thorns_Percent + Thorns_Percent_All#NONE	333
+320	0x140	Thorns_Fixed	0	0	0	0	136			334
+321	0x141	Thorns_AOE_Radius	4294967295	0	0	0	136			337
+322	0x142	Thorns_Has_Damage_Type	0	1	1	0	136			338
+323	0x143	On_Hit_Thorns_Proc_Chance	4294967295	0	0	0	136			
+324	0x144	Steal_Health_Percent	4294967295	0	0	0	136			340
+325	0x145	Steal_Mana_Percent	4294967295	0	0	0	136			341
+326	0x146	Resource_On_Hit	10	0	0	0	136			342
+327	0x147	Resource_On_Hit_Bonus_Pct	10	0	0	0	136			343
+328	0x148	Resource_On_Hit_Bonus	10	0	0	0	136			344
+329	0x149	Resource_On_Kill	10	0	0	0	136			345
+330	0x14a	Resource_On_Crit	10	0	0	0	136			346
+331	0x14b	Hitpoints_On_Hit	4294967295	0	0	0	136			347
+332	0x14c	Hitpoints_On_Kill	4294967295	0	0	0	136			348
+333	0x14d	Hitpoints_On_Kill_Reduction_Percent	4294967295	0	0	0	136			349
+334	0x14e	Hitpoints_On_Kill_Total	4294967295	0	0	0	136		Hitpoints_On_Kill * Pin(1 - Hitpoints_On_Kill_Reduction_Percent, 0, 1)	350
+335	0x14f	Damage_To_Mana	4294967295	0	0	0	136			351
+336	0x150	Last_Proc_Time	4294967295	3	1	0	136			352
+337	0x151	Damage_Power_Delta	0	0	0	0	136			353
+338	0x152	Damage_Power_Min	0	0	0	0	136			354
+339	0x153	Rope_Overlay	4294967295	3	1	4294967295	222			355
+340	0x154	General_Cooldown	4294967295	3	1	4294967295	1			356
+341	0x155	Power_Cooldown	4	1	1	4294967295	1			357
+342	0x156	Power_Cooldown_Start	4	1	1	4294967295	1			358
+343	0x157	Proc_Cooldown	4294967295	1	1	0	1			359
+344	0x158	Emote_Cooldown	4294967295	1	1	0	1			360
+345	0x159	Projectile_Speed	4294967295	0	0	0	222			361
+346	0x15a	Projectile_Speed_Increase_Percent	4294967295	0	0	0	222			362
+347	0x15b	Destroy When Path Blocked	4294967295	1	1	0	0			363
+348	0x15c	Skill_Toggled_State	4	1	1	0	1			364
+349	0x15d	Skill_Charges	4	1	1	0	1			365
+350	0x15e	Act	4294967295	3	1	4294967295	136			368
+351	0x15f	Difficulty	4294967295	3	1	4294967295	136			369
+352	0x160	Last_Damage_Amount	4294967295	3	0	4294967295	0			370
+353	0x161	In_Knockback	4294967295	1	1	0	0			371
+354	0x162	Amplify_Damage_Type_Percent	0	0	0	0	0			372
+355	0x163	Amplify_Damage_Skill_Percent	4	0	0	0	0			373
+356	0x164	Amplify_Damage_Percent	4294967295	0	0	0	0			374
+357	0x165	Durability_Cur	4294967295	0	1	0	8			375
+358	0x166	Durability_Max	4294967295	0	1	0	8			376
+359	0x167	Durability_Max_Before_Reforge	4294967295	0	1	0	8			
+360	0x168	Durability_Last_Damage	4294967295	0	1	0	0			377
+361	0x169	Item_Quality_Level	4294967295	4	1	4294967295	8			378
+362	0x16a	Item_Quality_Level_Identified	4294967295	4	1	4294967295	0			379
+363	0x16b	Item_Cost_Percent_Bonus	4294967295	0	0	0	8			380
+364	0x16c	Item_Equipped	4294967295	1	1	0	8			381
+365	0x16d	Item_Ping	4294967295	3	1	4294967295	0			
+366	0x16e	Requirement	1	1	0	0	136	FLOOR(Requirement.Agg * (1 + Requirements_Ease_Percent#NONE))		383
+367	0x16f	Requirements_Ease_Percent	4294967295	0	0	0	136		0	384
+368	0x170	Requirement_When_Equipped	1	1	0	0	136			385
+369	0x171	Sockets	4294967295	0	1	0	8		0	386
+370	0x172	Sockets_Filled	4294967295	0	1	0	8		0	387
+371	0x173	Stats_All_Bonus	4294967295	0	0	0	136			388
+372	0x174	Item_Bound_To_ACD	4294967295	4	1	4294967295	8		0	389
+373	0x175	Item_Locked_To_ACD	4294967295	3	1	4294967295	8		0	390
+374	0x176	Item_Binding_Level_Override	4294967295	4	1	0	8		0	391
+375	0x177	Item_LegendaryItem_Level_Override	4294967295	4	1	0	8		0	392
+376	0x178	Item_Targeted_Player_Class	4294967295	4	1	4294967295	8		0	393
+377	0x179	Item_Targeted_Hireling_Class	4294967295	4	1	0	8		0	394
+378	0x17a	ItemStackQuantityHi	4294967295	4	1	0	8			395
+379	0x17b	ItemStackQuantityLo	4294967295	4	1	0	8			396
+380	0x17c	Run_Speed_Granted	4294967295	0	0	0	136			397
+381	0x17d	Run_Speed_Duration	4294967295	0	1	0	136			398
+382	0x17e	IdentifyCost	4294967295	0	1	0	8			399
+383	0x17f	Seed	4294967295	4	1	0	8		0	400
+384	0x180	IsCrafted	4294967295	4	1	0	8		0	401
+385	0x181	IsVendorBought	4294967295	4	1	0	8			402
+386	0x182	DyeType	4294967295	1	1	0	8		0	403
+387	0x183	Loot_2_0_Drop	4294967295	4	1	0	8			404
+388	0x184	EnchantAffix	4294967295	3	1	4294967295	8		0	
+389	0x185	EnchantRangeVal	4294967295	4	1	0	8		0	
+390	0x186	EnchantRangeMax	4294967295	4	1	255	8		0	
+391	0x187	EnchantedAffixOld	4294967295	4	1	4294967295	8		0	418
+392	0x188	EnchantedAffixNew	4294967295	4	1	4294967295	8		0	419
+393	0x189	EnchantedAffixSeed	4294967295	4	1	0	8		0	420
+394	0x18a	EnchantedAffixCount	4294967295	4	1	0	8		0	421
+395	0x18b	TransmogGBID	4294967295	3	1	4294967295	8		0	422
+396	0x18c	HighlySalvageable	4294967295	1	1	0	8		0	424
+397	0x18d	ItemUnlockTimeHi	4294967295	4	1	0	8			425
+398	0x18e	ItemUnlockTimeLo	4294967295	4	1	0	8			426
+399	0x18f	Always_Plays_GetHit	4294967295	1	1	0	0			433
+400	0x190	Hidden	4294967295	1	1	0	222			434
+401	0x191	Alpha Attachments	4294967295	1	1	0	222			436
+402	0x192	RActor_Fade_Group	4294967295	1	1	4294967295	222			437
+403	0x193	Quest Range	4294967295	3	1	4294967295	222			438
+404	0x194	Attack_Cooldown_Min	4294967295	0	1	0	0			439
+405	0x195	Attack_Cooldown_Delta	4294967295	0	1	0	0			440
+406	0x196	InitialCooldownMinTotal	4294967295	0	1	0	0		InitialCooldownMin / Attacks_Per_Second_Total	441
+407	0x197	InitialCooldownDeltaTotal	4294967295	0	1	0	0		InitialCooldownDelta / Attacks_Per_Second_Total	442
+408	0x198	Attack_Cooldown_Min_Total	4294967295	0	1	0	0		Attack_Cooldown_Min / Attacks_Per_Second_Total	443
+409	0x199	Attack_Cooldown_Delta_Total	4294967295	0	1	0	0		Attack_Cooldown_Delta / Attacks_Per_Second_Total	444
+410	0x19a	Closing_Cooldown_Min_Total	4294967295	0	1	0	0			445
+411	0x19b	Closing_Cooldown_Delta_Total	4294967295	0	1	0	0			446
+412	0x19c	Quest_Monster	4294967295	0	1	0	222			447
+413	0x19d	Quest_Monster Effect	4294967295	3	1	4294967295	222			448
+414	0x19e	Treasure_Class	4294967295	3	1	4294967295	0			449
+415	0x19f	Removes_Body_On_Death	4294967295	1	1	0	0			450
+416	0x1a0	InitialCooldownMin	4294967295	0	1	0	0			451
+417	0x1a1	InitialCooldownDelta	4294967295	0	1	0	0			452
+418	0x1a2	Knockback_Weight	4294967295	0	0	0	0			453
+419	0x1a3	UntargetableByPets	4294967295	1	1	0	0			454
+420	0x1a4	Damage_State_Current	4294967295	0	1	0	222			455
+421	0x1a5	Damage_State_Max	4294967295	0	1	0	222			456
+422	0x1a6	Is_Player_Decoy	4294967295	1	1	0	222			457
+423	0x1a7	Custom_Target_Weight	3	0	0	0	0			458
+424	0x1a8	Gizmo_State	4294967295	3	1	4294967295	4			459
+425	0x1a9	Gizmo_Charges	4294967295	1	1	0	4			460
+426	0x1aa	Chest_Open	3	0	1	0	4			461
+427	0x1ab	Door_Locked	4294967295	1	1	0	4			462
+428	0x1ac	Door_Timer	4294967295	3	1	4294967295	4			463
+429	0x1ad	Gizmo_Disabled_By_Script	4294967295	1	1	0	4			464
+430	0x1ae	Gizmo_Operator_ACDID	4294967295	3	1	4294967295	4			465
+431	0x1af	Triggering_Count	4294967295	0	1	0	4			466
+432	0x1b0	Gizmo_Operation_Radius_Override	4294967295	1	0	0	4			467
+433	0x1b1	Gate_Position	4294967295	0	0	0	4			468
+434	0x1b2	Gate_Velocity	4294967295	0	0	0	4			469
+435	0x1b3	Gizmo_Has_Been_Operated	4294967295	1	1	0	4			470
+436	0x1b4	Banner_Usable	4294967295	1	1	0	4			471
+437	0x1b5	Banner_Player_In_Combat	4294967295	1	1	0	4			472
+438	0x1b6	Pet_Owner	4294967295	3	1	4294967295	222			473
+439	0x1b7	Pet_Creator	4294967295	3	1	4294967295	222			474
+440	0x1b8	Pet_Type	4294967295	3	1	4294967295	222			475
+441	0x1b9	DropsNoLoot	4294967295	1	1	0	0			476
+442	0x1ba	GrantsNoXP	4294967295	1	1	0	0			477
+443	0x1bb	Hireling_Class	4294967295	1	1	0	222			478
+444	0x1bc	Summoned_By_SNO	4294967295	3	1	4294967295	0			479
+445	0x1bd	Pet_Proc_Scalar	4294967295	1	0	0	0			480
+446	0x1be	Pet_Cannot_Be_Dismissed	4294967295	1	1	0	222			481
+447	0x1bf	Is_NPC	4294967295	1	1	0	222			482
+448	0x1c0	NPC_Is_Operatable	4294967295	1	1	0	222			483
+449	0x1c1	NPC_Is_Escorting	4294967295	1	1	0	222			484
+450	0x1c2	NPC_Has_Interact_Options	12	1	1	0	222			485
+451	0x1c3	Conversation_Icon	12	3	1	4294967295	222			486
+452	0x1c4	Callout_Cooldown	16	1	1	4294967295	0			488
+453	0x1c5	Banter_Cooldown	16	1	1	4294967295	222			489
+454	0x1c6	Conversation_Heard_Count	16	1	1	0	0			490
+455	0x1c7	Last_Tick_Shop_Entered	4294967295	3	1	4294967295	0			491
+456	0x1c8	Is_Helper	4294967295	1	1	0	0			492
+457	0x1c9	Axe	4294967295	0	0	0	136			493
+458	0x1ca	Axe2H	4294967295	0	0	0	136			494
+459	0x1cb	ThrowingAxe	4294967295	0	0	0	136			495
+460	0x1cc	AxeAny	4294967295	0	0	0	136	Pin(Axe + Axe2H + ThrowingAxe, 0, 1)	Pin(Axe + Axe2H + ThrowingAxe, 0, 1)	496
+461	0x1cd	Bow	4294967295	0	0	0	136			497
+462	0x1ce	Crossbow	4294967295	0	0	0	136			498
+463	0x1cf	BowAny	4294967295	0	0	0	136	Pin(Bow + Crossbow, 0, 1)	Pin(Bow + Crossbow, 0, 1)	499
+464	0x1d0	Club	4294967295	0	0	0	136			500
+465	0x1d1	Club2H	4294967295	0	0	0	136			501
+466	0x1d2	ClubAny	4294967295	0	0	0	136	Pin(Club + Club2H, 0, 1)	Pin(Club + Club2H, 0, 1)	502
+467	0x1d3	Dagger	4294967295	0	0	0	136			503
+468	0x1d4	Mace	4294967295	0	0	0	136			504
+469	0x1d5	Mace2H	4294967295	0	0	0	136			505
+470	0x1d6	MaceAny	4294967295	0	0	0	136	Pin(Mace + Mace2H, 0, 1)	Pin(Mace + Mace2H, 0, 1)	506
+471	0x1d7	Sword	4294967295	0	0	0	136			507
+472	0x1d8	Sword2H	4294967295	0	0	0	136			508
+473	0x1d9	SwordAny	4294967295	0	0	0	136	Pin(Sword + Sword2H, 0, 1)	Pin(Sword + Sword2H, 0, 1)	509
+474	0x1da	Polearm	4294967295	0	0	0	136			510
+475	0x1db	Spear	4294967295	0	0	0	136			511
+476	0x1dc	Wand	4294967295	0	0	0	136			512
+477	0x1dd	ColdStaff	4294967295	0	0	0	136			513
+478	0x1de	FireStaff	4294967295	0	0	0	136			514
+479	0x1df	LightningStaff	4294967295	0	0	0	136			515
+480	0x1e0	PoisonStaff	4294967295	0	0	0	136			516
+481	0x1e1	StaffAny	4294967295	0	0	0	136	Pin(ColdStaff + FireStaff + LightningStaff + PoisonStaff, 0, 1)	Pin(ColdStaff + FireStaff + LightningStaff + PoisonStaff, 0, 1)	517
+482	0x1e2	Weapon1H	4294967295	0	0	0	136	Pin(Axe + Club + Dagger + Mace + Sword + Wand, 0, 1)	Pin(Axe + Club + Dagger + Mace + Sword + Wand, 0, 1)	518
+483	0x1e3	Weapon2H	4294967295	0	0	0	136	Pin(Axe2H + BowAny + Club2H + Mace2H + Sword2H + Polearm + Spear + StaffAny, 0, 1)	Pin(Axe2H + BowAny + Club2H + Mace2H + Sword2H + Polearm + Spear + StaffAny, 0, 1)	519
+484	0x1e4	WeaponMelee	4294967295	0	0	0	136	Pin(Axe + Axe2H + ClubAny + Dagger + MaceAny + SwordAny + Polearm + Spear + Wand + StaffAny, 0, 1)	Pin(Axe + Axe2H + ClubAny + Dagger + MaceAny + SwordAny + Polearm + Spear + Wand + StaffAny, 0, 1)	520
+485	0x1e5	WeaponRanged	4294967295	0	0	0	136	Pin(ThrowingAxe + BowAny, 0, 1)	Pin(ThrowingAxe + BowAny, 0, 1)	521
+486	0x1e6	Quiver	4294967295	0	0	0	136			522
+487	0x1e7	Reincarnation_Buff	4294967295	3	1	4294967295	222			523
+488	0x1e8	Dead_Body_AnimTag	4294967295	3	1	4294967295	0			524
+489	0x1e9	Spawned_by_ACDID	4294967295	3	1	4294967295	0			525
+490	0x1ea	Summoned_By_ACDID	4294967295	3	1	4294967295	222			526
+491	0x1eb	Summoner_ID	4294967295	3	1	4294967295	222			527
+492	0x1ec	Banner_ACDID	4294967295	3	1	4294967295	0			528
+493	0x1ed	Breakable_Shield_HP	4294967295	0	0	0	0			529
+494	0x1ee	Current_WeaponClass	4294967295	3	1	4294967295	222			530
+495	0x1ef	Weapons_Sheathed	4294967295	1	1	0	222			531
+496	0x1f0	Held_In_OffHand	4294967295	1	1	0	222		0	532
+497	0x1f1	Attacks_Per_Second_Item_MainHand	4294967295	0	0	0	136	(Held_In_OffHand ? 0 : Attacks_Per_Second_Item_Subtotal )		533
+498	0x1f2	Attacks_Per_Second_Item_OffHand	4294967295	0	0	0	136	(Held_In_OffHand ? Attacks_Per_Second_Item_Subtotal : 0)		534
+499	0x1f3	Attacks_Per_Second_Item_Total_MainHand	4294967295	0	0	0	136	Attacks_Per_Second_Item_MainHand + Attacks_Per_Second_Item_Bonus		535
+500	0x1f4	Attacks_Per_Second_Item_Total_OffHand	4294967295	0	0	0	136	Attacks_Per_Second_Item_OffHand + Attacks_Per_Second_Item_Bonus		536
+501	0x1f5	Damage_Weapon_Min_Total_MainHand	0	0	0	0	136	(Held_In_OffHand#NONE ? 0 : Damage_Weapon_Min_Total )		537
+502	0x1f6	Damage_Weapon_Min_Total_OffHand	0	0	0	0	136	(Held_In_OffHand#NONE ? Damage_Weapon_Min_Total : 0)		538
+503	0x1f7	Damage_Weapon_Delta_Total_MainHand	0	0	0	0	136	(Held_In_OffHand#NONE ? 0 : Damage_Weapon_Delta_Total )		539
+504	0x1f8	Damage_Weapon_Delta_Total_OffHand	0	0	0	0	136	(Held_In_OffHand#NONE ? Damage_Weapon_Delta_Total : 0)		540
+505	0x1f9	Attacks_Per_Second_Item_CurrentHand	4294967295	0	0	0	136		(DualWield_Hand ? Attacks_Per_Second_Item_OffHand : Attacks_Per_Second_Item_MainHand)	541
+506	0x1fa	Damage_Weapon_Min_Total_CurrentHand	0	0	0	0	136		(DualWield_Hand#NONE ? Damage_Weapon_Min_Total_OffHand : Damage_Weapon_Min_Total_MainHand)	542
+507	0x1fb	Damage_Weapon_Delta_Total_CurrentHand	0	0	0	0	136		(DualWield_Hand#NONE ? Damage_Weapon_Delta_Total_OffHand : Damage_Weapon_Delta_Total_MainHand)	543
+508	0x1fc	Has_Special_Death_AnimTag	4294967295	1	1	4294967295	0			544
+509	0x1fd	Death_Type_Override	4294967295	3	1	4294967295	0			545
+510	0x1fe	In_Combat	4294967295	1	1	0	1			546
+511	0x1ff	In_Combat_Next_Tick_Check	4294967295	1	1	0	0			547
+512	0x200	In_Conversation	4294967295	3	1	0	222			548
+513	0x201	Last_Tick_Potion_Used	4294967295	3	1	4294967295	0			549
+514	0x202	Potion_Dilution_Percent	4294967295	0	0	0	0			550
+515	0x203	Out_Of_Combat_Health_Regen_Percent	4294967295	0	0	0	0			551
+516	0x204	Out_Of_Combat_Mana_Regen_Percent	4294967295	0	0	0	0			552
+517	0x205	Potion_Dilution_Duration	4294967295	3	1	4294967295	0			553
+518	0x206	Potion_Dilution_Scalar	4294967295	0	0	0	0			554
+519	0x207	Feared	4294967295	1	1	0	222			555
+520	0x208	Fear_Immune	4294967295	1	1	0	0			556
+521	0x209	Last_Damage_ACD	4294967295	3	1	4294967295	222			557
+522	0x20a	Attached_To_ACD	4294967295	3	1	4294967295	222			558
+523	0x20b	Attachment_ACD	4294967295	3	1	4294967295	222			559
+524	0x20c	Normal_Attack_Replacement_Power_SNO	4294967295	3	1	4294967295	1			560
+525	0x20d	Damage_Type_Override	0	0	0	0	0			561
+526	0x20e	Minion_Count_Bonus_Percent	4294967295	0	0	0	0			562
+527	0x20f	Expensive_Proc_Count	4294967295	1	1	0	0			563
+528	0x210	Champion_Teleport_Time_Min_In_Seconds	4294967295	0	0	0	0			
+529	0x211	Champion_Teleport_Time_Delta_In_Seconds	4294967295	0	0	0	0			
+530	0x212	Champion_Clone_Next_Tick	4294967295	0	1	0	0			566
+531	0x213	Champion_Clone_Time_Min_In_Seconds	4294967295	0	0	0	0			567
+532	0x214	Champion_Clone_Time_Delta_In_Seconds	4294967295	0	0	0	0			568
+533	0x215	Champion_Clone_Hitpoint_Bonus_Percent	4294967295	0	0	0	0			569
+534	0x216	Champion_Clone_Damage_Bonus_Percent	4294967295	0	0	0	0			570
+535	0x217	Champion_Ghostly_Next_Tick	4294967295	0	1	0	0			571
+536	0x218	Champion_Ghostly_Inactive_Time_Min_In_Seconds	4294967295	0	0	0	0			572
+537	0x219	Champion_Ghostly_Inactive_Time_Delta_In_Seconds	4294967295	0	0	0	0			573
+538	0x21a	Champion_Ghostly_Active_Time_Min_In_Seconds	4294967295	0	0	0	0			574
+539	0x21b	Champion_Ghostly_Active_Time_Delta_In_Seconds	4294967295	0	0	0	0			575
+540	0x21c	Champion_Ghostly_Saved_Dodge_Chance	4294967295	0	0	0	0			576
+541	0x21d	Champion_Ghostly	4294967295	1	1	0	222			577
+542	0x21e	Base_Element	4294967295	1	1	4294967295	0			578
+543	0x21f	Projectile_Amount_Bonus_Percent	4294967295	0	0	0	0			579
+544	0x220	Projectile_Reflect_Chance	0	0	0	0	0			580
+545	0x221	Projectile_Reflect_Forced_Target	4294967295	1	1	4294967295	222			581
+546	0x222	Projectile_Reflect_Damage_Scalar	4294967295	1	0	1065353216	0			582
+547	0x223	Projectile_Reflect_Has_Damage_Cap	4294967295	1	1	0	0			583
+548	0x224	Projectile_Reflect_Damage_Cap_Remaining	4294967295	0	0	0	0			584
+549	0x225	Attack_Fear_Chance	4294967295	0	0	0	0			585
+550	0x226	Attack_Fear_Time_Min	4294967295	0	0	0	0			586
+551	0x227	Attack_Fear_Time_Delta	4294967295	0	0	0	0			587
+552	0x228	Buff_Visual_Effect	9	1	1	0	222			588
+553	0x229	Buff_Icon_Start_Tick0	4	1	1	0	1			589
+554	0x22a	Buff_Icon_Start_Tick1	4	1	1	0	1			590
+555	0x22b	Buff_Icon_Start_Tick2	4	1	1	0	1			591
+556	0x22c	Buff_Icon_Start_Tick3	4	1	1	0	1			592
+557	0x22d	Buff_Icon_Start_Tick4	4	1	1	0	1			593
+558	0x22e	Buff_Icon_Start_Tick5	4	1	1	0	1			594
+559	0x22f	Buff_Icon_Start_Tick6	4	1	1	0	1			595
+560	0x230	Buff_Icon_Start_Tick7	4	1	1	0	1			596
+561	0x231	Buff_Icon_Start_Tick8	4	1	1	0	1			597
+562	0x232	Buff_Icon_Start_Tick9	4	1	1	0	1			598
+563	0x233	Buff_Icon_Start_Tick10	4	1	1	0	1			599
+564	0x234	Buff_Icon_Start_Tick11	4	1	1	0	1			600
+565	0x235	Buff_Icon_Start_Tick12	4	1	1	0	1			601
+566	0x236	Buff_Icon_Start_Tick13	4	1	1	0	1			602
+567	0x237	Buff_Icon_Start_Tick14	4	1	1	0	1			603
+568	0x238	Buff_Icon_Start_Tick15	4	1	1	0	1			604
+569	0x239	Buff_Icon_Start_Tick16	4	1	1	0	1			605
+570	0x23a	Buff_Icon_Start_Tick17	4	1	1	0	1			606
+571	0x23b	Buff_Icon_Start_Tick18	4	1	1	0	1			607
+572	0x23c	Buff_Icon_Start_Tick19	4	1	1	0	1			608
+573	0x23d	Buff_Icon_Start_Tick20	4	1	1	0	1			609
+574	0x23e	Buff_Icon_Start_Tick21	4	1	1	0	1			610
+575	0x23f	Buff_Icon_Start_Tick22	4	1	1	0	1			611
+576	0x240	Buff_Icon_Start_Tick23	4	1	1	0	1			612
+577	0x241	Buff_Icon_Start_Tick24	4	1	1	0	1			613
+578	0x242	Buff_Icon_Start_Tick25	4	1	1	0	1			614
+579	0x243	Buff_Icon_Start_Tick26	4	1	1	0	1			615
+580	0x244	Buff_Icon_Start_Tick27	4	1	1	0	1			616
+581	0x245	Buff_Icon_Start_Tick28	4	1	1	0	1			617
+582	0x246	Buff_Icon_Start_Tick29	4	1	1	0	1			618
+583	0x247	Buff_Icon_Start_Tick30	4	1	1	0	1			619
+584	0x248	Buff_Icon_Start_Tick31	4	1	1	0	1			620
+585	0x249	Buff_Icon_End_Tick0	4	1	1	0	1			621
+586	0x24a	Buff_Icon_End_Tick1	4	1	1	0	1			622
+587	0x24b	Buff_Icon_End_Tick2	4	1	1	0	1			623
+588	0x24c	Buff_Icon_End_Tick3	4	1	1	0	1			624
+589	0x24d	Buff_Icon_End_Tick4	4	1	1	0	1			625
+590	0x24e	Buff_Icon_End_Tick5	4	1	1	0	1			626
+591	0x24f	Buff_Icon_End_Tick6	4	1	1	0	1			627
+592	0x250	Buff_Icon_End_Tick7	4	1	1	0	1			628
+593	0x251	Buff_Icon_End_Tick8	4	1	1	0	1			629
+594	0x252	Buff_Icon_End_Tick9	4	1	1	0	1			630
+595	0x253	Buff_Icon_End_Tick10	4	1	1	0	1			631
+596	0x254	Buff_Icon_End_Tick11	4	1	1	0	1			632
+597	0x255	Buff_Icon_End_Tick12	4	1	1	0	1			633
+598	0x256	Buff_Icon_End_Tick13	4	1	1	0	1			634
+599	0x257	Buff_Icon_End_Tick14	4	1	1	0	1			635
+600	0x258	Buff_Icon_End_Tick15	4	1	1	0	1			636
+601	0x259	Buff_Icon_End_Tick16	4	1	1	0	1			637
+602	0x25a	Buff_Icon_End_Tick17	4	1	1	0	1			638
+603	0x25b	Buff_Icon_End_Tick18	4	1	1	0	1			639
+604	0x25c	Buff_Icon_End_Tick19	4	1	1	0	1			640
+605	0x25d	Buff_Icon_End_Tick20	4	1	1	0	1			641
+606	0x25e	Buff_Icon_End_Tick21	4	1	1	0	1			642
+607	0x25f	Buff_Icon_End_Tick22	4	1	1	0	1			643
+608	0x260	Buff_Icon_End_Tick23	4	1	1	0	1			644
+609	0x261	Buff_Icon_End_Tick24	4	1	1	0	1			645
+610	0x262	Buff_Icon_End_Tick25	4	1	1	0	1			646
+611	0x263	Buff_Icon_End_Tick26	4	1	1	0	1			647
+612	0x264	Buff_Icon_End_Tick27	4	1	1	0	1			648
+613	0x265	Buff_Icon_End_Tick28	4	1	1	0	1			649
+614	0x266	Buff_Icon_End_Tick29	4	1	1	0	1			650
+615	0x267	Buff_Icon_End_Tick30	4	1	1	0	1			651
+616	0x268	Buff_Icon_End_Tick31	4	1	1	0	1			652
+617	0x269	Could_Have_Ragdolled	4294967295	1	1	0	222			653
+618	0x26a	Ambient_Damage_Effect_Last_Time	4294967295	1	1	0	0			654
+619	0x26b	Scale_Bonus	4294967295	0	0	0	222			655
+620	0x26c	Scale_Bonus_Is_Immediate	4294967295	1	1	0	222			656
+621	0x26d	Deleted_On_Server	4294967295	1	1	0	222			657
+622	0x26e	Scripted_Fade_Time	4294967295	1	1	0	222			658
+623	0x26f	Does_No_Damage	4294967295	1	1	0	0			659
+624	0x270	Does_Fake_Damage	4294967295	1	1	0	0			660
+625	0x271	SlowTime_Debuff	4294967295	0	0	0	222			661
+626	0x272	Blocks_Projectiles	4294967295	1	1	0	0			662
+627	0x273	Frozen	4294967295	1	1	0	222			663
+628	0x274	Freeze_Damage_Percent_Bonus	4294967295	0	0	0	0			664
+629	0x275	Shatter_Chance	4294967295	0	0	0	0			665
+630	0x276	DualWield_BothAttack_Chance	4294967295	0	0	0	0			666
+631	0x277	Summon_Expiration_Tick	4294967295	0	1	0	0			667
+632	0x278	Summon_Count	4294967295	0	1	0	0			668
+633	0x279	Uninterruptible	4294967295	1	1	0	222			669
+634	0x27a	Queue Death	4294967295	1	1	0	0			670
+635	0x27b	CantStartDisplayedPowers	4294967295	1	1	0	222			671
+636	0x27c	Wizard_Slowtime_Proxy_ACD	4294967295	3	1	4294967295	0			673
+637	0x27d	DPS	4294967295	1	0	0	0			674
+638	0x27e	Resurrection_Power	4294967295	3	1	4294967295	0			675
+639	0x27f	Freeze_Damage	4294967295	1	0	0	222			676
+640	0x280	Freeze_Capacity	4294967295	0	0	0	0			677
+641	0x281	Thaw_Rate	4294967295	0	0	0	0			678
+642	0x282	Chilled_Dur_Bonus_Percent	4294967295	0	0	0	0			679
+643	0x283	DOT_DPS	4294967295	0	0	0	222			680
+644	0x284	DamageCap_Percent	4294967295	1	0	0	222			681
+645	0x285	Item_Time_Sold	4294967295	1	1	0	8			682
+646	0x286	Forced_Hireling_Power	4294967295	3	1	4294967295	0			683
+647	0x287	IsRooted	4294967295	1	1	0	222			684
+648	0x288	RootTargetACD	4294967295	3	1	4294967295	222			685
+649	0x289	RootAutoDecayPerSecond	4294967295	1	0	0	222			686
+650	0x28a	RootUnitValue	4294967295	1	0	0	222			687
+651	0x28b	RootTotalTicks	4294967295	1	1	0	0			688
+652	0x28c	Hide_Affixes	4294967295	1	1	0	8			689
+653	0x28d	Rune_A	11	0	1	0	222			690
+654	0x28e	Rune_B	11	0	1	0	222			691
+655	0x28f	Rune_C	11	0	1	0	222			692
+656	0x290	Rune_D	11	0	1	0	222			693
+657	0x291	Rune_E	11	0	1	0	222			694
+658	0x292	Resistance_Stun	4294967295	0	0	0	136			695
+659	0x293	Resistance_Stun_Total	4294967295	0	0	0	136		Resistance_Stun + Resistance_StunRootFreeze	696
+660	0x294	Resistance_Root	4294967295	0	0	0	136			697
+661	0x295	Resistance_Root_Total	4294967295	0	0	0	136		Resistance_Root + Resistance_StunRootFreeze	698
+662	0x296	Resistance_Freeze	4294967295	0	0	0	136			699
+663	0x297	Resistance_Freeze_Total	4294967295	0	0	0	136		Resistance_Freeze + Resistance_StunRootFreeze	700
+664	0x298	Resistance_StunRootFreeze	4294967295	0	0	0	136			701
+665	0x299	CrowdControl_Reduction	4294967295	7	0	0	136			702
+666	0x29a	Displays_Team_Effect	4294967295	1	1	0	222			703
+667	0x29b	Cannot_Be_Added_To_AI_Target_List	4294967295	1	1	0	0			704
+668	0x29c	SkillKit	4294967295	3	1	4294967295	128			705
+669	0x29d	Immune_To_Charm	4294967295	1	1	0	0			706
+670	0x29e	Immune_To_Blind	4294967295	1	1	0	0			707
+671	0x29f	Damage_Shield	4294967295	1	1	0	222			708
+672	0x2a0	Damage_Shield_Amount	4294967295	0	0	0	222			709
+673	0x2a1	Guard_Object_ACDID	4294967295	3	1	4294967295	0			710
+674	0x2a2	Follow_Target_ACDID	4294967295	3	1	4294967295	0			711
+675	0x2a3	Follow_Target_Type	4294967295	3	1	0	0			712
+676	0x2a4	Forced_Enemy_ACDID	4294967295	1	1	4294967295	0			713
+677	0x2a5	NPC_Talk_Target_ANN	4294967295	3	1	4294967295	0			714
+678	0x2a6	NPC_Conv_Target_ANN	4294967295	3	1	4294967295	0			715
+679	0x2a7	Script_Target_ACDID	3	3	1	4294967295	0			716
+680	0x2a8	Look_Target_Server_ANN	4294967295	1	1	4294967295	222			717
+681	0x2a9	Look_Target_Broadcast_Intensity	4294967295	0	0	0	222			718
+682	0x2aa	Look_Target_Broadcast_Radius	4294967295	0	0	0	222			719
+683	0x2ab	Stealthed	4294967295	1	1	0	222			720
+684	0x2ac	GemQuality	4294967295	4	1	0	8			721
+685	0x2ad	ItemBuffIcon	4	1	1	0	222		0	723
+686	0x2ae	ScrollDuration	4294967295	1	0	0	0		0	724
+687	0x2af	Gizmo_Actor_SNO_To_Spawn	4294967295	3	1	4294967295	4			725
+688	0x2b0	Gizmo_Actor_To_Spawn_Scale	4294967295	1	0	0	4			726
+689	0x2b1	Death_Replacement_Power_SNO	4294967295	3	1	4294967295	0			727
+690	0x2b2	Attachment_Handled_By_Client	4294967295	1	1	0	222			728
+691	0x2b3	AI_In_Special_State	4294967295	1	1	0	0			729
+692	0x2b4	AI_Used_Scripted_Spawn_Anim	4294967295	1	1	0	0			730
+693	0x2b5	AI_Spawned_By_Inactive_Marker	4294967295	1	1	0	0			731
+694	0x2b6	Headstone_Player_ANN	4294967295	3	1	4294967295	222			732
+695	0x2b7	Resource_Cost_Reduction_Percent	10	7	0	0	136			733
+696	0x2b8	Resource_Cost_Reduction_Percent_Total	10	0	0	0	136		1.0 - ((1.0 - Resource_Cost_Reduction_Percent) * (1.0 - Resource_Cost_Reduction_Percent_All#NONE))	734
+697	0x2b9	Resource_Cost_Reduction_Percent_All	4294967295	7	0	0	136			735
+698	0x2ba	Damage_Type_Cost_Reduction_Percent	0	0	0	0	136			736
+699	0x2bb	Resistance_Penetration	0	0	0	0	0			737
+700	0x2bc	Resistance_Penetration_Total	0	0	0	0	0		(Resistance_Penetration + Resistance_Penetration_All#NONE) * (Resistance_Penetration_Percent_All#NONE + 1)	738
+701	0x2bd	Resistance_Penetration_All	4294967295	0	0	0	0			739
+702	0x2be	Resistance_Penetration_Percent_All	4294967295	0	0	0	0			740
+703	0x2bf	Fury_Effect_Level	4294967295	0	1	0	222			741
+704	0x2c0	Health_Potion_Bonus_Heal_Percent	4294967295	0	0	0	0			742
+705	0x2c1	Health_Potion_Affects_Allies_Percent	4294967295	0	0	0	136			743
+706	0x2c2	Free_Cast	4	1	1	0	136			744
+707	0x2c3	Free_Cast_All	4294967295	1	1	0	136			745
+708	0x2c4	Movement_Scalar_Reduction_Percent	4294967295	1	0	0	136			750
+709	0x2c5	Movement_Scalar_Reduction_Resistance	4294967295	0	0	0	136			751
+710	0x2c6	Damage_Absorb_Percent_All	4294967295	0	0	0	136			752
+711	0x2c7	World_Seed	4294967295	0	1	0	1			753
+712	0x2c8	Kill_Count_Record	4294967295	1	1	0	1			754
+713	0x2c9	Object_Destruction_Record	4294967295	1	1	0	1			755
+714	0x2ca	Single_Attack_Record	4294967295	1	1	0	1			756
+715	0x2cb	Environment_Attack_Record	4294967295	1	1	0	1			757
+716	0x2cc	Nephalem_Glory_Duration_Record	4294967295	1	1	0	1			758
+717	0x2cd	Root_Immune	4294967295	1	1	0	0			759
+718	0x2ce	Monster_Play_Get_Hit_Bonus	4294967295	0	0	0	0			760
+719	0x2cf	Stored_Contact_Frame	4294967295	1	1	0	0			761
+720	0x2d0	Buff_Icon_Count0	4	0	1	0	1			762
+721	0x2d1	Buff_Icon_Count1	4	0	1	0	1			763
+722	0x2d2	Buff_Icon_Count2	4	0	1	0	1			764
+723	0x2d3	Buff_Icon_Count3	4	0	1	0	1			765
+724	0x2d4	Buff_Icon_Count4	4	0	1	0	1			766
+725	0x2d5	Buff_Icon_Count5	4	0	1	0	1			767
+726	0x2d6	Buff_Icon_Count6	4	0	1	0	1			768
+727	0x2d7	Buff_Icon_Count7	4	0	1	0	1			769
+728	0x2d8	Buff_Icon_Count8	4	0	1	0	1			770
+729	0x2d9	Buff_Icon_Count9	4	0	1	0	1			771
+730	0x2da	Buff_Icon_Count10	4	0	1	0	1			772
+731	0x2db	Buff_Icon_Count11	4	0	1	0	1			773
+732	0x2dc	Buff_Icon_Count12	4	0	1	0	1			774
+733	0x2dd	Buff_Icon_Count13	4	0	1	0	1			775
+734	0x2de	Buff_Icon_Count14	4	0	1	0	1			776
+735	0x2df	Buff_Icon_Count15	4	0	1	0	1			777
+736	0x2e0	Buff_Icon_Count16	4	0	1	0	1			778
+737	0x2e1	Buff_Icon_Count17	4	0	1	0	1			779
+738	0x2e2	Buff_Icon_Count18	4	0	1	0	1			780
+739	0x2e3	Buff_Icon_Count19	4	0	1	0	1			781
+740	0x2e4	Buff_Icon_Count20	4	0	1	0	1			782
+741	0x2e5	Buff_Icon_Count21	4	0	1	0	1			783
+742	0x2e6	Buff_Icon_Count22	4	0	1	0	1			784
+743	0x2e7	Buff_Icon_Count23	4	0	1	0	1			785
+744	0x2e8	Buff_Icon_Count24	4	0	1	0	1			786
+745	0x2e9	Buff_Icon_Count25	4	0	1	0	1			787
+746	0x2ea	Buff_Icon_Count26	4	0	1	0	1			788
+747	0x2eb	Buff_Icon_Count27	4	0	1	0	1			789
+748	0x2ec	Buff_Icon_Count28	4	0	1	0	1			790
+749	0x2ed	Buff_Icon_Count29	4	0	1	0	1			791
+750	0x2ee	Buff_Icon_Count30	4	0	1	0	1			792
+751	0x2ef	Buff_Icon_Count31	4	0	1	0	1			793
+752	0x2f0	Observer	4294967295	1	1	0	222			794
+753	0x2f1	Resurrect_As_Observer	4294967295	1	1	0	0			795
+754	0x2f2	Combo_Level	4294967295	1	1	0	0			796
+755	0x2f3	Combo_Time_Last_Move	4294967295	1	1	0	0			797
+756	0x2f4	Burrowed	4294967295	1	1	0	222			798
+757	0x2f5	Death_Replacement_Effect_Group_SNO	4294967295	3	1	4294967295	0			799
+758	0x2f6	Checkpoint_Resurrection_Allowed_Game_Time	4294967295	0	1	0	222			800
+759	0x2f7	Checkpoint_Resurrection_Forced_Game_Time	4294967295	0	1	0	222			801
+760	0x2f8	Corpse_Resurrection_Allowed_Game_Time	4294967295	0	1	0	222			802
+761	0x2f9	Corpse_Resurrection_Charges	4294967295	0	1	0	136			803
+762	0x2fa	Controlling_TimedEvent_SNO	4294967295	3	1	4294967295	0			805
+763	0x2fb	Casting_Speed_Percent	4294967295	0	0	0	136			806
+764	0x2fc	Using_Bossbar	4294967295	1	1	0	222			807
+765	0x2fd	Power_Buff_0_Visual_Effect	4	1	1	0	222			808
+766	0x2fe	Power_Buff_1_Visual_Effect	4	1	1	0	222			809
+767	0x2ff	Power_Buff_2_Visual_Effect	4	1	1	0	222			810
+768	0x300	Power_Buff_3_Visual_Effect	4	1	1	0	222			811
+769	0x301	Power_Buff_4_Visual_Effect	4	1	1	0	222			812
+770	0x302	Power_Buff_5_Visual_Effect	4	1	1	0	222			813
+771	0x303	Power_Buff_6_Visual_Effect	4	1	1	0	222			814
+772	0x304	Power_Buff_7_Visual_Effect	4	1	1	0	222			815
+773	0x305	Power_Buff_8_Visual_Effect	4	1	1	0	222			816
+774	0x306	Power_Buff_9_Visual_Effect	4	1	1	0	222			817
+775	0x307	Power_Buff_10_Visual_Effect	4	1	1	0	222			818
+776	0x308	Power_Buff_11_Visual_Effect	4	1	1	0	222			819
+777	0x309	Power_Buff_12_Visual_Effect	4	1	1	0	222			820
+778	0x30a	Power_Buff_13_Visual_Effect	4	1	1	0	222			821
+779	0x30b	Power_Buff_14_Visual_Effect	4	1	1	0	222			822
+780	0x30c	Power_Buff_15_Visual_Effect	4	1	1	0	222			823
+781	0x30d	Power_Buff_16_Visual_Effect	4	1	1	0	222			824
+782	0x30e	Power_Buff_17_Visual_Effect	4	1	1	0	222			825
+783	0x30f	Power_Buff_18_Visual_Effect	4	1	1	0	222			826
+784	0x310	Power_Buff_19_Visual_Effect	4	1	1	0	222			827
+785	0x311	Power_Buff_20_Visual_Effect	4	1	1	0	222			828
+786	0x312	Power_Buff_21_Visual_Effect	4	1	1	0	222			829
+787	0x313	Power_Buff_22_Visual_Effect	4	1	1	0	222			830
+788	0x314	Power_Buff_23_Visual_Effect	4	1	1	0	222			831
+789	0x315	Power_Buff_24_Visual_Effect	4	1	1	0	222			832
+790	0x316	Power_Buff_25_Visual_Effect	4	1	1	0	222			833
+791	0x317	Power_Buff_26_Visual_Effect	4	1	1	0	222			834
+792	0x318	Power_Buff_27_Visual_Effect	4	1	1	0	222			835
+793	0x319	Power_Buff_28_Visual_Effect	4	1	1	0	222			836
+794	0x31a	Power_Buff_29_Visual_Effect	4	1	1	0	222			837
+795	0x31b	Power_Buff_30_Visual_Effect	4	1	1	0	222			838
+796	0x31c	Power_Buff_31_Visual_Effect	4	1	1	0	222			839
+797	0x31d	Store SNO	0	3	1	0	222			840
+798	0x31e	Busy	4294967295	1	1	0	222			841
+799	0x31f	Afk	4294967295	1	1	0	222			842
+800	0x320	Lore Playing	4294967295	1	1	0	0			843
+801	0x321	Last Action Timestamp	4294967295	1	1	0	0			844
+802	0x322	Portal Next Time	4294967295	1	1	0	1			845
+803	0x323	Repair_Discount_Percent	4294967295	0	0	0	222			846
+804	0x324	Resource_Degeneration_Prevented	4294967295	1	1	0	0			847
+805	0x325	Operatable	4294967295	4	1	0	222			848
+806	0x326	Has_Look_Override	4294967295	1	1	0	222			849
+807	0x327	Spawner_Concurrent_Count_ID	4294967295	3	1	4294967295	0			850
+808	0x328	Disabled	4294967295	1	1	0	222			851
+809	0x329	Skill_Override	3	1	1	4294967295	222			852
+810	0x32a	Skill_Override_Active	4294967295	1	1	0	222			853
+811	0x32b	Skill_Override_Ended	4	1	1	0	0			854
+812	0x32c	Skill_Override_Ended_Active	4294967295	1	1	0	0			855
+813	0x32d	Is_Power_Proxy	4294967295	1	1	0	0			856
+814	0x32e	Force_No_Death_Animation	4294967295	1	1	0	0			857
+815	0x32f	Player_WeaponClass_Anim_Override	4294967295	1	1	4294967295	222			858
+816	0x330	Operatable_Story_Gizmo	4294967295	1	1	0	4			859
+817	0x331	Power_Buff_0_Visual_Effect_None	4	1	1	0	222			860
+818	0x332	Power_Buff_0_Visual_Effect_A	4	1	1	0	222			861
+819	0x333	Power_Buff_0_Visual_Effect_B	4	1	1	0	222			862
+820	0x334	Power_Buff_0_Visual_Effect_C	4	1	1	0	222			863
+821	0x335	Power_Buff_0_Visual_Effect_D	4	1	1	0	222			864
+822	0x336	Power_Buff_0_Visual_Effect_E	4	1	1	0	222			865
+823	0x337	Power_Buff_1_Visual_Effect_None	4	1	1	0	222			866
+824	0x338	Power_Buff_1_Visual_Effect_A	4	1	1	0	222			867
+825	0x339	Power_Buff_1_Visual_Effect_B	4	1	1	0	222			868
+826	0x33a	Power_Buff_1_Visual_Effect_C	4	1	1	0	222			869
+827	0x33b	Power_Buff_1_Visual_Effect_D	4	1	1	0	222			870
+828	0x33c	Power_Buff_1_Visual_Effect_E	4	1	1	0	222			871
+829	0x33d	Power_Buff_2_Visual_Effect_None	4	1	1	0	222			872
+830	0x33e	Power_Buff_2_Visual_Effect_A	4	1	1	0	222			873
+831	0x33f	Power_Buff_2_Visual_Effect_B	4	1	1	0	222			874
+832	0x340	Power_Buff_2_Visual_Effect_C	4	1	1	0	222			875
+833	0x341	Power_Buff_2_Visual_Effect_D	4	1	1	0	222			876
+834	0x342	Power_Buff_2_Visual_Effect_E	4	1	1	0	222			877
+835	0x343	Power_Buff_3_Visual_Effect_None	4	1	1	0	222			878
+836	0x344	Power_Buff_3_Visual_Effect_A	4	1	1	0	222			879
+837	0x345	Power_Buff_3_Visual_Effect_B	4	1	1	0	222			880
+838	0x346	Power_Buff_3_Visual_Effect_C	4	1	1	0	222			881
+839	0x347	Power_Buff_3_Visual_Effect_D	4	1	1	0	222			882
+840	0x348	Power_Buff_3_Visual_Effect_E	4	1	1	0	222			883
+841	0x349	Power_Buff_4_Visual_Effect_None	4	1	1	0	222			884
+842	0x34a	Power_Buff_4_Visual_Effect_A	4	1	1	0	222			885
+843	0x34b	Power_Buff_4_Visual_Effect_B	4	1	1	0	222			886
+844	0x34c	Power_Buff_4_Visual_Effect_C	4	1	1	0	222			887
+845	0x34d	Power_Buff_4_Visual_Effect_D	4	1	1	0	222			888
+846	0x34e	Power_Buff_4_Visual_Effect_E	4	1	1	0	222			889
+847	0x34f	Power_Buff_5_Visual_Effect_None	4	1	1	0	222			890
+848	0x350	Power_Buff_5_Visual_Effect_A	4	1	1	0	222			891
+849	0x351	Power_Buff_5_Visual_Effect_B	4	1	1	0	222			892
+850	0x352	Power_Buff_5_Visual_Effect_C	4	1	1	0	222			893
+851	0x353	Power_Buff_5_Visual_Effect_D	4	1	1	0	222			894
+852	0x354	Power_Buff_5_Visual_Effect_E	4	1	1	0	222			895
+853	0x355	Power_Buff_6_Visual_Effect_None	4	1	1	0	222			896
+854	0x356	Power_Buff_6_Visual_Effect_A	4	1	1	0	222			897
+855	0x357	Power_Buff_6_Visual_Effect_B	4	1	1	0	222			898
+856	0x358	Power_Buff_6_Visual_Effect_C	4	1	1	0	222			899
+857	0x359	Power_Buff_6_Visual_Effect_D	4	1	1	0	222			900
+858	0x35a	Power_Buff_6_Visual_Effect_E	4	1	1	0	222			901
+859	0x35b	Power_Buff_7_Visual_Effect_None	4	1	1	0	222			902
+860	0x35c	Power_Buff_7_Visual_Effect_A	4	1	1	0	222			903
+861	0x35d	Power_Buff_7_Visual_Effect_B	4	1	1	0	222			904
+862	0x35e	Power_Buff_7_Visual_Effect_C	4	1	1	0	222			905
+863	0x35f	Power_Buff_7_Visual_Effect_D	4	1	1	0	222			906
+864	0x360	Power_Buff_7_Visual_Effect_E	4	1	1	0	222			907
+865	0x361	Power_Buff_8_Visual_Effect_None	4	1	1	0	222			908
+866	0x362	Power_Buff_8_Visual_Effect_A	4	1	1	0	222			909
+867	0x363	Power_Buff_8_Visual_Effect_B	4	1	1	0	222			910
+868	0x364	Power_Buff_8_Visual_Effect_C	4	1	1	0	222			911
+869	0x365	Power_Buff_8_Visual_Effect_D	4	1	1	0	222			912
+870	0x366	Power_Buff_8_Visual_Effect_E	4	1	1	0	222			913
+871	0x367	Power_Buff_9_Visual_Effect_None	4	1	1	0	222			914
+872	0x368	Power_Buff_9_Visual_Effect_A	4	1	1	0	222			915
+873	0x369	Power_Buff_9_Visual_Effect_B	4	1	1	0	222			916
+874	0x36a	Power_Buff_9_Visual_Effect_C	4	1	1	0	222			917
+875	0x36b	Power_Buff_9_Visual_Effect_D	4	1	1	0	222			918
+876	0x36c	Power_Buff_9_Visual_Effect_E	4	1	1	0	222			919
+877	0x36d	Power_Buff_10_Visual_Effect_None	4	1	1	0	222			920
+878	0x36e	Power_Buff_10_Visual_Effect_A	4	1	1	0	222			921
+879	0x36f	Power_Buff_10_Visual_Effect_B	4	1	1	0	222			922
+880	0x370	Power_Buff_10_Visual_Effect_C	4	1	1	0	222			923
+881	0x371	Power_Buff_10_Visual_Effect_D	4	1	1	0	222			924
+882	0x372	Power_Buff_10_Visual_Effect_E	4	1	1	0	222			925
+883	0x373	Power_Buff_11_Visual_Effect_None	4	1	1	0	222			926
+884	0x374	Power_Buff_11_Visual_Effect_A	4	1	1	0	222			927
+885	0x375	Power_Buff_11_Visual_Effect_B	4	1	1	0	222			928
+886	0x376	Power_Buff_11_Visual_Effect_C	4	1	1	0	222			929
+887	0x377	Power_Buff_11_Visual_Effect_D	4	1	1	0	222			930
+888	0x378	Power_Buff_11_Visual_Effect_E	4	1	1	0	222			931
+889	0x379	Power_Buff_12_Visual_Effect_None	4	1	1	0	222			932
+890	0x37a	Power_Buff_12_Visual_Effect_A	4	1	1	0	222			933
+891	0x37b	Power_Buff_12_Visual_Effect_B	4	1	1	0	222			934
+892	0x37c	Power_Buff_12_Visual_Effect_C	4	1	1	0	222			935
+893	0x37d	Power_Buff_12_Visual_Effect_D	4	1	1	0	222			936
+894	0x37e	Power_Buff_12_Visual_Effect_E	4	1	1	0	222			937
+895	0x37f	Power_Buff_13_Visual_Effect_None	4	1	1	0	222			938
+896	0x380	Power_Buff_13_Visual_Effect_A	4	1	1	0	222			939
+897	0x381	Power_Buff_13_Visual_Effect_B	4	1	1	0	222			940
+898	0x382	Power_Buff_13_Visual_Effect_C	4	1	1	0	222			941
+899	0x383	Power_Buff_13_Visual_Effect_D	4	1	1	0	222			942
+900	0x384	Power_Buff_13_Visual_Effect_E	4	1	1	0	222			943
+901	0x385	Power_Buff_14_Visual_Effect_None	4	1	1	0	222			944
+902	0x386	Power_Buff_14_Visual_Effect_A	4	1	1	0	222			945
+903	0x387	Power_Buff_14_Visual_Effect_B	4	1	1	0	222			946
+904	0x388	Power_Buff_14_Visual_Effect_C	4	1	1	0	222			947
+905	0x389	Power_Buff_14_Visual_Effect_D	4	1	1	0	222			948
+906	0x38a	Power_Buff_14_Visual_Effect_E	4	1	1	0	222			949
+907	0x38b	Power_Buff_15_Visual_Effect_None	4	1	1	0	222			950
+908	0x38c	Power_Buff_15_Visual_Effect_A	4	1	1	0	222			951
+909	0x38d	Power_Buff_15_Visual_Effect_B	4	1	1	0	222			952
+910	0x38e	Power_Buff_15_Visual_Effect_C	4	1	1	0	222			953
+911	0x38f	Power_Buff_15_Visual_Effect_D	4	1	1	0	222			954
+912	0x390	Power_Buff_15_Visual_Effect_E	4	1	1	0	222			955
+913	0x391	Power_Buff_16_Visual_Effect_None	4	1	1	0	222			956
+914	0x392	Power_Buff_16_Visual_Effect_A	4	1	1	0	222			957
+915	0x393	Power_Buff_16_Visual_Effect_B	4	1	1	0	222			958
+916	0x394	Power_Buff_16_Visual_Effect_C	4	1	1	0	222			959
+917	0x395	Power_Buff_16_Visual_Effect_D	4	1	1	0	222			960
+918	0x396	Power_Buff_16_Visual_Effect_E	4	1	1	0	222			961
+919	0x397	Power_Buff_17_Visual_Effect_None	4	1	1	0	222			962
+920	0x398	Power_Buff_17_Visual_Effect_A	4	1	1	0	222			963
+921	0x399	Power_Buff_17_Visual_Effect_B	4	1	1	0	222			964
+922	0x39a	Power_Buff_17_Visual_Effect_C	4	1	1	0	222			965
+923	0x39b	Power_Buff_17_Visual_Effect_D	4	1	1	0	222			966
+924	0x39c	Power_Buff_17_Visual_Effect_E	4	1	1	0	222			967
+925	0x39d	Power_Buff_18_Visual_Effect_None	4	1	1	0	222			968
+926	0x39e	Power_Buff_18_Visual_Effect_A	4	1	1	0	222			969
+927	0x39f	Power_Buff_18_Visual_Effect_B	4	1	1	0	222			970
+928	0x3a0	Power_Buff_18_Visual_Effect_C	4	1	1	0	222			971
+929	0x3a1	Power_Buff_18_Visual_Effect_D	4	1	1	0	222			972
+930	0x3a2	Power_Buff_18_Visual_Effect_E	4	1	1	0	222			973
+931	0x3a3	Power_Buff_19_Visual_Effect_None	4	1	1	0	222			974
+932	0x3a4	Power_Buff_19_Visual_Effect_A	4	1	1	0	222			975
+933	0x3a5	Power_Buff_19_Visual_Effect_B	4	1	1	0	222			976
+934	0x3a6	Power_Buff_19_Visual_Effect_C	4	1	1	0	222			977
+935	0x3a7	Power_Buff_19_Visual_Effect_D	4	1	1	0	222			978
+936	0x3a8	Power_Buff_19_Visual_Effect_E	4	1	1	0	222			979
+937	0x3a9	Power_Buff_20_Visual_Effect_None	4	1	1	0	222			980
+938	0x3aa	Power_Buff_20_Visual_Effect_A	4	1	1	0	222			981
+939	0x3ab	Power_Buff_20_Visual_Effect_B	4	1	1	0	222			982
+940	0x3ac	Power_Buff_20_Visual_Effect_C	4	1	1	0	222			983
+941	0x3ad	Power_Buff_20_Visual_Effect_D	4	1	1	0	222			984
+942	0x3ae	Power_Buff_20_Visual_Effect_E	4	1	1	0	222			985
+943	0x3af	Power_Buff_21_Visual_Effect_None	4	1	1	0	222			986
+944	0x3b0	Power_Buff_21_Visual_Effect_A	4	1	1	0	222			987
+945	0x3b1	Power_Buff_21_Visual_Effect_B	4	1	1	0	222			988
+946	0x3b2	Power_Buff_21_Visual_Effect_C	4	1	1	0	222			989
+947	0x3b3	Power_Buff_21_Visual_Effect_D	4	1	1	0	222			990
+948	0x3b4	Power_Buff_21_Visual_Effect_E	4	1	1	0	222			991
+949	0x3b5	Power_Buff_22_Visual_Effect_None	4	1	1	0	222			992
+950	0x3b6	Power_Buff_22_Visual_Effect_A	4	1	1	0	222			993
+951	0x3b7	Power_Buff_22_Visual_Effect_B	4	1	1	0	222			994
+952	0x3b8	Power_Buff_22_Visual_Effect_C	4	1	1	0	222			995
+953	0x3b9	Power_Buff_22_Visual_Effect_D	4	1	1	0	222			996
+954	0x3ba	Power_Buff_22_Visual_Effect_E	4	1	1	0	222			997
+955	0x3bb	Power_Buff_23_Visual_Effect_None	4	1	1	0	222			998
+956	0x3bc	Power_Buff_23_Visual_Effect_A	4	1	1	0	222			999
+957	0x3bd	Power_Buff_23_Visual_Effect_B	4	1	1	0	222			1000
+958	0x3be	Power_Buff_23_Visual_Effect_C	4	1	1	0	222			1001
+959	0x3bf	Power_Buff_23_Visual_Effect_D	4	1	1	0	222			1002
+960	0x3c0	Power_Buff_23_Visual_Effect_E	4	1	1	0	222			1003
+961	0x3c1	Power_Buff_24_Visual_Effect_None	4	1	1	0	222			1004
+962	0x3c2	Power_Buff_24_Visual_Effect_A	4	1	1	0	222			1005
+963	0x3c3	Power_Buff_24_Visual_Effect_B	4	1	1	0	222			1006
+964	0x3c4	Power_Buff_24_Visual_Effect_C	4	1	1	0	222			1007
+965	0x3c5	Power_Buff_24_Visual_Effect_D	4	1	1	0	222			1008
+966	0x3c6	Power_Buff_24_Visual_Effect_E	4	1	1	0	222			1009
+967	0x3c7	Power_Buff_25_Visual_Effect_None	4	1	1	0	222			1010
+968	0x3c8	Power_Buff_25_Visual_Effect_A	4	1	1	0	222			1011
+969	0x3c9	Power_Buff_25_Visual_Effect_B	4	1	1	0	222			1012
+970	0x3ca	Power_Buff_25_Visual_Effect_C	4	1	1	0	222			1013
+971	0x3cb	Power_Buff_25_Visual_Effect_D	4	1	1	0	222			1014
+972	0x3cc	Power_Buff_25_Visual_Effect_E	4	1	1	0	222			1015
+973	0x3cd	Power_Buff_26_Visual_Effect_None	4	1	1	0	222			1016
+974	0x3ce	Power_Buff_26_Visual_Effect_A	4	1	1	0	222			1017
+975	0x3cf	Power_Buff_26_Visual_Effect_B	4	1	1	0	222			1018
+976	0x3d0	Power_Buff_26_Visual_Effect_C	4	1	1	0	222			1019
+977	0x3d1	Power_Buff_26_Visual_Effect_D	4	1	1	0	222			1020
+978	0x3d2	Power_Buff_26_Visual_Effect_E	4	1	1	0	222			1021
+979	0x3d3	Power_Buff_27_Visual_Effect_None	4	1	1	0	222			1022
+980	0x3d4	Power_Buff_27_Visual_Effect_A	4	1	1	0	222			1023
+981	0x3d5	Power_Buff_27_Visual_Effect_B	4	1	1	0	222			1024
+982	0x3d6	Power_Buff_27_Visual_Effect_C	4	1	1	0	222			1025
+983	0x3d7	Power_Buff_27_Visual_Effect_D	4	1	1	0	222			1026
+984	0x3d8	Power_Buff_27_Visual_Effect_E	4	1	1	0	222			1027
+985	0x3d9	Power_Buff_28_Visual_Effect_None	4	1	1	0	222			1028
+986	0x3da	Power_Buff_28_Visual_Effect_A	4	1	1	0	222			1029
+987	0x3db	Power_Buff_28_Visual_Effect_B	4	1	1	0	222			1030
+988	0x3dc	Power_Buff_28_Visual_Effect_C	4	1	1	0	222			1031
+989	0x3dd	Power_Buff_28_Visual_Effect_D	4	1	1	0	222			1032
+990	0x3de	Power_Buff_28_Visual_Effect_E	4	1	1	0	222			1033
+991	0x3df	Power_Buff_29_Visual_Effect_None	4	1	1	0	222			1034
+992	0x3e0	Power_Buff_29_Visual_Effect_A	4	1	1	0	222			1035
+993	0x3e1	Power_Buff_29_Visual_Effect_B	4	1	1	0	222			1036
+994	0x3e2	Power_Buff_29_Visual_Effect_C	4	1	1	0	222			1037
+995	0x3e3	Power_Buff_29_Visual_Effect_D	4	1	1	0	222			1038
+996	0x3e4	Power_Buff_29_Visual_Effect_E	4	1	1	0	222			1039
+997	0x3e5	Power_Buff_30_Visual_Effect_None	4	1	1	0	222			1040
+998	0x3e6	Power_Buff_30_Visual_Effect_A	4	1	1	0	222			1041
+999	0x3e7	Power_Buff_30_Visual_Effect_B	4	1	1	0	222			1042
+1000	0x3e8	Power_Buff_30_Visual_Effect_C	4	1	1	0	222			1043
+1001	0x3e9	Power_Buff_30_Visual_Effect_D	4	1	1	0	222			1044
+1002	0x3ea	Power_Buff_30_Visual_Effect_E	4	1	1	0	222			1045
+1003	0x3eb	Power_Buff_31_Visual_Effect_None	4	1	1	0	222			1046
+1004	0x3ec	Power_Buff_31_Visual_Effect_A	4	1	1	0	222			1047
+1005	0x3ed	Power_Buff_31_Visual_Effect_B	4	1	1	0	222			1048
+1006	0x3ee	Power_Buff_31_Visual_Effect_C	4	1	1	0	222			1049
+1007	0x3ef	Power_Buff_31_Visual_Effect_D	4	1	1	0	222			1050
+1008	0x3f0	Power_Buff_31_Visual_Effect_E	4	1	1	0	222			1051
+1009	0x3f1	Walk_Passability_Power_SNO	4294967295	1	1	4294967295	222			1052
+1010	0x3f2	Passability_Power_SNO	4294967295	1	1	4294967295	222			1053
+1011	0x3f3	Flippy_ID	4294967295	3	1	4294967295	0			1054
+1012	0x3f4	Summoning_Machine_Num_Casters	4294967295	0	1	0	0			1055
+1013	0x3f5	Summoning_Machine_Spawn_Count	15	0	1	0	0			1056
+1014	0x3f6	Summoning_Machine_Next_Spawn_Ticks	4294967295	0	1	0	0			1057
+1015	0x3f7	Summoning_Machine_Spawn_Team	4294967295	1	1	4294967295	0			1058
+1016	0x3f8	Screen_Attack_Radius_Constant	4294967295	3	0	1114636288	0			1059
+1017	0x3f9	Max(Damage_Done_Reduction_Percent, 1)	4294967295	0	0	0	0			1060
+1018	0x3fa	Set_Item_Count	17	0	1	0	222			1061
+1019	0x3fb	Spawner_Countdown_Percent	4294967295	1	0	0	222			1063
+1020	0x3fc	Attack_Slow	4294967295	1	1	0	0			1064
+1021	0x3fd	Power_Disabled	4	1	1	0	222			1065
+1022	0x3fe	Weapon_Effect_Override	4294967295	1	1	0	222			1066
+1023	0x3ff	Debuff_Duration_Reduction_Percent	4294967295	0	0	0	0			1067
+1024	0x400	Uses_PvP_Power_Tags	4294967295	1	1	0	222			1068
+1025	0x401	Trait	4	1	1	0	222			1069
+1026	0x402	Last_ACD_Attacked_By	4294967295	3	1	4294967295	0			1070
+1027	0x403	Gold_PickUp_Radius	4294967295	0	0	0	222			1071
+1028	0x404	Client Only Effect	12	3	1	4294967295	222			1072
+1029	0x405	Power_Saved_Attribute	4294967295	1	1	0	0			1073
+1030	0x406	Resource_Gain_Bonus_Percent	10	0	0	0	136			1074
+1031	0x407	Looping_Animation_Start_Time	4294967295	1	1	0	222			1075
+1032	0x408	Looping_Animation_End_Time	4294967295	1	1	0	222			1076
+1033	0x409	Looping_Animation_Suppress_Item_Tooltips	4294967295	1	1	0	222			1077
+1034	0x40a	Heal_Effect_Last_Played_Tick	4294967295	3	1	4294967295	0			1078
+1035	0x40b	Resource_Effect_Last_Played_tick	10	3	1	4294967295	0			1079
+1036	0x40c	Thorns_Effect_Last_Played_tick	4294967295	3	1	4294967295	0			1080
+1037	0x40d	PVP_Kills	4294967295	0	1	0	1			1081
+1038	0x40e	PVP_Deaths	4294967295	0	1	0	1			1082
+1039	0x40f	PVP_Assists	4294967295	0	1	0	1			1083
+1040	0x410	PVP_Progression_Points_Gained	4294967295	0	1	0	1			1084
+1041	0x411	PVP_Current_Kill_Streak	4294967295	0	1	0	1			1085
+1042	0x412	PVP_Current_Death_Streak	4294967295	0	1	0	1			1086
+1043	0x413	PVP_Longest_Kill_Streak	4294967295	0	1	0	1			1087
+1044	0x414	PVP_Longest_Death_Streak	4294967295	0	1	0	1			1088
+1045	0x415	Turn_Rate_Scalar	4294967295	5	0	1065353216	222			1089
+1046	0x416	Turn_Accel_Scalar	4294967295	5	0	1065353216	222			1090
+1047	0x417	Turn_Deccel_Scalar	4294967295	5	0	1065353216	222			1091
+1048	0x418	No_Health_Drop	4294967295	1	1	0	0			1092
+1049	0x419	Leader	4294967295	1	1	0	0			1093
+1050	0x41a	IsContentRestrictedActor	4294967295	1	1	0	222			1094
+1051	0x41b	InBossEncounter	4294967295	1	1	0	1			1095
+1052	0x41c	God	4294967295	1	1	0	222			1096
+1053	0x41d	MinimapActive	4294967295	1	1	0	222			1098
+1054	0x41e	MinimapIconOverride	4294967295	3	1	4294967295	222			1099
+1055	0x41f	MinimapDisableArrow	4294967295	1	1	0	222			1100
+1056	0x420	Last_Blocked_ACD	4294967295	3	1	4294967295	0			1101
+1057	0x421	Last_Blocked_Time	4294967295	1	1	0	0			1102
+1058	0x422	Deactivate Lure	4294967295	1	1	0	0			1103
+1059	0x423	Weapons_Hidden	4294967295	1	1	0	222			1104
+1060	0x424	Main_Hand_Weapon_Hidden	4294967295	1	1	0	222			1105
+1061	0x425	Off_Hand_Weapon_Hidden	4294967295	1	1	0	222			1106
+1062	0x426	Actor_Updates_Attributes_From_Owner	4294967295	1	1	0	0			1107
+1063	0x427	Taunt_Target_ACD	4294967295	1	1	4294967295	0			1108
+1064	0x428	Charm_Source_ACD	4294967295	1	1	4294967295	0			1109
+1065	0x429	UI_Only_Percent_Damage_Increase	4294967295	0	0	0	128			1110
+1066	0x42a	Projectile_Effect_SNO	4294967295	3	1	4294967295	222			1111
+1067	0x42b	On_Hit_Fear_Proc_Chance	4294967295	7	0	0	136			1112
+1068	0x42c	On_Hit_Stun_Proc_Chance	4294967295	7	0	0	136			1113
+1069	0x42d	On_Hit_Blind_Proc_Chance	4294967295	7	0	0	136			1114
+1070	0x42e	On_Hit_Freeze_Proc_Chance	4294967295	7	0	0	136			1115
+1071	0x42f	On_Hit_Chill_Proc_Chance	4294967295	7	0	0	136			1116
+1072	0x430	On_Hit_Slow_Proc_Chance	4294967295	7	0	0	136			1117
+1073	0x431	On_Hit_Immobilize_Proc_Chance	4294967295	7	0	0	136			1118
+1074	0x432	On_Hit_Knockback_Proc_Chance	4294967295	7	0	0	136			1119
+1075	0x433	On_Hit_Bleed_Proc_Chance	4294967295	7	0	0	136			1120
+1076	0x434	On_Hit_Bleed_Proc_Damage_Base	4294967295	0	0	0	136			1121
+1077	0x435	On_Hit_Bleed_Proc_Damage_Delta	4294967295	0	0	0	136			1122
+1078	0x436	Damage_Percent_Reduction_From_Ranged	4294967295	7	0	0	136			1123
+1079	0x437	Damage_Percent_Reduction_From_Melee	4294967295	7	0	0	136			1124
+1080	0x438	Damage_Percent_Reduction_Turns_Into_Heal	4294967295	7	0	0	136			1125
+1081	0x439	Damage_Percent_Reduction_From_Elites	4294967295	7	0	0	136			1126
+1082	0x43a	Damage_Percent_Reduction_From_Type	0	7	0	0	136			1127
+1083	0x43b	Damage_Percent_Bonus_Vs_Monster_Type	18	0	0	0	136			1128
+1084	0x43c	Damage_Percent_Bonus_Vs_Elites	4294967295	0	0	0	136			1129
+1085	0x43d	Item_Manipulation_Timeout	4294967295	4	1	0	0			1130
+1086	0x43e	Picked_Up_Time	4294967295	4	1	0	136			1131
+1087	0x43f	Unequipped Time	19	4	1	1	1			1132
+1088	0x440	Last_ACD_Killed_Time	4294967295	4	1	0	1			1133
+1089	0x441	CannotDieDuring	4294967295	1	1	0	0			1134
+1090	0x442	Weapon_On_Hit_Fear_Proc_Chance	4294967295	7	0	0	136			1135
+1091	0x443	Weapon_On_Hit_Stun_Proc_Chance	4294967295	7	0	0	136			1136
+1092	0x444	Weapon_On_Hit_Blind_Proc_Chance	4294967295	7	0	0	136			1137
+1093	0x445	Weapon_On_Hit_Freeze_Proc_Chance	4294967295	7	0	0	136			1138
+1094	0x446	Weapon_On_Hit_Chill_Proc_Chance	4294967295	7	0	0	136			1139
+1095	0x447	Weapon_On_Hit_Slow_Proc_Chance	4294967295	7	0	0	136			1140
+1096	0x448	Weapon_On_Hit_Immobilize_Proc_Chance	4294967295	7	0	0	136			1141
+1097	0x449	Weapon_On_Hit_Knockback_Proc_Chance	4294967295	7	0	0	136			1142
+1098	0x44a	Weapon_On_Hit_Bleed_Proc_Chance	4294967295	7	0	0	136			1143
+1099	0x44b	Weapon_On_Hit_Bleed_Proc_Damage_Base	4294967295	0	0	0	136			1144
+1100	0x44c	Weapon_On_Hit_Bleed_Proc_Damage_Delta	4294967295	0	0	0	136			1145
+1101	0x44d	Weapon_On_Hit_Percent_Bleed_Proc_Chance	4294967295	7	0	0	136			1146
+1102	0x44e	Weapon_On_Hit_Percent_Bleed_Proc_Damage	4294967295	0	0	0	136			1147
+1103	0x44f	Weapon_On_Hit_Percent_Bleed_Proc_Duration	4294967295	0	0	0	136			1148
+1104	0x450	Weapon_On_Hit_Fear_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Fear_Proc_Chance )		1149
+1105	0x451	Weapon_On_Hit_Fear_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Fear_Proc_Chance : 0)		1150
+1106	0x452	Weapon_On_Hit_Fear_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Fear_Proc_Chance_OffHand : Weapon_On_Hit_Fear_Proc_Chance_MainHand)	1151
+1107	0x453	Weapon_On_Hit_Stun_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Stun_Proc_Chance )		1152
+1108	0x454	Weapon_On_Hit_Stun_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Stun_Proc_Chance : 0)		1153
+1109	0x455	Weapon_On_Hit_Stun_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Stun_Proc_Chance_OffHand : Weapon_On_Hit_Stun_Proc_Chance_MainHand)	1154
+1110	0x456	Weapon_On_Hit_Blind_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Blind_Proc_Chance )		1155
+1111	0x457	Weapon_On_Hit_Blind_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Blind_Proc_Chance : 0)		1156
+1112	0x458	Weapon_On_Hit_Blind_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Blind_Proc_Chance_OffHand : Weapon_On_Hit_Blind_Proc_Chance_MainHand)	1157
+1113	0x459	Weapon_On_Hit_Freeze_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Freeze_Proc_Chance )		1158
+1114	0x45a	Weapon_On_Hit_Freeze_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Freeze_Proc_Chance : 0)		1159
+1115	0x45b	Weapon_On_Hit_Freeze_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Freeze_Proc_Chance_OffHand : Weapon_On_Hit_Freeze_Proc_Chance_MainHand)	1160
+1116	0x45c	Weapon_On_Hit_Chill_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Chill_Proc_Chance )		1161
+1117	0x45d	Weapon_On_Hit_Chill_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Chill_Proc_Chance : 0)		1162
+1118	0x45e	Weapon_On_Hit_Chill_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Chill_Proc_Chance_OffHand : Weapon_On_Hit_Chill_Proc_Chance_MainHand)	1163
+1119	0x45f	Weapon_On_Hit_Slow_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Slow_Proc_Chance )		1164
+1120	0x460	Weapon_On_Hit_Slow_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Slow_Proc_Chance : 0)		1165
+1121	0x461	Weapon_On_Hit_Slow_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Slow_Proc_Chance_OffHand : Weapon_On_Hit_Slow_Proc_Chance_MainHand)	1166
+1122	0x462	Weapon_On_Hit_Immobilize_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Immobilize_Proc_Chance )		1167
+1123	0x463	Weapon_On_Hit_Immobilize_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Immobilize_Proc_Chance : 0)		1168
+1124	0x464	Weapon_On_Hit_Immobilize_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Immobilize_Proc_Chance_OffHand : Weapon_On_Hit_Immobilize_Proc_Chance_MainHand)	1169
+1125	0x465	Weapon_On_Hit_Knockback_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Knockback_Proc_Chance )		1170
+1126	0x466	Weapon_On_Hit_Knockback_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Knockback_Proc_Chance : 0)		1171
+1127	0x467	Weapon_On_Hit_Knockback_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Knockback_Proc_Chance_OffHand : Weapon_On_Hit_Knockback_Proc_Chance_MainHand)	1172
+1128	0x468	Weapon_On_Hit_Bleed_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Bleed_Proc_Chance )		1173
+1129	0x469	Weapon_On_Hit_Bleed_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Bleed_Proc_Chance : 0)		1174
+1130	0x46a	Weapon_On_Hit_Bleed_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Bleed_Proc_Chance_OffHand : Weapon_On_Hit_Bleed_Proc_Chance_MainHand)	1175
+1131	0x46b	Weapon_On_Hit_Bleed_Proc_Damage_Base_MainHand	4294967295	0	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Bleed_Proc_Damage_Base )		1176
+1132	0x46c	Weapon_On_Hit_Bleed_Proc_Damage_Base_OffHand	4294967295	0	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Bleed_Proc_Damage_Base : 0)		1177
+1133	0x46d	Weapon_On_Hit_Bleed_Proc_Damage_Base_CurrentHand	4294967295	0	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Bleed_Proc_Damage_Base_OffHand : Weapon_On_Hit_Bleed_Proc_Damage_Base_MainHand)	1178
+1134	0x46e	Weapon_On_Hit_Bleed_Proc_Damage_Delta_MainHand	4294967295	0	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Bleed_Proc_Damage_Delta )		1179
+1135	0x46f	Weapon_On_Hit_Bleed_Proc_Damage_Delta_OffHand	4294967295	0	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Bleed_Proc_Damage_Delta : 0)		1180
+1136	0x470	Weapon_On_Hit_Bleed_Proc_Damage_Delta_CurrentHand	4294967295	0	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Bleed_Proc_Damage_Delta_OffHand : Weapon_On_Hit_Bleed_Proc_Damage_Delta_MainHand)	1181
+1137	0x471	Weapon_On_Hit_Percent_Bleed_Proc_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Percent_Bleed_Proc_Chance )		1182
+1138	0x472	Weapon_On_Hit_Percent_Bleed_Proc_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Percent_Bleed_Proc_Chance : 0)		1183
+1139	0x473	Weapon_On_Hit_Percent_Bleed_Proc_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Percent_Bleed_Proc_Chance_OffHand : Weapon_On_Hit_Percent_Bleed_Proc_Chance_MainHand)	1184
+1140	0x474	Weapon_On_Hit_Percent_Bleed_Proc_Damage_MainHand	4294967295	0	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Percent_Bleed_Proc_Damage )		1185
+1141	0x475	Weapon_On_Hit_Percent_Bleed_Proc_Damage_Base_OffHand	4294967295	0	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Percent_Bleed_Proc_Damage : 0)		1186
+1142	0x476	Weapon_On_Hit_Percent_Bleed_Proc_Damage_Base_CurrentHand	4294967295	0	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Percent_Bleed_Proc_Damage_Base_OffHand : Weapon_On_Hit_Percent_Bleed_Proc_Damage_MainHand)	1187
+1143	0x477	Weapon_On_Hit_Percent_Bleed_Proc_Duration_MainHand	4294967295	0	0	0	136	(Held_In_OffHand ? 0 : Weapon_On_Hit_Percent_Bleed_Proc_Duration )		1188
+1144	0x478	Weapon_On_Hit_Percent_Bleed_Proc_Duration_OffHand	4294967295	0	0	0	136	(Held_In_OffHand ? Weapon_On_Hit_Percent_Bleed_Proc_Duration : 0)		1189
+1145	0x479	Weapon_On_Hit_Percent_Bleed_Proc_Duration_CurrentHand	4294967295	0	0	0	136		(DualWield_Hand ? Weapon_On_Hit_Percent_Bleed_Proc_Duration_OffHand : Weapon_On_Hit_Percent_Bleed_Proc_Duration_MainHand)	1190
+1146	0x47a	Power_Damage_Percent_Bonus	4	0	0	0	136			1191
+1147	0x47b	Power_Instance_Damage_Percent_Bonus	20	0	0	0	136			1192
+1148	0x47c	Power_Resource_Reduction	4	0	0	0	136			1193
+1149	0x47d	Power_Resource_Reduction_Percent	4	0	0	0	136			1194
+1150	0x47e	Power_Cooldown_Reduction	4	0	0	0	136			1195
+1151	0x47f	Power_Duration_Increase	4	0	0	0	136			1197
+1152	0x480	Power_Crit_Percent_Bonus	4	0	0	0	136			1198
+1153	0x481	Weapon_Crit_Chance	4294967295	7	0	0	136			1199
+1154	0x482	Weapon_Crit_Chance_MainHand	4294967295	7	0	0	136	(Held_In_OffHand ? 0 : Weapon_Crit_Chance )		1200
+1155	0x483	Weapon_Crit_Chance_OffHand	4294967295	7	0	0	136	(Held_In_OffHand ? Weapon_Crit_Chance : 0)		1201
+1156	0x484	Weapon_Crit_Chance_CurrentHand	4294967295	7	0	0	136		(DualWield_Hand ? Weapon_Crit_Chance_OffHand : Weapon_Crit_Chance_MainHand)	1202
+1157	0x485	Strength_Item	4294967295	0	0	0	136			1203
+1158	0x486	Dexterity_Item	4294967295	0	0	0	136			1204
+1159	0x487	Intelligence_Item	4294967295	0	0	0	136			1205
+1160	0x488	Vitality_Item	4294967295	0	0	0	136			1206
+1161	0x489	Item_Level_Requirement_Reduction	4294967295	0	1	0	136			1207
+1162	0x48a	Item_Durability_Percent_Bonus	4294967295	0	0	0	136			1209
+1163	0x48b	Item_Indestructible	4294967295	1	1	0	8			1210
+1164	0x48c	Player_All_Items_Indestructible	4294967295	1	1	0	136			1211
+1165	0x48d	Core_Attributes_From_Item_Bonus_Multiplier	4294967295	1	0	1065353216	128			1212
+1166	0x48e	Waiting_To_Accept_Resurrection	4294967295	1	1	0	1			1213
+1167	0x48f	Ghosted	4294967295	1	1	0	1			1214
+1168	0x490	Special_Inventory_Has_Sold	4294967295	1	1	0	2			1215
+1169	0x491	Special_Inventory_Index	4294967295	1	1	4294967295	0			1216
+1170	0x492	Inventory_Reroll_Time	4294967295	1	1	0	0			1217
+1171	0x493	Perk_Buff_Poll_Next_Time	4294967295	1	1	0	0			1218
+1172	0x494	Power_Channel_Lockout_Time	4294967295	4	1	0	0			1220
+1173	0x495	Power_Buff_0_Lockout_Time	4	4	1	0	0			1221
+1174	0x496	Power_Buff_1_Lockout_Time	4	4	1	0	0			1222
+1175	0x497	Power_Buff_2_Lockout_Time	4	4	1	0	0			1223
+1176	0x498	Power_Buff_3_Lockout_Time	4	4	1	0	0			1224
+1177	0x499	Power_Buff_4_Lockout_Time	4	4	1	0	0			1225
+1178	0x49a	Power_Buff_5_Lockout_Time	4	4	1	0	0			1226
+1179	0x49b	Power_Buff_6_Lockout_Time	4	4	1	0	0			1227
+1180	0x49c	Power_Buff_7_Lockout_Time	4	4	1	0	0			1228
+1181	0x49d	Power_Buff_8_Lockout_Time	4	4	1	0	0			1229
+1182	0x49e	Power_Buff_9_Lockout_Time	4	4	1	0	0			1230
+1183	0x49f	Power_Buff_10_Lockout_Time	4	4	1	0	0			1231
+1184	0x4a0	Power_Buff_11_Lockout_Time	4	4	1	0	0			1232
+1185	0x4a1	Power_Buff_12_Lockout_Time	4	4	1	0	0			1233
+1186	0x4a2	Power_Buff_13_Lockout_Time	4	4	1	0	0			1234
+1187	0x4a3	Power_Buff_14_Lockout_Time	4	4	1	0	0			1235
+1188	0x4a4	Power_Buff_15_Lockout_Time	4	4	1	0	0			1236
+1189	0x4a5	Power_Buff_16_Lockout_Time	4	4	1	0	0			1237
+1190	0x4a6	Power_Buff_17_Lockout_Time	4	4	1	0	0			1238
+1191	0x4a7	Power_Buff_18_Lockout_Time	4	4	1	0	0			1239
+1192	0x4a8	Power_Buff_19_Lockout_Time	4	4	1	0	0			1240
+1193	0x4a9	Power_Buff_20_Lockout_Time	4	4	1	0	0			1241
+1194	0x4aa	Power_Buff_21_Lockout_Time	4	4	1	0	0			1242
+1195	0x4ab	Power_Buff_22_Lockout_Time	4	4	1	0	0			1243
+1196	0x4ac	Power_Buff_23_Lockout_Time	4	4	1	0	0			1244
+1197	0x4ad	Power_Buff_24_Lockout_Time	4	4	1	0	0			1245
+1198	0x4ae	Power_Buff_25_Lockout_Time	4	4	1	0	0			1246
+1199	0x4af	Power_Buff_26_Lockout_Time	4	4	1	0	0			1247
+1200	0x4b0	Power_Buff_27_Lockout_Time	4	4	1	0	0			1248
+1201	0x4b1	Power_Buff_28_Lockout_Time	4	4	1	0	0			1249
+1202	0x4b2	Power_Buff_29_Lockout_Time	4	4	1	0	0			1250
+1203	0x4b3	Power_Buff_30_Lockout_Time	4	4	1	0	0			1251
+1204	0x4b4	Power_Buff_31_Lockout_Time	4	4	1	0	0			1252
+1205	0x4b5	Known_By_Owner	4294967295	4	1	4294967295	0			1253
+1206	0x4b6	Never_Deactivates	4294967295	1	1	0	0			1254
+1207	0x4b7	Account_Under_Review	4294967295	1	1	0	1			1255
+1208	0x4b8	Projectile_Detonate_Time	4294967295	4	1	0	64			1256
+1209	0x4b9	Projectile_Uncapped_Lifetime	4294967295	0	1	0	0			1257
+1210	0x4ba	PageOfFate_Item	4294967295	3	1	4294967295	222			1258
+1211	0x4bb	Accolade_0	4294967295	4	1	4294967295	1			1259
+1212	0x4bc	Accolade_1	4294967295	4	1	4294967295	1			1260
+1213	0x4bd	Accolade_2	4294967295	4	1	4294967295	1			1261
+1214	0x4be	Accolade_3	4294967295	4	1	4294967295	1			1262
+1215	0x4bf	Accolade_4	4294967295	4	1	4294967295	1			1263
+1216	0x4c0	Accolade_0_Value	4294967295	4	0	0	1			1264
+1217	0x4c1	Accolade_1_Value	4294967295	4	0	0	1			1265
+1218	0x4c2	Accolade_2_Value	4294967295	4	0	0	1			1266
+1219	0x4c3	Accolade_3_Value	4294967295	4	0	0	1			1267
+1220	0x4c4	Accolade_4_Value	4294967295	4	0	0	1			1268
+1221	0x4c5	PVP_Rank	4294967295	0	1	0	1			1269
+1222	0x4c6	PVP_Tokens	4294967295	0	1	0	1			1270
+1223	0x4c7	PVP_Experience_Next_Lo	4294967295	0	1	0	1			1271
+1224	0x4c8	PVP_Experience_Next_Hi	4294967295	0	1	0	1			1272
+1225	0x4c9	PVP_Gold_Gained_This_Game	4294967295	0	1	0	1			1273
+1226	0x4ca	PVP_PVP_Experience_Gained_This_Game_Lo	4294967295	0	1	0	1			1274
+1227	0x4cb	PVP_PVP_Experience_Gained_This_Game_Hi	4294967295	0	1	0	1			1275
+1228	0x4cc	PVP_Normal_Experience_Gained_This_Game_Lo	4294967295	0	1	0	1			1276
+1229	0x4cd	PVP_Normal_Experience_Gained_This_Game_Hi	4294967295	0	1	0	1			1277
+1230	0x4ce	PVP_Tokens_Gained_This_Game	4294967295	0	1	0	1			1278
+1231	0x4cf	PVP_Level_Equalizer_Level	4294967295	0	1	0	1			1279
+1232	0x4d0	Is_Temporary_Lure	4294967295	0	1	1	0			1280
+1233	0x4d1	Ignore_Lure	4294967295	0	1	0	0			1281
+1234	0x4d2	Effect_Owner_ANN	4294967295	3	1	4294967295	222			1282
+1235	0x4d3	Elite_Engaged	4294967295	1	1	0	0			1283
+1236	0x4d4	Engaged_Rare_Time	4294967295	1	1	0	1			1284
+1237	0x4d5	Engaged_Goblin_Time	4294967295	1	1	0	1			1285
+1238	0x4d6	On_Death_Accolade_0	4294967295	4	1	4294967295	1			1286
+1239	0x4d7	On_Death_Accolade_0_Value	4294967295	4	0	0	1			1287
+1240	0x4d8	Item_Power_Passive	4	1	0	0	136			1288
+1241	0x4d9	PVP_TeamDeathmatch_Games_Played	4294967295	4	1	0	1			1289
+1242	0x4da	Last_Health_Drop_Interval	4294967295	4	1	4294967295	0			1290
+1243	0x4db	CrowdControl_Resistance	4294967295	4	0	0	136			1291
+1244	0x4dc	CrowdControl_Projected_End_Time	4294967295	4	1	0	136			1292
+1245	0x4dd	Charmed	4294967295	1	1	0	222			1294
+1246	0x4de	Taunted	4294967295	1	1	0	222			1295
+1247	0x4df	Dueling	4294967295	1	1	0	222			1296
+1248	0x4e0	PVP_Player_Revealed_On_Map	4294967295	1	1	0	222			1297
+1249	0x4e1	Targeted_Legendary_Chance	4294967295	1	1	0	1			1298
+1250	0x4e2	Has_Dropped_Special_loot	4294967295	1	1	0	0			1301
+1251	0x4e3	Scroll_Buff	4294967295	1	1	0	1			1302
+1252	0x4e4	Buff_Exclusive_Type_Active	3	1	1	0	1			1303
+1253	0x4e5	In_Combat_With_Player	4294967295	1	1	0	1			1304
+1254	0x4e6	Actor_Forwards_Buffs	4294967295	1	1	4294967295	0			1305
+1255	0x4e7	Item_Marked_As_Junk	4294967295	1	1	0	136			1306
+1256	0x4e8	Allow_2H_And_Shield	4294967295	1	1	0	1			1307
+1257	0x4e9	Class_Damage_Reduction_Percent_PVP	4294967295	0	0	0	1			1308
+1258	0x4ea	Paragon_Bonus	17	4	1	0	222			1309
+1259	0x4eb	Paragon_Bonus_Points_Available	3	4	1	0	222			1310
+1260	0x4ec	Dungeon_Finder_Progress_Percent	4294967295	1	0	0	222			1311
+1261	0x4ed	Item_Trade_Player_High	12	4	1	0	8			1312
+1262	0x4ee	Item_Trade_Player_Low	12	4	1	0	8			1313
+1263	0x4ef	Item_Trade_End_Time	4294967295	1	1	0	8			1314
+1264	0x4f0	Item_Trade_Timer_ID	4294967295	4	1	4294967295	0			1315
+1265	0x4f1	Item_Is_BOE	4294967295	4	1	0	8			1316
+1266	0x4f2	Season	4294967295	4	1	0	8			1317
+1267	0x4f3	DamageDoneTotalTrackedHi	4294967295	4	1	0	1			1318
+1268	0x4f4	DamageDoneTotalTrackedLo	4294967295	4	1	0	1			1319
+1269	0x4f5	DamageDoneTrackingStartTick	4294967295	4	1	0	1			1320
+1270	0x4f6	PowerPersistsAcrossGames	4	0	1	0	1			1321
+1271	0x4f7	Experience_Bonus_Percent_IGR_Buff	4294967295	0	0	0	136			1322
+1272	0x4f8	Experience_Bonus_Percent_Anniversary_Buff	4294967295	0	0	0	136			1323
+1273	0x4f9	Experience_Bonus_Percent_Community_Buff	4294967295	0	0	0	136			1324
+1274	0x4fa	Experience_Bonus_Percent_Super_Scalar	4294967295	0	0	0	136			1326
+1275	0x4fb	Experience_Bonus_Percent_Super_Scalar_Total	4294967295	0	0	0	136		Experience_Bonus_Percent_Super_Scalar + Experience_Bonus_Percent_Community_Buff + Experience_Bonus_Percent_IGR_Buff + Experience_Bonus_Percent_Anniversary_Buff	1327
+1276	0x4fc	AlwaysShowFloatingNumbers	4294967295	1	1	0	222			1328
+1277	0x4fd	Targeted_Rare_Chance	4294967295	1	1	0	1			1329
+1278	0x4fe	Supress_Thorns_Effect	4294967295	1	1	0	222			1330
+1279	0x4ff	Dynamic_Entrance_GUID	4294967295	4	1	0	0			1331
+1280	0x500	Bonus_Chance_To_Be_Crit_Hit	4294967295	0	0	0	0			1332
+1281	0x501	Bonus_Chance_To_Be_Crit_Hit_By_Actor	15	0	0	0	0			1333
+1282	0x502	Bonus_Chance_To_Receive_Crushing_Blown	4294967295	0	0	0	0			1334
+1283	0x503	Force_Gripped	4294967295	1	1	0	222			1335
+1284	0x504	Power Bonus Attack Radius	4	0	0	0	222			1336
+1285	0x505	Item_Store_Player_High	4294967295	4	1	0	0			1337
+1286	0x506	Item_Store_Player_Low	4294967295	4	1	0	0			1338
+1287	0x507	Power_Primary_Resource_Cost_Override	4	6	0	2139095039	222			1339
+1288	0x508	Power_Secondary_Resource_Cost_Override	4	6	0	2139095039	222			1340
+1289	0x509	Power_Channel_Cost_Override	4	6	0	2139095039	222			1341
+1290	0x50a	Rune_A_Override	4	0	1	0	0			1342
+1291	0x50b	Rune_B_Override	4	0	1	0	0			1343
+1292	0x50c	Rune_C_Override	4	0	1	0	0			1344
+1293	0x50d	Rune_D_Override	4	0	1	0	0			1345
+1294	0x50e	Rune_E_Override	4	0	1	0	0			1346
+1295	0x50f	Elemental_Effect_Amplitude_Bonus	0	0	0	0	222			1347
+1296	0x510	Elemental_Effect_Duration_Bonus	0	0	0	0	222			1348
+1297	0x511	Elemental_Effect_Proc_Chance_Bonus	0	0	0	0	222			1349
+1298	0x512	Splash_Damage_Effect_Percent	4294967295	0	0	0	222			1350
+1299	0x513	Crushing_Blow_Proc_Chance	4294967295	0	0	0	222			1351
+1300	0x514	Item_Equipped_But_Disabled	4294967295	1	1	0	8			1352
+1301	0x515	Attribute_Projectile_Pass_Through	4294967295	1	1	0	222			1354
+1302	0x516	Attribute_Set_Item_Discount	4294967295	1	1	0	222			1355
+1303	0x517	Negative_Health_Globe_Spawn_Chance	4294967295	7	0	0	0			1356
+1304	0x518	Override_Attached_Anim	4294967295	1	1	4294967295	1			1357
+1305	0x519	Has_Infinite_Shrine_Buffs	4294967295	1	1	0	0			1358
+1306	0x51a	Item_Legendary_Item_Base_Item	4294967295	4	1	4294967295	8		0	1359
+1307	0x51b	Targeted_Magic_Chance	4294967295	1	1	0	1			1360
+1308	0x51c	Dont_Update_Camera_While_Attached	4294967295	1	1	0	1			1361
+1309	0x51d	Linked Dynamic Entrance GUID	4294967295	1	1	0	0			1362
+1310	0x51e	Boost_TC_Index	4294967295	1	1	0	1			1363
+1311	0x51f	Boost_TC_NextTime	4294967295	1	1	0	0			1364
+1312	0x520	Potion_Bonus_Armor_Percent	4294967295	0	0	0	8			1365
+1313	0x521	Potion_Bonus_Resist_All	4294967295	0	0	0	8			1366
+1314	0x522	Potion_Bonus_Hitpoints_Granted	4294967295	0	0	0	8			1367
+1315	0x523	Potion_Bonus_Buff_Duration	4294967295	0	0	0	8			1368
+1316	0x524	Potion_Bonus_Life_On_Hit	4294967295	0	0	0	8			1369
+1317	0x525	Potion_Bonus_Life_On_Kill	4294967295	0	0	0	8			1370
+1318	0x526	Last_Special_Item_Time_High	4294967295	4	1	0	1			1371
+1319	0x527	Last_Special_Item_Time_Low	4294967295	4	1	0	1			1372
+1320	0x528	Item_Rest_Bonus_Pool	4294967295	4	0	0	1			1373
+1321	0x529	Item_Unlucky_Bonus_Secs	4294967295	4	0	0	1			1374
+1322	0x52a	Item_Unlucky_Bonus_Allow	4294967295	1	1	0	0			1375
+1323	0x52b	Avenger_Buildup_Secs	4294967295	4	0	0	1			1376
+1324	0x52c	Bounty_Objective	4294967295	1	1	0	222			1377
+1325	0x52d	Illusion	4294967295	1	1	0	0			1378
+1326	0x52e	TornadoStraighten	4294967295	1	1	0	0			1379
+1327	0x52f	Prevent_Evade_During	4294967295	1	1	0	222			1380
+1328	0x530	Damage_Bonus_From_Nephalem_Glory	4294967295	1	0	0	222			1381
+1329	0x531	Item_Player_Recipient	4294967295	4	1	4294967295	8		0	1382
+1330	0x532	Heavens_Fury_Attacker	12	4	1	4294967295	0			1383
+1331	0x533	Item_Assigned_Hero_High	4294967295	4	1	0	8			1384
+1332	0x534	Item_Assigned_Hero_Low	4294967295	4	1	0	8			1385
+1333	0x535	Pierce_Charge	4294967295	4	1	0	0			1386
+1334	0x536	Upscaled_Level	4294967295	1	1	0	1			1387
+1335	0x537	Resurrected	4294967295	1	1	0	2			1388
+1336	0x538	Damage_SidekickMultiplier	4294967295	0	0	0	136			1389
+1337	0x539	Thorns_AOE_Radius_Next_Time	4294967295	1	1	0	0			1390
+1338	0x53a	Movement_Destroys_Waller_Walls	4294967295	1	1	0	222			1391
+1339	0x53b	Mail_Flag_Icon	12	3	1	0	0			1392
+1340	0x53c	Tiered_Loot_Run_Key_Level	4294967295	1	1	0	222			1393
+1341	0x53d	Forced Move	4294967295	3	1	0	222			1396
+1342	0x53e	Effective_Level	4294967295	0	1	0	1		Max(Upscaled_Level, Level)	1397
+1343	0x53f	Item_Console_Max_Level	4294967295	4	1	0	8		0	1399
+1344	0x540	Console_Promo_Item	4294967295	1	1	0	8			1400
+1345	0x541	Double_BloodShards	4294967295	1	1	0	1			1401

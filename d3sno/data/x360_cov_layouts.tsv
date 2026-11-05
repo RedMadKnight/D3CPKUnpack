@@ -1,0 +1,21 @@
+build	record	offset	bytes	kind	type	points_to	name	root_ext
+x360	SceneDefinition	-	536	RECORD SIZE			switch type data	scn
+x360	SceneDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	scn
+x360	SceneDefinition	0xc	4	prim	i		dwFlags	scn
+x360	SceneDefinition	0x10	24	struct	AABB		aabbBounds	scn
+x360	SceneDefinition	0x28	24	struct	AABB		aabbMarkerSetBounds	scn
+x360	SceneDefinition	0x40	96	struct	NavMeshDef		tNavMeshData	scn
+x360	SceneDefinition	0xa0	8	pair		array:SNO	serExclusions	scn
+x360	SceneDefinition	0xa8	56	raw	SNOArray		arExclusions	scn
+x360	SceneDefinition	0xe0	8	pair		array:SNO	serInclusions	scn
+x360	SceneDefinition	0xe8	56	raw	SNOArray		arInclusions	scn
+x360	SceneDefinition	0x120	8	pair		array:SNO	serMarkerSets	scn
+x360	SceneDefinition	0x128	56	raw	SNOArray		arMarkerSets	scn
+x360	SceneDefinition	0x160	8	struct	LookLink		tLookLink	scn
+x360	SceneDefinition	0x168	8	pair		array:MsgTriggeredEvent	serMsgTriggeredEvents	scn
+x360	SceneDefinition	0x170	4	prim	i		nMsgTriggeredEventCount	scn
+x360	SceneDefinition	0x178	8	ptr	xptr64		ptMsgTriggeredEvents	scn
+x360	SceneDefinition	0x180	136	struct	NavZoneDefinition		tNavZoneDef	scn
+x360	SceneDefinition	0x208	8	zero			u208	scn
+x360	SceneDefinition	0x210	4	prim	i		snoAppearance	scn
+x360	SceneDefinition	0x214	4	prim	i		snoPhysMesh	scn

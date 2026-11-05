@@ -14,7 +14,8 @@ BUILDS = ("ps3", "switch")
 
 class Layouts(unittest.TestCase):
     def test_every_record_on_both_builds(self):
-        self.assertEqual(len(R.layouts()), 44)
+        self.assertEqual(len([k for k in R.layouts() if k[0] != "x360"]), 44)
+        self.assertEqual(len([k for k in R.layouts() if k[0] == "x360"]), 7)  # stage 8, X3
         self.assertEqual(R.layout("ps3", "actor").size, 432)
         self.assertEqual(R.layout("switch", "conversation_node").size, 136)
         self.assertEqual(R.layout("ps3", "conversation_node").size, 104)
@@ -128,15 +129,36 @@ class Monsters(unittest.TestCase):
     def test_ps3_levels_then_modifiers(self):
         floats = [0.0] * 146
         floats[8] = 1.5
-        floats[58] = struct.unpack(">f", struct.pack(">i", 1))[0]
+        floats = floats[:142]
+        floats[58] = 0.0
+        floats[75] = 1.0
+        floats[85] = 15.7
         data = B.build_record("ps3", "monster", {
             "level_by_difficulty": [10, 20, 30, 40], "attribute_modifiers": floats,
         })
         record = R.parse_record_file(data, "mon").record
         self.assertEqual(record["level_by_difficulty"], [10, 20, 30, 40])
+        self.assertEqual(len(record["attribute_modifiers"]), 142)
         values = R.monster_attributes(record, ">")
         self.assertEqual(values["Hitpoints_Regen_Per_Second"], 1.5)
-        self.assertEqual(values["GrantsNoXP"], 1)
+        self.assertEqual(values["Immunity#0"], 1)
+        self.assertIsInstance(values["Immunity#0"], int)
+        self.assertEqual(values["Attack_Cooldown_Min"], 15)  # truncated, not rounded
+        self.assertFalse(R.monster_grants_experience(record))
+
+    def test_slot_names_and_shared_slot(self):
+        floats = [0.0] * 146
+        floats[58] = 1.0
+        floats[71] = 0.25
+        record = R.parse_record_file(B.build_record("switch", "monster", {
+            "attribute_modifiers": floats,
+        }), "mon").record
+        values = R.monster_attributes(record, "<")
+        self.assertEqual((values["Resistance#5"], values["Resistance#6"]), (0.25, 0.25))
+        self.assertTrue(R.monster_grants_experience(record))
+        slots = R.monster_slots(record)
+        self.assertEqual(slots["GBA_EXPERIENCE"], 1.0)
+        self.assertEqual(len(slots), 146)
 
     def test_switch_index_order_is_the_same(self):
         floats = [float(i) for i in range(146)]
@@ -148,7 +170,17 @@ class Monsters(unittest.TestCase):
     def test_table_offsets_agree(self):
         for attribute in R.monster_attribute_indices():
             self.assertGreaterEqual(attribute.index, 0)
-        self.assertEqual(len(R.monster_attribute_indices()), 61)
+        rows = R.monster_attribute_indices()
+        self.assertEqual(len(rows), 146)
+        self.assertEqual([r.index for r in rows], list(range(146)))
+        for row in rows:
+            self.assertEqual(row.switch_offset, 0x44 + 4 * row.index)
+            if row.index < 142:
+                self.assertEqual(row.ps3_offset, 0x54 + 4 * row.index)
+            else:
+                self.assertIsNone(row.ps3_offset)
+        self.assertEqual(rows[58].slot_name, "GBA_EXPERIENCE")
+        self.assertEqual(sum(1 for r in rows if r.attribute_kind == "int"), 21)
 
 
 class Conversations(unittest.TestCase):
@@ -238,12 +270,17 @@ class Treasure(unittest.TestCase):
             modifier = parsed.record["modifiers"][0]
             self.assertEqual(R.live_affixes(modifier), [5, 6])
             self.assertEqual(R.DROP_KINDS[modifier["drop_kind"]], "targeted_legendary")
-            self.assertFalse(R.rolls_every_modifier(parsed.record["choose_kind"]))
+            self.assertTrue(R.rolls_every_modifier(parsed.record["choose_kind"]))
+            self.assertEqual(parsed.record.enum("choose_kind").constant, "TCC_ALL_OF")
 
     def test_choose_kinds(self):
-        self.assertTrue(R.rolls_every_modifier(0))
-        self.assertTrue(R.rolls_every_modifier(3))
-        self.assertFalse(R.rolls_every_modifier(2))
+        self.assertFalse(R.rolls_every_modifier(0))  # one of, by weight
+        self.assertFalse(R.rolls_every_modifier(3))
+        self.assertTrue(R.rolls_every_modifier(1))  # all of, each by its chance
+        self.assertTrue(R.rolls_every_modifier(2))
+        self.assertEqual(R.choose_rule(3), R.ChooseRule(3, "one_of", True))
+        self.assertEqual(R.choose_rule(-1).mode, "none")
+        self.assertFalse(R.rolls_every_modifier(-1))
         with self.assertRaises(FormatError):
             R.rolls_every_modifier(4)
 
@@ -312,9 +349,11 @@ class Attributes(unittest.TestCase):
     def test_safe_rows_only(self):
         self.assertEqual(R.ps3_attribute(65).name, "Level")
         self.assertEqual(R.ps3_attribute(65).switch_id, 57)
-        self.assertIsNone(R.ps3_attribute(66))
-        self.assertEqual(R.ps3_attribute(66, safe_only=False).status, "HYPOTHESIS")
-        self.assertIsNone(R.ps3_attribute(0, safe_only=False).name)
+        self.assertEqual(R.ps3_attribute(66).status, "SUPPORTED")  # stage 7 table
+        self.assertIsNone(R.ps3_attribute(12))
+        self.assertEqual(R.ps3_attribute(12, safe_only=False).name, "Intelligence")
+        self.assertEqual(R.ps3_attribute(0).name, "Axe_Bad_Data")
+        self.assertEqual(R.ps3_attribute(0).switch_id, 0)
         self.assertIsNone(R.ps3_attribute(99999))
 
     def test_order_is_kept(self):

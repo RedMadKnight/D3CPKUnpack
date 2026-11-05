@@ -1,0 +1,4177 @@
+struct	x360_size	field_index	x360_offset	x360_bytes	type	element	count	extra
+ActStartLocOverride	24	0	0	12	ResolvedPortalDestination			
+ActStartLocOverride	24	1	12	4	SNO			group 58
+ActStartLocOverride	24	2	16	4	SNO			group 48
+ActStartLocOverride	24	3	20	4	INT			
+ActQuestInfo	4	0	0	4	SNO			group 31
+Act	4200	0	12	12	SerializeData			
+Act	4200	1	24	8	VARIABLEARRAY	ActQuestInfo		
+Act	4200	2	32	4000	FIXEDARRAY	WaypointInfo	100	
+Act	4200	3	4032	12	ResolvedPortalDestination			
+Act	4200	4	4044	144	FIXEDARRAY	ActStartLocOverride	6	
+Act	4200	5	4188	4	SNO			group 69
+Act	4200	6	4192	8	INT			
+SubSceneGroup	32	0	0	4	SNO			group 51
+SubSceneGroup	32	1	4	4	INT			
+SubSceneGroup	32	2	8	8	INT			
+SubSceneGroup	32	3	24	8	SerializeData			
+SubSceneGroup	32	4	16	8	VARIABLEARRAY	SubSceneEntry		
+SceneCluster	184	0	0	128	CHARARRAY		128	
+SceneCluster	184	1	128	4	INT			
+SceneCluster	184	2	132	4	INT			
+SceneCluster	184	3	144	8	SerializeData			
+SceneCluster	184	4	136	8	VARIABLEARRAY	SubSceneGroup		
+SceneCluster	184	5	152	32	SubSceneGroup			
+SceneClusterSet	24	0	0	8	INT			
+SceneClusterSet	24	1	16	8	SerializeData			
+SceneClusterSet	24	2	8	8	VARIABLEARRAY	SceneCluster		
+ExtendedPath_Console	192	0	8	8	SerializeData			
+ExtendedPath_Console	192	1	0	8	VARIABLEARRAY	VelocityVectorPath		
+ExtendedPath_Console	192	2	24	8	SerializeData			
+ExtendedPath_Console	192	3	16	8	VARIABLEARRAY	VelocityVectorPath		
+ExtendedPath_Console	192	4	40	8	SerializeData			
+ExtendedPath_Console	192	5	32	8	VARIABLEARRAY	VelocityPath		
+ExtendedPath_Console	192	6	56	8	SerializeData			
+ExtendedPath_Console	192	7	48	8	VARIABLEARRAY	FloatPath		
+ExtendedPath_Console	192	8	72	8	SerializeData			
+ExtendedPath_Console	192	9	64	8	VARIABLEARRAY	AngularVelocityPath		
+ExtendedPath_Console	192	10	88	8	SerializeData			
+ExtendedPath_Console	192	11	80	8	VARIABLEARRAY	AnglePath		
+ExtendedPath_Console	192	12	104	8	SerializeData			
+ExtendedPath_Console	192	13	96	8	VARIABLEARRAY	FloatPath		
+ExtendedPath_Console	192	14	120	8	SerializeData			
+ExtendedPath_Console	192	15	112	8	VARIABLEARRAY	FloatPath		
+ExtendedPath_Console	192	16	136	8	SerializeData			
+ExtendedPath_Console	192	17	128	8	VARIABLEARRAY	VelocityPath		
+ExtendedPath_Console	192	18	152	8	SerializeData			
+ExtendedPath_Console	192	19	144	8	VARIABLEARRAY	AccelVectorPath		
+ExtendedPath_Console	192	20	168	8	SerializeData			
+ExtendedPath_Console	192	21	160	8	VARIABLEARRAY	VelocityPath		
+ExtendedPath_Console	192	22	184	8	SerializeData			
+ExtendedPath_Console	192	23	176	8	VARIABLEARRAY	FloatPath		
+EmitterParams	64	0	48	4	INT			
+EmitterParams	64	1	24	8	SerializeData			
+EmitterParams	64	2	0	8	VARIABLEARRAY	FloatPath		
+EmitterParams	64	3	32	8	SerializeData			
+EmitterParams	64	4	8	8	VARIABLEARRAY	FloatPath		
+EmitterParams	64	5	40	8	SerializeData			
+EmitterParams	64	6	16	8	VARIABLEARRAY	VectorPath		
+EmitterParams	64	7	52	4	INT			
+EmitterParams	64	8	56	8	INT			
+Particle	688	0	12	4	INT			
+Particle	688	1	16	4	INT			
+Particle	688	2	20	4	TIME			
+Particle	688	3	24	4	TIME			
+Particle	688	4	28	4	TIME			
+Particle	688	5	32	12	InterpolationScalar			
+Particle	688	6	44	4	INT			
+Particle	688	7	280	8	SerializeData			
+Particle	688	8	272	8	VARIABLEARRAY	FloatPath		
+Particle	688	9	296	8	SerializeData			
+Particle	688	10	288	8	VARIABLEARRAY	IntPath		
+Particle	688	11	312	8	SerializeData			
+Particle	688	12	304	8	VARIABLEARRAY	FloatPath		
+Particle	688	13	328	8	SerializeData			
+Particle	688	14	320	8	VARIABLEARRAY	TimePath		
+Particle	688	15	344	8	SerializeData			
+Particle	688	16	336	8	VARIABLEARRAY	FloatPath		
+Particle	688	17	360	8	SerializeData			
+Particle	688	18	352	8	VARIABLEARRAY	AnglePath		
+Particle	688	19	376	8	SerializeData			
+Particle	688	20	368	8	VARIABLEARRAY	VelocityPath		
+Particle	688	21	392	8	SerializeData			
+Particle	688	22	384	8	VARIABLEARRAY	VelocityPath		
+Particle	688	23	56	104	UberMaterial			
+Particle	688	24	160	4	SNO			group 28
+Particle	688	25	164	4	MASS			
+Particle	688	26	168	4	INT			
+Particle	688	27	172	4	FLOAT			
+Particle	688	28	176	4	FLOAT			
+Particle	688	29	180	4	FLOAT			
+Particle	688	30	184	4	FLOAT			
+Particle	688	31	188	4	FLOAT			
+Particle	688	32	192	4	FLOAT			
+Particle	688	33	196	4	FLOAT			
+Particle	688	34	200	8	SNO			group 1
+Particle	688	35	208	64	EmitterParams			
+Particle	688	36	424	8	SerializeData			
+Particle	688	37	416	8	VARIABLEARRAY	FloatPath		
+Particle	688	38	408	8	SerializeData			
+Particle	688	39	400	8	VARIABLEARRAY	ColorPath		
+Particle	688	40	440	8	SerializeData			
+Particle	688	41	432	8	VARIABLEARRAY	FloatPath		
+Particle	688	42	456	8	SerializeData			
+Particle	688	43	448	8	VARIABLEARRAY	FloatPath		
+Particle	688	44	472	8	SerializeData			
+Particle	688	45	464	8	VARIABLEARRAY	AnglePath		
+Particle	688	46	488	8	SerializeData			
+Particle	688	47	480	8	VARIABLEARRAY	AngularVelocityPath		
+Particle	688	48	504	8	SerializeData			
+Particle	688	49	496	8	VARIABLEARRAY	VectorPath		
+Particle	688	50	520	8	SerializeData			
+Particle	688	51	512	8	VARIABLEARRAY	VelocityPath		
+Particle	688	52	536	8	SerializeData			
+Particle	688	53	528	8	VARIABLEARRAY	AngularVelocityPath		
+Particle	688	54	552	8	SerializeData			
+Particle	688	55	544	8	VARIABLEARRAY	VectorPath		
+Particle	688	56	568	8	SerializeData			
+Particle	688	57	560	8	VARIABLEARRAY	VectorPath		
+Particle	688	58	584	8	SerializeData			
+Particle	688	59	576	8	VARIABLEARRAY	VelocityVectorPath		
+Particle	688	60	600	8	SerializeData			
+Particle	688	61	592	8	VARIABLEARRAY	AccelVectorPath		
+Particle	688	62	616	8	SerializeData			
+Particle	688	63	608	8	VARIABLEARRAY	VectorPath		
+Particle	688	64	632	8	SerializeData			
+Particle	688	65	624	8	VARIABLEARRAY	VelocityVectorPath		
+Particle	688	66	648	8	SerializeData			
+Particle	688	67	640	8	VARIABLEARRAY	ExtendedPath_Console		
+Particle	688	68	48	8	FLOAT			
+Particle	688	69	656	4	INT			
+Particle	688	70	660	4	FLOAT			
+Particle	688	71	664	4	FLOAT			
+Particle	688	72	676	4	INT			
+Particle	688	73	668	8	SerializeData			
+Particle	688	74	680	8	VARIABLEARRAY	MsgTriggeredEvent		
+SkillDeclaration	8	0	0	4	SNO			group 29
+SkillDeclaration	8	1	4	4	INT			
+HealthDropInfo	12	0	0	4	FLOAT			
+HealthDropInfo	12	1	4	4	GBID			
+HealthDropInfo	12	2	8	4	INT			
+ColorNode	12	0	0	4	RGBACOLOR			
+ColorNode	12	1	4	4	RGBACOLOR			
+ColorNode	12	2	8	4	FLOAT			
+ColorPath	48	0	0	32	InterpolationPathHeader			
+ColorPath	48	1	40	8	SerializeData			
+ColorPath	48	2	32	8	VARIABLEARRAY	ColorNode		
+TieredLootRunLevel	48	0	0	8	SerializeData			
+TieredLootRunLevel	48	1	8	8	VARIABLEARRAY	BYTE		
+TieredLootRunLevel	48	2	16	4	INT			
+TieredLootRunLevel	48	3	20	4	INT			
+TieredLootRunLevel	48	4	24	4	FLOAT			
+TieredLootRunLevel	48	5	28	4	FLOAT			
+TieredLootRunLevel	48	6	32	4	FLOAT			
+TieredLootRunLevel	48	7	36	4	FLOAT			
+TieredLootRunLevel	48	8	40	4	FLOAT			
+TieredLootRunLevel	48	9	44	4	INT			
+HandicapLevel	48	0	0	8	SerializeData			
+HandicapLevel	48	1	8	8	VARIABLEARRAY	BYTE		
+HandicapLevel	48	2	16	4	INT			
+HandicapLevel	48	3	20	4	INT			
+HandicapLevel	48	4	24	4	FLOAT			
+HandicapLevel	48	5	28	4	FLOAT			
+HandicapLevel	48	6	32	4	FLOAT			
+HandicapLevel	48	7	36	4	FLOAT			
+HandicapLevel	48	8	40	4	FLOAT			
+HandicapLevel	48	9	44	4	FLOAT			
+HandicapLevelTable	16	0	0	8	SerializeData			
+HandicapLevelTable	16	1	8	8	VARIABLEARRAY	HandicapLevel		
+QualityClass	120	0	0	8	SerializeData			
+QualityClass	120	1	8	8	VARIABLEARRAY	BYTE		
+QualityClass	120	2	16	4	INT			
+QualityClass	120	3	20	8	INT			
+QualityClass	120	4	28	4	FLOAT			
+QualityClass	120	5	32	4	FLOAT			
+QualityClass	120	6	36	4	FLOAT			
+QualityClass	120	7	40	4	FLOAT			
+QualityClass	120	8	44	4	FLOAT			
+QualityClass	120	9	48	4	FLOAT			
+QualityClass	120	10	52	4	FLOAT			
+QualityClass	120	11	56	4	FLOAT			
+QualityClass	120	12	60	4	FLOAT			
+QualityClass	120	13	64	4	FLOAT			
+QualityClass	120	14	68	4	FLOAT			
+QualityClass	120	15	72	4	FLOAT			
+QualityClass	120	16	76	4	FLOAT			
+QualityClass	120	17	80	4	FLOAT			
+QualityClass	120	18	84	4	FLOAT			
+QualityClass	120	19	88	4	FLOAT			
+QualityClass	120	20	92	4	FLOAT			
+QualityClass	120	21	96	4	FLOAT			
+QualityClass	120	22	100	4	FLOAT			
+QualityClass	120	23	104	4	FLOAT			
+QualityClass	120	24	108	4	FLOAT			
+QualityClass	120	25	112	4	FLOAT			
+QualityClass	120	26	116	4	INT			
+QualityClassTable	16	0	0	8	SerializeData			
+QualityClassTable	16	1	8	8	VARIABLEARRAY	QualityClass		
+ItemLevelModTable	16	0	0	8	SerializeData			
+ItemLevelModTable	16	1	8	8	VARIABLEARRAY	LootDistribution		
+OctreeLeaf	24	0	0	16	OctreeCube			
+OctreeLeaf	24	1	16	4	INT			
+OctreeLeaf	24	2	20	4	INT			
+OctreeCube	16	0	0	12	VECTOR3D			
+OctreeCube	16	1	12	4	FLOAT			
+OctreeNode	48	0	0	16	OctreeCube			
+OctreeNode	48	1	16	32	FIXEDARRAY	INT	8	
+PRTransform	28	0	0	16	Quaternion			
+PRTransform	28	1	16	12	VECTOR3D			
+PRSTransform	32	0	0	16	Quaternion			
+PRSTransform	32	1	16	12	VECTOR3D			
+PRSTransform	32	2	28	4	FLOAT			
+SubSceneLabel	8	0	0	4	GBID			
+SubSceneLabel	8	1	4	4	INT			
+SubSceneEntry	32	0	0	4	SNO			group 33
+SubSceneEntry	32	1	4	4	INT			
+SubSceneEntry	32	2	8	8	INT			
+SubSceneEntry	32	3	24	8	SerializeData			
+SubSceneEntry	32	4	16	8	VARIABLEARRAY	SubSceneLabel		
+UIStyleChildSpec	112	0	0	8	SerializeData			
+UIStyleChildSpec	112	1	8	8	VARIABLEARRAY	BYTE		
+UIStyleChildSpec	112	2	16	96	DataElements			
+UIDataElementFloat32	16	0	0	8	INT64			
+UIDataElementFloat32	16	1	8	8	FLOAT			
+UIDataElementInt32	16	0	0	8	INT64			
+UIDataElementInt32	16	1	8	8	INT			
+DataElements	72	0	0	4	INT			
+DataElements	72	1	4	12	SerializeData			
+DataElements	72	2	16	8	VARIABLEARRAY	UIControlElement		
+DataElements	72	3	24	4	INT			
+DataElements	72	4	28	12	SerializeData			
+DataElements	72	5	40	8	VARIABLEARRAY	UIDataElementInt32		
+DataElements	72	6	48	4	INT			
+DataElements	72	7	52	12	SerializeData			
+DataElements	72	8	64	8	VARIABLEARRAY	UIDataElementFloat32		
+UIStyle	160	0	0	8	INT64			
+UIStyle	160	1	8	8	SerializeData			
+UIStyle	160	2	16	8	VARIABLEARRAY	BYTE		
+UIStyle	160	3	24	72	DataElements			
+UIStyle	160	4	96	4	INT			
+UIStyle	160	5	100	12	SerializeData			
+UIStyle	160	6	112	48	VARIABLEARRAY	UIStyleChildSpec		
+Trail	344	0	12	4	INT			
+Trail	344	1	16	4	INT			
+Trail	344	2	20	4	INT			
+Trail	344	3	24	4	TIME			
+Trail	344	4	28	4	TIME			
+Trail	344	5	32	4	TIME			
+Trail	344	6	36	4	TIME			
+Trail	344	7	40	48	ColorPath			
+Trail	344	8	88	48	ColorPath			
+Trail	344	9	136	48	FloatPath			
+Trail	344	10	184	48	FloatPath			
+Trail	344	11	232	4	ENUM			
+Trail	344	12	236	4	INT			
+Trail	344	13	240	104	UberMaterial			
+AccelVector3D	12	0	0	4	ACCEL			
+AccelVector3D	12	1	4	4	ACCEL			
+AccelVector3D	12	2	8	4	ACCEL			
+FloatNode	12	0	0	4	FLOAT			
+FloatNode	12	1	4	4	FLOAT			
+FloatNode	12	2	8	4	FLOAT			
+InterpolationPathHeader	28	0	0	4	INT			
+InterpolationPathHeader	28	1	4	4	FLOAT			
+InterpolationPathHeader	28	2	8	4	FLOAT			
+InterpolationPathHeader	28	3	12	4	INT			
+InterpolationPathHeader	28	4	16	12	InterpolationScalar			
+FloatPath	48	0	0	32	InterpolationPathHeader			
+FloatPath	48	1	40	8	SerializeData			
+FloatPath	48	2	32	8	VARIABLEARRAY	FloatNode		
+TieredLootRunLevelTable	16	0	0	8	SerializeData			
+TieredLootRunLevelTable	16	1	8	8	VARIABLEARRAY	TieredLootRunLevel		
+ParagonBonus	400	0	0	8	SerializeData			
+ParagonBonus	400	1	8	8	VARIABLEARRAY	BYTE		
+ParagonBonus	400	2	16	4	INT			
+ParagonBonus	400	3	20	4	INT			
+ParagonBonus	400	4	24	8	INT			
+ParagonBonus	400	5	32	96	FIXEDARRAY	AttributeSpecifier	4	
+ParagonBonus	400	6	128	4	INT			
+ParagonBonus	400	7	132	4	INT			
+ParagonBonus	400	8	136	4	ENUM			
+ParagonBonus	400	9	140	260	CHARARRAY		256	
+ParagonBonusesTable	16	0	0	8	SerializeData			
+ParagonBonusesTable	16	1	8	8	VARIABLEARRAY	ParagonBonus		
+ItemSalvageLevel	40	0	0	8	SerializeData			
+ItemSalvageLevel	40	1	8	8	VARIABLEARRAY	BYTE		
+ItemSalvageLevel	40	2	16	4	INT			
+ItemSalvageLevel	40	3	20	4	INT			
+ItemSalvageLevel	40	4	24	4	SNO			group 52
+ItemSalvageLevel	40	5	28	4	SNO			group 52
+ItemSalvageLevel	40	6	32	4	SNO			group 52
+ItemSalvageLevel	40	7	36	4	SNO			group 52
+ItemSalvageLevelTable	16	0	0	8	SerializeData			
+ItemSalvageLevelTable	16	1	8	8	VARIABLEARRAY	ItemSalvageLevel		
+Hardpoint	40	0	0	8	HardpointHash			
+Hardpoint	40	1	8	4	INT			
+Hardpoint	40	2	12	28	PRTransform			
+Matrix4x4	64	0	0	4	FLOAT			
+Matrix4x4	64	1	4	4	FLOAT			
+Matrix4x4	64	2	8	4	FLOAT			
+Matrix4x4	64	3	12	4	FLOAT			
+Matrix4x4	64	4	16	4	FLOAT			
+Matrix4x4	64	5	20	4	FLOAT			
+Matrix4x4	64	6	24	4	FLOAT			
+Matrix4x4	64	7	28	4	FLOAT			
+Matrix4x4	64	8	32	4	FLOAT			
+Matrix4x4	64	9	36	4	FLOAT			
+Matrix4x4	64	10	40	4	FLOAT			
+Matrix4x4	64	11	44	4	FLOAT			
+Matrix4x4	64	12	48	4	FLOAT			
+Matrix4x4	64	13	52	4	FLOAT			
+Matrix4x4	64	14	56	4	FLOAT			
+Matrix4x4	64	15	60	4	FLOAT			
+VelocityVector3D	12	0	0	4	VELOCITY			
+VelocityVector3D	12	1	4	4	VELOCITY			
+VelocityVector3D	12	2	8	4	VELOCITY			
+BoneBlendWeights	8	0	0	8	FIXEDARRAY	FLOAT	2	
+AnimPermutation	360	0	0	4	INT			
+AnimPermutation	360	1	4	68	CHARARRAY		68	
+AnimPermutation	360	2	72	4	VELOCITY			
+AnimPermutation	360	3	76	4	FLOAT			
+AnimPermutation	360	4	80	4	FLOAT			
+AnimPermutation	360	5	84	4	FLOAT			
+AnimPermutation	360	6	88	4	FLOAT			
+AnimPermutation	360	7	92	4	TIME			
+AnimPermutation	360	8	96	4	TIME			
+AnimPermutation	360	9	104	4	FLOAT			
+AnimPermutation	360	10	108	4	FLOAT			
+AnimPermutation	360	11	112	4	FLOAT			
+AnimPermutation	360	12	116	4	FLOAT			
+AnimPermutation	360	13	100	4	INT			
+AnimPermutation	360	14	120	4	INT			
+AnimPermutation	360	15	124	12	SerializeData			
+AnimPermutation	360	16	136	8	VARIABLEARRAY	BoneName		
+AnimPermutation	360	17	144	4	INT			
+AnimPermutation	360	18	148	4	INT			
+AnimPermutation	360	19	152	8	SerializeData			
+AnimPermutation	360	20	160	8	VARIABLEARRAY	BoneBlendWeights		
+AnimPermutation	360	21	168	4	INT			
+AnimPermutation	360	22	172	12	SerializeData			
+AnimPermutation	360	23	184	8	VARIABLEARRAY	TranslationCurve		
+AnimPermutation	360	24	192	8	SerializeData			
+AnimPermutation	360	25	200	8	VARIABLEARRAY	RotationCurve		
+AnimPermutation	360	26	208	8	SerializeData			
+AnimPermutation	360	27	216	8	VARIABLEARRAY	ScaleCurve		
+AnimPermutation	360	28	224	4	FLOAT			
+AnimPermutation	360	29	228	4	FLOAT			
+AnimPermutation	360	30	232	4	FLOAT			
+AnimPermutation	360	31	236	4	FLOAT			
+AnimPermutation	360	32	240	12	VECTOR3D			
+AnimPermutation	360	33	252	12	VECTOR3D			
+AnimPermutation	360	34	264	12	VECTOR3D			
+AnimPermutation	360	35	276	12	VECTOR3D			
+AnimPermutation	360	36	288	4	FLOAT			
+AnimPermutation	360	37	300	4	INT			
+AnimPermutation	360	38	292	8	SerializeData			
+AnimPermutation	360	39	304	8	VARIABLEARRAY	KeyframedAttachment		
+AnimPermutation	360	40	312	8	SerializeData			
+AnimPermutation	360	41	320	8	VARIABLEARRAY	VECTOR3D		
+AnimPermutation	360	42	328	12	VelocityVector3D			
+AnimPermutation	360	43	340	20	HardpointLink			
+Anim	64	0	12	4	INT			
+Anim	64	1	16	4	INT			
+Anim	64	2	20	4	SNO			group 9
+Anim	64	3	32	8	INT			
+Anim	64	4	24	8	SerializeData			
+Anim	64	5	40	8	VARIABLEARRAY	AnimPermutation		
+Anim	64	6	56	8	INT			
+Anim	64	7	48	8	INT64			
+AIBehavior	48	0	12	32	FIXEDARRAY	SNO	8	group 4
+AIBehavior	48	1	44	4	INT			
+ConstraintLink	8	0	0	4	INT			
+ConstraintLink	8	1	4	4	INT			
+LookLink	8	0	0	4	INT			
+LookLink	8	1	4	4	INT			
+HardpointHash	8	0	0	4	INT			
+HardpointHash	8	1	4	4	INT			
+HardpointLink	12	0	0	8	HardpointHash			
+HardpointLink	12	1	8	4	INT			
+MsgTriggeredEvent	192	0	0	4	INT			
+MsgTriggeredEvent	192	1	4	188	TriggerEvent			
+SerializeData	8	0	0	4	INT			
+SerializeData	8	1	4	4	INT			
+Sound	168	0	12	4	INT			
+Sound	168	1	16	4	INT			
+Sound	168	2	20	4	FLOAT			
+Sound	168	3	24	4	FLOAT			
+Sound	168	4	28	4	FLOAT			
+Sound	168	5	32	4	INT			
+Sound	168	6	36	4	FLOAT			
+Sound	168	7	40	4	FLOAT			
+Sound	168	8	44	4	FLOAT			
+Sound	168	9	48	4	FLOAT			
+Sound	168	10	52	4	IMPULSE			
+Sound	168	11	56	4	IMPULSE			
+Sound	168	12	60	4	FLOAT			
+Sound	168	13	64	4	FLOAT			
+Sound	168	14	68	8	SerializeData			
+Sound	168	15	80	8	VARIABLEARRAY	SoundPermutation		
+Sound	168	16	76	4	VARIABLEARRAY_COUNT			
+Sound	168	17	88	4	INT			
+Sound	168	18	92	4	INT			
+Sound	168	19	96	8	INT			
+Sound	168	20	136	4	TIME			
+Sound	168	21	140	28	TIME			
+Sound	168	22	112	8	SerializeData			
+Sound	168	23	104	8	VARIABLEARRAY	DspEffect		
+Sound	168	24	128	8	SerializeData			
+Sound	168	25	120	8	VARIABLEARRAY	RTPCParams		
+Physics	68	0	12	4	INT			
+Physics	68	1	16	4	INT			
+Physics	68	2	20	4	FLOAT			
+Physics	68	3	24	4	FLOAT			
+Physics	68	4	28	4	FLOAT			
+Physics	68	5	32	4	FLOAT			
+Physics	68	6	36	4	FLOAT			
+Physics	68	7	40	4	WORD			
+Physics	68	8	44	4	FLOAT			
+Physics	68	9	48	4	ACCEL			
+Physics	68	10	52	4	ACCEL			
+Physics	68	11	56	4	VELOCITY			
+Physics	68	12	60	4	ACCEL			
+Physics	68	13	64	4	ACCEL			
+AccelVectorNode	28	0	0	12	AccelVector3D			
+AccelVectorNode	28	1	12	12	AccelVector3D			
+AccelVectorNode	28	2	24	4	FLOAT			
+VelocityVectorNode	28	0	0	12	VelocityVector3D			
+VelocityVectorNode	28	1	12	12	VelocityVector3D			
+VelocityVectorNode	28	2	24	4	FLOAT			
+VelocityVectorPath	48	0	0	32	InterpolationPathHeader			
+VelocityVectorPath	48	1	40	8	SerializeData			
+VelocityVectorPath	48	2	32	8	VARIABLEARRAY	VelocityVectorNode		
+Observer	148	0	12	4	INT			
+Observer	148	1	16	4	ANGLE			
+Observer	148	2	20	4	FLOAT			
+Observer	148	3	24	4	FLOAT			
+Observer	148	4	28	4	FLOAT			
+Observer	148	5	32	4	ANGLE			
+Observer	148	6	36	4	ANGLE			
+Observer	148	7	40	4	FLOAT			
+Observer	148	8	44	12	VECTOR3D			
+Observer	148	9	56	12	VECTOR3D			
+Observer	148	10	68	4	FLOAT			
+Observer	148	11	72	4	FLOAT			
+Observer	148	12	76	4	FLOAT			
+Observer	148	13	80	4	FLOAT			
+Observer	148	14	84	4	FLOAT			
+Observer	148	15	88	4	FLOAT			
+Observer	148	16	92	4	FLOAT			
+Observer	148	17	96	4	FLOAT			
+Observer	148	18	100	4	FLOAT			
+Observer	148	19	104	4	FLOAT			
+Observer	148	20	108	4	FLOAT			
+Observer	148	21	112	4	FLOAT			
+Observer	148	22	116	4	FLOAT			
+Observer	148	23	120	12	VECTOR3D			
+Observer	148	24	132	4	FLOAT			
+Observer	148	25	136	12	VECTOR3D			
+MonsterChampionSpawnGroup	24	0	4	4	FLOAT			
+MonsterChampionSpawnGroup	24	1	0	4	INT			
+MonsterChampionSpawnGroup	24	2	16	8	SerializeData			
+MonsterChampionSpawnGroup	24	3	8	8	VARIABLEARRAY	MonsterChampionSpawnItem		
+Monster#1360	1360	0	12	4	INT			
+Monster#1360	1360	1	16	4	SNO			group 1
+Monster#1360	1360	2	20	4	INT			
+Monster#1360	1360	3	24	4	ENUM			
+Monster#1360	1360	4	28	4	ENUM			
+Monster#1360	1360	5	32	4	ENUM			
+Monster#1360	1360	6	56	4	ENUM			
+Monster#1360	1360	7	60	4	INT			
+Monster#1360	1360	8	64	4	INT			
+Monster#1360	1360	9	652	4	FLOAT			
+Monster#1360	1360	10	656	4	FLOAT			
+Monster#1360	1360	11	660	4	FLOAT			
+Monster#1360	1360	12	664	4	FLOAT			
+Monster#1360	1360	13	668	4	FLOAT			
+Monster#1360	1360	14	672	4	FLOAT			
+Monster#1360	1360	15	976	4	SNO			group 52
+Monster#1360	1360	16	980	4	SNO			group 52
+Monster#1360	1360	17	984	4	SNO			group 59
+Monster#1360	1360	18	680	12	HealthDropInfo			
+Monster#1360	1360	19	692	12	HealthDropInfo			
+Monster#1360	1360	20	704	12	HealthDropInfo			
+Monster#1360	1360	21	716	12	HealthDropInfo			
+Monster#1360	1360	22	676	4	INT			
+Monster#1360	1360	23	1124	28	ENUM			
+Monster#1360	1360	24	68	584	FIXEDARRAY	FLOAT	146	
+Monster#1360	1360	25	728	4	SNO			group 39
+Monster#1360	1360	26	732	64	FIXEDARRAY	SkillDeclaration	8	
+Monster#1360	1360	27	796	128	FIXEDARRAY	MonsterSkillDeclaration	8	
+Monster#1360	1360	28	924	4	SNO			group 52
+Monster#1360	1360	29	928	4	SNO			group 52
+Monster#1360	1360	30	932	4	SNO			group 52
+Monster#1360	1360	31	936	4	SNO			group 52
+Monster#1360	1360	32	940	4	SNO			group 52
+Monster#1360	1360	33	36	20	Monster			
+Monster#1360	1360	34	944	4	FLOAT			
+Monster#1360	1360	35	948	4	FLOAT			
+Monster#1360	1360	36	952	4	FLOAT			
+Monster#1360	1360	37	956	4	FLOAT			
+Monster#1360	1360	38	960	4	INT			
+Monster#1360	1360	39	964	4	FLOAT			
+Monster#1360	1360	40	968	4	INT			
+Monster#1360	1360	41	972	4	INT			
+Monster#1360	1360	42	988	24	FIXEDARRAY	SNO	6	group 3
+Monster#1360	1360	43	1012	32	FIXEDARRAY	GBID	8	
+Monster#1360	1360	44	1044	24	FIXEDARRAY	SNO	6	group 1
+Monster#1360	1360	45	1068	4	INT			
+Monster#1360	1360	46	1072	16	FIXEDARRAY	GBID	4	
+Monster#1360	1360	47	1088	24	FIXEDARRAY	GBID	6	
+Monster#1360	1360	48	1112	4	INT			
+Monster#1360	1360	49	1116	4	INT			
+Monster#1360	1360	50	1120	4	INT			
+Monster#1360	1360	51	1216	128	CHARARRAY		128	
+Monster#1360	1360	52	1152	8	SerializeData			
+Monster#1360	1360	53	1160	8	TAGMAP			
+Monster#1360	1360	54	1168	8	INT			
+Monster#1360	1360	55	1184	8	SerializeData			
+Monster#1360	1360	56	1176	8	VARIABLEARRAY	MonsterMinionSpawnGroup		
+Monster#1360	1360	57	1192	8	INT			
+Monster#1360	1360	58	1208	8	SerializeData			
+Monster#1360	1360	59	1200	8	VARIABLEARRAY	MonsterChampionSpawnGroup		
+Monster#1360	1360	60	1344	4	SNO			group 4
+Monster#1360	1360	61	1348	4	INT			
+Monster#1360	1360	62	1352	4	INT			
+Monster#1360	1360	63	1356	4	INT			
+MarkerSet	200	0	12	12	SerializeData			
+MarkerSet	200	1	24	56	VARIABLEARRAY	Marker		
+MarkerSet	200	2	80	8	SerializeData			
+MarkerSet	200	3	88	56	VARIABLEARRAY	Circle		
+MarkerSet	200	4	168	4	INT			
+MarkerSet	200	5	144	24	AABB			
+MarkerSet	200	6	172	4	GBID			
+MarkerSet	200	7	176	4	INT			
+MarkerSet	200	8	180	12	SerializeData			
+MarkerSet	200	9	192	8	VARIABLEARRAY	WORD		
+LabelGBID	32	0	0	8	SerializeData			
+LabelGBID	32	1	8	8	VARIABLEARRAY	BYTE		
+LabelGBID	32	2	16	4	INT			
+LabelGBID	32	3	20	4	INT			
+LabelGBID	32	4	24	4	INT			
+LabelGBID	32	5	28	4	INT			
+MovementStyleDefinition	152	0	0	8	SerializeData			
+MovementStyleDefinition	152	1	8	8	VARIABLEARRAY	BYTE		
+MovementStyleDefinition	152	2	16	4	INT			
+MovementStyleDefinition	152	3	20	4	INT			
+MovementStyleDefinition	152	4	24	4	INT			
+MovementStyleDefinition	152	5	28	4	INT			
+MovementStyleDefinition	152	6	32	4	INT			
+MovementStyleDefinition	152	7	36	4	INT			
+MovementStyleDefinition	152	8	40	4	INT			
+MovementStyleDefinition	152	9	44	4	INT			
+MovementStyleDefinition	152	10	48	4	INT			
+MovementStyleDefinition	152	11	52	4	INT			
+MovementStyleDefinition	152	12	56	4	FLOAT			
+MovementStyleDefinition	152	13	60	4	FLOAT			
+MovementStyleDefinition	152	14	64	4	FLOAT			
+MovementStyleDefinition	152	15	68	4	FLOAT			
+MovementStyleDefinition	152	16	72	4	FLOAT			
+MovementStyleDefinition	152	17	76	4	FLOAT			
+MovementStyleDefinition	152	18	80	4	FLOAT			
+MovementStyleDefinition	152	19	84	4	FLOAT			
+MovementStyleDefinition	152	20	88	4	FLOAT			
+MovementStyleDefinition	152	21	92	4	FLOAT			
+MovementStyleDefinition	152	22	96	4	FLOAT			
+MovementStyleDefinition	152	23	100	4	FLOAT			
+MovementStyleDefinition	152	24	104	4	FLOAT			
+MovementStyleDefinition	152	25	108	4	FLOAT			
+MovementStyleDefinition	152	26	112	4	FLOAT			
+MovementStyleDefinition	152	27	116	4	FLOAT			
+MovementStyleDefinition	152	28	120	4	FLOAT			
+MovementStyleDefinition	152	29	124	4	FLOAT			
+MovementStyleDefinition	152	30	128	4	FLOAT			
+MovementStyleDefinition	152	31	132	4	FLOAT			
+MovementStyleDefinition	152	32	140	4	FLOAT			
+MovementStyleDefinition	152	33	136	4	FLOAT			
+MovementStyleDefinition	152	34	144	4	SNO			group 29
+MovementStyleDefinition	152	35	148	4	INT			
+MovementStyles	16	0	0	8	SerializeData			
+MovementStyles	16	1	8	8	VARIABLEARRAY	MovementStyleDefinition		
+HeroData	264	0	0	8	SerializeData			
+HeroData	264	1	8	8	VARIABLEARRAY	BYTE		
+HeroData	264	2	16	4	INT			
+HeroData	264	3	20	4	INT			
+HeroData	264	4	24	4	SNO			group 1
+HeroData	264	5	28	4	SNO			group 1
+HeroData	264	6	32	4	SNO			group 52
+HeroData	264	7	36	4	INT			
+HeroData	264	8	40	4	SNO			group 29
+HeroData	264	9	44	4	SNO			group 29
+HeroData	264	10	48	4	SNO			group 39
+HeroData	264	11	52	4	SNO			group 39
+HeroData	264	12	56	4	SNO			group 39
+HeroData	264	13	60	4	SNO			group 39
+HeroData	264	14	76	4	FLOAT			
+HeroData	264	15	80	4	INT			
+HeroData	264	16	84	4	FLOAT			
+HeroData	264	17	88	4	FLOAT			
+HeroData	264	18	92	4	FLOAT			
+HeroData	264	19	96	4	FLOAT			
+HeroData	264	20	100	4	FLOAT			
+HeroData	264	21	104	4	FLOAT			
+HeroData	264	22	108	4	FLOAT			
+HeroData	264	23	112	4	FLOAT			
+HeroData	264	24	116	4	FLOAT			
+HeroData	264	25	64	4	ENUM			
+HeroData	264	26	68	4	ENUM			
+HeroData	264	27	72	4	ENUM			
+HeroData	264	28	120	4	FLOAT			
+HeroData	264	29	124	4	FLOAT			
+HeroData	264	30	128	4	FLOAT			
+HeroData	264	31	132	4	FLOAT			
+HeroData	264	32	136	4	FLOAT			
+HeroData	264	33	140	4	FLOAT			
+HeroData	264	34	144	4	FLOAT			
+HeroData	264	35	148	4	FLOAT			
+HeroData	264	36	152	4	FLOAT			
+HeroData	264	37	156	4	FLOAT			
+HeroData	264	38	160	4	FLOAT			
+HeroData	264	39	164	4	FLOAT			
+HeroData	264	40	168	4	FLOAT			
+HeroData	264	41	172	4	FLOAT			
+HeroData	264	42	176	4	FLOAT			
+HeroData	264	43	180	4	FLOAT			
+HeroData	264	44	184	4	FLOAT			
+HeroData	264	45	188	4	FLOAT			
+HeroData	264	46	192	4	FLOAT			
+HeroData	264	47	196	4	FLOAT			
+HeroData	264	48	200	4	FLOAT			
+HeroData	264	49	204	4	FLOAT			
+HeroData	264	50	208	4	FLOAT			
+HeroData	264	51	212	4	FLOAT			
+HeroData	264	52	216	4	FLOAT			
+HeroData	264	53	220	4	FLOAT			
+HeroData	264	54	224	4	FLOAT			
+HeroData	264	55	228	4	FLOAT			
+HeroData	264	56	232	4	FLOAT			
+HeroData	264	57	236	4	FLOAT			
+HeroData	264	58	240	4	FLOAT			
+HeroData	264	59	244	4	FLOAT			
+HeroData	264	60	248	4	FLOAT			
+HeroData	264	61	252	4	FLOAT			
+HeroData	264	62	256	4	FLOAT			
+HeroData	264	63	260	4	FLOAT			
+Heros	16	0	0	8	SerializeData			
+Heros	16	1	8	8	VARIABLEARRAY	HeroData		
+Anim2DFrame	68	0	0	64	CHARARRAY		64	
+Anim2DFrame	68	1	64	4	RGBACOLOR			
+Adventure	36	0	12	4	SNO			group 1
+Adventure	36	1	16	4	FLOAT			
+Adventure	36	2	20	4	ANGLE			
+Adventure	36	3	24	4	ANGLE			
+Adventure	36	4	28	4	ANGLE			
+Adventure	36	5	32	4	SNO			group 24
+ActorCollisionFlags	16	0	0	4	INT			
+ActorCollisionFlags	16	1	4	4	INT			
+ActorCollisionFlags	16	2	8	4	INT			
+ActorCollisionFlags	16	3	12	4	INT			
+ControlScheme	420	0	12	368	FIXEDARRAY	ButtonBinding	92	
+ControlScheme	420	1	380	24	FIXEDARRAY	INT	6	
+ControlScheme	420	2	404	4	INT			
+ControlScheme	420	3	408	4	INT			
+ControlScheme	420	4	412	4	INT			
+ControlScheme	420	5	416	4	INT			
+Lore	36	0	12	4	INT			
+Lore	36	1	16	4	INT			
+Lore	36	2	20	4	INT			
+Lore	36	3	24	4	INT			
+Lore	36	4	28	4	SNO			group 12
+Lore	36	5	32	4	INT			
+MonsterChampionSpawnItem	8	0	0	4	SNO			group 1
+MonsterChampionSpawnItem	8	1	4	4	INT			
+MonsterMinionSpawnItem	20	0	0	4	SNO			group 1
+MonsterMinionSpawnItem	20	1	4	4	INT			
+MonsterMinionSpawnItem	20	2	8	4	INT			
+MonsterMinionSpawnItem	20	3	12	4	INT			
+MonsterMinionSpawnItem	20	4	16	4	INT			
+MonsterMinionSpawnGroup	24	0	0	4	FLOAT			
+MonsterMinionSpawnGroup	24	1	4	4	INT			
+MonsterMinionSpawnGroup	24	2	16	8	SerializeData			
+MonsterMinionSpawnGroup	24	3	8	8	VARIABLEARRAY	MonsterMinionSpawnItem		
+Monster#20	20	0	0	4	FLOAT			
+Monster#20	20	1	4	4	FLOAT			
+Monster#20	20	2	8	4	FLOAT			
+Monster#20	20	3	12	4	FLOAT			
+Monster#20	20	4	16	4	INT			
+MonsterSkillDeclaration	16	0	0	4	FLOAT			
+MonsterSkillDeclaration	16	1	4	4	FLOAT			
+MonsterSkillDeclaration	16	2	8	4	INT			
+MonsterSkillDeclaration	16	3	12	4	FLOAT			
+LightStateParams	624	0	0	48	FloatPath			
+LightStateParams	624	1	48	48	FloatPath			
+LightStateParams	624	2	96	144	FIXEDARRAY	FloatPath	3	
+LightStateParams	624	3	240	48	AnglePath			
+LightStateParams	624	4	288	48	AnglePath			
+LightStateParams	624	5	336	48	ColorPath			
+LightStateParams	624	6	384	48	FloatPath			
+LightStateParams	624	7	432	48	ColorPath			
+LightStateParams	624	8	480	48	FloatPath			
+LightStateParams	624	9	528	48	ColorPath			
+LightStateParams	624	10	576	48	FloatPath			
+Light	1312	0	12	4	INT			
+Light	1312	1	16	4	INT			
+Light	1312	2	20	4	INT			
+Light	1312	3	24	24	MaterialTexture			
+Light	1312	4	48	4	TIME			
+Light	1312	5	52	4	INT			
+Light	1312	6	56	8	FLOAT			
+Light	1312	7	64	624	LightStateParams			
+Light	1312	8	688	624	LightStateParams			
+AttributeSpecifier	24	0	0	4	TRANSLATEABLE			
+AttributeSpecifier	24	1	4	4	ATTRIBUTEPARAM			
+AttributeSpecifier	24	2	16	8	SerializeData			
+AttributeSpecifier	24	3	8	8	FORMULA			
+Font	216	0	12	4	INT			
+Font	216	1	16	64	CHARARRAY		64	
+Font	216	2	80	64	CHARARRAY		64	
+Font	216	3	144	4	INT			
+Font	216	4	148	4	ENUM			
+Font	216	5	152	4	ENUM			
+Font	216	6	156	4	INT			
+Font	216	7	160	4	FLOAT			
+Font	216	8	164	4	FLOAT			
+Font	216	9	168	8	SerializeData			
+Font	216	10	176	8	VARIABLEARRAY	FontConsoleTexture		
+Font	216	11	184	4	INT			
+Font	216	12	188	4	INT			
+Font	216	13	192	8	SerializeData			
+Font	216	14	200	8	VARIABLEARRAY	FontPointSizeData		
+Font	216	15	208	4	INT			
+Font	216	16	212	4	INT			
+EffectGroup	120	0	12	4	INT			
+EffectGroup	120	1	48	4	INT			
+EffectGroup	120	2	40	4	INT			
+EffectGroup	120	3	44	4	INT			
+EffectGroup	120	4	24	8	INT			
+EffectGroup	120	5	52	4	SNO			group 29
+EffectGroup	120	6	16	8	SerializeData			
+EffectGroup	120	7	32	8	VARIABLEARRAY	EffectItem		
+EffectGroup	120	8	56	64	FIXEDARRAY	INT	16	
+GeoSet	24	0	0	4	INT			
+GeoSet	24	1	4	12	SerializeData			
+GeoSet	24	2	16	8	VARIABLEARRAY	SubObject		
+BonePulseData	20	0	0	4	INT			
+BonePulseData	20	1	4	4	INT			
+BonePulseData	20	2	8	4	FLOAT			
+BonePulseData	20	3	12	4	FLOAT			
+BonePulseData	20	4	16	4	ANGLE			
+Structure	344	0	0	4	INT			
+Structure	344	1	4	4	INT			
+Structure	344	2	8	8	SerializeData			
+Structure	344	3	16	8	VARIABLEARRAY	BoneStructure		
+Structure	344	4	24	36	LookAtData			
+Structure	344	5	60	4	INT			
+Structure	344	6	72	8	SerializeData			
+Structure	344	7	64	8	VARIABLEARRAY	BonePulseData		
+Structure	344	8	80	48	FIXEDARRAY	GeoSet	2	
+Structure	344	9	128	16	Sphere			
+Structure	344	10	144	4	INT			
+Structure	344	11	148	12	SerializeData			
+Structure	344	12	160	8	VARIABLEARRAY	CollisionCapsule		
+Structure	344	13	168	4	INT			
+Structure	344	14	172	12	SerializeData			
+Structure	344	15	184	8	VARIABLEARRAY	Hardpoint		
+Structure	344	16	192	16	VECTOR3D			
+Structure	344	17	208	72	Octree			
+Structure	344	18	280	24	AABB			
+Structure	344	19	336	8	INT64			
+Structure	344	20	304	4	INT			
+Structure	344	21	308	12	SerializeData			
+Structure	344	22	320	8	VARIABLEARRAY	ConstraintParameters		
+Structure	344	23	328	8	INT			
+SubObjectAppearance	248	0	0	4	INT			
+SubObjectAppearance	248	1	4	4	SNO			group 11
+SubObjectAppearance	248	2	8	8	SerializeData			
+SubObjectAppearance	248	3	16	8	TAGMAP			
+SubObjectAppearance	248	4	24	104	UberMaterial			
+SubObjectAppearance	248	5	128	8	SNO			group 57
+SubObjectAppearance	248	6	136	112	UberMaterial			
+AppearanceMaterial	24	0	0	4	INT			
+AppearanceMaterial	24	1	4	4	INT			
+AppearanceMaterial	24	2	8	8	SerializeData			
+AppearanceMaterial	24	3	16	8	VARIABLEARRAY	SubObjectAppearance		
+AABB	24	0	0	12	VECTOR3D			
+AABB	24	1	12	12	VECTOR3D			
+LabelEntry	20	0	0	4	GBID			
+LabelEntry	20	1	4	4	INT			
+LabelEntry	20	2	8	4	FLOAT			
+LabelEntry	20	3	12	4	INT			
+LabelEntry	20	4	16	4	INT			
+LabelCondition	24	0	0	4	ENUM			
+LabelCondition	24	1	4	4	INT			
+LabelCondition	24	2	8	16	FIXEDARRAY	INT	4	
+SkillKit	64	0	24	8	SerializeData			
+SkillKit	64	1	16	8	VARIABLEARRAY	TraitEntry		
+SkillKit	64	2	40	8	SerializeData			
+SkillKit	64	3	32	8	VARIABLEARRAY	ActiveSkillEntry		
+SkillKit	64	4	56	8	SerializeData			
+SkillKit	64	5	48	8	VARIABLEARRAY	INT		
+SetItemBonusTable	16	0	0	8	SerializeData			
+SetItemBonusTable	16	1	8	8	VARIABLEARRAY	SetItemBonusTableEntry		
+RareMonsterNamesEntry	160	0	0	8	SerializeData			
+RareMonsterNamesEntry	160	1	8	8	VARIABLEARRAY	BYTE		
+RareMonsterNamesEntry	160	2	16	4	INT			
+RareMonsterNamesEntry	160	3	20	4	INT			
+RareMonsterNamesEntry	160	4	24	4	ENUM			
+RareMonsterNamesEntry	160	5	28	128	CHARARRAY		128	
+RareMonsterNamesEntry	160	6	156	4	INT			
+RareMonsterNamesTable	16	0	0	8	SerializeData			
+RareMonsterNamesTable	16	1	8	8	VARIABLEARRAY	RareMonsterNamesEntry		
+MonsterAffixesEntry	664	0	0	8	SerializeData			
+MonsterAffixesEntry	664	1	8	8	VARIABLEARRAY	BYTE		
+MonsterAffixesEntry	664	2	16	4	INT			
+MonsterAffixesEntry	664	3	20	4	INT			
+MonsterAffixesEntry	664	4	24	4	INT			
+MonsterAffixesEntry	664	5	28	4	INT			
+MonsterAffixesEntry	664	6	32	4	INT			
+MonsterAffixesEntry	664	7	44	4	ENUM			
+MonsterAffixesEntry	664	8	36	4	ENUM			
+MonsterAffixesEntry	664	9	40	4	ENUM			
+MonsterAffixesEntry	664	10	48	4	INT			
+MonsterAffixesEntry	664	11	52	4	INT			
+MonsterAffixesEntry	664	12	56	4	INT			
+MonsterAffixesEntry	664	13	60	4	INT			
+MonsterAffixesEntry	664	14	548	4	SNO			group 29
+MonsterAffixesEntry	664	15	556	4	SNO			group 29
+MonsterAffixesEntry	664	16	552	4	SNO			group 29
+MonsterAffixesEntry	664	17	64	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	18	68	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	19	80	8	SerializeData			
+MonsterAffixesEntry	664	20	72	8	FORMULA			
+MonsterAffixesEntry	664	21	88	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	22	92	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	23	104	8	SerializeData			
+MonsterAffixesEntry	664	24	96	8	FORMULA			
+MonsterAffixesEntry	664	25	112	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	26	116	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	27	128	8	SerializeData			
+MonsterAffixesEntry	664	28	120	8	FORMULA			
+MonsterAffixesEntry	664	29	136	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	30	140	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	31	152	8	SerializeData			
+MonsterAffixesEntry	664	32	144	8	FORMULA			
+MonsterAffixesEntry	664	33	160	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	34	164	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	35	176	8	SerializeData			
+MonsterAffixesEntry	664	36	168	8	FORMULA			
+MonsterAffixesEntry	664	37	184	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	38	188	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	39	200	8	SerializeData			
+MonsterAffixesEntry	664	40	192	8	FORMULA			
+MonsterAffixesEntry	664	41	208	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	42	212	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	43	224	8	SerializeData			
+MonsterAffixesEntry	664	44	216	8	FORMULA			
+MonsterAffixesEntry	664	45	232	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	46	236	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	47	248	8	SerializeData			
+MonsterAffixesEntry	664	48	240	8	FORMULA			
+MonsterAffixesEntry	664	49	256	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	50	260	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	51	272	8	SerializeData			
+MonsterAffixesEntry	664	52	264	8	FORMULA			
+MonsterAffixesEntry	664	53	280	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	54	284	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	55	296	8	SerializeData			
+MonsterAffixesEntry	664	56	288	8	FORMULA			
+MonsterAffixesEntry	664	57	304	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	58	308	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	59	320	8	SerializeData			
+MonsterAffixesEntry	664	60	312	8	FORMULA			
+MonsterAffixesEntry	664	61	328	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	62	332	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	63	344	8	SerializeData			
+MonsterAffixesEntry	664	64	336	8	FORMULA			
+MonsterAffixesEntry	664	65	352	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	66	356	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	67	368	8	SerializeData			
+MonsterAffixesEntry	664	68	360	8	FORMULA			
+MonsterAffixesEntry	664	69	376	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	70	380	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	71	392	8	SerializeData			
+MonsterAffixesEntry	664	72	384	8	FORMULA			
+MonsterAffixesEntry	664	73	400	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	74	404	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	75	416	8	SerializeData			
+MonsterAffixesEntry	664	76	408	8	FORMULA			
+MonsterAffixesEntry	664	77	424	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	78	428	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	79	440	8	SerializeData			
+MonsterAffixesEntry	664	80	432	8	FORMULA			
+MonsterAffixesEntry	664	81	448	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	82	452	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	83	464	8	SerializeData			
+MonsterAffixesEntry	664	84	456	8	FORMULA			
+MonsterAffixesEntry	664	85	472	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	86	476	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	87	488	8	SerializeData			
+MonsterAffixesEntry	664	88	480	8	FORMULA			
+MonsterAffixesEntry	664	89	496	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	90	500	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	91	512	8	SerializeData			
+MonsterAffixesEntry	664	92	504	8	FORMULA			
+MonsterAffixesEntry	664	93	520	4	TRANSLATEABLE			
+MonsterAffixesEntry	664	94	524	4	ATTRIBUTEPARAM			
+MonsterAffixesEntry	664	95	536	12	SerializeData			
+MonsterAffixesEntry	664	96	528	8	FORMULA			
+MonsterAffixesEntry	664	97	560	1	BYTE			
+MonsterAffixesEntry	664	98	561	1	BYTE			
+MonsterAffixesEntry	664	99	562	1	BYTE			
+MonsterAffixesEntry	664	100	563	1	BYTE			
+MonsterAffixesEntry	664	101	564	1	BYTE			
+MonsterAffixesEntry	664	102	565	1	BYTE			
+MonsterAffixesEntry	664	103	566	1	BYTE			
+MonsterAffixesEntry	664	104	567	1	BYTE			
+MonsterAffixesEntry	664	105	568	1	BYTE			
+MonsterAffixesEntry	664	106	569	1	BYTE			
+MonsterAffixesEntry	664	107	570	1	BYTE			
+MonsterAffixesEntry	664	108	571	1	BYTE			
+MonsterAffixesEntry	664	109	572	1	BYTE			
+MonsterAffixesEntry	664	110	573	1	BYTE			
+MonsterAffixesEntry	664	111	574	1	BYTE			
+MonsterAffixesEntry	664	112	575	1	BYTE			
+MonsterAffixesEntry	664	113	576	1	BYTE			
+MonsterAffixesEntry	664	114	577	1	BYTE			
+MonsterAffixesEntry	664	115	578	1	BYTE			
+MonsterAffixesEntry	664	116	579	1	BYTE			
+MonsterAffixesEntry	664	117	580	1	BYTE			
+MonsterAffixesEntry	664	118	581	1	BYTE			
+MonsterAffixesEntry	664	119	582	1	BYTE			
+MonsterAffixesEntry	664	120	583	1	BYTE			
+MonsterAffixesEntry	664	121	584	1	BYTE			
+MonsterAffixesEntry	664	122	585	1	BYTE			
+MonsterAffixesEntry	664	123	586	1	BYTE			
+MonsterAffixesEntry	664	124	587	1	BYTE			
+MonsterAffixesEntry	664	125	588	1	BYTE			
+MonsterAffixesEntry	664	126	589	1	BYTE			
+MonsterAffixesEntry	664	127	590	1	BYTE			
+MonsterAffixesEntry	664	128	591	1	BYTE			
+MonsterAffixesEntry	664	129	592	1	BYTE			
+MonsterAffixesEntry	664	130	593	1	BYTE			
+MonsterAffixesEntry	664	131	594	1	BYTE			
+MonsterAffixesEntry	664	132	595	1	BYTE			
+MonsterAffixesEntry	664	133	596	1	BYTE			
+MonsterAffixesEntry	664	134	597	1	BYTE			
+MonsterAffixesEntry	664	135	598	1	BYTE			
+MonsterAffixesEntry	664	136	599	1	BYTE			
+MonsterAffixesEntry	664	137	600	1	BYTE			
+MonsterAffixesEntry	664	138	601	1	BYTE			
+MonsterAffixesEntry	664	139	602	1	BYTE			
+MonsterAffixesEntry	664	140	603	1	BYTE			
+MonsterAffixesEntry	664	141	604	1	BYTE			
+MonsterAffixesEntry	664	142	605	1	BYTE			
+MonsterAffixesEntry	664	143	606	1	BYTE			
+MonsterAffixesEntry	664	144	607	1	BYTE			
+MonsterAffixesEntry	664	145	608	1	BYTE			
+MonsterAffixesEntry	664	146	609	1	BYTE			
+MonsterAffixesEntry	664	147	610	1	BYTE			
+MonsterAffixesEntry	664	148	611	1	BYTE			
+MonsterAffixesEntry	664	149	612	1	BYTE			
+MonsterAffixesEntry	664	150	613	1	BYTE			
+MonsterAffixesEntry	664	151	614	1	BYTE			
+MonsterAffixesEntry	664	152	615	1	BYTE			
+MonsterAffixesEntry	664	153	616	1	BYTE			
+MonsterAffixesEntry	664	154	617	1	BYTE			
+MonsterAffixesEntry	664	155	618	1	BYTE			
+MonsterAffixesEntry	664	156	619	1	BYTE			
+MonsterAffixesEntry	664	157	620	1	BYTE			
+MonsterAffixesEntry	664	158	621	1	BYTE			
+MonsterAffixesEntry	664	159	622	1	BYTE			
+MonsterAffixesEntry	664	160	623	1	BYTE			
+MonsterAffixesEntry	664	161	624	1	BYTE			
+MonsterAffixesEntry	664	162	625	1	BYTE			
+MonsterAffixesEntry	664	163	626	1	BYTE			
+MonsterAffixesEntry	664	164	627	1	BYTE			
+MonsterAffixesEntry	664	165	628	1	BYTE			
+MonsterAffixesEntry	664	166	629	1	BYTE			
+MonsterAffixesEntry	664	167	630	1	BYTE			
+MonsterAffixesEntry	664	168	631	1	BYTE			
+MonsterAffixesEntry	664	169	632	1	BYTE			
+MonsterAffixesEntry	664	170	633	1	BYTE			
+MonsterAffixesEntry	664	171	634	1	BYTE			
+MonsterAffixesEntry	664	172	635	1	BYTE			
+MonsterAffixesEntry	664	173	636	1	BYTE			
+MonsterAffixesEntry	664	174	637	1	BYTE			
+MonsterAffixesEntry	664	175	638	1	BYTE			
+MonsterAffixesEntry	664	176	639	1	BYTE			
+MonsterAffixesEntry	664	177	640	1	BYTE			
+MonsterAffixesEntry	664	178	641	1	BYTE			
+MonsterAffixesEntry	664	179	642	1	BYTE			
+MonsterAffixesEntry	664	180	643	1	BYTE			
+MonsterAffixesEntry	664	181	644	1	BYTE			
+MonsterAffixesEntry	664	182	645	1	BYTE			
+MonsterAffixesEntry	664	183	646	1	BYTE			
+MonsterAffixesEntry	664	184	647	1	BYTE			
+MonsterAffixesEntry	664	185	648	1	BYTE			
+MonsterAffixesEntry	664	186	649	1	BYTE			
+MonsterAffixesEntry	664	187	650	1	BYTE			
+MonsterAffixesEntry	664	188	651	1	BYTE			
+MonsterAffixesEntry	664	189	652	1	BYTE			
+MonsterAffixesEntry	664	190	653	1	BYTE			
+MonsterAffixesEntry	664	191	654	1	BYTE			
+MonsterAffixesEntry	664	192	655	1	BYTE			
+MonsterAffixesEntry	664	193	656	1	BYTE			
+MonsterAffixesEntry	664	194	657	1	BYTE			
+MonsterAffixesEntry	664	195	658	6	BYTE			
+MonsterAffixesTable	16	0	0	8	SerializeData			
+MonsterAffixesTable	16	1	8	8	VARIABLEARRAY	MonsterAffixesEntry		
+UberMaterial	104	0	4	72	Material			
+UberMaterial	104	1	0	4	SNO			group 36
+UberMaterial	104	2	76	12	SerializeData			
+UberMaterial	104	3	88	16	VARIABLEARRAY	MaterialTextureEntry		
+PostFXParams	32	0	0	16	FIXEDARRAY	FLOAT	4	
+PostFXParams	32	1	16	16	FIXEDARRAY	FLOAT	4	
+Environment	84	0	0	4	RGBACOLOR			
+Environment	84	1	4	32	PostFXParams			
+Environment	84	2	36	4	SNO			group 1
+Environment	84	3	40	4	SNO			group 62
+Environment	84	4	44	4	SNO			group 62
+Environment	84	5	48	4	FLOAT			
+Environment	84	6	52	4	FLOAT			
+Environment	84	7	56	4	SNO			group 5
+Environment	84	8	60	4	SNO			group 60
+Environment	84	9	64	4	SNO			group 47
+Environment	84	10	68	4	SNO			group 44
+Environment	84	11	72	4	SNO			group 44
+Environment	84	12	76	4	FLOAT			
+Environment	84	13	80	4	INT			
+SceneCachedValues	80	0	0	4	INT			
+SceneCachedValues	80	1	4	4	INT			
+SceneCachedValues	80	2	8	4	INT			
+SceneCachedValues	80	3	12	24	AABB			
+SceneCachedValues	80	4	36	24	AABB			
+SceneCachedValues	80	5	60	16	FIXEDARRAY	INT	4	
+SceneCachedValues	80	6	76	4	INT			
+SceneSpecification	220	0	0	4	INT			
+SceneSpecification	220	1	4	8	IVECTOR2D			
+SceneSpecification	220	2	12	16	FIXEDARRAY	SNO	4	group 22
+SceneSpecification	220	3	28	4	SNO			group 48
+SceneSpecification	220	4	32	4	INT			
+SceneSpecification	220	5	36	4	SNO			group 22
+SceneSpecification	220	6	40	4	SNO			group 48
+SceneSpecification	220	7	44	4	INT			
+SceneSpecification	220	8	48	4	SNO			group 22
+SceneSpecification	220	9	52	4	SNO			group 62
+SceneSpecification	220	10	56	4	SNO			group 5
+SceneSpecification	220	11	60	4	SNO			group 60
+SceneSpecification	220	12	64	4	SNO			group 47
+SceneSpecification	220	13	68	4	SNO			group 48
+SceneSpecification	220	14	72	4	INT			
+SceneSpecification	220	15	76	4	INT			
+SceneSpecification	220	16	80	56	INT			
+SceneSpecification	220	17	136	4	INT			
+SceneSpecification	220	18	140	80	SceneCachedValues			
+ActiveSkillEntry	64	0	0	4	SNO			group 29
+ActiveSkillEntry	64	1	4	4	INT			
+ActiveSkillEntry	64	2	8	4	INT			
+ActiveSkillEntry	64	3	12	4	INT			
+ActiveSkillEntry	64	4	16	4	INT			
+ActiveSkillEntry	64	5	20	4	INT			
+ActiveSkillEntry	64	6	24	4	INT			
+ActiveSkillEntry	64	7	28	4	INT			
+ActiveSkillEntry	64	8	32	4	INT			
+ActiveSkillEntry	64	9	36	4	INT			
+ActiveSkillEntry	64	10	40	4	INT			
+ActiveSkillEntry	64	11	44	20	FIXEDARRAY	INT	5	
+TraitEntry	16	0	0	4	SNO			group 29
+TraitEntry	16	1	4	4	INT			
+TraitEntry	16	2	8	4	INT			
+TraitEntry	16	3	12	4	INT			
+ShaderMap	32	0	12	4	INT			
+ShaderMap	32	1	16	8	SerializeData			
+ShaderMap	32	2	24	8	TAGMAP			
+BountyData	76	0	0	4	ENUM			
+BountyData	76	1	4	4	ENUM			
+BountyData	76	2	8	4	SNO			group 22
+BountyData	76	3	12	4	SNO			group 48
+BountyData	76	4	16	4	SNO			group 31
+BountyData	76	5	20	4	SNO			group 48
+BountyData	76	6	24	4	SNO			group 1
+BountyData	76	7	28	4	SNO			group 48
+BountyData	76	8	32	4	SNO			group 22
+BountyData	76	9	36	4	SNO			group 33
+BountyData	76	10	40	4	SNO			group 48
+BountyData	76	11	48	4	SNO			group 2
+BountyData	76	12	52	4	SNO			group 48
+BountyData	76	13	56	4	SNO			group 22
+BountyData	76	14	60	4	SNO			group 15
+BountyData	76	15	44	4	GBID			
+BountyData	76	16	64	4	SNO			group 33
+BountyData	76	17	68	4	SNO			group 48
+BountyData	76	18	72	4	GBID			
+Quest	272	0	12	4	ENUM			
+Quest	272	1	16	4	INT			
+Quest	272	2	20	4	INT			
+Quest	272	3	24	4	INT			
+Quest	272	4	40	40	QuestUnassignedStep			
+Quest	272	5	88	8	SerializeData			
+Quest	272	6	80	8	VARIABLEARRAY	QuestStep		
+Quest	272	7	104	8	SerializeData			
+Quest	272	8	96	8	VARIABLEARRAY	QuestCompletionStep		
+Quest	272	9	28	4	INT			
+Quest	272	10	32	4	INT			
+Quest	272	11	36	4	INT			
+Quest	272	12	112	72	FIXEDARRAY	SNO	18	group 22
+Quest	272	13	184	4	SNO			group 48
+Quest	272	14	188	4	ENUM			
+Quest	272	15	192	80	BountyData			
+IntNode	12	0	0	4	INT			
+IntNode	12	1	4	4	INT			
+IntNode	12	2	8	4	FLOAT			
+IntPath	48	0	0	32	InterpolationPathHeader			
+IntPath	48	1	40	8	SerializeData			
+IntPath	48	2	32	8	VARIABLEARRAY	IntNode		
+LevelAreaSpawnItem	32	0	0	8	SNOName			
+LevelAreaSpawnItem	32	1	8	4	ENUM			
+LevelAreaSpawnItem	32	2	12	4	INT			
+LevelAreaSpawnItem	32	3	16	4	INT			
+LevelAreaSpawnItem	32	4	20	4	INT			
+LevelAreaSpawnItem	32	5	24	4	INT			
+LevelAreaSpawnItem	32	6	28	4	FLOAT			
+AssetListEntry	8	0	0	4	INT			
+AssetListEntry	8	1	4	4	INT			
+AssetList	16	0	8	8	SerializeData			
+AssetList	16	1	0	8	VARIABLEARRAY	AssetListEntry		
+BannerParams	232	0	8	8	SerializeData			
+BannerParams	232	1	0	8	VARIABLEARRAY	BannerTexturePair		
+BannerParams	232	2	16	8	INT			
+BannerParams	232	3	32	8	SerializeData			
+BannerParams	232	4	24	8	VARIABLEARRAY	BannerTexturePair		
+BannerParams	232	5	40	8	INT			
+BannerParams	232	6	56	8	SerializeData			
+BannerParams	232	7	48	8	VARIABLEARRAY	BannerTexturePair		
+BannerParams	232	8	72	8	SerializeData			
+BannerParams	232	9	64	8	VARIABLEARRAY	BannerTexturePair		
+BannerParams	232	10	80	8	INT			
+BannerParams	232	11	96	8	SerializeData			
+BannerParams	232	12	88	8	VARIABLEARRAY	BannerTexturePair		
+BannerParams	232	13	104	8	INT			
+BannerParams	232	14	120	8	SerializeData			
+BannerParams	232	15	112	8	VARIABLEARRAY	BannerColorSet		
+BannerParams	232	16	136	8	SerializeData			
+BannerParams	232	17	128	8	VARIABLEARRAY	BannerSigilPlacement		
+BannerParams	232	18	152	8	SerializeData			
+BannerParams	232	19	144	8	VARIABLEARRAY	SNO		group 1
+BannerParams	232	20	168	8	SerializeData			
+BannerParams	232	21	160	8	VARIABLEARRAY	SNO		group 1
+BannerParams	232	22	184	8	SerializeData			
+BannerParams	232	23	176	8	VARIABLEARRAY	SNO		group 1
+BannerParams	232	24	200	8	SerializeData			
+BannerParams	232	25	192	8	VARIABLEARRAY	SNO		group 1
+BannerParams	232	26	216	16	SerializeData			
+BannerParams	232	27	208	8	VARIABLEARRAY	EpicBannerDescription		
+GlobalServerData	656	0	8	8	SerializeData			
+GlobalServerData	656	1	0	8	VARIABLEARRAY	ActorGroup		
+GlobalServerData	656	2	24	8	SerializeData			
+GlobalServerData	656	3	16	8	VARIABLEARRAY	GlobalScriptVariable		
+GlobalServerData	656	4	32	312	FIXEDARRAY	DifficultyTuningParams	6	
+GlobalServerData	656	5	344	4	FLOAT			
+GlobalServerData	656	6	348	4	FLOAT			
+GlobalServerData	656	7	352	4	FLOAT			
+GlobalServerData	656	8	356	4	FLOAT			
+GlobalServerData	656	9	360	4	FLOAT			
+GlobalServerData	656	10	364	4	FLOAT			
+GlobalServerData	656	11	368	4	FLOAT			
+GlobalServerData	656	12	372	4	FLOAT			
+GlobalServerData	656	13	376	4	INT			
+GlobalServerData	656	14	380	4	FLOAT			
+GlobalServerData	656	15	384	4	FLOAT			
+GlobalServerData	656	16	388	4	FLOAT			
+GlobalServerData	656	17	392	4	FLOAT			
+GlobalServerData	656	18	400	4	FLOAT			
+GlobalServerData	656	19	404	4	FLOAT			
+GlobalServerData	656	20	408	4	FLOAT			
+GlobalServerData	656	21	412	4	FLOAT			
+GlobalServerData	656	22	416	4	FLOAT			
+GlobalServerData	656	23	396	4	FLOAT			
+GlobalServerData	656	24	420	4	INT			
+GlobalServerData	656	25	424	4	INT			
+GlobalServerData	656	26	428	4	INT			
+GlobalServerData	656	27	432	4	FLOAT			
+GlobalServerData	656	28	436	4	FLOAT			
+GlobalServerData	656	29	440	4	FLOAT			
+GlobalServerData	656	30	444	4	FLOAT			
+GlobalServerData	656	31	448	4	FLOAT			
+GlobalServerData	656	32	452	4	FLOAT			
+GlobalServerData	656	33	464	4	FLOAT			
+GlobalServerData	656	34	456	4	FLOAT			
+GlobalServerData	656	35	460	4	INT			
+GlobalServerData	656	36	604	4	FLOAT			
+GlobalServerData	656	37	608	4	FLOAT			
+GlobalServerData	656	38	612	4	FLOAT			
+GlobalServerData	656	39	616	4	FLOAT			
+GlobalServerData	656	40	620	8	FIXEDARRAY	FLOAT	2	
+GlobalServerData	656	41	628	4	FLOAT			
+GlobalServerData	656	42	632	4	FLOAT			
+GlobalServerData	656	43	636	4	FLOAT			
+GlobalServerData	656	44	640	4	FLOAT			
+GlobalServerData	656	45	468	4	INT			
+GlobalServerData	656	46	472	4	INT			
+GlobalServerData	656	47	476	4	INT			
+GlobalServerData	656	48	480	4	INT			
+GlobalServerData	656	49	484	4	INT			
+GlobalServerData	656	50	488	4	INT			
+GlobalServerData	656	51	492	4	INT			
+GlobalServerData	656	52	496	4	INT			
+GlobalServerData	656	53	500	4	INT			
+GlobalServerData	656	54	504	4	FLOAT			
+GlobalServerData	656	55	508	4	FLOAT			
+GlobalServerData	656	56	512	40	FIXEDARRAY	FLOAT	10	
+GlobalServerData	656	57	552	4	FLOAT			
+GlobalServerData	656	58	556	4	FLOAT			
+GlobalServerData	656	59	560	4	INT			
+GlobalServerData	656	60	564	4	INT			
+GlobalServerData	656	61	568	4	INT			
+GlobalServerData	656	62	572	4	FLOAT			
+GlobalServerData	656	63	576	4	INT			
+GlobalServerData	656	64	644	4	FLOAT			
+GlobalServerData	656	65	648	4	FLOAT			
+GlobalServerData	656	66	580	4	FLOAT			
+GlobalServerData	656	67	584	4	FLOAT			
+GlobalServerData	656	68	588	4	FLOAT			
+GlobalServerData	656	69	592	4	FLOAT			
+GlobalServerData	656	70	596	4	FLOAT			
+GlobalServerData	656	71	600	4	FLOAT			
+GlobalServerData	656	72	652	4	FLOAT			
+Globals	936	0	24	8	SerializeData			
+Globals	936	1	16	8	VARIABLEARRAY	GlobalServerData		
+Globals	936	2	32	8	INT			
+Globals	936	3	48	8	SerializeData			
+Globals	936	4	40	8	VARIABLEARRAY	StartLocationName		
+Globals	936	5	56	4	FLOAT			
+Globals	936	6	60	4	FLOAT			
+Globals	936	7	64	4	FLOAT			
+Globals	936	8	68	4	FLOAT			
+Globals	936	9	72	4	INT			
+Globals	936	10	76	4	INT			
+Globals	936	11	80	4	FLOAT			
+Globals	936	12	84	4	FLOAT			
+Globals	936	13	88	4	INT			
+Globals	936	14	92	4	FLOAT			
+Globals	936	15	96	4	FLOAT			
+Globals	936	16	100	4	FLOAT			
+Globals	936	17	104	4	FLOAT			
+Globals	936	18	108	4	FLOAT			
+Globals	936	19	112	4	FLOAT			
+Globals	936	20	116	4	FLOAT			
+Globals	936	21	120	4	FLOAT			
+Globals	936	22	124	4	FLOAT			
+Globals	936	23	408	4	FLOAT			
+Globals	936	24	412	4	FLOAT			
+Globals	936	25	416	4	FLOAT			
+Globals	936	26	420	4	FLOAT			
+Globals	936	27	424	4	FLOAT			
+Globals	936	28	428	4	FLOAT			
+Globals	936	29	432	4	FLOAT			
+Globals	936	30	436	4	FLOAT			
+Globals	936	31	440	4	FLOAT			
+Globals	936	32	444	4	FLOAT			
+Globals	936	33	480	4	FLOAT			
+Globals	936	34	476	4	FLOAT			
+Globals	936	35	448	4	FLOAT			
+Globals	936	36	452	4	FLOAT			
+Globals	936	37	468	4	FLOAT			
+Globals	936	38	472	4	FLOAT			
+Globals	936	39	456	4	FLOAT			
+Globals	936	40	460	4	FLOAT			
+Globals	936	41	464	4	FLOAT			
+Globals	936	42	484	4	FLOAT			
+Globals	936	43	488	4	FLOAT			
+Globals	936	44	492	4	INT			
+Globals	936	45	128	4	INT			
+Globals	936	46	132	20	FIXEDARRAY	INT	4	
+Globals	936	47	152	232	BannerParams			
+Globals	936	48	384	4	INT			
+Globals	936	49	388	4	INT			
+Globals	936	50	392	4	INT			
+Globals	936	51	396	4	INT			
+Globals	936	52	400	4	FLOAT			
+Globals	936	53	632	4	FLOAT			
+Globals	936	54	636	4	FLOAT			
+Globals	936	55	404	4	INT			
+Globals	936	56	496	4	FLOAT			
+Globals	936	57	500	4	INT			
+Globals	936	58	504	4	INT			
+Globals	936	59	508	4	FLOAT			
+Globals	936	60	512	4	FLOAT			
+Globals	936	61	516	4	FLOAT			
+Globals	936	62	520	112	FIXEDARRAY	AssetList	7	
+Globals	936	63	668	4	FLOAT			
+Globals	936	64	672	4	FLOAT			
+Globals	936	65	676	4	FLOAT			
+Globals	936	66	680	4	FLOAT			
+Globals	936	67	684	4	FLOAT			
+Globals	936	68	688	4	FLOAT			
+Globals	936	69	692	4	INT			
+Globals	936	70	696	4	FLOAT			
+Globals	936	71	648	4	FLOAT			
+Globals	936	72	652	4	FLOAT			
+Globals	936	73	656	4	FLOAT			
+Globals	936	74	700	4	FLOAT			
+Globals	936	75	704	4	FLOAT			
+Globals	936	76	712	4	FLOAT			
+Globals	936	77	716	4	INT			
+Globals	936	78	720	4	FLOAT			
+Globals	936	79	724	4	FLOAT			
+Globals	936	80	728	4	INT			
+Globals	936	81	708	4	FLOAT			
+Globals	936	82	732	4	FLOAT			
+Globals	936	83	736	4	FLOAT			
+Globals	936	84	740	4	FLOAT			
+Globals	936	85	640	4	FLOAT			
+Globals	936	86	644	4	FLOAT			
+Globals	936	87	660	4	FLOAT			
+Globals	936	88	664	4	FLOAT			
+Globals	936	89	744	4	FLOAT			
+Globals	936	90	748	4	FLOAT			
+Globals	936	91	752	4	FLOAT			
+Globals	936	92	756	4	FLOAT			
+Globals	936	93	760	4	FLOAT			
+Globals	936	94	764	4	FLOAT			
+Globals	936	95	768	4	FLOAT			
+Globals	936	96	772	4	FLOAT			
+Globals	936	97	776	4	INT			
+Globals	936	98	780	4	INT			
+Globals	936	99	784	4	FLOAT			
+Globals	936	100	788	4	FLOAT			
+Globals	936	101	792	4	FLOAT			
+Globals	936	102	796	4	FLOAT			
+Globals	936	103	800	4	FLOAT			
+Globals	936	104	804	4	FLOAT			
+Globals	936	105	808	4	FLOAT			
+Globals	936	106	812	4	INT			
+Globals	936	107	816	4	INT			
+Globals	936	108	820	4	INT			
+Globals	936	109	824	4	INT			
+Globals	936	110	828	4	INT			
+Globals	936	111	832	4	INT			
+Globals	936	112	836	4	FLOAT			
+Globals	936	113	840	4	FLOAT			
+Globals	936	114	844	4	FLOAT			
+Globals	936	115	848	4	FLOAT			
+Globals	936	116	852	4	FLOAT			
+Globals	936	117	856	4	FLOAT			
+Globals	936	118	860	4	FLOAT			
+Globals	936	119	864	4	INT			
+Globals	936	120	868	4	INT			
+Globals	936	121	872	4	FLOAT			
+Globals	936	122	876	4	FLOAT			
+Globals	936	123	880	4	FLOAT			
+Globals	936	124	884	4	FLOAT			
+Globals	936	125	888	4	FLOAT			
+Globals	936	126	892	4	FLOAT			
+Globals	936	127	896	4	FLOAT			
+Globals	936	128	900	4	FLOAT			
+Globals	936	129	904	4	FLOAT			
+Globals	936	130	908	4	FLOAT			
+Globals	936	131	912	4	INT			
+Globals	936	132	916	4	FLOAT			
+Globals	936	133	920	4	FLOAT			
+Globals	936	134	924	4	INT			
+Globals	936	135	928	4	INT			
+Globals	936	136	932	4	INT			
+ItemDropTableEntry	904	0	0	8	SerializeData			
+ItemDropTableEntry	904	1	8	8	VARIABLEARRAY	BYTE		
+ItemDropTableEntry	904	2	16	4	INT			
+ItemDropTableEntry	904	3	20	4	INT			
+ItemDropTableEntry	904	4	24	4	INT			
+ItemDropTableEntry	904	5	28	4	INT			
+ItemDropTableEntry	904	6	32	4	INT			
+ItemDropTableEntry	904	7	36	4	INT			
+ItemDropTableEntry	904	8	40	4	INT			
+ItemDropTableEntry	904	9	44	4	INT			
+ItemDropTableEntry	904	10	48	4	INT			
+ItemDropTableEntry	904	11	52	4	INT			
+ItemDropTableEntry	904	12	56	4	INT			
+ItemDropTableEntry	904	13	60	4	INT			
+ItemDropTableEntry	904	14	64	4	INT			
+ItemDropTableEntry	904	15	68	4	INT			
+ItemDropTableEntry	904	16	72	4	INT			
+ItemDropTableEntry	904	17	76	4	INT			
+ItemDropTableEntry	904	18	80	4	INT			
+ItemDropTableEntry	904	19	84	4	INT			
+ItemDropTableEntry	904	20	88	4	INT			
+ItemDropTableEntry	904	21	92	4	INT			
+ItemDropTableEntry	904	22	96	4	INT			
+ItemDropTableEntry	904	23	100	4	INT			
+ItemDropTableEntry	904	24	104	4	INT			
+ItemDropTableEntry	904	25	108	4	INT			
+ItemDropTableEntry	904	26	112	4	INT			
+ItemDropTableEntry	904	27	116	4	INT			
+ItemDropTableEntry	904	28	120	4	INT			
+ItemDropTableEntry	904	29	124	4	INT			
+ItemDropTableEntry	904	30	128	4	INT			
+ItemDropTableEntry	904	31	132	4	INT			
+ItemDropTableEntry	904	32	136	4	INT			
+ItemDropTableEntry	904	33	140	4	INT			
+ItemDropTableEntry	904	34	144	4	INT			
+ItemDropTableEntry	904	35	148	4	INT			
+ItemDropTableEntry	904	36	152	4	INT			
+ItemDropTableEntry	904	37	156	4	INT			
+ItemDropTableEntry	904	38	160	4	INT			
+ItemDropTableEntry	904	39	164	4	INT			
+ItemDropTableEntry	904	40	168	4	INT			
+ItemDropTableEntry	904	41	172	4	INT			
+ItemDropTableEntry	904	42	176	4	INT			
+ItemDropTableEntry	904	43	180	4	INT			
+ItemDropTableEntry	904	44	184	4	INT			
+ItemDropTableEntry	904	45	188	4	INT			
+ItemDropTableEntry	904	46	192	4	INT			
+ItemDropTableEntry	904	47	196	4	INT			
+ItemDropTableEntry	904	48	200	4	INT			
+ItemDropTableEntry	904	49	204	4	INT			
+ItemDropTableEntry	904	50	208	4	INT			
+ItemDropTableEntry	904	51	212	4	INT			
+ItemDropTableEntry	904	52	216	4	INT			
+ItemDropTableEntry	904	53	220	4	INT			
+ItemDropTableEntry	904	54	224	4	INT			
+ItemDropTableEntry	904	55	228	4	INT			
+ItemDropTableEntry	904	56	232	4	INT			
+ItemDropTableEntry	904	57	236	4	INT			
+ItemDropTableEntry	904	58	240	4	INT			
+ItemDropTableEntry	904	59	244	4	INT			
+ItemDropTableEntry	904	60	248	4	INT			
+ItemDropTableEntry	904	61	252	4	INT			
+ItemDropTableEntry	904	62	256	4	INT			
+ItemDropTableEntry	904	63	260	4	INT			
+ItemDropTableEntry	904	64	264	4	INT			
+ItemDropTableEntry	904	65	268	4	INT			
+ItemDropTableEntry	904	66	272	4	INT			
+ItemDropTableEntry	904	67	276	4	INT			
+ItemDropTableEntry	904	68	280	4	INT			
+ItemDropTableEntry	904	69	284	4	INT			
+ItemDropTableEntry	904	70	288	4	INT			
+ItemDropTableEntry	904	71	292	4	INT			
+ItemDropTableEntry	904	72	296	4	INT			
+ItemDropTableEntry	904	73	300	4	INT			
+ItemDropTableEntry	904	74	304	4	INT			
+ItemDropTableEntry	904	75	308	4	INT			
+ItemDropTableEntry	904	76	312	4	INT			
+ItemDropTableEntry	904	77	316	4	INT			
+ItemDropTableEntry	904	78	320	4	INT			
+ItemDropTableEntry	904	79	324	4	INT			
+ItemDropTableEntry	904	80	328	4	INT			
+ItemDropTableEntry	904	81	332	4	INT			
+ItemDropTableEntry	904	82	336	4	INT			
+ItemDropTableEntry	904	83	340	4	INT			
+ItemDropTableEntry	904	84	344	4	INT			
+ItemDropTableEntry	904	85	348	4	INT			
+ItemDropTableEntry	904	86	352	4	INT			
+ItemDropTableEntry	904	87	356	4	INT			
+ItemDropTableEntry	904	88	360	4	INT			
+ItemDropTableEntry	904	89	364	4	INT			
+ItemDropTableEntry	904	90	368	4	INT			
+ItemDropTableEntry	904	91	372	4	INT			
+ItemDropTableEntry	904	92	376	4	INT			
+ItemDropTableEntry	904	93	380	4	INT			
+ItemDropTableEntry	904	94	384	4	INT			
+ItemDropTableEntry	904	95	388	4	INT			
+ItemDropTableEntry	904	96	392	4	INT			
+ItemDropTableEntry	904	97	396	4	INT			
+ItemDropTableEntry	904	98	400	4	INT			
+ItemDropTableEntry	904	99	404	4	INT			
+ItemDropTableEntry	904	100	408	4	INT			
+ItemDropTableEntry	904	101	412	4	INT			
+ItemDropTableEntry	904	102	416	4	INT			
+ItemDropTableEntry	904	103	420	4	INT			
+ItemDropTableEntry	904	104	424	4	INT			
+ItemDropTableEntry	904	105	428	4	INT			
+ItemDropTableEntry	904	106	432	4	INT			
+ItemDropTableEntry	904	107	436	4	INT			
+ItemDropTableEntry	904	108	440	4	INT			
+ItemDropTableEntry	904	109	444	4	INT			
+ItemDropTableEntry	904	110	448	4	INT			
+ItemDropTableEntry	904	111	452	4	INT			
+ItemDropTableEntry	904	112	456	4	INT			
+ItemDropTableEntry	904	113	460	4	INT			
+ItemDropTableEntry	904	114	464	4	INT			
+ItemDropTableEntry	904	115	468	4	INT			
+ItemDropTableEntry	904	116	472	4	INT			
+ItemDropTableEntry	904	117	476	4	INT			
+ItemDropTableEntry	904	118	480	4	INT			
+ItemDropTableEntry	904	119	484	4	INT			
+ItemDropTableEntry	904	120	488	4	INT			
+ItemDropTableEntry	904	121	492	4	INT			
+ItemDropTableEntry	904	122	496	4	INT			
+ItemDropTableEntry	904	123	500	4	INT			
+ItemDropTableEntry	904	124	504	4	INT			
+ItemDropTableEntry	904	125	508	4	INT			
+ItemDropTableEntry	904	126	512	4	INT			
+ItemDropTableEntry	904	127	516	4	INT			
+ItemDropTableEntry	904	128	520	4	INT			
+ItemDropTableEntry	904	129	524	4	INT			
+ItemDropTableEntry	904	130	528	4	INT			
+ItemDropTableEntry	904	131	532	4	INT			
+ItemDropTableEntry	904	132	536	4	INT			
+ItemDropTableEntry	904	133	540	4	INT			
+ItemDropTableEntry	904	134	544	4	INT			
+ItemDropTableEntry	904	135	548	4	INT			
+ItemDropTableEntry	904	136	552	4	INT			
+ItemDropTableEntry	904	137	556	4	INT			
+ItemDropTableEntry	904	138	560	4	INT			
+ItemDropTableEntry	904	139	564	4	INT			
+ItemDropTableEntry	904	140	568	4	INT			
+ItemDropTableEntry	904	141	572	4	INT			
+ItemDropTableEntry	904	142	576	4	INT			
+ItemDropTableEntry	904	143	580	4	INT			
+ItemDropTableEntry	904	144	584	4	INT			
+ItemDropTableEntry	904	145	588	4	INT			
+ItemDropTableEntry	904	146	592	4	INT			
+ItemDropTableEntry	904	147	596	4	INT			
+ItemDropTableEntry	904	148	600	4	INT			
+ItemDropTableEntry	904	149	604	4	INT			
+ItemDropTableEntry	904	150	608	4	INT			
+ItemDropTableEntry	904	151	612	4	INT			
+ItemDropTableEntry	904	152	616	4	INT			
+ItemDropTableEntry	904	153	620	4	INT			
+ItemDropTableEntry	904	154	624	4	INT			
+ItemDropTableEntry	904	155	628	4	INT			
+ItemDropTableEntry	904	156	632	4	INT			
+ItemDropTableEntry	904	157	636	4	INT			
+ItemDropTableEntry	904	158	640	4	INT			
+ItemDropTableEntry	904	159	644	4	INT			
+ItemDropTableEntry	904	160	648	4	INT			
+ItemDropTableEntry	904	161	652	4	INT			
+ItemDropTableEntry	904	162	656	4	INT			
+ItemDropTableEntry	904	163	660	4	INT			
+ItemDropTableEntry	904	164	664	4	INT			
+ItemDropTableEntry	904	165	668	4	INT			
+ItemDropTableEntry	904	166	672	4	INT			
+ItemDropTableEntry	904	167	676	4	INT			
+ItemDropTableEntry	904	168	680	4	INT			
+ItemDropTableEntry	904	169	684	4	INT			
+ItemDropTableEntry	904	170	688	4	INT			
+ItemDropTableEntry	904	171	692	4	INT			
+ItemDropTableEntry	904	172	696	4	INT			
+ItemDropTableEntry	904	173	700	4	INT			
+ItemDropTableEntry	904	174	704	4	INT			
+ItemDropTableEntry	904	175	708	4	INT			
+ItemDropTableEntry	904	176	712	4	INT			
+ItemDropTableEntry	904	177	716	4	INT			
+ItemDropTableEntry	904	178	720	4	INT			
+ItemDropTableEntry	904	179	724	4	INT			
+ItemDropTableEntry	904	180	728	4	INT			
+ItemDropTableEntry	904	181	732	4	INT			
+ItemDropTableEntry	904	182	736	4	INT			
+ItemDropTableEntry	904	183	740	4	INT			
+ItemDropTableEntry	904	184	744	4	INT			
+ItemDropTableEntry	904	185	748	4	INT			
+ItemDropTableEntry	904	186	752	4	INT			
+ItemDropTableEntry	904	187	756	4	INT			
+ItemDropTableEntry	904	188	760	4	INT			
+ItemDropTableEntry	904	189	764	4	INT			
+ItemDropTableEntry	904	190	768	4	INT			
+ItemDropTableEntry	904	191	772	4	INT			
+ItemDropTableEntry	904	192	776	4	INT			
+ItemDropTableEntry	904	193	780	8	INT			
+ItemDropTableEntry	904	194	788	4	INT			
+ItemDropTableEntry	904	195	792	4	INT			
+ItemDropTableEntry	904	196	796	4	INT			
+ItemDropTableEntry	904	197	800	4	INT			
+ItemDropTableEntry	904	198	804	4	INT			
+ItemDropTableEntry	904	199	808	4	INT			
+ItemDropTableEntry	904	200	812	4	INT			
+ItemDropTableEntry	904	201	816	4	INT			
+ItemDropTableEntry	904	202	820	4	INT			
+ItemDropTableEntry	904	203	824	4	INT			
+ItemDropTableEntry	904	204	828	4	INT			
+ItemDropTableEntry	904	205	832	4	INT			
+ItemDropTableEntry	904	206	836	4	INT			
+ItemDropTableEntry	904	207	840	4	INT			
+ItemDropTableEntry	904	208	844	4	INT			
+ItemDropTableEntry	904	209	848	4	INT			
+ItemDropTableEntry	904	210	852	4	INT			
+ItemDropTableEntry	904	211	856	4	INT			
+ItemDropTableEntry	904	212	860	4	INT			
+ItemDropTableEntry	904	213	864	4	INT			
+ItemDropTableEntry	904	214	868	4	INT			
+ItemDropTableEntry	904	215	872	4	INT			
+ItemDropTableEntry	904	216	876	4	INT			
+ItemDropTableEntry	904	217	880	4	INT			
+ItemDropTableEntry	904	218	884	4	INT			
+ItemDropTableEntry	904	219	888	4	INT			
+ItemDropTableEntry	904	220	892	4	INT			
+ItemDropTableEntry	904	221	896	4	INT			
+ItemDropTableEntry	904	222	900	4	INT			
+SocketedEffectsTableEntry	1176	0	0	8	SerializeData			
+SocketedEffectsTableEntry	1176	1	8	8	VARIABLEARRAY	BYTE		
+SocketedEffectsTableEntry	1176	2	16	4	INT			
+SocketedEffectsTableEntry	1176	3	20	4	INT			
+SocketedEffectsTableEntry	1176	4	24	4	GBID			
+SocketedEffectsTableEntry	1176	5	28	4	GBID			
+SocketedEffectsTableEntry	1176	6	32	4	TRANSLATEABLE			
+SocketedEffectsTableEntry	1176	7	36	4	ATTRIBUTEPARAM			
+SocketedEffectsTableEntry	1176	8	48	8	SerializeData			
+SocketedEffectsTableEntry	1176	9	40	8	FORMULA			
+SocketedEffectsTableEntry	1176	10	56	4	TRANSLATEABLE			
+SocketedEffectsTableEntry	1176	11	60	4	ATTRIBUTEPARAM			
+SocketedEffectsTableEntry	1176	12	72	8	SerializeData			
+SocketedEffectsTableEntry	1176	13	64	8	FORMULA			
+SocketedEffectsTableEntry	1176	14	80	4	TRANSLATEABLE			
+SocketedEffectsTableEntry	1176	15	84	4	ATTRIBUTEPARAM			
+SocketedEffectsTableEntry	1176	16	96	8	SerializeData			
+SocketedEffectsTableEntry	1176	17	88	8	FORMULA			
+SocketedEffectsTableEntry	1176	18	104	4	TRANSLATEABLE			
+SocketedEffectsTableEntry	1176	19	108	4	ATTRIBUTEPARAM			
+SocketedEffectsTableEntry	1176	20	120	8	SerializeData			
+SocketedEffectsTableEntry	1176	21	112	8	FORMULA			
+SocketedEffectsTableEntry	1176	22	128	4	TRANSLATEABLE			
+SocketedEffectsTableEntry	1176	23	132	4	ATTRIBUTEPARAM			
+SocketedEffectsTableEntry	1176	24	144	8	SerializeData			
+SocketedEffectsTableEntry	1176	25	136	8	FORMULA			
+SocketedEffectsTableEntry	1176	26	152	1024	CHARARRAY		1024	
+SocketedEffectsTable	16	0	0	8	SerializeData			
+SocketedEffectsTable	16	1	8	8	VARIABLEARRAY	SocketedEffectsTableEntry		
+RareItemNamesEntry	40	0	0	8	SerializeData			
+RareItemNamesEntry	40	1	8	8	VARIABLEARRAY	BYTE		
+RareItemNamesEntry	40	2	16	4	INT			
+RareItemNamesEntry	40	3	20	4	INT			
+RareItemNamesEntry	40	4	28	4	GBID			
+RareItemNamesEntry	40	5	24	4	ENUM			
+RareItemNamesEntry	40	6	32	4	ENUM			
+RareItemNamesEntry	40	7	36	4	INT			
+RareItemNamesTable	16	0	0	8	SerializeData			
+RareItemNamesTable	16	1	8	8	VARIABLEARRAY	RareItemNamesEntry		
+ConversationListEntry	332	0	0	4	SNO			group 12
+ConversationListEntry	332	1	4	4	INT			
+ConversationListEntry	332	2	8	4	INT			
+ConversationListEntry	332	3	12	4	INT			
+ConversationListEntry	332	4	16	4	GBID			
+ConversationListEntry	332	5	20	128	CHARARRAY		128	
+ConversationListEntry	332	6	148	128	CHARARRAY		128	
+ConversationListEntry	332	7	276	4	SNO			group 31
+ConversationListEntry	332	8	280	4	INT			
+ConversationListEntry	332	9	284	4	SNO			group 31
+ConversationListEntry	332	10	288	4	SNO			group 31
+ConversationListEntry	332	11	292	4	SNO			group 31
+ConversationListEntry	332	12	296	4	SNO			group 58
+ConversationListEntry	332	13	300	24	FIXEDARRAY	SNO	6	group 22
+ConversationListEntry	332	14	324	4	INT			
+ConversationListEntry	332	15	328	4	INT			
+ConversationList	32	0	24	8	SerializeData			
+ConversationList	32	1	16	8	VARIABLEARRAY	ConversationListEntry		
+Hero	32	0	12	12	SerializeData			
+Hero	32	1	24	8	VARIABLEARRAY	BYTE		
+ClothConstraintSerializable	16	0	0	4	INT			
+ClothConstraintSerializable	16	1	4	4	INT			
+ClothConstraintSerializable	16	2	8	4	FLOAT			
+ClothConstraintSerializable	16	3	12	4	FLOAT			
+ClothStaple	28	0	0	4	INT			
+ClothStaple	28	1	4	12	FIXEDARRAY	INT	3	
+ClothStaple	28	2	16	12	FIXEDARRAY	FLOAT	3	
+ClothFaceSerializable	16	0	0	4	FLOAT			
+ClothFaceSerializable	16	1	4	4	INT			
+ClothFaceSerializable	16	2	8	4	INT			
+ClothFaceSerializable	16	3	12	4	INT			
+ClothStructure	144	0	0	4	INT			
+ClothStructure	144	1	4	12	SerializeData			
+ClothStructure	144	2	16	8	VARIABLEARRAY	ClothVertexSerializable		
+ClothStructure	144	3	24	4	INT			
+ClothStructure	144	4	28	12	SerializeData			
+ClothStructure	144	5	40	8	VARIABLEARRAY	ClothFaceSerializable		
+ClothStructure	144	6	48	4	INT			
+ClothStructure	144	7	52	12	SerializeData			
+ClothStructure	144	8	64	8	VARIABLEARRAY	ClothStaple		
+ClothStructure	144	9	72	4	INT			
+ClothStructure	144	10	76	12	SerializeData			
+ClothStructure	144	11	88	8	VARIABLEARRAY	ClothConstraintSerializable		
+ClothStructure	144	12	96	4	INT			
+ClothStructure	144	13	100	12	SerializeData			
+ClothStructure	144	14	112	8	VARIABLEARRAY	ClothConstraintSerializable		
+ClothStructure	144	15	120	4	INT			
+ClothStructure	144	16	124	4	FLOAT			
+ClothStructure	144	17	128	8	SerializeData			
+ClothStructure	144	18	136	8	VARIABLEARRAY	WORD		
+TexAnimParams	144	0	0	4	INT			
+TexAnimParams	144	1	4	64	Matrix4x4			
+TexAnimParams	144	2	68	4	FLOAT			
+TexAnimParams	144	3	72	4	VELOCITY			
+TexAnimParams	144	4	76	4	VELOCITY			
+TexAnimParams	144	5	80	4	FLOAT			
+TexAnimParams	144	6	84	4	VELOCITY			
+TexAnimParams	144	7	88	4	VELOCITY			
+TexAnimParams	144	8	92	4	ANGLE			
+TexAnimParams	144	9	96	4	ANGULARVELOCITY			
+TexAnimParams	144	10	100	4	ANGULARVELOCITY			
+TexAnimParams	144	11	104	4	INT			
+TexAnimParams	144	12	108	4	INT			
+TexAnimParams	144	13	112	4	INT			
+TexAnimParams	144	14	116	4	INT			
+TexAnimParams	144	15	120	20	FrameAnim			
+TexAnimParams	144	16	140	4	INT			
+FrameAnim	20	0	0	4	INT			
+FrameAnim	20	1	4	4	VELOCITY			
+FrameAnim	20	2	8	4	VELOCITY			
+FrameAnim	20	3	12	4	INT			
+FrameAnim	20	4	16	4	INT			
+Vibrations	136	0	12	4	INT			
+Vibrations	136	1	16	4	TIME			
+Vibrations	136	2	20	4	TIME			
+Vibrations	136	3	24	4	FLOAT			
+Vibrations	136	4	28	4	FLOAT			
+Vibrations	136	5	32	8	FLOAT			
+Vibrations	136	6	40	48	FloatPath			
+Vibrations	136	7	88	48	FloatPath			
+Accolade	16	0	12	4	INT			
+Surface	40	0	12	4	INT			
+Surface	40	1	16	4	SNO			group 27
+Surface	40	2	20	4	INT			
+Surface	40	3	24	8	SerializeData			
+Surface	40	4	32	8	TAGMAP			
+RecipeEntry	96	0	0	8	SerializeData			
+RecipeEntry	96	1	8	8	VARIABLEARRAY	BYTE		
+RecipeEntry	96	2	16	4	INT			
+RecipeEntry	96	3	20	4	INT			
+RecipeEntry	96	4	24	4	SNO			group 49
+RecipeEntry	96	5	28	4	ENUM			
+RecipeEntry	96	6	32	4	INT			
+RecipeEntry	96	7	36	4	INT			
+RecipeEntry	96	8	40	4	INT			
+RecipeEntry	96	9	44	4	INT			
+RecipeEntry	96	10	48	48	FIXEDARRAY	RecipeIngredient	6	
+EliteModifierData	112	0	0	8	SerializeData			
+EliteModifierData	112	1	8	8	VARIABLEARRAY	BYTE		
+EliteModifierData	112	2	16	4	INT			
+EliteModifierData	112	3	20	4	INT			
+EliteModifierData	112	4	24	4	FLOAT			
+EliteModifierData	112	5	28	4	TIME			
+EliteModifierData	112	6	32	4	FLOAT			
+EliteModifierData	112	7	36	4	TIME			
+EliteModifierData	112	8	40	4	FLOAT			
+EliteModifierData	112	9	44	4	TIME			
+EliteModifierData	112	10	48	4	FLOAT			
+EliteModifierData	112	11	52	4	TIME			
+EliteModifierData	112	12	56	4	FLOAT			
+EliteModifierData	112	13	60	4	TIME			
+EliteModifierData	112	14	64	4	FLOAT			
+EliteModifierData	112	15	68	4	TIME			
+EliteModifierData	112	16	72	4	FLOAT			
+EliteModifierData	112	17	76	4	TIME			
+EliteModifierData	112	18	80	4	FLOAT			
+EliteModifierData	112	19	84	4	FLOAT			
+EliteModifierData	112	20	88	4	TIME			
+EliteModifierData	112	21	92	4	FLOAT			
+EliteModifierData	112	22	96	4	FLOAT			
+EliteModifierData	112	23	100	4	FLOAT			
+EliteModifierData	112	24	104	4	FLOAT			
+EliteModifierData	112	25	108	4	INT			
+EliteModifiers	16	0	0	8	SerializeData			
+EliteModifiers	16	1	8	8	VARIABLEARRAY	EliteModifierData		
+HirelingEntry	88	0	0	8	SerializeData			
+HirelingEntry	88	1	8	8	VARIABLEARRAY	BYTE		
+HirelingEntry	88	2	16	4	INT			
+HirelingEntry	88	3	20	4	INT			
+HirelingEntry	88	4	24	4	SNO			group 1
+HirelingEntry	88	5	28	4	SNO			group 1
+HirelingEntry	88	6	32	4	SNO			group 1
+HirelingEntry	88	7	36	4	SNO			group 52
+HirelingEntry	88	8	40	4	ENUM			
+HirelingEntry	88	9	44	4	FLOAT			
+HirelingEntry	88	10	48	4	FLOAT			
+HirelingEntry	88	11	52	4	FLOAT			
+HirelingEntry	88	12	56	4	FLOAT			
+HirelingEntry	88	13	60	4	FLOAT			
+HirelingEntry	88	14	64	4	FLOAT			
+HirelingEntry	88	15	68	4	FLOAT			
+HirelingEntry	88	16	72	4	FLOAT			
+HirelingEntry	88	17	76	4	FLOAT			
+HirelingEntry	88	18	80	4	FLOAT			
+HirelingEntry	88	19	84	4	FLOAT			
+Hirelings	16	0	0	8	SerializeData			
+Hirelings	16	1	8	8	VARIABLEARRAY	HirelingEntry		
+ItemDropTable	16	0	0	8	SerializeData			
+ItemDropTable	16	1	8	8	VARIABLEARRAY	ItemDropTableEntry		
+Explosion	64	0	12	4	INT			
+Explosion	64	1	16	4	INT			
+Explosion	64	2	20	12	VECTOR3D			
+Explosion	64	3	32	4	IMPULSE			
+Explosion	64	4	36	4	FLOAT			
+Explosion	64	5	40	4	FLOAT			
+Explosion	64	6	44	4	FLOAT			
+Explosion	64	7	48	4	FLOAT			
+Explosion	64	8	52	4	INT			
+Explosion	64	9	56	4	FLOAT			
+Explosion	64	10	60	4	INT			
+EncounterSpawnOption	12	0	0	4	SNO			group 1
+EncounterSpawnOption	12	1	4	4	INT			
+EncounterSpawnOption	12	2	8	4	INT			
+Encounter	32	0	12	4	SNO			group 1
+Encounter	32	1	24	8	SerializeData			
+Encounter	32	2	16	8	VARIABLEARRAY	EncounterSpawnOption		
+KeyframedAttachment	192	0	0	4	FLOAT			
+KeyframedAttachment	192	1	4	188	TriggerEvent			
+ScaleCurve	16	0	0	8	SerializeData			
+ScaleCurve	16	1	8	8	VARIABLEARRAY	BYTE		
+RotationCurve	16	0	0	8	SerializeData			
+RotationCurve	16	1	8	8	VARIABLEARRAY	BYTE		
+TranslationCurve	16	0	0	8	SerializeData			
+TranslationCurve	16	1	8	8	VARIABLEARRAY	BYTE		
+BoneName	4	0	0	4	INT			
+AICondition	28	0	0	4	ENUM			
+AICondition	28	1	4	4	ENUM			
+AICondition	28	2	8	16	FIXEDARRAY	FLOAT	4	
+AICondition	28	3	24	4	SNO			group 29
+AIEntry	184	0	0	4	INT			
+AIEntry	184	1	4	4	UNRESOLVED			
+AIEntry	184	2	8	4	UNRESOLVED			
+AIEntry	184	3	12	4	INT			
+AIEntry	184	4	16	140	FIXEDARRAY	AICondition	5	
+AIEntry	184	5	156	4	SNO			group 29
+AIEntry	184	6	160	4	GBID			
+AIEntry	184	7	164	4	ENUM			
+AIEntry	184	8	168	4	UNRESOLVED			
+AIEntry	184	9	172	4	UNRESOLVED			
+AIEntry	184	10	176	4	ENUM			
+AIEntry	184	11	180	4	ENUM			
+AIDecision	24	0	0	8	INT			
+AIDecision	24	1	16	8	SerializeData			
+AIDecision	24	2	8	8	VARIABLEARRAY	AIEntry		
+AIState	64	0	16	48	FIXEDARRAY	AIDecision	2	
+TriggerConditions	36	0	0	4	PERCENT			
+TriggerConditions	36	1	4	4	TIME			
+TriggerConditions	36	2	8	4	TIME			
+TriggerConditions	36	3	12	4	TIME			
+TriggerConditions	36	4	16	4	TIME			
+TriggerConditions	36	5	20	4	IMPULSE			
+TriggerConditions	36	6	24	4	IMPULSE			
+TriggerConditions	36	7	28	4	INT			
+TriggerConditions	36	8	32	4	INT			
+LabelRule	176	0	0	128	CHARARRAY		128	
+LabelRule	176	1	128	24	LabelCondition			
+LabelRule	176	2	152	4	INT			
+LabelRule	176	3	156	4	INT			
+LabelRule	176	4	168	8	SerializeData			
+LabelRule	176	5	160	8	VARIABLEARRAY	LabelEntry		
+LabelRuleSet	24	0	0	8	INT			
+LabelRuleSet	24	1	16	8	SerializeData			
+LabelRuleSet	24	2	8	8	VARIABLEARRAY	LabelRule		
+SoundSample	16	0	0	4	INT			
+SoundSample	16	1	4	4	INT			
+SoundSample	16	2	8	4	INT			
+SoundSample	16	3	12	4	INT			
+SoundBank	40	0	12	12	SerializeData			
+SoundBank	40	1	24	8	VARIABLEARRAY	SoundSample		
+SoundBank	40	2	32	4	VARIABLEARRAY_COUNT			
+SoundBank	40	3	36	4	INT			
+IVector2D	8	0	0	4	INT			
+IVector2D	8	1	4	4	INT			
+ItemTierData	32	0	0	4	GBID			
+ItemTierData	32	1	4	4	GBID			
+ItemTierData	32	2	8	4	GBID			
+ItemTierData	32	3	12	4	GBID			
+ItemTierData	32	4	16	4	GBID			
+ItemTierData	32	5	20	4	GBID			
+ItemTierData	32	6	24	4	GBID			
+ItemTierData	32	7	28	4	GBID			
+ItemTiers	16	0	0	8	SerializeData			
+ItemTiers	16	1	8	8	VARIABLEARRAY	ItemTierData		
+LootDistribution#92#158	92	0	0	4	INT			
+LootDistribution#92#158	92	1	4	4	FLOAT			
+LootDistribution#92#158	92	2	8	4	FLOAT			
+LootDistribution#92#158	92	3	12	4	FLOAT			
+LootDistribution#92#158	92	4	16	4	FLOAT			
+LootDistribution#92#158	92	5	20	4	FLOAT			
+LootDistribution#92#158	92	6	24	4	FLOAT			
+LootDistribution#92#158	92	7	28	4	FLOAT			
+LootDistribution#92#158	92	8	32	4	FLOAT			
+LootDistribution#92#158	92	9	36	4	FLOAT			
+LootDistribution#92#158	92	10	40	4	FLOAT			
+LootDistribution#92#158	92	11	44	4	FLOAT			
+LootDistribution#92#158	92	12	48	4	INT			
+LootDistribution#92#158	92	13	52	4	INT			
+LootDistribution#92#158	92	14	56	4	INT			
+LootDistribution#92#158	92	15	60	4	INT			
+LootDistribution#92#158	92	16	64	4	INT			
+LootDistribution#92#158	92	17	68	4	INT			
+LootDistribution#92#158	92	18	72	4	INT			
+LootDistribution#92#158	92	19	76	4	INT			
+LootDistribution#92#158	92	20	80	4	INT			
+LootDistribution#92#158	92	21	84	4	INT			
+LootDistribution#92#158	92	22	88	4	INT			
+LootDistribution#92#159	92	0	0	4	INT			
+LootDistribution#92#159	92	1	4	4	FLOAT			
+LootDistribution#92#159	92	2	8	4	FLOAT			
+LootDistribution#92#159	92	3	12	4	FLOAT			
+LootDistribution#92#159	92	4	16	4	FLOAT			
+LootDistribution#92#159	92	5	20	4	FLOAT			
+LootDistribution#92#159	92	6	24	4	FLOAT			
+LootDistribution#92#159	92	7	28	4	FLOAT			
+LootDistribution#92#159	92	8	32	4	FLOAT			
+LootDistribution#92#159	92	9	36	4	FLOAT			
+LootDistribution#92#159	92	10	40	4	FLOAT			
+LootDistribution#92#159	92	11	44	4	FLOAT			
+LootDistribution#92#159	92	12	48	4	INT			
+LootDistribution#92#159	92	13	52	4	INT			
+LootDistribution#92#159	92	14	56	4	INT			
+LootDistribution#92#159	92	15	60	4	INT			
+LootDistribution#92#159	92	16	64	4	INT			
+LootDistribution#92#159	92	17	68	4	INT			
+LootDistribution#92#159	92	18	72	4	INT			
+LootDistribution#92#159	92	19	76	4	INT			
+LootDistribution#92#159	92	20	80	4	INT			
+LootDistribution#92#159	92	21	84	4	INT			
+LootDistribution#92#159	92	22	88	4	INT			
+LootDistributionTable	16	0	0	8	SerializeData			
+LootDistributionTable	16	1	8	8	VARIABLEARRAY	LootDistribution		
+Vector2D	8	0	0	4	FLOAT			
+Vector2D	8	1	4	4	FLOAT			
+OctreePrimitive	8	0	0	4	INT			
+OctreePrimitive	8	1	4	4	INT			
+Octree	72	0	0	4	INT			
+Octree	72	1	4	4	INT			
+Octree	72	2	8	4	INT			
+Octree	72	3	12	4	INT			
+Octree	72	4	16	4	INT			
+Octree	72	5	20	4	INT			
+Octree	72	6	24	8	SerializeData			
+Octree	72	7	32	8	VARIABLEARRAY	OctreeNode		
+Octree	72	8	40	8	SerializeData			
+Octree	72	9	48	8	VARIABLEARRAY	OctreeLeaf		
+Octree	72	10	56	8	SerializeData			
+Octree	72	11	64	8	VARIABLEARRAY	OctreePrimitive		
+CompInfluence	2	0	0	1	BYTE			
+CompInfluence	2	1	1	1	BYTE			
+Influence	8	0	0	4	INT			
+Influence	8	1	4	4	FLOAT			
+VertInfluences	24	0	0	24	FIXEDARRAY	Influence	3	
+ScaleKey	8	0	0	4	INT			
+ScaleKey	8	1	4	4	FLOAT			
+RotationKey	12	0	0	4	INT			
+RotationKey	12	1	4	8	Quaternion16			
+TranslationKey	16	0	0	4	INT			
+TranslationKey	16	1	4	12	VECTOR3D			
+Vector3D	12	0	0	4	FLOAT			
+Vector3D	12	1	4	4	FLOAT			
+Vector3D	12	2	8	4	FLOAT			
+QuestTime	8	0	0	4	SNO			group 31
+QuestTime	8	1	4	4	INT			
+QuestRange#16	16	0	0	8	QuestTime			
+QuestRange#16	16	1	8	8	QuestTime			
+QuestRange#32	32	0	12	4	INT			
+QuestRange#32	32	1	24	8	SerializeData			
+QuestRange#32	32	2	16	8	VARIABLEARRAY	QuestRange		
+BuffSubcondition	12	0	0	4	SNO			group 29
+BuffSubcondition	12	1	4	4	INT			
+BuffSubcondition	12	2	8	4	INT			
+PlayerFlagSubcondition	128	0	0	128	CHARARRAY		128	
+FollowerSubcondition	8	0	0	4	ENUM			
+FollowerSubcondition	8	1	4	4	INT			
+Condition	1188	0	12	4	INT			
+Condition	1188	1	16	4	INT			
+Condition	1188	2	20	24	FIXEDARRAY	INT	6	
+Condition	1188	3	20	24	FIXEDARRAY	INT	6	
+Condition	1188	4	44	4	INT			
+Condition	1188	5	48	4	INT			
+Condition	1188	6	52	4	INT			
+Condition	1188	7	56	4	INT			
+Condition	1188	8	60	24	FIXEDARRAY	LoreSubcondition	3	
+Condition	1188	9	84	48	FIXEDARRAY	QuestSubcondition	3	
+Condition	1188	10	132	48	FIXEDARRAY	ItemSubcondition	3	
+Condition	1188	11	180	4	INT			
+Condition	1188	12	184	4	INT			
+Condition	1188	13	188	4	INT			
+Condition	1188	14	192	4	INT			
+Condition	1188	15	196	4	INT			
+Condition	1188	16	200	8	INT			
+Condition	1188	17	208	4	INT			
+Condition	1188	18	212	4	INT			
+Condition	1188	19	216	4	INT			
+Condition	1188	20	220	4	INT			
+Condition	1188	21	224	4	SNO			group 48
+Condition	1188	22	228	4	SNO			group 22
+Condition	1188	23	232	4	SNO			group 58
+Condition	1188	24	236	8	FollowerSubcondition			
+Condition	1188	25	244	24	FIXEDARRAY	LabelSubcondition	3	
+Condition	1188	26	268	36	FIXEDARRAY	SkillSubcondition	3	
+Condition	1188	27	304	4	INT			
+Condition	1188	28	308	4	INT			
+Condition	1188	29	312	4	INT			
+Condition	1188	30	316	4	INT			
+Condition	1188	31	320	4	INT			
+Condition	1188	32	324	60	FIXEDARRAY	MonsterSubcondition	15	
+Condition	1188	33	384	384	FIXEDARRAY	GameFlagSubcondition	3	
+Condition	1188	34	768	384	FIXEDARRAY	PlayerFlagSubcondition	3	
+Condition	1188	35	1152	36	FIXEDARRAY	BuffSubcondition	3	
+SceneChunk	256	0	0	8	SNOName			
+SceneChunk	256	1	8	28	PRTransform			
+SceneChunk	256	2	36	220	SceneSpecification			
+UIControlAnimationBinding	24	0	0	8	SerializeData			
+UIControlAnimationBinding	24	1	8	8	VARIABLEARRAY	BYTE		
+UIControlAnimationBinding	24	2	16	4	INT			
+UIControlAnimationBinding	24	3	20	4	FLOAT			
+UIAnimationDescription	40	0	0	8	INT64			
+UIAnimationDescription	40	1	8	8	SerializeData			
+UIAnimationDescription	40	2	16	8	VARIABLEARRAY	BYTE		
+UIAnimationDescription	40	3	24	4	INT			
+UIAnimationDescription	40	4	28	12	FIXEDARRAY	INT	2	
+UIAnimationElementVector2D	12	0	0	4	FLOAT			
+UIAnimationElementVector2D	12	1	4	8	FIXEDARRAY	FLOAT	2	
+UIAnimationElementFloat	8	0	0	4	FLOAT			
+UIAnimationElementFloat	8	1	4	4	FLOAT			
+UIAnimationElementInt32	8	0	0	4	FLOAT			
+UIAnimationElementInt32	8	1	4	4	INT			
+UIAnimationElements	120	0	0	4	INT			
+UIAnimationElements	120	1	4	12	SerializeData			
+UIAnimationElements	120	2	16	8	VARIABLEARRAY	UIAnimationElementInt32		
+UIAnimationElements	120	3	24	4	INT			
+UIAnimationElements	120	4	28	12	SerializeData			
+UIAnimationElements	120	5	40	8	VARIABLEARRAY	UIAnimationElementFloat		
+UIAnimationElements	120	6	48	4	INT			
+UIAnimationElements	120	7	52	12	SerializeData			
+UIAnimationElements	120	8	64	8	VARIABLEARRAY	UIAnimationElementVector2D		
+UIAnimationElements	120	9	72	4	INT			
+UIAnimationElements	120	10	76	12	SerializeData			
+UIAnimationElements	120	11	88	8	VARIABLEARRAY	UIAnimationDescription		
+UIAnimationElements	120	12	96	4	INT			
+UIAnimationElements	120	13	100	12	SerializeData			
+UIAnimationElements	120	14	112	8	VARIABLEARRAY	UIControlAnimationBinding		
+BuffFilterDef	8	0	0	4	SNO			group 29
+BuffFilterDef	8	1	4	4	INT			
+BuffDef	16	0	0	8	SerializeData			
+BuffDef	16	1	8	8	VARIABLEARRAY	BuffFilterDef		
+PowerDef	728	0	0	8	SerializeData			
+PowerDef	728	1	8	8	TAGMAP			
+PowerDef	728	2	16	8	SerializeData			
+PowerDef	728	3	24	8	TAGMAP			
+PowerDef	728	4	32	8	SerializeData			
+PowerDef	728	5	40	8	TAGMAP			
+PowerDef	728	6	48	8	SerializeData			
+PowerDef	728	7	80	8	TAGMAP			
+PowerDef	728	8	56	8	SerializeData			
+PowerDef	728	9	88	8	TAGMAP			
+PowerDef	728	10	64	8	SerializeData			
+PowerDef	728	11	96	8	TAGMAP			
+PowerDef	728	12	72	8	SerializeData			
+PowerDef	728	13	104	8	TAGMAP			
+PowerDef	728	14	112	8	SerializeData			
+PowerDef	728	15	144	8	TAGMAP			
+PowerDef	728	16	120	8	SerializeData			
+PowerDef	728	17	152	8	TAGMAP			
+PowerDef	728	18	128	8	SerializeData			
+PowerDef	728	19	160	8	TAGMAP			
+PowerDef	728	20	136	8	SerializeData			
+PowerDef	728	21	168	8	TAGMAP			
+PowerDef	728	22	176	4	INT			
+PowerDef	728	23	180	16	ActorCollisionFlags			
+PowerDef	728	24	196	20	ActorCollisionFlags			
+PowerDef	728	25	216	512	FIXEDARRAY	BuffDef	32	
+MadeToOrderTypesEntry	64	0	0	8	SerializeData			
+MadeToOrderTypesEntry	64	1	8	8	VARIABLEARRAY	BYTE		
+MadeToOrderTypesEntry	64	2	16	4	INT			
+MadeToOrderTypesEntry	64	3	20	4	INT			
+MadeToOrderTypesEntry	64	4	24	4	INT			
+MadeToOrderTypesEntry	64	5	28	4	INT			
+MadeToOrderTypesEntry	64	6	32	24	FIXEDARRAY	RecipeIngredient	3	
+MadeToOrderTypesEntry	64	7	56	4	INT			
+MadeToOrderTypesEntry	64	8	60	4	INT			
+MadeToOrderTypesTable	16	0	0	8	SerializeData			
+MadeToOrderTypesTable	16	1	8	8	VARIABLEARRAY	MadeToOrderTypesEntry		
+LootRunQuestTierEntry	280	0	0	8	SerializeData			
+LootRunQuestTierEntry	280	1	8	8	VARIABLEARRAY	BYTE		
+LootRunQuestTierEntry	280	2	16	4	INT			
+LootRunQuestTierEntry	280	3	20	4	INT			
+LootRunQuestTierEntry	280	4	24	4	SNO			group 31
+LootRunQuestTierEntry	280	5	28	4	FLOAT			
+LootRunQuestTierEntry	280	6	32	4	GBID			
+LootRunQuestTierEntry	280	7	36	4	GBID			
+LootRunQuestTierEntry	280	8	40	4	SNO			group 31
+LootRunQuestTierEntry	280	9	44	4	FLOAT			
+LootRunQuestTierEntry	280	10	48	4	GBID			
+LootRunQuestTierEntry	280	11	52	4	GBID			
+LootRunQuestTierEntry	280	12	56	4	SNO			group 31
+LootRunQuestTierEntry	280	13	60	4	FLOAT			
+LootRunQuestTierEntry	280	14	64	4	GBID			
+LootRunQuestTierEntry	280	15	68	4	GBID			
+LootRunQuestTierEntry	280	16	72	4	SNO			group 31
+LootRunQuestTierEntry	280	17	76	4	FLOAT			
+LootRunQuestTierEntry	280	18	80	4	GBID			
+LootRunQuestTierEntry	280	19	84	4	GBID			
+LootRunQuestTierEntry	280	20	88	4	SNO			group 31
+LootRunQuestTierEntry	280	21	92	4	FLOAT			
+LootRunQuestTierEntry	280	22	96	4	GBID			
+LootRunQuestTierEntry	280	23	100	4	GBID			
+LootRunQuestTierEntry	280	24	104	4	SNO			group 31
+LootRunQuestTierEntry	280	25	108	4	FLOAT			
+LootRunQuestTierEntry	280	26	112	4	GBID			
+LootRunQuestTierEntry	280	27	116	4	GBID			
+LootRunQuestTierEntry	280	28	120	4	SNO			group 31
+LootRunQuestTierEntry	280	29	124	4	FLOAT			
+LootRunQuestTierEntry	280	30	128	4	GBID			
+LootRunQuestTierEntry	280	31	132	4	GBID			
+LootRunQuestTierEntry	280	32	136	4	SNO			group 31
+LootRunQuestTierEntry	280	33	140	4	FLOAT			
+LootRunQuestTierEntry	280	34	144	4	GBID			
+LootRunQuestTierEntry	280	35	148	4	GBID			
+LootRunQuestTierEntry	280	36	152	4	SNO			group 31
+LootRunQuestTierEntry	280	37	156	4	FLOAT			
+LootRunQuestTierEntry	280	38	160	4	GBID			
+LootRunQuestTierEntry	280	39	164	4	GBID			
+LootRunQuestTierEntry	280	40	168	4	SNO			group 31
+LootRunQuestTierEntry	280	41	172	4	FLOAT			
+LootRunQuestTierEntry	280	42	176	4	GBID			
+LootRunQuestTierEntry	280	43	180	4	GBID			
+LootRunQuestTierEntry	280	44	184	4	SNO			group 31
+LootRunQuestTierEntry	280	45	188	4	FLOAT			
+LootRunQuestTierEntry	280	46	192	4	GBID			
+LootRunQuestTierEntry	280	47	196	4	GBID			
+LootRunQuestTierEntry	280	48	200	4	SNO			group 31
+LootRunQuestTierEntry	280	49	204	4	FLOAT			
+LootRunQuestTierEntry	280	50	208	4	GBID			
+LootRunQuestTierEntry	280	51	212	4	GBID			
+LootRunQuestTierEntry	280	52	216	4	SNO			group 31
+LootRunQuestTierEntry	280	53	220	4	FLOAT			
+LootRunQuestTierEntry	280	54	224	4	GBID			
+LootRunQuestTierEntry	280	55	228	4	GBID			
+LootRunQuestTierEntry	280	56	232	4	SNO			group 31
+LootRunQuestTierEntry	280	57	236	4	FLOAT			
+LootRunQuestTierEntry	280	58	240	4	GBID			
+LootRunQuestTierEntry	280	59	244	4	GBID			
+LootRunQuestTierEntry	280	60	248	4	SNO			group 31
+LootRunQuestTierEntry	280	61	252	4	FLOAT			
+LootRunQuestTierEntry	280	62	256	4	GBID			
+LootRunQuestTierEntry	280	63	260	4	GBID			
+LootRunQuestTierEntry	280	64	264	4	SNO			group 31
+LootRunQuestTierEntry	280	65	268	4	FLOAT			
+LootRunQuestTierEntry	280	66	272	4	GBID			
+LootRunQuestTierEntry	280	67	276	4	GBID			
+LootRunQuestTierTable	16	0	0	8	SerializeData			
+LootRunQuestTierTable	16	1	8	8	VARIABLEARRAY	LootRunQuestTierEntry		
+FlagLookup	388	0	0	4	INT			
+FlagLookup	388	1	4	128	CHARARRAY		128	
+FlagLookup	388	2	132	256	CHARARRAY		256	
+FlagSet	32	0	24	8	SerializeData			
+FlagSet	32	1	16	8	VARIABLEARRAY	FlagLookup		
+dmSubEdge	4	0	0	1	BYTE			
+dmSubEdge	4	1	1	1	BYTE			
+dmSubEdge	4	2	2	1	BYTE			
+dmSubEdge	4	3	3	1	BYTE			
+dmPlane	16	0	0	12	dmFloat3			
+dmPlane	16	1	12	4	FLOAT			
+PolytopeData	96	0	32	12	dmFloat3			
+PolytopeData	96	1	64	8	SerializeData			
+PolytopeData	96	2	0	8	VARIABLEARRAY	dmFloat3		
+PolytopeData	96	3	72	8	SerializeData			
+PolytopeData	96	4	8	8	VARIABLEARRAY	dmPlane		
+PolytopeData	96	5	80	8	SerializeData			
+PolytopeData	96	6	16	8	VARIABLEARRAY	dmSubEdge		
+PolytopeData	96	7	88	8	SerializeData			
+PolytopeData	96	8	24	8	VARIABLEARRAY	BYTE		
+PolytopeData	96	9	44	4	INT			
+PolytopeData	96	10	48	4	INT			
+PolytopeData	96	11	52	4	INT			
+PolytopeData	96	12	56	4	FLOAT			
+PolytopeData	96	13	60	4	FLOAT			
+TriggerEvent	188	0	0	4	INT			
+TriggerEvent	188	1	4	36	TriggerConditions			
+TriggerEvent	188	2	40	4	INT			
+TriggerEvent	188	3	44	8	SNOName			
+TriggerEvent	188	4	52	4	INT			
+TriggerEvent	188	5	56	4	INT			
+TriggerEvent	188	6	68	24	FIXEDARRAY	HardpointLink	2	
+TriggerEvent	188	7	92	8	LookLink			
+TriggerEvent	188	8	100	8	ConstraintLink			
+TriggerEvent	188	9	108	4	INT			
+TriggerEvent	188	10	112	4	FLOAT			
+TriggerEvent	188	11	116	4	INT			
+TriggerEvent	188	12	120	4	INT			
+TriggerEvent	188	13	124	4	INT			
+TriggerEvent	188	14	128	4	INT			
+TriggerEvent	188	15	132	4	INT			
+TriggerEvent	188	16	136	4	FLOAT			
+TriggerEvent	188	17	140	4	FLOAT			
+TriggerEvent	188	18	160	4	INT			
+TriggerEvent	188	19	164	4	INT			
+TriggerEvent	188	20	144	4	INT			
+TriggerEvent	188	21	148	4	FLOAT			
+TriggerEvent	188	22	152	4	INT			
+TriggerEvent	188	23	156	4	VELOCITY			
+TriggerEvent	188	24	168	4	TIME			
+TriggerEvent	188	25	60	4	INT			
+TriggerEvent	188	26	64	4	INT			
+TriggerEvent	188	27	172	4	RGBACOLOR			
+TriggerEvent	188	28	176	4	TIME			
+TriggerEvent	188	29	180	4	RGBACOLOR			
+TriggerEvent	188	30	184	4	TIME			
+ResolvedPortalDestination	12	0	0	4	SNO			group 48
+ResolvedPortalDestination	12	1	4	4	INT			
+ResolvedPortalDestination	12	2	8	4	SNO			group 22
+WaypointInfo	40	0	0	4	INT			
+WaypointInfo	40	1	4	4	SNO			group 48
+WaypointInfo	40	2	8	4	SNO			group 22
+WaypointInfo	40	3	12	4	INT			
+WaypointInfo	40	4	16	4	INT			
+WaypointInfo	40	5	20	4	INT			
+WaypointInfo	40	6	24	4	SNO			group 58
+WaypointInfo	40	7	28	4	INT			
+WaypointInfo	40	8	32	8	IVECTOR2D			
+LootDropModifier	120	0	0	4	INT			
+LootDropModifier	120	1	4	4	SNO			group 52
+LootDropModifier	120	2	32	56	ItemSpecifierData			
+LootDropModifier	120	3	16	4	GBID			
+LootDropModifier	120	4	8	4	HIGHPRECISIONPERCENT			
+LootDropModifier	120	5	12	4	INT			
+LootDropModifier	120	6	28	4	SNO			group 51
+LootDropModifier	120	7	20	4	INT			
+LootDropModifier	120	8	24	4	INT			
+LootDropModifier	120	9	96	16	FIXEDARRAY	INT	4	
+LootDropModifier	120	10	88	4	INT			
+LootDropModifier	120	11	92	4	INT			
+LootDropModifier	120	12	112	4	INT			
+LootDropModifier	120	13	116	4	INT			
+TreasureClass	40	0	12	4	HIGHPRECISIONPERCENT			
+TreasureClass	40	1	16	4	INT			
+TreasureClass	40	2	20	4	INT			
+TreasureClass	40	3	32	8	SerializeData			
+TreasureClass	40	4	24	8	VARIABLEARRAY	LootDropModifier		
+GameFlagSubcondition	128	0	0	128	CHARARRAY		128	
+MonsterSubcondition	4	0	0	4	SNO			group 1
+SkillSubcondition	12	0	0	4	SNO			group 29
+SkillSubcondition	12	1	4	4	INT			
+SkillSubcondition	12	2	8	4	INT			
+LabelSubcondition	8	0	0	4	GBID			
+LabelSubcondition	8	1	4	4	INT			
+ItemSubcondition	16	0	0	4	GBID			
+ItemSubcondition	16	1	4	4	INT			
+ItemSubcondition	16	2	8	4	INT			
+ItemSubcondition	16	3	12	4	INT			
+ItemSpecifierData	56	0	0	4	GBID			
+ItemSpecifierData	56	1	4	4	INT			
+ItemSpecifierData	56	2	8	24	FIXEDARRAY	GBID	6	
+ItemSpecifierData	56	3	32	4	INT			
+ItemSpecifierData	56	4	36	4	INT			
+ItemSpecifierData	56	5	40	4	INT			
+ItemSpecifierData	56	6	44	4	INT			
+ItemSpecifierData	56	7	48	4	INT			
+ItemSpecifierData	56	8	52	4	INT			
+TextureStageParams	24	0	0	4	INT			
+TextureStageParams	24	1	4	4	INT			
+TextureStageParams	24	2	8	4	INT			
+TextureStageParams	24	3	12	4	INT			
+TextureStageParams	24	4	16	4	INT			
+TextureStageParams	24	5	20	4	FLOAT			
+RenderParams	96	0	0	4	INT			
+RenderParams	96	1	4	4	INT			
+RenderParams	96	2	8	4	INT			
+RenderParams	96	3	12	4	FLOAT			
+RenderParams	96	4	16	4	FLOAT			
+RenderParams	96	5	20	4	INT			
+RenderParams	96	6	24	4	INT			
+RenderParams	96	7	28	4	INT			
+RenderParams	96	8	32	4	INT			
+RenderParams	96	9	36	4	INT			
+RenderParams	96	10	40	4	INT			
+RenderParams	96	11	44	4	INT			
+RenderParams	96	12	48	4	INT			
+RenderParams	96	13	52	4	BYTE			
+RenderParams	96	14	56	4	INT			
+RenderParams	96	15	60	4	INT			
+RenderParams	96	16	64	4	INT			
+RenderParams	96	17	68	4	INT			
+RenderParams	96	18	72	4	INT			
+RenderParams	96	19	76	4	INT			
+RenderParams	96	20	80	4	INT			
+RenderParams	96	21	84	4	INT			
+RenderParams	96	22	88	4	INT			
+RenderParams	96	23	92	4	RGBACOLOR			
+RenderPass	224	0	0	4	INT			
+RenderPass	224	1	4	4	INT			
+RenderPass	224	2	8	96	RenderParams			
+RenderPass	224	3	104	4	INT			
+RenderPass	224	4	108	4	INT			
+RenderPass	224	5	112	8	SerializeData			
+RenderPass	224	6	120	8	VARIABLEARRAY	TextureStageParams		
+RenderPass	224	7	128	4	INT			
+RenderPass	224	8	132	12	SerializeData			
+RenderPass	224	9	144	32	TAGMAP			
+RenderPass	224	10	176	4	INT			
+RenderPass	224	11	180	4	INT			
+RenderPass	224	12	184	8	SerializeData			
+RenderPass	224	13	192	8	VARIABLEARRAY	BYTE		
+RenderPass	224	14	200	8	SerializeData			
+RenderPass	224	15	208	8	VARIABLEARRAY	BYTE		
+RenderPass	224	16	216	4	INT			
+RenderPass	224	17	220	4	INT			
+Shaders	56	0	12	4	INT			
+Shaders	56	1	16	4	INT			
+Shaders	56	2	20	4	INT			
+Shaders	56	3	24	8	SerializeData			
+Shaders	56	4	32	8	VARIABLEARRAY	RenderPass		
+Shaders	56	5	40	8	SerializeData			
+Shaders	56	6	48	8	INT64			
+AccelVectorPath	48	0	0	32	InterpolationPathHeader			
+AccelVectorPath	48	1	40	8	SerializeData			
+AccelVectorPath	48	2	32	8	VARIABLEARRAY	AccelVectorNode		
+AngularVelocityNode	12	0	0	4	ANGULARVELOCITY			
+AngularVelocityNode	12	1	4	4	ANGULARVELOCITY			
+AngularVelocityNode	12	2	8	4	FLOAT			
+AngularVelocityPath	48	0	0	32	InterpolationPathHeader			
+AngularVelocityPath	48	1	40	8	SerializeData			
+AngularVelocityPath	48	2	32	8	VARIABLEARRAY	AngularVelocityNode		
+GizmoLocSpawnChoice	20	0	0	8	SNOName			
+GizmoLocSpawnChoice	20	1	8	4	INT			
+GizmoLocSpawnChoice	20	2	12	4	FLOAT			
+GizmoLocSpawnChoice	20	3	16	4	INT			
+GizmoLocSpawnEntry	40	0	0	4	INT			
+GizmoLocSpawnEntry	40	1	4	4	INT			
+GizmoLocSpawnEntry	40	2	8	4	INT			
+GizmoLocSpawnEntry	40	3	20	4	SNO			group 51
+GizmoLocSpawnEntry	40	4	12	4	INT			
+GizmoLocSpawnEntry	40	5	16	4	HIGHPRECISIONPERCENT			
+GizmoLocSpawnEntry	40	6	32	8	SerializeData			
+GizmoLocSpawnEntry	40	7	24	8	VARIABLEARRAY	GizmoLocSpawnChoice		
+GizmoLocSpawnType	16	0	8	8	SerializeData			
+GizmoLocSpawnType	16	1	0	8	VARIABLEARRAY	GizmoLocSpawnEntry		
+GizmoLocSet	832	0	0	832	FIXEDARRAY	GizmoLocSpawnType	52	
+LegacyItemConversion	32	0	0	8	SerializeData			
+LegacyItemConversion	32	1	8	8	VARIABLEARRAY	BYTE		
+LegacyItemConversion	32	2	16	4	INT			
+LegacyItemConversion	32	3	20	4	INT			
+LegacyItemConversion	32	4	24	4	GBID			
+LegacyItemConversion	32	5	28	4	GBID			
+DevilsHandRedeemableSetReward	8	0	0	4	GBID			
+DevilsHandRedeemableSetReward	8	1	4	4	INT			
+DevilsHandRedeemableSet	144	0	0	8	SerializeData			
+DevilsHandRedeemableSet	144	1	8	8	VARIABLEARRAY	BYTE		
+DevilsHandRedeemableSet	144	2	16	4	INT			
+DevilsHandRedeemableSet	144	3	20	4	INT			
+DevilsHandRedeemableSet	144	4	24	4	INT			
+DevilsHandRedeemableSet	144	5	28	4	FLAG			bit 0
+DevilsHandRedeemableSet	144	6	28	4	FLAG			bit 1
+DevilsHandRedeemableSet	144	7	32	64	FIXEDARRAY	DevilsHandRedeemableSetReward	8	
+DevilsHandRedeemableSet	144	8	96	4	INT			
+DevilsHandRedeemableSet	144	9	100	4	SNO			group 59
+DevilsHandRedeemableSet	144	10	104	32	FIXEDARRAY	GBID	8	
+DevilsHandRedeemableSet	144	11	136	8	INT			
+DevilsHandRedeemableSetTable	16	0	0	8	SerializeData			
+DevilsHandRedeemableSetTable	16	1	8	8	VARIABLEARRAY	DevilsHandRedeemableSet		
+MadeToOrderAffixFoldersEntry	136	0	0	8	SerializeData			
+MadeToOrderAffixFoldersEntry	136	1	8	8	VARIABLEARRAY	BYTE		
+MadeToOrderAffixFoldersEntry	136	2	16	4	INT			
+MadeToOrderAffixFoldersEntry	136	3	20	4	INT			
+MadeToOrderAffixFoldersEntry	136	4	24	4	INT			
+MadeToOrderAffixFoldersEntry	136	5	28	4	GBID			
+MadeToOrderAffixFoldersEntry	136	6	32	96	FIXEDARRAY	GBID	24	
+MadeToOrderAffixFoldersEntry	136	7	128	4	INT			
+MadeToOrderAffixFoldersEntry	136	8	132	4	INT			
+MadeToOrderAffixFoldersTable	16	0	0	8	SerializeData			
+MadeToOrderAffixFoldersTable	16	1	8	8	VARIABLEARRAY	MadeToOrderAffixFoldersEntry		
+ConvLocaleDisplayTimes	48	0	0	48	FIXEDARRAY	INT	12	
+ConversationTreeNode	136	0	0	4	INT			
+ConversationTreeNode	136	1	4	4	INT			
+ConversationTreeNode	136	2	8	4	INT			
+ConversationTreeNode	136	3	12	4	ENUM			
+ConversationTreeNode	136	4	16	4	ENUM			
+ConversationTreeNode	136	5	20	4	INT			
+ConversationTreeNode	136	6	32	4	INT			
+ConversationTreeNode	136	7	36	4	INT			
+ConversationTreeNode	136	8	24	4	TIME			
+ConversationTreeNode	136	9	28	4	INT			
+ConversationTreeNode	136	10	48	8	SerializeData			
+ConversationTreeNode	136	11	40	8	VARIABLEARRAY	INT		
+ConversationTreeNode	136	12	56	4	INT			
+ConversationTreeNode	136	13	60	4	ENUM			
+ConversationTreeNode	136	14	64	4	INT			
+ConversationTreeNode	136	15	68	4	INT			
+ConversationTreeNode	136	16	72	4	ENUM			
+ConversationTreeNode	136	17	76	4	INT			
+ConversationTreeNode	136	18	80	4	INT			
+ConversationTreeNode	136	19	84	4	INT			
+ConversationTreeNode	136	20	96	8	SerializeData			
+ConversationTreeNode	136	21	88	8	VARIABLEARRAY	ConversationTreeNode		
+ConversationTreeNode	136	22	112	8	SerializeData			
+ConversationTreeNode	136	23	104	8	VARIABLEARRAY	ConversationTreeNode		
+ConversationTreeNode	136	24	128	8	SerializeData			
+ConversationTreeNode	136	25	120	8	VARIABLEARRAY	ConversationTreeNode		
+Conversation	272	0	12	4	ENUM			
+Conversation	272	1	16	4	INT			
+Conversation	272	2	20	4	SNO			group 12
+Conversation	272	3	24	12	FIXEDARRAY	SNO	3	group 12
+Conversation	272	4	36	4	INT			
+Conversation	272	5	40	128	CHARARRAY		128	
+Conversation	272	6	168	4	SNO			group 1
+Conversation	272	7	172	4	SNO			group 1
+Conversation	272	8	176	4	SNO			group 1
+Conversation	272	9	180	4	SNO			group 1
+Conversation	272	10	184	4	SNO			group 1
+Conversation	272	11	188	4	INT			
+Conversation	272	12	200	8	SerializeData			
+Conversation	272	13	192	8	VARIABLEARRAY	ConversationTreeNode		
+Conversation	272	14	216	48	SerializeData			
+Conversation	272	15	208	8	VARIABLEARRAY	BYTE		
+Conversation	272	16	264	4	SNO			group 64
+Conversation	272	17	268	4	INT			
+Cloth	100	0	12	4	INT			
+Cloth	100	1	16	4	INT			
+Cloth	100	2	20	4	FLOAT			
+Cloth	100	3	24	4	FLOAT			
+Cloth	100	4	28	4	FLOAT			
+Cloth	100	5	32	4	FLOAT			
+Cloth	100	6	36	4	FLOAT			
+Cloth	100	7	40	4	FLOAT			
+Cloth	100	8	48	4	ACCEL			
+Cloth	100	9	52	4	FLOAT			
+Cloth	100	10	56	4	FLOAT			
+Cloth	100	11	60	4	FLOAT			
+Cloth	100	12	64	16	FIXEDARRAY	INT	4	
+Cloth	100	13	80	4	SNO			group 5
+Cloth	100	14	84	4	INT			
+Cloth	100	15	44	4	FLOAT			
+Cloth	100	16	88	12	VECTOR3D			
+Anim2D	64	0	12	4	INT			
+Anim2D	64	1	16	4	INT			
+Anim2D	64	2	20	20	FrameAnim			
+Anim2D	64	3	40	4	SNO			group 40
+Anim2D	64	4	44	4	INT			
+Anim2D	64	5	48	8	SerializeData			
+Anim2D	64	6	56	8	VARIABLEARRAY	Anim2DFrame		
+AxialCylinder	20	0	0	12	VECTOR3D			
+AxialCylinder	20	1	12	4	FLOAT			
+AxialCylinder	20	2	16	4	FLOAT			
+DRLGParams	120	0	0	8	SerializeData			
+DRLGParams	120	1	8	56	VARIABLEARRAY	TileInfo		
+DRLGParams	120	2	64	4	INT			
+DRLGParams	120	3	68	12	SerializeData			
+DRLGParams	120	4	80	8	VARIABLEARRAY	DRLGCommand		
+DRLGParams	120	5	88	8	SerializeData			
+DRLGParams	120	6	96	8	VARIABLEARRAY	INT		
+DRLGParams	120	7	104	8	SerializeData			
+DRLGParams	120	8	112	8	TAGMAP			
+WorldServerData	144	0	0	8	SerializeData			
+WorldServerData	144	1	8	8	VARIABLEARRAY	DRLGParams		
+WorldServerData	144	2	16	8	SerializeData			
+WorldServerData	144	3	24	8	VARIABLEARRAY	SceneParams		
+WorldServerData	144	4	32	24	LabelRuleSet			
+WorldServerData	144	5	56	8	INT			
+WorldServerData	144	6	64	24	SceneClusterSet			
+WorldServerData	144	7	88	16	FIXEDARRAY	SNO	4	group 29
+WorldServerData	144	8	104	12	FIXEDARRAY	GBID	3	
+WorldServerData	144	9	116	4	SNO			group 35
+WorldServerData	144	10	120	8	INT			
+WorldServerData	144	11	136	8	SerializeData			
+WorldServerData	144	12	128	8	VARIABLEARRAY	SNO		group 47
+Worlds	192	0	12	4	INT			
+Worlds	192	1	16	8	SerializeData			
+Worlds	192	2	24	8	VARIABLEARRAY	WorldServerData		
+Worlds	192	3	32	8	SerializeData			
+Worlds	192	4	40	56	VARIABLEARRAY	SNO		group 24
+Worlds	192	5	96	84	Environment			
+Worlds	192	6	180	4	FLOAT			
+Worlds	192	7	184	4	INT			
+Worlds	192	8	188	4	FLOAT			
+UIControlElement	24	0	0	8	INT64			
+UIControlElement	24	1	8	8	SerializeData			
+UIControlElement	24	2	16	8	VARIABLEARRAY	BYTE		
+ImageFileID	4	0	0	4	INT			
+Textures	632	0	16	4	INT			
+Textures	632	1	20	4	INT			
+Textures	632	2	24	4	INT			
+Textures	632	3	28	4	INT			
+Textures	632	4	32	4	INT			
+Textures	632	5	36	4	INT			
+Textures	632	6	44	4	INT			
+Textures	632	7	48	480	FIXEDARRAY	SerializeData	60	
+Textures	632	8	40	4	INT			
+Textures	632	9	592	8	SerializeData			
+Textures	632	10	584	8	VARIABLEARRAY	ImageFileID		
+Textures	632	11	532	12	SerializeData			
+Textures	632	12	544	8	VARIABLEARRAY	TexFrame		
+Textures	632	13	528	4	VARIABLEARRAY_COUNT			
+Textures	632	14	552	8	IVECTOR2D			
+Textures	632	15	600	4	INT			
+Textures	632	16	604	4	INT			
+Textures	632	17	608	4	INT			
+Textures	632	18	612	4	INT			
+Textures	632	19	616	4	FLOAT			
+Textures	632	20	620	4	INT			
+Textures	632	21	624	8	INT			
+Textures	632	22	560	8	INT64			
+Textures	632	23	568	8	INT			
+Textures	632	24	576	4	INT			
+Textures	632	25	580	4	INT			
+StringTableEntry	24	0	8	8	SerializeData			
+StringTableEntry	24	1	0	8	CSTRING			
+StringTableEntry	24	2	16	4	INT			
+StringTableEntry	24	3	20	4	INT			
+StringList	40	0	24	16	SerializeData			
+StringList	40	1	16	8	VARIABLEARRAY	StringTableEntry		
+Shakes	416	0	12	4	INT			
+Shakes	416	1	16	4	TIME			
+Shakes	416	2	20	4	TIME			
+Shakes	416	3	24	4	FLOAT			
+Shakes	416	4	28	4	FLOAT			
+Shakes	416	5	32	48	VectorPath			
+Shakes	416	6	80	48	VectorPath			
+Shakes	416	7	128	48	AnglePath			
+Shakes	416	8	176	48	FloatPath			
+Shakes	416	9	224	48	AnglePath			
+Shakes	416	10	272	48	FloatPath			
+Shakes	416	11	320	48	AnglePath			
+Shakes	416	12	368	48	FloatPath			
+NavCellBorderData	4	0	0	2	WORD			
+NavCellBorderData	4	1	2	2	WORD			
+NavCellLookup	4	0	0	2	WORD			
+NavCellLookup	4	1	2	2	WORD			
+NavZoneDefinition	136	0	0	8	INT			
+NavZoneDefinition	136	1	16	8	SerializeData			
+NavZoneDefinition	136	2	8	8	VARIABLEARRAY	NavCell		
+NavZoneDefinition	136	3	24	8	INT			
+NavZoneDefinition	136	4	40	8	SerializeData			
+NavZoneDefinition	136	5	32	8	VARIABLEARRAY	NavCellLookup		
+NavZoneDefinition	136	6	48	4	FLOAT			
+NavZoneDefinition	136	7	52	4	FLOAT			
+NavZoneDefinition	136	8	56	4	INT			
+NavZoneDefinition	136	9	60	12	IVECTOR2D			
+NavZoneDefinition	136	10	80	8	SerializeData			
+NavZoneDefinition	136	11	72	8	VARIABLEARRAY	NavGridSquare		
+NavZoneDefinition	136	12	88	8	INT			
+NavZoneDefinition	136	13	104	8	SerializeData			
+NavZoneDefinition	136	14	96	8	VARIABLEARRAY	NavCellLookup		
+NavZoneDefinition	136	15	112	8	INT			
+NavZoneDefinition	136	16	128	8	SerializeData			
+NavZoneDefinition	136	17	120	8	VARIABLEARRAY	NavCellBorderData		
+Scene	536	0	12	4	INT			
+Scene	536	1	528	4	SNO			group 9
+Scene	536	2	532	4	SNO			group 61
+Scene	536	3	16	24	AABB			
+Scene	536	4	40	24	AABB			
+Scene	536	5	64	96	NavMeshDef			
+Scene	536	6	160	8	SerializeData			
+Scene	536	7	168	56	VARIABLEARRAY	SNO		group 33
+Scene	536	8	224	8	SerializeData			
+Scene	536	9	232	56	VARIABLEARRAY	SNO		group 33
+Scene	536	10	288	8	SerializeData			
+Scene	536	11	296	56	VARIABLEARRAY	SNO		group 24
+Scene	536	12	352	8	LookLink			
+Scene	536	13	368	8	INT			
+Scene	536	14	360	8	SerializeData			
+Scene	536	15	376	8	VARIABLEARRAY	MsgTriggeredEvent		
+Scene	536	16	384	136	NavZoneDefinition			
+Scene	536	17	520	8	INT64			
+QuestCompletionStep	24	0	8	8	SerializeData			
+QuestCompletionStep	24	1	0	8	CSTRING			
+QuestCompletionStep	24	2	16	4	INT			
+QuestCompletionStep	24	3	20	4	INT			
+QuestStep	168	0	8	8	SerializeData			
+QuestStep	168	1	0	8	CSTRING			
+QuestStep	168	2	16	4	INT			
+QuestStep	168	3	24	4	ENUM			
+QuestStep	168	4	28	24	FIXEDARRAY	SNO	6	group 49
+QuestStep	168	5	52	4	SNO			group 52
+QuestStep	168	6	56	4	INT			
+QuestStep	168	7	60	4	INT			
+QuestStep	168	8	64	4	ENUM			
+QuestStep	168	9	68	24	FIXEDARRAY	SNO	6	group 49
+QuestStep	168	10	92	4	SNO			group 52
+QuestStep	168	11	96	4	INT			
+QuestStep	168	12	100	4	INT			
+QuestStep	168	13	128	8	SerializeData			
+QuestStep	168	14	120	8	VARIABLEARRAY	QuestStepObjectiveSet		
+QuestStep	168	15	144	8	SerializeData			
+QuestStep	168	16	136	8	VARIABLEARRAY	QuestStepBonusObjectiveSet		
+QuestStep	168	17	160	8	SerializeData			
+QuestStep	168	18	152	8	VARIABLEARRAY	QuestStepFailureConditionSet		
+QuestStep	168	19	20	4	INT			
+QuestStep	168	20	104	4	SNO			group 29
+QuestStep	168	21	108	12	FIXEDARRAY	SNO	2	group 22
+QuestStepFailureCondition	72	0	0	4	ENUM			
+QuestStepFailureCondition	72	1	4	4	INT			
+QuestStepFailureCondition	72	2	8	4	INT			
+QuestStepFailureCondition	72	3	12	8	SNOName			
+QuestStepFailureCondition	72	4	20	8	SNOName			
+QuestStepFailureCondition	72	5	28	4	GBID			
+QuestStepFailureCondition	72	6	32	8	GBID			
+QuestStepFailureCondition	72	7	48	8	SerializeData			
+QuestStepFailureCondition	72	8	40	8	CSTRING			
+QuestStepFailureCondition	72	9	64	8	SerializeData			
+QuestStepFailureCondition	72	10	56	8	CSTRING			
+QuestStepFailureConditionSet	16	0	8	8	SerializeData			
+QuestStepFailureConditionSet	16	1	0	8	VARIABLEARRAY	QuestStepFailureCondition		
+QuestUnassignedStep	40	0	0	4	INT			
+QuestUnassignedStep	40	1	4	4	INT			
+QuestUnassignedStep	40	2	16	8	SerializeData			
+QuestUnassignedStep	40	3	8	8	VARIABLEARRAY	QuestStepObjectiveSet		
+QuestUnassignedStep	40	4	32	8	SerializeData			
+QuestUnassignedStep	40	5	24	8	VARIABLEARRAY	QuestStepFailureConditionSet		
+EpicBannerDescription	148	0	0	4	SNO			group 44
+EpicBannerDescription	148	1	4	4	SNO			group 1
+EpicBannerDescription	148	2	8	4	SNO			group 1
+EpicBannerDescription	148	3	12	4	INT			
+EpicBannerDescription	148	4	16	132	CHARARRAY		128	
+BannerSigilPlacement	68	0	0	64	CHARARRAY		64	
+BannerSigilPlacement	68	1	64	4	INT			
+BannerColorSet	84	0	0	8	FIXEDARRAY	RGBACOLOR	2	
+BannerColorSet	84	1	8	64	CHARARRAY		64	
+BannerColorSet	84	2	72	4	INT			
+BannerColorSet	84	3	76	8	INT			
+BannerTexturePair	16	0	0	4	SNO			group 44
+BannerTexturePair	16	1	4	4	INT			
+BannerTexturePair	16	2	8	8	INT			
+DifficultyTuningParams	52	0	0	4	FLOAT			
+DifficultyTuningParams	52	1	4	4	FLOAT			
+DifficultyTuningParams	52	2	8	4	FLOAT			
+DifficultyTuningParams	52	3	12	4	FLOAT			
+DifficultyTuningParams	52	4	16	4	FLOAT			
+DifficultyTuningParams	52	5	20	4	FLOAT			
+DifficultyTuningParams	52	6	24	4	FLOAT			
+DifficultyTuningParams	52	7	28	4	FLOAT			
+DifficultyTuningParams	52	8	32	4	FLOAT			
+DifficultyTuningParams	52	9	36	4	FLOAT			
+DifficultyTuningParams	52	10	40	4	FLOAT			
+DifficultyTuningParams	52	11	44	4	FLOAT			
+DifficultyTuningParams	52	12	48	4	FLOAT			
+EnchantItemAffixUseCountCostScalar	8	0	0	4	INT			
+EnchantItemAffixUseCountCostScalar	8	1	4	4	FLOAT			
+EnchantItemAffixUseCountCostScalarsTable	16	0	0	8	SerializeData			
+EnchantItemAffixUseCountCostScalarsTable	16	1	8	8	VARIABLEARRAY	EnchantItemAffixUseCountCostScalar		
+LegacyItemConversionTable	16	0	0	8	SerializeData			
+LegacyItemConversionTable	16	1	8	8	VARIABLEARRAY	LegacyItemConversion		
+GameBalance	616	0	12	4	INT			
+GameBalance	616	1	16	4	INT			
+GameBalance	616	2	20	4	INT			
+GameBalance	616	3	24	16	Items			
+GameBalance	616	4	40	16	Items			
+GameBalance	616	5	56	16	ExperienceTable			
+GameBalance	616	6	72	16	ExperienceTableAlt			
+GameBalance	616	7	88	16	HelpCodes			
+GameBalance	616	8	104	16	MonsterLevelTable			
+GameBalance	616	9	136	16	Heros			
+GameBalance	616	10	152	16	MovementStyles			
+GameBalance	616	11	168	16	Labels			
+GameBalance	616	12	120	16	AffixTable			
+GameBalance	616	13	184	16	LootDistributionTable			
+GameBalance	616	14	200	16	RareItemNamesTable			
+GameBalance	616	15	216	16	MonsterAffixesTable			
+GameBalance	616	16	232	16	RareMonsterNamesTable			
+GameBalance	616	17	248	16	SocketedEffectsTable			
+GameBalance	616	18	264	16	ItemEnchantmentTable			
+GameBalance	616	19	280	16	ItemDropTable			
+GameBalance	616	20	296	16	ItemLevelModTable			
+GameBalance	616	21	312	16	QualityClassTable			
+GameBalance	616	22	328	16	HandicapLevelTable			
+GameBalance	616	23	344	16	ItemSalvageLevelTable			
+GameBalance	616	24	360	16	Hirelings			
+GameBalance	616	25	376	16	SetItemBonusTable			
+GameBalance	616	26	392	16	EliteModifiers			
+GameBalance	616	27	408	16	ItemTiers			
+GameBalance	616	28	424	16	PowerFormulaTable			
+GameBalance	616	29	440	16	RecipesTable			
+GameBalance	616	30	456	16	ScriptedAchievementEventsTable			
+GameBalance	616	31	472	16	ItemDurabilityCostScalarsTable			
+GameBalance	616	32	488	16	LootRunQuestTierTable			
+GameBalance	616	33	504	16	ParagonBonusesTable			
+GameBalance	616	34	520	16	MadeToOrderTypesTable			
+GameBalance	616	35	536	16	MadeToOrderAffixFoldersTable			
+GameBalance	616	36	552	16	DevilsHandRedeemableSetTable			
+GameBalance	616	37	568	16	LegacyItemConversionTable			
+GameBalance	616	38	584	16	EnchantItemAffixUseCountCostScalarsTable			
+GameBalance	616	39	600	16	TieredLootRunLevelTable			
+AppearanceSample	12	0	0	4	INT			
+AppearanceSample	12	1	4	4	INT			
+AppearanceSample	12	2	8	4	INT			
+AppearanceSamplingSubgrid	56	0	0	4	INT			
+AppearanceSamplingSubgrid	56	1	4	4	INT			
+AppearanceSamplingSubgrid	56	2	8	8	VECTOR2D			
+AppearanceSamplingSubgrid	56	3	16	8	SerializeData			
+AppearanceSamplingSubgrid	56	4	24	8	VARIABLEARRAY	AppearanceSample		
+AppearanceSamplingSubgrid	56	5	32	24	AABB			
+StaticLight	92	0	0	4	INT			
+StaticLight	92	1	4	4	INT			
+StaticLight	92	2	8	12	VECTOR3D			
+StaticLight	92	3	20	12	VECTOR3D			
+StaticLight	92	4	32	4	FLOAT			
+StaticLight	92	5	36	4	INT			
+StaticLight	92	6	40	12	FIXEDARRAY	FLOAT	3	
+StaticLight	92	7	52	4	FLOAT			
+StaticLight	92	8	56	4	FLOAT			
+StaticLight	92	9	60	4	FLOAT			
+StaticLight	92	10	64	4	FLOAT			
+StaticLight	92	11	68	4	INT			
+StaticLight	92	12	72	4	INT			
+StaticLight	92	13	76	16	RGBACOLORVALUE			
+Quaternion	16	0	12	4	FLOAT			
+Quaternion	16	1	0	12	VECTOR3D			
+AppearanceLook	4	0	0	4	INT			
+Appearance	552	0	364	4	INT			
+Appearance	552	1	368	8	SerializeData			
+Appearance	552	2	376	8	VARIABLEARRAY	AppearanceMaterial		
+Appearance	552	3	384	8	SerializeData			
+Appearance	552	4	392	8	VARIABLEARRAY	AppearanceLook		
+Appearance	552	5	16	344	Structure			
+Appearance	552	6	360	4	INT			
+Appearance	552	7	400	4	INT			
+Appearance	552	8	404	12	SerializeData			
+Appearance	552	9	416	8	VARIABLEARRAY	StaticLight		
+Appearance	552	10	424	4	INT			
+Appearance	552	11	428	4	TIME			
+Appearance	552	12	432	4	TIME			
+Appearance	552	13	436	4	TIME			
+Appearance	552	14	440	4	TIME			
+Appearance	552	15	444	4	TIME			
+Appearance	552	16	448	4	INT			
+Appearance	552	17	452	4	FLOAT			
+Appearance	552	18	456	4	INT			
+Appearance	552	19	460	4	INT			
+Appearance	552	20	464	8	INT64			
+Appearance	552	21	544	8	INT			
+Appearance	552	22	472	4	FLOAT			
+Appearance	552	23	476	4	FLOAT			
+Appearance	552	24	480	4	INT			
+Appearance	552	25	484	4	INT			
+Appearance	552	26	488	24	AABB			
+Appearance	552	27	512	8	SerializeData			
+Appearance	552	28	520	8	VARIABLEARRAY	AppearanceSamplingSubgrid		
+Appearance	552	29	528	8	SerializeData			
+Appearance	552	30	536	8	SerializeData			
+Quaternion16	8	0	0	2	WORD			
+Quaternion16	8	1	2	2	WORD			
+Quaternion16	8	2	4	2	WORD			
+Quaternion16	8	3	6	2	WORD			
+SceneParams	24	0	0	8	SerializeData			
+SceneParams	24	1	16	8	VARIABLEARRAY	SceneChunk		
+SceneParams	24	2	8	8	INT			
+DRLGCommand	152	0	0	128	CHARARRAY		128	
+DRLGCommand	152	1	128	4	INT			
+DRLGCommand	152	2	132	12	SerializeData			
+DRLGCommand	152	3	144	8	TAGMAP			
+CustomTileCell	36	0	0	4	INT			
+CustomTileCell	36	1	4	4	INT			
+CustomTileCell	36	2	8	4	INT			
+CustomTileCell	36	3	12	4	SNO			group 33
+CustomTileCell	36	4	16	4	INT			
+CustomTileCell	36	5	20	16	FIXEDARRAY	INT	4	
+CustomTileInfo	40	0	0	4	INT			
+CustomTileInfo	40	1	4	4	INT			
+CustomTileInfo	40	2	8	4	INT			
+CustomTileInfo	40	3	12	8	IVECTOR2D			
+CustomTileInfo	40	4	20	12	SerializeData			
+CustomTileInfo	40	5	32	8	VARIABLEARRAY	CustomTileCell		
+TileInfo	80	0	0	4	INT			
+TileInfo	80	1	12	4	INT			
+TileInfo	80	2	4	4	INT			
+TileInfo	80	3	8	4	SNO			group 33
+TileInfo	80	4	16	8	SerializeData			
+TileInfo	80	5	24	8	TAGMAP			
+TileInfo	80	6	32	40	CustomTileInfo			
+TileInfo	80	7	72	8	INT			
+RTPCParams	24	0	0	4	INT			
+RTPCParams	24	1	16	4	INT			
+RTPCParams	24	2	20	4	FLOAT			
+RTPCParams	24	3	4	12	InterpolationScalar			
+SoundPermutation	64	0	0	4	SNO			group 41
+SoundPermutation	64	1	4	4	INT			
+SoundPermutation	64	2	8	4	INT			
+SoundPermutation	64	3	12	4	FLOAT			
+SoundPermutation	64	4	16	4	FLOAT			
+SoundPermutation	64	5	20	4	FLOAT			
+SoundPermutation	64	6	24	4	FLOAT			
+SoundPermutation	64	7	28	4	TIME			
+SoundPermutation	64	8	32	4	TIME			
+SoundPermutation	64	9	36	4	INT			
+SoundPermutation	64	10	40	4	INT			
+SoundPermutation	64	11	44	4	FLOAT			
+SoundPermutation	64	12	48	4	FLOAT			
+SoundPermutation	64	13	52	12	TIME			
+ScriptEventVariantParamLW	24	0	16	8	ENUM			
+ScriptEventVariantParamLW	24	1	0	4	INT			
+ScriptEventVariantParamLW	24	2	0	4	FLOAT			
+ScriptEventVariantParamLW	24	3	0	4	FLOAT			
+ScriptEventVariantParamLW	24	4	4	12	FLOAT			
+ScriptEventVariantParamLW	24	5	0	4	FLOAT			
+ScriptEventVariantParamLW	24	6	4	12	FLOAT			
+ScriptEventVariantParamLW	24	7	0	4	SNO			group 1
+ScriptEventVariantParamLW	24	8	0	4	SNO			group 25
+ScriptEventVariantParamLW	24	9	0	4	SNO			group 22
+ScriptEventVariantParamLW	24	10	0	4	SNO			group 33
+ScriptEventVariantParamLW	24	11	0	4	SNO			group 12
+ScriptEventVariantParamLW	24	12	0	4	SNO			group 55
+ScriptEventVariantParamLW	24	13	0	4	SNO			group 48
+ScriptEventVariantParamLW	24	14	0	4	SNO			group 29
+ScriptEventVariantParamLW	24	15	0	4	SNO			group 64
+ScriptEventVariantParamLW	24	16	0	4	SNO			group 58
+ScriptEventVariantParamLW	24	17	0	4	INT			
+ScriptEventVariantParamLW	24	18	0	4	INT			
+ScriptEventVariantParamLW	24	19	0	4	INT			
+ScriptEventVariantParamLW	24	20	0	4	ANIM_TAG			
+ScriptEventVariantParamLW	24	21	0	4	INT			
+ScriptEventVariantParamLW	24	22	0	4	TIME			
+ScriptEventVariantParamLW	24	23	0	4	TIME			
+ScriptEventVariantParamLW	24	24	0	4	ACTOR_GROUP			
+ScriptEventVariantParamLW	24	25	0	4	ACTOR_GROUP			
+ScriptEventVariantParamLW	24	26	0	4	GBID			
+ScriptEventVariantParamLW	24	27	0	4	INT			
+ScriptEventVariantParamLW	24	28	0	4	INT			
+ScriptEventVariantParamLW	24	29	0	4	INT			
+NavGridSquare	6	0	0	2	WORD			
+NavGridSquare	6	1	2	2	WORD			
+NavGridSquare	6	2	4	2	WORD			
+NavCell	32	0	0	12	VECTOR3D			
+NavCell	32	1	12	12	VECTOR3D			
+NavCell	32	2	24	2	WORD			
+NavCell	32	3	26	2	WORD			
+NavCell	32	4	28	4	INT			
+NavMeshDef	96	0	0	4	INT			
+NavMeshDef	96	1	4	4	INT			
+NavMeshDef	96	2	8	4	INT			
+NavMeshDef	96	3	12	4	INT			
+NavMeshDef	96	4	16	4	INT			
+NavMeshDef	96	5	20	4	INT			
+NavMeshDef	96	6	24	4	INT			
+NavMeshDef	96	7	28	4	INT			
+NavMeshDef	96	8	32	4	FLOAT			
+NavMeshDef	96	9	36	4	FLOAT			
+NavMeshDef	96	10	40	8	NavMeshSquare			
+NavMeshDef	96	11	48	16	FIXEDARRAY	INT	4	
+NavMeshDef	96	12	64	8	SerializeData			
+NavMeshDef	96	13	72	8	VARIABLEARRAY	CompNavMeshSquare		
+NavMeshDef	96	14	80	8	SerializeData			
+NavMeshDef	96	15	88	8	VARIABLEARRAY	BYTE		
+QuestStepBonusObjectiveSet	40	0	0	4	INT			
+QuestStepBonusObjectiveSet	40	1	4	4	INT			
+QuestStepBonusObjectiveSet	40	2	8	4	INT			
+QuestStepBonusObjectiveSet	40	3	12	4	INT			
+QuestStepBonusObjectiveSet	40	4	16	8	INT			
+QuestStepBonusObjectiveSet	40	5	32	8	SerializeData			
+QuestStepBonusObjectiveSet	40	6	24	8	VARIABLEARRAY	QuestStepObjective		
+QuestStepObjective	88	0	0	4	INT			
+QuestStepObjective	88	1	4	4	ENUM			
+QuestStepObjective	88	2	8	4	INT			
+QuestStepObjective	88	3	12	4	INT			
+QuestStepObjective	88	4	16	8	SNOName			
+QuestStepObjective	88	5	24	8	SNOName			
+QuestStepObjective	88	6	32	4	GBID			
+QuestStepObjective	88	7	36	4	GBID			
+QuestStepObjective	88	8	48	8	SerializeData			
+QuestStepObjective	88	9	40	8	CSTRING			
+QuestStepObjective	88	10	64	8	SerializeData			
+QuestStepObjective	88	11	56	8	CSTRING			
+QuestStepObjective	88	12	72	4	INT			
+QuestStepObjective	88	13	76	4	INT			
+QuestStepObjective	88	14	80	8	GBID			
+QuestStepObjectiveSet	24	0	0	8	INT			
+QuestStepObjectiveSet	24	1	16	8	SerializeData			
+QuestStepObjectiveSet	24	2	8	8	VARIABLEARRAY	QuestStepObjective		
+VelocityNode	12	0	0	4	VELOCITY			
+VelocityNode	12	1	4	4	VELOCITY			
+VelocityNode	12	2	8	4	FLOAT			
+VelocityPath	48	0	0	32	InterpolationPathHeader			
+VelocityPath	48	1	40	8	SerializeData			
+VelocityPath	48	2	32	8	VARIABLEARRAY	VelocityNode		
+TimeNode	12	0	0	4	TIME			
+TimeNode	12	1	4	4	TIME			
+TimeNode	12	2	8	4	FLOAT			
+TimePath	48	0	0	32	InterpolationPathHeader			
+TimePath	48	1	40	8	SerializeData			
+TimePath	48	2	32	8	VARIABLEARRAY	TimeNode		
+AngleNode	12	0	0	4	ANGLE			
+AngleNode	12	1	4	4	ANGLE			
+AngleNode	12	2	8	4	FLOAT			
+AnglePath	48	0	0	32	InterpolationPathHeader			
+AnglePath	48	1	40	8	SerializeData			
+AnglePath	48	2	32	8	VARIABLEARRAY	AngleNode		
+StartLocationName	68	0	0	4	INT			
+StartLocationName	68	1	4	64	CHARARRAY		64	
+GlobalScriptVariable	40	0	0	4	INT			
+GlobalScriptVariable	40	1	4	32	CHARARRAY		32	
+GlobalScriptVariable	40	2	36	4	FLOAT			
+ActorGroup	68	0	0	4	INT			
+ActorGroup	68	1	4	64	CHARARRAY		64	
+SetItemBonusTableEntry	224	0	0	8	SerializeData			
+SetItemBonusTableEntry	224	1	8	8	VARIABLEARRAY	BYTE		
+SetItemBonusTableEntry	224	2	16	4	INT			
+SetItemBonusTableEntry	224	3	20	4	INT			
+SetItemBonusTableEntry	224	4	28	4	INT			
+SetItemBonusTableEntry	224	5	24	4	GBID			
+SetItemBonusTableEntry	224	6	32	192	FIXEDARRAY	AttributeSpecifier	8	
+AffixTableEntry	552	0	0	8	SerializeData			
+AffixTableEntry	552	1	8	8	VARIABLEARRAY	BYTE		
+AffixTableEntry	552	2	16	4	INT			
+AffixTableEntry	552	3	20	4	INT			
+AffixTableEntry	552	4	24	4	INT			
+AffixTableEntry	552	5	28	4	INT			
+AffixTableEntry	552	6	32	4	INT			
+AffixTableEntry	552	7	36	4	INT			
+AffixTableEntry	552	8	40	4	INT			
+AffixTableEntry	552	9	44	4	INT			
+AffixTableEntry	552	10	48	4	INT			
+AffixTableEntry	552	11	52	4	INT			
+AffixTableEntry	552	12	56	4	INT			
+AffixTableEntry	552	13	60	4	INT			
+AffixTableEntry	552	14	64	4	INT			
+AffixTableEntry	552	15	68	4	INT			
+AffixTableEntry	552	16	72	4	INT			
+AffixTableEntry	552	17	76	4	INT			
+AffixTableEntry	552	18	80	4	INT			
+AffixTableEntry	552	19	84	4	INT			
+AffixTableEntry	552	20	88	4	INT			
+AffixTableEntry	552	21	92	4	INT			
+AffixTableEntry	552	22	96	4	ENUM			
+AffixTableEntry	552	23	100	4	INT			
+AffixTableEntry	552	24	104	4	GBID			
+AffixTableEntry	552	25	108	4	GBID			
+AffixTableEntry	552	26	112	4	SNO			group 42
+AffixTableEntry	552	27	116	4	SNO			group 42
+AffixTableEntry	552	28	120	4	GBID			
+AffixTableEntry	552	29	124	4	GBID			
+AffixTableEntry	552	30	352	4	INT			
+AffixTableEntry	552	31	356	4	ENUM			
+AffixTableEntry	552	32	160	96	FIXEDARRAY	INT	24	
+AffixTableEntry	552	33	256	96	FIXEDARRAY	INT	24	
+AffixTableEntry	552	34	360	8	GBID			
+AffixTableEntry	552	35	128	4	ENUM			
+AffixTableEntry	552	36	132	4	GBID			
+AffixTableEntry	552	37	136	24	FIXEDARRAY	INT	6	
+AffixTableEntry	552	38	368	168	FIXEDARRAY	AttributeSpecifier	4	
+AffixTableEntry	552	39	536	4	GBID			
+AffixTableEntry	552	40	540	12	ENUM			
+AffixTable	16	0	0	8	SerializeData			
+AffixTable	16	1	8	8	VARIABLEARRAY	AffixTableEntry		
+Labels	16	0	0	8	SerializeData			
+Labels	16	1	8	8	VARIABLEARRAY	LabelGBID		
+MonsterLevelDefinition	240	0	0	4	INT			
+MonsterLevelDefinition	240	1	4	4	FLOAT			
+MonsterLevelDefinition	240	2	8	4	FLOAT			
+MonsterLevelDefinition	240	3	12	4	FLOAT			
+MonsterLevelDefinition	240	4	16	4	FLOAT			
+MonsterLevelDefinition	240	5	20	4	FLOAT			
+MonsterLevelDefinition	240	6	24	4	FLOAT			
+MonsterLevelDefinition	240	7	28	4	FLOAT			
+MonsterLevelDefinition	240	8	32	4	FLOAT			
+MonsterLevelDefinition	240	9	36	4	FLOAT			
+MonsterLevelDefinition	240	10	40	4	FLOAT			
+MonsterLevelDefinition	240	11	44	4	FLOAT			
+MonsterLevelDefinition	240	12	48	4	FLOAT			
+MonsterLevelDefinition	240	13	52	4	FLOAT			
+MonsterLevelDefinition	240	14	56	4	FLOAT			
+MonsterLevelDefinition	240	15	60	4	FLOAT			
+MonsterLevelDefinition	240	16	64	4	FLOAT			
+MonsterLevelDefinition	240	17	68	4	FLOAT			
+MonsterLevelDefinition	240	18	72	4	FLOAT			
+MonsterLevelDefinition	240	19	76	4	FLOAT			
+MonsterLevelDefinition	240	20	80	4	FLOAT			
+MonsterLevelDefinition	240	21	84	4	FLOAT			
+MonsterLevelDefinition	240	22	88	4	FLOAT			
+MonsterLevelDefinition	240	23	92	4	FLOAT			
+MonsterLevelDefinition	240	24	96	4	FLOAT			
+MonsterLevelDefinition	240	25	100	4	FLOAT			
+MonsterLevelDefinition	240	26	104	4	FLOAT			
+MonsterLevelDefinition	240	27	108	4	FLOAT			
+MonsterLevelDefinition	240	28	112	4	FLOAT			
+MonsterLevelDefinition	240	29	116	4	FLOAT			
+MonsterLevelDefinition	240	30	120	4	FLOAT			
+MonsterLevelDefinition	240	31	124	4	FLOAT			
+MonsterLevelDefinition	240	32	128	4	FLOAT			
+MonsterLevelDefinition	240	33	132	4	FLOAT			
+MonsterLevelDefinition	240	34	136	4	FLOAT			
+MonsterLevelDefinition	240	35	140	4	FLOAT			
+MonsterLevelDefinition	240	36	144	4	FLOAT			
+MonsterLevelDefinition	240	37	148	4	FLOAT			
+MonsterLevelDefinition	240	38	152	4	FLOAT			
+MonsterLevelDefinition	240	39	156	4	FLOAT			
+MonsterLevelDefinition	240	40	160	4	FLOAT			
+MonsterLevelDefinition	240	41	164	4	FLOAT			
+MonsterLevelDefinition	240	42	168	4	FLOAT			
+MonsterLevelDefinition	240	43	172	4	FLOAT			
+MonsterLevelDefinition	240	44	176	4	FLOAT			
+MonsterLevelDefinition	240	45	180	4	FLOAT			
+MonsterLevelDefinition	240	46	184	4	FLOAT			
+MonsterLevelDefinition	240	47	188	4	FLOAT			
+MonsterLevelDefinition	240	48	192	4	FLOAT			
+MonsterLevelDefinition	240	49	196	4	FLOAT			
+MonsterLevelDefinition	240	50	200	4	FLOAT			
+MonsterLevelDefinition	240	51	204	4	FLOAT			
+MonsterLevelDefinition	240	52	208	4	FLOAT			
+MonsterLevelDefinition	240	53	212	4	FLOAT			
+MonsterLevelDefinition	240	54	216	4	FLOAT			
+MonsterLevelDefinition	240	55	220	4	FLOAT			
+MonsterLevelDefinition	240	56	224	4	FLOAT			
+MonsterLevelDefinition	240	57	228	4	FLOAT			
+MonsterLevelDefinition	240	58	232	4	FLOAT			
+MonsterLevelDefinition	240	59	236	4	INT			
+MonsterLevelTable	16	0	0	8	SerializeData			
+MonsterLevelTable	16	1	8	8	VARIABLEARRAY	MonsterLevelDefinition		
+RandomAmbientSoundParams	20	0	0	4	SNO			group 40
+RandomAmbientSoundParams	20	1	4	4	FLOAT			
+RandomAmbientSoundParams	20	2	8	4	FLOAT			
+RandomAmbientSoundParams	20	3	12	4	TIME			
+RandomAmbientSoundParams	20	4	16	4	TIME			
+AmbientSound	96	0	12	4	INT			
+AmbientSound	96	1	16	4	SNO			group 40
+AmbientSound	96	2	20	40	FIXEDARRAY	RandomAmbientSoundParams	2	
+AmbientSound	96	3	60	4	SNO			group 40
+AmbientSound	96	4	64	4	TIME			
+AmbientSound	96	5	68	4	TIME			
+AmbientSound	96	6	72	4	INT			
+AmbientSound	96	7	76	4	FLOAT			
+AmbientSound	96	8	80	4	FLOAT			
+AmbientSound	96	9	84	4	FLOAT			
+AmbientSound	96	10	88	4	FLOAT			
+AmbientSound	96	11	92	4	FLOAT			
+InventoryImages	8	0	0	4	INT			
+InventoryImages	8	1	4	4	INT			
+ActorCollisionData	76	0	0	16	ActorCollisionFlags			
+ActorCollisionData	76	1	16	4	INT			
+ActorCollisionData	76	2	20	20	AxialCylinder			
+ActorCollisionData	76	3	40	24	AABB			
+ActorCollisionData	76	4	64	4	FLOAT			
+ActorCollisionData	76	5	68	4	FLOAT			
+ActorCollisionData	76	6	72	4	FLOAT			
+WeightedLook	12	0	0	8	LookLink			
+WeightedLook	12	1	8	4	INT			
+Actor	440	0	12	4	INT			
+Actor	440	1	16	4	ENUM			
+Actor	440	2	20	4	SNO			group 9
+Actor	440	3	24	4	SNO			group 61
+Actor	440	4	28	20	AxialCylinder			
+Actor	440	5	48	16	Sphere			
+Actor	440	6	64	24	AABB			
+Actor	440	7	88	8	SerializeData			
+Actor	440	8	96	8	TAGMAP			
+Actor	440	9	104	4	SNO			group 8
+Actor	440	10	108	4	SNO			group 67
+Actor	440	11	112	4	INT			
+Actor	440	12	116	4	SNO			group 25
+Actor	440	13	128	8	INT			
+Actor	440	14	120	8	SerializeData			
+Actor	440	15	136	8	VARIABLEARRAY	MsgTriggeredEvent		
+Actor	440	16	144	12	VECTOR3D			
+Actor	440	17	156	96	FIXEDARRAY	WeightedLook	8	
+Actor	440	18	252	4	SNO			group 28
+Actor	440	19	256	4	INT			
+Actor	440	20	260	4	INT			
+Actor	440	21	264	4	FLOAT			
+Actor	440	22	268	4	FLOAT			
+Actor	440	23	272	4	FLOAT			
+Actor	440	24	276	76	ActorCollisionData			
+Actor	440	25	352	48	FIXEDARRAY	InventoryImages	6	
+Actor	440	26	400	8	INT			
+Actor	440	27	416	8	SerializeData			
+Actor	440	28	408	8	CSTRING			
+Actor	440	29	432	8	SerializeData			
+Actor	440	30	424	8	CSTRING			
+WeightedPopulation	76	0	0	4	SNO			group 22
+WeightedPopulation	76	1	4	64	CHARARRAY		64	
+WeightedPopulation	76	2	68	4	FLOAT			
+WeightedPopulation	76	3	72	4	INT			
+WeightedTransition	8	0	0	4	SNO			group 48
+WeightedTransition	8	1	4	4	FLOAT			
+DungeonFinderLevelTable	64	0	0	4	SNO			group 48
+DungeonFinderLevelTable	64	1	4	4	FLOAT			
+DungeonFinderLevelTable	64	2	16	8	SerializeData			
+DungeonFinderLevelTable	64	3	8	8	VARIABLEARRAY	WeightedTransition		
+DungeonFinderLevelTable	64	4	32	8	SerializeData			
+DungeonFinderLevelTable	64	5	24	8	VARIABLEARRAY	WeightedPopulation		
+DungeonFinderLevelTable	64	6	40	4	FLOAT			
+DungeonFinderLevelTable	64	7	44	4	FLOAT			
+DungeonFinderLevelTable	64	8	48	4	FLOAT			
+DungeonFinderLevelTable	64	9	56	4	FLOAT			
+DungeonFinderLevelTable	64	10	60	4	FLOAT			
+DungeonFinderLevelTable	64	11	52	4	SNO			group 15
+AnimTreeBlendRamp	24	0	0	4	FLOAT			
+AnimTreeBlendRamp	24	1	4	4	FLOAT			
+AnimTreeBlendRamp	24	2	8	4	FLOAT			
+AnimTreeBlendRamp	24	3	12	4	FLOAT			
+AnimTreeBlendRamp	24	4	16	4	FLOAT			
+AnimTreeBlendRamp	24	5	20	4	FLOAT			
+AnimTreeBlendCase	12	0	0	4	ENUM			
+AnimTreeBlendCase	12	1	8	4	FLOAT			
+AnimTreeBlendCase	12	2	4	4	INT			
+AnimTreeNode	300	0	0	4	ENUM			
+AnimTreeNode	300	1	4	4	INT			
+AnimTreeNode	300	2	8	64	FIXEDARRAY	INT	16	
+AnimTreeNode	300	3	72	4	ENUM			
+AnimTreeNode	300	4	76	192	FIXEDARRAY	AnimTreeBlendCase	16	
+AnimTreeNode	300	5	268	24	AnimTreeBlendRamp			
+AnimTreeNode	300	6	292	4	INT			
+AnimTreeNode	300	7	296	4	AnimTreeLayerName			
+AnimTreeLayerName	4	0	0	4	INT			
+AnimTreeLeaf	36	0	0	4	ENUM			
+AnimTreeLeaf	36	1	4	4	SNO			group 6
+AnimTreeLeaf	36	2	8	4	INT			
+AnimTreeLeaf	36	3	12	4	FLOAT			
+AnimTreeLeaf	36	4	16	4	FLOAT			
+AnimTreeLeaf	36	5	20	4	INT			
+AnimTreeLeaf	36	6	24	4	ENUM			
+AnimTreeLeaf	36	7	28	4	ENUM			
+AnimTreeLeaf	36	8	32	4	AnimTreeLayerName			
+ButtonBinding	4	0	0	4	INT			
+TimedEvent	16	0	12	4	TIME			
+Rope	1120	0	12	4	INT			
+Rope	1120	1	16	4	INT			
+Rope	1120	2	20	4	FLOAT			
+Rope	1120	3	24	4	MASS			
+Rope	1120	4	28	4	FLOAT			
+Rope	1120	5	32	4	MASS			
+Rope	1120	6	36	4	FLOAT			
+Rope	1120	7	40	8	FLOAT			
+Rope	1120	8	48	104	UberMaterial			
+Rope	1120	9	152	4	SNO			group 28
+Rope	1120	10	156	4	TIME			
+Rope	1120	11	160	4	TIME			
+Rope	1120	12	164	4	TIME			
+Rope	1120	13	168	8	TIME			
+Rope	1120	14	176	48	ColorPath			
+Rope	1120	15	224	48	ColorPath			
+Rope	1120	16	272	48	FloatPath			
+Rope	1120	17	320	48	FloatPath			
+Rope	1120	18	368	48	FloatPath			
+Rope	1120	19	416	48	FloatPath			
+Rope	1120	20	464	48	FloatPath			
+Rope	1120	21	512	48	FloatPath			
+Rope	1120	22	560	48	FloatPath			
+Rope	1120	23	608	48	FloatPath			
+Rope	1120	24	656	48	FloatPath			
+Rope	1120	25	704	48	FloatPath			
+Rope	1120	26	752	48	VectorPath			
+Rope	1120	27	800	48	VelocityPath			
+Rope	1120	28	848	4	FLOAT			
+Rope	1120	29	852	4	FLOAT			
+Rope	1120	30	856	48	FloatPath			
+Rope	1120	31	904	48	FloatPath			
+Rope	1120	32	952	48	FloatPath			
+Rope	1120	33	1000	48	FloatPath			
+Rope	1120	34	1048	48	FloatPath			
+Rope	1120	35	1104	8	INT			
+Rope	1120	36	1096	8	SerializeData			
+Rope	1120	37	1112	8	VARIABLEARRAY	MsgTriggeredEvent		
+VectorNode	28	0	0	12	VECTOR3D			
+VectorNode	28	1	12	12	VECTOR3D			
+VectorNode	28	2	24	4	FLOAT			
+VectorPath	48	0	0	32	InterpolationPathHeader			
+VectorPath	48	1	40	8	SerializeData			
+VectorPath	48	2	32	8	VARIABLEARRAY	VectorNode		
+LevelAreaSpawnGroup	56	0	0	4	ENUM			
+LevelAreaSpawnGroup	56	1	4	4	FLOAT			
+LevelAreaSpawnGroup	56	2	8	4	FLOAT			
+LevelAreaSpawnGroup	56	3	12	4	INT			
+LevelAreaSpawnGroup	56	4	16	8	INT			
+LevelAreaSpawnGroup	56	5	32	8	SerializeData			
+LevelAreaSpawnGroup	56	6	24	8	VARIABLEARRAY	LevelAreaSpawnItem		
+LevelAreaSpawnGroup	56	7	40	4	INT			
+LevelAreaSpawnGroup	56	8	44	4	INT			
+LevelAreaSpawnGroup	56	9	48	8	SNO			group 51
+LevelAreaSpawnPopulation	152	0	0	64	CHARARRAY		64	
+LevelAreaSpawnPopulation	152	1	64	4	INT			
+LevelAreaSpawnPopulation	152	2	68	4	FLOAT			
+LevelAreaSpawnPopulation	152	3	72	4	FLOAT			
+LevelAreaSpawnPopulation	152	4	76	16	FIXEDARRAY	INT	4	
+LevelAreaSpawnPopulation	152	5	92	16	FIXEDARRAY	INT	4	
+LevelAreaSpawnPopulation	152	6	136	8	SerializeData			
+LevelAreaSpawnPopulation	152	7	128	8	VARIABLEARRAY	SNO		group 47
+LevelAreaSpawnPopulation	152	8	108	4	INT			
+LevelAreaSpawnPopulation	152	9	120	8	SerializeData			
+LevelAreaSpawnPopulation	152	10	112	8	VARIABLEARRAY	LevelAreaSpawnGroup		
+LevelAreaSpawnPopulation	152	11	144	8	SNO			group 15
+LevelAreaServerData	864	0	0	8	SNO			group 22
+LevelAreaServerData	864	1	8	832	GizmoLocSet			
+LevelAreaServerData	864	2	840	4	SNO			group 22
+LevelAreaServerData	864	3	844	4	INT			
+LevelAreaServerData	864	4	856	8	SerializeData			
+LevelAreaServerData	864	5	848	8	VARIABLEARRAY	LevelAreaSpawnPopulation		
+LevelArea	40	0	12	4	INT			
+LevelArea	40	1	16	4	SNO			group 22
+LevelArea	40	2	20	4	SNO			group 22
+LevelArea	40	3	32	8	SerializeData			
+LevelArea	40	4	24	8	VARIABLEARRAY	LevelAreaServerData		
+Item	656	0	0	8	SerializeData			
+Item	656	1	8	8	VARIABLEARRAY	BYTE		
+Item	656	2	16	4	INT			
+Item	656	3	20	4	INT			
+Item	656	4	24	4	SNO			group 1
+Item	656	5	28	4	GBID			
+Item	656	6	40	4	INT			
+Item	656	7	44	4	ENUM			
+Item	656	8	48	4	INT			
+Item	656	9	52	4	INT			
+Item	656	10	56	4	INT			
+Item	656	11	60	4	INT			
+Item	656	12	64	4	INT			
+Item	656	13	68	4	INT			
+Item	656	14	72	4	INT			
+Item	656	15	76	4	INT			
+Item	656	16	96	4	INT			
+Item	656	17	100	4	INT			
+Item	656	18	104	4	INT			
+Item	656	19	108	4	INT			
+Item	656	20	112	4	INT			
+Item	656	21	80	4	INT			
+Item	656	22	116	4	INT			
+Item	656	23	120	4	INT			
+Item	656	24	124	4	INT			
+Item	656	25	84	4	INT			
+Item	656	26	88	4	INT			
+Item	656	27	92	4	INT			
+Item	656	28	128	4	GBID			
+Item	656	29	132	4	GBID			
+Item	656	30	136	4	SNO			group 52
+Item	656	31	140	4	SNO			group 52
+Item	656	32	144	4	SNO			group 52
+Item	656	33	148	4	SNO			group 52
+Item	656	34	152	4	SNO			group 42
+Item	656	35	156	4	SNO			group 42
+Item	656	36	340	4	INT			
+Item	656	37	344	4	INT			
+Item	656	38	348	4	INT			
+Item	656	39	352	4	INT			
+Item	656	40	356	4	INT			
+Item	656	41	360	4	INT			
+Item	656	42	364	4	INT			
+Item	656	43	368	4	INT			
+Item	656	44	32	4	FLAG			bit 0
+Item	656	45	32	4	FLAG			bit 1
+Item	656	46	32	4	FLAG			bit 2
+Item	656	47	32	4	FLAG			bit 3
+Item	656	48	32	4	FLAG			bit 4
+Item	656	49	32	4	FLAG			bit 5
+Item	656	50	32	4	FLAG			bit 7
+Item	656	51	32	4	FLAG			bit 6
+Item	656	52	32	4	FLAG			bit 8
+Item	656	53	32	4	FLAG			bit 9
+Item	656	54	32	4	FLAG			bit 10
+Item	656	55	32	4	FLAG			bit 11
+Item	656	56	32	4	FLAG			bit 12
+Item	656	57	32	4	FLAG			bit 13
+Item	656	58	32	4	FLAG			bit 14
+Item	656	59	32	4	FLAG			bit 15
+Item	656	60	32	4	FLAG			bit 16
+Item	656	61	32	4	FLAG			bit 17
+Item	656	62	32	4	FLAG			bit 18
+Item	656	63	32	4	FLAG			bit 19
+Item	656	64	32	4	FLAG			bit 20
+Item	656	65	32	4	FLAG			bit 21
+Item	656	66	36	4	INT			
+Item	656	67	176	4	FLOAT			
+Item	656	68	180	4	FLOAT			
+Item	656	69	184	4	FLOAT			
+Item	656	70	188	4	FLOAT			
+Item	656	71	192	4	FLOAT			
+Item	656	72	196	4	FLOAT			
+Item	656	73	200	4	FLOAT			
+Item	656	74	204	4	INT			
+Item	656	75	208	4	SNO			group 29
+Item	656	76	212	4	INT			
+Item	656	77	216	4	SNO			group 29
+Item	656	78	220	4	INT			
+Item	656	79	224	4	SNO			group 29
+Item	656	80	228	4	INT			
+Item	656	81	232	4	SNO			group 29
+Item	656	82	236	4	INT			
+Item	656	83	160	16	FIXEDARRAY	INT	4	
+Item	656	84	240	8	SerializeData			
+Item	656	85	248	8	VARIABLEARRAY	AttributeSpecifier		
+Item	656	86	256	4	ENUM			
+Item	656	87	260	40	FIXEDARRAY	GBID	10	
+Item	656	88	300	4	GBID			
+Item	656	89	304	4	GBID			
+Item	656	90	308	32	FIXEDARRAY	GBID	8	
+Item	656	91	372	4	GBID			
+Item	656	92	376	4	GBID			
+Item	656	93	380	4	GBID			
+Item	656	94	384	4	GBID			
+Item	656	95	388	4	GBID			
+Item	656	96	392	4	GBID			
+Item	656	97	396	4	INT			
+Item	656	98	400	4	INT			
+Item	656	99	404	4	INT			
+Item	656	100	408	4	INT			
+Item	656	101	412	4	INT			
+Item	656	102	416	4	INT			
+Item	656	103	420	4	INT			
+Item	656	104	424	4	INT			
+Item	656	105	428	4	INT			
+Item	656	106	432	4	INT			
+Item	656	107	436	4	INT			
+Item	656	108	440	4	INT			
+Item	656	109	444	4	GBID			
+Item	656	110	448	4	ENUM			
+Item	656	111	452	4	INT			
+Item	656	112	456	4	ENUM			
+Item	656	113	460	4	SNO			group 1
+Item	656	114	464	4	SNO			group 48
+Item	656	115	468	4	SNO			group 48
+Item	656	116	472	4	SNO			group 22
+Item	656	117	476	4	INT			
+Item	656	118	480	4	INT			
+Item	656	119	484	4	INT			
+Item	656	120	488	4	GBID			
+Item	656	121	492	4	FLOAT			
+Item	656	122	496	4	FLOAT			
+Item	656	123	500	4	FLOAT			
+Item	656	124	504	4	FLOAT			
+Item	656	125	508	4	FLOAT			
+Item	656	126	512	4	FLOAT			
+Item	656	127	516	4	FLOAT			
+Item	656	128	520	4	FLOAT			
+Item	656	129	524	4	FLOAT			
+Item	656	130	528	4	FLOAT			
+Item	656	131	532	4	INT			
+Item	656	132	536	48	FIXEDARRAY	RecipeIngredient	6	
+Item	656	133	584	4	INT			
+Item	656	134	588	48	FIXEDARRAY	RecipeIngredient	6	
+Item	656	135	636	4	SNO			group 22
+Item	656	136	640	4	SNO			group 22
+Item	656	137	644	4	SNO			group 1
+Item	656	138	648	8	INT			
+Items#16#318	16	0	0	8	SerializeData			
+Items#16#318	16	1	8	8	VARIABLEARRAY	ItemType		
+ItemType	88	0	0	8	SerializeData			
+ItemType	88	1	8	8	VARIABLEARRAY	BYTE		
+ItemType	88	2	16	4	INT			
+ItemType	88	3	20	4	INT			
+ItemType	88	4	24	4	GBID			
+ItemType	88	5	28	4	INT			
+ItemType	88	6	32	4	INT			
+ItemType	88	7	40	4	ENUM			
+ItemType	88	8	44	4	ENUM			
+ItemType	88	9	48	4	ENUM			
+ItemType	88	10	52	4	ENUM			
+ItemType	88	11	36	4	FLAG			bit 0
+ItemType	88	12	36	4	FLAG			bit 12
+ItemType	88	13	36	4	FLAG			bit 1
+ItemType	88	14	36	4	FLAG			bit 3
+ItemType	88	15	36	4	FLAG			bit 6
+ItemType	88	16	36	4	FLAG			bit 7
+ItemType	88	17	36	4	FLAG			bit 8
+ItemType	88	18	36	4	FLAG			bit 9
+ItemType	88	19	36	4	FLAG			bit 10
+ItemType	88	20	36	4	FLAG			bit 13
+ItemType	88	21	36	4	FLAG			bit 11
+ItemType	88	22	36	4	FLAG			bit 17
+ItemType	88	23	36	4	FLAG			bit 14
+ItemType	88	24	36	4	FLAG			bit 15
+ItemType	88	25	36	4	FLAG			bit 16
+ItemType	88	26	36	4	FLAG			bit 18
+ItemType	88	27	56	4	GBID			
+ItemType	88	28	60	4	GBID			
+ItemType	88	29	64	4	GBID			
+ItemType	88	30	68	4	GBID			
+ItemType	88	31	72	16	FIXEDARRAY	INT	4	
+Items#16#320	16	0	0	8	SerializeData			
+Items#16#320	16	1	8	8	VARIABLEARRAY	ItemType		
+FontConsolePointSize	4	0	0	4	INT			
+FontConsoleKerning	16	0	0	4	INT			
+FontConsoleKerning	16	1	4	4	INT			
+FontConsoleKerning	16	2	8	4	INT			
+FontConsoleKerning	16	3	12	4	INT			
+FontPointSizeData	88	0	0	4	INT			
+FontPointSizeData	88	1	4	4	INT			
+FontPointSizeData	88	2	8	4	INT			
+FontPointSizeData	88	3	12	4	INT			
+FontPointSizeData	88	4	16	4	INT			
+FontPointSizeData	88	5	20	4	INT			
+FontPointSizeData	88	6	24	4	INT			
+FontPointSizeData	88	7	28	4	INT			
+FontPointSizeData	88	8	32	4	INT			
+FontPointSizeData	88	9	36	4	INT			
+FontPointSizeData	88	10	40	8	SerializeData			
+FontPointSizeData	88	11	48	8	INT64			
+FontPointSizeData	88	12	56	4	INT			
+FontPointSizeData	88	13	60	4	INT			
+FontPointSizeData	88	14	64	8	SerializeData			
+FontPointSizeData	88	15	72	8	VARIABLEARRAY	FontConsoleKerning		
+FontPointSizeData	88	16	80	4	INT			
+FontPointSizeData	88	17	84	4	FLOAT			
+FontConsoleTexture	40	0	0	4	INT			
+FontConsoleTexture	40	1	4	4	INT			
+FontConsoleTexture	40	2	8	4	INT			
+FontConsoleTexture	40	3	12	4	INT			
+FontConsoleTexture	40	4	16	8	SerializeData			
+FontConsoleTexture	40	5	24	4	ENUM			
+FontConsoleTexture	40	6	28	4	INT			
+FontConsoleTexture	40	7	32	8	SerializeData			
+EffectItem	200	0	0	4	INT			
+EffectItem	200	1	4	4	INT			
+EffectItem	200	2	8	192	MsgTriggeredEvent			
+SubObjectEdgeSegment	176	0	8	8				no initialiser found
+SubObjectEdgeSegment	176	1	0	8				no initialiser found
+SubObjectEdgeSegment	176	2	16	8				no initialiser found
+SubObjectEdgeSegment	176	3	24	8				no initialiser found
+SubObjectEdgeSegment	176	4	32	8				no initialiser found
+SubObjectEdgeSegment	176	5	40	4				no initialiser found
+SubObjectEdgeSegment	176	6	44	4				no initialiser found
+SubObjectEdgeSegment	176	7	48	8				no initialiser found
+SubObjectEdgeSegment	176	8	56	8				no initialiser found
+SubObjectEdgeSegment	176	9	64	8				no initialiser found
+SubObjectEdgeSegment	176	10	80	8				no initialiser found
+SubObjectEdgeSegment	176	11	72	8				no initialiser found
+SubObjectEdgeSegment	176	12	88	8				no initialiser found
+SubObjectEdgeSegment	176	13	96	8				no initialiser found
+SubObjectEdgeSegment	176	14	104	4				no initialiser found
+SubObjectEdgeSegment	176	15	108	4				no initialiser found
+SubObjectEdgeSegment	176	16	112	8				no initialiser found
+SubObjectEdgeSegment	176	17	120	8				no initialiser found
+SubObjectEdgeSegment	176	18	128	8				no initialiser found
+SubObjectEdgeSegment	176	19	144	8				no initialiser found
+SubObjectEdgeSegment	176	20	136	8				no initialiser found
+SubObjectEdgeSegment	176	21	160	8				no initialiser found
+SubObjectEdgeSegment	176	22	152	8				no initialiser found
+SubObjectEdgeSegment	176	23	168	4				no initialiser found
+SubObjectEdgeSegment	176	24	172	4				no initialiser found
+SkinningInfo	104	0	0	4	INT			
+SkinningInfo	104	1	4	12	SerializeData			
+SkinningInfo	104	2	16	8	VARIABLEARRAY	INT		
+SkinningInfo	104	3	24	8	INT			
+SkinningInfo	104	4	32	8	INT64			
+SkinningInfo	104	5	40	8	SerializeData			
+SkinningInfo	104	6	48	8	INT			
+SkinningInfo	104	7	56	8	INT64			
+SkinningInfo	104	8	64	40	SerializeData			
+SubObject	240	0	0	4	INT			
+SubObject	240	1	4	4	INT			
+SubObject	240	2	8	8	SerializeData			
+SubObject	240	3	16	8	VARIABLEARRAY	FatVertex		
+SubObject	240	4	24	8	SerializeData			
+SubObject	240	5	32	8	VARIABLEARRAY	VertInfluences		
+SubObject	240	6	40	4	INT			
+SubObject	240	7	44	12	SerializeData			
+SubObject	240	8	56	8	VARIABLEARRAY	WORD		
+SubObject	240	9	64	8	SerializeData			
+SubObject	240	10	72	8	VARIABLEARRAY	ClothStructure		
+SubObject	240	11	80	4	SNO			group 43
+SubObject	240	12	84	4	INT			
+SubObject	240	13	88	4	FLOAT			
+SubObject	240	14	92	4	INT			
+SubObject	240	15	96	4	INT			
+SubObject	240	16	100	4	INT			
+SubObject	240	17	104	4	INT			
+SubObject	240	18	108	24	AABB			
+SubObject	240	19	132	4	INT			
+SubObject	240	20	136	8	SerializeData			
+SubObject	240	21	144	8	VARIABLEARRAY	CollisionShape		
+SubObject	240	22	152	8	INT64			
+SubObject	240	23	160	4	INT			
+SubObject	240	24	164	4	INT			
+SubObject	240	25	168	8	INT64			
+SubObject	240	26	176	8	SerializeData			
+SubObject	240	27	184	8	SerializeData			
+SubObject	240	28	192	8	VARIABLEARRAY	SkinningInfo		
+SubObject	240	29	200	8	SerializeData			
+SubObject	240	30	208	8	VARIABLEARRAY	CompVertInfluences		
+SubObject	240	31	216	12	VECTOR3D			
+SubObject	240	32	228	12	VECTOR3D			
+LookAtData	36	0	0	4	INT			
+LookAtData	36	1	4	4	INT			
+LookAtData	36	2	8	4	INT			
+LookAtData	36	3	12	4	ANGLE			
+LookAtData	36	4	16	4	ANGLE			
+LookAtData	36	5	20	4	ANGLE			
+LookAtData	36	6	24	4	ANGLE			
+LookAtData	36	7	28	4	ANGULARVELOCITY			
+LookAtData	36	8	32	4	FLOAT			
+BoneStructure	256	0	0	4	INT			
+BoneStructure	256	1	4	4	INT			
+BoneStructure	256	2	8	4	INT			
+BoneStructure	256	3	12	24	AABB			
+BoneStructure	256	4	36	16	Sphere			
+BoneStructure	256	5	52	32	PRSTransform			
+BoneStructure	256	6	84	32	PRSTransform			
+BoneStructure	256	7	116	32	PRSTransform			
+BoneStructure	256	8	148	32	PRSTransform			
+BoneStructure	256	9	180	32	PRSTransform			
+BoneStructure	256	10	212	4	INT			
+BoneStructure	256	11	216	8	SerializeData			
+BoneStructure	256	12	224	8	VARIABLEARRAY	CollisionShape		
+BoneStructure	256	13	232	8	SerializeData			
+BoneStructure	256	14	240	8	VARIABLEARRAY	ConstraintParameters		
+BoneStructure	256	15	248	8	SNO			group 27
+RandomMusicSoundParams	16	0	0	4	SNO			group 40
+RandomMusicSoundParams	16	1	4	4	TIME			
+RandomMusicSoundParams	16	2	8	4	TIME			
+RandomMusicSoundParams	16	3	12	4	TIME			
+PlaylistEntry	76	0	0	4	SNO			group 41
+PlaylistEntry	76	1	4	4	INT			
+PlaylistEntry	76	2	8	4	FLOAT			
+PlaylistEntry	76	3	12	4	INT			
+PlaylistEntry	76	4	16	4	INT			
+PlaylistEntry	76	5	20	4	INT			
+PlaylistEntry	76	6	24	4	INT			
+PlaylistEntry	76	7	28	4	INT			
+PlaylistEntry	76	8	32	4	INT			
+PlaylistEntry	76	9	36	4	INT			
+PlaylistEntry	76	10	40	4	INT			
+PlaylistEntry	76	11	44	4	INT			
+PlaylistEntry	76	12	48	4	INT			
+PlaylistEntry	76	13	52	4	INT			
+PlaylistEntry	76	14	56	4	INT			
+PlaylistEntry	76	15	60	4	FLOAT			
+PlaylistEntry	76	16	64	12	FLOAT			
+Music	80	0	12	4	INT			
+Music	80	1	16	4	FLOAT			
+Music	80	2	20	4	TIME			
+Music	80	3	24	4	TIME			
+Music	80	4	36	4	INT			
+Music	80	5	28	8	SerializeData			
+Music	80	6	40	8	VARIABLEARRAY	PlaylistEntry		
+Music	80	7	48	32	FIXEDARRAY	RandomMusicSoundParams	2	
+Material#136	136	0	12	4	INT			
+Material#136	136	1	16	8	SerializeData			
+Material#136	136	2	24	8	TAGMAP			
+Material#136	136	3	32	104	UberMaterial			
+TexFrame	20	0	0	4	INT			
+TexFrame	20	1	4	4	FLOAT			
+TexFrame	20	2	8	4	FLOAT			
+TexFrame	20	3	12	4	FLOAT			
+TexFrame	20	4	16	4	FLOAT			
+Circle	12	0	0	8	VECTOR2D			
+Circle	12	1	8	4	FLOAT			
+ItemEnchantment	464	0	0	8	SerializeData			
+ItemEnchantment	464	1	8	8	VARIABLEARRAY	BYTE		
+ItemEnchantment	464	2	16	4	INT			
+ItemEnchantment	464	3	20	4	INT			
+ItemEnchantment	464	4	24	4	INT			
+ItemEnchantment	464	5	28	4	INT			
+ItemEnchantment	464	6	32	4	INT			
+ItemEnchantment	464	7	36	4	INT			
+ItemEnchantment	464	8	40	4	INT			
+ItemEnchantment	464	9	44	4	INT			
+ItemEnchantment	464	10	48	384	FIXEDARRAY	AttributeSpecifier	16	
+ItemEnchantment	464	11	432	4	INT			
+ItemEnchantment	464	12	436	24	FIXEDARRAY	RecipeIngredient	3	
+ItemEnchantment	464	13	460	4	INT			
+ItemEnchantmentTable	16	0	0	8	SerializeData			
+ItemEnchantmentTable	16	1	8	8	VARIABLEARRAY	ItemEnchantment		
+ExperienceLevelAlt	112	0	0	8	INT64			
+ExperienceLevelAlt	112	1	8	4	INT			
+ExperienceLevelAlt	112	2	12	4	INT			
+ExperienceLevelAlt	112	3	16	4	INT			
+ExperienceLevelAlt	112	4	20	4	INT			
+ExperienceLevelAlt	112	5	24	4	INT			
+ExperienceLevelAlt	112	6	28	4	INT			
+ExperienceLevelAlt	112	7	32	4	INT			
+ExperienceLevelAlt	112	8	36	4	INT			
+ExperienceLevelAlt	112	9	40	4	INT			
+ExperienceLevelAlt	112	10	44	4	INT			
+ExperienceLevelAlt	112	11	48	4	INT			
+ExperienceLevelAlt	112	12	52	4	INT			
+ExperienceLevelAlt	112	13	56	4	INT			
+ExperienceLevelAlt	112	14	60	4	INT			
+ExperienceLevelAlt	112	15	64	4	INT			
+ExperienceLevelAlt	112	16	68	4	INT			
+ExperienceLevelAlt	112	17	72	4	INT			
+ExperienceLevelAlt	112	18	76	4	INT			
+ExperienceLevelAlt	112	19	80	4	INT			
+ExperienceLevelAlt	112	20	84	4	INT			
+ExperienceLevelAlt	112	21	88	4	INT			
+ExperienceLevelAlt	112	22	92	4	INT			
+ExperienceLevelAlt	112	23	96	4	INT			
+ExperienceLevelAlt	112	24	100	4	INT			
+ExperienceLevelAlt	112	25	104	4	INT			
+ExperienceLevelAlt	112	26	108	4	INT			
+ExperienceLevel	464	0	0	8	INT64			
+ExperienceLevel	464	1	8	4	INT			
+ExperienceLevel	464	2	12	4	INT			
+ExperienceLevel	464	3	16	4	FLOAT			
+ExperienceLevel	464	4	20	4	FLOAT			
+ExperienceLevel	464	5	24	4	INT			
+ExperienceLevel	464	6	28	4	INT			
+ExperienceLevel	464	7	32	4	INT			
+ExperienceLevel	464	8	36	4	INT			
+ExperienceLevel	464	9	40	4	INT			
+ExperienceLevel	464	10	44	4	INT			
+ExperienceLevel	464	11	48	4	INT			
+ExperienceLevel	464	12	52	4	INT			
+ExperienceLevel	464	13	56	4	INT			
+ExperienceLevel	464	14	60	4	INT			
+ExperienceLevel	464	15	64	4	INT			
+ExperienceLevel	464	16	68	4	INT			
+ExperienceLevel	464	17	72	4	INT			
+ExperienceLevel	464	18	76	4	INT			
+ExperienceLevel	464	19	80	4	INT			
+ExperienceLevel	464	20	84	4	INT			
+ExperienceLevel	464	21	88	4	INT			
+ExperienceLevel	464	22	92	4	INT			
+ExperienceLevel	464	23	96	4	INT			
+ExperienceLevel	464	24	100	4	INT			
+ExperienceLevel	464	25	104	4	INT			
+ExperienceLevel	464	26	108	4	INT			
+ExperienceLevel	464	27	112	4	INT			
+ExperienceLevel	464	28	116	4	INT			
+ExperienceLevel	464	29	120	4	INT			
+ExperienceLevel	464	30	124	4	INT			
+ExperienceLevel	464	31	140	4	INT			
+ExperienceLevel	464	32	128	4	INT			
+ExperienceLevel	464	33	144	4	INT			
+ExperienceLevel	464	34	132	4	INT			
+ExperienceLevel	464	35	148	4	INT			
+ExperienceLevel	464	36	136	4	INT			
+ExperienceLevel	464	37	152	4	INT			
+ExperienceLevel	464	38	156	4	INT			
+ExperienceLevel	464	39	160	4	INT			
+ExperienceLevel	464	40	164	4	FLOAT			
+ExperienceLevel	464	41	168	4	FLOAT			
+ExperienceLevel	464	42	172	4	FLOAT			
+ExperienceLevel	464	43	176	4	INT			
+ExperienceLevel	464	44	180	4	INT			
+ExperienceLevel	464	45	184	4	INT			
+ExperienceLevel	464	46	188	4	INT			
+ExperienceLevel	464	47	192	4	INT			
+ExperienceLevel	464	48	196	4	INT			
+ExperienceLevel	464	49	200	4	INT			
+ExperienceLevel	464	50	204	4	INT			
+ExperienceLevel	464	51	208	4	INT			
+ExperienceLevel	464	52	212	4	INT			
+ExperienceLevel	464	53	216	4	INT			
+ExperienceLevel	464	54	220	4	INT			
+ExperienceLevel	464	55	224	4	INT			
+ExperienceLevel	464	56	228	4	INT			
+ExperienceLevel	464	57	232	4	INT			
+ExperienceLevel	464	58	236	4	INT			
+ExperienceLevel	464	59	240	4	INT			
+ExperienceLevel	464	60	244	4	INT			
+ExperienceLevel	464	61	248	4	INT			
+ExperienceLevel	464	62	252	4	INT			
+ExperienceLevel	464	63	256	4	INT			
+ExperienceLevel	464	64	260	4	INT			
+ExperienceLevel	464	65	264	4	INT			
+ExperienceLevel	464	66	268	20	INT			
+ExperienceLevel	464	67	288	4	INT			
+ExperienceLevel	464	68	292	4	INT			
+ExperienceLevel	464	69	296	4	INT			
+ExperienceLevel	464	70	300	4	INT			
+ExperienceLevel	464	71	340	4	FLOAT			
+ExperienceLevel	464	72	304	4	INT			
+ExperienceLevel	464	73	308	4	INT			
+ExperienceLevel	464	74	312	4	INT			
+ExperienceLevel	464	75	316	4	INT			
+ExperienceLevel	464	76	344	4	FLOAT			
+ExperienceLevel	464	77	320	4	INT			
+ExperienceLevel	464	78	324	4	INT			
+ExperienceLevel	464	79	328	4	INT			
+ExperienceLevel	464	80	332	8	INT			
+ExperienceLevel	464	81	348	4	FLOAT			
+ExperienceLevel	464	82	352	8	INT64			
+ExperienceLevel	464	83	360	4	INT			
+ExperienceLevel	464	84	364	4	INT			
+ExperienceLevel	464	85	372	4	INT			
+ExperienceLevel	464	86	368	4	INT			
+ExperienceLevel	464	87	376	4	INT			
+ExperienceLevel	464	88	380	4	INT			
+ExperienceLevel	464	89	384	4	INT			
+ExperienceLevel	464	90	388	4	INT			
+ExperienceLevel	464	91	396	4	INT			
+ExperienceLevel	464	92	392	4	INT			
+ExperienceLevel	464	93	400	4	INT			
+ExperienceLevel	464	94	404	4	INT			
+ExperienceLevel	464	95	408	4	INT			
+ExperienceLevel	464	96	412	4	INT			
+ExperienceLevel	464	97	420	4	INT			
+ExperienceLevel	464	98	416	4	INT			
+ExperienceLevel	464	99	424	4	INT			
+ExperienceLevel	464	100	428	4	INT			
+ExperienceLevel	464	101	432	4	FLOAT			
+ExperienceLevel	464	102	436	4	INT			
+ExperienceLevel	464	103	440	4	INT			
+ExperienceLevel	464	104	444	4	INT			
+ExperienceLevel	464	105	448	4	INT			
+ExperienceLevel	464	106	452	4	INT			
+ExperienceLevel	464	107	456	8	INT			
+ExperienceTable	16	0	0	8	SerializeData			
+ExperienceTable	16	1	8	8	VARIABLEARRAY	ExperienceLevel		
+RecipeIngredient	8	0	0	4	GBID			
+RecipeIngredient	8	1	4	4	INT			
+MaterialTexture	24	0	16	4	SNO			group 44
+MaterialTexture	24	1	0	8	SerializeData			
+MaterialTexture	24	2	8	8	VARIABLEARRAY	BYTE		
+MaterialTexture	24	3	20	4	INT			
+MaterialTextureEntry	32	0	0	4	INT			
+MaterialTextureEntry	32	1	4	4	INT			
+MaterialTextureEntry	32	2	8	24	MaterialTexture			
+RGBAColorValue	16	0	0	4	FLOAT			
+RGBAColorValue	16	1	4	4	FLOAT			
+RGBAColorValue	16	2	8	4	FLOAT			
+RGBAColorValue	16	3	12	4	FLOAT			
+Material#72	72	0	0	16	RGBACOLORVALUE			
+Material#72	72	1	16	16	RGBACOLORVALUE			
+Material#72	72	2	32	16	RGBACOLORVALUE			
+Material#72	72	3	48	16	RGBACOLORVALUE			
+Material#72	72	4	64	4	FLOAT			
+Material#72	72	5	68	4	INT			
+RGBAColor	4	0	0	1	BYTE			
+RGBAColor	4	1	1	1	BYTE			
+RGBAColor	4	2	2	1	BYTE			
+RGBAColor	4	3	3	1	BYTE			
+SNOName	8	0	0	4	SNO_GROUP			
+SNOName	8	1	4	4	SNONAME_HANDLE			
+Sphere	16	0	0	12	VECTOR3D			
+Sphere	16	1	12	4	FLOAT			
+CollisionMesh	112	0	60	4	INT			
+CollisionMesh	112	1	96	8	SerializeData			
+CollisionMesh	112	2	0	8	VARIABLEARRAY	dmMeshNode		
+CollisionMesh	112	3	64	4	INT			
+CollisionMesh	112	4	80	8	SerializeData			
+CollisionMesh	112	5	8	8	VARIABLEARRAY	dmFloat4		
+CollisionMesh	112	6	68	4	INT			
+CollisionMesh	112	7	88	8	SerializeData			
+CollisionMesh	112	8	16	8	VARIABLEARRAY	dmMeshTriangle		
+CollisionMesh	112	9	24	12	dmFloat3			
+CollisionMesh	112	10	36	12	dmFloat3			
+CollisionMesh	112	11	48	12	dmFloat3			
+CollisionMesh	112	12	72	8	INT			
+CollisionMesh	112	13	104	4	INT			
+CollisionMesh	112	14	108	4	INT			
+PhysMesh	48	0	12	4	INT			
+PhysMesh	48	1	16	4	INT			
+PhysMesh	48	2	20	12	SerializeData			
+PhysMesh	48	3	32	8	VARIABLEARRAY	CollisionMesh		
+PhysMesh	48	4	40	8	INT			
+Account	32	0	12	12	SerializeData			
+Account	32	1	24	8	VARIABLEARRAY	BYTE		
+QuestSubcondition	16	0	0	4	SNO			group 31
+QuestSubcondition	16	1	4	4	INT			
+QuestSubcondition	16	2	8	4	INT			
+QuestSubcondition	16	3	12	4	INT			
+LoreSubcondition	8	0	0	4	SNO			group 59
+LoreSubcondition	8	1	4	4	INT			
+Recipe	72	0	12	56	ItemSpecifierData			
+Recipe	72	1	68	4	INT			
+ColorCorrectionParams	12	0	0	4	SNO			group 44
+ColorCorrectionParams	12	1	4	4	SNO			group 44
+ColorCorrectionParams	12	2	8	4	SNO			group 44
+WeatherStateParams	76	0	0	4	INT			
+WeatherStateParams	76	1	4	4	RGBACOLOR			
+WeatherStateParams	76	2	8	4	FLOAT			
+WeatherStateParams	76	3	12	4	FLOAT			
+WeatherStateParams	76	4	16	4	FLOAT			
+WeatherStateParams	76	5	20	4	FLOAT			
+WeatherStateParams	76	6	24	4	RGBACOLOR			
+WeatherStateParams	76	7	28	4	FLOAT			
+WeatherStateParams	76	8	32	4	FLOAT			
+WeatherStateParams	76	9	36	4	FLOAT			
+WeatherStateParams	76	10	40	4	SNO			group 23
+WeatherStateParams	76	11	44	4	SNO			group 23
+WeatherStateParams	76	12	48	4	FLOAT			
+WeatherStateParams	76	13	52	4	FLOAT			
+WeatherStateParams	76	14	56	4	SNO			group 23
+WeatherStateParams	76	15	60	4	SNO			group 23
+WeatherStateParams	76	16	64	4	SNO			group 23
+WeatherStateParams	76	17	68	4	FLOAT			
+WeatherStateParams	76	18	72	4	FLOAT			
+Weather	424	0	12	4	INT			
+Weather	424	1	16	8	TIME			
+Weather	424	2	24	48	VelocityVectorPath			
+Weather	424	3	72	48	VelocityVectorPath			
+Weather	424	4	120	8	TIME			
+Weather	424	5	128	48	FloatPath			
+Weather	424	6	176	4	SNO			group 27
+Weather	424	7	180	4	SNO			group 27
+Weather	424	8	184	4	SNO			group 40
+Weather	424	9	188	4	SNO			group 1
+Weather	424	10	192	4	FLOAT			
+Weather	424	11	196	4	TIME			
+Weather	424	12	200	4	TIME			
+Weather	424	13	204	4	TIME			
+Weather	424	14	208	4	SNO			group 23
+Weather	424	15	212	4	SNO			group 14
+Weather	424	16	216	4	SNO			group 40
+Weather	424	17	220	4	FLOAT			
+Weather	424	18	224	4	FLOAT			
+Weather	424	19	228	4	FLOAT			
+Weather	424	20	232	76	WeatherStateParams			
+Weather	424	21	308	76	WeatherStateParams			
+Weather	424	22	384	4	FLOAT			
+Weather	424	23	388	12	ColorCorrectionParams			
+Weather	424	24	408	8	SerializeData			
+Weather	424	25	400	8	VARIABLEARRAY	SNO		group 47
+Weather	424	26	416	4	INT			
+Weather	424	27	420	4	INT			
+ScriptEventVariantParamString_Console	16	0	0	8	SerializeData			
+ScriptEventVariantParamString_Console	16	1	8	8	VARIABLEARRAY	BYTE		
+ScriptMessageMap	192	0	0	4	ENUM			
+ScriptMessageMap	192	1	4	4	INT			
+ScriptMessageMap	192	2	184	4	INT			
+ScriptMessageMap	192	3	188	4	INT			
+ScriptMessageMap	192	4	8	96	FIXEDARRAY	ScriptEventVariantParamLW	4	
+ScriptMessageMap	192	5	104	64	FIXEDARRAY	ScriptEventVariantParamString_Console	4	
+ScriptMessageMap	192	6	168	8	SerializeData			
+ScriptMessageMap	192	7	176	8	VARIABLEARRAY	BYTE		
+Script	72	0	12	4	INT			
+Script	72	1	16	8	SerializeData			
+Script	72	2	24	8	VARIABLEARRAY	BYTE		
+Script	72	3	32	8	SerializeData			
+Script	72	4	40	8	VARIABLEARRAY	ScriptMessageMap		
+Script	72	5	48	4	INT			
+Script	72	6	52	4	INT			
+Script	72	7	56	16	SNO			group 31
+ScriptFormulaDetails	776	0	0	256	CHARARRAY		256	
+ScriptFormulaDetails	776	1	256	512	CHARARRAY		512	
+ScriptFormulaDetails	776	2	768	4	INT			
+ScriptFormulaDetails	776	3	772	4	INT			
+Power	784	0	16	728	PowerDef			
+Power	784	1	744	4	INT			
+Power	784	2	748	4	INT			
+Power	784	3	752	8	INT			
+Power	784	4	768	8	SerializeData			
+Power	784	5	760	8	VARIABLEARRAY	BYTE		
+Power	784	6	776	8	SNO			group 31
+PowerFormulaTableEntry	1328	0	0	1024	CHARARRAY		1024	
+PowerFormulaTableEntry	1328	1	1024	4	FLOAT			
+PowerFormulaTableEntry	1328	2	1028	4	FLOAT			
+PowerFormulaTableEntry	1328	3	1032	4	FLOAT			
+PowerFormulaTableEntry	1328	4	1036	4	FLOAT			
+PowerFormulaTableEntry	1328	5	1040	4	FLOAT			
+PowerFormulaTableEntry	1328	6	1044	4	FLOAT			
+PowerFormulaTableEntry	1328	7	1048	4	FLOAT			
+PowerFormulaTableEntry	1328	8	1052	4	FLOAT			
+PowerFormulaTableEntry	1328	9	1056	4	FLOAT			
+PowerFormulaTableEntry	1328	10	1060	4	FLOAT			
+PowerFormulaTableEntry	1328	11	1064	4	FLOAT			
+PowerFormulaTableEntry	1328	12	1068	4	FLOAT			
+PowerFormulaTableEntry	1328	13	1072	4	FLOAT			
+PowerFormulaTableEntry	1328	14	1076	4	FLOAT			
+PowerFormulaTableEntry	1328	15	1080	4	FLOAT			
+PowerFormulaTableEntry	1328	16	1084	4	FLOAT			
+PowerFormulaTableEntry	1328	17	1088	4	FLOAT			
+PowerFormulaTableEntry	1328	18	1092	4	FLOAT			
+PowerFormulaTableEntry	1328	19	1096	4	FLOAT			
+PowerFormulaTableEntry	1328	20	1100	4	FLOAT			
+PowerFormulaTableEntry	1328	21	1104	4	FLOAT			
+PowerFormulaTableEntry	1328	22	1108	4	FLOAT			
+PowerFormulaTableEntry	1328	23	1112	4	FLOAT			
+PowerFormulaTableEntry	1328	24	1116	4	FLOAT			
+PowerFormulaTableEntry	1328	25	1120	4	FLOAT			
+PowerFormulaTableEntry	1328	26	1124	4	FLOAT			
+PowerFormulaTableEntry	1328	27	1128	4	FLOAT			
+PowerFormulaTableEntry	1328	28	1132	4	FLOAT			
+PowerFormulaTableEntry	1328	29	1136	4	FLOAT			
+PowerFormulaTableEntry	1328	30	1140	4	FLOAT			
+PowerFormulaTableEntry	1328	31	1144	4	FLOAT			
+PowerFormulaTableEntry	1328	32	1148	4	FLOAT			
+PowerFormulaTableEntry	1328	33	1152	4	FLOAT			
+PowerFormulaTableEntry	1328	34	1156	4	FLOAT			
+PowerFormulaTableEntry	1328	35	1160	4	FLOAT			
+PowerFormulaTableEntry	1328	36	1164	4	FLOAT			
+PowerFormulaTableEntry	1328	37	1168	4	FLOAT			
+PowerFormulaTableEntry	1328	38	1172	4	FLOAT			
+PowerFormulaTableEntry	1328	39	1176	4	FLOAT			
+PowerFormulaTableEntry	1328	40	1180	4	FLOAT			
+PowerFormulaTableEntry	1328	41	1184	4	FLOAT			
+PowerFormulaTableEntry	1328	42	1188	4	FLOAT			
+PowerFormulaTableEntry	1328	43	1192	4	FLOAT			
+PowerFormulaTableEntry	1328	44	1196	4	FLOAT			
+PowerFormulaTableEntry	1328	45	1200	4	FLOAT			
+PowerFormulaTableEntry	1328	46	1204	4	FLOAT			
+PowerFormulaTableEntry	1328	47	1208	4	FLOAT			
+PowerFormulaTableEntry	1328	48	1212	4	FLOAT			
+PowerFormulaTableEntry	1328	49	1216	4	FLOAT			
+PowerFormulaTableEntry	1328	50	1220	4	FLOAT			
+PowerFormulaTableEntry	1328	51	1224	4	FLOAT			
+PowerFormulaTableEntry	1328	52	1228	4	FLOAT			
+PowerFormulaTableEntry	1328	53	1232	4	FLOAT			
+PowerFormulaTableEntry	1328	54	1236	4	FLOAT			
+PowerFormulaTableEntry	1328	55	1240	4	FLOAT			
+PowerFormulaTableEntry	1328	56	1244	4	FLOAT			
+PowerFormulaTableEntry	1328	57	1248	4	FLOAT			
+PowerFormulaTableEntry	1328	58	1252	4	FLOAT			
+PowerFormulaTableEntry	1328	59	1256	4	FLOAT			
+PowerFormulaTableEntry	1328	60	1260	4	FLOAT			
+PowerFormulaTableEntry	1328	61	1264	4	FLOAT			
+PowerFormulaTableEntry	1328	62	1268	4	FLOAT			
+PowerFormulaTableEntry	1328	63	1272	4	FLOAT			
+PowerFormulaTableEntry	1328	64	1276	4	FLOAT			
+PowerFormulaTableEntry	1328	65	1280	4	FLOAT			
+PowerFormulaTableEntry	1328	66	1284	4	FLOAT			
+PowerFormulaTableEntry	1328	67	1288	4	FLOAT			
+PowerFormulaTableEntry	1328	68	1292	4	FLOAT			
+PowerFormulaTableEntry	1328	69	1296	4	FLOAT			
+PowerFormulaTableEntry	1328	70	1300	4	FLOAT			
+PowerFormulaTableEntry	1328	71	1304	4	FLOAT			
+PowerFormulaTableEntry	1328	72	1308	4	FLOAT			
+PowerFormulaTableEntry	1328	73	1312	4	FLOAT			
+PowerFormulaTableEntry	1328	74	1316	4	FLOAT			
+PowerFormulaTableEntry	1328	75	1320	4	FLOAT			
+PowerFormulaTableEntry	1328	76	1324	4	FLOAT			
+PowerFormulaTable	16	0	0	8	SerializeData			
+PowerFormulaTable	16	1	8	8	VARIABLEARRAY	PowerFormulaTableEntry		
+HelpCodes#640	640	0	0	256	CHARARRAY		256	
+HelpCodes#640	640	1	256	256	CHARARRAY		256	
+HelpCodes#640	640	2	512	128	CHARARRAY		128	
+HelpCodes#16	16	0	0	8	SerializeData			
+HelpCodes#16	16	1	8	8	VARIABLEARRAY	HelpCodes		
+ExperienceTableAlt	16	0	0	8	SerializeData			
+ExperienceTableAlt	16	1	8	8	VARIABLEARRAY	ExperienceLevelAlt		
+CollisionCapsule	48	0	0	4	FLOAT			
+CollisionCapsule	48	1	4	4	FLOAT			
+CollisionCapsule	48	2	8	40	Hardpoint			
+CompVertInfluences	6	0	0	6	FIXEDARRAY	CompInfluence	3	
+ClothVertexSerializable	44	0	0	12	VECTOR3D			
+ClothVertexSerializable	44	1	12	12	VECTOR3D			
+ClothVertexSerializable	44	2	24	4	FLOAT			
+ClothVertexSerializable	44	3	28	4	INT			
+ClothVertexSerializable	44	4	32	4	INT			
+ClothVertexSerializable	44	5	36	4	INT			
+ClothVertexSerializable	44	6	40	4	INT			
+FatVertex	32	0	0	12	VECTOR3D			
+FatVertex	32	1	12	4	RGBACOLOR			
+FatVertex	32	2	16	8	FIXEDARRAY	RGBACOLOR	2	
+FatVertex	32	3	24	8	FIXEDARRAY	RGBACOLOR	2	
+CollisionShape	80	0	0	4	INT			
+CollisionShape	80	1	4	4	INT			
+CollisionShape	80	2	8	4	INT			
+CollisionShape	80	3	12	4	INT			
+CollisionShape	80	4	16	4	FLOAT			
+CollisionShape	80	5	20	4	FLOAT			
+CollisionShape	80	6	24	4	FLOAT			
+CollisionShape	80	7	28	12	SerializeData			
+CollisionShape	80	8	40	8	VARIABLEARRAY	PolytopeData		
+CollisionShape	80	9	48	12	VECTOR3D			
+CollisionShape	80	10	60	12	VECTOR3D			
+CollisionShape	80	11	72	8	FLOAT			
+AnimSetTagMap	16	0	0	8	SerializeData			
+AnimSetTagMap	16	1	8	8	TAGMAP			
+AnimSet	480	0	12	4	SNO			group 8
+AnimSet	480	1	16	8	SerializeData			
+AnimSet	480	2	24	8	TAGMAP			
+AnimSet	480	3	32	448	FIXEDARRAY	AnimSetTagMap	28	
+DungeonFinder	40	0	24	8	SerializeData			
+DungeonFinder	40	1	16	8	VARIABLEARRAY	DungeonFinderLevelTable		
+DungeonFinder	40	2	32	8	FLOAT			
+AnimTree	96	0	12	4	INT			
+AnimTree	96	1	16	4	INT			
+AnimTree	96	2	20	4	INT			
+AnimTree	96	3	24	8	SerializeData			
+AnimTree	96	4	32	8	VARIABLEARRAY	AnimTreeLeaf		
+AnimTree	96	5	40	4	INT			
+AnimTree	96	6	44	12	SerializeData			
+AnimTree	96	7	56	8	VARIABLEARRAY	AnimTreeNode		
+AnimTree	96	8	64	4	INT			
+AnimTree	96	9	68	12	SerializeData			
+AnimTree	96	10	80	8	VARIABLEARRAY	INT		
+AnimTree	96	11	88	8	INT			
+BossEncounter	104	0	12	4	INT			
+BossEncounter	104	1	16	4	INT			
+BossEncounter	104	2	20	4	INT			
+BossEncounter	104	3	24	4	INT			
+BossEncounter	104	4	28	4	INT			
+BossEncounter	104	5	32	4	INT			
+BossEncounter	104	6	36	4	INT			
+BossEncounter	104	7	48	4	INT			
+BossEncounter	104	8	44	4	INT			
+BossEncounter	104	9	40	4	INT			
+BossEncounter	104	10	52	4	INT			
+BossEncounter	104	11	56	4	INT			
+BossEncounter	104	12	64	4	SNO			group 58
+BossEncounter	104	13	96	4	SNO			group 22
+BossEncounter	104	14	100	4	SNO			group 1
+BossEncounter	104	15	60	4	FLOAT			
+BossEncounter	104	16	68	16	FIXEDARRAY	SNO	4	group 48
+BossEncounter	104	17	84	12	FIXEDARRAY	SNO	3	group 35
+Tutorial	48	0	12	4	INT			
+Tutorial	48	1	16	4	INT			
+Tutorial	48	2	20	4	TIME			
+Tutorial	48	3	24	4	TIME			
+Tutorial	48	4	28	4	INT			
+Tutorial	48	5	32	4	INT			
+Tutorial	48	6	36	8	IVECTOR2D			
+Tutorial	48	7	44	4	INT			
+dmMeshTriangle	28	0	0	4	INT			
+dmMeshTriangle	28	1	4	4	INT			
+dmMeshTriangle	28	2	8	4	INT			
+dmMeshTriangle	28	3	12	4	INT			
+dmMeshTriangle	28	4	16	4	INT			
+dmMeshTriangle	28	5	20	4	INT			
+dmMeshTriangle	28	6	24	2	WORD			
+dmMeshTriangle	28	7	26	2	WORD			
+dmFloat4	16	0	0	4	FLOAT			
+dmFloat4	16	1	4	4	FLOAT			
+dmFloat4	16	2	8	4	FLOAT			
+dmFloat4	16	3	12	4	FLOAT			
+dmMeshNode	16	0	0	2	WORD			
+dmMeshNode	16	1	2	2	WORD			
+dmMeshNode	16	2	4	2	WORD			
+dmMeshNode	16	3	6	2	WORD			
+dmMeshNode	16	4	8	2	WORD			
+dmMeshNode	16	5	10	2	WORD			
+dmMeshNode	16	6	12	4	INT			
+ReverbParams	88	0	0	4	INT			
+ReverbParams	88	1	4	4	FLOAT			
+ReverbParams	88	2	8	4	FLOAT			
+ReverbParams	88	3	12	4	INT			
+ReverbParams	88	4	16	4	INT			
+ReverbParams	88	5	20	4	INT			
+ReverbParams	88	6	24	4	FLOAT			
+ReverbParams	88	7	28	4	FLOAT			
+ReverbParams	88	8	32	4	FLOAT			
+ReverbParams	88	9	36	4	INT			
+ReverbParams	88	10	40	4	FLOAT			
+ReverbParams	88	11	44	4	INT			
+ReverbParams	88	12	48	4	FLOAT			
+ReverbParams	88	13	52	4	FLOAT			
+ReverbParams	88	14	56	4	FLOAT			
+ReverbParams	88	15	60	4	FLOAT			
+ReverbParams	88	16	64	4	FLOAT			
+ReverbParams	88	17	68	4	FLOAT			
+ReverbParams	88	18	72	4	FLOAT			
+ReverbParams	88	19	76	4	FLOAT			
+ReverbParams	88	20	80	4	FLOAT			
+ReverbParams	88	21	84	4	INT			
+Reverb	104	0	12	88	ReverbParams			
+Reverb	104	1	100	4	INT			
+ConductorSequence	32	0	24	8	INT			
+ConductorSequence	32	1	16	8	SerializeData			
+ConductorSequence	32	2	8	8	VARIABLEARRAY	ScriptMessageMap		
+ConductorSequence	32	3	0	8	INT			
+ConductorPhase	32	0	0	4	INT			
+ConductorPhase	32	1	4	4	INT			
+ConductorPhase	32	2	24	8	INT			
+ConductorPhase	32	3	16	8	SerializeData			
+ConductorPhase	32	4	8	8	VARIABLEARRAY	ConductorSequence		
+Conductor	72	0	32	8	SerializeData			
+Conductor	72	1	24	8	VARIABLEARRAY	ConductorPhase		
+Conductor	72	2	12	4	INT			
+Conductor	72	3	16	8	INT			
+Conductor	72	4	40	8	INT			
+Conductor	72	5	56	16	SerializeData			
+Conductor	72	6	48	8	VARIABLEARRAY	BYTE		
+UIControlData	368	0	0	8	INT			
+UIControlData	368	1	8	8	INT64			
+UIControlData	368	2	16	8	SerializeData			
+UIControlData	368	3	24	8	VARIABLEARRAY	BYTE		
+UIControlData	368	4	32	8	INT64			
+UIControlData	368	5	40	8	SerializeData			
+UIControlData	368	6	48	8	VARIABLEARRAY	BYTE		
+UIControlData	368	7	56	8	INT			
+UIControlData	368	8	64	160	UIStyle			
+UIControlData	368	9	224	144	UIAnimationElements			
+UI	184	0	12	4	INT			
+UI	184	1	16	4	INT			
+UI	184	2	20	12	SerializeData			
+UI	184	3	32	8	VARIABLEARRAY	UIControlData		
+UI	184	4	40	4	INT			
+UI	184	5	44	12	SerializeData			
+UI	184	6	56	8	VARIABLEARRAY	UIStyle		
+UI	184	7	64	120	DataElements			
+DspParam	16	0	0	4	FLOAT			
+DspParam	16	1	4	4	FLOAT			
+DspParam	16	2	8	4	INT			
+DspParam	16	3	12	4	INT			
+DspEffect	264	0	0	4	ENUM			
+DspEffect	264	1	4	4	INT			
+DspEffect	264	2	8	16	DspParam			
+DspEffect	264	3	24	16	DspParam			
+DspEffect	264	4	40	16	DspParam			
+DspEffect	264	5	56	16	DspParam			
+DspEffect	264	6	72	16	DspParam			
+DspEffect	264	7	88	16	DspParam			
+DspEffect	264	8	104	16	DspParam			
+DspEffect	264	9	120	16	DspParam			
+DspEffect	264	10	8	16	DspParam			
+DspEffect	264	11	24	16	DspParam			
+DspEffect	264	12	40	16	DspParam			
+DspEffect	264	13	56	16	DspParam			
+DspEffect	264	14	8	16	DspParam			
+DspEffect	264	15	8	16	DspParam			
+DspEffect	264	16	24	16	DspParam			
+DspEffect	264	17	40	16	DspParam			
+DspEffect	264	18	56	16	DspParam			
+DspEffect	264	19	72	16	DspParam			
+DspEffect	264	20	8	16	DspParam			
+DspEffect	264	21	24	16	DspParam			
+DspEffect	264	22	40	16	DspParam			
+DspEffect	264	23	56	16	DspParam			
+DspEffect	264	24	8	16	DspParam			
+DspEffect	264	25	24	16	DspParam			
+DspEffect	264	26	8	16	DspParam			
+DspEffect	264	27	24	16	DspParam			
+DspEffect	264	28	8	16	DspParam			
+DspEffect	264	29	8	16	DspParam			
+DspEffect	264	30	24	16	DspParam			
+DspEffect	264	31	40	16	DspParam			
+DspEffect	264	32	8	16	DspParam			
+DspEffect	264	33	24	16	DspParam			
+DspEffect	264	34	40	16	DspParam			
+DspEffect	264	35	56	16	DspParam			
+DspEffect	264	36	72	16	DspParam			
+DspEffect	264	37	88	16	DspParam			
+DspEffect	264	38	104	16	DspParam			
+DspEffect	264	39	120	16	DspParam			
+DspEffect	264	40	136	16	DspParam			
+DspEffect	264	41	152	16	DspParam			
+DspEffect	264	42	168	16	DspParam			
+DspEffect	264	43	184	16	DspParam			
+DspEffect	264	44	200	16	DspParam			
+DspEffect	264	45	216	16	DspParam			
+DspEffect	264	46	232	32	DspParam			
+ScriptEventVariantParam	104	0	0	4				no initialiser found
+ScriptEventVariantParam	104	1	4	4				no initialiser found
+ScriptEventVariantParam	104	2	4	4				no initialiser found
+ScriptEventVariantParam	104	3	4	4				no initialiser found
+ScriptEventVariantParam	104	4	8	96				no initialiser found
+ScriptEventVariantParam	104	5	4	4				no initialiser found
+ScriptEventVariantParam	104	6	8	96				no initialiser found
+ScriptEventVariantParam	104	7	4	4				no initialiser found
+ScriptEventVariantParam	104	8	4	4				no initialiser found
+ScriptEventVariantParam	104	9	4	4				no initialiser found
+ScriptEventVariantParam	104	10	4	4				no initialiser found
+ScriptEventVariantParam	104	11	4	4				no initialiser found
+ScriptEventVariantParam	104	12	4	4				no initialiser found
+ScriptEventVariantParam	104	13	4	4				no initialiser found
+ScriptEventVariantParam	104	14	4	4				no initialiser found
+ScriptEventVariantParam	104	15	4	4				no initialiser found
+ScriptEventVariantParam	104	16	4	4				no initialiser found
+ScriptEventVariantParam	104	17	8	96				no initialiser found
+ScriptEventVariantParam	104	18	4	4				no initialiser found
+ScriptEventVariantParam	104	19	4	4				no initialiser found
+ScriptEventVariantParam	104	20	4	4				no initialiser found
+ScriptEventVariantParam	104	21	8	96				no initialiser found
+ScriptEventVariantParam	104	22	4	4				no initialiser found
+ScriptEventVariantParam	104	23	4	4				no initialiser found
+ScriptEventVariantParam	104	24	4	4				no initialiser found
+ScriptEventVariantParam	104	25	4	4				no initialiser found
+ScriptEventVariantParam	104	26	4	4				no initialiser found
+ScriptEventVariantParam	104	27	8	96				no initialiser found
+ScriptEventVariantParam	104	28	8	96				no initialiser found
+ScriptEventVariantParam	104	29	4	4				no initialiser found
+SceneGroupItem	12	0	0	4	SNO			group 33
+SceneGroupItem	12	1	4	4	INT			
+SceneGroupItem	12	2	8	4	GBID			
+SceneGroup	40	0	12	4	INT			
+SceneGroup	40	1	16	8	SerializeData			
+SceneGroup	40	2	24	8	VARIABLEARRAY	SceneGroupItem		
+SceneGroup	40	3	32	8	INT			
+CompNavMeshSquare	4	0	0	2	WORD			
+CompNavMeshSquare	4	1	2	2	WORD			
+NavMeshSquare	8	0	0	4	FLOAT			
+NavMeshSquare	8	1	4	4	INT			
+MarkerLink	8	0	0	4	INT			
+MarkerLink	8	1	4	4	INT			
+Marker	88	0	0	4	INT			
+Marker	88	1	4	4	INT			
+Marker	88	2	8	4	INT			
+Marker	88	3	12	28	PRTransform			
+Marker	88	4	40	8	SNOName			
+Marker	88	5	48	8	SerializeData			
+Marker	88	6	56	8	TAGMAP			
+Marker	88	7	64	4	INT			
+Marker	88	8	68	12	SerializeData			
+Marker	88	9	80	8	VARIABLEARRAY	MarkerLink		
+InterpolationScalar	12	0	0	4	INT			
+InterpolationScalar	12	1	4	4	FLOAT			
+InterpolationScalar	12	2	8	4	FLOAT			
+ItemDurabilityCostScalar	8	0	0	4	FLOAT			
+ItemDurabilityCostScalar	8	1	4	4	FLOAT			
+ItemDurabilityCostScalarsTable	16	0	0	8	SerializeData			
+ItemDurabilityCostScalarsTable	16	1	8	8	VARIABLEARRAY	ItemDurabilityCostScalar		
+ScriptedAchievementEvent	24	0	0	8	SerializeData			
+ScriptedAchievementEvent	24	1	8	8	VARIABLEARRAY	BYTE		
+ScriptedAchievementEvent	24	2	16	4	INT			
+ScriptedAchievementEvent	24	3	20	4	INT			
+ScriptedAchievementEventsTable	16	0	0	8	SerializeData			
+ScriptedAchievementEventsTable	16	1	8	8	VARIABLEARRAY	ScriptedAchievementEvent		
+RecipesTable	16	0	0	8	SerializeData			
+RecipesTable	16	1	8	8	VARIABLEARRAY	RecipeEntry		
+ConstraintParameters	236	0	0	4	INT			
+ConstraintParameters	236	1	4	4	INT			
+ConstraintParameters	236	2	8	4	INT			
+ConstraintParameters	236	3	12	4	INT			
+ConstraintParameters	236	4	16	4	INT			
+ConstraintParameters	236	5	20	4	INT			
+ConstraintParameters	236	6	24	28	PRTransform			
+ConstraintParameters	236	7	52	12	VECTOR3D			
+ConstraintParameters	236	8	64	28	PRTransform			
+ConstraintParameters	236	9	92	28	PRTransform			
+ConstraintParameters	236	10	120	4	FLOAT			
+ConstraintParameters	236	11	124	4	FLOAT			
+ConstraintParameters	236	12	128	4	FLOAT			
+ConstraintParameters	236	13	132	4	FLOAT			
+ConstraintParameters	236	14	136	4	FLOAT			
+ConstraintParameters	236	15	140	4	FLOAT			
+ConstraintParameters	236	16	144	4	FLOAT			
+ConstraintParameters	236	17	148	4	FLOAT			
+ConstraintParameters	236	18	152	4	FLOAT			
+ConstraintParameters	236	19	156	4	FLOAT			
+ConstraintParameters	236	20	160	4	FLOAT			
+ConstraintParameters	236	21	164	4	FLOAT			
+ConstraintParameters	236	22	168	4	FLOAT			
+ConstraintParameters	236	23	172	64	CHARARRAY		64	
+dmFloat3	12	0	0	4	FLOAT			
+dmFloat3	12	1	4	4	FLOAT			
+dmFloat3	12	2	8	4	FLOAT			

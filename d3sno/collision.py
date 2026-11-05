@@ -5,17 +5,17 @@ from __future__ import annotations
 import struct
 from dataclasses import dataclass, field
 
-from .binary import ByteView, FormatError, Pair
-from .sno import SnoHeader, parse_header
+from .binary import ByBuild, ByteView, FormatError, Pair
+from .sno import SnoHeader, parse_header, resolve_build
 from .transform import Vector
 
 LEAF = 3
-_MESH_SIZE = {"switch": 112, "ps3": 136}
-_NODE_SIZE = {"switch": 16, "ps3": 8}
-_TRIANGLE_SIZE = {"switch": 28, "ps3": 16}
+_MESH_SIZE = ByBuild({"switch": 112, "ps3": 136})
+_NODE_SIZE = ByBuild({"switch": 16, "ps3": 8})
+_TRIANGLE_SIZE = ByBuild({"switch": 28, "ps3": 16})
 _VERTEX_SIZE = 16
 # Field positions in a mesh record.
-_FIELDS = {
+_FIELDS = ByBuild({
     "switch": {
         "centre": 0x18, "half": 0x24, "scale": 0x30, "nodes": 0x3C, "vertices": 0x40,
         "triangles": 0x44, "height": 0x48, "vertex_pair": 0x50, "triangle_pair": 0x58,
@@ -26,7 +26,7 @@ _FIELDS = {
         "triangles": 0x4C, "entries": 0x54, "height": 0x5C, "vertex_pair": 0x60,
         "triangle_pair": 0x68, "node_pair": 0x78, "flags": 0x80, "material": 0x84,
     },
-}
+})
 
 
 @dataclass(frozen=True)
@@ -80,7 +80,7 @@ class CollisionFile:
 
 def _read_triangles(raw: bytes, build: str, order: str) -> list[Triangle]:
     result = []
-    if build == "switch":
+    if build != "ps3":
         for row in struct.iter_unpack(order + "6iHH", raw):
             result.append(Triangle(row[:3], row[3:6], row[6], row[7]))
     else:
@@ -91,7 +91,7 @@ def _read_triangles(raw: bytes, build: str, order: str) -> list[Triangle]:
 
 
 def _read_nodes(raw: bytes, build: str, order: str) -> list[TreeNode]:
-    if build == "switch":
+    if build != "ps3":
         return [
             TreeNode(row[6], row[:3], row[3:6], None, None)
             for row in struct.iter_unpack(order + "6hI", raw)
@@ -104,7 +104,7 @@ def _read_nodes(raw: bytes, build: str, order: str) -> list[TreeNode]:
 
 def _walk_tree(nodes: list[TreeNode], build: str, position: int) -> list[int]:
     """Visit the tree and return the triangle index of every leaf slot, in leaf order."""
-    shift = 6 if build == "switch" else 2
+    shift = 6 if build != "ps3" else 2
     leaves: list[int] = []
     seen: set[int] = set()
     pending = [0] if nodes else []
@@ -118,7 +118,7 @@ def _walk_tree(nodes: list[TreeNode], build: str, position: int) -> list[int]:
         node = nodes[index]
         if node.is_leaf:
             first = node.data >> shift
-            count = (node.data >> 2) & 15 if build == "switch" else node.a
+            count = (node.data >> 2) & 15 if build != "ps3" else node.a
             leaves.extend(range(first, first + count))
         else:
             right = node.data >> shift
@@ -165,7 +165,7 @@ def _read_mesh(view: ByteView, raw: bytes, build: str, base: int, warnings: list
         warnings.append(f"mesh {index}: a triangle lies in more than one leaf")
     if len(set(leaves)) != triangle_count:
         warnings.append(f"mesh {index}: leaves hold {len(set(leaves))} of {triangle_count} triangles")
-    triangles = table if build == "switch" else [table[i] for i in dict.fromkeys(leaves)]
+    triangles = table if build != "ps3" else [table[i] for i in dict.fromkeys(leaves)]
     for triangle in triangles:
         if not all(0 <= v < vertex_count for v in triangle.vertices):
             raise FormatError(f"triangle vertex {triangle.vertices} of {vertex_count}", base)
@@ -178,7 +178,7 @@ def _read_mesh(view: ByteView, raw: bytes, build: str, base: int, warnings: list
 def parse_collision(data: bytes, build: str | None = None, strict: bool = False) -> CollisionFile:
     """Read a ``.phm``. A triangle not in exactly one leaf is a warning, unless ``strict``."""
     header = parse_header(data, build)
-    resolved = header.build
+    resolved = resolve_build("phm", header, build)
     view = ByteView(data, header.order)
     count = view.i32(0x20, "mesh count")
     pair = view.pair(0x24, "meshes pair")

@@ -1,0 +1,1090 @@
+enum	value	name	source
+tag_record_type	-1	TAGVARIANTTYPE_NONE	game enum
+tag_record_type	0	TAGVARIANTTYPE_INT	game enum
+tag_record_type	1	TAGVARIANTTYPE_FLOAT	game enum
+tag_record_type	2	TAGVARIANTTYPE_SNO	game enum
+tag_record_type	3	TAGVARIANTTYPE_GBID	game enum
+tag_record_type	4	TAGVARIANTTYPE_FORMULA	game enum
+tag_record_type	5	TAGVARIANTTYPE_ACTOR_GROUP	game enum
+tag_record_type	6	TAGVARIANTTYPE_ACTOR_ATTRIBUTE	game enum
+tag_record_type	7	TAGVARIANTTYPE_STARTLOC_NAME	game enum
+skill_category	-1	SKILLCAT_INVALID	game enum (switch)
+skill_category	0	SKILLCAT_BARB_1	game enum (switch)
+skill_category	1	SKILLCAT_BARB_2	game enum (switch)
+skill_category	2	SKILLCAT_BARB_3	game enum (switch)
+skill_category	3	SKILLCAT_WIZ_1	game enum (switch)
+skill_category	4	SKILLCAT_WIZ_2	game enum (switch)
+skill_category	5	SKILLCAT_WIZ_3	game enum (switch)
+skill_category	6	SKILLCAT_WITCHDOC_1	game enum (switch)
+skill_category	7	SKILLCAT_WITCHDOC_2	game enum (switch)
+skill_category	8	SKILLCAT_WITCHDOC_3	game enum (switch)
+skill_category	9	SKILLCAT_DHUNTER_1	game enum (switch)
+skill_category	10	SKILLCAT_DHUNTER_2	game enum (switch)
+skill_category	11	SKILLCAT_DHUNTER_3	game enum (switch)
+skill_category	12	SKILLCAT_MONK_1	game enum (switch)
+skill_category	13	SKILLCAT_MONK_2	game enum (switch)
+skill_category	14	SKILLCAT_MONK_3	game enum (switch)
+skill_category	15	SKILLCAT_BARB_4	game enum (switch)
+skill_category	16	SKILLCAT_BARB_5	game enum (switch)
+skill_category	17	SKILLCAT_BARB_6	game enum (switch)
+skill_category	18	SKILLCAT_WIZ_4	game enum (switch)
+skill_category	19	SKILLCAT_WIZ_5	game enum (switch)
+skill_category	20	SKILLCAT_WIZ_6	game enum (switch)
+skill_category	21	SKILLCAT_WITCHDOC_4	game enum (switch)
+skill_category	22	SKILLCAT_WITCHDOC_5	game enum (switch)
+skill_category	23	SKILLCAT_WITCHDOC_6	game enum (switch)
+skill_category	24	SKILLCAT_DHUNTER_4	game enum (switch)
+skill_category	25	SKILLCAT_DHUNTER_5	game enum (switch)
+skill_category	26	SKILLCAT_DHUNTER_6	game enum (switch)
+skill_category	27	SKILLCAT_MONK_4	game enum (switch)
+skill_category	28	SKILLCAT_MONK_5	game enum (switch)
+skill_category	29	SKILLCAT_MONK_6	game enum (switch)
+skill_category	30	SKILLCAT_CRUSADER_1	game enum (switch)
+skill_category	31	SKILLCAT_CRUSADER_2	game enum (switch)
+skill_category	32	SKILLCAT_CRUSADER_3	game enum (switch)
+skill_category	33	SKILLCAT_CRUSADER_4	game enum (switch)
+skill_category	34	SKILLCAT_CRUSADER_5	game enum (switch)
+skill_category	35	SKILLCAT_CRUSADER_6	game enum (switch)
+skill_category	36	SKILLCAT_NECROMANCER_1	game enum (switch)
+skill_category	37	SKILLCAT_NECROMANCER_2	game enum (switch)
+skill_category	38	SKILLCAT_NECROMANCER_3	game enum (switch)
+skill_category	39	SKILLCAT_NECROMANCER_4	game enum (switch)
+skill_category	40	SKILLCAT_NECROMANCER_5	game enum (switch)
+skill_category	41	SKILLCAT_NECROMANCER_6	game enum (switch)
+skill_category	42	NUM_SKILL_CATEGORIES	game enum (switch)
+lore_category	-1	LORECAT_LATEST	game enum
+lore_category	0	LORECAT_QUEST	game enum
+lore_category	1	LORECAT_WORLD	game enum
+lore_category	2	LORECAT_PEOPLE	game enum
+lore_category	3	LORECAT_BESTIARY	game enum
+lore_category	4	NUM_LORE_CATEGORIES	game enum
+script_event	-1	Invalid	game symbol table (switch ids)
+script_event	0	Actor Killed	game symbol table (switch ids)
+script_event	1	Actor Damaged	game symbol table (switch ids)
+script_event	2	Actor Sighted	game symbol table (switch ids)
+script_event	3	Actor Scored Critical Hit	game symbol table (switch ids)
+script_event	4	Actor Spawned By Spawner	game symbol table (switch ids)
+script_event	5	Actor Health Entered Range	game symbol table (switch ids)
+script_event	6	Actor Reached Path Node	game symbol table (switch ids)
+script_event	7	Actor Activated	game symbol table (switch ids)
+script_event	8	Actor Rerolled Inventory	game symbol table (switch ids)
+script_event	9	Conversation Started	game symbol table (switch ids)
+script_event	10	Conversation Finished	game symbol table (switch ids)
+script_event	11	Heart Beat	game symbol table (switch ids)
+script_event	12	Game Time	game symbol table (switch ids)
+script_event	13	Player Entered Game	game symbol table (switch ids)
+script_event	14	Player Left Game	game symbol table (switch ids)
+script_event	15	Player Picked Up Item	game symbol table (switch ids)
+script_event	16	Player Dropped Item	game symbol table (switch ids)
+script_event	17	Player Kill Counter	game symbol table (switch ids)
+script_event	18	Player Town Portal	game symbol table (switch ids)
+script_event	19	Hireling Equipped Item	game symbol table (switch ids)
+script_event	20	Loot Dropped	game symbol table (switch ids)
+script_event	21	Gizmo Operate	game symbol table (switch ids)
+script_event	21	Gizmo Operated	game symbol table (switch ids)
+script_event	22	Gizmo Can Operate	game symbol table (switch ids)
+script_event	23	Helper Attached	game symbol table (switch ids)
+script_event	24	Helper Dismissed	game symbol table (switch ids)
+script_event	25	Helper Guard Object	game symbol table (switch ids)
+script_event	26	Hireling Learned Skill	game symbol table (switch ids)
+script_event	27	User Event	game symbol table (switch ids)
+script_event	28	Quest Step Assigned	game symbol table (switch ids)
+script_event	29	Quest Step Completed	game symbol table (switch ids)
+script_event	30	Quest Objective Progressed	game symbol table (switch ids)
+script_event	31	Quest Objective Completed	game symbol table (switch ids)
+script_event	32	Quest Range Changed	game symbol table (switch ids)
+script_event	33	Quest Timer Running Out	game symbol table (switch ids)
+script_event	34	Quest Completed	game symbol table (switch ids)
+script_event	35	AIQueue Empty	game symbol table (switch ids)
+script_event	36	AIQueue Action Complete	game symbol table (switch ids)
+script_event	37	Group Killed	game symbol table (switch ids)
+script_event	38	Player Entered World	game symbol table (switch ids)
+script_event	39	Player Entered Level Area	game symbol table (switch ids)
+script_event	40	Player In Range of Actor	game symbol table (switch ids)
+script_event	41	Trigger On Actor Entered	game symbol table (switch ids)
+script_event	42	Trigger On Actor Exited	game symbol table (switch ids)
+script_event	43	Trigger Pulse Actors In Bounds	game symbol table (switch ids)
+script_event	44	Timed Event Time Elapsed	game symbol table (switch ids)
+script_event	45	Timed Event Time Remaining	game symbol table (switch ids)
+script_event	46	Gate Gizmo Opened	game symbol table (switch ids)
+script_event	47	On World Deleted	game symbol table (switch ids)
+script_event	48	Actor Healed	game symbol table (switch ids)
+script_event	49	Actor Leveled	game symbol table (switch ids)
+script_event	50	Actor Resurrected	game symbol table (switch ids)
+script_event	51	Actor Used Power	game symbol table (switch ids)
+script_event	52	Boss Encounter Reset	game symbol table (switch ids)
+script_event	53	Door Completely Opened	game symbol table (switch ids)
+script_event	54	Player Skipped Sequence	game symbol table (switch ids)
+script_event	55	Changed Act	game symbol table (switch ids)
+script_event	56	Hireling Hired	game symbol table (switch ids)
+script_event	57	Hireling Dismissed	game symbol table (switch ids)
+script_event	58	NPC Vendor Operated	game symbol table (switch ids)
+script_event	59	Devil's Hand Tracking	game symbol table (switch ids)
+script_event	60	Player Entered Horadric Quest Level Area	game symbol table (switch ids)
+script_filter_kind	0	SCRIPT_EVENT_VARIANT_PARAM_NONE	game enum
+script_filter_kind	1	SCRIPT_EVENT_VARIANT_PARAM_DWORD	game enum
+script_filter_kind	2	SCRIPT_EVENT_VARIANT_PARAM_FLOAT	game enum
+script_filter_kind	3	SCRIPT_EVENT_VARIANT_PARAM_FLOAT_RANGE_ENTERED	game enum
+script_filter_kind	4	SCRIPT_EVENT_VARIANT_PARAM_ACTOR_SNO	game enum
+script_filter_kind	5	SCRIPT_EVENT_VARIANT_PARAM_MONSTER_SNO	game enum
+script_filter_kind	6	SCRIPT_EVENT_VARIANT_PARAM_LEVEL_AREA_SNO	game enum
+script_filter_kind	7	SCRIPT_EVENT_VARIANT_PARAM_STRING_HASH	game enum
+script_filter_kind	8	SCRIPT_EVENT_VARIANT_PARAM_PLAYER	game enum
+script_filter_kind	9	SCRIPT_EVENT_VARIANT_PARAM_PLAYER_ALLY	game enum
+script_filter_kind	10	SCRIPT_EVENT_VARIANT_PARAM_SCENE_SNO	game enum
+script_filter_kind	11	SCRIPT_EVENT_VARIANT_PARAM_CONVERSATION	game enum
+script_filter_kind	12	SCRIPT_EVENT_VARIANT_PARAM_SELF	game enum
+script_filter_kind	13	SCRIPT_EVENT_VARIANT_PARAM_GAME_TIME	game enum
+script_filter_kind	14	SCRIPT_EVENT_VARIANT_PARAM_ANIM_TAG	game enum
+script_filter_kind	15	SCRIPT_EVENT_VARIANT_PARAM_QUEST_NAME	game enum
+script_filter_kind	16	SCRIPT_EVENT_VARIANT_PARAM_TIME_INTERVAL	game enum
+script_filter_kind	17	SCRIPT_EVENT_VARIANT_PARAM_PRIMARY_GROUP	game enum
+script_filter_kind	18	SCRIPT_EVENT_VARIANT_PARAM_SECONDARY_GROUP	game enum
+script_filter_kind	19	SCRIPT_EVENT_VARIANT_PARAM_ITEM_GBID	game enum
+script_filter_kind	20	SCRIPT_EVENT_VARIANT_PARAM_LINKED_MARKER_ANY	game enum
+script_filter_kind	21	SCRIPT_EVENT_VARIANT_PARAM_LINKED_MARKER_IN_GROUP	game enum
+script_filter_kind	22	SCRIPT_EVENT_VARIANT_PARAM_FLOAT_RANGE_INSIDE	game enum
+script_filter_kind	23	SCRIPT_EVENT_VARIANT_PARAM_TIMED_EVENT_SNO	game enum
+script_filter_kind	24	SCRIPT_EVENT_VARIANT_PARAM_SPAWNER_PARENT_NAME	game enum
+script_filter_kind	25	SCRIPT_EVENT_VARIANT_PARAM_SPAWNER_PARENT_SELF	game enum
+script_filter_kind	26	SCRIPT_EVENT_VARIANT_PARAM_WORLD_SNO	game enum
+script_filter_kind	27	SCRIPT_EVENT_VARIANT_PARAM_POWER_SNO	game enum
+script_filter_kind	28	SCRIPT_EVENT_VARIANT_PARAM_QUESTRANGE	game enum
+script_filter_kind	29	SCRIPT_EVENT_VARIANT_PARAM_GIZMO_TYPE	game enum
+script_filter_kind	30	SCRIPT_EVENT_VARIANT_PARAM_BOSS_ENCOUNTER_SNO	game enum
+script_filter_kind	31	SCRIPT_EVENT_NUM_VARIANT_PARAM_TYPES	game enum
+game_balance_type	1	Item Types	game symbol table
+game_balance_type	2	Items	game symbol table
+game_balance_type	3	Experience Table	game symbol table
+game_balance_type	4	Hirelings	game symbol table
+game_balance_type	5	Monster Levels	game symbol table
+game_balance_type	7	Heros	game symbol table
+game_balance_type	8	Affix List	game symbol table
+game_balance_type	10	Movement Styles	game symbol table
+game_balance_type	11	Labels	game symbol table
+game_balance_type	12	Loot Distribution	game symbol table
+game_balance_type	16	Rare Item Names	game symbol table
+game_balance_type	17	Scenery	game symbol table
+game_balance_type	18	Monster Affixes	game symbol table
+game_balance_type	19	Monster Names	game symbol table
+game_balance_type	21	Socketed Effects	game symbol table
+game_balance_type	24	Help Codes	game symbol table
+game_balance_type	25	Item Drop Table	game symbol table
+game_balance_type	26	Item Level Modifiers	game symbol table
+game_balance_type	27	Quality Classes	game symbol table
+game_balance_type	28	Handicaps	game symbol table
+game_balance_type	29	Item Salvage Levels	game symbol table
+game_balance_type	32	Recipes	game symbol table
+game_balance_type	33	Set Item Bonuses	game symbol table
+game_balance_type	34	Elite Modifiers	game symbol table
+game_balance_type	35	Item Tiers	game symbol table
+game_balance_type	36	Power Formula Tables	game symbol table
+game_balance_type	37	Scripted Achievement Events	game symbol table
+game_balance_type	39	LootRun Quest Tiers	game symbol table
+game_balance_type	40	Paragon Bonuses	game symbol table
+game_balance_type	45	Legacy Item Conversions	game symbol table
+game_balance_type	46	Enchant Item Affix Use Count Cost Scalars	game symbol table
+game_balance_type	49	Tiered Loot Run Levels	game symbol table
+game_balance_type	50	Transmute Recipes	game symbol table
+game_balance_type	51	Currency Conversions	game symbol table
+game_balance_type	23	Item Enhancements	ps3 only, from file name ItemEnhancements.gam
+game_balance_type	9	Inventory	from file names; no rows in 9 and -1
+game_balance_type	-1	Axe Bad Data	from file names; no rows in 9 and -1
+game_balance_type	48	Experience Table Alt	from file names; no rows in 9 and -1
+script_filter_kind	-1	(unused slot)	data: value, second value and string empty in every use
+power_bit	0	POWERBIT_PASSABILITY_DURING_ENABLED	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	1	POWERBIT_PASSABILITY_DEST_ENABLED	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	2	POWERBIT_CONTACTFRAME_ENABLED_FIRST	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	3	POWERBIT_CONTACTFRAME_ENABLED_SECOND	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	4	POWERBIT_CONTACTFRAME_ENABLED_THIRD	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	5	POWERBIT_CONTACTFRAME_ENABLED_LAST	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	6	POWERBIT_REQUIRES_WALKING_PATH_TO_TARGET	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	7	POWERBIT_CONSOLE_MOVES_FORWARD_NO_TARGET	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	8	POWERBIT_CONSOLE_TARGET_AREA_GROWS	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	9	POWERBIT_CONSOLE_ALLOW_WALK_BETWEEN_CASTS	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	10	POWERBIT_CONSOLE_USE_RADIAL_TARGETING	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	11	POWERBIT_CONSOLE_USE_CONE_TARGETING	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	12	POWERBIT_CONSOLE_USE_SECONDARY_TARGETING	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	13	POWERBIT_CONSOLE_PREFER_RADIAL_TARGETING	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	14	POWERBIT_DEPRECATED_CONSOLE_PREFER_CONE_TARGETING	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	15	POWERBIT_CONSOLE_ON_BUTTON_UP_ONLY	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+power_bit	16	POWERBIT_CONSOLE_TARGET_RANGE_GROWS	game enum; 3 and 4 named by position between FIRST (2) and LAST (5)
+sno_group	-2	SNOGROUP_CODE	game enum
+sno_group	-1	SNOGROUP_NONE	game enum
+sno_group	1	ACTOR_SNO	game enum
+sno_group	2	ADVENTURE_SNO	game enum
+sno_group	3	AIBEHAVIOR_SNO	game enum
+sno_group	4	AISTATE_SNO	game enum
+sno_group	5	AMBIENTSOUND_SNO	game enum
+sno_group	6	ANIMATION_SNO	game enum
+sno_group	7	ANIMATION2D_SNO	game enum
+sno_group	8	ANIMSET_SNO	game enum
+sno_group	9	APPEARANCE_SNO	game enum
+sno_group	10	HERO_SNO	game enum
+sno_group	11	CLOTH_SNO	game enum
+sno_group	12	CONVERSATION_SNO	game enum
+sno_group	13	CONVERSATIONLIST_SNO	game enum
+sno_group	14	EFFECTGROUP_SNO	game enum
+sno_group	15	ENCOUNTER_SNO	game enum
+sno_group	17	EXPLOSION_SNO	game enum
+sno_group	18	FLAGSET_SNO	game enum
+sno_group	19	FONT_SNO	game enum
+sno_group	20	GAMEBALANCE_SNO	game enum
+sno_group	21	GLOBAL_SNO	game enum
+sno_group	22	LEVELAREA_SNO	game enum
+sno_group	23	LIGHT_SNO	game enum
+sno_group	24	MARKERSET_SNO	game enum
+sno_group	25	MONSTER_SNO	game enum
+sno_group	26	OBSERVER_SNO	game enum
+sno_group	27	PARTICLE_SNO	game enum
+sno_group	28	PHYSICS_SNO	game enum
+sno_group	29	POWER_SNO	game enum
+sno_group	31	QUEST_SNO	game enum
+sno_group	32	ROPE_SNO	game enum
+sno_group	33	SCENE_SNO	game enum
+sno_group	34	SCENEGROUP_SNO	game enum
+sno_group	35	SCRIPT_SNO	game enum
+sno_group	36	SHADERMAP_SNO	game enum
+sno_group	37	SHADER_SNO	game enum
+sno_group	38	SHAKE_SNO	game enum
+sno_group	39	SKILLKIT_SNO	game enum
+sno_group	40	SOUND_SNO	game enum
+sno_group	41	SOUNDBANK_SNO	game enum
+sno_group	42	STRINGLIST_SNO	game enum
+sno_group	43	SURFACE_SNO	game enum
+sno_group	44	TEXTURE_SNO	game enum
+sno_group	45	TRAIL_SNO	game enum
+sno_group	46	UI_SNO	game enum
+sno_group	47	WEATHER_SNO	game enum
+sno_group	48	WORLD_SNO	game enum
+sno_group	49	RECIPE_SNO	game enum
+sno_group	51	CONDITION_SNO	game enum
+sno_group	52	TREASURECLASS_SNO	game enum
+sno_group	53	ACCOUNT_SNO	game enum
+sno_group	54	CONDUCTOR_SNO	game enum
+sno_group	55	TIMEDEVENT_SNO	game enum
+sno_group	56	ACT_SNO	game enum
+sno_group	57	MATERIAL_SNO	game enum
+sno_group	58	QUESTRANGE_SNO	game enum
+sno_group	59	LORE_SNO	game enum
+sno_group	60	REVERB_SNO	game enum
+sno_group	61	PHYSMESH_SNO	game enum
+sno_group	62	MUSIC_SNO	game enum
+sno_group	63	TUTORIAL_SNO	game enum
+sno_group	64	BOSS_ENCOUNTER_SNO	game enum
+sno_group	65	CONTROL_SCHEME_SNO	game enum
+sno_group	66	ACCOLADE_SNO	game enum
+sno_group	67	ANIMTREE_SNO	game enum
+sno_group	68	VIBRATION_SNO	game enum
+sno_group	69	DUNGEONFINDER_SNO	game enum
+sno_group	70	MAX_SNO_GROUPS	game enum
+formula_opcode	0	BBE_END	game enum
+formula_opcode	1	BBE_FUNC	game enum
+formula_opcode	2	BBE_PAREN	game enum
+formula_opcode	3	BBE_COMMA	game enum
+formula_opcode	4	BBE_IDEN_FLOAT	game enum
+formula_opcode	5	BBE_IDEN_LONG	game enum
+formula_opcode	6	BBE_CONST_FLOAT	game enum
+formula_opcode	7	BBE_OP_LT	game enum
+formula_opcode	8	BBE_OP_GT	game enum
+formula_opcode	9	BBE_OP_EQ	game enum
+formula_opcode	10	BBE_OP_NEQ	game enum
+formula_opcode	11	BBE_OP_ADD	game enum
+formula_opcode	12	BBE_OP_SUB	game enum
+formula_opcode	13	BBE_OP_MUL	game enum
+formula_opcode	14	BBE_OP_DIV	game enum
+formula_opcode	15	BBE_OP_POW	game enum
+formula_opcode	16	BBE_OP_NEG	game enum
+formula_opcode	17	BBE_OP_TERNARY	game enum
+formula_opcode	18	BBE_LAST	game enum
+formula_function	0	Min	game function table
+formula_function	1	Max	game function table
+formula_function	2	Pin	game function table
+formula_function	3	RangeInt	game function table
+formula_function	4	RandomInt	game function table
+formula_function	5	FLOOR	game function table
+formula_function	6	Dim	game function table
+formula_function	7	Pow	game function table
+formula_function	8	Log	game function table
+formula_function	9	RangeFloat	game function table
+formula_function	10	RandomFloat	game function table
+formula_function	11	Table	game function table
+formula_identifier_class_switch	0	BBE_IDENTIFIER_FAST_ATTRIB	game enum (switch numbering)
+formula_identifier_class_switch	1	BBE_IDENTIFIER_SKILL_LEVEL	game enum (switch numbering)
+formula_identifier_class_switch	2	BBE_IDENTIFIER_ITEM_LEVEL	game enum (switch numbering)
+formula_identifier_class_switch	3	BBE_IDENTIFIER_GIZMO_LEVEL	game enum (switch numbering)
+formula_identifier_class_switch	4	BBE_IDENTIFIER_SKILL_LEVEL_PREVIOUS	game enum (switch numbering)
+formula_identifier_class_switch	5	BBE_IDENTIFIER_MONSTER_DAMAGE_TYPE	game enum (switch numbering)
+formula_identifier_class_switch	6	BBE_IDENTIFIER_MONSTER_DAMAGE_MIN_PHYSICAL	game enum (switch numbering)
+formula_identifier_class_switch	7	BBE_IDENTIFIER_MONSTER_DAMAGE_DELTA_PHYSICAL	game enum (switch numbering)
+formula_identifier_class_switch	8	BBE_IDENTIFIER_MONSTER_DAMAGE_MIN_FIRE	game enum (switch numbering)
+formula_identifier_class_switch	9	BBE_IDENTIFIER_MONSTER_DAMAGE_DELTA_FIRE	game enum (switch numbering)
+formula_identifier_class_switch	10	BBE_IDENTIFIER_MONSTER_DAMAGE_MIN_LIGHTNING	game enum (switch numbering)
+formula_identifier_class_switch	11	BBE_IDENTIFIER_MONSTER_DAMAGE_DELTA_LIGHTNING	game enum (switch numbering)
+formula_identifier_class_switch	12	BBE_IDENTIFIER_MONSTER_DAMAGE_MIN_COLD	game enum (switch numbering)
+formula_identifier_class_switch	13	BBE_IDENTIFIER_MONSTER_DAMAGE_DELTA_COLD	game enum (switch numbering)
+formula_identifier_class_switch	14	BBE_IDENTIFIER_MONSTER_DAMAGE_MIN_POISON	game enum (switch numbering)
+formula_identifier_class_switch	15	BBE_IDENTIFIER_MONSTER_DAMAGE_DELTA_POISON	game enum (switch numbering)
+formula_identifier_class_switch	16	BBE_IDENTIFIER_MONSTER_DAMAGE_MIN_ARCANE	game enum (switch numbering)
+formula_identifier_class_switch	17	BBE_IDENTIFIER_MONSTER_DAMAGE_DELTA_ARCANE	game enum (switch numbering)
+formula_identifier_class_switch	18	BBE_IDENTIFIER_MONSTER_DAMAGE_MIN_HOLY	game enum (switch numbering)
+formula_identifier_class_switch	19	BBE_IDENTIFIER_MONSTER_DAMAGE_DELTA_HOLY	game enum (switch numbering)
+formula_identifier_class_switch	20	BBE_IDENTIFIER_MONSTER_DAMAGE_MIN_SIEGE	game enum (switch numbering)
+formula_identifier_class_switch	21	BBE_IDENTIFIER_MONSTER_DAMAGE_DELTA_SIEGE	game enum (switch numbering)
+formula_identifier_class_switch	22	BBE_IDENTIFIER_POWER_TAG	game enum (switch numbering)
+formula_identifier_class_switch	23	BBE_IDENTIFIER_SCRIPT_FORMULA_0	game enum (switch numbering)
+formula_identifier_class_switch	24	BBE_IDENTIFIER_SCRIPT_FORMULA_1	game enum (switch numbering)
+formula_identifier_class_switch	25	BBE_IDENTIFIER_SCRIPT_FORMULA_2	game enum (switch numbering)
+formula_identifier_class_switch	26	BBE_IDENTIFIER_SCRIPT_FORMULA_3	game enum (switch numbering)
+formula_identifier_class_switch	27	BBE_IDENTIFIER_SCRIPT_FORMULA_4	game enum (switch numbering)
+formula_identifier_class_switch	28	BBE_IDENTIFIER_SCRIPT_FORMULA_5	game enum (switch numbering)
+formula_identifier_class_switch	29	BBE_IDENTIFIER_SCRIPT_FORMULA_6	game enum (switch numbering)
+formula_identifier_class_switch	30	BBE_IDENTIFIER_SCRIPT_FORMULA_7	game enum (switch numbering)
+formula_identifier_class_switch	31	BBE_IDENTIFIER_SCRIPT_FORMULA_8	game enum (switch numbering)
+formula_identifier_class_switch	32	BBE_IDENTIFIER_SCRIPT_FORMULA_9	game enum (switch numbering)
+formula_identifier_class_switch	33	BBE_IDENTIFIER_SCRIPT_FORMULA_10	game enum (switch numbering)
+formula_identifier_class_switch	34	BBE_IDENTIFIER_SCRIPT_FORMULA_11	game enum (switch numbering)
+formula_identifier_class_switch	35	BBE_IDENTIFIER_SCRIPT_FORMULA_12	game enum (switch numbering)
+formula_identifier_class_switch	36	BBE_IDENTIFIER_SCRIPT_FORMULA_13	game enum (switch numbering)
+formula_identifier_class_switch	37	BBE_IDENTIFIER_SCRIPT_FORMULA_14	game enum (switch numbering)
+formula_identifier_class_switch	38	BBE_IDENTIFIER_SCRIPT_FORMULA_15	game enum (switch numbering)
+formula_identifier_class_switch	39	BBE_IDENTIFIER_SCRIPT_FORMULA_16	game enum (switch numbering)
+formula_identifier_class_switch	40	BBE_IDENTIFIER_SCRIPT_FORMULA_17	game enum (switch numbering)
+formula_identifier_class_switch	41	BBE_IDENTIFIER_SCRIPT_FORMULA_18	game enum (switch numbering)
+formula_identifier_class_switch	42	BBE_IDENTIFIER_SCRIPT_FORMULA_19	game enum (switch numbering)
+formula_identifier_class_switch	43	BBE_IDENTIFIER_SCRIPT_FORMULA_20	game enum (switch numbering)
+formula_identifier_class_switch	44	BBE_IDENTIFIER_SCRIPT_FORMULA_21	game enum (switch numbering)
+formula_identifier_class_switch	45	BBE_IDENTIFIER_SCRIPT_FORMULA_22	game enum (switch numbering)
+formula_identifier_class_switch	46	BBE_IDENTIFIER_SCRIPT_FORMULA_23	game enum (switch numbering)
+formula_identifier_class_switch	47	BBE_IDENTIFIER_SCRIPT_FORMULA_24	game enum (switch numbering)
+formula_identifier_class_switch	48	BBE_IDENTIFIER_SCRIPT_FORMULA_25	game enum (switch numbering)
+formula_identifier_class_switch	49	BBE_IDENTIFIER_SCRIPT_FORMULA_26	game enum (switch numbering)
+formula_identifier_class_switch	50	BBE_IDENTIFIER_SCRIPT_FORMULA_27	game enum (switch numbering)
+formula_identifier_class_switch	51	BBE_IDENTIFIER_SCRIPT_FORMULA_28	game enum (switch numbering)
+formula_identifier_class_switch	52	BBE_IDENTIFIER_SCRIPT_FORMULA_29	game enum (switch numbering)
+formula_identifier_class_switch	53	BBE_IDENTIFIER_SCRIPT_FORMULA_30	game enum (switch numbering)
+formula_identifier_class_switch	54	BBE_IDENTIFIER_SCRIPT_FORMULA_31	game enum (switch numbering)
+formula_identifier_class_switch	55	BBE_IDENTIFIER_SCRIPT_FORMULA_32	game enum (switch numbering)
+formula_identifier_class_switch	56	BBE_IDENTIFIER_SCRIPT_FORMULA_33	game enum (switch numbering)
+formula_identifier_class_switch	57	BBE_IDENTIFIER_SCRIPT_FORMULA_34	game enum (switch numbering)
+formula_identifier_class_switch	58	BBE_IDENTIFIER_SCRIPT_FORMULA_35	game enum (switch numbering)
+formula_identifier_class_switch	59	BBE_IDENTIFIER_SCRIPT_FORMULA_36	game enum (switch numbering)
+formula_identifier_class_switch	60	BBE_IDENTIFIER_SCRIPT_FORMULA_37	game enum (switch numbering)
+formula_identifier_class_switch	61	BBE_IDENTIFIER_SCRIPT_FORMULA_38	game enum (switch numbering)
+formula_identifier_class_switch	62	BBE_IDENTIFIER_SCRIPT_FORMULA_39	game enum (switch numbering)
+formula_identifier_class_switch	63	BBE_IDENTIFIER_SCRIPT_FORMULA_40	game enum (switch numbering)
+formula_identifier_class_switch	64	BBE_IDENTIFIER_SCRIPT_FORMULA_41	game enum (switch numbering)
+formula_identifier_class_switch	65	BBE_IDENTIFIER_SCRIPT_FORMULA_42	game enum (switch numbering)
+formula_identifier_class_switch	66	BBE_IDENTIFIER_SCRIPT_FORMULA_43	game enum (switch numbering)
+formula_identifier_class_switch	67	BBE_IDENTIFIER_SCRIPT_FORMULA_44	game enum (switch numbering)
+formula_identifier_class_switch	68	BBE_IDENTIFIER_SCRIPT_FORMULA_45	game enum (switch numbering)
+formula_identifier_class_switch	69	BBE_IDENTIFIER_SCRIPT_FORMULA_46	game enum (switch numbering)
+formula_identifier_class_switch	70	BBE_IDENTIFIER_SCRIPT_FORMULA_47	game enum (switch numbering)
+formula_identifier_class_switch	71	BBE_IDENTIFIER_SCRIPT_FORMULA_48	game enum (switch numbering)
+formula_identifier_class_switch	72	BBE_IDENTIFIER_SCRIPT_FORMULA_49	game enum (switch numbering)
+formula_identifier_class_switch	73	BBE_IDENTIFIER_SCRIPT_FORMULA_50	game enum (switch numbering)
+formula_identifier_class_switch	74	BBE_IDENTIFIER_SCRIPT_FORMULA_51	game enum (switch numbering)
+formula_identifier_class_switch	75	BBE_IDENTIFIER_SCRIPT_FORMULA_52	game enum (switch numbering)
+formula_identifier_class_switch	76	BBE_IDENTIFIER_SCRIPT_FORMULA_53	game enum (switch numbering)
+formula_identifier_class_switch	77	BBE_IDENTIFIER_SCRIPT_FORMULA_54	game enum (switch numbering)
+formula_identifier_class_switch	78	BBE_IDENTIFIER_SCRIPT_FORMULA_55	game enum (switch numbering)
+formula_identifier_class_switch	79	BBE_IDENTIFIER_SCRIPT_FORMULA_56	game enum (switch numbering)
+formula_identifier_class_switch	80	BBE_IDENTIFIER_SCRIPT_FORMULA_57	game enum (switch numbering)
+formula_identifier_class_switch	81	BBE_IDENTIFIER_SCRIPT_FORMULA_58	game enum (switch numbering)
+formula_identifier_class_switch	82	BBE_IDENTIFIER_SCRIPT_FORMULA_59	game enum (switch numbering)
+formula_identifier_class_switch	83	BBE_IDENTIFIER_SCRIPT_FORMULA_60	game enum (switch numbering)
+formula_identifier_class_switch	84	BBE_IDENTIFIER_SCRIPT_FORMULA_61	game enum (switch numbering)
+formula_identifier_class_switch	85	BBE_IDENTIFIER_SCRIPT_FORMULA_62	game enum (switch numbering)
+formula_identifier_class_switch	86	BBE_IDENTIFIER_SCRIPT_FORMULA_63	game enum (switch numbering)
+formula_identifier_class_switch	87	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_DAMAGE_TIER_1	game enum (switch numbering)
+formula_identifier_class_switch	88	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_DAMAGE_TIER_2	game enum (switch numbering)
+formula_identifier_class_switch	89	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_DAMAGE_TIER_3	game enum (switch numbering)
+formula_identifier_class_switch	90	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_DAMAGE_TIER_4	game enum (switch numbering)
+formula_identifier_class_switch	91	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_DAMAGE_TIER_5	game enum (switch numbering)
+formula_identifier_class_switch	92	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_DAMAGE_TIER_6	game enum (switch numbering)
+formula_identifier_class_switch	93	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_DAMAGE_TIER_7	game enum (switch numbering)
+formula_identifier_class_switch	94	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_HEALING	game enum (switch numbering)
+formula_identifier_class_switch	95	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_WDCOST	game enum (switch numbering)
+formula_identifier_class_switch	96	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_RUNE_DAMAGE_BONUS	game enum (switch numbering)
+formula_identifier_class_switch	97	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_PVP_AVERAGE_PRIMARY_STAT	game enum (switch numbering)
+formula_identifier_class_switch	98	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_PVP_AVERAGE_VITALITY	game enum (switch numbering)
+formula_identifier_class_switch	99	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_PVP_AVERAGE_ARMOR	game enum (switch numbering)
+formula_identifier_class_switch	100	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_PVP_AVERAGE_WEAPON_DPS	game enum (switch numbering)
+formula_identifier_class_switch	101	BBE_IDENTIFIER_MONSTER_HEALTH_MIN	game enum (switch numbering)
+formula_identifier_class_switch	102	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_LEGENDARY_PROC_DMG	game enum (switch numbering)
+formula_identifier_class_switch	103	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_OFFHAND_DMG_MIN_MIN	game enum (switch numbering)
+formula_identifier_class_switch	104	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_OFFHAND_DMG_MIN_MAX	game enum (switch numbering)
+formula_identifier_class_switch	105	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_OFFHAND_DMG_DELTA_MIN	game enum (switch numbering)
+formula_identifier_class_switch	106	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_OFFHAND_DMG_DELTA_MAX	game enum (switch numbering)
+formula_identifier_class_switch	107	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_SHIELD_BLOCK_MIN_MIN	game enum (switch numbering)
+formula_identifier_class_switch	108	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_SHIELD_BLOCK_MIN_MAX	game enum (switch numbering)
+formula_identifier_class_switch	109	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_SHIELD_BLOCK_DELTA_MIN	game enum (switch numbering)
+formula_identifier_class_switch	110	BBE_IDENTIFIER_TABLE_FORMULA_INDEX_SHIELD_BLOCK_DELTA_MAX	game enum (switch numbering)
+formula_identifier_class_switch	111	BBE_IDENTIFIER_AREA_DAMAGE_MIN_PHYSICAL	game enum (switch numbering)
+formula_identifier_class_switch	112	BBE_IDENTIFIER_AREA_DAMAGE_DELTA_PHYSICAL	game enum (switch numbering)
+formula_identifier_class_switch	113	BBE_IDENTIFIER_TRAIT_ACTIVE	game enum (switch numbering)
+tag_value:gActs	-1	Invalid	game symbol table
+tag_value:gActs	0	A1	game symbol table
+tag_value:gActs	100	A2	game symbol table
+tag_value:gActs	200	A3	game symbol table
+tag_value:gActs	300	A4	game symbol table
+tag_value:gActs	400	A5	game symbol table
+tag_value:gActs	1000	Test	game symbol table
+tag_value:gActs	3000	OpenWorld	game symbol table
+tag_value:AppearanceFXFunction	0	APPEARANCE_FX_FUNC_NOP	game enum
+tag_value:AppearanceFXFunction	1	APPEARANCE_FX_FUNC_SINE	game enum
+tag_value:AppearanceFXFunction	2	APPEARANCE_FX_FUNC_LERP	game enum
+tag_value:AppearanceFXFunction	3	APPEARANCE_FX_FUNC_LOG	game enum
+tag_value:AppearanceFXFunction	4	APPEARANCE_FX_FUNC_EXP	game enum
+tag_value:AppearanceFXFunction	5	APPEARANCE_FX_FUNC_LINEAR_FADE	game enum
+tag_value:AppearanceFXFunction	6	APPEARANCE_FX_FUNC_RAND	game enum
+tag_value:AppearanceFXFunction	7	APPEARANCE_FX_FUNC_SET	game enum
+tag_value:gAIBehaviorTypes	-1	None	game symbol table
+tag_value:gAIBehaviorTypes	0	Normal	game symbol table
+tag_value:gAIBehaviorTypes	1	EscortFollow	game symbol table
+tag_value:gAIBehaviorTypes	2	EscortLead	game symbol table
+tag_value:gAIBehaviorTypes	3	GuardObject	game symbol table
+tag_value:gAIBehaviorTypes	4	Stalled	game symbol table
+tag_value:gActorBrainNames	-1	Undefined	game symbol table
+tag_value:gActorBrainNames	0	NoBrain	game symbol table
+tag_value:gActorBrainNames	1	Player	game symbol table
+tag_value:gActorBrainNames	2	Monster	game symbol table
+tag_value:gActorBrainNames	5	Spawner	game symbol table
+tag_value:gActorBrainNames	14	Do Nothing	game symbol table
+tag_value:gActorBrainNames	29	Resurrection Shrine	game symbol table
+tag_value:gActorBrainNames	49	Hireling	game symbol table
+tag_value:gActorBrainNames	66	Zombie	game symbol table
+tag_value:gActorBrainNames	73	Skeleton Summoner	game symbol table
+tag_value:gActorBrainNames	74	Siegebreaker Demon	game symbol table
+tag_value:gActorBrainNames	75	Skeleton ShieldBearer	game symbol table
+tag_value:gActorBrainNames	76	Triune Summoner	game symbol table
+tag_value:gActorBrainNames	77	Pig Caged	game symbol table
+tag_value:gActorBrainNames	78	Wood Wraith	game symbol table
+tag_value:gActorBrainNames	80	Triune Vessel	game symbol table
+tag_value:gActorBrainNames	81	Triune Berserker	game symbol table
+tag_value:gActorBrainNames	82	Spore Pod	game symbol table
+tag_value:gActorBrainNames	84	Wizard Tornado	game symbol table
+tag_value:gActorBrainNames	85	Fallen Shaman	game symbol table
+tag_value:gActorBrainNames	86	Sand Tornado	game symbol table
+tag_value:gActorBrainNames	87	Sentry	game symbol table
+tag_value:gActorBrainNames	90	Hireling Proxy	game symbol table
+tag_value:gActorBrainNames	91	Vendor With Attract	game symbol table
+tag_value:gActorBrainNames	83	ACTORBRAIN_MIRROR_IMAGE	game symbol table
+tag_value:gActorBrainNames	92	ACTORBRAIN_NUM_BRAINS	game symbol table
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	0	BUFF_STACKTYPE_NEVER	game enum
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	1	BUFF_STACKTYPE_ALWAYS	game enum
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	2	BUFF_STACKTYPE_ONE_PER_SOURCE	game enum
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	3	BUFF_STACKTYPE_LONGEST	game enum
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	4	BUFF_STACKTYPE_REFRESH	game enum
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	5	BUFF_STACKTYPE_EXTEND	game enum
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	6	BUFF_STACKTYPE_EXISTING	game enum
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	7	BUFF_STACKTYPE_ONE_PER_SOURCE_REFRESH	game enum
+tag_value:<anon_enum:BUFF_STACKTYPE_NEVER>	8	BUFF_STACKTYPE_COUNT	game enum
+tag_value:<anon_enum:CHARGE_STEERING_NONE>	0	CHARGE_STEERING_NONE	game enum
+tag_value:<anon_enum:CHARGE_STEERING_NONE>	1	CHARGE_STEERING_WITH_PATHING	game enum
+tag_value:<anon_enum:CHARGE_STEERING_NONE>	2	CHARGE_STEERING_DYNAMIC_ONLY	game enum
+tag_value:gComponentLooks	-2104614664	Unique01	game symbol table
+tag_value:gComponentLooks	-2104614663	Unique02	game symbol table
+tag_value:gComponentLooks	-2104614662	Unique03	game symbol table
+tag_value:gComponentLooks	-2104614661	Unique04	game symbol table
+tag_value:gComponentLooks	-2104614660	Unique05	game symbol table
+tag_value:gComponentLooks	-2104614659	Unique06	game symbol table
+tag_value:gComponentLooks	-2104614658	Unique07	game symbol table
+tag_value:gComponentLooks	-2104614657	Unique08	game symbol table
+tag_value:gComponentLooks	-2104614656	Unique09	game symbol table
+tag_value:gComponentLooks	-2104614632	Unique10	game symbol table
+tag_value:gComponentLooks	-2104614631	Unique11	game symbol table
+tag_value:gComponentLooks	-2104614630	Unique12	game symbol table
+tag_value:gComponentLooks	-2104614629	Unique13	game symbol table
+tag_value:gComponentLooks	-2104614628	Unique14	game symbol table
+tag_value:gComponentLooks	-2104614627	Unique15	game symbol table
+tag_value:gComponentLooks	-2104614626	Unique16	game symbol table
+tag_value:gComponentLooks	-2104614625	Unique17	game symbol table
+tag_value:gComponentLooks	-2104614624	Unique18	game symbol table
+tag_value:gComponentLooks	-2104614623	Unique19	game symbol table
+tag_value:gComponentLooks	-2104614599	Unique20	game symbol table
+tag_value:gComponentLooks	-2104614598	Unique21	game symbol table
+tag_value:gComponentLooks	-2104614597	Unique22	game symbol table
+tag_value:gComponentLooks	-2104614596	Unique23	game symbol table
+tag_value:gComponentLooks	-2104614595	Unique24	game symbol table
+tag_value:gComponentLooks	-2104614594	Unique25	game symbol table
+tag_value:gComponentLooks	-2104614593	Unique26	game symbol table
+tag_value:gComponentLooks	-2104614592	Unique27	game symbol table
+tag_value:gComponentLooks	-2104614591	Unique28	game symbol table
+tag_value:gComponentLooks	-2104614590	Unique29	game symbol table
+tag_value:gComponentLooks	-2104614566	Unique30	game symbol table
+tag_value:gComponentLooks	-2104614565	Unique31	game symbol table
+tag_value:gComponentLooks	-2104614564	Unique32	game symbol table
+tag_value:gComponentLooks	-2104614563	Unique33	game symbol table
+tag_value:gComponentLooks	-2104614562	Unique34	game symbol table
+tag_value:gComponentLooks	-2104614561	Unique35	game symbol table
+tag_value:gComponentLooks	-2104614560	Unique36	game symbol table
+tag_value:gComponentLooks	-2104614559	Unique37	game symbol table
+tag_value:gComponentLooks	-2104614558	Unique38	game symbol table
+tag_value:gComponentLooks	-2104614557	Unique39	game symbol table
+tag_value:gComponentLooks	-2104614533	Unique40	game symbol table
+tag_value:gComponentLooks	-2104614532	Unique41	game symbol table
+tag_value:gComponentLooks	-2104614531	Unique42	game symbol table
+tag_value:gComponentLooks	-2104614530	Unique43	game symbol table
+tag_value:gComponentLooks	-2104614529	Unique44	game symbol table
+tag_value:gComponentLooks	-2104614528	Unique45	game symbol table
+tag_value:gComponentLooks	-2104614527	Unique46	game symbol table
+tag_value:gComponentLooks	-2104614526	Unique47	game symbol table
+tag_value:gComponentLooks	-2104614525	Unique48	game symbol table
+tag_value:gComponentLooks	-2104614524	Unique49	game symbol table
+tag_value:gComponentLooks	-2104614500	Unique50	game symbol table
+tag_value:gComponentLooks	-2104614499	Unique51	game symbol table
+tag_value:gComponentLooks	-2104614498	Unique52	game symbol table
+tag_value:gComponentLooks	-2104614497	Unique53	game symbol table
+tag_value:gComponentLooks	-2104614496	Unique54	game symbol table
+tag_value:gComponentLooks	-2104614495	Unique55	game symbol table
+tag_value:gComponentLooks	-2104614494	Unique56	game symbol table
+tag_value:gComponentLooks	-2104614493	Unique57	game symbol table
+tag_value:gComponentLooks	-2104614492	Unique58	game symbol table
+tag_value:gComponentLooks	-2104614491	Unique59	game symbol table
+tag_value:gComponentLooks	-2104614467	Unique60	game symbol table
+tag_value:gComponentLooks	-2104614466	Unique61	game symbol table
+tag_value:gComponentLooks	-2104614465	Unique62	game symbol table
+tag_value:gComponentLooks	-2104614464	Unique63	game symbol table
+tag_value:gComponentLooks	-2104614463	Unique64	game symbol table
+tag_value:gComponentLooks	-2104614462	Unique65	game symbol table
+tag_value:gComponentLooks	-2104614461	Unique66	game symbol table
+tag_value:gComponentLooks	-2104614460	Unique67	game symbol table
+tag_value:gComponentLooks	-2104614459	Unique68	game symbol table
+tag_value:gComponentLooks	-2104614458	Unique69	game symbol table
+tag_value:gComponentLooks	-2104614434	Unique70	game symbol table
+tag_value:gComponentLooks	-2104614433	Unique71	game symbol table
+tag_value:gComponentLooks	-2104614432	Unique72	game symbol table
+tag_value:gComponentLooks	-2104614431	Unique73	game symbol table
+tag_value:gComponentLooks	-2104614430	Unique74	game symbol table
+tag_value:gComponentLooks	-2104614429	Unique75	game symbol table
+tag_value:gComponentLooks	-2104614428	Unique76	game symbol table
+tag_value:gComponentLooks	-2104614427	Unique77	game symbol table
+tag_value:gComponentLooks	-2104614426	Unique78	game symbol table
+tag_value:gComponentLooks	-2104614425	Unique79	game symbol table
+tag_value:gComponentLooks	-2104614401	Unique80	game symbol table
+tag_value:gComponentLooks	-2104614400	Unique81	game symbol table
+tag_value:gComponentLooks	-2104614399	Unique82	game symbol table
+tag_value:gComponentLooks	-2104614398	Unique83	game symbol table
+tag_value:gComponentLooks	-2104614397	Unique84	game symbol table
+tag_value:gComponentLooks	-2104614396	Unique85	game symbol table
+tag_value:gComponentLooks	-2104614395	Unique86	game symbol table
+tag_value:gComponentLooks	-2104614394	Unique87	game symbol table
+tag_value:gComponentLooks	-2104614393	Unique88	game symbol table
+tag_value:gComponentLooks	-2104614392	Unique89	game symbol table
+tag_value:gComponentLooks	-2104614368	Unique90	game symbol table
+tag_value:gComponentLooks	-2104614367	Unique91	game symbol table
+tag_value:gComponentLooks	-2104614366	Unique92	game symbol table
+tag_value:gComponentLooks	-2104614365	Unique93	game symbol table
+tag_value:gComponentLooks	-2104614364	Unique94	game symbol table
+tag_value:gComponentLooks	-2104614363	Unique95	game symbol table
+tag_value:gComponentLooks	-2104614362	Unique96	game symbol table
+tag_value:gComponentLooks	-2104614361	Unique97	game symbol table
+tag_value:gComponentLooks	-2104614360	Unique98	game symbol table
+tag_value:gComponentLooks	-2104614359	Unique99	game symbol table
+tag_value:gComponentLooks	65	A	game symbol table
+tag_value:gComponentLooks	66	B	game symbol table
+tag_value:gComponentLooks	67	C	game symbol table
+tag_value:gComponentLooks	68	D	game symbol table
+tag_value:gComponentLooks	69	E	game symbol table
+tag_value:gComponentLooks	70	F	game symbol table
+tag_value:gComponentLooks	71	G	game symbol table
+tag_value:gComponentLooks	72	H	game symbol table
+tag_value:gComponentLooks	73	I	game symbol table
+tag_value:gComponentLooks	74	J	game symbol table
+tag_value:gComponentLooks	75	K	game symbol table
+tag_value:gComponentLooks	76	L	game symbol table
+tag_value:gComponentLooks	77	M	game symbol table
+tag_value:gComponentLooks	78	N	game symbol table
+tag_value:gComponentLooks	79	O	game symbol table
+tag_value:gComponentLooks	80	P	game symbol table
+tag_value:gComponentLooks	81	Q	game symbol table
+tag_value:gComponentLooks	82	R	game symbol table
+tag_value:gComponentLooks	83	S	game symbol table
+tag_value:gComponentLooks	84	T	game symbol table
+tag_value:gComponentLooks	85	U	game symbol table
+tag_value:gComponentLooks	86	V	game symbol table
+tag_value:gComponentLooks	87	W	game symbol table
+tag_value:gComponentLooks	88	X	game symbol table
+tag_value:gComponentLooks	89	Y	game symbol table
+tag_value:gComponentLooks	90	Z	game symbol table
+tag_value:gComponentStyles	0	- None -	game symbol table
+tag_value:gComponentStyles	1	Light A	game symbol table
+tag_value:gComponentStyles	2	Light B	game symbol table
+tag_value:gComponentStyles	3	Medium A	game symbol table
+tag_value:gComponentStyles	4	Medium B	game symbol table
+tag_value:gComponentStyles	5	Heavy A	game symbol table
+tag_value:gComponentStyles	6	Heavy B	game symbol table
+tag_value:gComponentStyles	7	Light C	game symbol table
+tag_value:gComponentStyles	8	Medium C	game symbol table
+tag_value:gComponentStyles	9	Heavy C	game symbol table
+tag_value:gComponentStyles	10	Class Light A	game symbol table
+tag_value:gComponentStyles	11	Class Light B	game symbol table
+tag_value:gComponentStyles	12	Class Light C	game symbol table
+tag_value:gComponentStyles	13	Class Medium A	game symbol table
+tag_value:gComponentStyles	14	Class Medium B	game symbol table
+tag_value:gComponentStyles	15	Class Medium C	game symbol table
+tag_value:gComponentStyles	16	Class Heavy A	game symbol table
+tag_value:gComponentStyles	17	Class Heavy B	game symbol table
+tag_value:gComponentStyles	18	Class Heavy C	game symbol table
+tag_value:<anon_enum:CONTACT_FRAME_NONE>	-1	CONTACT_FRAME_NONE	game enum
+tag_value:<anon_enum:CONTACT_FRAME_NONE>	0	CONTACT_FRAME_NORMAL	game enum
+tag_value:<anon_enum:CONTACT_FRAME_NONE>	1	CONTACT_FRAME_IN_END	game enum
+tag_value:<anon_enum:CONTACT_FRAME_NONE>	2	CONTACT_FRAME_IN_START	game enum
+tag_value:gCrafterTypes	-1	- None -	game symbol table
+tag_value:gCrafterTypes	0	Blacksmith	game symbol table
+tag_value:gCrafterTypes	1	Jeweler	game symbol table
+tag_value:gCrafterTypes	2	Mystic	game symbol table
+tag_value:gCrafterTypes	3	Horadrim	game symbol table
+tag_value:gCrafterTypes	4	Jewel Upgrade	game symbol table
+tag_value:gDamageTypes	-1	None	game symbol table
+tag_value:gDamageTypes	0	Physical	game symbol table
+tag_value:gDamageTypes	1	Fire	game symbol table
+tag_value:gDamageTypes	2	Lightning	game symbol table
+tag_value:gDamageTypes	3	Cold	game symbol table
+tag_value:gDamageTypes	4	Poison	game symbol table
+tag_value:gDamageTypes	5	Arcane	game symbol table
+tag_value:gDamageTypes	6	Holy	game symbol table
+tag_value:gDeliveryMechanismTypes	0	Unknown	game symbol table
+tag_value:gDeliveryMechanismTypes	1	Melee	game symbol table
+tag_value:gDeliveryMechanismTypes	2	Ranged	game symbol table
+tag_value:gDeliveryMechanismTypes	3	Magic	game symbol table
+tag_value:gDeliveryMechanismTypes	4	DOT	game symbol table
+tag_value:gDeliveryMechanismTypes	5	Thorns	game symbol table
+tag_value:gDifficulty	0	Normal	game symbol table
+tag_value:gDifficulty	1	Nightmare	game symbol table
+tag_value:gDifficulty	2	Hell	game symbol table
+tag_value:gDifficulty	3	Inferno	game symbol table
+tag_value:gDifficulty	4	X1	game symbol table
+tag_value:gDifficulty	5	Dynamic	game symbol table
+tag_value:gActorGenderNames	0	Male	game symbol table
+tag_value:gActorGenderNames	1	Female	game symbol table
+tag_value:gActorGenderNames	0	Male	game symbol table
+tag_value:gActorGenderNames	1	Female	game symbol table
+tag_value:gActorGizmoNames	-1		game symbol table
+tag_value:gActorGizmoNames	0	Door	game symbol table
+tag_value:gActorGizmoNames	1	Chest	game symbol table
+tag_value:gActorGizmoNames	2	Portal	game symbol table
+tag_value:gActorGizmoNames	4	Waypoint	game symbol table
+tag_value:gActorGizmoNames	7	Checkpoint	game symbol table
+tag_value:gActorGizmoNames	8	Sign	game symbol table
+tag_value:gActorGizmoNames	9	HealingWell	game symbol table
+tag_value:gActorGizmoNames	10	PowerUp	game symbol table
+tag_value:gActorGizmoNames	11	TownPortal	game symbol table
+tag_value:gActorGizmoNames	12	HearthPortal	game symbol table
+tag_value:gActorGizmoNames	18	Headstone	game symbol table
+tag_value:gActorGizmoNames	20	Portal Destination	game symbol table
+tag_value:gActorGizmoNames	23	Breakable Chest	game symbol table
+tag_value:gActorGizmoNames	25	Shared Stash	game symbol table
+tag_value:gActorGizmoNames	28	Spawner	game symbol table
+tag_value:gActorGizmoNames	33	Page Of Fate Portal	game symbol table
+tag_value:gActorGizmoNames	44	Trigger	game symbol table
+tag_value:gActorGizmoNames	47	Secret Portal	game symbol table
+tag_value:gActorGizmoNames	48	Destroyable Object	game symbol table
+tag_value:gActorGizmoNames	56	Breakable Door	game symbol table
+tag_value:gActorGizmoNames	57	Switch	game symbol table
+tag_value:gActorGizmoNames	58	Pressure Plate	game symbol table
+tag_value:gActorGizmoNames	59	Gate	game symbol table
+tag_value:gActorGizmoNames	60	Destroy Self When Near	game symbol table
+tag_value:gActorGizmoNames	62	Act Transition Object	game symbol table
+tag_value:gActorGizmoNames	63	Reforming Destroyable Object	game symbol table
+tag_value:gActorGizmoNames	64	Banner	game symbol table
+tag_value:gActorGizmoNames	65	Lore Chest	game symbol table
+tag_value:gActorGizmoNames	66	Boss Portal	game symbol table
+tag_value:gActorGizmoNames	67	Placed Loot	game symbol table
+tag_value:gActorGizmoNames	68	Save Point	game symbol table
+tag_value:gActorGizmoNames	69	Return Point Portal	game symbol table
+tag_value:gActorGizmoNames	70	Dungeon Portal	game symbol table
+tag_value:gActorGizmoNames	71	Identify All	game symbol table
+tag_value:gActorGizmoNames	75	Return Portal	game symbol table
+tag_value:gActorGizmoNames	76	Recreate Game With Party	game symbol table
+tag_value:gActorGizmoNames	77	Mailbox	game symbol table
+tag_value:gActorGizmoNames	78	LootRun Switch	game symbol table
+tag_value:gActorGizmoNames	79	PoolOfReflection	game symbol table
+tag_value:gActorGizmoNames	80	MultiClick	game symbol table
+tag_value:gActorGizmoNames	81	Weekly Challenge Switch	game symbol table
+tag_value:gActorGizmoNames	82	Objective Finder	game symbol table
+tag_value:gActorGizmoNames	84	Necromancer Monster Corpse	game symbol table
+tag_value:gActorGizmoNames	85	Challenge Rift Inspect ArmorRack	game symbol table
+tag_value:gActorGizmoNames	86	Challenge Rift Reward	game symbol table
+tag_value:gActorGizmoNames	5	ACTORGIZMO_ITEM_INTERNAL	game symbol table
+tag_value:gActorGizmoNames	19	ACTORGIZMO_SCRIPT_PROP	game symbol table
+tag_value:gActorGizmoNames	83	ACTORGIZMO_SET_DUNGEON_PORTAL	game symbol table
+tag_value:gHirelingClass	0	- None -	game symbol table
+tag_value:gHirelingClass	1	Templar	game symbol table
+tag_value:gHirelingClass	2	Scoundrel	game symbol table
+tag_value:gHirelingClass	3	Enchantress	game symbol table
+tag_value:gMonsterRarity	0		game symbol table
+tag_value:gMonsterRarity	1	Champion	game symbol table
+tag_value:gMonsterRarity	2	Rare	game symbol table
+tag_value:gMonsterRarity	3	Minion	game symbol table
+tag_value:gMonsterRarity	4	Unique	game symbol table
+tag_value:gMonsterRarity	5	Hireling	game symbol table
+tag_value:gMonsterRarity	7	Boss	game symbol table
+tag_value:gOpenWorldModes	-1	Invalid	game symbol table
+tag_value:gOpenWorldModes	0	Idle	game symbol table
+tag_value:gOpenWorldModes	1	Bounty	game symbol table
+tag_value:gOpenWorldModes	2	DungeonFinder	game symbol table
+tag_value:gOpenWorldModes	3	ResetPending	game symbol table
+tag_value:gPlayerClasses	-1	- None -	game symbol table
+tag_value:gPlayerClasses	0	DemonHunter	game symbol table
+tag_value:gPlayerClasses	1	Barbarian	game symbol table
+tag_value:gPlayerClasses	2	Wizard	game symbol table
+tag_value:gPlayerClasses	3	Witchdoctor	game symbol table
+tag_value:gPlayerClasses	4	Monk	game symbol table
+tag_value:gPlayerClasses	5	Crusader	game symbol table
+tag_value:gPlayerClasses	6	Necromancer	game symbol table
+tag_value:gPlayerClasses	-930376119	DemonHunter (name hash)	game symbol table
+tag_value:gPlayerClasses	1337532130	Barbarian (name hash)	game symbol table
+tag_value:gPlayerClasses	491159985	Wizard (name hash)	game symbol table
+tag_value:gPlayerClasses	54772266	Witchdoctor (name hash)	game symbol table
+tag_value:gPlayerClasses	4041749	Monk (name hash)	game symbol table
+tag_value:gPlayerClasses	-1104684007	Crusader (name hash)	game symbol table
+tag_value:gPlayerClasses	-1924295443	Necromancer (name hash)	game symbol table
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	-1	BRAIN_ACTION_NONE	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	0	BRAIN_ACTION_WANDER	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	1	BRAIN_ACTION_IDLE	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	2	BRAIN_ACTION_STRAFE	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	3	BRAIN_ACTION_CIRCLE	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	4	BRAIN_ACTION_RUNAWAY	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	5	BRAIN_ACTION_CLOSE	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	6	BRAIN_ACTION_RUN_NEARBY	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	7	BRAIN_ACTION_WANDER_RUN	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	8	BRAIN_ACTION_CIRCLE_STRAFE	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	9	BRAIN_ACTION_FOLLOW	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	10	BRAIN_ACTION_RUN_IN_FRONT	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	11	BRAIN_ACTION_RETURN_TO_PATH	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	12	BRAIN_ACTION_FOLLOW_PATH	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	13	BRAIN_ACTION_ORBIT	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	14	BRAIN_ACTION_LOOKAT	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	15	BRAIN_ACTION_RETURN_TO_GUARD_OBJECT	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	16	BRAIN_ACTION_WANDER_TOWN	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	17	BRAIN_ACTION_BACKPEDAL	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	18	BRAIN_ACTION_WANDER_MINION	game enum
+tag_value:<anon_enum:BRAIN_ACTION_NONE>	19	BRAIN_ACTION_FOLLOW_NATURAL	game enum
+tag_value:<anon_enum:POWER_HOTBAR_EXCLUSIVE_TYPE_NONE>	0	POWER_HOTBAR_EXCLUSIVE_TYPE_NONE	game enum
+tag_value:<anon_enum:POWER_HOTBAR_EXCLUSIVE_TYPE_NONE>	1	POWER_HOTBAR_EXCLUSIVE_TYPE_CRUSADER_LAW	game enum
+tag_value:<anon_enum:POWER_HOTBAR_EXCLUSIVE_TYPE_NONE>	2	POWER_HOTBAR_EXCLUSIVE_TYPE_MONK_MANTRA	game enum
+tag_value:<anon_enum:POWER_HOTBAR_EXCLUSIVE_TYPE_NONE>	3	POWER_HOTBAR_EXCLUSIVE_TYPE_COUNT	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	-1	PAYLOAD_NONE	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	0	PAYLOAD_SINGLE_TARGET	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	1	PAYLOAD_RAY	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	2	PAYLOAD_AOE	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	3	PAYLOAD_AOE_ALL	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	4	PAYLOAD_LINE	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	5	PAYLOAD_MELEE	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	6	PAYLOAD_FRONT	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	7	PAYLOAD_BACK	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	8	PAYLOAD_PIE	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	9	PAYLOAD_CAPSULE	game enum
+tag_value:<anon_enum:PAYLOAD_NONE>	10	PAYLOAD_BOX	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	-1	SPECIALDEATH_NONE	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	0	SPECIALDEATH_LAVA	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	1	SPECIALDEATH_DISINTEGRATE	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	2	SPECIALDEATH_PULVERIZE	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	3	SPECIALDEATH_PLAGUED	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	4	SPECIALDEATH_DISMEMBER	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	5	SPECIALDEATH_DECAPITATION	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	6	SPECIALDEATH_ACID	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	7	SPECIALDEATH_SACRIFICE	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	8	SPECIALDEATH_SPIRIT	game enum
+tag_value:<anon_enum:SPECIALDEATH_NONE>	9	NUM_SPECIAL_DEATH_TYPES	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	0	UNDEFINED_POWER_TEMPLATE	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	3	WALK_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	4	GIZMO_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	6	ANIMATION_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	7	HEARTBEAT_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	8	ONSLAY_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	9	ONGETHIT_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	11	ONCRITICAL_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	21	POTION_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	23	USE_ITEM_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	24	ONCREATE_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	25	PROC_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	30	SPECIALWALK_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	35	SECONDARY_ANIMATION_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	40	LOOPING_ANIMATION_POWER	game enum
+tag_value:<anon_enum:UNDEFINED_POWER_TEMPLATE>	41	ATTACKMOVE_POWER	game enum
+tag_value:<anon_enum:AI_PROXIMITY_SHAPE_NONE>	-1	AI_PROXIMITY_SHAPE_NONE	game enum
+tag_value:<anon_enum:AI_PROXIMITY_SHAPE_NONE>	0	AI_PROXIMITY_SHAPE_SPHERE	game enum
+tag_value:<anon_enum:AI_PROXIMITY_SHAPE_NONE>	1	AI_PROXIMITY_SHAPE_BOX	game enum
+tag_value:gTeamNames	0	Scenery	game symbol table
+tag_value:gTeamNames	1	Neutral	game symbol table
+tag_value:gTeamNames	2	Player Allies 0	game symbol table
+tag_value:gTeamNames	3	Player Allies 1	game symbol table
+tag_value:gTeamNames	4	Player Allies 2	game symbol table
+tag_value:gTeamNames	5	Player Allies 3	game symbol table
+tag_value:gTeamNames	6	Player Allies 4	game symbol table
+tag_value:gTeamNames	7	Player Allies 5	game symbol table
+tag_value:gTeamNames	8	Player Allies 6	game symbol table
+tag_value:gTeamNames	9	Player Allies 7	game symbol table
+tag_value:gTeamNames	10	Monster 0	game symbol table
+tag_value:gTeamNames	11	Monster 1	game symbol table
+tag_value:gTeamNames	12	Monster 2	game symbol table
+tag_value:gTeamNames	13	Monster 3	game symbol table
+tag_value:gTeamNames	14	Monster Friend	game symbol table
+tag_value:gTeamNames	15	Hate All Except Players 0	game symbol table
+tag_value:gTeamNames	16	Hate All Except Players 1	game symbol table
+tag_value:gTeamNames	17	Hate All Except Players 2	game symbol table
+tag_value:gTeamNames	18	Hate All Except Players 3	game symbol table
+tag_value:gTeamNames	19	Hate All Except Players 4	game symbol table
+tag_value:gTeamNames	20	Hate All Except Players 5	game symbol table
+tag_value:gTeamNames	21	Hate All Except Players 6	game symbol table
+tag_value:gTeamNames	22	Hate All Except Players 7	game symbol table
+tag_value:gTetherType	0	Always	game symbol table
+tag_value:gTetherType	1	Only when Idle	game symbol table
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	-1	TEXTUREFORMAT_UNKNOWN	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	0	TEXTUREFORMAT_ARGB8888	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	1	TEXTUREFORMAT_RGBA8888	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	2	TEXTUREFORMAT_ARGB0888	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	3	TEXTUREFORMAT_ARGB4444	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	4	TEXTUREFORMAT_ARGB1555	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	5	TEXTUREFORMAT_ARGB0555	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	6	TEXTUREFORMAT_RGB565	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	7	TEXTUREFORMAT_L8	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	8	TEXTUREFORMAT_P8	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	9	TEXTUREFORMAT_DXT1	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	10	TEXTUREFORMAT_DXT1_1BITALPHA	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	11	TEXTUREFORMAT_DXT3	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	12	TEXTUREFORMAT_DXT5	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	13	TEXTUREFORMAT_LIN_ARGB8888	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	14	TEXTUREFORMAT_LIN_RGBA8888	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	15	TEXTUREFORMAT_LIN_ARGB0888	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	16	TEXTUREFORMAT_LIN_ARGB4444	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	17	TEXTUREFORMAT_LIN_ARGB1555	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	18	TEXTUREFORMAT_LIN_ARGB0555	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	19	TEXTUREFORMAT_LIN_RGB565	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	20	TEXTUREFORMAT_LIN_L8	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	21	TEXTUREFORMAT_ABGR8888	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	22	TEXTUREFORMAT_RGB888	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	23	TEXTUREFORMAT_A8	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	24	TEXTUREFORMAT_R32F	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	25	TEXTUREFORMAT_A16B16G16R16F	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	26	TEXTUREFORMAT_A32B32G32R32F	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	27	TEXTUREFORMAT_L16	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	28	TEXTUREFORMAT_R16G16B16	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	29	TEXTUREFORMAT_A16R16G16B16	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	30	TEXTUREFORMAT_D24X8	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	31	TEXTUREFORMAT_D16	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	32	TEXTUREFORMAT_DF24	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	33	TEXTUREFORMAT_DF16	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	34	TEXTUREFORMAT_D32	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	35	TEXTUREFORMAT_RAWZ	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	36	TEXTUREFORMAT_INTZ	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	37	TEXTUREFORMAT_DEPTHOPAQUE	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	38	TEXTUREFORMAT_R16F	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	39	TEXTUREFORMAT_G32FR32F	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	40	TEXTUREFORMAT_G16FR16F	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	41	TEXTUREFORMAT_A16B16G16R16	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	42	TEXTUREFORMAT_A2B10G10R10	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	43	TEXTUREFORMAT_DXT5N	game enum
+tag_value:<anon_enum:TEXTUREFORMAT_UNKNOWN>	44	NUM_TEXTUREFORMATS	game enum
+tag_value:<anon_enum:TILT_TYPE_NORMAL>	0	TILT_TYPE_NORMAL	game enum
+tag_value:<anon_enum:TILT_TYPE_NORMAL>	1	TILT_TYPE_QUADRUPED	game enum
+tag_value:<anon_enum:TILT_TYPE_NORMAL>	2	TILT_TYPE_SPIDER	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	-1	VBFORMAT_UNKNOWN	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	0	VBFORMAT_NOTEX_L	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	1	VBFORMAT_BILLBOARD	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	2	VBFORMAT_1TEX_L	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	3	VBFORMAT_SPRITE	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	4	VBFORMAT_2TEX_L	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	5	VBFORMAT_BUMPBASIS	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	6	VBFORMAT_SKIN	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	7	VBFORMAT_CLOTH	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	8	VBFORMAT_D3DXATLAS	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	9	VBFORMAT_2TEX_L_CPOS	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	10	VBFORMAT_SKIN_CPOS	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	11	VBFORMAT_BILLBOARD_PARTICLE	game enum
+tag_value:<anon_enum:VBFORMAT_UNKNOWN>	12	NUM_VBFORMATS	game enum
+tag_value:gWeaponClasses	-1	None	game symbol table
+tag_value:gWeaponClasses	0	Hand-to-hand	game symbol table
+tag_value:gWeaponClasses	1	1H Swing	game symbol table
+tag_value:gWeaponClasses	2	1H Thrust	game symbol table
+tag_value:gWeaponClasses	3	2H Swing	game symbol table
+tag_value:gWeaponClasses	4	2H Thrust	game symbol table
+tag_value:gWeaponClasses	5	Staff	game symbol table
+tag_value:gWeaponClasses	6	Bow	game symbol table
+tag_value:gWeaponClasses	7	Crossbow	game symbol table
+tag_value:gWeaponClasses	8	Wand	game symbol table
+tag_value:gWeaponClasses	9	Dual Wield	game symbol table
+tag_value:gWeaponClasses	10	HtH w/ Orb	game symbol table
+tag_value:gWeaponClasses	11	1HS w/ Orb	game symbol table
+tag_value:gWeaponClasses	12	1HT w/ Orb	game symbol table
+tag_value:gWeaponClasses	13	Dual Wield SF	game symbol table
+tag_value:gWeaponClasses	14	Dual Wield FF	game symbol table
+tag_value:gWeaponClasses	15	1H Fist	game symbol table
+tag_value:gWeaponClasses	16	2H Axe/Mace	game symbol table
+tag_value:gWeaponClasses	17	HandXBow	game symbol table
+tag_value:gWeaponClasses	18	Wand w/ Orb	game symbol table
+tag_value:gWeaponClasses	19	1H Swing w/ Shield	game symbol table
+tag_value:gWeaponClasses	20	1H Thrust w/ Shield	game symbol table
+tag_value:gWeaponClasses	21	Hth w/ Shield	game symbol table
+tag_value:gWeaponClasses	22	2H Swing w/ Shield	game symbol table
+tag_value:gWeaponClasses	23	2H Thrust w/ Shield	game symbol table
+tag_value:gWeaponClasses	24	Staff w/ Shield	game symbol table
+tag_value:gWeaponClasses	25	2H Flail	game symbol table
+tag_value:gWeaponClasses	26	2H Flail w/ Shield	game symbol table
+tag_value:gWeaponClasses	27	On Horse	game symbol table
+tag_value:<anon_enum:DRLG_CHOKEPOINT_NONE>	-1	DRLG_CHOKEPOINT_NONE	game enum
+tag_value:<anon_enum:DRLG_CHOKEPOINT_NONE>	0	DRLG_CHOKEPOINT_NORTH_SOUTH	game enum
+tag_value:<anon_enum:DRLG_CHOKEPOINT_NONE>	1	DRLG_CHOKEPOINT_EAST_WEST	game enum
+tag_value:<anon_enum:DRLG_CHOKEPOINT_NONE>	2	DRLG_CHOKEPOINT_PLACEMENT	game enum
+tag_value:<anon_enum:DRLG_EDGE_INVALID>	-2	DRLG_EDGE_INVALID	game enum
+tag_value:<anon_enum:DRLG_EDGE_INVALID>	-1	DRLG_EDGE_UNDEFINED	game enum
+tag_value:<anon_enum:DRLG_EDGE_INVALID>	0	DRLG_EDGE_DEFAULT	game enum
+tag_value:<anon_enum:DRLG_EDGE_INVALID>	1	DRLG_EDGE_ROAD	game enum
+tag_value:<anon_enum:DRLG_EDGE_INVALID>	2	DRLG_EDGE_BORDER	game enum
+tag_value:<anon_enum:DRLG_EDGE_INVALID>	3	DRLG_EDGE_BOG	game enum
+tag_value:<anon_enum:DRLG_EDGE_INVALID>	4	DRLG_EDGE_SECRET	game enum
+tag_value:<anon_enum:DRLG_EDGE_INVALID>	5	DRLG_EDGE_NUM_TYPES	game enum
+tag_value:<anon_enum:DRLG_SHAPE_UNDEFINED>	-1	DRLG_SHAPE_UNDEFINED	game enum
+tag_value:<anon_enum:DRLG_SHAPE_UNDEFINED>	0	DRLG_SHAPE_CIRCLE	game enum
+tag_value:<anon_enum:DRLG_SHAPE_UNDEFINED>	1	DRLG_SHAPE_SQUARE	game enum
+tag_value:<anon_enum:DRLG_SHAPE_UNDEFINED>	2	DRLG_SHAPE_OVAL	game enum
+tag_value:<anon_enum:DRLG_SHAPE_UNDEFINED>	3	DRLG_SHAPE_RECTANGLE	game enum
+tag_value:<anon_enum:DRLG_SHAPE_UNDEFINED>	4	DRLG_SHAPE_ORGANIC	game enum
+tag_value:<anon_enum:DRLG_SHAPE_UNDEFINED>	5	DRLG_SHAPE_NUM_TYPES	game enum
+tag_value:<anon_enum:DRLG_SPECIAL_TILE_NONE>	-1	DRLG_SPECIAL_TILE_NONE	game enum
+tag_value:<anon_enum:DRLG_SPECIAL_TILE_NONE>	0	DRLG_SPECIAL_TILE_0	game enum
+tag_value:<anon_enum:DRLG_SPECIAL_TILE_NONE>	1	DRLG_SPECIAL_TILE_1	game enum
+tag_value:<anon_enum:DRLG_SPECIAL_TILE_NONE>	2	DRLG_SPECIAL_TILE_NUM_TYPES	game enum
+tag_value:gDRLGTileSets	0	None	game symbol table
+tag_value:gDRLGTileSets	100	Rat Maze 1	game symbol table
+tag_value:gDRLGTileSets	101	Rat Maze 2	game symbol table
+tag_value:gDRLGTileSets	102	Rat Maze 3	game symbol table
+tag_value:gDRLGTileSets	103	Rat Maze 4	game symbol table
+tag_value:gDRLGTileSets	104	Rat Maze 5	game symbol table
+tag_value:gDRLGTileSets	105	Rat Maze 6	game symbol table
+tag_value:gDRLGTileSets	106	Rat Maze 7	game symbol table
+tag_value:gDRLGTileSets	107	Rat Maze 8	game symbol table
+tag_value:gDRLGTileSets	108	Rat Maze 9	game symbol table
+tag_value:gDRLGTileSets	109	Rat Maze 10	game symbol table
+tag_value:gDRLGTileSets	110	Rat Maze 11	game symbol table
+tag_value:gDRLGTileSets	111	Rat Maze 12	game symbol table
+tag_value:gDRLGTileSets	112	Rat Maze 13	game symbol table
+tag_value:gDRLGTileSets	113	Rat Maze 14	game symbol table
+tag_value:gDRLGTileSets	114	Rat Maze 15	game symbol table
+tag_value:gDRLGTileSets	115	Rat Maze 16	game symbol table
+tag_value:gDRLGTileSets	116	Rat Maze 17	game symbol table
+tag_value:gDRLGTileSets	117	Rat Maze 18	game symbol table
+tag_value:gDRLGTileSets	118	Rat Maze 19	game symbol table
+tag_value:gDRLGTileSets	119	Rat Maze 20	game symbol table
+tag_value:gDRLGTileSets	200	Entrance 1	game symbol table
+tag_value:gDRLGTileSets	201	Entrance 2	game symbol table
+tag_value:gDRLGTileSets	202	Entrance 3	game symbol table
+tag_value:gDRLGTileSets	203	Entrance 4	game symbol table
+tag_value:gDRLGTileSets	204	Entrance 5	game symbol table
+tag_value:gDRLGTileSets	205	Entrance 6	game symbol table
+tag_value:gDRLGTileSets	206	Entrance 7	game symbol table
+tag_value:gDRLGTileSets	207	Entrance 8	game symbol table
+tag_value:gDRLGTileSets	208	Entrance 9	game symbol table
+tag_value:gDRLGTileSets	209	Entrance 10	game symbol table
+tag_value:gDRLGTileSets	210	Entrance 11	game symbol table
+tag_value:gDRLGTileSets	211	Entrance 12	game symbol table
+tag_value:gDRLGTileSets	212	Entrance 13	game symbol table
+tag_value:gDRLGTileSets	213	Entrance 14	game symbol table
+tag_value:gDRLGTileSets	214	Entrance 15	game symbol table
+tag_value:gDRLGTileSets	215	Entrance 16	game symbol table
+tag_value:gDRLGTileSets	216	Entrance 17	game symbol table
+tag_value:gDRLGTileSets	217	Entrance 18	game symbol table
+tag_value:gDRLGTileSets	218	Entrance 19	game symbol table
+tag_value:gDRLGTileSets	219	Entrance 20	game symbol table
+tag_value:gDRLGTileSets	300	Exit 1	game symbol table
+tag_value:gDRLGTileSets	301	Exit 2	game symbol table
+tag_value:gDRLGTileSets	302	Exit 3	game symbol table
+tag_value:gDRLGTileSets	303	Exit 4	game symbol table
+tag_value:gDRLGTileSets	304	Exit 5	game symbol table
+tag_value:gDRLGTileSets	305	Exit 6	game symbol table
+tag_value:gDRLGTileSets	306	Exit 7	game symbol table
+tag_value:gDRLGTileSets	307	Exit 8	game symbol table
+tag_value:gDRLGTileSets	308	Exit 9	game symbol table
+tag_value:gDRLGTileSets	309	Exit 10	game symbol table
+tag_value:gDRLGTileSets	310	Exit 11	game symbol table
+tag_value:gDRLGTileSets	311	Exit 12	game symbol table
+tag_value:gDRLGTileSets	312	Exit 13	game symbol table
+tag_value:gDRLGTileSets	313	Exit 14	game symbol table
+tag_value:gDRLGTileSets	314	Exit 15	game symbol table
+tag_value:gDRLGTileSets	315	Exit 16	game symbol table
+tag_value:gDRLGTileSets	316	Exit 17	game symbol table
+tag_value:gDRLGTileSets	317	Exit 18	game symbol table
+tag_value:gDRLGTileSets	318	Exit 19	game symbol table
+tag_value:gDRLGTileSets	319	Exit 20	game symbol table
+tag_value:gDRLGTileSets	401	Feature 1	game symbol table
+tag_value:gDRLGTileSets	402	Feature 2	game symbol table
+tag_value:gDRLGTileSets	403	Feature 3	game symbol table
+tag_value:gDRLGTileSets	404	Feature 4	game symbol table
+tag_value:gDRLGTileSets	405	Feature 5	game symbol table
+tag_value:gDRLGTileSets	406	Feature 6	game symbol table
+tag_value:gDRLGTileSets	407	Feature 7	game symbol table
+tag_value:gDRLGTileSets	408	Feature 8	game symbol table
+tag_value:gDRLGTileSets	409	Feature 9	game symbol table
+tag_value:gDRLGTileSets	410	Feature 10	game symbol table
+tag_value:gDRLGTileSets	411	Feature 11	game symbol table
+tag_value:gDRLGTileSets	412	Feature 12	game symbol table
+tag_value:gDRLGTileSets	413	Feature 13	game symbol table
+tag_value:gDRLGTileSets	414	Feature 14	game symbol table
+tag_value:gDRLGTileSets	415	Feature 15	game symbol table
+tag_value:gDRLGTileSets	416	Feature 16	game symbol table
+tag_value:gDRLGTileSets	417	Feature 17	game symbol table
+tag_value:gDRLGTileSets	418	Feature 18	game symbol table
+tag_value:gDRLGTileSets	419	Feature 19	game symbol table
+tag_value:gDRLGTileSets	420	Feature 20	game symbol table
+tag_value:gDRLGTileSets	500	Transition 1	game symbol table
+tag_value:gDRLGTileSets	501	Transition 2	game symbol table
+tag_value:gDRLGTileSets	502	Transition 3	game symbol table
+tag_value:gDRLGTileSets	503	Transition 4	game symbol table
+tag_value:gDRLGTileSets	504	Transition 5	game symbol table
+tag_value:gDRLGTileSets	505	Transition 6	game symbol table
+tag_value:gDRLGTileSets	506	Transition 7	game symbol table
+tag_value:gDRLGTileSets	507	Transition 8	game symbol table
+tag_value:gDRLGTileSets	508	Transition 9	game symbol table
+tag_value:gDRLGTileSets	509	Transition 10	game symbol table
+tag_value:gDRLGTileSets	510	Transition 11	game symbol table
+tag_value:gDRLGTileSets	511	Transition 12	game symbol table
+tag_value:gDRLGTileSets	512	Transition 13	game symbol table
+tag_value:gDRLGTileSets	513	Transition 14	game symbol table
+tag_value:gDRLGTileSets	514	Transition 15	game symbol table
+tag_value:gDRLGTileSets	515	Transition 16	game symbol table
+tag_value:gDRLGTileSets	516	Transition 17	game symbol table
+tag_value:gDRLGTileSets	517	Transition 18	game symbol table
+tag_value:gDRLGTileSets	518	Transition 19	game symbol table
+tag_value:gDRLGTileSets	519	Transition 20	game symbol table
+tag_value:gDRLGTileSets	600	Dummy	game symbol table
+tag_value:gDRLGTileSets	700	Compound 1	game symbol table
+tag_value:gDRLGTileSets	701	Compound 2	game symbol table
+tag_value:gDRLGTileSets	702	Compound 3	game symbol table
+tag_value:gDRLGTileSets	703	Compound 4	game symbol table
+tag_value:gDRLGTileSets	704	Compound 5	game symbol table
+tag_value:gDRLGTileSets	705	Compound 6	game symbol table
+tag_value:gDRLGTileSets	706	Compound 7	game symbol table
+tag_value:gDRLGTileSets	707	Compound 8	game symbol table
+tag_value:gDRLGTileSets	708	Compound 9	game symbol table
+tag_value:gDRLGTileSets	709	Compound 10	game symbol table
+tag_value:gDRLGTileSets	710	Compound 11	game symbol table
+tag_value:gDRLGTileSets	711	Compound 12	game symbol table
+tag_value:gDRLGTileSets	712	Compound 13	game symbol table
+tag_value:gDRLGTileSets	713	Compound 14	game symbol table
+tag_value:gDRLGTileSets	714	Compound 15	game symbol table
+tag_value:gDRLGTileSets	715	Compound 16	game symbol table
+tag_value:gDRLGTileSets	716	Compound 17	game symbol table
+tag_value:gDRLGTileSets	717	Compound 18	game symbol table
+tag_value:gDRLGTileSets	718	Compound 19	game symbol table
+tag_value:gDRLGTileSets	719	Compound 20	game symbol table
+tag_value:gDRLGTileSets	800	Pre-Set Scene	game symbol table
+tag_value:gDRLGTileTypes	0	NONE	game symbol table
+tag_value:gDRLGTileTypes	1	N	game symbol table
+tag_value:gDRLGTileTypes	2	S	game symbol table
+tag_value:gDRLGTileTypes	3	NS	game symbol table
+tag_value:gDRLGTileTypes	4	E	game symbol table
+tag_value:gDRLGTileTypes	5	NE	game symbol table
+tag_value:gDRLGTileTypes	6	SE	game symbol table
+tag_value:gDRLGTileTypes	7	NSE	game symbol table
+tag_value:gDRLGTileTypes	8	W	game symbol table
+tag_value:gDRLGTileTypes	9	NW	game symbol table
+tag_value:gDRLGTileTypes	10	SW	game symbol table
+tag_value:gDRLGTileTypes	11	NSW	game symbol table
+tag_value:gDRLGTileTypes	12	EW	game symbol table
+tag_value:gDRLGTileTypes	13	NEW	game symbol table
+tag_value:gDRLGTileTypes	14	SEW	game symbol table
+tag_value:gDRLGTileTypes	15	NSEW	game symbol table
+tag_value:gDRLGTileTypes	16777215	CUSTOM	game symbol table

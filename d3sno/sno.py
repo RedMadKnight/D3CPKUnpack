@@ -8,9 +8,9 @@ from .binary import ByteView, FormatError, Pair, build_order, order_build
 
 __all__ = [
     "Group", "GROUPS", "NONE", "Pair", "SNO_HEADER_SIZE", "SNO_SIGNATURE", "SnoHeader",
-    "VERSIONS", "check_version", "compact_handle", "group_by_extension", "group_by_id",
+    "VERSIONS", "check_version", "compact_handle", "header_problems", "group_by_extension", "group_by_id",
     "RawSnoFile", "hash33", "hash33_ci", "parse_header", "parse_raw", "read_pair", "resolve_build", "slice_pair",
-    "split_compact",
+    "split_compact", "X360_VERSIONS", "detect_build", "expected_version",
 ]
 
 SNO_SIGNATURE = 0xDEADBEEF
@@ -63,6 +63,60 @@ VERSIONS = {
 }
 
 
+def _load_versions() -> None:
+    """Add every extension of ``cov_sno_versions.tsv`` to ``VERSIONS``."""
+    import csv
+
+    from .datafiles import DATA
+
+    with open(DATA / "cov_sno_versions.tsv", encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle, delimiter="\t"):
+            ps3 = int(row["ps3_version"]) if row["ps3_version"] else None
+            switch = int(row["switch_version"]) if row["switch_version"] else None
+            VERSIONS.setdefault(row["extension"], (ps3, switch))
+
+
+_load_versions()
+
+# File version per type on x360 (X2); from ``x360_sno_versions.tsv``.
+X360_VERSIONS: dict[str, int] = {}
+
+
+def _load_x360_versions() -> None:
+    import csv
+
+    from .datafiles import DATA
+
+    with open(DATA / "x360_sno_versions.tsv", encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle, delimiter="	"):
+            if row["x360_version"]:
+                X360_VERSIONS[row["extension"]] = int(row["x360_version"])
+
+
+_load_x360_versions()
+
+
+def expected_version(extension: str, build: str) -> int | None:
+    """The table's file version of a type on a build; None where the type is unknown there."""
+    extension = extension.lstrip(".")
+    if build == "x360":
+        return X360_VERSIONS.get(extension)
+    known = VERSIONS.get(extension)
+    if known is None:
+        return None
+    return known[0 if build == "ps3" else 1]
+
+
+def header_problems(header: "SnoHeader") -> list[str]:
+    """The two runtime words after the handle are zero in every shipped file."""
+    problems = []
+    if header.runtime_1:
+        problems.append(f"word 0x14 is 0x{header.runtime_1:X}")
+    if header.runtime_2:
+        problems.append(f"word 0x18 is 0x{header.runtime_2:X}")
+    return problems
+
+
 def group_by_id(group_id: int) -> Group | None:
     return _BY_ID.get(group_id)
 
@@ -90,10 +144,13 @@ class SnoHeader:
     handle: int
     runtime_1: int
     runtime_2: int
+    given_build: str | None = None  # the caller's build, when one was passed
 
     @property
     def build(self) -> str:
-        return order_build(self.order)
+        """The caller's build if given, else the build of the byte order (big-endian: ps3;
+        ``resolve_build`` tells x360 from ps3 by the version)."""
+        return self.given_build or order_build(self.order)
 
 
 def parse_header(data: bytes, build: str | None = None) -> SnoHeader:
@@ -114,7 +171,7 @@ def parse_header(data: bytes, build: str | None = None) -> SnoHeader:
     words = view.unpack("7I", 0, "SNO header")
     if words[0] != SNO_SIGNATURE:
         raise FormatError("bad SNO signature", 0)
-    return SnoHeader(order, *words)
+    return SnoHeader(order, *words, given_build=build)
 
 
 @dataclass
@@ -131,10 +188,14 @@ def parse_raw(data: bytes, build: str | None = None) -> RawSnoFile:
 
 def check_version(extension: str, version: int, build: str, strict: bool = False) -> bool:
     """Compare with the table. A mismatch raises only when ``strict``."""
-    known = VERSIONS.get(extension.lstrip("."))
-    if known is None:
+    extension = extension.lstrip(".")
+    if extension not in VERSIONS and extension not in X360_VERSIONS:
         return True
-    expected = known[0 if build == "ps3" else 1]
+    expected = expected_version(extension, build)
+    if expected is None:
+        if strict:
+            raise FormatError(f".{extension} does not exist on {build}", 4)
+        return False
     if version == expected:
         return True
     if strict:
@@ -142,16 +203,44 @@ def check_version(extension: str, version: int, build: str, strict: bool = False
     return False
 
 
+def detect_build(
+    extension: str, header: SnoHeader, fallback: str | None = None,
+) -> str | None:
+    """X2: the build of a file from its signature and version, without a caller's build.
+
+    Little-endian is Switch. Big-endian is x360 or ps3 by the version; a version that is the
+    same on both (``.aco``, ``.adv`` ...) gives ``fallback`` (the archive's or the caller's build).
+    None when nothing decides (no fallback, or a version known to neither big-endian build).
+    """
+    if header.order == "<":
+        return "switch"
+    extension = extension.lstrip(".")
+    ps3 = VERSIONS.get(extension, (None, None))[0]
+    x360 = X360_VERSIONS.get(extension)
+    is_ps3, is_x360 = header.version == ps3, header.version == x360
+    if is_x360 and not is_ps3:
+        return "x360"
+    if is_ps3 and not is_x360:
+        return "ps3"
+    return fallback
+
+
 def resolve_build(
     extension: str, header: SnoHeader, build: str | None = None, strict: bool = False,
+    fallback: str | None = None,
 ) -> str:
-    """Pick the build of a file from its version, falling back to its byte order."""
+    """Pick the build of a file: the caller's ``build`` if given; otherwise X2 (signature, then
+    version; ``fallback`` for a big-endian version shared by ps3 and x360, else ps3)."""
     if build is not None:
         check_version(extension, header.version, build, strict)
         return build
     from_order = header.build
     known = VERSIONS.get(extension, ())
-    if len(set(known)) == 2 and header.version in known:
+    if from_order == "ps3":
+        detected = detect_build(extension, header, fallback)
+        if detected is not None:
+            return detected
+    if len(set(known)) == 2 and None not in known and header.version in known:
         from_version = "ps3" if header.version == known[0] else "switch"
         if from_version != from_order:
             raise FormatError(

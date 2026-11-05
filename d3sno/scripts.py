@@ -5,18 +5,18 @@ from __future__ import annotations
 import struct
 from dataclasses import dataclass, field
 
-from .binary import ByteView, FormatError
+from .binary import ByBuild, ByteView, FormatError
 from .luachunk import script_slice
 from .sno import SnoHeader, hash33_ci, parse_header, resolve_build
 
-_ENTRY = {"switch": 192, "ps3": 176}
-_FILTER_SIZE = {"switch": 24, "ps3": 20}
+_ENTRY = ByBuild({"switch": 192, "ps3": 176})
+_FILTER_SIZE = ByBuild({"switch": 24, "ps3": 20})
 _FILTER_AT = 8
-_STRINGS_AT = {"switch": 0x68, "ps3": 0x58}
-_HANDLER_AT = {"switch": 0xA8, "ps3": 0x98}
-_FLAGS_AT = {"switch": 0xB8, "ps3": 0xA8}
+_STRINGS_AT = ByBuild({"switch": 0x68, "ps3": 0x58})
+_HANDLER_AT = ByBuild({"switch": 0xA8, "ps3": 0x98})
+_FLAGS_AT = ByBuild({"switch": 0xB8, "ps3": 0xA8})
 FILTER_COUNT = 4
-_NO_VALUE_KINDS = (0, 12, 20, 25)
+_NO_VALUE_KINDS = (-1, 0, 12, 20, 25)  # -1 marks an unused filter slot
 _FLOAT_KINDS = (2,)
 _RANGE_KINDS = (3, 22)
 STRING_HASH_KINDS = (7, 15, 21, 24)
@@ -26,6 +26,7 @@ _INTEGER_KINDS = (1, 8, 9, 29)
 
 # ps3 event id to switch event id. Others are unknown.
 EVENT_PS3_TO_SWITCH = {
+    -1: -1,  # Invalid (stage 7, T3)
     **{i: i for i in range(8)},
     8: 9, 9: 10, 10: 11, 11: 12, 12: 13, 13: 14, 14: 15, 16: 17, 17: 19, 18: 20, 19: 21, 24: 26,
     25: 27, 26: 28, 27: 29, 28: 30, 29: 32, 30: 33, 33: 37, 34: 38, 35: 39, 36: 40, 37: 41,
@@ -42,6 +43,12 @@ class MessageFilter:
     value: int | float | tuple[float, float] | None  # by kind; raw where the kind is opaque
     group: int | None  # for a handle
 
+    @property
+    def kind_name(self) -> str | None:
+        from .enums import enum_name
+
+        return enum_name("script_filter_kind", self.kind)
+
 
 @dataclass
 class MessageEntry:
@@ -53,6 +60,13 @@ class MessageEntry:
     event_count: int
     raw: bytes = b""
     strings: list[bytes | None] = field(default_factory=list)  # 4 filters, then the handler
+
+    def event_name(self, build: str) -> str | None:
+        """The ``script_event`` name; ps3 ids go through the ps3 to switch map first."""
+        from .enums import enum_name
+
+        switch_id = switch_event_id(self.event_id, build)
+        return None if switch_id is None else enum_name("script_event", switch_id)
 
 
 @dataclass
@@ -74,7 +88,7 @@ def string_pair_at(build: str, slot: int) -> int:
 
 def switch_event_id(event_id: int, build: str) -> int | None:
     """The switch id of an event. ps3 ids outside the known map give None."""
-    return event_id if build == "switch" else EVENT_PS3_TO_SWITCH.get(event_id)
+    return event_id if build != "ps3" else EVENT_PS3_TO_SWITCH.get(event_id)
 
 
 def _float(word: int, order: str) -> float:
@@ -106,11 +120,11 @@ def _raw_string(view: ByteView, position: int) -> bytes | None:
 
 def _read_filter(view: ByteView, base: int, build: str, slot: int, warnings: list[str]) -> MessageFilter:
     at = base + _FILTER_AT + slot * _FILTER_SIZE[build]
-    if build == "switch":
+    if build != "ps3":
         value, second = view.unpack("II", at)
-        kind = view.u32(at + 16)
+        kind = view.i32(at + 16)
     else:
-        kind, value, second = view.unpack("III", at)
+        kind, value, second = view.unpack("iII", at)
     text = None
     if kind not in _NO_VALUE_KINDS:
         text = _text(view, base + _STRINGS_AT[build] + slot * 16)

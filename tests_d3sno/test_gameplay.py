@@ -42,10 +42,32 @@ class SkillKits(unittest.TestCase):
             read = skills.parse_skill_kit(B.build_skl(
                 build, [(100, 1, 10)], [(200, 1, 2, 5, 1, 11, 12, 13, 14, 15)],
             ))
-            self.assertEqual(read.traits[0], skills.Trait(100, 1, 10))
+            new = None if build == "ps3" else 0
+            self.assertEqual(read.traits[0], skills.Trait(100, 1, 10, new))
             active = read.actives[0]
             self.assertEqual((active.power, active.new_category, active.granted), (200, 2, 1))
             self.assertEqual(active.rune_unlock_levels, (11, 12, 13, 14, 15))
+            self.assertEqual(active.category_name, "SKILLCAT_BARB_2")
+            self.assertEqual(read.power_fallbacks, [])
+
+    def test_switch_extra_fields(self):
+        read = skills.parse_skill_kit(B.build_skl(
+            "switch", [(100, 0, 10, 1)], [(200, 0, -1, 5, 1, 11, 12, 13, 14, 15, 1, 0, 1, 0, 1, 0)],
+            fallbacks=[77, 78],
+        ))
+        self.assertEqual(read.traits[0].new, 1)
+        active = read.actives[0]
+        self.assertEqual((active.new, active.rune_new), (1, (0, 1, 0, 1, 0)))
+        self.assertEqual(active.category_name, "SKILLCAT_BARB_1")
+        self.assertEqual(active.new_category_name, "SKILLCAT_INVALID")
+        self.assertEqual(read.power_fallbacks, [77, 78])
+
+    def test_fixed_part_size(self):
+        for build, size in (("ps3", 0x40), ("switch", 0x50)):
+            data = B.build_skl(build)
+            self.assertEqual(len(data), size)
+            with self.assertRaises(FormatError):
+                skills.parse_skill_kit(data[:size - 4])
 
     def test_entry_sizes(self):
         for build, at in (("ps3", 0x2C), ("switch", 0x3C)):
@@ -69,6 +91,8 @@ class Small(unittest.TestCase):
         read = skills.parse_lore(B.build_words("ps3", [1, 2, 3, 4, 5, 6]))
         self.assertEqual((read.flags, read.category, read.xp_level), (1, 2, 3))
         self.assertEqual((read.xp_tier, read.conversation, read.signature_label_hash), (4, 5, 6))
+        self.assertEqual(read.category_name, "LORECAT_PEOPLE")
+        self.assertEqual(skills.LORE_FIXED, 0x34)
 
     def test_lore_short(self):
         with self.assertRaises(FormatError):

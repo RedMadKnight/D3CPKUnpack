@@ -4,13 +4,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .binary import ByteView, FormatError
+from .binary import ByBuild, ByteView, FormatError
 from .sno import SnoHeader, parse_header, resolve_build
 
-_ROW = {"switch": 16, "ps3": 40}
-_STORED_AT = {"switch": 0x0C, "ps3": 0x20}
-_SAMPLE_COUNT_AT = {"switch": 0x30, "ps3": 0x24}
-_PERMUTATION = {"switch": (0x54, 0x5C, 64), "ps3": (0x50, 0x58, 44)}  # pair, count, size
+_ROW = ByBuild({"switch": 16, "ps3": 40})
+_STORED_AT = ByBuild({"switch": 0x0C, "ps3": 0x20})
+_SAMPLE_COUNT_AT = ByBuild({"switch": 0x30, "ps3": 0x24})
+_PERMUTATION = ByBuild({"switch": (0x54, 0x5C, 64), "ps3": (0x50, 0x58, 44)})  # pair, count, size
 
 
 @dataclass(frozen=True)
@@ -70,8 +70,9 @@ class SoundFile:
 
 def parse_sound(data: bytes, build: str | None = None) -> SoundFile:
     header = parse_header(data, build)
+    resolved = resolve_build("snd", header, build)
     view = ByteView(data, header.order)
-    pair_at, count_at, size = _PERMUTATION[header.build]
+    pair_at, count_at, size = _PERMUTATION[resolved]
     count = view.i32(count_at, "permutation count")
     pair = view.pair(pair_at, "permutations pair")
     if count < 0 or pair.size != count * size:
@@ -82,7 +83,7 @@ def parse_sound(data: bytes, build: str | None = None) -> SoundFile:
         row = raw[i * size:(i + 1) * size]
         r = ByteView(row, view.order)
         permutations.append(SoundPermutation(r.i32(0), r.u32(4), r.u32(8), row))
-    return SoundFile(header, header.build, permutations)
+    return SoundFile(header, resolved, permutations)
 
 
 def resolve_sample(permutation: SoundPermutation, banks: dict[int, SoundBank]) -> SampleRow | None:

@@ -7,7 +7,7 @@ import struct
 from dataclasses import dataclass, field
 
 from .appearance import AppearanceFile, check_float32, gltf_dumps, to_gltf
-from .binary import ByteView, FormatError, Pair, build_order, to_f32
+from .binary import ByBuild, ByteView, FormatError, Pair, build_order, to_f32
 from .sno import SnoHeader, parse_header, resolve_build
 from .transform import Quaternion, Transform, Vector, quat_normalise
 
@@ -16,7 +16,7 @@ ATTACHMENT_SIZE = 192
 CURVE_ENTRY_SIZE = 16
 BLEND_WEIGHT_SIZE = 8
 NONLINEAR_SIZE = 12
-_TABLE_AT = {"ps3": 0x40, "switch": 0x38}
+_TABLE_AT = ByBuild({"ps3": 0x40, "switch": 0x38})
 _PS3_ANI_HEAD = 0x50
 _ROTATION_UNIT = to_f32(1 / 32767)
 MODE_STOP = 0
@@ -144,13 +144,13 @@ def _read_switch_data(view: ByteView, perm: Permutation, base: int) -> None:
 def parse_ani(
     data: bytes, build: str | None = None, can: bytes | None = None, strict: bool = False,
 ) -> AniFile:
-    """Read an ``.ani``. On ps3, pass the ``.can`` bytes to merge the animation data."""
+    """Read an ``.ani``. On ps3 and x360, pass the ``.can`` bytes to merge the animation data."""
     header = parse_header(data, build)
     resolved = resolve_build("ani", header, build, strict)
     view = ByteView(data, build_order(resolved))
     table_pair = view.pair(0x28, "permutation table pair")
     warnings = []
-    if resolved == "ps3":
+    if resolved in ("ps3", "x360"):  # x360 .ani is the ps3 form, data in the .can (X5)
         count, excess = divmod(len(data) - _PS3_ANI_HEAD, PERMUTATION_SIZE)
         if count < 0 or excess:
             raise FormatError(f"ps3 .ani of {len(data)} bytes is not 0x50 + 360 * n", 0)

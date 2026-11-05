@@ -1,0 +1,966 @@
+ext	ps3_record	ps3_offset	ps3_nonzero	switch_record	switch_offset	switch_field	agree	records
+ani	fixed:0x40	0x000	300	AnimationDefinition	0x000	tHeader.snoHandle	287	300
+ani	fixed:0x40	0x004	0	AnimationDefinition			0	300
+ani	fixed:0x40	0x008	0	AnimationDefinition			0	300
+ani	fixed:0x40	0x00c	34	AnimationDefinition	0x00c	dwFlags	34	300
+ani	fixed:0x40	0x010	73	AnimationDefinition	0x010	ePlaybackMode	73	300
+ani	fixed:0x40	0x014	300	AnimationDefinition	0x014	snoAppearance	299	300
+ani	fixed:0x40	0x018	300	AnimationDefinition			0	300
+ani	fixed:0x40	0x01c	300	AnimationDefinition	0x01c	serPermutations+4(pair)	298	300
+ani	fixed:0x40	0x020	300	AnimationDefinition	0x020	nPermutationCount	298	300
+ani	fixed:0x40	0x024	0	AnimationDefinition			0	300
+ani	fixed:0x40	0x028	0	AnimationDefinition			0	300
+ani	fixed:0x40	0x02c	0	AnimationDefinition			0	300
+ani	fixed:0x40	0x030	0	AnimationDefinition			0	300
+ani	fixed:0x40	0x034	0	AnimationDefinition			0	300
+ani	fixed:0x40	0x038	300	AnimationDefinition	0x030	dwMachineTime	294	300
+ani	fixed:0x40	0x03c	0	AnimationDefinition			0	300
+ani	pair:0x28:360	0x000	49	AnimPermutation	0x000	dwFlags	49	323
+ani	pair:0x28:360	0x004	323	AnimPermutation			0	323
+ani	pair:0x28:360	0x008	323	AnimPermutation			0	323
+ani	pair:0x28:360	0x00c	322	AnimPermutation			0	323
+ani	pair:0x28:360	0x010	319	AnimPermutation	0x010	szPermutationName+12	1	323
+ani	pair:0x28:360	0x014	302	AnimPermutation			0	323
+ani	pair:0x28:360	0x018	276	AnimPermutation			0	323
+ani	pair:0x28:360	0x01c	231	AnimPermutation			0	323
+ani	pair:0x28:360	0x020	172	AnimPermutation	0x020	szPermutationName+28	4	323
+ani	pair:0x28:360	0x024	109	AnimPermutation			0	323
+ani	pair:0x28:360	0x028	53	AnimPermutation			0	323
+ani	pair:0x28:360	0x02c	24	AnimPermutation			0	323
+ani	pair:0x28:360	0x030	5	AnimPermutation			0	323
+ani	pair:0x28:360	0x034	2	AnimPermutation			0	323
+ani	pair:0x28:360	0x038	1	AnimPermutation			0	323
+ani	pair:0x28:360	0x03c	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x040	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x044	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x048	323	AnimPermutation	0x048	flFrameRate	308	323
+ani	pair:0x28:360	0x04c	320	AnimPermutation	0x04c	flCompression	320	323
+ani	pair:0x28:360	0x050	323	AnimPermutation	0x050	flTranslationCompressionRatio	134	323
+ani	pair:0x28:360	0x054	323	AnimPermutation	0x054	flRotationCompressionRatio	89	323
+ani	pair:0x28:360	0x058	323	AnimPermutation	0x058	flScaleCompressionRatio	316	323
+ani	pair:0x28:360	0x05c	188	AnimPermutation	0x05c	dwBlendTime	186	323
+ani	pair:0x28:360	0x060	19	AnimPermutation	0x060	dwFromPermBlendTime	19	323
+ani	pair:0x28:360	0x064	322	AnimPermutation	0x064	dwWeight	322	323
+ani	pair:0x28:360	0x068	323	AnimPermutation	0x068	flSpeedMultMin	322	323
+ani	pair:0x28:360	0x06c	8	AnimPermutation	0x06c	flSpeedMultDelta	8	323
+ani	pair:0x28:360	0x070	107	AnimPermutation	0x070	flRagdollVelocityFactor	107	323
+ani	pair:0x28:360	0x074	103	AnimPermutation	0x074	flRagdollMomentumFactor	103	323
+ani	pair:0x28:360	0x078	323	AnimPermutation	0x078	nBoneCount	319	323
+ani	pair:0x28:360	0x07c	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x080	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x084	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x088	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x08c	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x090	27	AnimPermutation	0x078	nBoneCount	27	323
+ani	pair:0x28:360	0x094	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x098	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x09c	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0a0	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0a4	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0a8	323	AnimPermutation	0x0a8	nKeyframeCount	320	323
+ani	pair:0x28:360	0x0ac	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0b0	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0b4	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0b8	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0bc	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0c0	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0c4	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0c8	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0cc	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0d0	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0d4	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0d8	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0dc	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x0e0	305	AnimPermutation	0x0e0	flContactKeyframe	302	323
+ani	pair:0x28:360	0x0e4	236	AnimPermutation	0x0e4	flContactKeyframe+4	236	323
+ani	pair:0x28:360	0x0e8	1	AnimPermutation	0x0e8	flContactKeyframe+8	1	323
+ani	pair:0x28:360	0x0ec	236	AnimPermutation	0x0ec	flContactKeyframe+12	236	323
+ani	pair:0x28:360	0x0f0	18	AnimPermutation	0x0f0	wpContactOffset	18	323
+ani	pair:0x28:360	0x0f4	13	AnimPermutation	0x0f4	wpContactOffset+4	13	323
+ani	pair:0x28:360	0x0f8	45	AnimPermutation	0x0f8	wpContactOffset+8	45	323
+ani	pair:0x28:360	0x0fc	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x100	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x104	86	AnimPermutation	0x104	wpContactOffset+20	77	323
+ani	pair:0x28:360	0x108	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x10c	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x110	86	AnimPermutation	0x104	wpContactOffset+20	77	323
+ani	pair:0x28:360	0x114	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x118	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x11c	86	AnimPermutation	0x104	wpContactOffset+20	77	323
+ani	pair:0x28:360	0x120	323	AnimPermutation	0x120	flEarliestInterruptKeyFrame	316	323
+ani	pair:0x28:360	0x124	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x128	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x12c	232	AnimPermutation	0x12c	nKeyedAttachmentCount	219	323
+ani	pair:0x28:360	0x130	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x134	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x138	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x13c	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x140	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x144	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x148	20	AnimPermutation	0x148	wvAvgVel	16	323
+ani	pair:0x28:360	0x14c	3	AnimPermutation	0x14c	wvAvgVel+4	3	323
+ani	pair:0x28:360	0x150	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x154	4	AnimPermutation	0x154	tHardpointLink.tHash.dwHash	4	323
+ani	pair:0x28:360	0x158	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x15c	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x160	0	AnimPermutation			0	323
+ani	pair:0x28:360	0x164	0	AnimPermutation			0	323
+ans	fixed:0x150	0x000	300	AnimSetDefinition	0x000	tHeader.snoHandle	293	300
+ans	fixed:0x150	0x004	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x008	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x00c	300	AnimSetDefinition	0x00c	snoParentAnimSet	300	300
+ans	fixed:0x150	0x010	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x014	300	AnimSetDefinition	0x014	serTagMapAnimDefault+4(pair)	276	300
+ans	fixed:0x150	0x018	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x01c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x020	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x024	300	AnimSetDefinition	0x024	tWeaponAnimTagMap[0].serTagMap+4(pair)	300	300
+ans	fixed:0x150	0x028	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x02c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x030	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x034	300	AnimSetDefinition	0x034	tWeaponAnimTagMap[1].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x038	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x03c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x040	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x044	300	AnimSetDefinition	0x044	tWeaponAnimTagMap[2].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x048	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x04c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x050	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x054	300	AnimSetDefinition	0x054	tWeaponAnimTagMap[3].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x058	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x05c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x060	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x064	300	AnimSetDefinition	0x064	tWeaponAnimTagMap[4].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x068	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x06c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x070	300	AnimSetDefinition	0x010	serTagMapAnimDefault(pair)	5	300
+ans	fixed:0x150	0x074	300	AnimSetDefinition	0x074	tWeaponAnimTagMap[5].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x078	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x07c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x080	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x084	300	AnimSetDefinition	0x084	tWeaponAnimTagMap[6].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x088	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x08c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x090	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x094	300	AnimSetDefinition	0x094	tWeaponAnimTagMap[7].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x098	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x09c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0a0	300	AnimSetDefinition	0x010	serTagMapAnimDefault(pair)	1	300
+ans	fixed:0x150	0x0a4	300	AnimSetDefinition	0x054	tWeaponAnimTagMap[3].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x0a8	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0ac	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0b0	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0b4	300	AnimSetDefinition	0x0b4	tWeaponAnimTagMap[9].serTagMap+4(pair)	299	300
+ans	fixed:0x150	0x0b8	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0bc	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0c0	300	AnimSetDefinition	0x030	tWeaponAnimTagMap[1].serTagMap(pair)	4	300
+ans	fixed:0x150	0x0c4	300	AnimSetDefinition	0x0c4	tWeaponAnimTagMap[10].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x0c8	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0cc	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0d0	300	AnimSetDefinition	0x0b0	tWeaponAnimTagMap[9].serTagMap(pair)	2	300
+ans	fixed:0x150	0x0d4	300	AnimSetDefinition	0x0c4	tWeaponAnimTagMap[10].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x0d8	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0dc	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0e0	300	AnimSetDefinition	0x0c0	tWeaponAnimTagMap[10].serTagMap(pair)	1	300
+ans	fixed:0x150	0x0e4	300	AnimSetDefinition	0x0c4	tWeaponAnimTagMap[10].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x0e8	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0ec	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0f0	300	AnimSetDefinition	0x0f0	tWeaponAnimTagMap[13].serTagMap(pair)	1	300
+ans	fixed:0x150	0x0f4	300	AnimSetDefinition	0x0f4	tWeaponAnimTagMap[13].serTagMap+4(pair)	299	300
+ans	fixed:0x150	0x0f8	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x0fc	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x100	300	AnimSetDefinition	0x010	serTagMapAnimDefault(pair)	4	300
+ans	fixed:0x150	0x104	300	AnimSetDefinition	0x0c4	tWeaponAnimTagMap[10].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x108	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x10c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x110	300	AnimSetDefinition	0x140	tWeaponAnimTagMap[18].serTagMap(pair)	1	300
+ans	fixed:0x150	0x114	300	AnimSetDefinition	0x0f4	tWeaponAnimTagMap[13].serTagMap+4(pair)	299	300
+ans	fixed:0x150	0x118	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x11c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x120	300	AnimSetDefinition	0x150	tWeaponAnimTagMap[19].serTagMap(pair)	1	300
+ans	fixed:0x150	0x124	300	AnimSetDefinition	0x0f4	tWeaponAnimTagMap[13].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x128	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x12c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x130	300	AnimSetDefinition	0x010	serTagMapAnimDefault(pair)	5	300
+ans	fixed:0x150	0x134	300	AnimSetDefinition	0x134	tWeaponAnimTagMap[17].serTagMap+4(pair)	299	300
+ans	fixed:0x150	0x138	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x13c	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x140	300	AnimSetDefinition			0	300
+ans	fixed:0x150	0x144	300	AnimSetDefinition	0x144	tWeaponAnimTagMap[18].serTagMap+4(pair)	298	300
+ans	fixed:0x150	0x148	0	AnimSetDefinition			0	300
+ans	fixed:0x150	0x14c	0	AnimSetDefinition			0	300
+snd	fixed:0x7C	0x000	400	SoundDefinition	0x000	tHeader.snoHandle	393	400
+snd	fixed:0x7C	0x004	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x008	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x00c	400	SoundDefinition	0x00c	dwFlags	400	400
+snd	fixed:0x7C	0x010	385	SoundDefinition	0x010	dwPriority	385	400
+snd	fixed:0x7C	0x014	398	SoundDefinition	0x014	wdFalloffRadiusMin	398	400
+snd	fixed:0x7C	0x018	400	SoundDefinition	0x018	wdFalloffRadiusDelta	400	400
+snd	fixed:0x7C	0x01c	391	SoundDefinition	0x01c	flRolloffFactor	391	400
+snd	fixed:0x7C	0x020	399	SoundDefinition	0x020	eFalloffType	399	400
+snd	fixed:0x7C	0x024	7	SoundDefinition	0x024	flDopplerFactor	7	400
+snd	fixed:0x7C	0x028	256	SoundDefinition	0x028	flDuckAmountDB	255	400
+snd	fixed:0x7C	0x02c	394	SoundDefinition	0x02c	flGlobalVolumeDB	391	400
+snd	fixed:0x7C	0x030	11	SoundDefinition	0x034	flImpulseMin	11	400
+snd	fixed:0x7C	0x034	10	SoundDefinition	0x038	flImpulseDelta	10	400
+snd	fixed:0x7C	0x038	11	SoundDefinition	0x03c	flImpulseAttenMinDB	11	400
+snd	fixed:0x7C	0x03c	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x040	375	SoundDefinition			0	400
+snd	fixed:0x7C	0x044	375	SoundDefinition	0x074	serDspEffects+4(pair)	1	400
+snd	fixed:0x7C	0x048	375	SoundDefinition	0x04c	nPermutationCount	373	400
+snd	fixed:0x7C	0x04c	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x050	283	SoundDefinition	0x058	eType	283	400
+snd	fixed:0x7C	0x054	397	SoundDefinition	0x05c	nInstanceLimit	397	400
+snd	fixed:0x7C	0x058	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x05c	18	SoundDefinition	0x044	serPermutations(pair)	5	400
+snd	fixed:0x7C	0x060	18	SoundDefinition	0x074	serDspEffects+4(pair)	18	400
+snd	fixed:0x7C	0x064	397	SoundDefinition	0x088	dwCrossFadeTime	397	400
+snd	fixed:0x7C	0x068	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x06c	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x070	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x074	0	SoundDefinition			0	400
+snd	fixed:0x7C	0x078	0	SoundDefinition			0	400
+snd	pair:0x50:44	0x000	1540	SoundPermutation	0x000	snoSoundBank	1540	1540
+snd	pair:0x50:44	0x004	1540	SoundPermutation	0x004	dwSampleHash	1536	1540
+snd	pair:0x50:44	0x008	1540	SoundPermutation	0x008	dwWeight	1540	1540
+snd	pair:0x50:44	0x00c	689	SoundPermutation	0x00c	flVolumeDBMin	689	1540
+snd	pair:0x50:44	0x010	627	SoundPermutation	0x010	flVolumeDBDelta	627	1540
+snd	pair:0x50:44	0x014	806	SoundPermutation	0x014	flPitchSemitonesMin	806	1540
+snd	pair:0x50:44	0x018	898	SoundPermutation	0x018	flPitchSemitonesDelta	898	1540
+snd	pair:0x50:44	0x01c	116	SoundPermutation	0x020	dwFadeOutTime	116	1540
+snd	pair:0x50:44	0x020	10	SoundPermutation	0x034	dwDelay	10	1540
+snd	pair:0x50:44	0x024	0	SoundPermutation			0	1540
+snd	pair:0x50:44	0x028	0	SoundPermutation			0	1540
+sbk	fixed:0x1C	0x000	300	SoundBankDefinition	0x000	tHeader.snoHandle	296	300
+sbk	fixed:0x1C	0x004	0	SoundBankDefinition			0	300
+sbk	fixed:0x1C	0x008	0	SoundBankDefinition			0	300
+sbk	fixed:0x1C	0x00c	300	SoundBankDefinition	0x020	nSoundSampleCount	1	300
+sbk	fixed:0x1C	0x010	300	SoundBankDefinition	0x00c	serSoundSamples(pair)	18	300
+sbk	fixed:0x1C	0x014	300	SoundBankDefinition	0x020	nSoundSampleCount	45	300
+sbk	fixed:0x1C	0x018	0	SoundBankDefinition			0	300
+sbk	pair:0x1C:40	0x000	1621	SoundSample	0x000	dwHash	1600	1621
+sbk	pair:0x1C:40	0x004	8	SoundSample			0	1621
+sbk	pair:0x1C:40	0x008	60	SoundSample			0	1621
+sbk	pair:0x1C:40	0x00c	1621	SoundSample			0	1621
+sbk	pair:0x1C:40	0x010	1621	SoundSample			0	1621
+sbk	pair:0x1C:40	0x014	1621	SoundSample	0x008	dwDecompressedSize	1600	1621
+sbk	pair:0x1C:40	0x018	1621	SoundSample			0	1621
+sbk	pair:0x1C:40	0x01c	0	SoundSample			0	1621
+sbk	pair:0x1C:40	0x020	1621	SoundSample			0	1621
+sbk	pair:0x1C:40	0x024	0	SoundSample			0	1621
+mrk	fixed:0xC8	0x000	300	MarkerSetDefinition	0x000	tHeader.snoHandle	298	300
+mrk	fixed:0xC8	0x004	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x008	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x00c	175	MarkerSetDefinition	0x00c	serMarkers(pair)	175	300
+mrk	fixed:0xC8	0x010	175	MarkerSetDefinition	0x010	serMarkers+4(pair)	150	300
+mrk	fixed:0xC8	0x014	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x018	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x01c	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x020	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x024	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x028	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x02c	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x030	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x034	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x038	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x03c	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x040	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x044	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x048	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x04c	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x050	12	MarkerSetDefinition	0x050	serNoSpawns(pair)	4	300
+mrk	fixed:0xC8	0x054	12	MarkerSetDefinition	0x054	serNoSpawns+4(pair)	12	300
+mrk	fixed:0xC8	0x058	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x05c	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x060	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x064	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x068	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x06c	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x070	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x074	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x078	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x07c	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x080	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x084	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x088	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x08c	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x090	192	MarkerSetDefinition	0x090	aabbBounds.wp	179	300
+mrk	fixed:0xC8	0x094	191	MarkerSetDefinition	0x094	aabbBounds.wp+4	175	300
+mrk	fixed:0xC8	0x098	183	MarkerSetDefinition	0x098	aabbBounds.wp+8	170	300
+mrk	fixed:0xC8	0x09c	192	MarkerSetDefinition	0x09c	aabbBounds.wvExt	178	300
+mrk	fixed:0xC8	0x0a0	192	MarkerSetDefinition	0x0a0	aabbBounds.wvExt+4	176	300
+mrk	fixed:0xC8	0x0a4	192	MarkerSetDefinition	0x0a4	aabbBounds.wvExt+8	175	300
+mrk	fixed:0xC8	0x0a8	217	MarkerSetDefinition	0x0a8	dwMarkerSetFlags	216	300
+mrk	fixed:0xC8	0x0ac	300	MarkerSetDefinition	0x0ac	nLabel	300	300
+mrk	fixed:0xC8	0x0b0	67	MarkerSetDefinition	0x0b0	nSpecialIndexCount	44	300
+mrk	fixed:0xC8	0x0b4	67	MarkerSetDefinition	0x0b4	serSpecialIndexList(pair)	20	300
+mrk	fixed:0xC8	0x0b8	67	MarkerSetDefinition	0x0b8	serSpecialIndexList+4(pair)	44	300
+mrk	fixed:0xC8	0x0bc	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x0c0	0	MarkerSetDefinition			0	300
+mrk	fixed:0xC8	0x0c4	0	MarkerSetDefinition			0	300
+mrk	pair:0x1C:88	0x000	1616	Marker	0x000	dwHash	1616	1616
+mrk	pair:0x1C:88	0x004	0	Marker			0	1616
+mrk	pair:0x1C:88	0x008	912	Marker	0x008	eType	912	1616
+mrk	pair:0x1C:88	0x00c	162	Marker	0x00c	transform.q.wvImag	161	1616
+mrk	pair:0x1C:88	0x010	170	Marker	0x010	transform.q.wvImag+4	169	1616
+mrk	pair:0x1C:88	0x014	606	Marker	0x014	transform.q.wvImag+8	604	1616
+mrk	pair:0x1C:88	0x018	1610	Marker	0x018	transform.q.wdReal	1610	1616
+mrk	pair:0x1C:88	0x01c	1615	Marker	0x01c	transform.wp	1607	1616
+mrk	pair:0x1C:88	0x020	1614	Marker	0x020	transform.wp+4	1606	1616
+mrk	pair:0x1C:88	0x024	1452	Marker	0x024	transform.wp+8	1446	1616
+mrk	pair:0x1C:88	0x028	1616	Marker	0x028	snoname.snoGroup	1616	1616
+mrk	pair:0x1C:88	0x02c	1616	Marker	0x02c	snoname.snoHandle	1589	1616
+mrk	pair:0x1C:88	0x030	1616	Marker	0x030	serTagMap(pair)	286	1616
+mrk	pair:0x1C:88	0x034	1616	Marker	0x034	serTagMap+4(pair)	1607	1616
+mrk	pair:0x1C:88	0x038	0	Marker			0	1616
+mrk	pair:0x1C:88	0x03c	0	Marker			0	1616
+mrk	pair:0x1C:88	0x040	44	Marker	0x040	nLinkCount	44	1616
+mrk	pair:0x1C:88	0x044	44	Marker	0x044	serMarkerLinks(pair)	11	1616
+mrk	pair:0x1C:88	0x048	44	Marker	0x048	serMarkerLinks+4(pair)	44	1616
+mrk	pair:0x1C:88	0x04c	0	Marker			0	1616
+mrk	pair:0x1C:88	0x050	0	Marker			0	1616
+mrk	pair:0x1C:88	0x054	0	Marker			0	1616
+mat	fixed:0x68	0x000	300	MaterialDefinition	0x000	tHeader.snoHandle	296	300
+mat	fixed:0x68	0x004	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x008	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x00c	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x010	300	MaterialDefinition			0	300
+mat	fixed:0x68	0x014	300	MaterialDefinition	0x014	serTagMap+4(pair)	298	300
+mat	fixed:0x68	0x018	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x01c	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x020	300	MaterialDefinition	0x020	tUberMaterial.snoShaderMap	299	300
+mat	fixed:0x68	0x024	295	MaterialDefinition	0x068	tUberMaterial.mat.nSortPri	21	300
+mat	fixed:0x68	0x028	300	MaterialDefinition	0x030	tUberMaterial.mat.rgbavalAmbient+12	293	300
+mat	fixed:0x68	0x02c	295	MaterialDefinition	0x068	tUberMaterial.mat.nSortPri	21	300
+mat	fixed:0x68	0x030	300	MaterialDefinition	0x030	tUberMaterial.mat.rgbavalAmbient+12	293	300
+mat	fixed:0x68	0x034	52	MaterialDefinition			0	300
+mat	fixed:0x68	0x038	300	MaterialDefinition	0x030	tUberMaterial.mat.rgbavalAmbient+12	286	300
+mat	fixed:0x68	0x03c	33	MaterialDefinition			0	300
+mat	fixed:0x68	0x040	300	MaterialDefinition	0x030	tUberMaterial.mat.rgbavalAmbient+12	293	300
+mat	fixed:0x68	0x044	8	MaterialDefinition	0x064	tUberMaterial.mat.flPower	8	300
+mat	fixed:0x68	0x048	75	MaterialDefinition	0x068	tUberMaterial.mat.nSortPri	73	300
+mat	fixed:0x68	0x04c	299	MaterialDefinition	0x010	serTagMap(pair)	14	300
+mat	fixed:0x68	0x050	299	MaterialDefinition	0x06c	tUberMaterial.serMatTexList(pair)	7	300
+mat	fixed:0x68	0x054	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x058	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x05c	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x060	0	MaterialDefinition			0	300
+mat	fixed:0x68	0x064	0	MaterialDefinition			0	300
+tex	fixed:0x260	0x000	150	TextureDefinition	0x000	tHeader.snoHandle	145	150
+tex	fixed:0x260	0x004	0	TextureDefinition			0	150
+tex	fixed:0x260	0x008	0	TextureDefinition			0	150
+tex	fixed:0x260	0x00c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x010	150	TextureDefinition	0x010	eTexFormat	150	150
+tex	fixed:0x260	0x014	150	TextureDefinition	0x014	dwWidth	147	150
+tex	fixed:0x260	0x018	150	TextureDefinition	0x018	dwHeight	147	150
+tex	fixed:0x260	0x01c	150	TextureDefinition	0x01c	dwFaceCount	150	150
+tex	fixed:0x260	0x020	150	TextureDefinition	0x020	dwDepth	150	150
+tex	fixed:0x260	0x024	0	TextureDefinition			0	150
+tex	fixed:0x260	0x028	92	TextureDefinition	0x028	dwMipMapLevelMin	90	150
+tex	fixed:0x260	0x02c	109	TextureDefinition	0x02c	dwMipMapLevelMax	108	150
+tex	fixed:0x260	0x030	150	TextureDefinition	0x250	serImageFileIDs(pair)	142	150
+tex	fixed:0x260	0x034	150	TextureDefinition			0	150
+tex	fixed:0x260	0x038	0	TextureDefinition			0	150
+tex	fixed:0x260	0x03c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x040	0	TextureDefinition			0	150
+tex	fixed:0x260	0x044	0	TextureDefinition			0	150
+tex	fixed:0x260	0x048	0	TextureDefinition			0	150
+tex	fixed:0x260	0x04c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x050	0	TextureDefinition			0	150
+tex	fixed:0x260	0x054	0	TextureDefinition			0	150
+tex	fixed:0x260	0x058	0	TextureDefinition			0	150
+tex	fixed:0x260	0x05c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x060	0	TextureDefinition			0	150
+tex	fixed:0x260	0x064	0	TextureDefinition			0	150
+tex	fixed:0x260	0x068	0	TextureDefinition			0	150
+tex	fixed:0x260	0x06c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x070	0	TextureDefinition			0	150
+tex	fixed:0x260	0x074	0	TextureDefinition			0	150
+tex	fixed:0x260	0x078	0	TextureDefinition			0	150
+tex	fixed:0x260	0x07c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x080	0	TextureDefinition			0	150
+tex	fixed:0x260	0x084	0	TextureDefinition			0	150
+tex	fixed:0x260	0x088	0	TextureDefinition			0	150
+tex	fixed:0x260	0x08c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x090	0	TextureDefinition			0	150
+tex	fixed:0x260	0x094	0	TextureDefinition			0	150
+tex	fixed:0x260	0x098	0	TextureDefinition			0	150
+tex	fixed:0x260	0x09c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0a0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0a4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0a8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0ac	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0b0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0b4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0b8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0bc	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0c0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0c4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0c8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0cc	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0d0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0d4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0d8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0dc	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0e0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0e4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0e8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0ec	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0f0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0f4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0f8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x0fc	0	TextureDefinition			0	150
+tex	fixed:0x260	0x100	0	TextureDefinition			0	150
+tex	fixed:0x260	0x104	0	TextureDefinition			0	150
+tex	fixed:0x260	0x108	0	TextureDefinition			0	150
+tex	fixed:0x260	0x10c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x110	0	TextureDefinition			0	150
+tex	fixed:0x260	0x114	0	TextureDefinition			0	150
+tex	fixed:0x260	0x118	0	TextureDefinition			0	150
+tex	fixed:0x260	0x11c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x120	0	TextureDefinition			0	150
+tex	fixed:0x260	0x124	0	TextureDefinition			0	150
+tex	fixed:0x260	0x128	0	TextureDefinition			0	150
+tex	fixed:0x260	0x12c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x130	0	TextureDefinition			0	150
+tex	fixed:0x260	0x134	0	TextureDefinition			0	150
+tex	fixed:0x260	0x138	0	TextureDefinition			0	150
+tex	fixed:0x260	0x13c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x140	0	TextureDefinition			0	150
+tex	fixed:0x260	0x144	0	TextureDefinition			0	150
+tex	fixed:0x260	0x148	0	TextureDefinition			0	150
+tex	fixed:0x260	0x14c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x150	0	TextureDefinition			0	150
+tex	fixed:0x260	0x154	0	TextureDefinition			0	150
+tex	fixed:0x260	0x158	0	TextureDefinition			0	150
+tex	fixed:0x260	0x15c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x160	0	TextureDefinition			0	150
+tex	fixed:0x260	0x164	0	TextureDefinition			0	150
+tex	fixed:0x260	0x168	0	TextureDefinition			0	150
+tex	fixed:0x260	0x16c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x170	0	TextureDefinition			0	150
+tex	fixed:0x260	0x174	0	TextureDefinition			0	150
+tex	fixed:0x260	0x178	0	TextureDefinition			0	150
+tex	fixed:0x260	0x17c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x180	0	TextureDefinition			0	150
+tex	fixed:0x260	0x184	0	TextureDefinition			0	150
+tex	fixed:0x260	0x188	0	TextureDefinition			0	150
+tex	fixed:0x260	0x18c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x190	0	TextureDefinition			0	150
+tex	fixed:0x260	0x194	0	TextureDefinition			0	150
+tex	fixed:0x260	0x198	0	TextureDefinition			0	150
+tex	fixed:0x260	0x19c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1a0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1a4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1a8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1ac	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1b0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1b4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1b8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1bc	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1c0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1c4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1c8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1cc	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1d0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1d4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1d8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1dc	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1e0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1e4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1e8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1ec	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1f0	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1f4	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1f8	0	TextureDefinition			0	150
+tex	fixed:0x260	0x1fc	0	TextureDefinition			0	150
+tex	fixed:0x260	0x200	0	TextureDefinition			0	150
+tex	fixed:0x260	0x204	0	TextureDefinition			0	150
+tex	fixed:0x260	0x208	0	TextureDefinition			0	150
+tex	fixed:0x260	0x20c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x210	150	TextureDefinition	0x210	dwFrameCount	150	150
+tex	fixed:0x260	0x214	150	TextureDefinition	0x250	serImageFileIDs(pair)	1	150
+tex	fixed:0x260	0x218	150	TextureDefinition	0x218	serFrame+4(pair)	150	150
+tex	fixed:0x260	0x21c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x220	0	TextureDefinition			0	150
+tex	fixed:0x260	0x224	0	TextureDefinition			0	150
+tex	fixed:0x260	0x228	0	TextureDefinition			0	150
+tex	fixed:0x260	0x22c	0	TextureDefinition			0	150
+tex	fixed:0x260	0x230	0	TextureDefinition			0	150
+tex	fixed:0x260	0x234	0	TextureDefinition			0	150
+tex	fixed:0x260	0x238	0	TextureDefinition			0	150
+tex	fixed:0x260	0x23c	150	TextureDefinition			0	150
+tex	fixed:0x260	0x240	150	TextureDefinition	0x254	serImageFileIDs+4(pair)	150	150
+tex	fixed:0x260	0x244	1	TextureDefinition	0x020	dwDepth	1	150
+tex	fixed:0x260	0x248	145	TextureDefinition	0x25c	dwImportFlags	144	150
+tex	fixed:0x260	0x24c	150	TextureDefinition	0x260	dwMachineTime	146	150
+tex	fixed:0x260	0x250	93	TextureDefinition	0x020	dwDepth	93	150
+tex	fixed:0x260	0x254	15	TextureDefinition	0x268	flConsoleLightmapVScale	15	150
+tex	fixed:0x260	0x258	150	TextureDefinition	0x020	dwDepth	150	150
+tex	fixed:0x260	0x25c	150	TextureDefinition	0x020	dwDepth	150	150
+wrl	fixed:0xF0	0x000	210	WorldDefinition	0x000	tHeader.snoHandle	203	210
+wrl	fixed:0xF0	0x004	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x008	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x00c	105	WorldDefinition	0x00c	bDRLG	105	210
+wrl	fixed:0xF0	0x010	210	WorldDefinition			0	210
+wrl	fixed:0xF0	0x014	210	WorldDefinition			0	210
+wrl	fixed:0xF0	0x018	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x01c	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x020	28	WorldDefinition			0	210
+wrl	fixed:0xF0	0x024	28	WorldDefinition	0x024	serMarkerSets+4(pair)	28	210
+wrl	fixed:0xF0	0x028	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x02c	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x030	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x034	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x038	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x03c	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x040	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x044	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x048	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x04c	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x050	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x054	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x058	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x05c	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x060	69	WorldDefinition			0	210
+wrl	fixed:0xF0	0x064	142	WorldDefinition	0x064	tEnvironment.tPostFXParams.flFilterOffset	142	210
+wrl	fixed:0xF0	0x068	142	WorldDefinition	0x068	tEnvironment.tPostFXParams.flFilterOffset+4	142	210
+wrl	fixed:0xF0	0x06c	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x070	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x074	142	WorldDefinition	0x074	tEnvironment.tPostFXParams.flFilterCoeff	142	210
+wrl	fixed:0xF0	0x078	142	WorldDefinition	0x078	tEnvironment.tPostFXParams.flFilterCoeff+4	142	210
+wrl	fixed:0xF0	0x07c	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x080	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x084	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x088	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x08c	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x090	210	WorldDefinition	0x084	tEnvironment.snoSkyboxActor	209	210
+wrl	fixed:0xF0	0x094	139	WorldDefinition	0x084	tEnvironment.snoSkyboxActor	139	210
+wrl	fixed:0xF0	0x098	210	WorldDefinition			0	210
+wrl	fixed:0xF0	0x09c	139	WorldDefinition	0x084	tEnvironment.snoSkyboxActor	139	210
+wrl	fixed:0xF0	0x0a0	210	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0a4	139	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0a8	210	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0ac	139	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0b0	210	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0b4	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0b8	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0bc	1	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0c0	1	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0c4	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0c8	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0cc	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0d0	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0d4	0	WorldDefinition			0	210
+wrl	fixed:0xF0	0x0d8	210	WorldDefinition	0x088	tEnvironment.snoMusic	209	210
+wrl	fixed:0xF0	0x0dc	210	WorldDefinition	0x098	tEnvironment.snoAmbient	210	210
+wrl	fixed:0xF0	0x0e0	210	WorldDefinition	0x09c	tEnvironment.snoReverb	189	210
+wrl	fixed:0xF0	0x0e4	210	WorldDefinition	0x0a0	tEnvironment.snoWeather	205	210
+wrl	fixed:0xF0	0x0e8	210	WorldDefinition	0x0a4	tEnvironment.snoIrradianceTex	210	210
+wrl	fixed:0xF0	0x0ec	210	WorldDefinition	0x0a8	tEnvironment.snoIrradianceTexDead	210	210
+wrl	pair:0x20:112	0x000	105	WorldServerData			0	210
+wrl	pair:0x20:112	0x004	105	WorldServerData	0x004	serDRLGParams+4(pair)	105	210
+wrl	pair:0x20:112	0x008	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x00c	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x010	105	WorldServerData			0	210
+wrl	pair:0x20:112	0x014	105	WorldServerData	0x014	serSceneParams+4(pair)	105	210
+wrl	pair:0x20:112	0x018	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x01c	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x020	120	WorldServerData	0x020	tLabelRuleSet.nNumRules	96	210
+wrl	pair:0x20:112	0x024	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x028	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x02c	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x030	120	WorldServerData			0	210
+wrl	pair:0x20:112	0x034	120	WorldServerData	0x034	tLabelRuleSet.serRules+4(pair)	96	210
+wrl	pair:0x20:112	0x038	11	WorldServerData	0x038	nSceneClusterIDNext	11	210
+wrl	pair:0x20:112	0x03c	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x040	4	WorldServerData	0x040	tSceneClusterSet.nNumClusters	4	210
+wrl	pair:0x20:112	0x044	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x048	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x04c	0	WorldServerData			0	210
+wrl	pair:0x20:112	0x050	4	WorldServerData			0	210
+wrl	pair:0x20:112	0x054	4	WorldServerData			0	210
+wrl	pair:0x20:112	0x058	210	WorldServerData	0x058	arNavMeshFuncs	208	210
+wrl	pair:0x20:112	0x05c	210	WorldServerData	0x058	arNavMeshFuncs	208	210
+wrl	pair:0x20:112	0x060	210	WorldServerData	0x060	arNavMeshFuncs+8	210	210
+wrl	pair:0x20:112	0x064	210	WorldServerData	0x064	arNavMeshFuncs+12	210	210
+wrl	pair:0x20:112	0x068	210	WorldServerData	0x074	snoScript	209	210
+wrl	pair:0x20:112	0x06c	101	WorldServerData	0x078	nSeed	89	210
+scn	fixed:0x218	0x000	300	SceneDefinition	0x000	tHeader.snoHandle	297	300
+scn	fixed:0x218	0x004	0	SceneDefinition			0	300
+scn	fixed:0x218	0x008	0	SceneDefinition			0	300
+scn	fixed:0x218	0x00c	120	SceneDefinition	0x00c	dwFlags	120	300
+scn	fixed:0x218	0x010	298	SceneDefinition	0x010	aabbBounds.wp	298	300
+scn	fixed:0x218	0x014	295	SceneDefinition	0x014	aabbBounds.wp+4	295	300
+scn	fixed:0x218	0x018	299	SceneDefinition	0x018	aabbBounds.wp+8	298	300
+scn	fixed:0x218	0x01c	300	SceneDefinition	0x01c	aabbBounds.wvExt	300	300
+scn	fixed:0x218	0x020	300	SceneDefinition	0x020	aabbBounds.wvExt+4	300	300
+scn	fixed:0x218	0x024	299	SceneDefinition	0x024	aabbBounds.wvExt+8	298	300
+scn	fixed:0x218	0x028	298	SceneDefinition	0x028	aabbMarkerSetBounds.wp	293	300
+scn	fixed:0x218	0x02c	295	SceneDefinition	0x02c	aabbMarkerSetBounds.wp+4	294	300
+scn	fixed:0x218	0x030	299	SceneDefinition	0x030	aabbMarkerSetBounds.wp+8	293	300
+scn	fixed:0x218	0x034	300	SceneDefinition	0x034	aabbMarkerSetBounds.wvExt	295	300
+scn	fixed:0x218	0x038	300	SceneDefinition	0x038	aabbMarkerSetBounds.wvExt+4	299	300
+scn	fixed:0x218	0x03c	300	SceneDefinition	0x03c	aabbMarkerSetBounds.wvExt+8	294	300
+scn	fixed:0x218	0x040	297	SceneDefinition	0x040	?	297	300
+scn	fixed:0x218	0x044	297	SceneDefinition	0x044	?	297	300
+scn	fixed:0x218	0x048	297	SceneDefinition	0x048	?	297	300
+scn	fixed:0x218	0x04c	297	SceneDefinition	0x04c	?	297	300
+scn	fixed:0x218	0x050	131	SceneDefinition	0x050	tNavMeshData.nEdgeTopSize	131	300
+scn	fixed:0x218	0x054	89	SceneDefinition	0x054	tNavMeshData.nEdgeBottomSize	89	300
+scn	fixed:0x218	0x058	127	SceneDefinition	0x058	tNavMeshData.nEdgeLeftSize	127	300
+scn	fixed:0x218	0x05c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x060	279	SceneDefinition	0x060	tNavMeshData.flMinZ	279	300
+scn	fixed:0x218	0x064	297	SceneDefinition	0x064	tNavMeshData.flMaxZ	297	300
+scn	fixed:0x218	0x068	242	SceneDefinition	0x068	tNavMeshData.tEdge.wdSquareZ	242	300
+scn	fixed:0x218	0x06c	297	SceneDefinition	0x06c	tNavMeshData.tEdge.dwSquareFlags	297	300
+scn	fixed:0x218	0x070	210	SceneDefinition	0x070	tNavMeshData.arNumNodesForDistByLevelArea	210	300
+scn	fixed:0x218	0x074	11	SceneDefinition	0x074	tNavMeshData.arNumNodesForDistByLevelArea+4	11	300
+scn	fixed:0x218	0x078	0	SceneDefinition			0	300
+scn	fixed:0x218	0x07c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x080	0	SceneDefinition			0	300
+scn	fixed:0x218	0x084	0	SceneDefinition			0	300
+scn	fixed:0x218	0x088	0	SceneDefinition			0	300
+scn	fixed:0x218	0x08c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x090	257	SceneDefinition	0x080	tNavMeshData.serCompNavMeshArraySquares(pair)	257	300
+scn	fixed:0x218	0x094	257	SceneDefinition	0x094	tNavMeshData.serCompNavMeshArraySquaresSpecialFlags+4(pair)	257	300
+scn	fixed:0x218	0x098	0	SceneDefinition			0	300
+scn	fixed:0x218	0x09c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0a0	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0a4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0a8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0ac	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0b0	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0b4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0b8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0bc	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0c0	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0c4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0c8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0cc	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0d0	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0d4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0d8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0dc	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0e0	25	SceneDefinition	0x0e0	serInclusions(pair)	6	300
+scn	fixed:0x218	0x0e4	25	SceneDefinition	0x0e4	serInclusions+4(pair)	24	300
+scn	fixed:0x218	0x0e8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0ec	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0f0	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0f4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0f8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x0fc	0	SceneDefinition			0	300
+scn	fixed:0x218	0x100	0	SceneDefinition			0	300
+scn	fixed:0x218	0x104	0	SceneDefinition			0	300
+scn	fixed:0x218	0x108	0	SceneDefinition			0	300
+scn	fixed:0x218	0x10c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x110	0	SceneDefinition			0	300
+scn	fixed:0x218	0x114	0	SceneDefinition			0	300
+scn	fixed:0x218	0x118	0	SceneDefinition			0	300
+scn	fixed:0x218	0x11c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x120	297	SceneDefinition	0x120	serMarkerSets(pair)	40	300
+scn	fixed:0x218	0x124	297	SceneDefinition	0x124	serMarkerSets+4(pair)	259	300
+scn	fixed:0x218	0x128	0	SceneDefinition			0	300
+scn	fixed:0x218	0x12c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x130	0	SceneDefinition			0	300
+scn	fixed:0x218	0x134	0	SceneDefinition			0	300
+scn	fixed:0x218	0x138	0	SceneDefinition			0	300
+scn	fixed:0x218	0x13c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x140	0	SceneDefinition			0	300
+scn	fixed:0x218	0x144	0	SceneDefinition			0	300
+scn	fixed:0x218	0x148	0	SceneDefinition			0	300
+scn	fixed:0x218	0x14c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x150	0	SceneDefinition			0	300
+scn	fixed:0x218	0x154	0	SceneDefinition			0	300
+scn	fixed:0x218	0x158	0	SceneDefinition			0	300
+scn	fixed:0x218	0x15c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x160	33	SceneDefinition	0x160	tLookLink.dwLookHash	33	300
+scn	fixed:0x218	0x164	0	SceneDefinition			0	300
+scn	fixed:0x218	0x168	4	SceneDefinition	0x168	serMsgTriggeredEvents(pair)	3	300
+scn	fixed:0x218	0x16c	4	SceneDefinition	0x16c	serMsgTriggeredEvents+4(pair)	3	300
+scn	fixed:0x218	0x170	4	SceneDefinition	0x170	nMsgTriggeredEventCount	3	300
+scn	fixed:0x218	0x174	0	SceneDefinition			0	300
+scn	fixed:0x218	0x178	0	SceneDefinition			0	300
+scn	fixed:0x218	0x17c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x180	296	SceneDefinition	0x180	tNavZoneDef.uNavCellCount	295	300
+scn	fixed:0x218	0x184	0	SceneDefinition			0	300
+scn	fixed:0x218	0x188	0	SceneDefinition			0	300
+scn	fixed:0x218	0x18c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x190	0	SceneDefinition			0	300
+scn	fixed:0x218	0x194	0	SceneDefinition			0	300
+scn	fixed:0x218	0x198	296	SceneDefinition	0x198	tNavZoneDef.uNavCellNeighborCount	295	300
+scn	fixed:0x218	0x19c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1a0	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1a4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1a8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1ac	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1b0	297	SceneDefinition	0x1b0	tNavZoneDef.flGridSizeFeet	297	300
+scn	fixed:0x218	0x1b4	297	SceneDefinition	0x1b4	tNavZoneDef.flOOGridSizeFeet	297	300
+scn	fixed:0x218	0x1b8	297	SceneDefinition	0x1b8	tNavZoneDef.nGridSize	297	300
+scn	fixed:0x218	0x1bc	297	SceneDefinition	0x1bc	tNavZoneDef.tGridSize	297	300
+scn	fixed:0x218	0x1c0	297	SceneDefinition	0x1c0	tNavZoneDef.tGridSize+4	297	300
+scn	fixed:0x218	0x1c4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1c8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1cc	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1d0	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1d4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1d8	296	SceneDefinition	0x1d8	tNavZoneDef.uCellLookupCount	295	300
+scn	fixed:0x218	0x1dc	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1e0	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1e4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1e8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1ec	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1f0	296	SceneDefinition	0x1f0	tNavZoneDef.uBorderDataCount	295	300
+scn	fixed:0x218	0x1f4	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1f8	0	SceneDefinition			0	300
+scn	fixed:0x218	0x1fc	0	SceneDefinition			0	300
+scn	fixed:0x218	0x200	0	SceneDefinition			0	300
+scn	fixed:0x218	0x204	0	SceneDefinition			0	300
+scn	fixed:0x218	0x208	0	SceneDefinition			0	300
+scn	fixed:0x218	0x20c	0	SceneDefinition			0	300
+scn	fixed:0x218	0x210	300	SceneDefinition	0x20c	snoAppearance	290	300
+scn	fixed:0x218	0x214	300	SceneDefinition	0x210	snoPhysMesh	299	300
+phm	fixed:0x30	0x000	300	PhysMeshDefinition	0x000	tHeader.snoHandle	296	300
+phm	fixed:0x30	0x004	0	PhysMeshDefinition			0	300
+phm	fixed:0x30	0x008	0	PhysMeshDefinition			0	300
+phm	fixed:0x30	0x00c	44	PhysMeshDefinition	0x00c	dwFlags	44	300
+phm	fixed:0x30	0x010	298	PhysMeshDefinition	0x010	nCollisionMeshCount	298	300
+phm	fixed:0x30	0x014	298	PhysMeshDefinition	0x014	serCollisionMeshes(pair)	298	300
+phm	fixed:0x30	0x018	298	PhysMeshDefinition			0	300
+phm	fixed:0x30	0x01c	0	PhysMeshDefinition			0	300
+phm	fixed:0x30	0x020	0	PhysMeshDefinition			0	300
+phm	fixed:0x30	0x024	0	PhysMeshDefinition			0	300
+phm	fixed:0x30	0x028	300	PhysMeshDefinition	0x028	dwMachineTime	299	300
+phm	fixed:0x30	0x02c	0	PhysMeshDefinition			0	300
+phm	pair:0x24:136	0x000	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x004	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x008	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x00c	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x010	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x014	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x018	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x01c	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x020	418	CollisionMesh	0x018	?	418	420
+phm	pair:0x24:136	0x024	417	CollisionMesh	0x01c	?	417	420
+phm	pair:0x24:136	0x028	420	CollisionMesh	0x020	?	420	420
+phm	pair:0x24:136	0x02c	420	CollisionMesh			0	420
+phm	pair:0x24:136	0x030	420	CollisionMesh			0	420
+phm	pair:0x24:136	0x034	420	CollisionMesh	0x02c	?	2	420
+phm	pair:0x24:136	0x038	420	CollisionMesh			0	420
+phm	pair:0x24:136	0x03c	420	CollisionMesh			0	420
+phm	pair:0x24:136	0x040	420	CollisionMesh			0	420
+phm	pair:0x24:136	0x044	420	CollisionMesh	0x03c	?	130	420
+phm	pair:0x24:136	0x048	420	CollisionMesh	0x040	?	420	420
+phm	pair:0x24:136	0x04c	420	CollisionMesh	0x044	?	420	420
+phm	pair:0x24:136	0x050	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x054	420	CollisionMesh	0x06c	uMaterial	2	420
+phm	pair:0x24:136	0x058	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x05c	420	CollisionMesh	0x048	?	273	420
+phm	pair:0x24:136	0x060	420	CollisionMesh	0x064	serDominoNodes+4(pair)	3	420
+phm	pair:0x24:136	0x064	420	CollisionMesh	0x054	serDominoVertices+4(pair)	420	420
+phm	pair:0x24:136	0x068	420	CollisionMesh	0x05c	serDominoTriangles+4(pair)	1	420
+phm	pair:0x24:136	0x06c	420	CollisionMesh	0x05c	serDominoTriangles+4(pair)	7	420
+phm	pair:0x24:136	0x070	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x074	0	CollisionMesh			0	420
+phm	pair:0x24:136	0x078	420	CollisionMesh	0x050	serDominoVertices(pair)	1	420
+phm	pair:0x24:136	0x07c	420	CollisionMesh	0x040	?	1	420
+phm	pair:0x24:136	0x080	124	CollisionMesh	0x068	uFlags	124	420
+phm	pair:0x24:136	0x084	116	CollisionMesh	0x06c	uMaterial	116	420
+app	fixed:0x240	0x000	80	AppearanceDefinition	0x000	tHeader.snoHandle	78	80
+app	fixed:0x240	0x004	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x008	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x00c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x010	72	AppearanceDefinition	0x010	tStructure.dwFlags	72	80
+app	fixed:0x240	0x014	29	AppearanceDefinition	0x014	tStructure.nBoneCount	28	80
+app	fixed:0x240	0x018	29	AppearanceDefinition			0	80
+app	fixed:0x240	0x01c	29	AppearanceDefinition			0	80
+app	fixed:0x240	0x020	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x024	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x028	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x02c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x030	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x034	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x038	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x03c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x040	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x044	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x048	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x04c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x050	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x054	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x058	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x05c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x060	80	AppearanceDefinition	0x060	tStructure.tGeoSets[0].nSubObjectCount	79	80
+app	fixed:0x240	0x064	80	AppearanceDefinition			0	80
+app	fixed:0x240	0x068	80	AppearanceDefinition			0	80
+app	fixed:0x240	0x06c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x070	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x074	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x078	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x07c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x080	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x084	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x088	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x08c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x090	76	AppearanceDefinition	0x090	tStructure.wsBounds.wpCenter	74	80
+app	fixed:0x240	0x094	73	AppearanceDefinition	0x094	tStructure.wsBounds.wpCenter+4	71	80
+app	fixed:0x240	0x098	73	AppearanceDefinition	0x098	tStructure.wsBounds.wpCenter+8	72	80
+app	fixed:0x240	0x09c	80	AppearanceDefinition	0x09c	tStructure.wsBounds.wdRadius	78	80
+app	fixed:0x240	0x0a0	2	AppearanceDefinition	0x0a0	tStructure.nCollisionCapsuleCount	2	80
+app	fixed:0x240	0x0a4	2	AppearanceDefinition			0	80
+app	fixed:0x240	0x0a8	2	AppearanceDefinition	0x0a8	tStructure.serCollisionCapsules+4(pair)	2	80
+app	fixed:0x240	0x0ac	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0b0	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0b4	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0b8	80	AppearanceDefinition	0x0b8	tStructure.nHardpointCount	79	80
+app	fixed:0x240	0x0bc	80	AppearanceDefinition			0	80
+app	fixed:0x240	0x0c0	80	AppearanceDefinition	0x0c0	tStructure.serHardpoints+4(pair)	79	80
+app	fixed:0x240	0x0c4	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0c8	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0cc	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0d0	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0d4	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0d8	80	AppearanceDefinition	0x0d8	tStructure.wvRigidAnimAxis+8	80	80
+app	fixed:0x240	0x0dc	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x0e0	29	AppearanceDefinition	0x0e0	tStructure.tOctreeVisualMesh.nMaxNodes	29	80
+app	fixed:0x240	0x0e4	29	AppearanceDefinition	0x0e0	tStructure.tOctreeVisualMesh.nMaxNodes	29	80
+app	fixed:0x240	0x0e8	29	AppearanceDefinition	0x0e8	tStructure.tOctreeVisualMesh.nMaxPrimitives	28	80
+app	fixed:0x240	0x0ec	29	AppearanceDefinition	0x0ec	tStructure.tOctreeVisualMesh.nNodeCount	27	80
+app	fixed:0x240	0x0f0	29	AppearanceDefinition	0x0f0	tStructure.tOctreeVisualMesh.nLeafCount	27	80
+app	fixed:0x240	0x0f4	27	AppearanceDefinition	0x0f4	tStructure.tOctreeVisualMesh.nPrimitiveCount	18	80
+app	fixed:0x240	0x0f8	29	AppearanceDefinition			0	80
+app	fixed:0x240	0x0fc	29	AppearanceDefinition	0x0fc	tStructure.tOctreeVisualMesh.serNodes+4(pair)	27	80
+app	fixed:0x240	0x100	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x104	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x108	29	AppearanceDefinition			0	80
+app	fixed:0x240	0x10c	29	AppearanceDefinition	0x10c	tStructure.tOctreeVisualMesh.serLeaves+4(pair)	27	80
+app	fixed:0x240	0x110	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x114	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x118	27	AppearanceDefinition			0	80
+app	fixed:0x240	0x11c	27	AppearanceDefinition	0x11c	tStructure.tOctreeVisualMesh.serPrimitives+4(pair)	18	80
+app	fixed:0x240	0x120	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x124	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x128	76	AppearanceDefinition	0x128	tStructure.aabbBounds.wp	74	80
+app	fixed:0x240	0x12c	72	AppearanceDefinition	0x12c	tStructure.aabbBounds.wp+4	70	80
+app	fixed:0x240	0x130	73	AppearanceDefinition	0x130	tStructure.aabbBounds.wp+8	72	80
+app	fixed:0x240	0x134	80	AppearanceDefinition	0x134	tStructure.aabbBounds.wvExt	78	80
+app	fixed:0x240	0x138	80	AppearanceDefinition	0x138	tStructure.aabbBounds.wvExt+4	78	80
+app	fixed:0x240	0x13c	79	AppearanceDefinition	0x13c	tStructure.aabbBounds.wvExt+8	78	80
+app	fixed:0x240	0x140	2	AppearanceDefinition	0x140	tStructure.nLoopConstraintCount	2	80
+app	fixed:0x240	0x144	2	AppearanceDefinition			0	80
+app	fixed:0x240	0x148	2	AppearanceDefinition			0	80
+app	fixed:0x240	0x14c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x150	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x154	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x158	21	AppearanceDefinition	0x158	tStructure.uRagdollDegrade	21	80
+app	fixed:0x240	0x15c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x160	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x164	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x168	65	AppearanceDefinition	0x010	tStructure.dwFlags	14	80
+app	fixed:0x240	0x16c	11	AppearanceDefinition	0x0d8	tStructure.wvRigidAnimAxis+8	11	80
+app	fixed:0x240	0x170	80	AppearanceDefinition	0x168	nNumLooks	54	80
+app	fixed:0x240	0x174	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x178	80	AppearanceDefinition	0x168	nNumLooks	79	80
+app	fixed:0x240	0x17c	80	AppearanceDefinition	0x16c	nNumMaterials	79	80
+app	fixed:0x240	0x180	80	AppearanceDefinition	0x0f0	tStructure.tOctreeVisualMesh.nLeafCount	1	80
+app	fixed:0x240	0x184	80	AppearanceDefinition	0x0c0	tStructure.serHardpoints+4(pair)	4	80
+app	fixed:0x240	0x188	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x18c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x190	80	AppearanceDefinition	0x01c	tStructure.serBoneStructure+4(pair)	1	80
+app	fixed:0x240	0x194	80	AppearanceDefinition	0x184	serAppearanceLooks+4(pair)	79	80
+app	fixed:0x240	0x198	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x19c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x1a0	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x1a4	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x1a8	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x1ac	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x1b0	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x1b4	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x1b8	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x1bc	80	AppearanceDefinition	0x1ac	dwFadeOutTimeCriticalHitBlood	80	80
+app	fixed:0x240	0x1c0	80	AppearanceDefinition	0x1b0	dwFadeOutTimeStoned	80	80
+app	fixed:0x240	0x1c4	80	AppearanceDefinition	0x1b0	dwFadeOutTimeStoned	80	80
+app	fixed:0x240	0x1c8	80	AppearanceDefinition	0x1b8	dwFadeOutTimeFrozen	80	80
+app	fixed:0x240	0x1cc	80	AppearanceDefinition	0x1b0	dwFadeOutTimeStoned	80	80
+app	fixed:0x240	0x1d0	80	AppearanceDefinition	0x1c0	dwMachineTime	76	80
+app	fixed:0x240	0x1d4	24	AppearanceDefinition	0x1c4	flUVGenQuality	24	80
+app	fixed:0x240	0x1d8	24	AppearanceDefinition	0x1c8	dwLightMapWidth	24	80
+app	fixed:0x240	0x1dc	24	AppearanceDefinition	0x1cc	dwLightMapHeight	24	80
+app	fixed:0x240	0x1e0	24	AppearanceDefinition	0x1d4	tUnwrapTimeStamp+4	24	80
+app	fixed:0x240	0x1e4	24	AppearanceDefinition	0x1d0	tUnwrapTimeStamp	24	80
+app	fixed:0x240	0x1e8	26	AppearanceDefinition	0x1d8	flMinZ	5	80
+app	fixed:0x240	0x1ec	27	AppearanceDefinition	0x1dc	flMaxZ	3	80
+app	fixed:0x240	0x1f0	29	AppearanceDefinition	0x1e0	nSubgridsX	29	80
+app	fixed:0x240	0x1f4	29	AppearanceDefinition	0x1e0	nSubgridsX	29	80
+app	fixed:0x240	0x1f8	27	AppearanceDefinition	0x1e8	tSubgridsAABB.wp	27	80
+app	fixed:0x240	0x1fc	27	AppearanceDefinition	0x1ec	tSubgridsAABB.wp+4	27	80
+app	fixed:0x240	0x200	28	AppearanceDefinition	0x1f0	tSubgridsAABB.wp+8	28	80
+app	fixed:0x240	0x204	29	AppearanceDefinition	0x1f4	tSubgridsAABB.wvExt	29	80
+app	fixed:0x240	0x208	29	AppearanceDefinition	0x1f4	tSubgridsAABB.wvExt	29	80
+app	fixed:0x240	0x20c	29	AppearanceDefinition	0x1f4	tSubgridsAABB.wvExt	29	80
+app	fixed:0x240	0x210	29	AppearanceDefinition			0	80
+app	fixed:0x240	0x214	29	AppearanceDefinition	0x204	serSubgrids+4(pair)	29	80
+app	fixed:0x240	0x218	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x21c	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x220	80	AppearanceDefinition	0x0bc	tStructure.serHardpoints(pair)	1	80
+app	fixed:0x240	0x224	3	AppearanceDefinition	0x214	serAppearanceSubObjectsIndices+4(pair)	2	80
+app	fixed:0x240	0x228	80	AppearanceDefinition	0x0bc	tStructure.serHardpoints(pair)	1	80
+app	fixed:0x240	0x22c	3	AppearanceDefinition	0x21c	serAppearanceSubObjectsVertices+4(pair)	2	80
+app	fixed:0x240	0x230	29	AppearanceDefinition	0x220	dwFlags	29	80
+app	fixed:0x240	0x234	0	AppearanceDefinition			0	80
+app	fixed:0x240	0x238	80	AppearanceDefinition			0	80
+app	fixed:0x240	0x23c	0	AppearanceDefinition			0	80
+app	pair:0x28:176	0x000	524	BoneStructure	0x000	dwHash	524	524
+app	pair:0x28:176	0x004	351	BoneStructure	0x008	nParentIndex	351	524
+app	pair:0x28:176	0x008	462	BoneStructure	0x00c	aabb.wp	442	524
+app	pair:0x28:176	0x00c	424	BoneStructure	0x010	aabb.wp+4	407	524
+app	pair:0x28:176	0x010	450	BoneStructure	0x014	aabb.wp+8	424	524
+app	pair:0x28:176	0x014	499	BoneStructure	0x018	aabb.wvExt	482	524
+app	pair:0x28:176	0x018	499	BoneStructure	0x01c	aabb.wvExt+4	483	524
+app	pair:0x28:176	0x01c	498	BoneStructure	0x020	aabb.wvExt+8	479	524
+app	pair:0x28:176	0x020	423	BoneStructure	0x024	wsBounds.wpCenter	405	524
+app	pair:0x28:176	0x024	385	BoneStructure	0x028	wsBounds.wpCenter+4	369	524
+app	pair:0x28:176	0x028	383	BoneStructure	0x02c	wsBounds.wpCenter+8	358	524
+app	pair:0x28:176	0x02c	499	BoneStructure	0x030	wsBounds.wdRadius	478	524
+app	pair:0x28:176	0x030	73	BoneStructure	0x034	transform.q.wvImag	73	524
+app	pair:0x28:176	0x034	122	BoneStructure	0x038	transform.q.wvImag+4	122	524
+app	pair:0x28:176	0x038	70	BoneStructure	0x03c	transform.q.wvImag+8	70	524
+app	pair:0x28:176	0x03c	505	BoneStructure	0x040	transform.q.wdReal	505	524
+app	pair:0x28:176	0x040	480	BoneStructure	0x044	transform.wp	476	524
+app	pair:0x28:176	0x044	454	BoneStructure	0x048	transform.wp+4	453	524
+app	pair:0x28:176	0x048	491	BoneStructure	0x04c	transform.wp+8	486	524
+app	pair:0x28:176	0x04c	524	BoneStructure	0x050	transform.flScale	516	524
+app	pair:0x28:176	0x050	524	BoneStructure	0x054	transformInv.q.wvImag	524	524
+app	pair:0x28:176	0x054	524	BoneStructure	0x058	transformInv.q.wvImag+4	524	524
+app	pair:0x28:176	0x058	524	BoneStructure	0x05c	transformInv.q.wvImag+8	524	524
+app	pair:0x28:176	0x05c	505	BoneStructure	0x040	transform.q.wdReal	505	524
+app	pair:0x28:176	0x060	493	BoneStructure	0x064	transformInv.wp	487	524
+app	pair:0x28:176	0x064	477	BoneStructure	0x068	transformInv.wp+4	469	524
+app	pair:0x28:176	0x068	481	BoneStructure	0x06c	transformInv.wp+8	473	524
+app	pair:0x28:176	0x06c	524	BoneStructure	0x070	transformInv.flScale	516	524
+app	pair:0x28:176	0x070	67	BoneStructure	0x074	transformParentRel.q.wvImag	67	524
+app	pair:0x28:176	0x074	85	BoneStructure	0x078	transformParentRel.q.wvImag+4	85	524
+app	pair:0x28:176	0x078	66	BoneStructure	0x07c	transformParentRel.q.wvImag+8	66	524
+app	pair:0x28:176	0x07c	519	BoneStructure	0x080	transformParentRel.q.wdReal	519	524
+app	pair:0x28:176	0x080	470	BoneStructure	0x084	transformParentRel.wp	467	524
+app	pair:0x28:176	0x084	433	BoneStructure	0x088	transformParentRel.wp+4	431	524
+app	pair:0x28:176	0x088	475	BoneStructure	0x08c	transformParentRel.wp+8	470	524
+app	pair:0x28:176	0x08c	524	BoneStructure	0x090	transformParentRel.flScale	522	524
+app	pair:0x28:176	0x090	278	BoneStructure	0x0d4	nShapeCount	278	524
+app	pair:0x28:176	0x094	278	BoneStructure			0	524
+app	pair:0x28:176	0x098	278	BoneStructure			0	524
+app	pair:0x28:176	0x09c	0	BoneStructure			0	524
+app	pair:0x28:176	0x0a0	101	BoneStructure			0	524
+app	pair:0x28:176	0x0a4	101	BoneStructure			0	524
+app	pair:0x28:176	0x0a8	0	BoneStructure			0	524
+app	pair:0x28:176	0x0ac	524	BoneStructure	0x0f8	snoParticleSystem	524	524
+app	pair:0xCC:40	0x000	261	Hardpoint	0x000	tHash.dwHash	261	261
+app	pair:0xCC:40	0x004	0	Hardpoint			0	261
+app	pair:0xCC:40	0x008	224	Hardpoint	0x008	nBoneIndex	224	261
+app	pair:0xCC:40	0x00c	19	Hardpoint	0x00c	transform.q.wvImag	19	261
+app	pair:0xCC:40	0x010	29	Hardpoint	0x010	transform.q.wvImag+4	29	261
+app	pair:0xCC:40	0x014	31	Hardpoint	0x014	transform.q.wvImag+8	31	261
+app	pair:0xCC:40	0x018	258	Hardpoint	0x018	transform.q.wdReal	258	261
+app	pair:0xCC:40	0x01c	136	Hardpoint	0x01c	transform.wp	136	261
+app	pair:0xCC:40	0x020	96	Hardpoint	0x020	transform.wp+4	96	261
+app	pair:0xCC:40	0x024	129	Hardpoint	0x024	transform.wp+8	129	261

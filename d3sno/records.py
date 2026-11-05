@@ -7,15 +7,16 @@ fields by their neutral names. A name that repeats in one record is numbered fro
 from __future__ import annotations
 
 import csv
+import math
 import re
 import struct
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
 
-from .binary import ByteView, FormatError, Pair
+from .binary import ByBuild, ByteView, FormatError, Pair
 from .power import TagMap, read_tag_map
-from .sno import SnoHeader, hash33, parse_header
+from .sno import SnoHeader, hash33, parse_header, resolve_build
 
 DATA = Path(__file__).parent / "data"
 TICKS_PER_SECOND = 60
@@ -27,7 +28,7 @@ RECORDS_BY_EXTENSION = {
     "acr": "actor", "mon": "monster", "qst": "quest", "cnv": "conversation",
     "cnl": "conversation_list", "trs": "treasure_class", "cnd": "condition", "rcp": "recipe",
 }
-_TABLE_BUILDS = {"nx": "switch", "ps3": "ps3"}
+_TABLE_BUILDS = {"nx": "switch", "ps3": "ps3", "x360": "x360"}
 
 
 @dataclass(frozen=True)
@@ -68,17 +69,20 @@ def layouts() -> dict[tuple[str, str], Layout]:
     """All record layouts, keyed by (build, record)."""
     sizes: dict[tuple[str, str], int] = {}
     rows: dict[tuple[str, str], list[FieldSpec]] = {}
-    with open(DATA / "layouts.tsv", encoding="utf-8", newline="") as handle:
-        for row in csv.DictReader(handle, delimiter="\t"):
-            key = (_TABLE_BUILDS[row["build"]], row["record"])
-            if row["offset"] == "-":
-                sizes[key] = int(row["bytes"])
-                continue
-            count = int(row["count"]) if row["count"] else None
-            rows.setdefault(key, []).append(FieldSpec(
-                int(row["offset"], 16), int(row["bytes"]), row["type"], count, row["name"],
-                row["meaning"],
-            ))
+    table_rows: list[dict] = []
+    for table in ("layouts.tsv", "x360_layouts.tsv"):  # x360: seven records of their own (X3)
+        with open(DATA / table, encoding="utf-8", newline="") as handle:
+            table_rows += csv.DictReader(handle, delimiter="\t")
+    for row in table_rows:
+        key = (_TABLE_BUILDS[row["build"]], row["record"])
+        if row["offset"] == "-":
+            sizes[key] = int(row["bytes"])
+            continue
+        count = int(row["count"]) if row["count"] else None
+        rows.setdefault(key, []).append(FieldSpec(
+            int(row["offset"], 16), int(row["bytes"]), row["type"], count, row["name"],
+            row["meaning"],
+        ))
     result = {}
     for key, size in sizes.items():
         specs = sorted(rows.get(key, []), key=lambda spec: spec.offset)
@@ -90,8 +94,14 @@ def layouts() -> dict[tuple[str, str], Layout]:
 
 
 def layout(build: str, record: str) -> Layout:
+    """A record layout. x360 has its own rows for seven records; all others are Switch's (X3)."""
     try:
-        return layouts()[(build, record)]
+        found = layouts().get((build, record))
+        if found is None and build == "x360":
+            found = layouts().get(("switch", record))
+        if found is None:
+            raise KeyError(record)
+        return found
     except KeyError:
         raise FormatError(f"no {record} layout for {build}") from None
 
@@ -102,9 +112,42 @@ class Record:
     position: int  # file offset
     raw: bytes
     values: dict[str, object] = field(default_factory=dict)
+    build: str | None = None
 
     def __getitem__(self, name: str):
         return self.values[name]
+
+    def enum(self, name: str):
+        """The ``cov_enums_records.tsv`` row of an enum field's value, or None."""
+        from .enums import record_value
+
+        value = self.values.get(name)
+        return record_value(self.type, _table_field(self.type, name), value) if isinstance(value, int) else None
+
+    def flags(self, name: str):
+        """A flags field read bit by bit (``FlagNames``)."""
+        from .enums import record_flags
+
+        return record_flags(
+            self.type, _table_field(self.type, name), self.values[name], self.build or "switch",
+        )
+
+    def named(self) -> dict[str, object]:
+        """Every enum and flags field with a table: constant names, raw values kept apart."""
+        from .enums import is_flags_field, record_enums
+
+        found: dict[str, object] = {}
+        tables = {name for (record, name) in record_enums() if record == self.type}
+        for name, value in self.values.items():
+            base = _table_field(self.type, name)
+            if base not in tables or not isinstance(value, int):
+                continue
+            if is_flags_field(self.type, base):
+                found[name] = self.flags(name)
+            else:
+                row = self.enum(name)
+                found[name] = row.name if row else None
+        return found
 
     def get(self, name: str, default=None):
         return self.values.get(name, default)
@@ -119,6 +162,19 @@ class Record:
             found.append(self.values[f"{name}_{index}"])
             index += 1
         return found
+
+
+_NUMBERED = re.compile(r"^(.*)_(\d+)$")
+
+
+def _table_field(record: str, name: str) -> str:
+    """The enum-table name of a field; repeated layout names carry a ``_<n>`` suffix."""
+    from .enums import record_enums
+
+    if (record, name) in record_enums():
+        return name
+    match = _NUMBERED.match(name)
+    return match.group(1) if match else name
 
 
 @dataclass
@@ -155,7 +211,7 @@ class _Reader:
             raise FormatError(f"{name} records nested too deeply", position)
         spec = layout(self.build, name)
         raw = self.view.take(position, spec.size, f"{name} record")
-        result = Record(name, position, raw)
+        result = Record(name, position, raw, build=self.build)
         counts: list[tuple[str, int, int]] = []
         for item in spec.fields:
             at = position + item.offset
@@ -251,9 +307,12 @@ def parse_record_file(
 
     ``kind`` is the extension or the record name.
     """
-    record = RECORDS_BY_EXTENSION.get(kind.lstrip(".").lower(), kind)
+    extension = kind.lstrip(".").lower()
+    record = RECORDS_BY_EXTENSION.get(extension, kind)
+    if extension not in RECORDS_BY_EXTENSION:
+        extension = next((e for e, r in RECORDS_BY_EXTENSION.items() if r == record), extension)
     header = parse_header(data, build)
-    resolved = header.build
+    resolved = resolve_build(extension, header, build)
     reader = _Reader(data, resolved, header.order)
     root = reader.record(record, 0x10, 0)
     end = 0x10 + layout(resolved, record).size
@@ -267,33 +326,75 @@ def parse_record_file(
 
 @dataclass(frozen=True)
 class MonsterAttribute:
+    """One game-balance slot of the monster modifier block."""
+
     index: int
-    name: str
-    value_kind: str
+    name: str  # the attribute(s) fed, ``;``-separated; empty where not known
+    value_kind: str  # what is stored: always float
     status: str
+    switch_offset: int | None = None
+    ps3_offset: int | None = None  # None: the slot is past the ps3 block
+    slot_name: str = ""
+    attribute_kind: str = ""  # int or float, of the receiving attribute
+    slot_status: str = ""
+
+    @property
+    def names(self) -> tuple[str, ...]:
+        return tuple(n for n in self.name.split(";") if n)
+
+
+def _hex_or_none(text: str) -> int | None:
+    return int(text, 16) if text else None
 
 
 @lru_cache(maxsize=None)
 def monster_attribute_indices() -> tuple[MonsterAttribute, ...]:
     with open(DATA / "monster_attribute_indices.tsv", encoding="utf-8", newline="") as handle:
         return tuple(
-            MonsterAttribute(int(row["index"]), row["attribute_set"], row["value_kind"], row["status"])
+            MonsterAttribute(
+                int(row["index"]), row["attribute_set"], row["value_kind"], row["status"],
+                _hex_or_none(row["nx_offset"]), _hex_or_none(row["ps3_offset"]),
+                row["slot_name"], row["attribute_kind"], row["slot_status"],
+            )
             for row in csv.DictReader(handle, delimiter="\t")
         )
 
 
-def monster_attributes(monster: Record, order: str) -> dict[str, float | int]:
-    """Named values from a monster's modifier floats. Int rows read the same bits as int."""
+def monster_attributes(monster: Record, order: str = "<") -> dict[str, float | int]:
+    """Named attribute values from a monster's modifier slots.
+
+    Slots are always floats. An integer attribute takes the float truncated toward zero.
+    A slot feeding two attributes gives both names. ``order`` is kept for old callers.
+    """
     floats = monster["attribute_modifiers"]
-    result = {}
+    result: dict[str, float | int] = {}
     for attribute in monster_attribute_indices():
-        if attribute.index >= len(floats):
+        if attribute.index >= len(floats) or not attribute.names:
             continue
         value = floats[attribute.index]
-        if attribute.value_kind == "int":
-            value = struct.unpack(order + "i", struct.pack(order + "f", value))[0]
-        result[attribute.name] = value
+        if attribute.attribute_kind == "int":
+            value = int(value) if math.isfinite(value) else value
+        for name in attribute.names:
+            result[name] = value
     return result
+
+
+def monster_slots(monster: Record) -> dict[str, float]:
+    """Every modifier slot by its slot name (``slot_<index>`` where none), as stored."""
+    floats = monster["attribute_modifiers"]
+    return {
+        (a.slot_name or f"slot_{a.index}"): floats[a.index]
+        for a in monster_attribute_indices() if a.index < len(floats)
+    }
+
+
+EXPERIENCE_SLOT = 58
+
+
+def monster_grants_experience(monster: Record) -> bool:
+    """Slot 58 is an experience multiplier; zero means no experience."""
+    floats = monster["attribute_modifiers"]
+    return len(floats) > EXPERIENCE_SLOT and floats[EXPERIENCE_SLOT] != 0
 
 
 # --- ps3 attributes ------------------------------------------------------------------------
@@ -307,6 +408,11 @@ class Ps3Attribute:
     name: str | None
     switch_id: int | None
     status: str
+    candidates: tuple[str, ...] = ()  # UNRESOLVED rows: the names the id can be (stage 7)
+
+    @property
+    def resolved(self) -> bool:
+        return self.status != "UNRESOLVED"
 
 
 @lru_cache(maxsize=None)
@@ -314,8 +420,11 @@ def ps3_attributes() -> dict[int, Ps3Attribute]:
     with open(DATA / "ps3_attributes.tsv", encoding="utf-8", newline="") as handle:
         return {
             int(row["ps3_id"]): Ps3Attribute(
-                int(row["ps3_id"]), row["name"] or None,
+                int(row["ps3_id"]),
+                # An UNRESOLVED id gets no single name, only its candidates.
+                (row["name"] or None) if row["status"] != "UNRESOLVED" else None,
                 int(row["switch_id"]) if row["switch_id"] else None, row["status"],
+                tuple(c for c in (row.get("candidates") or "").split(",") if c),
             )
             for row in csv.DictReader(handle, delimiter="\t")
         }
@@ -327,6 +436,55 @@ def ps3_attribute(ps3_id: int, safe_only: bool = True) -> Ps3Attribute | None:
     if found is None or (safe_only and found.status not in SAFE_STATUSES):
         return None
     return found
+
+
+# --- x360 attributes (X10) -----------------------------------------------------------------
+
+@dataclass(frozen=True)
+class X360Attribute:
+    """A row of ``x360_attributes.tsv``: the x360 id, its name and the Switch id of that name."""
+
+    id: int
+    name: str
+    parameter_type: int
+    operator: int
+    data_type: int
+    default_raw: int
+    sync_flags: int
+    formula_item: str
+    formula_character: str
+    switch_id: int | None
+
+
+@lru_cache(maxsize=None)
+def x360_attributes() -> dict[int, X360Attribute]:
+    with open(DATA / "x360_attributes.tsv", encoding="utf-8", newline="") as handle:
+        return {
+            int(row["id"]): X360Attribute(
+                int(row["id"]), row["name"], int(row["parameter_type"]), int(row["operator"]),
+                int(row["data_type"]), int(row["default_raw"]), int(row["sync_flags"]),
+                row["formula_item"], row["formula_character"],
+                int(row["switch_id"]) if row["switch_id"] not in ("", None) else None,
+            )
+            for row in csv.DictReader(handle, delimiter="	")
+        }
+
+
+def x360_attribute(x360_id: int) -> X360Attribute | None:
+    """An attribute by x360 id. x360 ids are not Switch ids (only 39 coincide)."""
+    return x360_attributes().get(x360_id)
+
+
+def attribute_name(attribute_id: int, build: str) -> str | None:
+    """The attribute name of an id on a build: x360 by its own table, ps3 by the ps3 table
+    (PROVEN and SUPPORTED rows only), Switch ids are returned as None here (no Switch table)."""
+    if build == "x360":
+        found = x360_attribute(attribute_id)
+        return found.name if found else None
+    if build == "ps3":
+        found = ps3_attribute(attribute_id)
+        return found.name if found else None
+    return None
 
 
 # --- Tag defaults --------------------------------------------------------------------------
@@ -418,12 +576,55 @@ LOCALE_NONE = 19
 GENDER_ANY = 2
 
 
+CLASS_COUNT = ByBuild({"switch": 7, "ps3": 5})
+LOCALES_WITHOUT_TIMES = (0, 1, 17)
+
+
+@dataclass(frozen=True)
+class Locale:
+    index: int
+    constant: str
+    code: str
+    note: str
+
+
+@lru_cache(maxsize=None)
+def display_time_locales() -> dict[int, Locale]:
+    """Locale slots of display times (``cov_display_time_locales.tsv``); 19 is no locale."""
+    with open(DATA / "cov_display_time_locales.tsv", encoding="utf-8", newline="") as handle:
+        return {
+            int(row["index"]): Locale(int(row["index"]), row["constant"], row["code"], row["note"])
+            for row in csv.DictReader(handle, delimiter="\t")
+        }
+
+
 @dataclass(frozen=True)
 class DisplayTime:
     locale: int  # 19 means none
     player_class: int  # the class count means any
     gender: int  # 2 means any
-    time: int
+    time: int  # ticks, 60 per second
+
+    @property
+    def seconds(self) -> float:
+        return self.time / TICKS_PER_SECOND
+
+    @property
+    def locale_code(self) -> str | None:
+        found = display_time_locales().get(self.locale)
+        return found.code or None if found else None
+
+    @property
+    def any_gender(self) -> bool:
+        return self.gender == GENDER_ANY
+
+    def any_class(self, build: str) -> bool:
+        return self.player_class == CLASS_COUNT[build]
+
+    @property
+    def carries_a_time(self) -> bool:
+        """Slots 0, 1 and 17 never carry a real time."""
+        return self.locale not in LOCALES_WITHOUT_TIMES
 
 
 def decode_display_time(word: int) -> DisplayTime:
@@ -515,13 +716,75 @@ DROP_KINDS = {
 }
 
 
+@dataclass(frozen=True)
+class ChooseRule:
+    kind: int
+    mode: str  # one_of (one modifier by weight), all_of (each by its chance) or none
+    shared: bool  # uses the shared multiplayer loot path
+
+
+_CHOOSE_RULES = {
+    -1: ("none", False), 0: ("one_of", False), 1: ("all_of", False),
+    2: ("all_of", True), 3: ("one_of", True),
+}
+
+
+def choose_rule(choose_kind: int) -> ChooseRule:
+    """How a treasure class picks: 0 one of by weight, 1 roll each, 2 and 3 shared, -1 none."""
+    found = _CHOOSE_RULES.get(choose_kind)
+    if found is None:
+        raise FormatError(f"choose kind {choose_kind}")
+    return ChooseRule(choose_kind, *found)
+
+
 def rolls_every_modifier(choose_kind: int) -> bool:
-    """Choose kind 0 or 3 rolls every modifier; 1 or 2 picks one by weight."""
-    if choose_kind in (0, 3):
-        return True
-    if choose_kind in (1, 2):
-        return False
-    raise FormatError(f"choose kind {choose_kind}")
+    """Kinds 1 and 2 roll every modifier by its chance; 0 and 3 pick one by weight."""
+    return choose_rule(choose_kind).mode == "all_of"
+
+
+# --- Objectives ----------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class ObjectiveParams:
+    record: str
+    kind: int
+    kind_name: str
+    target_1_group: int | None  # the file group the first target names
+    target_1_meaning: str | None
+    text_1: str | None  # what the first text names: a trigger, group, flag or event name
+    row_param_1: str | None
+    params_used: str
+    status: str
+
+
+@lru_cache(maxsize=None)
+def objective_params() -> dict[tuple[str, int], ObjectiveParams]:
+    """Meaning of the generic objective and failure parameters by kind."""
+    def text(value: str) -> str | None:
+        return None if value in ("", "-", "no") else value
+
+    found = {}
+    with open(DATA / "cov_objective_params.tsv", encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle, delimiter="\t"):
+            group = row["target_1_group"]
+            entry = ObjectiveParams(
+                row["record"], int(row["kind"]), row["kind_name"],
+                int(group) if group not in ("", "-") else None, text(row["target_1_meaning"]),
+                text(row["text_1"]), text(row["row_param_1"]), row["params_used"], row["status"],
+            )
+            found[(entry.record, entry.kind)] = entry
+    return found
+
+
+def objective_meaning(record: Record) -> ObjectiveParams | None:
+    """The parameter meaning of an ``objective`` or ``failure_condition`` record."""
+    kind = record.get("objective_kind", record.get("failure_kind"))
+    return objective_params().get((record.type, kind)) if isinstance(kind, int) else None
+
+
+def objective_count(record: Record) -> int:
+    """The second integer parameter is a count."""
+    return record["param_2"]
 
 
 def live_affixes(entry: Record) -> list[int]:

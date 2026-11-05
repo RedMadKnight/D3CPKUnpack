@@ -1,0 +1,440 @@
+record	field	kind	value	constant	label	status	switch_count	ps3_count
+AnimationDefinition	ePlaybackMode	value	0	PLAYBACKMODE_NORMAL	normal	PROVEN	11565	6889
+AnimationDefinition	ePlaybackMode	value	2	PLAYBACKMODE_LOOP	loop	PROVEN	4259	2251
+CollisionShape	eMaterial	value	-1	INVALID_MATERIAL	invalid material	PROVEN	0	0
+CollisionShape	eMaterial	value	0	DEFAULT_MATERIAL	default material	PROVEN	33234	17454
+CollisionShape	eMaterial	value	1	METAL_MATERIAL	metal material	PROVEN	821	414
+CollisionShape	eMaterial	value	2	WOOD_MATERIAL	wood material	PROVEN	826	528
+CollisionShape	eMaterial	value	3	BONE_MATERIAL	bone material	PROVEN	459	253
+CollisionShape	eMaterial	value	4	FLESH_MATERIAL	flesh material	PROVEN	1165	471
+CollisionShape	eMaterial	value	5	WATER_MATERIAL	water material	PROVEN	0	0
+CollisionShape	eMaterial	value	6	STONE_MATERIAL	stone material	PROVEN	687	303
+CollisionShape	eMaterial	value	7	GLASS_MATERIAL	glass material	PROVEN	113	63
+CollisionShape	eMaterial	value	8	PAPER_MATERIAL	paper material	PROVEN	301	150
+CollisionShape	eMaterial	value	9	METAL2_MATERIAL	metal2 material	PROVEN	88	70
+CollisionShape	eMaterial	value	10	METAL3_MATERIAL	metal3 material	PROVEN	6	0
+CollisionShape	eMaterial	value	11	WOOD2_MATERIAL	wood2 material	PROVEN	36	24
+CollisionShape	eMaterial	value	12	WOOD3_MATERIAL	wood3 material	PROVEN	0	0
+CollisionShape	eMaterial	value	13	STONE2_MATERIAL	stone2 material	PROVEN	0	0
+CollisionShape	eMaterial	value	14	STONE3_MATERIAL	stone3 material	PROVEN	1	1
+CollisionShape	eMaterial	value	15	BONE2_MATERIAL	bone2 material	PROVEN	30	21
+CollisionShape	eMaterial	value	16	BONE3_MATERIAL	bone3 material	PROVEN	54	39
+CollisionShape	eType	value	-1	NONE	none	PROVEN	0	0
+CollisionShape	eType	value	0	SPHERE	sphere	PROVEN	57	55
+CollisionShape	eType	value	1	CAPSULE	capsule	PROVEN	11262	5834
+CollisionShape	eType	value	2	POLYTOPE	polytope	PROVEN	26502	13902
+CompAndFormatUnion	eCompression	value	0	SOUNDCOMPRESSION_NONE	none	PROVEN	0	0
+CompAndFormatUnion	eCompression	value	1	SOUNDCOMPRESSION_ADPCM	adpcm	PROVEN	0	0
+CompAndFormatUnion	eCompression	value	2	SOUNDCOMPRESSION_MP3	mp3	PROVEN	0	0
+CompAndFormatUnion	eCompression	value	3	SOUNDCOMPRESSION_VORBIS	vorbis	PROVEN	1311	0
+CompAndFormatUnion	eCompression	value	4	SOUNDCOMPRESSION_FSBVORBIS	fsbvorbis	PROVEN	30168	0
+CompAndFormatUnion	eCompression	value	5	SOUNDCOMPRESSION_FSBAT9	fsbat9	PROVEN	0	0
+CompAndFormatUnion	eCompression	value	6	SOUNDCOMPRESSION_FSBXMA	fsbxma	PROVEN	0	0
+CompAndFormatUnion	eCompression	value	7	SOUNDCOMPRESSION_FSBFADPCM	fsbfadpcm	PROVEN	37238	0
+CompAndFormatUnion	eFormat	value	-1	SOUNDFORMAT_INVALID	invalid	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	0	SOUNDFORMAT_MONO_11KHz_8BIT	mono 11khz 8bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	1	SOUNDFORMAT_MONO_22KHz_8BIT	mono 22khz 8bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	2	SOUNDFORMAT_MONO_44KHz_8BIT	mono 44khz 8bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	3	SOUNDFORMAT_STEREO_11KHz_8BIT	stereo 11khz 8bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	4	SOUNDFORMAT_STEREO_22KHz_8BIT	stereo 22khz 8bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	5	SOUNDFORMAT_STEREO_44KHz_8BIT	stereo 44khz 8bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	6	SOUNDFORMAT_MONO_11KHz_16BIT	mono 11khz 16bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	7	SOUNDFORMAT_MONO_22KHz_16BIT	mono 22khz 16bit	PROVEN	926	0
+CompAndFormatUnion	eFormat	value	8	SOUNDFORMAT_MONO_44KHz_16BIT	mono 44khz 16bit	PROVEN	66536	0
+CompAndFormatUnion	eFormat	value	9	SOUNDFORMAT_STEREO_11KHz_16BIT	stereo 11khz 16bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	10	SOUNDFORMAT_STEREO_22KHz_16BIT	stereo 22khz 16bit	PROVEN	0	0
+CompAndFormatUnion	eFormat	value	11	SOUNDFORMAT_STEREO_44KHz_16BIT	stereo 44khz 16bit	PROVEN	1255	0
+ConstraintParameters	eType	value	0	CONSTRAINT_TYPE_REVOLUTE	revolute	PROVEN	3678	2026
+ConstraintParameters	eType	value	1	CONSTRAINT_TYPE_RAGDOLL	ragdoll	PROVEN	5979	3195
+ConstraintParameters	eType	value	2	CONSTRAINT_TYPE_SPHERICAL	spherical	PROVEN	14	12
+ConstraintParameters	eType	value	3	CONSTRAINT_TYPE_WELD	weld	PROVEN	662	348
+ConstraintParameters	eType	value	4	CONSTRAINT_TYPE_BREAKABLE	breakable	PROVEN	4731	2749
+CustomTileInfo	eCustomType	value	0	CUSTOM_TYPE_NONE	none	PROVEN	9357	2184
+CustomTileInfo	eCustomType	value	1	CUSTOM_TYPE_MULTI_SCENE	multi scene	PROVEN	337	88
+CustomTileInfo	eCustomType	value	2	CUSTOM_TYPE_MULTI_TILE	multi tile	PROVEN	410	127
+DspEffect	eDspType	value	-1		no effect	SUPPORTED	8	8
+DspEffect	eDspType	value	0	DSP_TYPE_CHORUS	type chorus	PROVEN	8	10
+DspEffect	eDspType	value	1	DSP_TYPE_COMPRESSOR	type compressor	PROVEN	2	2
+DspEffect	eDspType	value	2	DSP_TYPE_DISTORTION	type distortion	PROVEN	113	56
+DspEffect	eDspType	value	3	DSP_TYPE_ECHO	type echo	PROVEN	13	11
+DspEffect	eDspType	value	4	DSP_TYPE_FLANGE	type flange	PROVEN	0	0
+DspEffect	eDspType	value	5	DSP_TYPE_HIGHPASS	type highpass	PROVEN	552	255
+DspEffect	eDspType	value	6	DSP_TYPE_LOWPASS	type lowpass	PROVEN	92	72
+DspEffect	eDspType	value	7	DSP_TYPE_LOWPASS_SIMPLE	type lowpass simple	PROVEN	210	106
+DspEffect	eDspType	value	8	DSP_TYPE_PARAMEQ	type parameq	PROVEN	47	22
+DspEffect	eDspType	value	9	DSP_TYPE_SFXREVERB	type sfxreverb	PROVEN	0	0
+DspEffect	eDspType	value	10	DSP_NUM_TYPES	num types	PROVEN	0	0
+HardpointLink	eSource	value	0	HARDPOINTSOURCE_PRIMARY	primary	PROVEN	146000	10083
+HardpointLink	eSource	value	1	HARDPOINTSOURCE_SECONDARY	secondary	PROVEN	11	0
+HardpointLink	eSource	value	2	HARDPOINTSOURCE_TERTIARY	tertiary	PROVEN	0	0
+HardpointLink	eSource	value	3	HARDPOINTSOURCE_MAX_SOURCES	max sources	PROVEN	0	0
+LabelCondition	eType	value	0	LABEL_CONDITION_ALWAYS	always	PROVEN	528	224
+LabelCondition	eType	value	1	LABEL_CONDITION_GAME_DIFFICULTY_DEPRECATED	game difficulty deprecated	PROVEN	0	7
+LabelCondition	eType	value	2	LABEL_CONDITION_LABEL_ALREADY_SET	label already set	PROVEN	28	25
+LabelCondition	eType	value	3	LABEL_CONDITION_GAME_IS_OPEN_WORLD	game is open world	PROVEN	35	0
+Marker	eType	value	-1	MARKERTYPE_NONE	none	PROVEN	0	0
+Marker	eType	value	0	MARKERTYPE_ACTOR	actor	PROVEN	73739	28166
+Marker	eType	value	1	MARKERTYPE_LIGHT	light	PROVEN	9083	4997
+Marker	eType	value	3	MARKERTYPE_CAMERA	camera	PROVEN	0	0
+Marker	eType	value	4	MARKERTYPE_AUDIOVOLUME	audiovolume	PROVEN	113	27
+Marker	eType	value	5	MARKERTYPE_WEATHERVOLUME	weathervolume	PROVEN	248	71
+Marker	eType	value	6	MARKERTYPE_AMBIENTSOUND	ambientsound	PROVEN	2660	1349
+Marker	eType	value	7	MARKERTYPE_PARTICLESYSTEM	particlesystem	PROVEN	22395	11745
+Marker	eType	value	9	MARKERTYPE_SCENE	scene	PROVEN	0	0
+Marker	eType	value	10	MARKERTYPE_ENCOUNTER	encounter	PROVEN	4852	2846
+Marker	eType	value	12	MARKERTYPE_SCENEGROUP	scenegroup	PROVEN	0	0
+Marker	eType	value	13	MARKERTYPE_SCRIPT	script	PROVEN	24	14
+Marker	eType	value	14	MARKERTYPE_ADVENTURE	adventure	PROVEN	216	33
+Marker	eType	value	16	MARKERTYPE_SCENE_LOCATION	scene location	PROVEN	79	64
+Marker	eType	value	28	MARKERTYPE_MINIMAP	minimap	PROVEN	436	302
+Marker	eType	value	29	MARKERTYPE_EVENT	event	PROVEN	309	55
+Marker	eType	value	30	MARKERTYPE_CONDUCTOR	conductor	PROVEN	0	0
+Marker	eType	value	31	MARKERTYPE_EFFECTGROUP	effectgroup	PROVEN	22	0
+Marker	eType	value	50	MARKERTYPE_GIZMOLOC	gizmoloc	PROVEN	6666	3702
+Marker	eType	value	51	MARKERTYPE_GIZMOLOC_B	gizmoloc b	PROVEN	7159	2696
+Marker	eType	value	52	MARKERTYPE_GIZMOLOC_C	gizmoloc c	PROVEN	5210	2535
+Marker	eType	value	53	MARKERTYPE_GIZMOLOC_D	gizmoloc d	PROVEN	3440	1442
+Marker	eType	value	54	MARKERTYPE_GIZMOLOC_E	gizmoloc e	PROVEN	2506	948
+Marker	eType	value	55	MARKERTYPE_GIZMOLOC_F	gizmoloc f	PROVEN	1676	751
+Marker	eType	value	56	MARKERTYPE_GIZMOLOC_G	gizmoloc g	PROVEN	4436	790
+Marker	eType	value	57	MARKERTYPE_GIZMOLOC_H	gizmoloc h	PROVEN	932	340
+Marker	eType	value	58	MARKERTYPE_GIZMOLOC_I	gizmoloc i	PROVEN	1932	412
+Marker	eType	value	59	MARKERTYPE_GIZMOLOC_J	gizmoloc j	PROVEN	862	396
+Marker	eType	value	60	MARKERTYPE_GIZMOLOC_K	gizmoloc k	PROVEN	1384	917
+Marker	eType	value	61	MARKERTYPE_GIZMOLOC_L	gizmoloc l	PROVEN	789	312
+Marker	eType	value	62	MARKERTYPE_GIZMOLOC_M	gizmoloc m	PROVEN	734	235
+Marker	eType	value	63	MARKERTYPE_GIZMOLOC_N	gizmoloc n	PROVEN	504	282
+Marker	eType	value	64	MARKERTYPE_GIZMOLOC_O	gizmoloc o	PROVEN	1478	323
+Marker	eType	value	65	MARKERTYPE_GIZMOLOC_P	gizmoloc p	PROVEN	1348	475
+Marker	eType	value	66	MARKERTYPE_GIZMOLOC_Q	gizmoloc q	PROVEN	1732	851
+Marker	eType	value	67	MARKERTYPE_GIZMOLOC_R	gizmoloc r	PROVEN	675	538
+Marker	eType	value	68	MARKERTYPE_GIZMOLOC_S	gizmoloc s	PROVEN	690	466
+Marker	eType	value	69	MARKERTYPE_GIZMOLOC_T	gizmoloc t	PROVEN	817	217
+Marker	eType	value	70	MARKERTYPE_GIZMOLOC_U	gizmoloc u	PROVEN	1506	273
+Marker	eType	value	71	MARKERTYPE_GIZMOLOC_V	gizmoloc v	PROVEN	481	156
+Marker	eType	value	72	MARKERTYPE_GIZMOLOC_W	gizmoloc w	PROVEN	1497	875
+Marker	eType	value	73	MARKERTYPE_GIZMOLOC_X	gizmoloc x	PROVEN	1517	869
+Marker	eType	value	74	MARKERTYPE_GIZMOLOC_Y	gizmoloc y	PROVEN	1793	1155
+Marker	eType	value	75	MARKERTYPE_GIZMOLOC_Z	gizmoloc z	PROVEN	2955	1071
+Marker	eType	value	76		gizmo location 27 (continues the A to Z run 50 to 75)	HYPOTHESIS	129	0
+Marker	eType	value	77		gizmo location 28 (continues the A to Z run 50 to 75)	HYPOTHESIS	485	0
+Marker	eType	value	78		gizmo location 29 (continues the A to Z run 50 to 75)	HYPOTHESIS	1015	0
+Marker	eType	value	79		gizmo location 30 (continues the A to Z run 50 to 75)	HYPOTHESIS	341	0
+Marker	eType	value	80		gizmo location 31 (continues the A to Z run 50 to 75)	HYPOTHESIS	152	0
+Marker	eType	value	81		gizmo location 32 (continues the A to Z run 50 to 75)	HYPOTHESIS	37	0
+Marker	eType	value	82		gizmo location 33 (continues the A to Z run 50 to 75)	HYPOTHESIS	40	0
+Marker	eType	value	83		gizmo location 34 (continues the A to Z run 50 to 75)	HYPOTHESIS	32	0
+Marker	eType	value	84		gizmo location 35 (continues the A to Z run 50 to 75)	HYPOTHESIS	14	0
+Marker	eType	value	87		gizmo location 38 (continues the A to Z run 50 to 75)	HYPOTHESIS	28	0
+Marker	eType	value	88		gizmo location 39 (continues the A to Z run 50 to 75)	HYPOTHESIS	27	0
+Marker	eType	value	91		gizmo location 42 (continues the A to Z run 50 to 75)	HYPOTHESIS	5	0
+Marker	eType	value	98		gizmo location 49 (continues the A to Z run 50 to 75)	HYPOTHESIS	6	0
+Marker	eType	value	99		gizmo location 50 (continues the A to Z run 50 to 75)	HYPOTHESIS	5	0
+Marker	eType	value	100		gizmo location 51 (continues the A to Z run 50 to 75)	HYPOTHESIS	33	0
+Marker	eType	value	101		gizmo location 52 (continues the A to Z run 50 to 75)	HYPOTHESIS	54	0
+MaterialTextureEntry	eShaderTex	value	0	SHADERTEX_NONE	none	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	1	SHADERTEX_FIRST_SHADERTEX	first shadertex	PROVEN	134838	69938
+MaterialTextureEntry	eShaderTex	value	2	SHADERTEX_LIGHTMAP	lightmap	PROVEN	42648	21711
+MaterialTextureEntry	eShaderTex	value	3	SHADERTEX_BUMPMAP	bumpmap	PROVEN	2139	301
+MaterialTextureEntry	eShaderTex	value	4	SHADERTEX_ENVMAP	envmap	PROVEN	32800	12519
+MaterialTextureEntry	eShaderTex	value	5	SHADERTEX_GLOSS	gloss	PROVEN	31510	11641
+MaterialTextureEntry	eShaderTex	value	6	SHADERTEX_GLOW	glow	PROVEN	6106	2459
+MaterialTextureEntry	eShaderTex	value	7	SHADERTEX_REFLECTION	reflection	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	8	SHADERTEX_IRRADIANCE	irradiance	PROVEN	2922	1802
+MaterialTextureEntry	eShaderTex	value	9	SHADERTEX_REFRACTION	refraction	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	10	SHADERTEX_DISTORTION	distortion	PROVEN	144	84
+MaterialTextureEntry	eShaderTex	value	11	SHADERTEX_DIFFUSE_LAYER_1	diffuse layer 1	PROVEN	18821	8806
+MaterialTextureEntry	eShaderTex	value	12	SHADERTEX_ALPHA_LAYER_1	alpha layer 1	PROVEN	6222	3309
+MaterialTextureEntry	eShaderTex	value	13	SHADERTEX_DIFFUSE_LAYER_2	diffuse layer 2	PROVEN	6646	3568
+MaterialTextureEntry	eShaderTex	value	14	SHADERTEX_ALPHA_LAYER_2	alpha layer 2	PROVEN	4152	2112
+MaterialTextureEntry	eShaderTex	value	15	SHADERTEX_DIFFUSE_LAYER_3	diffuse layer 3	PROVEN	5454	2959
+MaterialTextureEntry	eShaderTex	value	16	SHADERTEX_ALPHA_LAYER_3	alpha layer 3	PROVEN	694	316
+MaterialTextureEntry	eShaderTex	value	17	SHADERTEX_DIFFUSE_LAYER_4	diffuse layer 4	PROVEN	4451	2026
+MaterialTextureEntry	eShaderTex	value	18	SHADERTEX_CLUTTER_MASK	clutter mask	PROVEN	4485	2230
+MaterialTextureEntry	eShaderTex	value	19	SHADERTEX_ALPHA	alpha	PROVEN	9168	4245
+MaterialTextureEntry	eShaderTex	value	20	SHADERTEX_WATER	water	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	21	SHADERTEX_VIGNETTE	vignette	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	22	SHADERTEX_SHADOW	shadow	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	23	SHADERTEX_SHADOW_COLOR	shadow color	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	24	SHADERTEX_SHADOW_MASK	shadow mask	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	25	SHADERTEX_DIFFUSE_OVERLAY	diffuse overlay	PROVEN	81568	25147
+MaterialTextureEntry	eShaderTex	value	26	SHADERTEX_OVERLAY_BEGIN	overlay begin	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	27	SHADERTEX_OVERLAY_FIRE_DEATH	overlay fire death	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	28	SHADERTEX_OVERLAY_LIGHTNING_DEATH	overlay lightning death	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	29	SHADERTEX_OVERLAY_COLD_DEATH	overlay cold death	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	30	SHADERTEX_OVERLAY_POISON_DEATH	overlay poison death	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	31	SHADERTEX_OVERLAY_PLAGUE_DEATH	overlay plague death	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	32	SHADERTEX_OVERLAY_ZOMBIFIED	overlay zombified	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	33	SHADERTEX_OVERLAY_SAND	overlay sand	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	34	SHADERTEX_OVERLAY_CRITICAL_HIT_BLOOD	overlay critical hit blood	PROVEN	59304	12594
+MaterialTextureEntry	eShaderTex	value	35	SHADERTEX_OVERLAY_STONED	overlay stoned	PROVEN	81824	25282
+MaterialTextureEntry	eShaderTex	value	36	SHADERTEX_OVERLAY_CHILLED	overlay chilled	PROVEN	81825	25282
+MaterialTextureEntry	eShaderTex	value	37	SHADERTEX_OVERLAY_FROZEN	overlay frozen	PROVEN	81825	25282
+MaterialTextureEntry	eShaderTex	value	38	SHADERTEX_OVERLAY_POISONED	overlay poisoned	PROVEN	81825	25282
+MaterialTextureEntry	eShaderTex	value	39	SHADERTEX_DEPTH	depth	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	40	SHADERTEX_DIFFUSE_OVERLAY_1	diffuse overlay 1	PROVEN	22268	12863
+MaterialTextureEntry	eShaderTex	value	41	SHADERTEX_DIFFUSE_OVERLAY_2	diffuse overlay 2	PROVEN	13134	5108
+MaterialTextureEntry	eShaderTex	value	42	SHADERTEX_ALPHA_LAYER_4	alpha layer 4	PROVEN	54	15
+MaterialTextureEntry	eShaderTex	value	43	SHADERTEX_DIFFUSE_LAYER_5	diffuse layer 5	PROVEN	39	39
+MaterialTextureEntry	eShaderTex	value	44	SHADERTEX_ALPHA_LAYER_5	alpha layer 5	PROVEN	30	8
+MaterialTextureEntry	eShaderTex	value	45	SHADERTEX_DIFFUSE_LAYER_6	diffuse layer 6	PROVEN	36	36
+MaterialTextureEntry	eShaderTex	value	46	SHADERTEX_ALPHA_LAYER_6	alpha layer 6	PROVEN	17	7
+MaterialTextureEntry	eShaderTex	value	47	SHADERTEX_BUMPMAP_1	bumpmap 1	PROVEN	396	6
+MaterialTextureEntry	eShaderTex	value	48	SHADERTEX_BUMPMAP_2	bumpmap 2	PROVEN	356	0
+MaterialTextureEntry	eShaderTex	value	49	SHADERTEX_BUMPMAP_3	bumpmap 3	PROVEN	364	0
+MaterialTextureEntry	eShaderTex	value	50	SHADERTEX_BUMPMAP_4	bumpmap 4	PROVEN	359	0
+MaterialTextureEntry	eShaderTex	value	51	SHADERTEX_BUMPMAP_5	bumpmap 5	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	52	SHADERTEX_BUMPMAP_6	bumpmap 6	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	53	SHADERTEX_INTERACTIVE_FOG	interactive fog	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	54	SHADERTEX_TINT	tint	PROVEN	10601	3396
+MaterialTextureEntry	eShaderTex	value	55	SHADERTEX_RIVER_MASK	river mask	PROVEN	423	107
+MaterialTextureEntry	eShaderTex	value	56	SHADERTEX_DYE_TINT_RAMP	dye tint ramp	PROVEN	6877	4
+MaterialTextureEntry	eShaderTex	value	57	SHADERTEX_BANNER	banner	PROVEN	544	544
+MaterialTextureEntry	eShaderTex	value	58	SHADERTEX_PMA_MASK	pma mask	PROVEN	4029	1946
+MaterialTextureEntry	eShaderTex	value	59	SHADERTEX_BANNER_TINT_RAMP	banner tint ramp	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	60	SHADERTEX_REFLECTION_1	reflection 1	PROVEN	0	0
+MaterialTextureEntry	eShaderTex	value	61	SHADERTEX_SSAO	ssao	PROVEN	0	0
+NavMeshDef	eNavMeshType	value	0	NAVMESH_TYPE_UNDEFINED	undefined	PROVEN	91	20
+NavMeshDef	eNavMeshType	value	1	NAVMESH_TYPE_ARRAY	array	PROVEN	3662	1727
+NavMeshDef	eNavMeshType	value	2	NAVMESH_TYPE_CONNECTED	connected	PROVEN	0	0
+RTPCParams	eCurveShape	value	0	FADE_SHAPE_LINEAR	linear	PROVEN	12	0
+RTPCParams	eCurveShape	value	1	FADE_SHAPE_LOGARITHMIC	logarithmic	PROVEN	17	0
+RTPCParams	eCurveShape	value	2	FADE_SHAPE_S_CURVE	s curve	PROVEN	6	0
+RTPCParams	eTarget	value	0	RTPC_TARGET_VOLUME	volume	PROVEN	18	0
+RTPCParams	eTarget	value	1	RTPC_TARGET_PITCH	pitch	PROVEN	17	0
+SoundDefinition	eFalloffType	value	0	FALLOFF_NONE	none	PROVEN	40	11
+SoundDefinition	eFalloffType	value	1	FALLOFF_INVERSE_DISTANCE	inverse distance	PROVEN	831	633
+SoundDefinition	eFalloffType	value	2	FALLOFF_LINEAR	linear	PROVEN	3456	1745
+SoundDefinition	eFalloffType	value	3	FALLOFF_LINEAR_LOG	linear log	PROVEN	27983	16096
+SoundDefinition	eType	value	0	SOUNDTYPE_EFFECT	soundtype effect	PROVEN	9752	5312
+SoundDefinition	eType	value	1	SOUNDTYPE_MUSIC	soundtype music	PROVEN	11	9
+SoundDefinition	eType	value	2	SOUNDTYPE_NARRATION	soundtype narration	PROVEN	21036	12126
+SoundDefinition	eType	value	3	SOUNDTYPE_AMBIENT	soundtype ambient	PROVEN	993	660
+SoundDefinition	eType	value	4	SOUNDTYPE_EFFECT_UI	soundtype effect ui	PROVEN	518	378
+SoundDefinition	eType	value	5	NUMBER_OF_SOUND_TYPES	number of sound types	PROVEN	0	0
+SoundPermutation	eFadeInShape	value	0	FADE_SHAPE_LINEAR	linear	PROVEN	118598	0
+SoundPermutation	eFadeInShape	value	1	FADE_SHAPE_LOGARITHMIC	logarithmic	PROVEN	327	0
+SoundPermutation	eFadeInShape	value	2	FADE_SHAPE_S_CURVE	s curve	PROVEN	1	0
+SoundPermutation	eFadeOutShape	value	0	FADE_SHAPE_LINEAR	linear	PROVEN	118436	0
+SoundPermutation	eFadeOutShape	value	1	FADE_SHAPE_LOGARITHMIC	logarithmic	PROVEN	489	0
+SoundPermutation	eFadeOutShape	value	2	FADE_SHAPE_S_CURVE	s curve	PROVEN	1	0
+SoundSampleP3	eCompression	value	0	SOUNDCOMPRESSION_NONE	none	PROVEN	0	0
+SoundSampleP3	eCompression	value	1	SOUNDCOMPRESSION_ADPCM	adpcm	PROVEN	0	0
+SoundSampleP3	eCompression	value	2	SOUNDCOMPRESSION_MP3	mp3	PROVEN	0	0
+SoundSampleP3	eCompression	value	3	SOUNDCOMPRESSION_VORBIS	vorbis	PROVEN	0	0
+SoundSampleP3	eCompression	value	4	SOUNDCOMPRESSION_FSBVORBIS	fsbvorbis	PROVEN	0	0
+SoundSampleP3	eCompression	value	5	SOUNDCOMPRESSION_FSBAT9	fsbat9	PROVEN	0	43979
+SoundSampleP3	eCompression	value	6	SOUNDCOMPRESSION_FSBXMA	fsbxma	PROVEN	0	0
+SoundSampleP3	eCompression	value	7	SOUNDCOMPRESSION_FSBFADPCM	fsbfadpcm	PROVEN	0	0
+SoundSampleP3	eFormat	value	-1	SOUNDFORMAT_INVALID	invalid	PROVEN	0	0
+SoundSampleP3	eFormat	value	0	SOUNDFORMAT_MONO_11KHz_8BIT	mono 11khz 8bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	1	SOUNDFORMAT_MONO_22KHz_8BIT	mono 22khz 8bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	2	SOUNDFORMAT_MONO_44KHz_8BIT	mono 44khz 8bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	3	SOUNDFORMAT_STEREO_11KHz_8BIT	stereo 11khz 8bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	4	SOUNDFORMAT_STEREO_22KHz_8BIT	stereo 22khz 8bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	5	SOUNDFORMAT_STEREO_44KHz_8BIT	stereo 44khz 8bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	6	SOUNDFORMAT_MONO_11KHz_16BIT	mono 11khz 16bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	7	SOUNDFORMAT_MONO_22KHz_16BIT	mono 22khz 16bit	PROVEN	0	6512
+SoundSampleP3	eFormat	value	8	SOUNDFORMAT_MONO_44KHz_16BIT	mono 44khz 16bit	PROVEN	0	36983
+SoundSampleP3	eFormat	value	9	SOUNDFORMAT_STEREO_11KHz_16BIT	stereo 11khz 16bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	10	SOUNDFORMAT_STEREO_22KHz_16BIT	stereo 22khz 16bit	PROVEN	0	0
+SoundSampleP3	eFormat	value	11	SOUNDFORMAT_STEREO_44KHz_16BIT	stereo 44khz 16bit	PROVEN	0	484
+Structure	dwFlags	bit	0	STRUCTURE_CANNOT_ANIMATE_BIT	cannot animate	PROVEN	7959	4324
+Structure	dwFlags	bit	1	STRUCTURE_CAN_RAGDOLL_BIT	can ragdoll	PROVEN	2516	1260
+Structure	dwFlags	bit	2	STRUCTURE_HAS_PARTIAL_RAGDOLL_BIT	has partial ragdoll	PROVEN	279	143
+Structure	dwFlags	bit	3	STRUCTURE_SEPARATE_COLLISION_MESH_BIT	separate collision mesh	PROVEN	0	0
+Structure	dwFlags	bit	4	STRUCTURE_HAS_BREAKABLE_RAGDOLL_BIT	has breakable ragdoll	PROVEN	415	243
+Structure	dwFlags	bit	5	STRUCTURE_HAS_BUOYANT_WATER_BIT	has buoyant water	PROVEN	0	0
+SubObject	dwFlags	bit	0	SUBOBJECT_UNSTRIPIFIED_BIT	unstripified	PROVEN	189781	0
+SubObject	dwFlags	bit	1	SUBOBJECT_CASTS_AO	casts ao	PROVEN	136405	0
+SubObject	dwFlags	bit	2	SUBOBJECT_RECEIVES_AO	receives ao	PROVEN	164685	0
+SubObject	dwFlags	bit	3	SUBOBJECT_NOT_WALKABLE_BIT	not walkable	PROVEN	131019	0
+SubObject	dwFlags	bit	4	SUBOBJECT_NOT_COLLIDABLE_BIT	not collidable	PROVEN	38372	0
+SubObject	dwFlags	bit	5	SUBOBJECT_CASTS_SHADOW	casts shadow	PROVEN	8218	0
+SubObject	dwFlags	bit	6	SUBOBJECT_RECEIVES_SHADOW	receives shadow	PROVEN	80458	0
+SubObject	dwFlags	bit	7	SUBOBJECT_FADE_CHILD_BIT	fade child	PROVEN	900	0
+SubObject	dwFlags	bit	8	SUBOBJECT_CLOTH_BIT	cloth	PROVEN	985	0
+SubObject	dwFlags	bit	9	SUBOBJECT_PROJECTILE_ONLY_BIT	projectile only	PROVEN	0	0
+SubObject	dwFlags	bit	10	SUBOBJECT_RECEIVES_FX_BIT	receives fx	PROVEN	35540	0
+SubObject	dwFlags	bit	11	SUBOBJECT_INTERIOR_SCENE_BIT	interior scene	PROVEN	25210	0
+SubObject	dwFlags	bit	12	SUBOBJECT_IN_OCTREE_BIT	in octree	PROVEN	44561	0
+SubObject	dwFlags	bit	13	SUBOBJECT_EDGE_GEOMETRY_BIT	edge geometry	PROVEN	0	0
+SubObject	dwFlags	bit	14	SUBOBJECT_EDGE_SKIN_BIT	edge skin	PROVEN	0	0
+SubObject	dwFlags	bit	15	SUBOBJECT_PACK_GEOMETRY_BIT	pack geometry	PROVEN	189150	0
+SubObject	dwFlags	bit	16	SUBOBJECT_PACK_SKIN_BIT	pack skin	PROVEN	13353	0
+SubObject	dwFlags	bit	17	SUBOBJECT_COARSE_GEO_FADE_TEST_BIT	coarse geo fade test	PROVEN	0	0
+SubObjectAppearance	dwFlags	bit	0	SUBOBJECTAPPEARANCE_RENDER_BIT	render	PROVEN	82146	42883
+SubObjectAppearance	dwFlags	bit	1	SUBOBJECTAPPEARANCE_INTERIOR_BIT_DEPRECATED	interior bit deprecated	PROVEN	25404	14998
+SubObjectAppearance	dwFlags	bit	2	SUBOBJECTAPPEARANCE_MESH_LIT_BIT	mesh lit	PROVEN	133866	69687
+SubObjectAppearance	dwFlags	bit	3	SUBOBJECTAPPEARANCE_KEEP_VERTEX_COLOR_BIT_DEPRECATED	keep vertex color bit deprecated	PROVEN	1	1
+SubObjectAppearance	dwFlags	bit	4	SUBOBJECTAPPEARANCE_USE_SHADER_FACTOR_BIT_DEPRECATED	use shader factor bit deprecated	PROVEN	0	0
+SubObjectAppearance	dwFlags	bit	5	SUBOBJECTAPPEARANCE_IMPORT_OVERWRITES_TEXTURES_DEPRECATED	import overwrites textures deprecated	PROVEN	0	0
+SubObjectAppearance	dwFlags	bit	6	SUBOBJECTAPPEARANCE_LIGHTMAPPED_BIT_DEPRECATED	lightmapped bit deprecated	PROVEN	0	0
+SubObjectAppearance	dwFlags	bit	7	SUBOBJECTAPPEARANCE_NO_PROJECTED_SHADOWS_BIT_DEPRECATED	no projected shadows bit deprecated	PROVEN	24976	14764
+SubObjectAppearance	dwFlags	bit	8	SUBOBJECTAPPEARANCE_NO_HIGHLIGHT_BIT	no highlight	PROVEN	2443	1088
+SubObjectAppearance	dwFlags	bit	9	SUBOBJECTAPPEARANCE_NOT_FOGGED_BIT_DEPRECATED	not fogged bit deprecated	PROVEN	0	0
+SubObjectAppearance	dwFlags	bit	10	SUBOBJECTAPPEARANCE_NO_CLOUD_SHADOWS_BIT_DEPRECATED	no cloud shadows bit deprecated	PROVEN	0	0
+SubObjectAppearance	dwFlags	bit	11	SUBOBJECTAPPEARANCE_LOCKED_FOR_LIGHTING_BIT_DEPRECATED	locked for lighting bit deprecated	PROVEN	0	0
+SubObjectAppearance	dwFlags	bit	12	SUBOBJECTAPPEARANCE_PMA_SHADOW_BIT	pma shadow	PROVEN	163	0
+SubObjectP3	dwFlags	bit	0	SUBOBJECT_UNSTRIPIFIED_BIT	unstripified	PROVEN	0	114849
+SubObjectP3	dwFlags	bit	1	SUBOBJECT_CASTS_AO	casts ao	PROVEN	0	87483
+SubObjectP3	dwFlags	bit	2	SUBOBJECT_RECEIVES_AO	receives ao	PROVEN	0	100318
+SubObjectP3	dwFlags	bit	3	SUBOBJECT_NOT_WALKABLE_BIT	not walkable	PROVEN	0	79582
+SubObjectP3	dwFlags	bit	4	SUBOBJECT_NOT_COLLIDABLE_BIT	not collidable	PROVEN	0	21536
+SubObjectP3	dwFlags	bit	5	SUBOBJECT_CASTS_SHADOW	casts shadow	PROVEN	0	4144
+SubObjectP3	dwFlags	bit	6	SUBOBJECT_RECEIVES_SHADOW	receives shadow	PROVEN	0	44634
+SubObjectP3	dwFlags	bit	7	SUBOBJECT_FADE_CHILD_BIT	fade child	PROVEN	0	257
+SubObjectP3	dwFlags	bit	8	SUBOBJECT_CLOTH_BIT	cloth	PROVEN	0	565
+SubObjectP3	dwFlags	bit	9	SUBOBJECT_PROJECTILE_ONLY_BIT	projectile only	PROVEN	0	0
+SubObjectP3	dwFlags	bit	10	SUBOBJECT_RECEIVES_FX_BIT	receives fx	PROVEN	0	21810
+SubObjectP3	dwFlags	bit	11	SUBOBJECT_INTERIOR_SCENE_BIT	interior scene	PROVEN	0	20970
+SubObjectP3	dwFlags	bit	12	SUBOBJECT_IN_OCTREE_BIT	in octree	PROVEN	0	29614
+SubObjectP3	dwFlags	bit	13	SUBOBJECT_EDGE_GEOMETRY_BIT	edge geometry	PROVEN	0	114311
+SubObjectP3	dwFlags	bit	14	SUBOBJECT_EDGE_SKIN_BIT	edge skin	PROVEN	0	6675
+SubObjectP3	dwFlags	bit	15	SUBOBJECT_PACK_GEOMETRY_BIT	pack geometry	PROVEN	0	0
+SubObjectP3	dwFlags	bit	16	SUBOBJECT_PACK_SKIN_BIT	pack skin	PROVEN	0	0
+SubObjectP3	dwFlags	bit	17	SUBOBJECT_COARSE_GEO_FADE_TEST_BIT	coarse geo fade test	PROVEN	0	0
+TextureDefinition	eTexFormat	value	-1	TEXTUREFORMAT_UNKNOWN	unknown	PROVEN	0	0
+TextureDefinition	eTexFormat	value	0	TEXTUREFORMAT_ARGB8888	argb8888	PROVEN	238	143
+TextureDefinition	eTexFormat	value	1	TEXTUREFORMAT_RGBA8888	rgba8888	PROVEN	0	0
+TextureDefinition	eTexFormat	value	2	TEXTUREFORMAT_ARGB0888	argb0888	PROVEN	0	0
+TextureDefinition	eTexFormat	value	3	TEXTUREFORMAT_ARGB4444	argb4444	PROVEN	0	0
+TextureDefinition	eTexFormat	value	4	TEXTUREFORMAT_ARGB1555	argb1555	PROVEN	2	3
+TextureDefinition	eTexFormat	value	5	TEXTUREFORMAT_ARGB0555	argb0555	PROVEN	0	0
+TextureDefinition	eTexFormat	value	6	TEXTUREFORMAT_RGB565	rgb565	PROVEN	0	0
+TextureDefinition	eTexFormat	value	7	TEXTUREFORMAT_L8	l8	PROVEN	4	1
+TextureDefinition	eTexFormat	value	8	TEXTUREFORMAT_P8	p8	PROVEN	0	0
+TextureDefinition	eTexFormat	value	9	TEXTUREFORMAT_DXT1	dxt1	PROVEN	13097	6902
+TextureDefinition	eTexFormat	value	10	TEXTUREFORMAT_DXT1_1BITALPHA	dxt1 1bitalpha	PROVEN	1536	1158
+TextureDefinition	eTexFormat	value	11	TEXTUREFORMAT_DXT3	dxt3	PROVEN	8984	5908
+TextureDefinition	eTexFormat	value	12	TEXTUREFORMAT_DXT5	dxt5	PROVEN	8359	3218
+TextureDefinition	eTexFormat	value	13	TEXTUREFORMAT_LIN_ARGB8888	lin argb8888	PROVEN	0	0
+TextureDefinition	eTexFormat	value	14	TEXTUREFORMAT_LIN_RGBA8888	lin rgba8888	PROVEN	0	0
+TextureDefinition	eTexFormat	value	15	TEXTUREFORMAT_LIN_ARGB0888	lin argb0888	PROVEN	0	0
+TextureDefinition	eTexFormat	value	16	TEXTUREFORMAT_LIN_ARGB4444	lin argb4444	PROVEN	0	0
+TextureDefinition	eTexFormat	value	17	TEXTUREFORMAT_LIN_ARGB1555	lin argb1555	PROVEN	0	0
+TextureDefinition	eTexFormat	value	18	TEXTUREFORMAT_LIN_ARGB0555	lin argb0555	PROVEN	0	0
+TextureDefinition	eTexFormat	value	19	TEXTUREFORMAT_LIN_RGB565	lin rgb565	PROVEN	0	0
+TextureDefinition	eTexFormat	value	20	TEXTUREFORMAT_LIN_L8	lin l8	PROVEN	0	0
+TextureDefinition	eTexFormat	value	21	TEXTUREFORMAT_ABGR8888	abgr8888	PROVEN	0	0
+TextureDefinition	eTexFormat	value	22	TEXTUREFORMAT_RGB888	rgb888	PROVEN	0	0
+TextureDefinition	eTexFormat	value	23	TEXTUREFORMAT_A8	a8	PROVEN	1	0
+TextureDefinition	eTexFormat	value	24	TEXTUREFORMAT_R32F	r32f	PROVEN	0	0
+TextureDefinition	eTexFormat	value	25	TEXTUREFORMAT_A16B16G16R16F	a16b16g16r16f	PROVEN	0	0
+TextureDefinition	eTexFormat	value	26	TEXTUREFORMAT_A32B32G32R32F	a32b32g32r32f	PROVEN	0	0
+TextureDefinition	eTexFormat	value	27	TEXTUREFORMAT_L16	l16	PROVEN	0	0
+TextureDefinition	eTexFormat	value	28	TEXTUREFORMAT_R16G16B16	r16g16b16	PROVEN	0	0
+TextureDefinition	eTexFormat	value	29	TEXTUREFORMAT_A16R16G16B16	a16r16g16b16	PROVEN	0	0
+TextureDefinition	eTexFormat	value	30	TEXTUREFORMAT_D24X8	d24x8	PROVEN	0	0
+TextureDefinition	eTexFormat	value	31	TEXTUREFORMAT_D16	d16	PROVEN	0	0
+TextureDefinition	eTexFormat	value	32	TEXTUREFORMAT_DF24	df24	PROVEN	0	0
+TextureDefinition	eTexFormat	value	33	TEXTUREFORMAT_DF16	df16	PROVEN	0	0
+TextureDefinition	eTexFormat	value	34	TEXTUREFORMAT_D32	d32	PROVEN	0	0
+TextureDefinition	eTexFormat	value	35	TEXTUREFORMAT_RAWZ	rawz	PROVEN	0	0
+TextureDefinition	eTexFormat	value	36	TEXTUREFORMAT_INTZ	intz	PROVEN	0	0
+TextureDefinition	eTexFormat	value	37	TEXTUREFORMAT_DEPTHOPAQUE	depthopaque	PROVEN	0	0
+TextureDefinition	eTexFormat	value	38	TEXTUREFORMAT_R16F	r16f	PROVEN	0	0
+TextureDefinition	eTexFormat	value	39	TEXTUREFORMAT_G32FR32F	g32fr32f	PROVEN	0	0
+TextureDefinition	eTexFormat	value	40	TEXTUREFORMAT_G16FR16F	g16fr16f	PROVEN	0	0
+TextureDefinition	eTexFormat	value	41	TEXTUREFORMAT_A16B16G16R16	a16b16g16r16	PROVEN	0	0
+TextureDefinition	eTexFormat	value	42	TEXTUREFORMAT_A2B10G10R10	a2b10g10r10	PROVEN	0	0
+TextureDefinition	eTexFormat	value	43	TEXTUREFORMAT_DXT5N	dxt5n	PROVEN	1	0
+TextureDefinition	eUsage	value	0	RESOURCEUSAGE_IMMUTABLE	immutable	PROVEN	32222	0
+TextureDefinition	eUsage	value	1	RESOURCEUSAGE_STATIC	static	PROVEN	0	0
+TextureDefinition	eUsage	value	2	RESOURCEUSAGE_DYNAMIC	dynamic	PROVEN	0	0
+TextureDefinition	eUsage	value	3	RESOURCEUSAGE_PROXY	proxy	PROVEN	0	0
+TriggerConditions	eMaterial	value	-1	INVALID_MATERIAL	invalid material	PROVEN	0	0
+TriggerConditions	eMaterial	value	0	DEFAULT_MATERIAL	default material	PROVEN	64146	81
+TriggerConditions	eMaterial	value	1	METAL_MATERIAL	metal material	PROVEN	0	0
+TriggerConditions	eMaterial	value	2	WOOD_MATERIAL	wood material	PROVEN	4	0
+TriggerConditions	eMaterial	value	3	BONE_MATERIAL	bone material	PROVEN	0	0
+TriggerConditions	eMaterial	value	4	FLESH_MATERIAL	flesh material	PROVEN	0	0
+TriggerConditions	eMaterial	value	5	WATER_MATERIAL	water material	PROVEN	0	0
+TriggerConditions	eMaterial	value	6	STONE_MATERIAL	stone material	PROVEN	0	0
+TriggerConditions	eMaterial	value	7	GLASS_MATERIAL	glass material	PROVEN	0	0
+TriggerConditions	eMaterial	value	8	PAPER_MATERIAL	paper material	PROVEN	2	0
+TriggerConditions	eMaterial	value	9	METAL2_MATERIAL	metal2 material	PROVEN	0	0
+TriggerConditions	eMaterial	value	10	METAL3_MATERIAL	metal3 material	PROVEN	0	0
+TriggerConditions	eMaterial	value	11	WOOD2_MATERIAL	wood2 material	PROVEN	0	0
+TriggerConditions	eMaterial	value	12	WOOD3_MATERIAL	wood3 material	PROVEN	0	0
+TriggerConditions	eMaterial	value	13	STONE2_MATERIAL	stone2 material	PROVEN	0	0
+TriggerConditions	eMaterial	value	14	STONE3_MATERIAL	stone3 material	PROVEN	2	0
+TriggerConditions	eMaterial	value	15	BONE2_MATERIAL	bone2 material	PROVEN	1	0
+TriggerConditions	eMaterial	value	16	BONE3_MATERIAL	bone3 material	PROVEN	0	0
+TriggerEvent	eAttachmentType	value	-1	ATTACHMENTTYPE_INVALID	invalid	PROVEN	0	0
+TriggerEvent	eAttachmentType	value	0	ATTACHMENTTYPE_ACTOR	actor	PROVEN	6076	4
+TriggerEvent	eAttachmentType	value	1	ATTACHMENTTYPE_PARTICLESYSTEM	particlesystem	PROVEN	26317	57
+TriggerEvent	eAttachmentType	value	2	ATTACHMENTTYPE_LIGHT	light	PROVEN	71	20
+TriggerEvent	eAttachmentType	value	3	ATTACHMENTTYPE_SOUND	sound	PROVEN	29987	0
+TriggerEvent	eAttachmentType	value	4	ATTACHMENTTYPE_UNUSED1	unused1	PROVEN	0	0
+TriggerEvent	eAttachmentType	value	5	ATTACHMENTTYPE_AMBIENTSOUND	ambientsound	PROVEN	55	0
+TriggerEvent	eAttachmentType	value	6	ATTACHMENTTYPE_EXPLOSION	explosion	PROVEN	785	0
+TriggerEvent	eAttachmentType	value	7	ATTACHMENTTYPE_UNUSED2	unused2	PROVEN	0	0
+TriggerEvent	eAttachmentType	value	8	ATTACHMENTTYPE_ACTORGROUP_DEPRECATED	actorgroup deprecated	PROVEN	0	0
+TriggerEvent	eAttachmentType	value	9	ATTACHMENTTYPE_SCENE	scene	PROVEN	0	0
+TriggerEvent	eAttachmentType	value	10	ATTACHMENTTYPE_UNUSED3	unused3	PROVEN	0	0
+TriggerEvent	eAttachmentType	value	11	ATTACHMENTTYPE_SHAKE	shake	PROVEN	847	0
+TriggerEvent	eAttachmentType	value	12	ATTACHMENTTYPE_VIBRATION	vibration	PROVEN	17	0
+TriggerEvent	eFootstepType	value	0	FOOTSTEPTYPE_RUN	run	PROVEN	63699	81
+TriggerEvent	eFootstepType	value	1	FOOTSTEPTYPE_WALK	walk	PROVEN	392	0
+TriggerEvent	eFootstepType	value	2	FOOTSTEPTYPE_SLIDE	slide	PROVEN	64	0
+TriggerEvent	eMsgPassMethod	value	0	MSGPASS_TO_ACTORCHAIN	actorchain	PROVEN	64147	81
+TriggerEvent	eMsgPassMethod	value	1	MSGPASS_TO_THIS_ACTOR	this actor	PROVEN	0	0
+TriggerEvent	eMsgPassMethod	value	2	MSGPASS_TO_SELF_AND_CHILDREN	self and children	PROVEN	0	0
+TriggerEvent	eMsgPassMethod	value	3	MSGPASS_TO_CHILDREN_ONLY	children only	PROVEN	8	0
+TriggerEvent	eOutroAnimType	value	0	OUTROANIMATIONTYPE_RUN_LEFT_FOOT	run left foot	PROVEN	55478	81
+TriggerEvent	eOutroAnimType	value	1	OUTROANIMATIONTYPE_RUN_RIGHT_FOOT	run right foot	PROVEN	1351	0
+TriggerEvent	eOutroAnimType	value	2	OUTROANIMATIONTYPE_WALK_LEFT_FOOT	walk left foot	PROVEN	1771	0
+TriggerEvent	eOutroAnimType	value	3	OUTROANIMATIONTYPE_WALK_RIGHT_FOOT	walk right foot	PROVEN	1804	0
+TriggerEvent	eOutroAnimType	value	4	OUTROANIMATIONTYPE_RUN_NONE	run none	PROVEN	3751	0
+TriggerEvent	eOutroAnimType	value	5	OUTROANIMATIONTYPE_WALK_NONE	walk none	PROVEN	0	0
+TriggerEvent	eRuneType	value	-1	RUNE_TYPE_INVALID	invalid	PROVEN	0	0
+TriggerEvent	eRuneType	value	0	RUNE_TYPE_A	a	PROVEN	64155	81
+TriggerEvent	eRuneType	value	1	RUNE_TYPE_B	b	PROVEN	0	0
+TriggerEvent	eRuneType	value	2	RUNE_TYPE_C	c	PROVEN	0	0
+TriggerEvent	eRuneType	value	3	RUNE_TYPE_D	d	PROVEN	0	0
+TriggerEvent	eRuneType	value	4	RUNE_TYPE_E	e	PROVEN	0	0
+TriggerEvent	eRuneType	value	6	RUNE_TYPE_NONE	none	PROVEN	0	0
+TriggerEvent	eType	value	0	TRIGGEREDEVENTTYPE_ADD_OBJECT	add object	PROVEN	29146	81
+TriggerEvent	eType	value	1	TRIGGEREDEVENTTYPE_DETACH_OBJECT	detach object	PROVEN	70	0
+TriggerEvent	eType	value	2	TRIGGEREDEVENTTYPE_ADD_CLOTH_DEPRECATED	add cloth deprecated	PROVEN	0	0
+TriggerEvent	eType	value	3	TRIGGEREDEVENTTYPE_DELETE_CLOTH_DEPRECATED	delete cloth deprecated	PROVEN	0	0
+TriggerEvent	eType	value	4	TRIGGEREDEVENTTYPE_ADD_TRAIL	add trail	PROVEN	132	0
+TriggerEvent	eType	value	5	TRIGGEREDEVENTTYPE_DELETE_TRAIL_DEPRECATED	delete trail deprecated	PROVEN	0	0
+TriggerEvent	eType	value	6	TRIGGEREDEVENTTYPE_MSG	msg	PROVEN	667	0
+TriggerEvent	eType	value	7	TRIGGEREDEVENTTYPE_DELETE_OBJECT	delete object	PROVEN	662	0
+TriggerEvent	eType	value	8	TRIGGEREDEVENTTYPE_FOOTSTEP	footstep	PROVEN	2292	0
+TriggerEvent	eType	value	9	TRIGGEREDEVENTTYPE_ANIM	anim	PROVEN	2	0
+TriggerEvent	eType	value	10	TRIGGEREDEVENTTYPE_TRANSPARENCY	transparency	PROVEN	89	0
+TriggerEvent	eType	value	11	TRIGGEREDEVENTTYPE_ADD_ROPE	add rope	PROVEN	194	0
+TriggerEvent	eType	value	12	TRIGGEREDEVENTTYPE_DELETE_ROPE_DEPRECATED	delete rope deprecated	PROVEN	0	0
+TriggerEvent	eType	value	13	TRIGGEREDEVENTTYPE_CHANGE_LOOK	change look	PROVEN	2453	0
+TriggerEvent	eType	value	14	TRIGGEREDEVENTTYPE_SHADOW	shadow	PROVEN	96	0
+TriggerEvent	eType	value	15	TRIGGEREDEVENTTYPE_CHANGE_PHYSICS_DEPRECATED	change physics deprecated	PROVEN	0	0
+TriggerEvent	eType	value	16	TRIGGEREDEVENTTYPE_ADD_EFFECT_GROUP	add effect group	PROVEN	3412	0
+TriggerEvent	eType	value	17	TRIGGEREDEVENTTYPE_DELETE_EFFECT_GROUP_DEPRECATED	delete effect group deprecated	PROVEN	0	0
+TriggerEvent	eType	value	18	TRIGGEREDEVENTTYPE_FROST_BREATH	frost breath	PROVEN	0	0
+TriggerEvent	eType	value	19	TRIGGEREDEVENTTYPE_ENABLE_RIGID_ANIMATION_ANGVEL_DEPRECATED	enable rigid animation angvel deprecated	PROVEN	0	0
+TriggerEvent	eType	value	20	TRIGGEREDEVENTTYPE_DISABLE_RIGID_ANIMATION_ANGVEL_DEPRECATED	disable rigid animation angvel deprecated	PROVEN	0	0
+TriggerEvent	eType	value	21	TRIGGEREDEVENTTYPE_ENABLE_RIGID_ANIMATION_BOB_DEPRECATED	enable rigid animation bob deprecated	PROVEN	0	0
+TriggerEvent	eType	value	22	TRIGGEREDEVENTTYPE_DISABLE_RIGID_ANIMATION_BOB_DEPRECATED	disable rigid animation bob deprecated	PROVEN	0	0
+TriggerEvent	eType	value	23	TRIGGEREDEVENTTYPE_MUSIC	music	PROVEN	0	0
+TriggerEvent	eType	value	24	TRIGGEREDEVENTTYPE_CAPTURE_BY_PARTICLE_SYSTEM_DEPRECATED	capture by particle system deprecated	PROVEN	0	0
+TriggerEvent	eType	value	25	TRIGGEREDEVENTTYPE_SPAWN_OBJECT	spawn object	PROVEN	9981	0
+TriggerEvent	eType	value	26	TRIGGEREDEVENTTYPE_OUTRO_OBJECT	outro object	PROVEN	298	0
+TriggerEvent	eType	value	27	TRIGGEREDEVENTTYPE_ENABLE_RAGDOLL	enable ragdoll	PROVEN	2790	0
+TriggerEvent	eType	value	28	TRIGGEREDEVENTTYPE_DISABLE_CONSTRAINT	disable constraint	PROVEN	1073	0
+TriggerEvent	eType	value	29	TRIGGEREDEVENTTYPE_DISABLE_COLLISION_MESSAGES	disable collision messages	PROVEN	5	0
+TriggerEvent	eType	value	30	TRIGGEREDEVENTTYPE_ATTACH_SPAWNED_ACTOR	attach spawned actor	PROVEN	3	0
+TriggerEvent	eType	value	31	TRIGGEREDEVENTTYPE_CANCEL_LOOK	cancel look	PROVEN	0	0
+TriggerEvent	eType	value	32	TRIGGEREDEVENTTYPE_HITFLASH	hitflash	PROVEN	324	0
+TriggerEvent	eType	value	33	TRIGGEREDEVENTTYPE_ENABLE_RAGDOLL_ANIMATION_OVERRIDE	enable ragdoll animation override	PROVEN	32	0
+TriggerEvent	eType	value	34	TRIGGEREDEVENTTYPE_DISABLE_RAGDOLL_ANIMATION_OVERRIDE	disable ragdoll animation override	PROVEN	23	0
+TriggerEvent	eType	value	35	TRIGGEREDEVENTTYPE_ATTACH_CAMERA	attach camera	PROVEN	0	0
+TriggerEvent	eType	value	36	TRIGGEREDEVENTTYPE_FRAMEOUT_ENABLE	frameout enable	PROVEN	0	0
+TriggerEvent	eType	value	37	TRIGGEREDEVENTTYPE_FRAMEOUT_DISABLE	frameout disable	PROVEN	0	0
+TriggerEvent	eType	value	38	TRIGGEREDEVENTTYPE_RESTORE_CAMERA	restore camera	PROVEN	0	0
+TriggerEvent	eType	value	39	TRIGGEREDEVENTTYPE_FADE	fade	PROVEN	206	0
+TriggerEvent	eType	value	40	TRIGGEREDEVENTTYPE_NULL	null	PROVEN	0	0
+TriggerEvent	eType	value	41	TRIGGEREDEVENTTYPE_OUTRO_ANIMATION	outro animation	PROVEN	10205	0
+TriggerEvent	eType	value	42	TRIGGEREDEVENTTYPE_HIDE_HELM_AND_SHOULDERS	hide helm and shoulders	PROVEN	0	0

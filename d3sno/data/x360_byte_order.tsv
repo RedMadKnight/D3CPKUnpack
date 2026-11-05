@@ -1,0 +1,18 @@
+format	place	switch_path_reads	x360_rule	status	check
+all SNO types	every header word, record word, pair, count, float and tag-map word	little-endian	big-endian (file order)	PROVEN	all strict passes in X2_results.tsv depend on it
+.app	packed vertex position, 3 x i16 at vertex +0 (28- and 36-byte vertices)	little-endian i16	big-endian i16	PROVEN	every 25th same-named Switch file (5,911 vertex streams, 4,150,455 vertices): 4,135,712 equal after a 16-bit swap; the rest differ in value
+.app	vertex normal, bytes +8..+11	bytes	same bytes as Switch	PROVEN	4,136,451 of 4,150,455 equal
+.app	vertex colours, 4 bytes at +12 and 4 bytes at +16	bytes in order	byte order reversed within each 4-byte group	PROVEN	3,692,249 and 3,718,376 (28-byte) equal after reversal; equal bytes only where the group reads the same both ways
+.app	vertex texture coordinates, 4 x u16 at +20	little-endian u16	little-endian u16 (same bytes as Switch)	PROVEN	4,144,394 of 4,150,455 vertices have identical bytes
+.app	skinned vertex joint bytes +28..+31 and weight bytes +32..+35	bytes in order	byte order reversed within each 4-byte group (weights ascend instead of descend)	PROVEN	301,313 weight groups and 236,220 joint groups equal after reversal; x360 weights ascend in 20,718 of 20,718 sampled vertices
+.app	skinning palette (i32 list of a skinning record)	little-endian	big-endian	PROVEN	all palette entries with weight index a bone (strict pass of every .app)
+.app	skinned index list (u16)	little-endian	big-endian	PROVEN	strict index range check on every .app
+.app	rigid index pool (u16)	file order	big-endian	PROVEN	strict index range check on every .app
+ComplexTypeDescriptorSizes.dat	magic, sizes, offsets	little-endian (fixed)	big-endian; detect by the magic 0xAABBCCDD	PROVEN	407 records parse with the big-endian magic
+CommonTOC.dat, Act*TOC.dat	header and entries	little-endian (fixed)	big-endian	PROVEN	all six files parse; see X2 report section 5
+Lua chunk header (.pow .scr .con .cnv script slices)	bytes 6..11 and size_t width	1,4,8,4,8,0 (little-endian, 8-byte size_t)	0,4,4,4,8,0 (big-endian, 4-byte size_t), the ps3 header	PROVEN	every script chunk of every .pow, .scr, .con, .cnv parses
+formula bytecode (tag maps, balance code)	opcode = first byte of each 4-byte word	little-endian word	big-endian word (opcode is byte 0 of the word as stored)	PROVEN	every balance code block and tag-map formula ends in END
+shader block, texture animation (presentation readers)	order chosen as big-endian only for ps3	little-endian	big-endian	SUPPORTED	code sites only; no x360 reader uses them (Switch-layout shader files have no reader)
+monster modifier block reader	order argument defaults to little-endian	little-endian	pass big-endian	SUPPORTED	caller must pass the file order
+.tex payload	pixel blocks (DXT colour and index words)	little-endian, Switch block-linear addressing	not decoded (tiled; see report)	OPEN	none
+FSB5 sample banks (.fsb)	FSB5 header and chunks	little-endian	little-endian (FSB5 is little-endian on every build)	PROVEN	every .fsb header parses (X2_results.tsv)

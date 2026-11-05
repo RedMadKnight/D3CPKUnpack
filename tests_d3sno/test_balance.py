@@ -38,6 +38,10 @@ class Tables(unittest.TestCase):
                         continue
                     read = G.parse_balance(B.build_gam(build, kind, slot, ["Axe", None], row))
                     self.assertEqual((read.type, read.table, read.row_size), (kind, name, row))
+                    named = any(s.kind == "name" for s in G.gam_pair_slots(build, kind))
+                    if not named:
+                        self.assertIsNone(read.rows[0].name)
+                        continue
                     self.assertEqual(read.rows[0].name, "Axe")
                     self.assertEqual(read.rows[0].id, 109694)
                     self.assertIsNone(read.rows[1].name)
@@ -48,8 +52,8 @@ class Tables(unittest.TestCase):
 
     def test_table_seen_on_ps3_as_bytes_only(self):
         read = G.parse_balance(B.build_gam("ps3", 28, extra_slots={0x348: bytes(600)}))
-        self.assertEqual((read.table, read.row_size), ("handicap_levels", None))
-        self.assertEqual(len(read.raw_slots[0x348]), 600)
+        self.assertEqual((read.table, read.row_size, len(read.rows)), ("handicap_levels", 60, 10))
+        self.assertEqual(read.raw_slots, {})
 
     def test_named_rows_of_added_tables_resolve(self):
         table = G.parse_balance(B.build_gam("switch", 50, 0x228, ["Axe"], 136))

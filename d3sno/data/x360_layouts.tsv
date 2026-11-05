@@ -1,0 +1,406 @@
+build	record	offset	bytes	type	count	name	meaning
+x360	actor	-	440	RECORD SIZE			x360 descriptor size (Actor)
+x360	actor	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
+x360	actor	0xc	4	u32 flags		flags	bit flags of the actor; bits: 0 scale comes from actor, 1 has random facing, 2 fade when near, 3 never turns, 4 sends creation time, 5 high dynamic shadows deprecaded, 6 load all look textures
+x360	actor	0x10	4	i32 enum		actor_kind	actor kind: 1 monster, 2 gizmo, 3 client effect, 4 server prop, 5 environment, 6 critter, 7 player, 8 item, 9 symbol, 10 projectile, 11 custom brain; values: 0 invalid, 1 monster, 2 gizmo, 3 client effect, 4 server prop, 5 environment, 6 critter, 7 player, 8 item, 9 axe symbol, 10 projectile, 11 custom brain
+x360	actor	0x14	4	file_ref(group 9)		appearance_ref	appearance file (group 9)
+x360	actor	0x18	4	file_ref(group 61)		physics_mesh_ref	physics mesh file (group 61), -1 none
+x360	actor	0x1c	12	f32[3]		bound_cylinder_base	bounding cylinder base point x,y,z
+x360	actor	0x28	4	f32		bound_cylinder_height	bounding cylinder height
+x360	actor	0x2c	4	f32		bound_cylinder_radius	bounding cylinder radius
+x360	actor	0x30	12	f32[3]		bound_sphere_center	bounding sphere centre
+x360	actor	0x3c	4	f32		bound_sphere_radius	bounding sphere radius
+x360	actor	0x40	12	f32[3]		bound_box_min	bounding box corner
+x360	actor	0x4c	12	f32[3]		bound_box_extent	bounding box extent
+x360	actor	0x58	8	tag_map_pair(offset u32, size u32)		tag_map	actor tag map, actor tag table
+x360	actor	0x60	8	pointer_slot(8, zero)		tag_map_ptr	pointer slot of tag_map, zero on disk
+x360	actor	0x68	4	file_ref(group 8)		anim_set_ref	animation set file (group 8)
+x360	actor	0x6c	4	file_ref(group 67)		anim_tree_ref	animation tree file (group 67), -1 none
+x360	actor	0x70	4	i32		pad	padding, zero
+x360	actor	0x74	4	file_ref(group 25)		monster_ref	monster file (group 25), -1 none
+x360	actor	0x78	8	array_pair(offset u32, size u32) of actor_event		events	array of message-triggered events
+x360	actor	0x80	4	i32 count of array at 0x78		event_count	number of message-triggered events; equals array size / element size
+x360	actor	0x88	8	pointer_slot(8, zero)		events_ptr	pointer slot of events, zero on disk
+x360	actor	0x90	12	f32[3]		power_source_offset	location offset where powers originate
+x360	actor	0x9c	4	i32		look_hash	look name hash (8 weighted looks)
+x360	actor	0xa0	4	i32		look_hash_padding	padding word after the look hash, zero
+x360	actor	0xa4	4	i32		look_weight	selection weight of the look
+x360	actor	0xa8	4	i32		look_hash	look name hash (8 weighted looks)
+x360	actor	0xac	4	i32		look_hash_padding	padding word after the look hash, zero
+x360	actor	0xb0	4	i32		look_weight	selection weight of the look
+x360	actor	0xb4	4	i32		look_hash	look name hash (8 weighted looks)
+x360	actor	0xb8	4	i32		look_hash_padding	padding word after the look hash, zero
+x360	actor	0xbc	4	i32		look_weight	selection weight of the look
+x360	actor	0xc0	4	i32		look_hash	look name hash (8 weighted looks)
+x360	actor	0xc4	4	i32		look_hash_padding	padding word after the look hash, zero
+x360	actor	0xc8	4	i32		look_weight	selection weight of the look
+x360	actor	0xcc	4	i32		look_hash	look name hash (8 weighted looks)
+x360	actor	0xd0	4	i32		look_hash_padding	padding word after the look hash, zero
+x360	actor	0xd4	4	i32		look_weight	selection weight of the look
+x360	actor	0xd8	4	i32		look_hash	look name hash (8 weighted looks)
+x360	actor	0xdc	4	i32		look_hash_padding	padding word after the look hash, zero
+x360	actor	0xe0	4	i32		look_weight	selection weight of the look
+x360	actor	0xe4	4	i32		look_hash	look name hash (8 weighted looks)
+x360	actor	0xe8	4	i32		look_hash_padding	padding word after the look hash, zero
+x360	actor	0xec	4	i32		look_weight	selection weight of the look
+x360	actor	0xf0	4	i32		look_hash	look name hash (8 weighted looks)
+x360	actor	0xf4	4	i32		look_hash_padding	padding word after the look hash, zero
+x360	actor	0xf8	4	i32		look_weight	selection weight of the look
+x360	actor	0xfc	4	file_ref(group 28)		physics_ref	physics file (group 28)
+x360	actor	0x100	4	u32 flags		physics_flags	physics bit flags; bits: 0 do not integrate bit deprecated, 1 do not autosleep, 2 affected by gravity, 3 affected by wind, 4 affected by explosions, 5 affected by turbulence bit deprecated, 6 constrained to ground bit deprecated, 7 affected by flocking bit deprecated, 8 has maximum acceleration, 9 has maximum speed, 10 unused, 11 constrained to altitude bit deprecated, 12 constrained to system radius bit deprecated, 13 constrained to collision spheres, 14 affected by random accel, 15 affected by rippling bit deprecated, 16 constrained to local collision spheres bit deprecated, 17 collide with same actor, 18 affected by buoyancy, 19 affected by disturbance, 20 animated prop
+x360	actor	0x104	4	i32 enum		material	surface material id; values: -1 invalid, 0 default, 1 metal, 2 wood, 3 bone, 4 flesh, 5 water, 6 stone, 7 glass, 8 paper, 9 metal2, 10 metal3, 11 wood2, 12 wood3, 13 stone2, 14 stone3, 15 bone2, 16 bone3
+x360	actor	0x108	4	f32		explosion_factor	explosion response factor
+x360	actor	0x10c	4	f32		wind_factor	wind response factor
+x360	actor	0x110	4	f32		ragdoll_response	partial ragdoll responsiveness
+x360	actor	0x114	4	u32 flags		coll_static_required	collision: static flags of which one is required; bits: 0 ALLOW_WALK, 1 ALLOW_FLIER, 2 ALLOW_SPIDER, 6 NO_SPAWN, 10 ALLOW_PROJECTILE, 11 ALLOW_GHOST, 3 LEVELAREA_BIT_0, 4 LEVELAREA_BIT_1, 5 SUBSCENE, 7 SPECIAL_0, 8 SPECIAL_1, 12 Rounded Corner 0, 13 Rounded Corner 1, 14 Rounded Corner 2, 15 Rounded Corner 3
+x360	actor	0x118	4	u32 flags		coll_static_prevent	collision: static flags that prevent; bits: 0 ALLOW_WALK, 1 ALLOW_FLIER, 2 ALLOW_SPIDER, 6 NO_SPAWN, 10 ALLOW_PROJECTILE, 11 ALLOW_GHOST, 3 LEVELAREA_BIT_0, 4 LEVELAREA_BIT_1, 5 SUBSCENE, 7 SPECIAL_0, 8 SPECIAL_1, 12 Rounded Corner 0, 13 Rounded Corner 1, 14 Rounded Corner 2, 15 Rounded Corner 3
+x360	actor	0x11c	4	u32 flags		coll_dynamic_no_overlap	collision: dynamic flags that may not overlap; bits: 0 actor, 1 pet, 2 projectile, 3 player, 4 gizmo, 5 los blocker, 6 gate, 7 flippy, 8 owned, 9 wreckable, 10 projectile blocker, 11 teleport blocker, 12 malthael ghost
+x360	actor	0x120	4	u32 flags		coll_dynamic_own	collision: own dynamic flags; bits: 0 actor, 1 pet, 2 projectile, 3 player, 4 gizmo, 5 los blocker, 6 gate, 7 flippy, 8 owned, 9 wreckable, 10 projectile blocker, 11 teleport blocker, 12 malthael ghost
+x360	actor	0x124	4	i32 enum		coll_shape	collision shape kind; values: 0 none, 1 cylinder, 2 box
+x360	actor	0x128	12	f32[3]		coll_cylinder_base	collision cylinder base
+x360	actor	0x134	4	f32		coll_cylinder_height	collision cylinder height
+x360	actor	0x138	4	f32		coll_cylinder_radius	collision cylinder radius
+x360	actor	0x13c	12	f32[3]		coll_box_min	collision box corner
+x360	actor	0x148	12	f32[3]		coll_box_extent	collision box extent
+x360	actor	0x154	4	f32		coll_moving_radius_scale	radius scale while moving
+x360	actor	0x158	4	f32		coll_cylinder_radius_console	console collision radius override
+x360	actor	0x15c	4	f32		coll_pad	padding, zero
+x360	actor	0x160	4	i32		inv_image	inventory image hash, one slot per player class
+x360	actor	0x164	4	i32		inv_image_female	female inventory image hash, 0 if same
+x360	actor	0x168	4	i32		inv_image	inventory image hash, one slot per player class
+x360	actor	0x16c	4	i32		inv_image_female	female inventory image hash, 0 if same
+x360	actor	0x170	4	i32		inv_image	inventory image hash, one slot per player class
+x360	actor	0x174	4	i32		inv_image_female	female inventory image hash, 0 if same
+x360	actor	0x178	4	i32		inv_image	inventory image hash, one slot per player class
+x360	actor	0x17c	4	i32		inv_image_female	female inventory image hash, 0 if same
+x360	actor	0x180	4	i32		inv_image	inventory image hash, one slot per player class
+x360	actor	0x184	4	i32		inv_image_female	female inventory image hash, 0 if same
+x360	actor	0x188	4	i32		inv_image	inventory image hash, one slot per player class
+x360	actor	0x18c	4	i32		inv_image_female	female inventory image hash, 0 if same
+x360	actor	0x190	4	i32		socketed_image	image hash used when socketed
+x360	actor	0x198	8	pointer_slot(8, zero)		internal_description_ptr	pointer slot of internal_description, zero on disk
+x360	actor	0x1a0	8	text_pair(offset u32, size u32)		internal_description	free text, NUL-terminated
+x360	actor	0x1a8	8	pointer_slot(8, zero)		voice_role_ptr	pointer slot of voice_role, zero on disk
+x360	actor	0x1b0	8	text_pair(offset u32, size u32)		voice_role	voice-over role text
+x360	condition	-	1188	RECORD SIZE			x360 descriptor size (Condition)
+x360	condition	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
+x360	condition	0xc	4	i32		male	bool
+x360	condition	0x10	4	i32		female	bool
+x360	condition	0x14	24	i32	6	classes	bool per player class: 7 on NX, 5 on PS3
+x360	condition	0x2c	4	i32		story_mode	bool
+x360	condition	0x30	4	i32		adventure_mode	bool
+x360	condition	0x34	4	i32		at_max_level	bool
+x360	condition	0x38	4	i32		below_max_level	bool
+x360	condition	0x3c	4	file_ref(group 59)		lore	lore (59), 3 slots
+x360	condition	0x40	4	i32		lore_learned	-1 any, 0 not learned, 1 learned
+x360	condition	0x44	4	file_ref(group 59)		lore	lore (59), 3 slots
+x360	condition	0x48	4	i32		lore_learned	-1 any, 0 not learned, 1 learned
+x360	condition	0x4c	4	file_ref(group 59)		lore	lore (59), 3 slots
+x360	condition	0x50	4	i32		lore_learned	-1 any, 0 not learned, 1 learned
+x360	condition	0x54	4	file_ref(group 31)		quest	quest (31), 3 slots
+x360	condition	0x58	4	i32		quest_step	step uid; -1 any, -2 seen as default
+x360	condition	0x5c	4	i32		quest_completed	-1 any, 0, 1
+x360	condition	0x60	4	i32		quest_assigned	-1 any, 0, 1
+x360	condition	0x64	4	file_ref(group 31)		quest	quest (31), 3 slots
+x360	condition	0x68	4	i32		quest_step	step uid; -1 any, -2 seen as default
+x360	condition	0x6c	4	i32		quest_completed	-1 any, 0, 1
+x360	condition	0x70	4	i32		quest_assigned	-1 any, 0, 1
+x360	condition	0x74	4	file_ref(group 31)		quest	quest (31), 3 slots
+x360	condition	0x78	4	i32		quest_step	step uid; -1 any, -2 seen as default
+x360	condition	0x7c	4	i32		quest_completed	-1 any, 0, 1
+x360	condition	0x80	4	i32		quest_assigned	-1 any, 0, 1
+x360	condition	0x84	4	row_id		item	item row id, 3 slots
+x360	condition	0x88	4	i32		item_possessed	bool
+x360	condition	0x8c	4	i32		item_count_min	count
+x360	condition	0x90	4	i32		item_count_max	count
+x360	condition	0x94	4	row_id		item	item row id, 3 slots
+x360	condition	0x98	4	i32		item_possessed	bool
+x360	condition	0x9c	4	i32		item_count_min	count
+x360	condition	0xa0	4	i32		item_count_max	count
+x360	condition	0xa4	4	row_id		item	item row id, 3 slots
+x360	condition	0xa8	4	i32		item_possessed	bool
+x360	condition	0xac	4	i32		item_count_min	count
+x360	condition	0xb0	4	i32		item_count_max	count
+x360	condition	0xb4	4	i32		player_level_min	0 no limit
+x360	condition	0xb8	4	i32		player_level_max	0 no limit
+x360	condition	0xbc	4	i32		lootee_level_min	
+x360	condition	0xc0	4	i32		lootee_level_max	
+x360	condition	0xc4	4	i32		difficulty_level_min	handicap (monster power or torment) minimum, -1 any
+x360	condition	0xc8	4	i32		difficulty_level_max	maximum
+x360	condition	0xd0	4	i32 enum		act_min	act 0..400, -1 any; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
+x360	condition	0xd4	4	i32 enum		act_max	act; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
+x360	condition	0xd8	4	i32		players_min	
+x360	condition	0xdc	4	i32		players_max	
+x360	condition	0xe0	4	file_ref(group 48)		world	world (48)
+x360	condition	0xe4	4	file_ref(group 22)		level_area	level area (22)
+x360	condition	0xe8	4	file_ref(group 58)		quest_range	quest range (58)
+x360	condition	0xec	4	i32 enum		follower	follower class; values: 0 none, 1 Templar, 2 Scoundrel, 3 Enchantress
+x360	condition	0xf0	4	i32		follower_current	-1 any
+x360	condition	0xf4	4	row_id		label	label row id, 3 slots
+x360	condition	0xf8	4	i32		label_active	bool
+x360	condition	0xfc	4	row_id		label	label row id, 3 slots
+x360	condition	0x100	4	i32		label_active	bool
+x360	condition	0x104	4	row_id		label	label row id, 3 slots
+x360	condition	0x108	4	i32		label_active	bool
+x360	condition	0x10c	4	file_ref(group 29)		skill	power (29), 3 slots
+x360	condition	0x110	4	i32		skill_level_min	
+x360	condition	0x114	4	i32		skill_level_max	
+x360	condition	0x118	4	file_ref(group 29)		skill	power (29), 3 slots
+x360	condition	0x11c	4	i32		skill_level_min	
+x360	condition	0x120	4	i32		skill_level_max	
+x360	condition	0x124	4	file_ref(group 29)		skill	power (29), 3 slots
+x360	condition	0x128	4	i32		skill_level_min	
+x360	condition	0x12c	4	i32		skill_level_max	
+x360	condition	0x130	4	i32		rank_champion	
+x360	condition	0x134	4	i32		rank_rare	
+x360	condition	0x138	4	i32		rank_unique	
+x360	condition	0x13c	4	i32		rank_boss	
+x360	condition	0x140	4	i32		double_goblins	
+x360	condition	0x144	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x148	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x14c	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x150	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x154	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x158	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x15c	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x160	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x164	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x168	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x16c	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x170	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x174	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x178	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x17c	4	file_ref(group 1)		monster_actor	actor (1), 15 slots
+x360	condition	0x180	128	char[128]		game_flag	3 texts of 128 bytes
+x360	condition	0x200	128	char[128]		game_flag	3 texts of 128 bytes
+x360	condition	0x280	128	char[128]		game_flag	3 texts of 128 bytes
+x360	condition	0x300	128	char[128]		player_flag	3 texts of 128 bytes
+x360	condition	0x380	128	char[128]		player_flag	3 texts of 128 bytes
+x360	condition	0x400	128	char[128]		player_flag	3 texts of 128 bytes
+x360	condition	0x480	4	file_ref(group 29)		buff_power	power (29), 3 slots
+x360	condition	0x484	4	i32		buff_index	
+x360	condition	0x488	4	i32		buff_stacks	
+x360	condition	0x48c	4	file_ref(group 29)		buff_power	power (29), 3 slots
+x360	condition	0x490	4	i32		buff_index	
+x360	condition	0x494	4	i32		buff_stacks	
+x360	condition	0x498	4	file_ref(group 29)		buff_power	power (29), 3 slots
+x360	condition	0x49c	4	i32		buff_index	
+x360	condition	0x4a0	4	i32		buff_stacks	
+x360	drop_modifier	-	120	RECORD SIZE			x360 descriptor size (LootDropModifier)
+x360	drop_modifier	0x0	4	i32 enum		drop_kind	drop kind, see Q6; values: -1 none, 0 treasureclass, 1 itemlabel, 2 item, 3 legendary, 4 class targeted legendary
+x360	drop_modifier	0x4	4	file_ref(group 52)		sub_treasure	treasure class (52)
+x360	drop_modifier	0x8	4	f32		chance	chance
+x360	drop_modifier	0xc	4	i32		weight	weight
+x360	drop_modifier	0x10	4	row_id		quality	quality class row id
+x360	drop_modifier	0x14	4	i32		item_label	label
+x360	drop_modifier	0x18	4	i32		item_label_2	label
+x360	drop_modifier	0x1c	4	file_ref(group 51)		condition	condition file (51)
+x360	drop_modifier	0x20	4	row_id		item	item row id
+x360	drop_modifier	0x24	4	i32		affix_count	number of affix slots used
+x360	drop_modifier	0x28	24	row_id	6	affixes	6 affix row ids; slots at or above the count are stale and must be ignored
+x360	drop_modifier	0x40	4	i32		random_affixes	extra random affixes
+x360	drop_modifier	0x44	4	i32		random_affixes_range	extra random range
+x360	drop_modifier	0x48	4	i32		legendary_affix_min	minimum legendary affixes
+x360	drop_modifier	0x4c	4	i32		account_bound	bool
+x360	drop_modifier	0x50	4	i32		major_affixes	NX only
+x360	drop_modifier	0x54	4	i32		minor_affixes	NX only
+x360	drop_modifier	0x58	4	i32		quantity	quantity
+x360	drop_modifier	0x5c	4	i32		quantity_range	extra random quantity
+x360	drop_modifier	0x60	16	i32	4	label_masks	5 bit masks
+x360	drop_modifier	0x70	4	i32		boss_drop	bool
+x360	drop_modifier	0x74	4	i32		ignore_gold_ranges	bool
+x360	monster	-	1360	RECORD SIZE			x360 descriptor size (Monster#1360)
+x360	monster	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
+x360	monster	0xc	4	u32 flags		flags	bit flags; bits: 0 is unique, 1 is large monster, 2 is elite, 3 hireling or pet, 4 is female, 5 is boss, 6 always uses self for awareness radius, 7 forces flavor text
+x360	monster	0x10	4	file_ref(group 1)		actor_ref	actor file (group 1)
+x360	monster	0x14	4	i32		look_index	look index in the actor
+x360	monster	0x18	4	i32 enum		monster_type	monster type, see symbol list; values: -1 none, 0 Undead, 1 Demon, 2 Beast, 3 Human, 4 Breakable, 5 Scenery, 6 Ally, 7 Team, 8 Helper, 9 CorruptedAngel, 10 Pandemonium, 11 Adria, 12 Blood Golem
+x360	monster	0x1c	4	i32 enum		race	monster race, -1 none; values: 0 none, 1 Fallen, 2 GoatMen, 3 Rogue, 4 Skeleton, 5 Zombie, 6 Spider, 7 Triune, 8 WoodWraith, 9 Human, 10 Animal, 11 TreasureGoblin, 12 CrazedAngel, -1 none (PS3 writes -1 where Switch writes 0)
+x360	monster	0x20	4	i32 enum		encounter_category	encounter category; values: -1 none, 3 Big, 4 Standard, 5 Ranged, 6 Swarm, 7 Boss
+x360	monster	0x24	4	f32		idle_radius	awareness radius when idle
+x360	monster	0x28	4	f32		combat_radius	awareness radius in combat
+x360	monster	0x2c	4	f32		target_abandon_time	time before target is dropped
+x360	monster	0x30	4	f32		warn_radius	radius to alert allies
+x360	monster	0x34	4	i32		needs_line_of_sight	bool
+x360	monster	0x38	4	i32 enum		base_element	damage type, -1 none; values: -1 None, 0 Physical, 1 Fire, 2 Lightning, 3 Cold, 4 Poison, 5 Arcane, 6 Holy
+x360	monster	0x3c	4	i32		count_min	spawn count minimum
+x360	monster	0x40	4	i32		count_range	extra random spawn count
+x360	monster	0x44	584	f32	146	attribute_modifiers	indexed float table, see Q6
+x360	monster	0x28c	4	f32		hp_champion	champion health multiplier
+x360	monster	0x290	4	f32		hp_champion_range	random extra champion multiplier
+x360	monster	0x294	4	f32		hp_rare	rare health multiplier
+x360	monster	0x298	4	f32		hp_rare_range	random extra rare multiplier
+x360	monster	0x29c	4	f32		hp_minion	minion health multiplier
+x360	monster	0x2a0	4	f32		hp_minion_range	random extra minion multiplier
+x360	monster	0x2a4	4	i32		gold	gold granted
+x360	monster	0x2a8	4	f32		health_drop_chance_normal	chance
+x360	monster	0x2ac	4	row_id		health_item_normal	item row id (items table)
+x360	monster	0x2b0	4	i32 enum		health_drop_style_normal	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
+x360	monster	0x2b4	4	f32		health_drop_chance_champion	chance
+x360	monster	0x2b8	4	row_id		health_item_champion	item row id
+x360	monster	0x2bc	4	i32 enum		health_drop_style_champion	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
+x360	monster	0x2c0	4	f32		health_drop_chance_rare	chance
+x360	monster	0x2c4	4	row_id		health_item_rare	item row id
+x360	monster	0x2c8	4	i32 enum		health_drop_style_rare	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
+x360	monster	0x2cc	4	f32		health_drop_chance_minion	chance
+x360	monster	0x2d0	4	row_id		health_item_minion	item row id
+x360	monster	0x2d4	4	i32 enum		health_drop_style_minion	drop style; values: 0 never, 1 every 20 percent, 2 every 25 percent, 3 every 33 percent, 4 every 50 percent, 5 on death only, 6 on pack death
+x360	monster	0x2d8	4	file_ref(group 39)		skill_kit_ref	skill kit file (group 39)
+x360	monster	0x2dc	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
+x360	monster	0x2e0	4	i32		skill_level_mod	level adjustment of the slot
+x360	monster	0x2e4	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
+x360	monster	0x2e8	4	i32		skill_level_mod	level adjustment of the slot
+x360	monster	0x2ec	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
+x360	monster	0x2f0	4	i32		skill_level_mod	level adjustment of the slot
+x360	monster	0x2f4	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
+x360	monster	0x2f8	4	i32		skill_level_mod	level adjustment of the slot
+x360	monster	0x2fc	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
+x360	monster	0x300	4	i32		skill_level_mod	level adjustment of the slot
+x360	monster	0x304	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
+x360	monster	0x308	4	i32		skill_level_mod	level adjustment of the slot
+x360	monster	0x30c	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
+x360	monster	0x310	4	i32		skill_level_mod	level adjustment of the slot
+x360	monster	0x314	4	file_ref(group 29)		skill_power	power file (group 29), 8 slots
+x360	monster	0x318	4	i32		skill_level_mod	level adjustment of the slot
+x360	monster	0x31c	4	f32		skill_range_min	use range minimum, 8 slots
+x360	monster	0x320	4	f32		skill_range_max	use range maximum
+x360	monster	0x324	4	i32		skill_weight	selection weight
+x360	monster	0x328	4	f32		skill_timer	cooldown
+x360	monster	0x32c	4	f32		skill_range_min	use range minimum, 8 slots
+x360	monster	0x330	4	f32		skill_range_max	use range maximum
+x360	monster	0x334	4	i32		skill_weight	selection weight
+x360	monster	0x338	4	f32		skill_timer	cooldown
+x360	monster	0x33c	4	f32		skill_range_min	use range minimum, 8 slots
+x360	monster	0x340	4	f32		skill_range_max	use range maximum
+x360	monster	0x344	4	i32		skill_weight	selection weight
+x360	monster	0x348	4	f32		skill_timer	cooldown
+x360	monster	0x34c	4	f32		skill_range_min	use range minimum, 8 slots
+x360	monster	0x350	4	f32		skill_range_max	use range maximum
+x360	monster	0x354	4	i32		skill_weight	selection weight
+x360	monster	0x358	4	f32		skill_timer	cooldown
+x360	monster	0x35c	4	f32		skill_range_min	use range minimum, 8 slots
+x360	monster	0x360	4	f32		skill_range_max	use range maximum
+x360	monster	0x364	4	i32		skill_weight	selection weight
+x360	monster	0x368	4	f32		skill_timer	cooldown
+x360	monster	0x36c	4	f32		skill_range_min	use range minimum, 8 slots
+x360	monster	0x370	4	f32		skill_range_max	use range maximum
+x360	monster	0x374	4	i32		skill_weight	selection weight
+x360	monster	0x378	4	f32		skill_timer	cooldown
+x360	monster	0x37c	4	f32		skill_range_min	use range minimum, 8 slots
+x360	monster	0x380	4	f32		skill_range_max	use range maximum
+x360	monster	0x384	4	i32		skill_weight	selection weight
+x360	monster	0x388	4	f32		skill_timer	cooldown
+x360	monster	0x38c	4	f32		skill_range_min	use range minimum, 8 slots
+x360	monster	0x390	4	f32		skill_range_max	use range maximum
+x360	monster	0x394	4	i32		skill_weight	selection weight
+x360	monster	0x398	4	f32		skill_timer	cooldown
+x360	monster	0x39c	4	file_ref(group 52)		treasure_first_kill	treasure class (group 52)
+x360	monster	0x3a0	4	file_ref(group 52)		treasure	treasure class
+x360	monster	0x3a4	4	file_ref(group 52)		treasure_rare	treasure class
+x360	monster	0x3a8	4	file_ref(group 52)		treasure_champion	treasure class
+x360	monster	0x3ac	4	file_ref(group 52)		treasure_champion_light	treasure class
+x360	monster	0x3b0	4	f32		no_drop_scale	no-drop scale
+x360	monster	0x3b4	4	f32		flee_chance	flee chance
+x360	monster	0x3b8	4	f32		flee_cooldown	flee cooldown
+x360	monster	0x3bc	4	f32		flee_cooldown_range	extra random cooldown
+x360	monster	0x3c0	4	i32		summon_per_cast	summons per cast
+x360	monster	0x3c4	4	f32		summon_life	summon lifetime
+x360	monster	0x3c8	4	i32		summon_max_alive	summon cap at once
+x360	monster	0x3cc	4	i32		summon_max_total	summon cap in total
+x360	monster	0x3d0	4	file_ref(group 52)		inventory	equipment treasure class (group 52)
+x360	monster	0x3d4	4	file_ref(group 52)		secondary_inventory	secondary inventory treasure class (group 52), -1 none
+x360	monster	0x3d8	4	file_ref(group 59)		lore_ref	lore file (group 59)
+x360	monster	0x3dc	24	file_ref(group 3)	6	ai_behaviours	6 AI behaviour files (group 3)
+x360	monster	0x3f4	32	row_id	8	movement_styles	8 movement style row ids
+x360	monster	0x414	24	file_ref(group 1)	6	summon_actors	6 summoned actor files (group 1)
+x360	monster	0x42c	4	i32		random_affix_count	number of random elite affixes
+x360	monster	0x430	16	row_id	4	affixes	4 monster affix row ids
+x360	monster	0x440	24	row_id	6	disallowed_affixes	6 monster affix row ids not allowed
+x360	monster	0x458	4	i32 enum		target_style_normal	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+x360	monster	0x45c	4	i32 enum		target_style_champion	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+x360	monster	0x460	4	i32 enum		target_style_rare	AI target style; values: 0 closest plus threatened, 1 closest, 2 closest plus ally, 3 closest plus not knockbackable, 4 highest threat, 5 switch on attack, 6 random, 7 assassin, 8 ranged focused, 9 melee focused, 10 melee pet, 11 crusader heavens fury
+x360	monster	0x464	4	i32 enum		resource	resource kind, -1 none; values: 0 Mana, 1 Arcanum, 2 Fury, 3 Spirit, 4 Power, 5 Hatred, 6 Discipline, 7 Faith, 8 Essence, -1 none
+x360	monster	0x480	8	tag_map_pair(offset u32, size u32)		tag_map	monster tag map, monster tag table
+x360	monster	0x488	8	pointer_slot(8, zero)		tag_map_ptr	pointer slot of tag_map, zero on disk
+x360	monster	0x490	4	i32 count of array at 0x4a0		minion_group_count	number of minion groups
+x360	monster	0x498	8	pointer_slot(8, zero)		minion_groups_ptr	pointer slot of minion_groups, zero on disk
+x360	monster	0x4a0	8	array_pair(offset u32, size u32) of minion_group		minion_groups	array of minion spawn groups
+x360	monster	0x4a8	4	i32 count of array at 0x4b8		champion_group_count	number of champion groups
+x360	monster	0x4b0	8	pointer_slot(8, zero)		champion_groups_ptr	pointer slot of champion_groups, zero on disk
+x360	monster	0x4b8	8	array_pair(offset u32, size u32) of champion_group		champion_groups	array of champion spawn groups
+x360	monster	0x4c0	128	char[128]		internal_name	text, 128 bytes, NUL-terminated
+x360	monster	0x540	4	file_ref(group 4)		ai_state_attacker_cap	AI state file (group 4) used when the attacker cap is reached
+x360	monster	0x544	4	i32		no_drop_throttle	bool
+x360	monster	0x548	4	i32		health_bar_with_owner	bool
+x360	monster	0x54c	4	i32		can_be_avenger	bool
+x360	quest	-	272	RECORD SIZE			x360 descriptor size (Quest)
+x360	quest	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
+x360	quest	0xc	4	i32 enum		quest_type	quest type: 0 main, 2 event, 4 challenge, 5 bounty, 6 horadric, 7..10 set dungeon forms; values: 0 Main Quest, 2 Event, 4 Challenge, 5 Bounty, 6 Horadric Quest, 7 Set Dungeon, 8 Set Dungeon Bonus, 9 Set Dungeon Mastery, 10 Set Dungeon Tracker
+x360	quest	0x10	4	i32 count of array at 0x58		step_count	number of steps
+x360	quest	0x14	4	i32 count of array at 0x68		completion_step_count	number of completion steps
+x360	quest	0x18	4	i32		quest_uid	quest unique number
+x360	quest	0x1c	4	u32 flags		flags	bit flags; bits: 0 auto generate map icon, 1 auto mark objective npcs, 2 show new quest blinker, 3 global event, 4 shared description text
+x360	quest	0x20	4	i32		zone_label	label hash
+x360	quest	0x24	4	i32 enum		act	act: 0, 100, 200, 300, 400; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
+x360	quest	0x28	4	i32		unassigned_uid	unused uid of the unassigned step
+x360	quest	0x2c	4	u32 flags		unassigned_flags	bit flags of the unassigned step; bits: 0 selectable step, 1 prevent matchmaking
+x360	quest	0x30	8	pointer_slot(8, zero)		unassigned_objective_sets_ptr	pointer slot of unassigned_objective_sets, zero on disk
+x360	quest	0x38	8	array_pair(offset u32, size u32) of objective_set		unassigned_objective_sets	objective sets of the unassigned step
+x360	quest	0x40	8	pointer_slot(8, zero)		unassigned_failure_sets_ptr	pointer slot of unassigned_failure_sets, zero on disk
+x360	quest	0x48	8	array_pair(offset u32, size u32) of failure_set		unassigned_failure_sets	failure condition sets of the unassigned step
+x360	quest	0x50	8	pointer_slot(8, zero)		steps_ptr	pointer slot of steps, zero on disk
+x360	quest	0x58	8	array_pair(offset u32, size u32) of quest_step		steps	array of steps
+x360	quest	0x60	8	pointer_slot(8, zero)		completion_steps_ptr	pointer slot of completion_steps, zero on disk
+x360	quest	0x68	8	array_pair(offset u32, size u32) of completion_step		completion_steps	array of completion steps
+x360	quest	0x70	72	file_ref(group 22)	18	extra_level_areas	18 level area files (group 22)
+x360	quest	0xb8	4	file_ref(group 48)		challenge_world	world file (group 48)
+x360	quest	0xbc	4	i32 enum		challenge_kind	challenge kind; values: -1 none, 0 Timed Dungeon, 1 Wave Fight, 2 Horde, 3 Zapper, 4 Goblin Hunt
+x360	quest	0xc0	4	i32 enum		bounty_act	act of the bounty; values: -1 Invalid, 0 A1, 100 A2, 200 A3, 300 A4, 400 A5, 3000 OpenWorld, 1000 Test
+x360	quest	0xc4	4	i32 enum		bounty_kind	bounty kind; values: -1 none, 0 Kill Unique, 1 Kill Boss, 2 Complete Event, 3 Clear Dungeon, 4 Camps, 5 HQ - Color Orbs, 6 HQ - Hot Cold
+x360	quest	0xc8	4	file_ref(group 22)		bounty_level_area	level area (22)
+x360	quest	0xcc	4	file_ref(group 48)		bounty_world	world (48)
+x360	quest	0xd0	4	file_ref(group 31)		bounty_req_quest	quest (31)
+x360	quest	0xd4	4	file_ref(group 48)		bounty_req_quest_world	world (48)
+x360	quest	0xd8	4	file_ref(group 1)		bounty_req_actor	actor (1)
+x360	quest	0xdc	4	file_ref(group 48)		bounty_req_actor_world	world
+x360	quest	0xe0	4	file_ref(group 22)		bounty_req_actor_area	level area
+x360	quest	0xe4	4	file_ref(group 33)		bounty_req_scene	scene (33)
+x360	quest	0xe8	4	file_ref(group 48)		bounty_req_scene_world	world
+x360	quest	0xec	4	row_id		bounty_req_label	label row id (labels table)
+x360	quest	0xf0	4	file_ref(group 2)		bounty_req_adventure	adventure (2)
+x360	quest	0xf4	4	file_ref(group 48)		bounty_req_adventure_world	world
+x360	quest	0xf8	4	file_ref(group 22)		bounty_req_adventure_area	level area
+x360	quest	0xfc	4	file_ref(group 15)		bounty_req_encounter	encounter (15)
+x360	quest	0x100	4	file_ref(group 33)		bounty_req_scene_2	scene
+x360	quest	0x104	4	file_ref(group 48)		bounty_req_scene_world_2	world
+x360	quest	0x108	4	row_id		bounty_req_label_2	label row id
+x360	quest_step	-	168	RECORD SIZE			x360 descriptor size (QuestStep)
+x360	quest_step	0x0	8	pointer_slot(8, zero)		name_ptr	pointer slot of name, zero on disk
+x360	quest_step	0x8	8	text_pair(offset u32, size u32)		name	step name text
+x360	quest_step	0x10	4	i32		uid	step uid
+x360	quest_step	0x14	4	u32 flags		flags	bit flags; bits: 0 resumable step, 1 save partial completion, 2 track per player, 3 shared log text, 4 show meter, 5 orphaned step, 6 selectable step, 7 prevent matchmaking, 8 use previous log text, 9 grant nv on completion, 10 hide bonus text
+x360	quest_step	0x18	4	i32 enum		reward_kind	reward kind; values: 0 no item, 1 Shared Recipe, 2 Class Recipe, 3 Treasure Class
+x360	quest_step	0x1c	24	file_ref(group 49)	6	reward_recipes	recipe files (group 49), one per player class
+x360	quest_step	0x34	4	file_ref(group 52)		reward_treasure	treasure class (52)
+x360	quest_step	0x38	4	i32		reward_xp_tier	experience tier
+x360	quest_step	0x3c	4	i32		reward_gold_tier	gold tier
+x360	quest_step	0x40	4	i32 enum		replay_reward_kind	reward kind on replay; values: 0 no item, 1 Shared Recipe, 2 Class Recipe, 3 Treasure Class
+x360	quest_step	0x44	24	file_ref(group 49)	6	replay_reward_recipes	recipes, one per class
+x360	quest_step	0x5c	4	file_ref(group 52)		replay_reward_treasure	treasure class
+x360	quest_step	0x60	4	i32		replay_xp_tier	experience tier
+x360	quest_step	0x64	4	i32		replay_gold_tier	gold tier
+x360	quest_step	0x68	4	file_ref(group 29)		power_granted	power (29)
+x360	quest_step	0x6c	8	file_ref(group 22)	2	waypoint_areas	2 level areas (22)
+x360	quest_step	0x78	8	pointer_slot(8, zero)		objective_sets_ptr	pointer slot of objective_sets, zero on disk
+x360	quest_step	0x80	8	array_pair(offset u32, size u32) of objective_set		objective_sets	array of objective sets
+x360	quest_step	0x88	8	pointer_slot(8, zero)		bonus_sets_ptr	pointer slot of bonus_sets, zero on disk
+x360	quest_step	0x90	8	array_pair(offset u32, size u32) of bonus_set		bonus_sets	array of bonus objective sets
+x360	quest_step	0x98	8	pointer_slot(8, zero)		failure_sets_ptr	pointer slot of failure_sets, zero on disk
+x360	quest_step	0xa0	8	array_pair(offset u32, size u32) of failure_set		failure_sets	array of failure condition sets
+x360	treasure_class	-	40	RECORD SIZE			x360 descriptor size (TreasureClass)
+x360	treasure_class	0x0	12	file_ref,i32,u32		self_handle,lock_count,header_flags	first 12 bytes: own handle, then two zero words
+x360	treasure_class	0xc	4	f32		no_drop_chance	chance that nothing drops
+x360	treasure_class	0x10	4	i32 enum		choose_kind	how modifiers are picked: 0 one of (pick one modifier by weight), 1 all of (roll every modifier by its chance), 2 all of, shared loot, 3 one of, shared loot, -1 none
+x360	treasure_class	0x14	4	i32		forced_level	forced item level
+x360	treasure_class	0x18	8	pointer_slot(8, zero)		modifiers_ptr	pointer slot of modifiers, zero on disk
+x360	treasure_class	0x20	8	array_pair(offset u32, size u32) of drop_modifier		modifiers	array of drop modifiers

@@ -1,0 +1,62 @@
+struct	x360_size	switch_struct	switch_size	x360_fields	switch_fields	difference
+Act	4200	ActDefinition	4192	7	5	size 4200 vs 4192; 2 x360-only fields
+Particle	688	ParticleDefinition	704	75	77	size 688 vs 704; 2 Switch fields absent; 6 fields at other offsets
+ColorPath	48	ColorPath	44	3	3	size 48 vs 44
+TieredLootRunLevel	48	TieredLootRunLevel	56	10	13	size 48 vs 56; 5 Switch fields absent; 2 x360-only fields; 8 fields at other offsets
+HandicapLevel	48	HandicapLevel	32	10	8	size 48 vs 32; 2 Switch fields absent; 4 x360-only fields; 6 fields at other offsets
+FloatPath	48	FloatPath	44	3	3	size 48 vs 44
+ItemSalvageLevel	40	ItemSalvageLevel	16	8	4	size 40 vs 16; 4 x360-only fields; 4 fields at other offsets
+Anim	64	AnimationDefinition	56	8	7	size 64 vs 56; 1 x360-only fields; 1 fields at other offsets
+VelocityVectorPath	48	VelocityVectorPath	44	3	3	size 48 vs 44
+Observer	148	ObserverDefinition	152	26	27	size 148 vs 152; 1 Switch fields absent; 25 fields at other offsets
+Monster#1360	1360	MonsterDefinition	1368	64	66	size 1360 vs 1368; 2 Switch fields absent; 4 fields at other offsets
+ControlScheme	420	ControlSchemeDefinition	444	6	6	size 420 vs 444; 5 fields at other offsets
+BountyData	76	BountyData	92	19	23	size 76 vs 92; 4 Switch fields absent; 17 fields at other offsets
+Quest	272	QuestDefinition	288	16	16	size 272 vs 288
+IntPath	48	IntPath	44	3	3	size 48 vs 44
+BannerParams	232	BannerParams	240	28	28	size 232 vs 240
+GlobalServerData	656	GlobalServerData	896	73	114	size 656 vs 896; 41 Switch fields absent; 25 fields at other offsets
+Globals	936	GlobalDefinition	1016	137	147	size 936 vs 1016; 10 Switch fields absent; 111 fields at other offsets
+EncounterSpawnOption	12	EncounterSpawnOption	16	3	4	size 12 vs 16; 1 Switch fields absent
+IVector2D	8			2		no Switch struct of this name
+Vector2D	8			2		no Switch struct of this name
+Vector3D	12			3		no Switch struct of this name
+Condition	1188	ConditionDefinition	1240	36	48	size 1188 vs 1240; 12 Switch fields absent; 32 fields at other offsets
+MadeToOrderTypesEntry	64			9		no Switch struct of this name
+MadeToOrderTypesTable	16			2		no Switch struct of this name
+LootDropModifier	120	LootDropModifier	132	14	16	size 120 vs 132; 2 Switch fields absent; 2 fields at other offsets
+TreasureClass	40	TreasureClassDefinition	56	5	8	size 40 vs 56; 3 Switch fields absent; 2 fields at other offsets
+AccelVectorPath	48	AccelVectorPath	44	3	3	size 48 vs 44
+AngularVelocityPath	48	AngularVelocityPath	44	3	3	size 48 vs 44
+LegacyItemConversion	32	LegacyItemConversion	40	6	8	size 32 vs 40; 2 Switch fields absent
+DevilsHandRedeemableSetReward	8			2		no Switch struct of this name
+DevilsHandRedeemableSet	144			12		no Switch struct of this name
+DevilsHandRedeemableSetTable	16			2		no Switch struct of this name
+MadeToOrderAffixFoldersEntry	136			9		no Switch struct of this name
+MadeToOrderAffixFoldersTable	16			2		no Switch struct of this name
+ConvLocaleDisplayTimes	48	ConvLocaleDisplayTimes	56	1	1	size 48 vs 56
+Scene	536	SceneDefinition	536	18	18	1 Switch fields absent; 1 x360-only fields; 2 fields at other offsets
+QuestStep	168	QuestStep	176	22	22	size 168 vs 176; 16 fields at other offsets
+GameBalance	616	GameBalanceDefinition	568	40	37	size 616 vs 568; 2 Switch fields absent; 5 x360-only fields; 17 fields at other offsets
+VelocityPath	48	VelocityPath	44	3	3	size 48 vs 44
+TimePath	48	TimePath	44	3	3	size 48 vs 44
+AnglePath	48	AnglePath	44	3	3	size 48 vs 44
+AffixTableEntry	552	AffixTableEntry	544	41	41	size 552 vs 544; 1 Switch fields absent; 1 x360-only fields; 27 fields at other offsets
+Actor	440	ActorDefinition	448	31	31	size 440 vs 448; 5 fields at other offsets
+WeightedPopulation	76	WeightedPopulation	80	4	5	size 76 vs 80; 1 Switch fields absent
+WeightedTransition	8	WeightedTransition	16	2	4	size 8 vs 16; 2 Switch fields absent
+DungeonFinderLevelTable	64	DungeonFinderLevelTable	72	12	14	size 64 vs 72; 2 Switch fields absent; 2 fields at other offsets
+Item	656	ItemDefinition	696	139	147	size 656 vs 696; 27 Switch fields absent; 19 x360-only fields; 76 fields at other offsets
+ItemType	88	ItemTypeDefinition	96	32	33	size 88 vs 96; 1 Switch fields absent; 24 fields at other offsets
+SubObjectEdgeSegment	176			25		no Switch struct of this name
+ItemEnchantment	464			14		no Switch struct of this name
+ItemEnchantmentTable	16			2		no Switch struct of this name
+ExperienceLevelAlt	112	ExperienceLevelAlt	128	27	31	size 112 vs 128; 4 Switch fields absent
+ExperienceLevel	464	ExperienceLevel	496	108	116	size 464 vs 496; 8 Switch fields absent; 96 fields at other offsets
+RGBAColorValue	16			4		no Switch struct of this name
+RGBAColor	4			4		no Switch struct of this name
+ColorCorrectionParams	12	ColorCorrectionParams	16	3	4	size 12 vs 16; 1 Switch fields absent
+Weather	424	WeatherDefinition	432	28	28	size 424 vs 432; 4 fields at other offsets
+ScriptEventVariantParam	104			30		no Switch struct of this name
+ItemDurabilityCostScalar	8			2		no Switch struct of this name
+ItemDurabilityCostScalarsTable	16			2		no Switch struct of this name

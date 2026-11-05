@@ -157,6 +157,8 @@ def cmd_mesh(args) -> int:
     Path(args.output).write_text(text, encoding="utf-8", newline="\n")
     for warning in app.warnings:
         _print(f"warning: {warning}")
+    for note in app.notes:
+        _print(f"note: {note}")
     _print(f"build {app.build}, {len(app.sub_objects)} sub-objects, {len(app.bones)} bones")
     return 0
 
@@ -325,7 +327,7 @@ def make_parser() -> argparse.ArgumentParser:
         return sub
 
     def add_build(sub: argparse.ArgumentParser) -> None:
-        sub.add_argument("--build", choices=("ps3", "switch"))
+        sub.add_argument("--build", choices=("ps3", "switch", "x360"))
 
     add("info", cmd_info).add_argument("archive")
     sub = add("verify", cmd_verify)

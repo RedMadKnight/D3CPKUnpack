@@ -1,0 +1,2017 @@
+build	record	offset	bytes	kind	type	points_to	name	root_ext
+switch	AppearanceDefinition	-	552	RECORD SIZE			switch type data	app
+switch	AppearanceDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	app
+switch	AppearanceDefinition	0x10	344	struct	Structure		tStructure	app
+switch	AppearanceDefinition	0x168	4	prim	i		nNumLooks	app
+switch	AppearanceDefinition	0x16c	4	prim	i		nNumMaterials	app
+switch	AppearanceDefinition	0x170	8	pair		array:AppearanceMaterial	serAppearanceMaterials	app
+switch	AppearanceDefinition	0x178	8	ptr	xptr64		ptAppearanceMaterials	app
+switch	AppearanceDefinition	0x180	8	pair		array:AppearanceLook	serAppearanceLooks	app
+switch	AppearanceDefinition	0x188	8	ptr	xptr64		ptAppearanceLooks	app
+switch	AppearanceDefinition	0x190	4	prim	i		nStaticLightCount	app
+switch	AppearanceDefinition	0x194	8	pair		array:StaticLight	serStaticLights	app
+switch	AppearanceDefinition	0x1a0	8	ptr	xptr64		ptStaticLights	app
+switch	AppearanceDefinition	0x1a8	4	prim	i		eOverlayProjectionAxis	app
+switch	AppearanceDefinition	0x1ac	4	prim	i		dwFadeOutTimeCriticalHitBlood	app
+switch	AppearanceDefinition	0x1b0	4	prim	i		dwFadeOutTimeStoned	app
+switch	AppearanceDefinition	0x1b4	4	prim	i		dwFadeOutTimeChilled	app
+switch	AppearanceDefinition	0x1b8	4	prim	i		dwFadeOutTimeFrozen	app
+switch	AppearanceDefinition	0x1bc	4	prim	i		dwFadeOutTimePoisoned	app
+switch	AppearanceDefinition	0x1c0	4	prim	i		dwMachineTime	app
+switch	AppearanceDefinition	0x1c4	4	prim	f		flUVGenQuality	app
+switch	AppearanceDefinition	0x1c8	4	prim	i		dwLightMapWidth	app
+switch	AppearanceDefinition	0x1cc	4	prim	i		dwLightMapHeight	app
+switch	AppearanceDefinition	0x1d0	8	raw	int64		tUnwrapTimeStamp	app
+switch	AppearanceDefinition	0x1d8	4	prim	f		flMinZ	app
+switch	AppearanceDefinition	0x1dc	4	prim	f		flMaxZ	app
+switch	AppearanceDefinition	0x1e0	4	prim	i		nSubgridsX	app
+switch	AppearanceDefinition	0x1e4	4	prim	i		nSubgridsY	app
+switch	AppearanceDefinition	0x1e8	24	struct	AABB		tSubgridsAABB	app
+switch	AppearanceDefinition	0x200	8	pair		array:AppearanceSamplingSubgrid	serSubgrids	app
+switch	AppearanceDefinition	0x208	8	ptr	xptr64		ptSubgrids	app
+switch	AppearanceDefinition	0x210	8	pair		blob:	serAppearanceSubObjectsIndices	app
+switch	AppearanceDefinition	0x218	8	pair		blob:	serAppearanceSubObjectsVertices	app
+switch	AppearanceDefinition	0x220	4	prim	i		dwFlags	app
+switch	AnimationDefinition	-	56	RECORD SIZE			switch type data	ani
+switch	AnimationDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	ani
+switch	AnimationDefinition	0xc	4	prim	i		dwFlags	ani
+switch	AnimationDefinition	0x10	4	prim	i		ePlaybackMode	ani
+switch	AnimationDefinition	0x14	4	prim	i		snoAppearance	ani
+switch	AnimationDefinition	0x18	8	pair		array:AnimPermutation	serPermutations	ani
+switch	AnimationDefinition	0x20	4	prim	i		nPermutationCount	ani
+switch	AnimationDefinition	0x28	8	ptr	xptr64		ptPermutations	ani
+switch	AnimationDefinition	0x30	4	prim	i		dwMachineTime	ani
+switch	AnimSetDefinition	-	480	RECORD SIZE			switch type data	ans
+switch	AnimSetDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	ans
+switch	AnimSetDefinition	0xc	4	prim	i		snoParentAnimSet	ans
+switch	AnimSetDefinition	0x10	8	pair		tagmap:	serTagMapAnimDefault	ans
+switch	AnimSetDefinition	0x18	8	ptr	xptr64		hTagMapAnimDefault	ans
+switch	AnimSetDefinition	0x20	448	struct	AnimSetTagMap		tWeaponAnimTagMap	ans
+switch	SceneDefinition	-	536	RECORD SIZE			switch type data	scn
+switch	SceneDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	scn
+switch	SceneDefinition	0xc	4	prim	i		dwFlags	scn
+switch	SceneDefinition	0x10	24	struct	AABB		aabbBounds	scn
+switch	SceneDefinition	0x28	24	struct	AABB		aabbMarkerSetBounds	scn
+switch	SceneDefinition	0x40	96	struct	NavMeshDef		tNavMeshData	scn
+switch	SceneDefinition	0xa0	8	pair		array:SNO	serExclusions	scn
+switch	SceneDefinition	0xa8	56	raw	SNOArray		arExclusions	scn
+switch	SceneDefinition	0xe0	8	pair		array:SNO	serInclusions	scn
+switch	SceneDefinition	0xe8	56	raw	SNOArray		arInclusions	scn
+switch	SceneDefinition	0x120	8	pair		array:SNO	serMarkerSets	scn
+switch	SceneDefinition	0x128	56	raw	SNOArray		arMarkerSets	scn
+switch	SceneDefinition	0x160	8	struct	LookLink		tLookLink	scn
+switch	SceneDefinition	0x168	8	pair		array:MsgTriggeredEvent	serMsgTriggeredEvents	scn
+switch	SceneDefinition	0x170	4	prim	i		nMsgTriggeredEventCount	scn
+switch	SceneDefinition	0x178	8	ptr	xptr64		ptMsgTriggeredEvents	scn
+switch	SceneDefinition	0x180	136	struct	NavZoneDefinition		tNavZoneDef	scn
+switch	SceneDefinition	0x208	4	prim	f		flXPDensityMultiplier	scn
+switch	SceneDefinition	0x20c	4	prim	i		snoAppearance	scn
+switch	SceneDefinition	0x210	4	prim	i		snoPhysMesh	scn
+switch	PhysMeshDefinition	-	48	RECORD SIZE			switch type data	phm
+switch	PhysMeshDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	phm
+switch	PhysMeshDefinition	0xc	4	prim	i		dwFlags	phm
+switch	PhysMeshDefinition	0x10	4	prim	i		nCollisionMeshCount	phm
+switch	PhysMeshDefinition	0x14	8	pair		array:CollisionMesh	serCollisionMeshes	phm
+switch	PhysMeshDefinition	0x20	8	ptr	xptr64		ptCollisionMeshes	phm
+switch	PhysMeshDefinition	0x28	4	prim	i		dwMachineTime	phm
+switch	TextureDefinition	-	632	RECORD SIZE			switch type data	tex
+switch	TextureDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	tex
+switch	TextureDefinition	0xc	4	prim	i		dwRuntimeFlags	tex
+switch	TextureDefinition	0x10	4	prim	i		eTexFormat	tex
+switch	TextureDefinition	0x14	4	prim	i		dwWidth	tex
+switch	TextureDefinition	0x18	4	prim	i		dwHeight	tex
+switch	TextureDefinition	0x1c	4	prim	i		dwFaceCount	tex
+switch	TextureDefinition	0x20	4	prim	i		dwDepth	tex
+switch	TextureDefinition	0x24	4	prim	i		dwPadding2	tex
+switch	TextureDefinition	0x28	4	prim	i		dwMipMapLevelMin	tex
+switch	TextureDefinition	0x2c	4	prim	i		dwMipMapLevelMax	tex
+switch	TextureDefinition	0x30	8	pair		blob:	serTex[0]	tex
+switch	TextureDefinition	0x38	8	pair		blob:	serTex[1]	tex
+switch	TextureDefinition	0x40	8	pair		blob:	serTex[2]	tex
+switch	TextureDefinition	0x48	8	pair		blob:	serTex[3]	tex
+switch	TextureDefinition	0x50	8	pair		blob:	serTex[4]	tex
+switch	TextureDefinition	0x58	8	pair		blob:	serTex[5]	tex
+switch	TextureDefinition	0x60	8	pair		blob:	serTex[6]	tex
+switch	TextureDefinition	0x68	8	pair		blob:	serTex[7]	tex
+switch	TextureDefinition	0x70	8	pair		blob:	serTex[8]	tex
+switch	TextureDefinition	0x78	8	pair		blob:	serTex[9]	tex
+switch	TextureDefinition	0x80	8	pair		blob:	serTex[10]	tex
+switch	TextureDefinition	0x88	8	pair		blob:	serTex[11]	tex
+switch	TextureDefinition	0x90	8	pair		blob:	serTex[12]	tex
+switch	TextureDefinition	0x98	8	pair		blob:	serTex[13]	tex
+switch	TextureDefinition	0xa0	8	pair		blob:	serTex[14]	tex
+switch	TextureDefinition	0xa8	8	pair		blob:	serTex[15]	tex
+switch	TextureDefinition	0xb0	8	pair		blob:	serTex[16]	tex
+switch	TextureDefinition	0xb8	8	pair		blob:	serTex[17]	tex
+switch	TextureDefinition	0xc0	8	pair		blob:	serTex[18]	tex
+switch	TextureDefinition	0xc8	8	pair		blob:	serTex[19]	tex
+switch	TextureDefinition	0xd0	8	pair		blob:	serTex[20]	tex
+switch	TextureDefinition	0xd8	8	pair		blob:	serTex[21]	tex
+switch	TextureDefinition	0xe0	8	pair		blob:	serTex[22]	tex
+switch	TextureDefinition	0xe8	8	pair		blob:	serTex[23]	tex
+switch	TextureDefinition	0xf0	8	pair		blob:	serTex[24]	tex
+switch	TextureDefinition	0xf8	8	pair		blob:	serTex[25]	tex
+switch	TextureDefinition	0x100	8	pair		blob:	serTex[26]	tex
+switch	TextureDefinition	0x108	8	pair		blob:	serTex[27]	tex
+switch	TextureDefinition	0x110	8	pair		blob:	serTex[28]	tex
+switch	TextureDefinition	0x118	8	pair		blob:	serTex[29]	tex
+switch	TextureDefinition	0x120	8	pair		blob:	serTex[30]	tex
+switch	TextureDefinition	0x128	8	pair		blob:	serTex[31]	tex
+switch	TextureDefinition	0x130	8	pair		blob:	serTex[32]	tex
+switch	TextureDefinition	0x138	8	pair		blob:	serTex[33]	tex
+switch	TextureDefinition	0x140	8	pair		blob:	serTex[34]	tex
+switch	TextureDefinition	0x148	8	pair		blob:	serTex[35]	tex
+switch	TextureDefinition	0x150	8	pair		blob:	serTex[36]	tex
+switch	TextureDefinition	0x158	8	pair		blob:	serTex[37]	tex
+switch	TextureDefinition	0x160	8	pair		blob:	serTex[38]	tex
+switch	TextureDefinition	0x168	8	pair		blob:	serTex[39]	tex
+switch	TextureDefinition	0x170	8	pair		blob:	serTex[40]	tex
+switch	TextureDefinition	0x178	8	pair		blob:	serTex[41]	tex
+switch	TextureDefinition	0x180	8	pair		blob:	serTex[42]	tex
+switch	TextureDefinition	0x188	8	pair		blob:	serTex[43]	tex
+switch	TextureDefinition	0x190	8	pair		blob:	serTex[44]	tex
+switch	TextureDefinition	0x198	8	pair		blob:	serTex[45]	tex
+switch	TextureDefinition	0x1a0	8	pair		blob:	serTex[46]	tex
+switch	TextureDefinition	0x1a8	8	pair		blob:	serTex[47]	tex
+switch	TextureDefinition	0x1b0	8	pair		blob:	serTex[48]	tex
+switch	TextureDefinition	0x1b8	8	pair		blob:	serTex[49]	tex
+switch	TextureDefinition	0x1c0	8	pair		blob:	serTex[50]	tex
+switch	TextureDefinition	0x1c8	8	pair		blob:	serTex[51]	tex
+switch	TextureDefinition	0x1d0	8	pair		blob:	serTex[52]	tex
+switch	TextureDefinition	0x1d8	8	pair		blob:	serTex[53]	tex
+switch	TextureDefinition	0x1e0	8	pair		blob:	serTex[54]	tex
+switch	TextureDefinition	0x1e8	8	pair		blob:	serTex[55]	tex
+switch	TextureDefinition	0x1f0	8	pair		blob:	serTex[56]	tex
+switch	TextureDefinition	0x1f8	8	pair		blob:	serTex[57]	tex
+switch	TextureDefinition	0x200	8	pair		blob:	serTex[58]	tex
+switch	TextureDefinition	0x208	8	pair		blob:	serTex[59]	tex
+switch	TextureDefinition	0x210	4	prim	i		dwFrameCount	tex
+switch	TextureDefinition	0x214	8	pair		array:TexFrame	serFrame	tex
+switch	TextureDefinition	0x220	8	ptr	xptr64		ptFrame	tex
+switch	TextureDefinition	0x228	8	prim	2i		pHotspot	tex
+switch	TextureDefinition	0x230	8	ptr	xptr64		prectFrame	tex
+switch	TextureDefinition	0x238	8	struct	TexData		tTexData	tex
+switch	TextureDefinition	0x240	4	prim	i		eUsage	tex
+switch	TextureDefinition	0x244	4	prim	i		dwLastFrameChecked	tex
+switch	TextureDefinition	0x248	8	ptr	xptr64		ptImageFileIDs	tex
+switch	TextureDefinition	0x250	8	pair		array:ImageFileID	serImageFileIDs	tex
+switch	TextureDefinition	0x258	4	prim	i		bCubemap	tex
+switch	TextureDefinition	0x25c	4	prim	i		dwImportFlags	tex
+switch	TextureDefinition	0x260	4	prim	i		dwMachineTime	tex
+switch	TextureDefinition	0x264	4	prim	i		dwConsoleMipOffset	tex
+switch	TextureDefinition	0x268	4	prim	f		flConsoleLightmapVScale	tex
+switch	TextureDefinition	0x26c	4	prim	i		dwVolumeXSlices	tex
+switch	TextureDefinition	0x270	4	prim	i		dwVolumeYSlices	tex
+switch	SoundDefinition	-	168	RECORD SIZE			switch type data	snd
+switch	SoundDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	snd
+switch	SoundDefinition	0xc	4	prim	i		dwFlags	snd
+switch	SoundDefinition	0x10	4	prim	i		dwPriority	snd
+switch	SoundDefinition	0x14	4	prim	f		wdFalloffRadiusMin	snd
+switch	SoundDefinition	0x18	4	prim	f		wdFalloffRadiusDelta	snd
+switch	SoundDefinition	0x1c	4	prim	f		flRolloffFactor	snd
+switch	SoundDefinition	0x20	4	prim	i		eFalloffType	snd
+switch	SoundDefinition	0x24	4	prim	f		flDopplerFactor	snd
+switch	SoundDefinition	0x28	4	prim	f		flDuckAmountDB	snd
+switch	SoundDefinition	0x2c	4	prim	f		flGlobalVolumeDB	snd
+switch	SoundDefinition	0x30	4	prim	f		flGlobalPitch	snd
+switch	SoundDefinition	0x34	4	prim	f		flImpulseMin	snd
+switch	SoundDefinition	0x38	4	prim	f		flImpulseDelta	snd
+switch	SoundDefinition	0x3c	4	prim	f		flImpulseAttenMinDB	snd
+switch	SoundDefinition	0x40	4	prim	f		flImpulseAttenMaxDB	snd
+switch	SoundDefinition	0x44	8	pair		array:SoundPermutation	serPermutations	snd
+switch	SoundDefinition	0x4c	4	prim	i		nPermutationCount	snd
+switch	SoundDefinition	0x50	8	ptr	xptr64		ptPermutations	snd
+switch	SoundDefinition	0x58	4	prim	i		eType	snd
+switch	SoundDefinition	0x5c	4	prim	i		nInstanceLimit	snd
+switch	SoundDefinition	0x60	4	prim	i		eLimitBehavior	snd
+switch	SoundDefinition	0x68	8	ptr	xptr64		arDspEffects	snd
+switch	SoundDefinition	0x70	8	pair		array:DspEffect	serDspEffects	snd
+switch	SoundDefinition	0x78	8	ptr	xptr64		arRTPCParams	snd
+switch	SoundDefinition	0x80	8	pair		array:RTPCParams	serRTPCParams	snd
+switch	SoundDefinition	0x88	4	prim	i		dwCrossFadeTime	snd
+switch	SoundDefinition	0x8c	4	prim	i		dwCooldownTime	snd
+switch	SoundDefinition	0x90	24	struct	SoundPlayHistory		tSoundPlayHistory	snd
+switch	SoundBankDefinition	-	40	RECORD SIZE			switch type data	sbk
+switch	SoundBankDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	sbk
+switch	SoundBankDefinition	0xc	8	pair		array:SoundSample	serSoundSamples	sbk
+switch	SoundBankDefinition	0x18	8	ptr	xptr64		ptSoundSamples	sbk
+switch	SoundBankDefinition	0x20	4	prim	i		nSoundSampleCount	sbk
+switch	SoundBankDefinition	0x24	4	prim	i		dwPad	sbk
+switch	WorldDefinition	-	192	RECORD SIZE			switch type data	wrl
+switch	WorldDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	wrl
+switch	WorldDefinition	0xc	4	prim	i		bDRLG	wrl
+switch	WorldDefinition	0x10	8	pair		array:WorldServerData	serServerData	wrl
+switch	WorldDefinition	0x18	8	ptr	xptr64		ptServerData	wrl
+switch	WorldDefinition	0x20	8	pair		array:SNO	serMarkerSets	wrl
+switch	WorldDefinition	0x28	56	raw	SNOArray		arMarkerSets	wrl
+switch	WorldDefinition	0x60	84	struct	Environment		tEnvironment	wrl
+switch	WorldDefinition	0xb4	4	prim	f		flDeformationScale	wrl
+switch	WorldDefinition	0xb8	4	prim	i		uFlags	wrl
+switch	WorldDefinition	0xbc	4	prim	f		flPVPMinimapFeetPerPixel	wrl
+switch	MarkerSetDefinition	-	200	RECORD SIZE			switch type data	mrk
+switch	MarkerSetDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	mrk
+switch	MarkerSetDefinition	0xc	8	pair		array:Marker	serMarkers	mrk
+switch	MarkerSetDefinition	0x18	56	raw	MarkerSet		tMarkerSet	mrk
+switch	MarkerSetDefinition	0x50	8	pair		array:Circle	serNoSpawns	mrk
+switch	MarkerSetDefinition	0x58	56	raw	NoSpawnSet		tNoSpawnSet	mrk
+switch	MarkerSetDefinition	0x90	24	struct	AABB		aabbBounds	mrk
+switch	MarkerSetDefinition	0xa8	4	prim	i		dwMarkerSetFlags	mrk
+switch	MarkerSetDefinition	0xac	4	prim	i		nLabel	mrk
+switch	MarkerSetDefinition	0xb0	4	prim	i		nSpecialIndexCount	mrk
+switch	MarkerSetDefinition	0xb4	8	pair		array:WORD	serSpecialIndexList	mrk
+switch	MarkerSetDefinition	0xc0	8	ptr	xptr64		pwSpecialIndexList	mrk
+switch	MaterialDefinition	-	136	RECORD SIZE			switch type data	mat
+switch	MaterialDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	mat
+switch	MaterialDefinition	0xc	4	prim	i		dwFlags	mat
+switch	MaterialDefinition	0x10	8	pair		tagmap:	serTagMap	mat
+switch	MaterialDefinition	0x18	8	ptr	xptr64		hTagMap	mat
+switch	MaterialDefinition	0x20	104	struct	UberMaterial		tUberMaterial	mat
+switch	RequiredDefinitionHeader	-	12	RECORD SIZE			switch type data	app
+switch	RequiredDefinitionHeader	0x0	4	prim	i		snoHandle	app
+switch	RequiredDefinitionHeader	0x4	4	prim	i		nLockCount	app
+switch	RequiredDefinitionHeader	0x8	4	prim	i		dwFlags	app
+switch	Structure	-	344	RECORD SIZE			switch type data	app
+switch	Structure	0x0	4	prim	i		dwFlags	app
+switch	Structure	0x4	4	prim	i		nBoneCount	app
+switch	Structure	0x8	8	pair		array:BoneStructure	serBoneStructure	app
+switch	Structure	0x10	8	ptr	xptr64		ptBoneStructure	app
+switch	Structure	0x18	36	struct	LookAtData		tLookAtData	app
+switch	Structure	0x3c	4	prim	i		nBonePulseCount	app
+switch	Structure	0x40	8	ptr	xptr64		ptBonePulses	app
+switch	Structure	0x48	8	pair		array:BonePulseData	serBonePulses	app
+switch	Structure	0x50	48	struct	GeoSet		tGeoSets	app
+switch	Structure	0x80	16	struct	Sphere		wsBounds	app
+switch	Structure	0x90	4	prim	i		nCollisionCapsuleCount	app
+switch	Structure	0x94	8	pair		array:CollisionCapsule	serCollisionCapsules	app
+switch	Structure	0xa0	8	ptr	xptr64		ptCollisionCapsules	app
+switch	Structure	0xa8	4	prim	i		nHardpointCount	app
+switch	Structure	0xac	8	pair		array:Hardpoint	serHardpoints	app
+switch	Structure	0xb8	8	ptr	xptr64		ptHardpoints	app
+switch	Structure	0xc0	12	prim	3f		wvRigidAnimAxis	app
+switch	Structure	0xd0	72	struct	Octree		tOctreeVisualMesh	app
+switch	Structure	0x118	24	struct	AABB		aabbBounds	app
+switch	Structure	0x130	4	prim	i		nLoopConstraintCount	app
+switch	Structure	0x134	8	pair		array:ConstraintParameters	serLoopConstraints	app
+switch	Structure	0x140	8	ptr	xptr64		ptLoopConstraints	app
+switch	Structure	0x148	4	prim	i		uRagdollDegrade	app
+switch	Structure	0x150	8	ptr	xptr64		ptPostprocessed	app
+switch	AppearanceMaterial	-	24	RECORD SIZE			switch type data	app
+switch	AppearanceMaterial	0x0	4	prim	i		dwMaterialHash	app
+switch	AppearanceMaterial	0x4	4	prim	i		dwPad	app
+switch	AppearanceMaterial	0x8	8	pair		array:SubObjectAppearance	serSOAs	app
+switch	AppearanceMaterial	0x10	8	ptr	xptr64		ptSOAs	app
+switch	AppearanceLook	-	4	RECORD SIZE			switch type data	app
+switch	AppearanceLook	0x0	4	prim	i		dwLookHash	app
+switch	StaticLight	-	92	RECORD SIZE			switch type data	app
+switch	StaticLight	0x0	4	prim	i		fCastsShadows	app
+switch	StaticLight	0x4	4	prim	i		eType	app
+switch	StaticLight	0x8	12	prim	3f		wp	app
+switch	StaticLight	0x14	12	prim	3f		wv	app
+switch	StaticLight	0x20	4	prim	f		wdRadius	app
+switch	StaticLight	0x24	4	prim	i		eAttenType	app
+switch	StaticLight	0x28	12	prim	f		flAtten	app
+switch	StaticLight	0x34	4	prim	f		flAttenNearStart	app
+switch	StaticLight	0x38	4	prim	f		flAttenNearEnd	app
+switch	StaticLight	0x3c	4	prim	f		flAttenFarStart	app
+switch	StaticLight	0x40	4	prim	f		flAttenFarEnd	app
+switch	StaticLight	0x44	4	prim	f		aHotspot	app
+switch	StaticLight	0x48	4	prim	f		aFalloff	app
+switch	StaticLight	0x4c	16	prim	4f		rgbavalDiffuse	app
+switch	AABB	-	24	RECORD SIZE			switch type data	app
+switch	AABB	0x0	12	prim	3f		wp	app
+switch	AABB	0xc	12	prim	3f		wvExt	app
+switch	AppearanceSamplingSubgrid	-	56	RECORD SIZE			switch type data	app
+switch	AppearanceSamplingSubgrid	0x0	4	prim	i		nSamplesX	app
+switch	AppearanceSamplingSubgrid	0x4	4	prim	i		nSamplesY	app
+switch	AppearanceSamplingSubgrid	0x8	8	prim	2f		wpBase	app
+switch	AppearanceSamplingSubgrid	0x10	8	pair		array:AppearanceSample	serSamples	app
+switch	AppearanceSamplingSubgrid	0x18	8	ptr	xptr64		ptSamples	app
+switch	AppearanceSamplingSubgrid	0x20	24	struct	AABB		aabb	app
+switch	AnimPermutation	-	360	RECORD SIZE			switch type data	ani
+switch	AnimPermutation	0x0	4	prim	i		dwFlags	ani
+switch	AnimPermutation	0x4	68	prim	c		szPermutationName	ani
+switch	AnimPermutation	0x48	4	prim	f		flFrameRate	ani
+switch	AnimPermutation	0x4c	4	prim	f		flCompression	ani
+switch	AnimPermutation	0x50	4	prim	f		flTranslationCompressionRatio	ani
+switch	AnimPermutation	0x54	4	prim	f		flRotationCompressionRatio	ani
+switch	AnimPermutation	0x58	4	prim	f		flScaleCompressionRatio	ani
+switch	AnimPermutation	0x5c	4	prim	i		dwBlendTime	ani
+switch	AnimPermutation	0x60	4	prim	i		dwFromPermBlendTime	ani
+switch	AnimPermutation	0x64	4	prim	i		dwWeight	ani
+switch	AnimPermutation	0x68	4	prim	f		flSpeedMultMin	ani
+switch	AnimPermutation	0x6c	4	prim	f		flSpeedMultDelta	ani
+switch	AnimPermutation	0x70	4	prim	f		flRagdollVelocityFactor	ani
+switch	AnimPermutation	0x74	4	prim	f		flRagdollMomentumFactor	ani
+switch	AnimPermutation	0x78	4	prim	i		nBoneCount	ani
+switch	AnimPermutation	0x7c	8	pair		array:BoneName	serBoneNames	ani
+switch	AnimPermutation	0x88	8	ptr	xptr64		ptBoneNames	ani
+switch	AnimPermutation	0x90	4	prim	i		nNumBoneBlendWeights	ani
+switch	AnimPermutation	0x94	4	prim	i		nPad	ani
+switch	AnimPermutation	0x98	8	pair		array:BoneBlendWeights	serBoneBlendWeights	ani
+switch	AnimPermutation	0xa0	8	ptr	xptr64		ptBoneBlendWeights	ani
+switch	AnimPermutation	0xa8	4	prim	i		nKeyframeCount	ani
+switch	AnimPermutation	0xac	8	pair		array:TranslationCurve	serTranslationCurves	ani
+switch	AnimPermutation	0xb8	8	ptr	xptr64		ptTranslationCurves	ani
+switch	AnimPermutation	0xc0	8	pair		array:RotationCurve	serRotationCurves	ani
+switch	AnimPermutation	0xc8	8	ptr	xptr64		ptRotationCurves	ani
+switch	AnimPermutation	0xd0	8	pair		array:ScaleCurve	serScaleCurves	ani
+switch	AnimPermutation	0xd8	8	ptr	xptr64		ptScaleCurves	ani
+switch	AnimPermutation	0xe0	16	prim	f		flContactKeyframe	ani
+switch	AnimPermutation	0xf0	48	prim	3f		wpContactOffset	ani
+switch	AnimPermutation	0x120	4	prim	f		flEarliestInterruptKeyFrame	ani
+switch	AnimPermutation	0x124	8	pair		array:KeyframedAttachment	serKeyedAttachments	ani
+switch	AnimPermutation	0x12c	4	prim	i		nKeyedAttachmentCount	ani
+switch	AnimPermutation	0x130	8	ptr	xptr64		ptKeyedAttachments	ani
+switch	AnimPermutation	0x138	8	pair		array:VECTOR3D	serNonlinearOffset	ani
+switch	AnimPermutation	0x140	8	ptr	xptr64		pwvNonlinearOffset	ani
+switch	AnimPermutation	0x148	12	prim	3f		wvAvgVel	ani
+switch	AnimPermutation	0x154	12	struct	HardpointLink		tHardpointLink	ani
+switch	AnimPermutation	0x160	8	ptr	xptr64		pnAnimToStructure	ani
+switch	AnimSetTagMap	-	16	RECORD SIZE			switch type data	ans
+switch	AnimSetTagMap	0x0	8	pair		tagmap:	serTagMap	ans
+switch	AnimSetTagMap	0x8	8	ptr	xptr64		hTagMap	ans
+switch	NavMeshDef	-	96	RECORD SIZE			switch type data	scn
+switch	NavMeshDef	0x0	4	prim	i		nSizeX	scn
+switch	NavMeshDef	0x4	4	prim	i		nSizeY	scn
+switch	NavMeshDef	0x8	4	prim	i		eNavMeshType	scn
+switch	NavMeshDef	0xc	4	prim	i		nNumSquares	scn
+switch	NavMeshDef	0x10	4	prim	i		nEdgeTopSize	scn
+switch	NavMeshDef	0x14	4	prim	i		nEdgeBottomSize	scn
+switch	NavMeshDef	0x18	4	prim	i		nEdgeLeftSize	scn
+switch	NavMeshDef	0x1c	4	prim	i		nEdgeRightSize	scn
+switch	NavMeshDef	0x20	4	prim	f		flMinZ	scn
+switch	NavMeshDef	0x24	4	prim	f		flMaxZ	scn
+switch	NavMeshDef	0x28	8	struct	NavMeshSquare		tEdge	scn
+switch	NavMeshDef	0x30	16	prim	i		arNumNodesForDistByLevelArea	scn
+switch	NavMeshDef	0x40	8	pair		array:CompNavMeshSquare	serCompNavMeshArraySquares	scn
+switch	NavMeshDef	0x48	8	ptr	xptr64		ptCompNavMeshArraySquares	scn
+switch	NavMeshDef	0x50	8	pair		array:BYTE	serCompNavMeshArraySquaresSpecialFlags	scn
+switch	NavMeshDef	0x58	8	ptr	xptr64		ptCompNavMeshArraySquaresSpecialFlags	scn
+switch	LookLink	-	8	RECORD SIZE			switch type data	scn
+switch	LookLink	0x0	4	prim	i		dwLookHash	scn
+switch	LookLink	0x4	4	prim	i		dwLookHashPadding	scn
+switch	MsgTriggeredEvent	-	192	RECORD SIZE			switch type data	scn
+switch	MsgTriggeredEvent	0x0	4	prim	i		dwMsgKey	scn
+switch	MsgTriggeredEvent	0x4	188	struct	TriggerEvent		tTriggerEvent	scn
+switch	NavZoneDefinition	-	136	RECORD SIZE			switch type data	scn
+switch	NavZoneDefinition	0x0	4	prim	i		uNavCellCount	scn
+switch	NavZoneDefinition	0x8	8	ptr	xptr64		arNavCells	scn
+switch	NavZoneDefinition	0x10	8	pair		array:NavCell	serNavCells	scn
+switch	NavZoneDefinition	0x18	4	prim	i		uNavCellNeighborCount	scn
+switch	NavZoneDefinition	0x20	8	ptr	xptr64		arNavCellNeighbors	scn
+switch	NavZoneDefinition	0x28	8	pair		array:NavCellLookup	serNavCellNeighbors	scn
+switch	NavZoneDefinition	0x30	4	prim	f		flGridSizeFeet	scn
+switch	NavZoneDefinition	0x34	4	prim	f		flOOGridSizeFeet	scn
+switch	NavZoneDefinition	0x38	4	prim	i		nGridSize	scn
+switch	NavZoneDefinition	0x3c	8	prim	2i		tGridSize	scn
+switch	NavZoneDefinition	0x48	8	ptr	xptr64		arGridSquares	scn
+switch	NavZoneDefinition	0x50	8	pair		array:NavGridSquare	serGridSquares	scn
+switch	NavZoneDefinition	0x58	4	prim	i		uCellLookupCount	scn
+switch	NavZoneDefinition	0x60	8	ptr	xptr64		arCellLookups	scn
+switch	NavZoneDefinition	0x68	8	pair		array:NavCellLookup	serCellLookups	scn
+switch	NavZoneDefinition	0x70	4	prim	i		uBorderDataCount	scn
+switch	NavZoneDefinition	0x78	8	ptr	xptr64		arBorderData	scn
+switch	NavZoneDefinition	0x80	8	pair		array:NavCellBorderData	serBorderData	scn
+switch	CollisionMesh	-	112	RECORD SIZE			switch type data	phm
+switch	CollisionMesh	0x0	8	ptr	rawptr		m_pRoot	phm
+switch	CollisionMesh	0x8	8	ptr	rawptr		m_aVertices	phm
+switch	CollisionMesh	0x10	8	ptr	rawptr		m_aTriangles	phm
+switch	CollisionMesh	0x18	12	struct	dmFloat3		m_center	phm
+switch	CollisionMesh	0x24	12	struct	dmFloat3		m_extents	phm
+switch	CollisionMesh	0x30	12	struct	dmFloat3		m_unquantize	phm
+switch	CollisionMesh	0x3c	4	prim	i		m_nodeCount	phm
+switch	CollisionMesh	0x40	4	prim	i		m_vertexCount	phm
+switch	CollisionMesh	0x44	4	prim	i		m_triangleCount	phm
+switch	CollisionMesh	0x48	4	prim	i		m_height	phm
+switch	CollisionMesh	0x4c	4	prim	i		m_padding	phm
+switch	CollisionMesh	0x50	8	pair		array:dmFloat4	serDominoVertices	phm
+switch	CollisionMesh	0x58	8	pair		array:dmMeshTriangle	serDominoTriangles	phm
+switch	CollisionMesh	0x60	8	pair		array:dmMeshNode	serDominoNodes	phm
+switch	CollisionMesh	0x68	4	prim	i		uFlags	phm
+switch	CollisionMesh	0x6c	4	prim	i		uMaterial	phm
+switch	TexFrame	-	20	RECORD SIZE			switch type data	tex
+switch	TexFrame	0x0	4	prim	i		hImageHandle	tex
+switch	TexFrame	0x4	4	prim	f		flU0	tex
+switch	TexFrame	0x8	4	prim	f		flV0	tex
+switch	TexFrame	0xc	4	prim	f		flU1	tex
+switch	TexFrame	0x10	4	prim	f		flV1	tex
+switch	TexData	-	8	RECORD SIZE			switch type data	tex
+switch	TexData	0x0	8	raw	TexData::<anon_union@GfxCommon.h:474>		u0	tex
+switch	ImageFileID	-	4	RECORD SIZE			switch type data	tex
+switch	ImageFileID	0x0	4	prim	i		nFrameIndex	tex
+switch	SoundPermutation	-	64	RECORD SIZE			switch type data	snd
+switch	SoundPermutation	0x0	4	prim	i		snoSoundBank	snd
+switch	SoundPermutation	0x4	4	prim	i		dwSampleHash	snd
+switch	SoundPermutation	0x8	4	prim	i		dwWeight	snd
+switch	SoundPermutation	0xc	4	prim	f		flVolumeDBMin	snd
+switch	SoundPermutation	0x10	4	prim	f		flVolumeDBDelta	snd
+switch	SoundPermutation	0x14	4	prim	f		flPitchSemitonesMin	snd
+switch	SoundPermutation	0x18	4	prim	f		flPitchSemitonesDelta	snd
+switch	SoundPermutation	0x1c	4	prim	i		dwFadeInTime	snd
+switch	SoundPermutation	0x20	4	prim	i		dwFadeOutTime	snd
+switch	SoundPermutation	0x24	4	prim	i		eFadeInShape	snd
+switch	SoundPermutation	0x28	4	prim	i		eFadeOutShape	snd
+switch	SoundPermutation	0x2c	4	prim	f		flFadeInAccel	snd
+switch	SoundPermutation	0x30	4	prim	f		flFadeOutAccel	snd
+switch	SoundPermutation	0x34	4	prim	i		dwDelay	snd
+switch	SoundPermutation	0x38	4	prim	i		nSampleIndex	snd
+switch	SoundPermutation	0x3c	4	prim	i		snoValidatedSoundBank	snd
+switch	DspEffect	-	264	RECORD SIZE			switch type data	snd
+switch	DspEffect	0x0	4	prim	i		eDspType	snd
+switch	DspEffect	0x4	4	prim	i		dwFlags	snd
+switch	DspEffect	0x8	256	raw	DspEffect::<anon_union@SoundDefinition.h:121>		u8	snd
+switch	RTPCParams	-	24	RECORD SIZE			switch type data	snd
+switch	RTPCParams	0x0	4	prim	i		eTarget	snd
+switch	RTPCParams	0x4	12	struct	InterpolationScalar		tScalar	snd
+switch	RTPCParams	0x10	4	prim	i		eCurveShape	snd
+switch	RTPCParams	0x14	4	prim	f		flCurveShapeAccel	snd
+switch	SoundPlayHistory	-	24	RECORD SIZE			switch type data	snd
+switch	SoundPlayHistory	0x0	4	prim	i		nLastPlayedPerm	snd
+switch	SoundPlayHistory	0x4	4	prim	i		dwLastPlayedTime	snd
+switch	SoundPlayHistory	0x8	16	prim	B		arPlayedFlags	snd
+switch	SoundSample	-	16	RECORD SIZE			switch type data	sbk
+switch	SoundSample	0x0	4	prim	i		dwHash	sbk
+switch	SoundSample	0x4	4	struct	CompAndFormatUnion		tCompAndFormatUnion	sbk
+switch	SoundSample	0x8	4	prim	i		dwDecompressedSize	sbk
+switch	SoundSample	0xc	4	prim	i		dwSampleSize	sbk
+switch	WorldServerData	-	144	RECORD SIZE			switch type data	wrl
+switch	WorldServerData	0x0	8	pair		array:DRLGParams	serDRLGParams	wrl
+switch	WorldServerData	0x8	8	ptr	xptr64		ptDRLG	wrl
+switch	WorldServerData	0x10	8	pair		array:SceneParams	serSceneParams	wrl
+switch	WorldServerData	0x18	8	ptr	xptr64		ptScene	wrl
+switch	WorldServerData	0x20	24	struct	LabelRuleSet		tLabelRuleSet	wrl
+switch	WorldServerData	0x38	4	prim	i		nSceneClusterIDNext	wrl
+switch	WorldServerData	0x40	24	struct	SceneClusterSet		tSceneClusterSet	wrl
+switch	WorldServerData	0x58	16	prim	i		arNavMeshFuncs	wrl
+switch	WorldServerData	0x68	12	prim	i		arLootrunTiers	wrl
+switch	WorldServerData	0x74	4	prim	i		snoScript	wrl
+switch	WorldServerData	0x78	4	prim	i		nSeed	wrl
+switch	WorldServerData	0x80	8	ptr	xptr64		arWeatherSNOs	wrl
+switch	WorldServerData	0x88	8	pair		array:SNO	serWeatherSNOs	wrl
+switch	Environment	-	84	RECORD SIZE			switch type data	wrl
+switch	Environment	0x0	4	prim	4B		rgbaSkyColor	wrl
+switch	Environment	0x4	32	struct	PostFXParams		tPostFXParams	wrl
+switch	Environment	0x24	4	prim	i		snoSkyboxActor	wrl
+switch	Environment	0x28	4	prim	i		snoMusic	wrl
+switch	Environment	0x2c	4	prim	i		snoIntroMusic	wrl
+switch	Environment	0x30	4	prim	f		flIntroMusicCooldownSecsMin	wrl
+switch	Environment	0x34	4	prim	f		flIntroMusicCooldownSecsMax	wrl
+switch	Environment	0x38	4	prim	i		snoAmbient	wrl
+switch	Environment	0x3c	4	prim	i		snoReverb	wrl
+switch	Environment	0x40	4	prim	i		snoWeather	wrl
+switch	Environment	0x44	4	prim	i		snoIrradianceTex	wrl
+switch	Environment	0x48	4	prim	i		snoIrradianceTexDead	wrl
+switch	Environment	0x4c	4	prim	f		flFarPlaneCap	wrl
+switch	Environment	0x50	4	prim	i		dwPad	wrl
+switch	Marker	-	88	RECORD SIZE			switch type data	mrk
+switch	Marker	0x0	4	prim	i		dwHash	mrk
+switch	Marker	0x4	4	prim	i		dwHashPadding	mrk
+switch	Marker	0x8	4	prim	i		eType	mrk
+switch	Marker	0xc	28	struct	PRTransform		transform	mrk
+switch	Marker	0x28	8	struct	SNOName		snoname	mrk
+switch	Marker	0x30	8	pair		tagmap:	serTagMap	mrk
+switch	Marker	0x38	8	ptr	xptr64		hTagMap	mrk
+switch	Marker	0x40	4	prim	i		nLinkCount	mrk
+switch	Marker	0x44	8	pair		array:MarkerLink	serMarkerLinks	mrk
+switch	Marker	0x50	8	ptr	xptr64		ptMarkerLinks	mrk
+switch	Circle	-	12	RECORD SIZE			switch type data	mrk
+switch	Circle	0x0	8	prim	2f		wpCenter	mrk
+switch	Circle	0x8	4	prim	f		wdRadius	mrk
+switch	UberMaterial	-	104	RECORD SIZE			switch type data	mat
+switch	UberMaterial	0x0	4	prim	i		snoShaderMap	mat
+switch	UberMaterial	0x4	72	struct	Material		mat	mat
+switch	UberMaterial	0x4c	8	pair		array:MaterialTextureEntry	serMatTexList	mat
+switch	UberMaterial	0x58	8	ptr	xptr64		ptMatTexList	mat
+switch	UberMaterial	0x60	4	prim	i		dwMatTexSortHash	mat
+switch	BoneStructure	-	256	RECORD SIZE			switch type data	app
+switch	BoneStructure	0x0	4	prim	i		dwHash	app
+switch	BoneStructure	0x4	4	prim	i		dwPad	app
+switch	BoneStructure	0x8	4	prim	i		nParentIndex	app
+switch	BoneStructure	0xc	24	struct	AABB		aabb	app
+switch	BoneStructure	0x24	16	struct	Sphere		wsBounds	app
+switch	BoneStructure	0x34	32	struct	PRSTransform		transform	app
+switch	BoneStructure	0x54	32	struct	PRSTransform		transformInv	app
+switch	BoneStructure	0x74	32	struct	PRSTransform		transformParentRel	app
+switch	BoneStructure	0x94	32	struct	PRSTransform		transformBindPose	app
+switch	BoneStructure	0xb4	32	struct	PRSTransform		transformBindPoseInv	app
+switch	BoneStructure	0xd4	4	prim	i		nShapeCount	app
+switch	BoneStructure	0xd8	8	pair		array:CollisionShape	serShapes	app
+switch	BoneStructure	0xe0	8	ptr	xptr64		ptShapes	app
+switch	BoneStructure	0xe8	8	pair		array:ConstraintParameters	serConstraint	app
+switch	BoneStructure	0xf0	8	ptr	xptr64		ptConstraint	app
+switch	BoneStructure	0xf8	4	prim	i		snoParticleSystem	app
+switch	LookAtData	-	36	RECORD SIZE			switch type data	app
+switch	LookAtData	0x0	4	prim	i		bEnabled	app
+switch	LookAtData	0x4	4	prim	i		dwBoneHash	app
+switch	LookAtData	0x8	4	prim	i		dwBoneHashPadding	app
+switch	LookAtData	0xc	4	prim	f		aAngleLimitYaw	app
+switch	LookAtData	0x10	4	prim	f		aPitchMin	app
+switch	LookAtData	0x14	4	prim	f		aPitchMax	app
+switch	LookAtData	0x18	4	prim	f		aPitchOffset	app
+switch	LookAtData	0x1c	4	prim	f		aSpeed	app
+switch	LookAtData	0x20	4	prim	f		flRange	app
+switch	BonePulseData	-	20	RECORD SIZE			switch type data	app
+switch	BonePulseData	0x0	4	prim	i		dwBoneHash	app
+switch	BonePulseData	0x4	4	prim	i		dwBoneHashPadding	app
+switch	BonePulseData	0x8	4	prim	f		flAmplitude	app
+switch	BonePulseData	0xc	4	prim	f		flHertz	app
+switch	BonePulseData	0x10	4	prim	f		aPhase	app
+switch	GeoSet	-	24	RECORD SIZE			switch type data	app
+switch	GeoSet	0x0	4	prim	i		nSubObjectCount	app
+switch	GeoSet	0x4	8	pair		array:SubObject	serSubObjects	app
+switch	GeoSet	0x10	8	ptr	xptr64		ptSubObjects	app
+switch	Sphere	-	16	RECORD SIZE			switch type data	app
+switch	Sphere	0x0	12	prim	3f		wpCenter	app
+switch	Sphere	0xc	4	prim	f		wdRadius	app
+switch	CollisionCapsule	-	48	RECORD SIZE			switch type data	app
+switch	CollisionCapsule	0x0	4	prim	f		flRadius	app
+switch	CollisionCapsule	0x4	4	prim	f		flLength	app
+switch	CollisionCapsule	0x8	40	struct	Hardpoint		tHardpoint	app
+switch	Hardpoint	-	40	RECORD SIZE			switch type data	app
+switch	Hardpoint	0x0	8	struct	HardpointHash		tHash	app
+switch	Hardpoint	0x8	4	prim	i		nBoneIndex	app
+switch	Hardpoint	0xc	28	struct	PRTransform		transform	app
+switch	Octree	-	72	RECORD SIZE			switch type data	app
+switch	Octree	0x0	4	prim	i		nMaxNodes	app
+switch	Octree	0x4	4	prim	i		nMaxLeaves	app
+switch	Octree	0x8	4	prim	i		nMaxPrimitives	app
+switch	Octree	0xc	4	prim	i		nNodeCount	app
+switch	Octree	0x10	4	prim	i		nLeafCount	app
+switch	Octree	0x14	4	prim	i		nPrimitiveCount	app
+switch	Octree	0x18	8	pair		array:OctreeNode	serNodes	app
+switch	Octree	0x20	8	ptr	xptr64		ptNodes	app
+switch	Octree	0x28	8	pair		array:OctreeLeaf	serLeaves	app
+switch	Octree	0x30	8	ptr	xptr64		ptLeaves	app
+switch	Octree	0x38	8	pair		array:OctreePrimitive	serPrimitives	app
+switch	Octree	0x40	8	ptr	xptr64		ptPrimitives	app
+switch	ConstraintParameters	-	236	RECORD SIZE			switch type data	app
+switch	ConstraintParameters	0x0	4	prim	i		dwHash	app
+switch	ConstraintParameters	0x4	4	prim	i		dwHashPadding	app
+switch	ConstraintParameters	0x8	4	prim	i		dwFlags	app
+switch	ConstraintParameters	0xc	4	prim	i		eType	app
+switch	ConstraintParameters	0x10	4	prim	i		nBone1	app
+switch	ConstraintParameters	0x14	4	prim	i		nBone2	app
+switch	ConstraintParameters	0x18	28	struct	PRTransform		frame	app
+switch	ConstraintParameters	0x34	12	prim	3f		twistAxis	app
+switch	ConstraintParameters	0x40	28	struct	PRTransform		localFrame1	app
+switch	ConstraintParameters	0x5c	28	struct	PRTransform		localFrame2	app
+switch	ConstraintParameters	0x78	4	prim	f		flRevoluteAngleLow	app
+switch	ConstraintParameters	0x7c	4	prim	f		flRevoluteAngleHigh	app
+switch	ConstraintParameters	0x80	4	prim	f		flRagdollConeAngle	app
+switch	ConstraintParameters	0x84	4	prim	f		flRagdollTwistLow	app
+switch	ConstraintParameters	0x88	4	prim	f		flRagdollTwistHigh	app
+switch	ConstraintParameters	0x8c	4	prim	f		flFriction	app
+switch	ConstraintParameters	0x90	4	prim	f		flCompliance	app
+switch	ConstraintParameters	0x94	4	prim	f		flAngularFrequencyHz	app
+switch	ConstraintParameters	0x98	4	prim	f		flAngularDampingRatio	app
+switch	ConstraintParameters	0x9c	4	prim	f		flLinearFrequencyHz	app
+switch	ConstraintParameters	0xa0	4	prim	f		flLinearDampingRatio	app
+switch	ConstraintParameters	0xa4	4	prim	f		flMotorStrength	app
+switch	ConstraintParameters	0xa8	4	prim	f		flStrength	app
+switch	ConstraintParameters	0xac	64	prim	c		szParticleSystem	app
+switch	SubObjectAppearance	-	248	RECORD SIZE			switch type data	app
+switch	SubObjectAppearance	0x0	4	prim	i		dwFlags	app
+switch	SubObjectAppearance	0x4	4	prim	i		snoCloth	app
+switch	SubObjectAppearance	0x8	8	pair		tagmap:	serTagMap	app
+switch	SubObjectAppearance	0x10	8	ptr	xptr64		hTagMap	app
+switch	SubObjectAppearance	0x18	104	struct	UberMaterial		tBaseUberMaterial	app
+switch	SubObjectAppearance	0x80	4	prim	i		snoMasterMaterial	app
+switch	SubObjectAppearance	0x88	104	struct	UberMaterial		tCompositeUberMaterial	app
+switch	SubObjectAppearance	0xf0	8	ptr	xptr64		hTagMapMasterMaterial	app
+switch	AppearanceSample	-	12	RECORD SIZE			switch type data	app
+switch	AppearanceSample	0x0	4	prim	i		u0	app
+switch	AppearanceSample	0x4	4	prim	i		u4	app
+switch	AppearanceSample	0x8	4	prim	i		u8	app
+switch	BoneName	-	4	RECORD SIZE			switch type data	ani
+switch	BoneName	0x0	4	prim	i		dwHash	ani
+switch	BoneBlendWeights	-	8	RECORD SIZE			switch type data	ani
+switch	BoneBlendWeights	0x0	8	prim	f		aflWeight	ani
+switch	TranslationCurve	-	16	RECORD SIZE			switch type data	ani
+switch	TranslationCurve	0x0	8	pair		array:BYTE	serKeysComp	ani
+switch	TranslationCurve	0x8	8	ptr	xptr64		ptKeysComp	ani
+switch	RotationCurve	-	16	RECORD SIZE			switch type data	ani
+switch	RotationCurve	0x0	8	pair		array:BYTE	serKeysComp	ani
+switch	RotationCurve	0x8	8	ptr	xptr64		ptKeysComp	ani
+switch	ScaleCurve	-	16	RECORD SIZE			switch type data	ani
+switch	ScaleCurve	0x0	8	pair		array:BYTE	serKeysComp	ani
+switch	ScaleCurve	0x8	8	ptr	xptr64		ptKeysComp	ani
+switch	KeyframedAttachment	-	192	RECORD SIZE			switch type data	ani
+switch	KeyframedAttachment	0x0	4	prim	f		flKeyframeIndex	ani
+switch	KeyframedAttachment	0x4	188	struct	TriggerEvent		tTriggeredEvent	ani
+switch	HardpointLink	-	12	RECORD SIZE			switch type data	ani
+switch	HardpointLink	0x0	8	struct	HardpointHash		tHash	ani
+switch	HardpointLink	0x8	4	prim	i		eSource	ani
+switch	NavMeshSquare	-	8	RECORD SIZE			switch type data	scn
+switch	NavMeshSquare	0x0	4	prim	f		wdSquareZ	scn
+switch	NavMeshSquare	0x4	4	prim	i		dwSquareFlags	scn
+switch	CompNavMeshSquare	-	4	RECORD SIZE			switch type data	scn
+switch	CompNavMeshSquare	0x0	2	prim	H		wdSquareZ	scn
+switch	CompNavMeshSquare	0x2	2	prim	H		dwSquareFlags	scn
+switch	TriggerEvent	-	188	RECORD SIZE			switch type data	scn
+switch	TriggerEvent	0x0	4	prim	i		eType	scn
+switch	TriggerEvent	0x4	36	struct	TriggerConditions		tConditions	scn
+switch	TriggerEvent	0x28	4	prim	i		eAttachmentType	scn
+switch	TriggerEvent	0x2c	8	struct	SNOName		snoname	scn
+switch	TriggerEvent	0x34	4	prim	i		dwID	scn
+switch	TriggerEvent	0x38	4	prim	i		dwPinFlags	scn
+switch	TriggerEvent	0x3c	4	prim	i		eRuneType	scn
+switch	TriggerEvent	0x40	4	prim	i		bUseRuneType	scn
+switch	TriggerEvent	0x44	24	struct	HardpointLink		tHardpointLinks	scn
+switch	TriggerEvent	0x5c	8	struct	LookLink		tLookLink	scn
+switch	TriggerEvent	0x64	8	struct	ConstraintLink		tConstraintLink	scn
+switch	TriggerEvent	0x6c	4	prim	i		dwAnimTag	scn
+switch	TriggerEvent	0x70	4	prim	f		flAlpha	scn
+switch	TriggerEvent	0x74	4	prim	i		eMsgPassMethod	scn
+switch	TriggerEvent	0x78	4	prim	i		dwMsgKey	scn
+switch	TriggerEvent	0x7c	4	prim	i		dwTriggerFlags	scn
+switch	TriggerEvent	0x80	4	prim	i		fIgnoreOwnerScale	scn
+switch	TriggerEvent	0x84	4	prim	i		fIgnoreOwnerAlpha	scn
+switch	TriggerEvent	0x88	4	prim	f		flScale	scn
+switch	TriggerEvent	0x8c	4	prim	f		flFadeTime	scn
+switch	TriggerEvent	0x90	4	prim	i		fUseParticleScalar	scn
+switch	TriggerEvent	0x94	4	prim	f		flParticleScalar	scn
+switch	TriggerEvent	0x98	4	prim	i		fUseMinimumSpeed	scn
+switch	TriggerEvent	0x9c	4	prim	f		flMinimumSpeed	scn
+switch	TriggerEvent	0xa0	4	prim	i		eFootstepType	scn
+switch	TriggerEvent	0xa4	4	prim	i		eOutroAnimType	scn
+switch	TriggerEvent	0xa8	4	prim	i		dwSpawnedActorLife	scn
+switch	TriggerEvent	0xac	4	prim	4B		rgbaColorAdd	scn
+switch	TriggerEvent	0xb0	4	prim	i		nHitFlashAddDuration	scn
+switch	TriggerEvent	0xb4	4	prim	4B		rgbaColorMul	scn
+switch	TriggerEvent	0xb8	4	prim	i		nHitFlashMulDuration	scn
+switch	NavCell	-	32	RECORD SIZE			switch type data	scn
+switch	NavCell	0x0	12	prim	3f		tMin	scn
+switch	NavCell	0xc	12	prim	3f		tMax	scn
+switch	NavCell	0x18	2	prim	H		uFlags	scn
+switch	NavCell	0x1a	2	prim	H		uNeighborCount	scn
+switch	NavCell	0x1c	4	prim	i		uNeighborOffset	scn
+switch	NavCellLookup	-	4	RECORD SIZE			switch type data	scn
+switch	NavCellLookup	0x0	2	prim	H		uCellFlags	scn
+switch	NavCellLookup	0x2	2	prim	H		uCellIndex	scn
+switch	NavGridSquare	-	6	RECORD SIZE			switch type data	scn
+switch	NavGridSquare	0x0	2	prim	H		uCellFlags	scn
+switch	NavGridSquare	0x2	2	prim	H		uCellCount	scn
+switch	NavGridSquare	0x4	2	prim	H		uLookupOffset	scn
+switch	NavCellBorderData	-	4	RECORD SIZE			switch type data	scn
+switch	NavCellBorderData	0x0	2	prim	H		uCellIndex	scn
+switch	NavCellBorderData	0x2	2	prim	H		uBorderFlags	scn
+switch	dmFloat3	-	12	RECORD SIZE			switch type data	phm
+switch	dmFloat3	0x0	4	prim	f		x	phm
+switch	dmFloat3	0x4	4	prim	f		y	phm
+switch	dmFloat3	0x8	4	prim	f		z	phm
+switch	dmFloat4	-	16	RECORD SIZE			switch type data	phm
+switch	dmFloat4	0x0	4	prim	f		x	phm
+switch	dmFloat4	0x4	4	prim	f		y	phm
+switch	dmFloat4	0x8	4	prim	f		z	phm
+switch	dmFloat4	0xc	4	prim	f		w	phm
+switch	dmMeshTriangle	-	28	RECORD SIZE			switch type data	phm
+switch	dmMeshTriangle	0x0	4	prim	i		i1	phm
+switch	dmMeshTriangle	0x4	4	prim	i		i2	phm
+switch	dmMeshTriangle	0x8	4	prim	i		i3	phm
+switch	dmMeshTriangle	0xc	4	prim	i		w1	phm
+switch	dmMeshTriangle	0x10	4	prim	i		w2	phm
+switch	dmMeshTriangle	0x14	4	prim	i		w3	phm
+switch	dmMeshTriangle	0x18	2	prim	H		materialIndex	phm
+switch	dmMeshTriangle	0x1a	2	prim	H		collisionFlags	phm
+switch	dmMeshNode	-	16	RECORD SIZE			switch type data	phm
+switch	dmMeshNode	0x0	2	raw	dm_int16		lowerX	phm
+switch	dmMeshNode	0x2	2	raw	dm_int16		lowerY	phm
+switch	dmMeshNode	0x4	2	raw	dm_int16		lowerZ	phm
+switch	dmMeshNode	0x6	2	raw	dm_int16		upperX	phm
+switch	dmMeshNode	0x8	2	raw	dm_int16		upperY	phm
+switch	dmMeshNode	0xa	2	raw	dm_int16		upperZ	phm
+switch	dmMeshNode	0xc	4	prim	i		uc	phm
+switch	InterpolationScalar	-	12	RECORD SIZE			switch type data	snd
+switch	InterpolationScalar	0x0	4	prim	i		nScalarFunction	snd
+switch	InterpolationScalar	0x4	4	prim	f		flScalarLerpZero	snd
+switch	InterpolationScalar	0x8	4	prim	f		flScalarLerpOne	snd
+switch	CompAndFormatUnion	-	4	RECORD SIZE			switch type data	sbk
+switch	CompAndFormatUnion	0x0	4	prim	i		u0	sbk
+switch	DRLGParams	-	120	RECORD SIZE			switch type data	wrl
+switch	DRLGParams	0x0	8	pair		array:TileInfo	serTiles	wrl
+switch	DRLGParams	0x8	56	raw	XGrowableArray<TileInfo, TileInfo>		arTiles	wrl
+switch	DRLGParams	0x40	4	prim	i		nNumCommands	wrl
+switch	DRLGParams	0x44	8	pair		array:DRLGCommand	serCommands	wrl
+switch	DRLGParams	0x50	8	ptr	xptr64		ptCommands	wrl
+switch	DRLGParams	0x58	8	pair		array:INT	serParentIndices	wrl
+switch	DRLGParams	0x60	8	ptr	xptr64		pParentIndices	wrl
+switch	DRLGParams	0x68	8	pair		tagmap:	serDRLGTagMap	wrl
+switch	DRLGParams	0x70	8	ptr	xptr64		hDRLGTagMap	wrl
+switch	SceneParams	-	24	RECORD SIZE			switch type data	wrl
+switch	SceneParams	0x0	8	pair		array:SceneChunk	serSceneChunks	wrl
+switch	SceneParams	0x8	4	prim	i		nSceneChunkCount	wrl
+switch	SceneParams	0x10	8	ptr	xptr64		ptSceneChunks	wrl
+switch	LabelRuleSet	-	24	RECORD SIZE			switch type data	wrl
+switch	LabelRuleSet	0x0	4	prim	i		nNumRules	wrl
+switch	LabelRuleSet	0x8	8	ptr	xptr64		arRules	wrl
+switch	LabelRuleSet	0x10	8	pair		array:LabelRule	serRules	wrl
+switch	SceneClusterSet	-	24	RECORD SIZE			switch type data	wrl
+switch	SceneClusterSet	0x0	4	prim	i		nNumClusters	wrl
+switch	SceneClusterSet	0x8	8	ptr	xptr64		arClusters	wrl
+switch	SceneClusterSet	0x10	8	pair		array:SceneCluster	serClusters	wrl
+switch	PostFXParams	-	32	RECORD SIZE			switch type data	wrl
+switch	PostFXParams	0x0	16	prim	f		flFilterOffset	wrl
+switch	PostFXParams	0x10	16	prim	f		flFilterCoeff	wrl
+switch	PRTransform	-	28	RECORD SIZE			switch type data	mrk
+switch	PRTransform	0x0	16	struct	Quaternion		q	mrk
+switch	PRTransform	0x10	12	prim	3f		wp	mrk
+switch	SNOName	-	8	RECORD SIZE			switch type data	mrk
+switch	SNOName	0x0	4	prim	i		snoGroup	mrk
+switch	SNOName	0x4	4	prim	i		snoHandle	mrk
+switch	MarkerLink	-	8	RECORD SIZE			switch type data	mrk
+switch	MarkerLink	0x0	4	prim	i		dwHash	mrk
+switch	MarkerLink	0x4	4	prim	i		dwGroupHash	mrk
+switch	Material	-	72	RECORD SIZE			switch type data	mat
+switch	Material	0x0	16	prim	4f		rgbavalAmbient	mat
+switch	Material	0x10	16	prim	4f		rgbavalDiffuse	mat
+switch	Material	0x20	16	prim	4f		rgbavalSpecular	mat
+switch	Material	0x30	16	prim	4f		rgbavalEmissive	mat
+switch	Material	0x40	4	prim	f		flPower	mat
+switch	Material	0x44	4	prim	i		nSortPri	mat
+switch	MaterialTextureEntry	-	32	RECORD SIZE			switch type data	mat
+switch	MaterialTextureEntry	0x0	4	prim	i		eShaderTex	mat
+switch	MaterialTextureEntry	0x4	4	prim	i		dwPad	mat
+switch	MaterialTextureEntry	0x8	24	struct	MaterialTexture		tMatTex	mat
+switch	PRSTransform	-	32	RECORD SIZE			switch type data	app
+switch	PRSTransform	0x0	16	struct	Quaternion		q	app
+switch	PRSTransform	0x10	12	prim	3f		wp	app
+switch	PRSTransform	0x1c	4	prim	f		flScale	app
+switch	CollisionShape	-	80	RECORD SIZE			switch type data	app
+switch	CollisionShape	0x0	4	prim	i		dwFlags	app
+switch	CollisionShape	0x4	4	prim	i		eType	app
+switch	CollisionShape	0x8	4	prim	i		eMaterial	app
+switch	CollisionShape	0xc	4	prim	i		nDegrade	app
+switch	CollisionShape	0x10	4	prim	f		flDensityFactor	app
+switch	CollisionShape	0x14	4	prim	f		flExplosionFactor	app
+switch	CollisionShape	0x18	4	prim	f		flVelocityFactor	app
+switch	CollisionShape	0x1c	8	pair		array:PolytopeData	serPolytope	app
+switch	CollisionShape	0x28	8	ptr	xptr64		pPolytopeData	app
+switch	CollisionShape	0x30	12	prim	3f		wp1	app
+switch	CollisionShape	0x3c	12	prim	3f		wp2	app
+switch	CollisionShape	0x48	4	prim	f		flRadius	app
+switch	SubObject	-	240	RECORD SIZE			switch type data	app
+switch	SubObject	0x0	4	prim	i		dwFlags	app
+switch	SubObject	0x4	4	prim	i		nVertCount	app
+switch	SubObject	0x8	8	pair		array:FatVertex	serVertList	app
+switch	SubObject	0x10	8	ptr	xptr64		ptVertList	app
+switch	SubObject	0x18	8	pair		array:VertInfluences	serInfluenceList	app
+switch	SubObject	0x20	8	ptr	xptr64		ptInfluenceList	app
+switch	SubObject	0x28	4	prim	i		nIndexCount	app
+switch	SubObject	0x2c	8	pair		array:WORD	serIndexList	app
+switch	SubObject	0x38	8	ptr	xptr64		pwIndexList	app
+switch	SubObject	0x40	8	pair		array:ClothStructure	serClothStructure	app
+switch	SubObject	0x48	8	ptr	xptr64		ptClothStructure	app
+switch	SubObject	0x50	4	prim	i		snoSurface	app
+switch	SubObject	0x54	4	prim	i		nFadeGroup	app
+switch	SubObject	0x58	4	prim	f		flFadeAlpha	app
+switch	SubObject	0x5c	4	struct	SubObjectNameInfo		tNameInfo	app
+switch	SubObject	0x60	4	prim	i		dwPad3	app
+switch	SubObject	0x64	4	prim	i		dwMaterialHash	app
+switch	SubObject	0x68	4	prim	i		dwSubObjectHash	app
+switch	SubObject	0x6c	24	struct	AABB		aabbBounds	app
+switch	SubObject	0x84	4	prim	i		nShapeCount	app
+switch	SubObject	0x88	8	pair		array:CollisionShape	serShapes	app
+switch	SubObject	0x90	8	ptr	xptr64		ptShapes	app
+switch	SubObject	0x98	8	ptr	xptr64		ptPostprocessed	app
+switch	SubObject	0xa0	4	prim	i		nPackVertCount	app
+switch	SubObject	0xa4	4	prim	i		dwPad	app
+switch	SubObject	0xa8	8	ptr	xptr64		pPackVertList	app
+switch	SubObject	0xb0	8	pair		blob:	serPackVertList	app
+switch	SubObject	0xb8	8	pair		array:SkinningInfo	serSkinningInfo	app
+switch	SubObject	0xc0	8	ptr	xptr64		ptSkinningInfo	app
+switch	SubObject	0xc8	8	pair		array:CompVertInfluences	serCompInfluenceList	app
+switch	SubObject	0xd0	8	ptr	xptr64		ptCompInfluenceList	app
+switch	SubObject	0xd8	12	prim	3f		wpFixedPointPosOffset	app
+switch	SubObject	0xe4	12	prim	3f		wpFixedPointPosScale	app
+switch	HardpointHash	-	8	RECORD SIZE			switch type data	app
+switch	HardpointHash	0x0	4	prim	i		dwHash	app
+switch	HardpointHash	0x4	4	prim	i		dwHashFlag	app
+switch	OctreeNode	-	48	RECORD SIZE			switch type data	app
+switch	OctreeNode	0x0	16	struct	OctreeCube		tCube	app
+switch	OctreeNode	0x10	32	prim	i		pdwChildren	app
+switch	OctreeLeaf	-	24	RECORD SIZE			switch type data	app
+switch	OctreeLeaf	0x0	16	struct	OctreeCube		tCube	app
+switch	OctreeLeaf	0x10	4	prim	i		nPrimitiveIndex	app
+switch	OctreeLeaf	0x14	4	prim	i		nPrimitiveCount	app
+switch	OctreePrimitive	-	8	RECORD SIZE			switch type data	app
+switch	OctreePrimitive	0x0	4	prim	i		dwUserData	app
+switch	OctreePrimitive	0x4	4	prim	i		dwIndexListIndex	app
+switch	TriggerConditions	-	36	RECORD SIZE			switch type data	scn
+switch	TriggerConditions	0x0	1	prim	B		bChance	scn
+switch	TriggerConditions	0x4	4	prim	i		dwDelayMin	scn
+switch	TriggerConditions	0x8	4	prim	i		dwDelayDelta	scn
+switch	TriggerConditions	0xc	4	prim	i		dwRepeatTimeMin	scn
+switch	TriggerConditions	0x10	4	prim	i		dwRepeatTimeDelta	scn
+switch	TriggerConditions	0x14	4	prim	f		flImpulseMin	scn
+switch	TriggerConditions	0x18	4	prim	f		flImpulseDelta	scn
+switch	TriggerConditions	0x1c	4	prim	i		eMaterial	scn
+switch	TriggerConditions	0x20	4	prim	i		dwConditionFlags	scn
+switch	ConstraintLink	-	8	RECORD SIZE			switch type data	scn
+switch	ConstraintLink	0x0	4	prim	i		dwHash	scn
+switch	ConstraintLink	0x4	4	prim	i		dwHashPadding	scn
+switch	TileInfo	-	80	RECORD SIZE			switch type data	wrl
+switch	TileInfo	0x0	4	prim	i		nTileType	wrl
+switch	TileInfo	0x4	4	prim	i		nTileSet	wrl
+switch	TileInfo	0x8	4	prim	i		snoScene	wrl
+switch	TileInfo	0xc	4	prim	i		dwWeight	wrl
+switch	TileInfo	0x10	8	pair		tagmap:	serTileTagMap	wrl
+switch	TileInfo	0x18	8	ptr	xptr64		hTileTagMap	wrl
+switch	TileInfo	0x20	40	struct	CustomTileInfo		tCustomTileInfo	wrl
+switch	TileInfo	0x48	4	prim	i		uClusterID	wrl
+switch	DRLGCommand	-	152	RECORD SIZE			switch type data	wrl
+switch	DRLGCommand	0x0	128	prim	c		szCommandName	wrl
+switch	DRLGCommand	0x80	4	prim	i		nCommandType	wrl
+switch	DRLGCommand	0x84	8	pair		tagmap:	serCommandTagMap	wrl
+switch	DRLGCommand	0x90	8	ptr	xptr64		hCommandTagMap	wrl
+switch	SceneChunk	-	256	RECORD SIZE			switch type data	wrl
+switch	SceneChunk	0x0	8	struct	SNOName		snoname	wrl
+switch	SceneChunk	0x8	28	struct	PRTransform		transform	wrl
+switch	SceneChunk	0x24	220	struct	SceneSpecification		tSceneSpec	wrl
+switch	LabelRule	-	176	RECORD SIZE			switch type data	wrl
+switch	LabelRule	0x0	128	prim	c		szRuleName	wrl
+switch	LabelRule	0x80	24	struct	LabelCondition		tCondition	wrl
+switch	LabelRule	0x98	4	prim	i		nNumToChoose	wrl
+switch	LabelRule	0x9c	4	prim	i		nNumEntries	wrl
+switch	LabelRule	0xa0	8	ptr	xptr64		arEntries	wrl
+switch	LabelRule	0xa8	8	pair		array:LabelEntry	serEntries	wrl
+switch	SceneCluster	-	184	RECORD SIZE			switch type data	wrl
+switch	SceneCluster	0x0	128	prim	c		szName	wrl
+switch	SceneCluster	0x80	4	prim	i		uClusterID	wrl
+switch	SceneCluster	0x84	4	prim	i		nNumSubSceneGroups	wrl
+switch	SceneCluster	0x88	8	ptr	xptr64		arSubSceneGroups	wrl
+switch	SceneCluster	0x90	8	pair		array:SubSceneGroup	serSubSceneGroups	wrl
+switch	SceneCluster	0x98	32	struct	SubSceneGroup		tDefaultSubSceneGroup	wrl
+switch	Quaternion	-	16	RECORD SIZE			switch type data	mrk
+switch	Quaternion	0x0	12	prim	3f		wvImag	mrk
+switch	Quaternion	0xc	4	prim	f		wdReal	mrk
+switch	MaterialTexture	-	24	RECORD SIZE			switch type data	mat
+switch	MaterialTexture	0x0	8	pair		array:BYTE	serTexAnimCompParams	mat
+switch	MaterialTexture	0x8	8	ptr	xptr64		pTexAnimCompParams	mat
+switch	MaterialTexture	0x10	4	prim	i		snoTex	mat
+switch	MaterialTexture	0x14	4	prim	i		dwPad	mat
+switch	PolytopeData	-	96	RECORD SIZE			switch type data	app
+switch	PolytopeData	0x0	8	ptr	rawptr		m_aVertices	app
+switch	PolytopeData	0x8	8	ptr	rawptr		m_aPlanes	app
+switch	PolytopeData	0x10	8	ptr	rawptr		m_aSubEdges	app
+switch	PolytopeData	0x18	8	ptr	rawptr		m_aFaceSubEdges	app
+switch	PolytopeData	0x20	12	struct	dmFloat3		m_centroid	app
+switch	PolytopeData	0x2c	4	prim	i		m_vertexCount	app
+switch	PolytopeData	0x30	4	prim	i		m_faceCount	app
+switch	PolytopeData	0x34	4	prim	i		m_subEdgeCount	app
+switch	PolytopeData	0x38	4	prim	f		m_volume	app
+switch	PolytopeData	0x3c	4	prim	f		m_area	app
+switch	PolytopeData	0x40	8	pair		array:dmFloat3	serVertices	app
+switch	PolytopeData	0x48	8	pair		array:dmPlane	serPlanes	app
+switch	PolytopeData	0x50	8	pair		array:dmSubEdge	serSubEdges	app
+switch	PolytopeData	0x58	8	pair		array:BYTE	serFaceSubEdges	app
+switch	FatVertex	-	32	RECORD SIZE			switch type data	app
+switch	FatVertex	0x0	12	prim	3f		wpPos	app
+switch	FatVertex	0xc	4	prim	4B		wvpNormal	app
+switch	FatVertex	0x10	8	prim	4B		rgbaColor	app
+switch	FatVertex	0x18	8	prim	4B		vpUVSet	app
+switch	VertInfluences	-	24	RECORD SIZE			switch type data	app
+switch	VertInfluences	0x0	24	struct	Influence		tBoneInfluence	app
+switch	ClothStructure	-	144	RECORD SIZE			switch type data	app
+switch	ClothStructure	0x0	4	prim	i		nVertexCount	app
+switch	ClothStructure	0x4	8	pair		array:ClothVertexSerializable	serVertices	app
+switch	ClothStructure	0x10	8	ptr	xptr64		ptVertices	app
+switch	ClothStructure	0x18	4	prim	i		nFaceCount	app
+switch	ClothStructure	0x1c	8	pair		array:ClothFaceSerializable	serFaces	app
+switch	ClothStructure	0x28	8	ptr	xptr64		ptFaces	app
+switch	ClothStructure	0x30	4	prim	i		nStapleCount	app
+switch	ClothStructure	0x34	8	pair		array:ClothStaple	serStaples	app
+switch	ClothStructure	0x40	8	ptr	xptr64		ptStaples	app
+switch	ClothStructure	0x48	4	prim	i		nDistanceConstraintCount	app
+switch	ClothStructure	0x4c	8	pair		array:ClothConstraintSerializable	serDistanceConstraints	app
+switch	ClothStructure	0x58	8	ptr	xptr64		ptDistanceConstraints	app
+switch	ClothStructure	0x60	4	prim	i		nBendingConstraintCount	app
+switch	ClothStructure	0x64	8	pair		array:ClothConstraintSerializable	serBendingConstraints	app
+switch	ClothStructure	0x70	8	ptr	xptr64		ptBendingConstraints	app
+switch	ClothStructure	0x78	4	prim	i		nIslandCount	app
+switch	ClothStructure	0x7c	4	prim	f		flArea	app
+switch	ClothStructure	0x80	8	pair		array:WORD	serClothVertMapping	app
+switch	ClothStructure	0x88	8	ptr	xptr64		ptClothVertexMapping	app
+switch	SubObjectNameInfo	-	4	RECORD SIZE			switch type data	app
+switch	SubObjectNameInfo	0x0	4	prim	i		u0	app
+switch	SkinningInfo	-	104	RECORD SIZE			switch type data	app
+switch	SkinningInfo	0x0	4	prim	i		nNumBones	app
+switch	SkinningInfo	0x4	8	pair		array:INT	serBoneIDs	app
+switch	SkinningInfo	0x10	8	ptr	xptr64		pBoneIDs	app
+switch	SkinningInfo	0x18	4	prim	i		nPackVertCount	app
+switch	SkinningInfo	0x20	8	ptr	xptr64		pPackVertList	app
+switch	SkinningInfo	0x28	8	pair		blob:	serPackVertList	app
+switch	SkinningInfo	0x30	4	prim	i		nPackIndexCount	app
+switch	SkinningInfo	0x38	8	ptr	xptr64		pPackIndexList	app
+switch	SkinningInfo	0x40	8	pair		blob:	serPackIndexList	app
+switch	SkinningInfo	0x48	16	struct	PackedIBEntry64		tPackIBEntry	app
+switch	SkinningInfo	0x58	16	struct	PackedVBEntry64		tPackVBEntry	app
+switch	CompVertInfluences	-	6	RECORD SIZE			switch type data	app
+switch	CompVertInfluences	0x0	6	struct	CompInfluence		tBoneInfluence	app
+switch	OctreeCube	-	16	RECORD SIZE			switch type data	app
+switch	OctreeCube	0x0	12	prim	3f		wpOrigin	app
+switch	OctreeCube	0xc	4	prim	f		wdSize	app
+switch	CustomTileInfo	-	40	RECORD SIZE			switch type data	wrl
+switch	CustomTileInfo	0x0	4	prim	i		eCustomType	wrl
+switch	CustomTileInfo	0x4	4	prim	i		nSizeX	wrl
+switch	CustomTileInfo	0x8	4	prim	i		nSizeY	wrl
+switch	CustomTileInfo	0xc	8	prim	2i		pointAnchor	wrl
+switch	CustomTileInfo	0x14	8	pair		array:CustomTileCell	serTiles	wrl
+switch	CustomTileInfo	0x20	8	ptr	xptr64		arTiles	wrl
+switch	SceneSpecification	-	220	RECORD SIZE			switch type data	wrl
+switch	SceneSpecification	0x0	4	prim	i		dHeight	wrl
+switch	SceneSpecification	0x4	8	prim	2i		pointGridLocation	wrl
+switch	SceneSpecification	0xc	16	prim	i		arSnoLevelAreas	wrl
+switch	SceneSpecification	0x1c	4	prim	i		snoPrevWorld	wrl
+switch	SceneSpecification	0x20	4	prim	i		uPrevEntranceGUID	wrl
+switch	SceneSpecification	0x24	4	prim	i		snoPrevLevelArea	wrl
+switch	SceneSpecification	0x28	4	prim	i		snoNextWorld	wrl
+switch	SceneSpecification	0x2c	4	prim	i		uNextEntranceGUID	wrl
+switch	SceneSpecification	0x30	4	prim	i		snoNextLevelArea	wrl
+switch	SceneSpecification	0x34	4	prim	i		snoMusic	wrl
+switch	SceneSpecification	0x38	4	prim	i		snoAmbient	wrl
+switch	SceneSpecification	0x3c	4	prim	i		snoReverb	wrl
+switch	SceneSpecification	0x40	4	prim	i		snoWeather	wrl
+switch	SceneSpecification	0x44	4	prim	i		snoPresetWorld	wrl
+switch	SceneSpecification	0x48	4	prim	i		nDRLGIndex	wrl
+switch	SceneSpecification	0x4c	4	prim	i		nSceneChunk	wrl
+switch	SceneSpecification	0x50	4	prim	i		dwOnPathBits	wrl
+switch	SceneSpecification	0x54	4	prim	i		nTileType	wrl
+switch	SceneSpecification	0x58	4	prim	i		nTileFamily	wrl
+switch	SceneSpecification	0x5c	44	struct	SceneDRLGCreationInfo		tDRLGCreationInfo	wrl
+switch	SceneSpecification	0x88	4	prim	i		uClusterID	wrl
+switch	SceneSpecification	0x8c	80	struct	SceneCachedValues		tCachedValues	wrl
+switch	LabelCondition	-	24	RECORD SIZE			switch type data	wrl
+switch	LabelCondition	0x0	4	prim	i		eType	wrl
+switch	LabelCondition	0x4	4	prim	i		uFlags	wrl
+switch	LabelCondition	0x8	16	prim	i		nConditionParm	wrl
+switch	LabelEntry	-	20	RECORD SIZE			switch type data	wrl
+switch	LabelEntry	0x0	4	prim	i		gbidLabel	wrl
+switch	LabelEntry	0x4	4	prim	i		uFlags	wrl
+switch	LabelEntry	0x8	4	prim	f		flWeight	wrl
+switch	LabelEntry	0xc	4	prim	i		nApplyCountMin	wrl
+switch	LabelEntry	0x10	4	prim	i		nApplyCountMax	wrl
+switch	SubSceneGroup	-	32	RECORD SIZE			switch type data	wrl
+switch	SubSceneGroup	0x0	4	prim	i		snoCondition	wrl
+switch	SubSceneGroup	0x4	4	prim	i		nNumScenesToChoose	wrl
+switch	SubSceneGroup	0x8	4	prim	i		nNumSubScenes	wrl
+switch	SubSceneGroup	0x10	8	ptr	xptr64		arSubScenes	wrl
+switch	SubSceneGroup	0x18	8	pair		array:SubSceneEntry	serSubScenes	wrl
+switch	dmPlane	-	16	RECORD SIZE			switch type data	app
+switch	dmPlane	0x0	12	struct	dmFloat3		normal	app
+switch	dmPlane	0xc	4	prim	f		offset	app
+switch	dmSubEdge	-	4	RECORD SIZE			switch type data	app
+switch	dmSubEdge	0x0	1	raw	dm_int8		twinOffset	app
+switch	dmSubEdge	0x1	1	prim	B		tail	app
+switch	dmSubEdge	0x2	1	prim	B		left	app
+switch	dmSubEdge	0x3	1	prim	B		next	app
+switch	Influence	-	8	RECORD SIZE			switch type data	app
+switch	Influence	0x0	4	prim	i		nBoneIndex	app
+switch	Influence	0x4	4	prim	f		flWeight	app
+switch	ClothVertexSerializable	-	44	RECORD SIZE			switch type data	app
+switch	ClothVertexSerializable	0x0	12	prim	3f		wp	app
+switch	ClothVertexSerializable	0xc	12	prim	3f		wp0	app
+switch	ClothVertexSerializable	0x18	4	prim	f		flInvMass	app
+switch	ClothVertexSerializable	0x1c	4	prim	i		nParentIndex	app
+switch	ClothVertexSerializable	0x20	4	prim	i		nAttachmentDistance	app
+switch	ClothVertexSerializable	0x24	4	prim	i		nFatVertexIndex	app
+switch	ClothVertexSerializable	0x28	4	prim	i		nIslandIndex	app
+switch	ClothFaceSerializable	-	16	RECORD SIZE			switch type data	app
+switch	ClothFaceSerializable	0x0	4	prim	f		flRestArea	app
+switch	ClothFaceSerializable	0x4	4	prim	i		nVertex1	app
+switch	ClothFaceSerializable	0x8	4	prim	i		nVertex2	app
+switch	ClothFaceSerializable	0xc	4	prim	i		nVertex3	app
+switch	ClothStaple	-	28	RECORD SIZE			switch type data	app
+switch	ClothStaple	0x0	4	prim	i		nVertex	app
+switch	ClothStaple	0x4	12	prim	i		anBoneIndices	app
+switch	ClothStaple	0x10	12	prim	f		aflBoneWeights	app
+switch	ClothConstraintSerializable	-	16	RECORD SIZE			switch type data	app
+switch	ClothConstraintSerializable	0x0	4	prim	i		nVertex1	app
+switch	ClothConstraintSerializable	0x4	4	prim	i		nVertex2	app
+switch	ClothConstraintSerializable	0x8	4	prim	f		flRestLengthSquared	app
+switch	ClothConstraintSerializable	0xc	4	prim	f		flHorizontal	app
+switch	PackedIBEntry64	-	16	RECORD SIZE			switch type data	app
+switch	PackedIBEntry64	0x0	8	ptr	xptr64		ptPIB	app
+switch	PackedIBEntry64	0x8	4	prim	i		dwIndexOffset	app
+switch	PackedVBEntry64	-	16	RECORD SIZE			switch type data	app
+switch	PackedVBEntry64	0x0	8	ptr	xptr64		ptPVB	app
+switch	PackedVBEntry64	0x8	4	prim	i		dwVertexOffset	app
+switch	PackedVBEntry64	0xc	4	prim	i		dwStreamOffset	app
+switch	CompInfluence	-	2	RECORD SIZE			switch type data	app
+switch	CompInfluence	0x0	1	prim	B		dwBoneIndex	app
+switch	CompInfluence	0x1	1	prim	B		dwWeight	app
+switch	CustomTileCell	-	36	RECORD SIZE			switch type data	wrl
+switch	CustomTileCell	0x0	4	prim	i		bEnabled	wrl
+switch	CustomTileCell	0x4	4	prim	i		nTileType	wrl
+switch	CustomTileCell	0x8	4	prim	i		nTileSet	wrl
+switch	CustomTileCell	0xc	4	prim	i		snoScene	wrl
+switch	CustomTileCell	0x10	4	prim	i		nTileHeight	wrl
+switch	CustomTileCell	0x14	16	prim	i		arExitHeights	wrl
+switch	SceneDRLGCreationInfo	-	44	RECORD SIZE			switch type data	wrl
+switch	SceneDRLGCreationInfo	0x0	4	prim	i		bCreatedFromDRLG	wrl
+switch	SceneDRLGCreationInfo	0x4	4	prim	i		nDRLGCommandIndex	wrl
+switch	SceneDRLGCreationInfo	0x8	4	prim	i		nAddOrder	wrl
+switch	SceneDRLGCreationInfo	0xc	4	prim	i		nCommandType	wrl
+switch	SceneDRLGCreationInfo	0x10	4	prim	i		bIsBorderTile	wrl
+switch	SceneDRLGCreationInfo	0x14	4	prim	i		bIsDeadEndTile	wrl
+switch	SceneDRLGCreationInfo	0x18	4	prim	i		bIsRoadTile	wrl
+switch	SceneDRLGCreationInfo	0x1c	4	prim	i		bIsReplacementTile	wrl
+switch	SceneDRLGCreationInfo	0x20	4	prim	i		bIsPerimeterTile	wrl
+switch	SceneDRLGCreationInfo	0x24	4	prim	i		bIgnoreNavmesh	wrl
+switch	SceneDRLGCreationInfo	0x28	4	prim	i		eTileSet	wrl
+switch	SceneCachedValues	-	80	RECORD SIZE			switch type data	wrl
+switch	SceneCachedValues	0x0	4	prim	i		dwCachedValuesValid	wrl
+switch	SceneCachedValues	0x4	4	prim	i		nNavmeshSizeX	wrl
+switch	SceneCachedValues	0x8	4	prim	i		nNavmeshSizeY	wrl
+switch	SceneCachedValues	0xc	24	struct	AABB		aabbBounds	wrl
+switch	SceneCachedValues	0x24	24	struct	AABB		aabbMarkerSetBounds	wrl
+switch	SceneCachedValues	0x3c	16	prim	i		arNumNodesForDistByLevelArea	wrl
+switch	SceneCachedValues	0x4c	4	prim	i		dwFlags	wrl
+switch	SubSceneEntry	-	32	RECORD SIZE			switch type data	wrl
+switch	SubSceneEntry	0x0	4	prim	i		snoScene	wrl
+switch	SubSceneEntry	0x4	4	prim	i		nWeight	wrl
+switch	SubSceneEntry	0x8	4	prim	i		nNumLabels	wrl
+switch	SubSceneEntry	0x10	8	ptr	xptr64		arLabels	wrl
+switch	SubSceneEntry	0x18	8	pair		array:SubSceneLabel	serLabels	wrl
+switch	SubSceneLabel	-	8	RECORD SIZE			switch type data	wrl
+switch	SubSceneLabel	0x0	4	prim	i		gbidLabel	wrl
+switch	SubSceneLabel	0x4	4	prim	i		nWeight	wrl
+ps3	AppearanceDefinition	-	568	RECORD SIZE			ps3 table	app
+ps3	AppearanceDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	app
+ps3	AppearanceDefinition	0x10	344	struct	Structure		tStructure	app
+ps3	AppearanceDefinition	0x168	4	prim	i		nPS3Count168	app
+ps3	AppearanceDefinition	0x16c	4	prim	f		flPS3Scale16c	app
+ps3	AppearanceDefinition	0x170	4	prim	i		nPS3One170	app
+ps3	AppearanceDefinition	0x174	4	zero			u174	app
+ps3	AppearanceDefinition	0x178	4	prim	i		nNumLooks	app
+ps3	AppearanceDefinition	0x17c	4	prim	i		nNumMaterials	app
+ps3	AppearanceDefinition	0x180	8	pair		array:AppearanceMaterial	serAppearanceMaterials	app
+ps3	AppearanceDefinition	0x188	8	ptr	xptr64		ptAppearanceMaterials	app
+ps3	AppearanceDefinition	0x190	8	pair		array:AppearanceLook	serAppearanceLooks	app
+ps3	AppearanceDefinition	0x198	8	ptr	xptr64		ptAppearanceLooks	app
+ps3	AppearanceDefinition	0x1a0	4	prim	i		nStaticLightCount	app
+ps3	AppearanceDefinition	0x1a4	8	pair		array:StaticLight	serStaticLights	app
+ps3	AppearanceDefinition	0x1b0	8	ptr	xptr64		ptStaticLights	app
+ps3	AppearanceDefinition	0x1b8	4	prim	i		eOverlayProjectionAxis	app
+ps3	AppearanceDefinition	0x1bc	4	prim	i		dwFadeOutTimeCriticalHitBlood	app
+ps3	AppearanceDefinition	0x1c0	4	prim	i		dwFadeOutTimeStoned	app
+ps3	AppearanceDefinition	0x1c4	4	prim	i		dwFadeOutTimeChilled	app
+ps3	AppearanceDefinition	0x1c8	4	prim	i		dwFadeOutTimeFrozen	app
+ps3	AppearanceDefinition	0x1cc	4	prim	i		dwFadeOutTimePoisoned	app
+ps3	AppearanceDefinition	0x1d0	4	prim	i		dwMachineTime	app
+ps3	AppearanceDefinition	0x1d4	4	prim	f		flUVGenQuality	app
+ps3	AppearanceDefinition	0x1d8	4	prim	i		dwLightMapWidth	app
+ps3	AppearanceDefinition	0x1dc	4	prim	i		dwLightMapHeight	app
+ps3	AppearanceDefinition	0x1e0	8	raw	int64		tUnwrapTimeStamp	app
+ps3	AppearanceDefinition	0x1e8	4	prim	f		flMinZ	app
+ps3	AppearanceDefinition	0x1ec	4	prim	f		flMaxZ	app
+ps3	AppearanceDefinition	0x1f0	4	prim	i		nSubgridsX	app
+ps3	AppearanceDefinition	0x1f4	4	prim	i		nSubgridsY	app
+ps3	AppearanceDefinition	0x1f8	24	struct	AABB		tSubgridsAABB	app
+ps3	AppearanceDefinition	0x210	8	pair		array:AppearanceSamplingSubgrid	serSubgrids	app
+ps3	AppearanceDefinition	0x218	8	ptr	xptr64		ptSubgrids	app
+ps3	AppearanceDefinition	0x220	8	pair		blob:	serAppearanceSubObjectsIndices	app
+ps3	AppearanceDefinition	0x228	8	pair		blob:	serAppearanceSubObjectsVertices	app
+ps3	AppearanceDefinition	0x230	4	prim	i		dwFlags	app
+ps3	AnimationDefinition	-	64	RECORD SIZE			ps3 table	ani
+ps3	AnimationDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	ani
+ps3	AnimationDefinition	0xc	4	prim	I		dwFlags	ani
+ps3	AnimationDefinition	0x10	4	prim	i		ePlaybackMode	ani
+ps3	AnimationDefinition	0x14	4	prim	i		snoAppearance	ani
+ps3	AnimationDefinition	0x18	8	pair		array:AnimPermutation	serPermutations	ani
+ps3	AnimationDefinition	0x20	4	prim	i		nPermutationCount	ani
+ps3	AnimationDefinition	0x24	12	ptr			ptPermutations	ani
+ps3	AnimationDefinition	0x30	8	zero			u30	ani
+ps3	AnimationDefinition	0x38	4	prim	I		dwMachineTime	ani
+ps3	AnimationDefinition	0x3c	4	zero			u3c	ani
+ps3	AnimSetDefinition	-	336	RECORD SIZE			ps3 table	ans
+ps3	AnimSetDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	ans
+ps3	AnimSetDefinition	0xc	4	prim	i		snoParentAnimSet	ans
+ps3	AnimSetDefinition	0x10	8	pair		tagmap:	serTagMapAnimDefault	ans
+ps3	AnimSetDefinition	0x18	8	ptr			hTagMapAnimDefault	ans
+ps3	AnimSetDefinition	0x20	304	struct	AnimSetTagMap		tWeaponAnimTagMap	ans
+ps3	SceneDefinition	-	536	RECORD SIZE			ps3 table	scn
+ps3	SceneDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	scn
+ps3	SceneDefinition	0xc	4	prim	i		dwFlags	scn
+ps3	SceneDefinition	0x10	24	struct	AABB		aabbBounds	scn
+ps3	SceneDefinition	0x28	24	struct	AABB		aabbMarkerSetBounds	scn
+ps3	SceneDefinition	0x40	96	struct	NavMeshDef		tNavMeshData	scn
+ps3	SceneDefinition	0xa0	8	pair		array:SNO	serExclusions	scn
+ps3	SceneDefinition	0xa8	56	raw	SNOArray		arExclusions	scn
+ps3	SceneDefinition	0xe0	8	pair		array:SNO	serInclusions	scn
+ps3	SceneDefinition	0xe8	56	raw	SNOArray		arInclusions	scn
+ps3	SceneDefinition	0x120	8	pair		array:SNO	serMarkerSets	scn
+ps3	SceneDefinition	0x128	56	raw	SNOArray		arMarkerSets	scn
+ps3	SceneDefinition	0x160	8	struct	LookLink		tLookLink	scn
+ps3	SceneDefinition	0x168	8	pair		array:MsgTriggeredEvent	serMsgTriggeredEvents	scn
+ps3	SceneDefinition	0x170	4	prim	i		nMsgTriggeredEventCount	scn
+ps3	SceneDefinition	0x178	8	ptr	xptr64		ptMsgTriggeredEvents	scn
+ps3	SceneDefinition	0x180	136	struct	NavZoneDefinition		tNavZoneDef	scn
+ps3	SceneDefinition	0x208	8	zero			u208	scn
+ps3	SceneDefinition	0x210	4	prim	i		snoAppearance	scn
+ps3	SceneDefinition	0x214	4	prim	i		snoPhysMesh	scn
+ps3	PhysMeshDefinition	-	48	RECORD SIZE			ps3 table	phm
+ps3	PhysMeshDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	phm
+ps3	PhysMeshDefinition	0xc	4	prim	I		dwFlags	phm
+ps3	PhysMeshDefinition	0x10	4	prim	i		nCollisionMeshCount	phm
+ps3	PhysMeshDefinition	0x14	8	pair		array:CollisionMesh	serCollisionMeshes	phm
+ps3	PhysMeshDefinition	0x1c	12	ptr			ptCollisionMeshes	phm
+ps3	PhysMeshDefinition	0x28	4	prim	I		dwMachineTime	phm
+ps3	PhysMeshDefinition	0x2c	4	zero			u2c	phm
+ps3	TextureDefinition	-	608	RECORD SIZE			ps3 table	tex
+ps3	TextureDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	tex
+ps3	TextureDefinition	0xc	4	prim	i		dwRuntimeFlags	tex
+ps3	TextureDefinition	0x10	4	prim	i		eTexFormat	tex
+ps3	TextureDefinition	0x14	4	prim	i		dwWidth	tex
+ps3	TextureDefinition	0x18	4	prim	i		dwHeight	tex
+ps3	TextureDefinition	0x1c	4	prim	i		dwFaceCount	tex
+ps3	TextureDefinition	0x20	4	prim	i		dwDepth	tex
+ps3	TextureDefinition	0x24	4	prim	i		dwPadding2	tex
+ps3	TextureDefinition	0x28	4	prim	i		dwMipMapLevelMin	tex
+ps3	TextureDefinition	0x2c	4	prim	i		dwMipMapLevelMax	tex
+ps3	TextureDefinition	0x30	8	pair		blob:	serTex[0]	tex
+ps3	TextureDefinition	0x38	8	pair		blob:	serTex[1]	tex
+ps3	TextureDefinition	0x40	8	pair		blob:	serTex[2]	tex
+ps3	TextureDefinition	0x48	8	pair		blob:	serTex[3]	tex
+ps3	TextureDefinition	0x50	8	pair		blob:	serTex[4]	tex
+ps3	TextureDefinition	0x58	8	pair		blob:	serTex[5]	tex
+ps3	TextureDefinition	0x60	8	pair		blob:	serTex[6]	tex
+ps3	TextureDefinition	0x68	8	pair		blob:	serTex[7]	tex
+ps3	TextureDefinition	0x70	8	pair		blob:	serTex[8]	tex
+ps3	TextureDefinition	0x78	8	pair		blob:	serTex[9]	tex
+ps3	TextureDefinition	0x80	8	pair		blob:	serTex[10]	tex
+ps3	TextureDefinition	0x88	8	pair		blob:	serTex[11]	tex
+ps3	TextureDefinition	0x90	8	pair		blob:	serTex[12]	tex
+ps3	TextureDefinition	0x98	8	pair		blob:	serTex[13]	tex
+ps3	TextureDefinition	0xa0	8	pair		blob:	serTex[14]	tex
+ps3	TextureDefinition	0xa8	8	pair		blob:	serTex[15]	tex
+ps3	TextureDefinition	0xb0	8	pair		blob:	serTex[16]	tex
+ps3	TextureDefinition	0xb8	8	pair		blob:	serTex[17]	tex
+ps3	TextureDefinition	0xc0	8	pair		blob:	serTex[18]	tex
+ps3	TextureDefinition	0xc8	8	pair		blob:	serTex[19]	tex
+ps3	TextureDefinition	0xd0	8	pair		blob:	serTex[20]	tex
+ps3	TextureDefinition	0xd8	8	pair		blob:	serTex[21]	tex
+ps3	TextureDefinition	0xe0	8	pair		blob:	serTex[22]	tex
+ps3	TextureDefinition	0xe8	8	pair		blob:	serTex[23]	tex
+ps3	TextureDefinition	0xf0	8	pair		blob:	serTex[24]	tex
+ps3	TextureDefinition	0xf8	8	pair		blob:	serTex[25]	tex
+ps3	TextureDefinition	0x100	8	pair		blob:	serTex[26]	tex
+ps3	TextureDefinition	0x108	8	pair		blob:	serTex[27]	tex
+ps3	TextureDefinition	0x110	8	pair		blob:	serTex[28]	tex
+ps3	TextureDefinition	0x118	8	pair		blob:	serTex[29]	tex
+ps3	TextureDefinition	0x120	8	pair		blob:	serTex[30]	tex
+ps3	TextureDefinition	0x128	8	pair		blob:	serTex[31]	tex
+ps3	TextureDefinition	0x130	8	pair		blob:	serTex[32]	tex
+ps3	TextureDefinition	0x138	8	pair		blob:	serTex[33]	tex
+ps3	TextureDefinition	0x140	8	pair		blob:	serTex[34]	tex
+ps3	TextureDefinition	0x148	8	pair		blob:	serTex[35]	tex
+ps3	TextureDefinition	0x150	8	pair		blob:	serTex[36]	tex
+ps3	TextureDefinition	0x158	8	pair		blob:	serTex[37]	tex
+ps3	TextureDefinition	0x160	8	pair		blob:	serTex[38]	tex
+ps3	TextureDefinition	0x168	8	pair		blob:	serTex[39]	tex
+ps3	TextureDefinition	0x170	8	pair		blob:	serTex[40]	tex
+ps3	TextureDefinition	0x178	8	pair		blob:	serTex[41]	tex
+ps3	TextureDefinition	0x180	8	pair		blob:	serTex[42]	tex
+ps3	TextureDefinition	0x188	8	pair		blob:	serTex[43]	tex
+ps3	TextureDefinition	0x190	8	pair		blob:	serTex[44]	tex
+ps3	TextureDefinition	0x198	8	pair		blob:	serTex[45]	tex
+ps3	TextureDefinition	0x1a0	8	pair		blob:	serTex[46]	tex
+ps3	TextureDefinition	0x1a8	8	pair		blob:	serTex[47]	tex
+ps3	TextureDefinition	0x1b0	8	pair		blob:	serTex[48]	tex
+ps3	TextureDefinition	0x1b8	8	pair		blob:	serTex[49]	tex
+ps3	TextureDefinition	0x1c0	8	pair		blob:	serTex[50]	tex
+ps3	TextureDefinition	0x1c8	8	pair		blob:	serTex[51]	tex
+ps3	TextureDefinition	0x1d0	8	pair		blob:	serTex[52]	tex
+ps3	TextureDefinition	0x1d8	8	pair		blob:	serTex[53]	tex
+ps3	TextureDefinition	0x1e0	8	pair		blob:	serTex[54]	tex
+ps3	TextureDefinition	0x1e8	8	pair		blob:	serTex[55]	tex
+ps3	TextureDefinition	0x1f0	8	pair		blob:	serTex[56]	tex
+ps3	TextureDefinition	0x1f8	8	pair		blob:	serTex[57]	tex
+ps3	TextureDefinition	0x200	8	pair		blob:	serTex[58]	tex
+ps3	TextureDefinition	0x208	8	pair		blob:	serTex[59]	tex
+ps3	TextureDefinition	0x210	4	prim	i		dwFrameCount	tex
+ps3	TextureDefinition	0x214	8	pair		array:TexFrame	serFrame	tex
+ps3	TextureDefinition	0x21c	32	zero			runtime21c	tex
+ps3	TextureDefinition	0x23c	8	pair		array:ImageFileID	serImageFileIDs	tex
+ps3	TextureDefinition	0x244	4	prim	I		bCubemap	tex
+ps3	TextureDefinition	0x248	4	prim	I		dwImportFlags	tex
+ps3	TextureDefinition	0x24c	4	prim	I		dwMachineTime	tex
+ps3	TextureDefinition	0x250	4	prim	I		dwConsoleMipOffset	tex
+ps3	TextureDefinition	0x254	4	prim	f		flConsoleLightmapVScale	tex
+ps3	TextureDefinition	0x258	4	prim	I		dwVolumeXSlices	tex
+ps3	TextureDefinition	0x25c	4	prim	I		dwVolumeYSlices	tex
+ps3	SoundDefinition	-	124	RECORD SIZE			ps3 table	snd
+ps3	SoundDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	snd
+ps3	SoundDefinition	0xc	4	prim	I		dwFlags	snd
+ps3	SoundDefinition	0x10	4	prim	I		dwPriority	snd
+ps3	SoundDefinition	0x14	4	prim	f		wdFalloffRadiusMin	snd
+ps3	SoundDefinition	0x18	4	prim	f		wdFalloffRadiusDelta	snd
+ps3	SoundDefinition	0x1c	4	prim	f		flRolloffFactor	snd
+ps3	SoundDefinition	0x20	4	prim	i		eFalloffType	snd
+ps3	SoundDefinition	0x24	4	prim	f		flDopplerFactor	snd
+ps3	SoundDefinition	0x28	4	prim	f		flDuckAmountDB	snd
+ps3	SoundDefinition	0x2c	4	prim	f		flGlobalVolumeDB	snd
+ps3	SoundDefinition	0x30	4	prim	f		flImpulseMin	snd
+ps3	SoundDefinition	0x34	4	prim	f		flImpulseDelta	snd
+ps3	SoundDefinition	0x38	4	prim	f		flImpulseAttenMinDB	snd
+ps3	SoundDefinition	0x3c	4	prim	f		flImpulseAttenMaxDB	snd
+ps3	SoundDefinition	0x40	8	pair		array:SoundPermutationP3	serPermutations	snd
+ps3	SoundDefinition	0x48	4	prim	i		nPermutationCount	snd
+ps3	SoundDefinition	0x4c	4	ptr			ptPermutations	snd
+ps3	SoundDefinition	0x50	4	prim	i		eType	snd
+ps3	SoundDefinition	0x54	4	prim	i		nInstanceLimit	snd
+ps3	SoundDefinition	0x58	4	prim	i		eLimitBehavior	snd
+ps3	SoundDefinition	0x5c	8	pair		array:DspEffect	serDspEffects	snd
+ps3	SoundDefinition	0x64	4	prim	I		dwCrossFadeTime	snd
+ps3	SoundDefinition	0x68	4	prim	I		dwCooldownTime	snd
+ps3	SoundDefinition	0x6c	16	zero			tSoundPlayHistory	snd
+ps3	SoundBankDefinition	-	28	RECORD SIZE			ps3 table	sbk
+ps3	SoundBankDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	sbk
+ps3	SoundBankDefinition	0xc	8	pair		array:SoundSampleP3	serSoundSamples	sbk
+ps3	SoundBankDefinition	0x14	4	prim	i		nSoundSampleCount	sbk
+ps3	SoundBankDefinition	0x18	4	ptr			ptSoundSamples	sbk
+ps3	WorldDefinition	-	256	RECORD SIZE			ps3 table	wrl
+ps3	WorldDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	wrl
+ps3	WorldDefinition	0xc	4	prim	i		bDRLG	wrl
+ps3	WorldDefinition	0x10	8	pair		array:WorldServerData	serServerData	wrl
+ps3	WorldDefinition	0x18	8	ptr	xptr64		ptServerData	wrl
+ps3	WorldDefinition	0x20	8	pair		array:SNO	serMarkerSets	wrl
+ps3	WorldDefinition	0x28	56	raw	SNOArray		arMarkerSets	wrl
+ps3	WorldDefinition	0x60	4	prim	4B		rgbaSkyColor	wrl
+ps3	WorldDefinition	0x64	32	struct	PostFXParams		tPostFXParams	wrl
+ps3	WorldDefinition	0x84	12	zero			u84	wrl
+ps3	WorldDefinition	0x90	4	prim	i		snoSkyboxActor	wrl
+ps3	WorldDefinition	0x94	4	prim	4B		rgbaColor1	wrl
+ps3	WorldDefinition	0x98	4	prim	f		flScale1	wrl
+ps3	WorldDefinition	0x9c	4	prim	4B		rgbaColor2	wrl
+ps3	WorldDefinition	0xa0	4	prim	f		flScale2	wrl
+ps3	WorldDefinition	0xa4	4	prim	4B		rgbaColor3	wrl
+ps3	WorldDefinition	0xa8	4	prim	f		flScale3	wrl
+ps3	WorldDefinition	0xac	4	prim	4B		rgbaColor4	wrl
+ps3	WorldDefinition	0xb0	4	prim	f		flScale4	wrl
+ps3	WorldDefinition	0xb4	8	zero			uB4	wrl
+ps3	WorldDefinition	0xbc	8	pair		blob:	serBC	wrl
+ps3	WorldDefinition	0xc4	16	zero			uC4	wrl
+ps3	WorldDefinition	0xd8	4	prim	i		snoMusic	wrl
+ps3	WorldDefinition	0xdc	4	prim	i		snoAmbient	wrl
+ps3	WorldDefinition	0xe0	4	prim	i		snoReverb	wrl
+ps3	WorldDefinition	0xe4	4	prim	i		snoWeather	wrl
+ps3	WorldDefinition	0xe8	4	prim	i		snoIrradianceTex	wrl
+ps3	WorldDefinition	0xec	4	prim	i		snoIrradianceTexDead	wrl
+ps3	WorldDefinition	0xf0	4	prim	f		flDeformationScale	wrl
+ps3	WorldDefinition	0xf4	4	prim	I		uFlags	wrl
+ps3	WorldDefinition	0xf8	4	prim	f		flPVPMinimapFeetPerPixel	wrl
+ps3	WorldDefinition	0xfc	4	zero			uFC	wrl
+ps3	MarkerSetDefinition	-	200	RECORD SIZE			same as switch	mrk
+ps3	MarkerSetDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	mrk
+ps3	MarkerSetDefinition	0xc	8	pair		array:Marker	serMarkers	mrk
+ps3	MarkerSetDefinition	0x18	56	raw	MarkerSet		tMarkerSet	mrk
+ps3	MarkerSetDefinition	0x50	8	pair		array:Circle	serNoSpawns	mrk
+ps3	MarkerSetDefinition	0x58	56	raw	NoSpawnSet		tNoSpawnSet	mrk
+ps3	MarkerSetDefinition	0x90	24	struct	AABB		aabbBounds	mrk
+ps3	MarkerSetDefinition	0xa8	4	prim	i		dwMarkerSetFlags	mrk
+ps3	MarkerSetDefinition	0xac	4	prim	i		nLabel	mrk
+ps3	MarkerSetDefinition	0xb0	4	prim	i		nSpecialIndexCount	mrk
+ps3	MarkerSetDefinition	0xb4	8	pair		array:WORD	serSpecialIndexList	mrk
+ps3	MarkerSetDefinition	0xc0	8	ptr	xptr64		pwSpecialIndexList	mrk
+ps3	MaterialDefinition	-	104	RECORD SIZE			ps3 table	mat
+ps3	MaterialDefinition	0x0	12	struct	RequiredDefinitionHeader		tHeader	mat
+ps3	MaterialDefinition	0xc	4	prim	I		dwFlags	mat
+ps3	MaterialDefinition	0x10	8	pair		tagmap:	serTagMap	mat
+ps3	MaterialDefinition	0x18	8	ptr			hTagMap	mat
+ps3	MaterialDefinition	0x20	72	struct	UberMaterial		tUberMaterial	mat
+ps3	RequiredDefinitionHeader	-	12	RECORD SIZE			derived from switch	app
+ps3	RequiredDefinitionHeader	0x0	4	prim	i		snoHandle	app
+ps3	RequiredDefinitionHeader	0x4	4	prim	i		nLockCount	app
+ps3	RequiredDefinitionHeader	0x8	4	prim	i		dwFlags	app
+ps3	Structure	-	344	RECORD SIZE			same as switch	app
+ps3	Structure	0x0	4	prim	i		dwFlags	app
+ps3	Structure	0x4	4	prim	i		nBoneCount	app
+ps3	Structure	0x8	8	pair		array:BoneStructure	serBoneStructure	app
+ps3	Structure	0x10	8	ptr	xptr64		ptBoneStructure	app
+ps3	Structure	0x18	36	struct	LookAtData		tLookAtData	app
+ps3	Structure	0x3c	4	prim	i		nBonePulseCount	app
+ps3	Structure	0x40	8	ptr	xptr64		ptBonePulses	app
+ps3	Structure	0x48	8	pair		array:BonePulseData	serBonePulses	app
+ps3	Structure	0x50	48	struct	GeoSet		tGeoSets	app
+ps3	Structure	0x80	16	struct	Sphere		wsBounds	app
+ps3	Structure	0x90	4	prim	i		nCollisionCapsuleCount	app
+ps3	Structure	0x94	8	pair		array:CollisionCapsule	serCollisionCapsules	app
+ps3	Structure	0xa0	8	ptr	xptr64		ptCollisionCapsules	app
+ps3	Structure	0xa8	4	prim	i		nHardpointCount	app
+ps3	Structure	0xac	8	pair		array:Hardpoint	serHardpoints	app
+ps3	Structure	0xb8	8	ptr	xptr64		ptHardpoints	app
+ps3	Structure	0xc0	12	prim	3f		wvRigidAnimAxis	app
+ps3	Structure	0xd0	72	struct	Octree		tOctreeVisualMesh	app
+ps3	Structure	0x118	24	struct	AABB		aabbBounds	app
+ps3	Structure	0x130	4	prim	i		nLoopConstraintCount	app
+ps3	Structure	0x134	8	pair		array:ConstraintParameters	serLoopConstraints	app
+ps3	Structure	0x140	8	ptr	xptr64		ptLoopConstraints	app
+ps3	Structure	0x148	4	prim	i		uRagdollDegrade	app
+ps3	Structure	0x150	8	ptr	xptr64		ptPostprocessed	app
+ps3	AppearanceMaterial	-	20	RECORD SIZE			ps3 table	app
+ps3	AppearanceMaterial	0x0	4	prim	I		dwMaterialHash	app
+ps3	AppearanceMaterial	0x4	4	zero			u04	app
+ps3	AppearanceMaterial	0x8	8	pair		array:SubObjectAppearance	serSOAs	app
+ps3	AppearanceMaterial	0x10	4	ptr			ptSOAs	app
+ps3	AppearanceLook	-	4	RECORD SIZE			same as switch	app
+ps3	AppearanceLook	0x0	4	prim	i		dwLookHash	app
+ps3	StaticLight	-	92	RECORD SIZE			derived from switch	app
+ps3	StaticLight	0x0	4	prim	i		fCastsShadows	app
+ps3	StaticLight	0x4	4	prim	i		eType	app
+ps3	StaticLight	0x8	12	prim	3f		wp	app
+ps3	StaticLight	0x14	12	prim	3f		wv	app
+ps3	StaticLight	0x20	4	prim	f		wdRadius	app
+ps3	StaticLight	0x24	4	prim	i		eAttenType	app
+ps3	StaticLight	0x28	12	prim	f		flAtten	app
+ps3	StaticLight	0x34	4	prim	f		flAttenNearStart	app
+ps3	StaticLight	0x38	4	prim	f		flAttenNearEnd	app
+ps3	StaticLight	0x3c	4	prim	f		flAttenFarStart	app
+ps3	StaticLight	0x40	4	prim	f		flAttenFarEnd	app
+ps3	StaticLight	0x44	4	prim	f		aHotspot	app
+ps3	StaticLight	0x48	4	prim	f		aFalloff	app
+ps3	StaticLight	0x4c	16	prim	4f		rgbavalDiffuse	app
+ps3	AABB	-	24	RECORD SIZE			same as switch	app
+ps3	AABB	0x0	12	prim	3f		wp	app
+ps3	AABB	0xc	12	prim	3f		wvExt	app
+ps3	AppearanceSamplingSubgrid	-	56	RECORD SIZE			same as switch	app
+ps3	AppearanceSamplingSubgrid	0x0	4	prim	i		nSamplesX	app
+ps3	AppearanceSamplingSubgrid	0x4	4	prim	i		nSamplesY	app
+ps3	AppearanceSamplingSubgrid	0x8	8	prim	2f		wpBase	app
+ps3	AppearanceSamplingSubgrid	0x10	8	pair		array:AppearanceSample	serSamples	app
+ps3	AppearanceSamplingSubgrid	0x18	8	ptr	xptr64		ptSamples	app
+ps3	AppearanceSamplingSubgrid	0x20	24	struct	AABB		aabb	app
+ps3	AnimPermutation	-	360	RECORD SIZE			same as switch	ani
+ps3	AnimPermutation	0x0	4	prim	i		dwFlags	ani
+ps3	AnimPermutation	0x4	68	prim	c		szPermutationName	ani
+ps3	AnimPermutation	0x48	4	prim	f		flFrameRate	ani
+ps3	AnimPermutation	0x4c	4	prim	f		flCompression	ani
+ps3	AnimPermutation	0x50	4	prim	f		flTranslationCompressionRatio	ani
+ps3	AnimPermutation	0x54	4	prim	f		flRotationCompressionRatio	ani
+ps3	AnimPermutation	0x58	4	prim	f		flScaleCompressionRatio	ani
+ps3	AnimPermutation	0x5c	4	prim	i		dwBlendTime	ani
+ps3	AnimPermutation	0x60	4	prim	i		dwFromPermBlendTime	ani
+ps3	AnimPermutation	0x64	4	prim	i		dwWeight	ani
+ps3	AnimPermutation	0x68	4	prim	f		flSpeedMultMin	ani
+ps3	AnimPermutation	0x6c	4	prim	f		flSpeedMultDelta	ani
+ps3	AnimPermutation	0x70	4	prim	f		flRagdollVelocityFactor	ani
+ps3	AnimPermutation	0x74	4	prim	f		flRagdollMomentumFactor	ani
+ps3	AnimPermutation	0x78	4	prim	i		nBoneCount	ani
+ps3	AnimPermutation	0x7c	8	pair		array:BoneName	serBoneNames	ani
+ps3	AnimPermutation	0x88	8	ptr	xptr64		ptBoneNames	ani
+ps3	AnimPermutation	0x90	4	prim	i		nNumBoneBlendWeights	ani
+ps3	AnimPermutation	0x94	4	prim	i		nPad	ani
+ps3	AnimPermutation	0x98	8	pair		array:BoneBlendWeights	serBoneBlendWeights	ani
+ps3	AnimPermutation	0xa0	8	ptr	xptr64		ptBoneBlendWeights	ani
+ps3	AnimPermutation	0xa8	4	prim	i		nKeyframeCount	ani
+ps3	AnimPermutation	0xac	8	pair		array:TranslationCurve	serTranslationCurves	ani
+ps3	AnimPermutation	0xb8	8	ptr	xptr64		ptTranslationCurves	ani
+ps3	AnimPermutation	0xc0	8	pair		array:RotationCurve	serRotationCurves	ani
+ps3	AnimPermutation	0xc8	8	ptr	xptr64		ptRotationCurves	ani
+ps3	AnimPermutation	0xd0	8	pair		array:ScaleCurve	serScaleCurves	ani
+ps3	AnimPermutation	0xd8	8	ptr	xptr64		ptScaleCurves	ani
+ps3	AnimPermutation	0xe0	16	prim	f		flContactKeyframe	ani
+ps3	AnimPermutation	0xf0	48	prim	3f		wpContactOffset	ani
+ps3	AnimPermutation	0x120	4	prim	f		flEarliestInterruptKeyFrame	ani
+ps3	AnimPermutation	0x124	8	pair		array:KeyframedAttachment	serKeyedAttachments	ani
+ps3	AnimPermutation	0x12c	4	prim	i		nKeyedAttachmentCount	ani
+ps3	AnimPermutation	0x130	8	ptr	xptr64		ptKeyedAttachments	ani
+ps3	AnimPermutation	0x138	8	pair		array:VECTOR3D	serNonlinearOffset	ani
+ps3	AnimPermutation	0x140	8	ptr	xptr64		pwvNonlinearOffset	ani
+ps3	AnimPermutation	0x148	12	prim	3f		wvAvgVel	ani
+ps3	AnimPermutation	0x154	12	struct	HardpointLink		tHardpointLink	ani
+ps3	AnimPermutation	0x160	8	ptr	xptr64		pnAnimToStructure	ani
+ps3	AnimSetTagMap	-	16	RECORD SIZE			derived from switch	ans
+ps3	AnimSetTagMap	0x0	8	pair		tagmap:	serTagMap	ans
+ps3	AnimSetTagMap	0x8	8	ptr	xptr64		hTagMap	ans
+ps3	NavMeshDef	-	96	RECORD SIZE			same as switch	scn
+ps3	NavMeshDef	0x0	4	prim	i		nSizeX	scn
+ps3	NavMeshDef	0x4	4	prim	i		nSizeY	scn
+ps3	NavMeshDef	0x8	4	prim	i		eNavMeshType	scn
+ps3	NavMeshDef	0xc	4	prim	i		nNumSquares	scn
+ps3	NavMeshDef	0x10	4	prim	i		nEdgeTopSize	scn
+ps3	NavMeshDef	0x14	4	prim	i		nEdgeBottomSize	scn
+ps3	NavMeshDef	0x18	4	prim	i		nEdgeLeftSize	scn
+ps3	NavMeshDef	0x1c	4	prim	i		nEdgeRightSize	scn
+ps3	NavMeshDef	0x20	4	prim	f		flMinZ	scn
+ps3	NavMeshDef	0x24	4	prim	f		flMaxZ	scn
+ps3	NavMeshDef	0x28	8	struct	NavMeshSquare		tEdge	scn
+ps3	NavMeshDef	0x30	16	prim	i		arNumNodesForDistByLevelArea	scn
+ps3	NavMeshDef	0x40	8	pair		array:CompNavMeshSquare	serCompNavMeshArraySquares	scn
+ps3	NavMeshDef	0x48	8	ptr	xptr64		ptCompNavMeshArraySquares	scn
+ps3	NavMeshDef	0x50	8	pair		array:BYTE	serCompNavMeshArraySquaresSpecialFlags	scn
+ps3	NavMeshDef	0x58	8	ptr	xptr64		ptCompNavMeshArraySquaresSpecialFlags	scn
+ps3	LookLink	-	8	RECORD SIZE			derived from switch	scn
+ps3	LookLink	0x0	4	prim	i		dwLookHash	scn
+ps3	LookLink	0x4	4	prim	i		dwLookHashPadding	scn
+ps3	MsgTriggeredEvent	-	192	RECORD SIZE			same as switch	scn
+ps3	MsgTriggeredEvent	0x0	4	prim	i		dwMsgKey	scn
+ps3	MsgTriggeredEvent	0x4	188	struct	TriggerEvent		tTriggerEvent	scn
+ps3	NavZoneDefinition	-	136	RECORD SIZE			same as switch	scn
+ps3	NavZoneDefinition	0x0	4	prim	i		uNavCellCount	scn
+ps3	NavZoneDefinition	0x8	8	ptr	xptr64		arNavCells	scn
+ps3	NavZoneDefinition	0x10	8	pair		array:NavCell	serNavCells	scn
+ps3	NavZoneDefinition	0x18	4	prim	i		uNavCellNeighborCount	scn
+ps3	NavZoneDefinition	0x20	8	ptr	xptr64		arNavCellNeighbors	scn
+ps3	NavZoneDefinition	0x28	8	pair		array:NavCellLookup	serNavCellNeighbors	scn
+ps3	NavZoneDefinition	0x30	4	prim	f		flGridSizeFeet	scn
+ps3	NavZoneDefinition	0x34	4	prim	f		flOOGridSizeFeet	scn
+ps3	NavZoneDefinition	0x38	4	prim	i		nGridSize	scn
+ps3	NavZoneDefinition	0x3c	8	prim	2i		tGridSize	scn
+ps3	NavZoneDefinition	0x48	8	ptr	xptr64		arGridSquares	scn
+ps3	NavZoneDefinition	0x50	8	pair		array:NavGridSquare	serGridSquares	scn
+ps3	NavZoneDefinition	0x58	4	prim	i		uCellLookupCount	scn
+ps3	NavZoneDefinition	0x60	8	ptr	xptr64		arCellLookups	scn
+ps3	NavZoneDefinition	0x68	8	pair		array:NavCellLookup	serCellLookups	scn
+ps3	NavZoneDefinition	0x70	4	prim	i		uBorderDataCount	scn
+ps3	NavZoneDefinition	0x78	8	ptr	xptr64		arBorderData	scn
+ps3	NavZoneDefinition	0x80	8	pair		array:NavCellBorderData	serBorderData	scn
+ps3	CollisionMesh	-	136	RECORD SIZE			ps3 table	phm
+ps3	CollisionMesh	0x0	32	zero			m_pointers	phm
+ps3	CollisionMesh	0x20	12	prim	3f		m_center	phm
+ps3	CollisionMesh	0x2c	12	prim	3f		m_extents	phm
+ps3	CollisionMesh	0x38	12	prim	3f		m_unquantize	phm
+ps3	CollisionMesh	0x44	4	prim	i		m_nodeCount	phm
+ps3	CollisionMesh	0x48	4	prim	i		m_vertexCount	phm
+ps3	CollisionMesh	0x4c	4	prim	i		m_triangleCount	phm
+ps3	CollisionMesh	0x50	4	zero			u50	phm
+ps3	CollisionMesh	0x54	4	prim	i		m_triangleEntries	phm
+ps3	CollisionMesh	0x58	4	zero			u58	phm
+ps3	CollisionMesh	0x5c	4	prim	i		m_height	phm
+ps3	CollisionMesh	0x60	8	pair		array:dmFloat4	serDominoVertices	phm
+ps3	CollisionMesh	0x68	8	pair		array:dmMeshTriangleP3	serDominoTriangles	phm
+ps3	CollisionMesh	0x70	8	pair		blob:	serUnused70	phm
+ps3	CollisionMesh	0x78	8	pair		array:dmMeshNodeP3	serDominoNodes	phm
+ps3	CollisionMesh	0x80	4	prim	I		uFlags	phm
+ps3	CollisionMesh	0x84	4	prim	I		uMaterial	phm
+ps3	TexFrame	-	20	RECORD SIZE			derived from switch	tex
+ps3	TexFrame	0x0	4	prim	i		hImageHandle	tex
+ps3	TexFrame	0x4	4	prim	f		flU0	tex
+ps3	TexFrame	0x8	4	prim	f		flV0	tex
+ps3	TexFrame	0xc	4	prim	f		flU1	tex
+ps3	TexFrame	0x10	4	prim	f		flV1	tex
+ps3	ImageFileID	-	4	RECORD SIZE			derived from switch	tex
+ps3	ImageFileID	0x0	4	prim	i		nFrameIndex	tex
+ps3	SoundPermutationP3	-	44	RECORD SIZE			ps3 table	snd
+ps3	SoundPermutationP3	0x0	4	prim	i		snoSoundBank	snd
+ps3	SoundPermutationP3	0x4	4	prim	I		dwSampleHash	snd
+ps3	SoundPermutationP3	0x8	4	prim	I		dwWeight	snd
+ps3	SoundPermutationP3	0xc	4	prim	f		flVolumeDBMin	snd
+ps3	SoundPermutationP3	0x10	4	prim	f		flVolumeDBDelta	snd
+ps3	SoundPermutationP3	0x14	4	prim	f		flPitchSemitonesMin	snd
+ps3	SoundPermutationP3	0x18	4	prim	f		flPitchSemitonesDelta	snd
+ps3	SoundPermutationP3	0x1c	4	prim	I		dwFadeOutTime	snd
+ps3	SoundPermutationP3	0x20	4	prim	I		dwDelay	snd
+ps3	SoundPermutationP3	0x24	8	zero			u24	snd
+ps3	DspEffect	-	264	RECORD SIZE			same as switch	snd
+ps3	DspEffect	0x0	4	prim	i		eDspType	snd
+ps3	DspEffect	0x4	4	prim	i		dwFlags	snd
+ps3	DspEffect	0x8	256	raw	DspEffect::<anon_union@SoundDefinition.h:121>		u8	snd
+ps3	SoundSampleP3	-	40	RECORD SIZE			ps3 table	sbk
+ps3	SoundSampleP3	0x0	4	prim	I		dwHash	sbk
+ps3	SoundSampleP3	0x4	4	prim	I		bIsVerifiedVO	sbk
+ps3	SoundSampleP3	0x8	4	prim	I		bIsTemporaryVO	sbk
+ps3	SoundSampleP3	0xc	4	prim	I		eCompression	sbk
+ps3	SoundSampleP3	0x10	4	prim	I		nCompressionQuality	sbk
+ps3	SoundSampleP3	0x14	4	prim	I		dwDecompressedSize	sbk
+ps3	SoundSampleP3	0x18	4	prim	I		eFormat	sbk
+ps3	SoundSampleP3	0x1c	4	zero			u1c	sbk
+ps3	SoundSampleP3	0x20	4	prim	I		dwSampleSize	sbk
+ps3	SoundSampleP3	0x24	4	zero			u24	sbk
+ps3	WorldServerData	-	112	RECORD SIZE			ps3 table	wrl
+ps3	WorldServerData	0x0	8	pair		array:DRLGParams	serDRLGParams	wrl
+ps3	WorldServerData	0x8	8	ptr	xptr64		ptDRLG	wrl
+ps3	WorldServerData	0x10	8	pair		array:SceneParams	serSceneParams	wrl
+ps3	WorldServerData	0x18	8	ptr	xptr64		ptScene	wrl
+ps3	WorldServerData	0x20	24	struct	LabelRuleSet		tLabelRuleSet	wrl
+ps3	WorldServerData	0x38	4	prim	i		nSceneClusterIDNext	wrl
+ps3	WorldServerData	0x40	24	struct	SceneClusterSet		tSceneClusterSet	wrl
+ps3	WorldServerData	0x58	16	prim	i		arNavMeshFuncs	wrl
+ps3	WorldServerData	0x68	4	prim	i		snoScript	wrl
+ps3	WorldServerData	0x6c	4	prim	i		nSeed	wrl
+ps3	PostFXParams	-	32	RECORD SIZE			same as switch	wrl
+ps3	PostFXParams	0x0	16	prim	f		flFilterOffset	wrl
+ps3	PostFXParams	0x10	16	prim	f		flFilterCoeff	wrl
+ps3	Marker	-	88	RECORD SIZE			same as switch	mrk
+ps3	Marker	0x0	4	prim	i		dwHash	mrk
+ps3	Marker	0x4	4	prim	i		dwHashPadding	mrk
+ps3	Marker	0x8	4	prim	i		eType	mrk
+ps3	Marker	0xc	28	struct	PRTransform		transform	mrk
+ps3	Marker	0x28	8	struct	SNOName		snoname	mrk
+ps3	Marker	0x30	8	pair		tagmap:	serTagMap	mrk
+ps3	Marker	0x38	8	ptr	xptr64		hTagMap	mrk
+ps3	Marker	0x40	4	prim	i		nLinkCount	mrk
+ps3	Marker	0x44	8	pair		array:MarkerLink	serMarkerLinks	mrk
+ps3	Marker	0x50	8	ptr	xptr64		ptMarkerLinks	mrk
+ps3	Circle	-	12	RECORD SIZE			derived from switch	mrk
+ps3	Circle	0x0	8	prim	2f		wpCenter	mrk
+ps3	Circle	0x8	4	prim	f		wdRadius	mrk
+ps3	UberMaterial	-	72	RECORD SIZE			ps3 table	mat
+ps3	UberMaterial	0x0	4	prim	i		snoShaderMap	mat
+ps3	UberMaterial	0x4	40	struct	Material		mat	mat
+ps3	UberMaterial	0x2c	8	pair		array:MaterialTextureEntry	serMatTexList	mat
+ps3	UberMaterial	0x34	8	ptr			ptMatTexList	mat
+ps3	UberMaterial	0x3c	12	zero			u3c	mat
+ps3	BoneStructure	-	176	RECORD SIZE			ps3 table	app
+ps3	BoneStructure	0x0	4	prim	I		dwHash	app
+ps3	BoneStructure	0x4	4	prim	i		nParentIndex	app
+ps3	BoneStructure	0x8	24	struct	AABB		aabb	app
+ps3	BoneStructure	0x20	16	struct	Sphere		wsBounds	app
+ps3	BoneStructure	0x30	32	struct	PRSTransform		transform	app
+ps3	BoneStructure	0x50	32	struct	PRSTransform		transformInv	app
+ps3	BoneStructure	0x70	32	struct	PRSTransform		transformParentRel	app
+ps3	BoneStructure	0x90	4	prim	i		nShapeCount	app
+ps3	BoneStructure	0x94	8	pair		array:CollisionShape	serShapes	app
+ps3	BoneStructure	0x9c	4	ptr			ptShapes	app
+ps3	BoneStructure	0xa0	8	pair		array:ConstraintParameters	serConstraint	app
+ps3	BoneStructure	0xa8	4	ptr			ptConstraint	app
+ps3	BoneStructure	0xac	4	prim	i		snoParticleSystem	app
+ps3	LookAtData	-	36	RECORD SIZE			same as switch	app
+ps3	LookAtData	0x0	4	prim	i		bEnabled	app
+ps3	LookAtData	0x4	4	prim	i		dwBoneHash	app
+ps3	LookAtData	0x8	4	prim	i		dwBoneHashPadding	app
+ps3	LookAtData	0xc	4	prim	f		aAngleLimitYaw	app
+ps3	LookAtData	0x10	4	prim	f		aPitchMin	app
+ps3	LookAtData	0x14	4	prim	f		aPitchMax	app
+ps3	LookAtData	0x18	4	prim	f		aPitchOffset	app
+ps3	LookAtData	0x1c	4	prim	f		aSpeed	app
+ps3	LookAtData	0x20	4	prim	f		flRange	app
+ps3	BonePulseData	-	20	RECORD SIZE			same as switch	app
+ps3	BonePulseData	0x0	4	prim	i		dwBoneHash	app
+ps3	BonePulseData	0x4	4	prim	i		dwBoneHashPadding	app
+ps3	BonePulseData	0x8	4	prim	f		flAmplitude	app
+ps3	BonePulseData	0xc	4	prim	f		flHertz	app
+ps3	BonePulseData	0x10	4	prim	f		aPhase	app
+ps3	GeoSet	-	24	RECORD SIZE			ps3 table	app
+ps3	GeoSet	0x0	4	prim	i		nSubObjectCount	app
+ps3	GeoSet	0x4	8	pair		array:SubObjectP3	serSubObjects	app
+ps3	GeoSet	0xc	4	zero			u0c	app
+ps3	GeoSet	0x10	8	ptr			ptSubObjects	app
+ps3	Sphere	-	16	RECORD SIZE			same as switch	app
+ps3	Sphere	0x0	12	prim	3f		wpCenter	app
+ps3	Sphere	0xc	4	prim	f		wdRadius	app
+ps3	CollisionCapsule	-	48	RECORD SIZE			same as switch	app
+ps3	CollisionCapsule	0x0	4	prim	f		flRadius	app
+ps3	CollisionCapsule	0x4	4	prim	f		flLength	app
+ps3	CollisionCapsule	0x8	40	struct	Hardpoint		tHardpoint	app
+ps3	Hardpoint	-	40	RECORD SIZE			same as switch	app
+ps3	Hardpoint	0x0	8	struct	HardpointHash		tHash	app
+ps3	Hardpoint	0x8	4	prim	i		nBoneIndex	app
+ps3	Hardpoint	0xc	28	struct	PRTransform		transform	app
+ps3	Octree	-	72	RECORD SIZE			same as switch	app
+ps3	Octree	0x0	4	prim	i		nMaxNodes	app
+ps3	Octree	0x4	4	prim	i		nMaxLeaves	app
+ps3	Octree	0x8	4	prim	i		nMaxPrimitives	app
+ps3	Octree	0xc	4	prim	i		nNodeCount	app
+ps3	Octree	0x10	4	prim	i		nLeafCount	app
+ps3	Octree	0x14	4	prim	i		nPrimitiveCount	app
+ps3	Octree	0x18	8	pair		array:OctreeNode	serNodes	app
+ps3	Octree	0x20	8	ptr	xptr64		ptNodes	app
+ps3	Octree	0x28	8	pair		array:OctreeLeaf	serLeaves	app
+ps3	Octree	0x30	8	ptr	xptr64		ptLeaves	app
+ps3	Octree	0x38	8	pair		array:OctreePrimitive	serPrimitives	app
+ps3	Octree	0x40	8	ptr	xptr64		ptPrimitives	app
+ps3	ConstraintParameters	-	228	RECORD SIZE			ps3 table	app
+ps3	ConstraintParameters	0x0	4	prim	i		dwHash	app
+ps3	ConstraintParameters	0x4	4	prim	i		dwHashPadding	app
+ps3	ConstraintParameters	0x8	4	prim	i		dwFlags	app
+ps3	ConstraintParameters	0xc	4	prim	i		eType	app
+ps3	ConstraintParameters	0x10	4	prim	i		nBone1	app
+ps3	ConstraintParameters	0x14	4	prim	i		nBone2	app
+ps3	ConstraintParameters	0x18	28	struct	PRTransform		frame	app
+ps3	ConstraintParameters	0x34	12	prim	3f		twistAxis	app
+ps3	ConstraintParameters	0x40	28	struct	PRTransform		localFrame1	app
+ps3	ConstraintParameters	0x5c	28	struct	PRTransform		localFrame2	app
+ps3	ConstraintParameters	0x78	4	prim	f		flRevoluteAngleLow	app
+ps3	ConstraintParameters	0x7c	4	prim	f		flRevoluteAngleHigh	app
+ps3	ConstraintParameters	0x80	4	prim	f		flRagdollConeAngle	app
+ps3	ConstraintParameters	0x84	4	prim	f		flRagdollTwistLow	app
+ps3	ConstraintParameters	0x88	4	prim	f		flRagdollTwistHigh	app
+ps3	ConstraintParameters	0x8c	4	prim	f		flFriction	app
+ps3	ConstraintParameters	0x90	4	prim	f		flCompliance	app
+ps3	ConstraintParameters	0x94	8	zero			u94	app
+ps3	ConstraintParameters	0x9c	4	prim	f		flMotorStrength	app
+ps3	ConstraintParameters	0xa0	4	prim	f		flStrength	app
+ps3	ConstraintParameters	0xa4	64	prim	c		szParticleSystem	app
+ps3	SubObjectAppearance	-	184	RECORD SIZE			ps3 table	app
+ps3	SubObjectAppearance	0x0	4	prim	I		dwFlags	app
+ps3	SubObjectAppearance	0x4	4	prim	i		snoCloth	app
+ps3	SubObjectAppearance	0x8	8	pair		tagmap:	serTagMap	app
+ps3	SubObjectAppearance	0x10	8	ptr			hTagMap	app
+ps3	SubObjectAppearance	0x18	72	struct	UberMaterial		tUberMaterial	app
+ps3	SubObjectAppearance	0x60	4	prim	i		snoMaterial	app
+ps3	SubObjectAppearance	0x64	4	zero			u64	app
+ps3	SubObjectAppearance	0x68	72	struct	UberMaterial		tCompositeUberMaterial	app
+ps3	SubObjectAppearance	0xb0	8	zero			ub0	app
+ps3	AppearanceSample	-	12	RECORD SIZE			same as switch	app
+ps3	AppearanceSample	0x0	4	prim	i		u0	app
+ps3	AppearanceSample	0x4	4	prim	i		u4	app
+ps3	AppearanceSample	0x8	4	prim	i		u8	app
+ps3	BoneName	-	4	RECORD SIZE			derived from switch	ani
+ps3	BoneName	0x0	4	prim	i		dwHash	ani
+ps3	BoneBlendWeights	-	8	RECORD SIZE			derived from switch	ani
+ps3	BoneBlendWeights	0x0	8	prim	f		aflWeight	ani
+ps3	TranslationCurve	-	16	RECORD SIZE			derived from switch	ani
+ps3	TranslationCurve	0x0	8	pair		array:BYTE	serKeysComp	ani
+ps3	TranslationCurve	0x8	8	ptr	xptr64		ptKeysComp	ani
+ps3	RotationCurve	-	16	RECORD SIZE			derived from switch	ani
+ps3	RotationCurve	0x0	8	pair		array:BYTE	serKeysComp	ani
+ps3	RotationCurve	0x8	8	ptr	xptr64		ptKeysComp	ani
+ps3	ScaleCurve	-	16	RECORD SIZE			derived from switch	ani
+ps3	ScaleCurve	0x0	8	pair		array:BYTE	serKeysComp	ani
+ps3	ScaleCurve	0x8	8	ptr	xptr64		ptKeysComp	ani
+ps3	KeyframedAttachment	-	192	RECORD SIZE			same as switch	ani
+ps3	KeyframedAttachment	0x0	4	prim	f		flKeyframeIndex	ani
+ps3	KeyframedAttachment	0x4	188	struct	TriggerEvent		tTriggeredEvent	ani
+ps3	HardpointLink	-	12	RECORD SIZE			derived from switch	ani
+ps3	HardpointLink	0x0	8	struct	HardpointHash		tHash	ani
+ps3	HardpointLink	0x8	4	prim	i		eSource	ani
+ps3	NavMeshSquare	-	8	RECORD SIZE			derived from switch	scn
+ps3	NavMeshSquare	0x0	4	prim	f		wdSquareZ	scn
+ps3	NavMeshSquare	0x4	4	prim	i		dwSquareFlags	scn
+ps3	CompNavMeshSquare	-	4	RECORD SIZE			derived from switch	scn
+ps3	CompNavMeshSquare	0x0	2	prim	H		wdSquareZ	scn
+ps3	CompNavMeshSquare	0x2	2	prim	H		dwSquareFlags	scn
+ps3	TriggerEvent	-	188	RECORD SIZE			same as switch	scn
+ps3	TriggerEvent	0x0	4	prim	i		eType	scn
+ps3	TriggerEvent	0x4	36	struct	TriggerConditions		tConditions	scn
+ps3	TriggerEvent	0x28	4	prim	i		eAttachmentType	scn
+ps3	TriggerEvent	0x2c	8	struct	SNOName		snoname	scn
+ps3	TriggerEvent	0x34	4	prim	i		dwID	scn
+ps3	TriggerEvent	0x38	4	prim	i		dwPinFlags	scn
+ps3	TriggerEvent	0x3c	4	prim	i		eRuneType	scn
+ps3	TriggerEvent	0x40	4	prim	i		bUseRuneType	scn
+ps3	TriggerEvent	0x44	24	struct	HardpointLink		tHardpointLinks	scn
+ps3	TriggerEvent	0x5c	8	struct	LookLink		tLookLink	scn
+ps3	TriggerEvent	0x64	8	struct	ConstraintLink		tConstraintLink	scn
+ps3	TriggerEvent	0x6c	4	prim	i		dwAnimTag	scn
+ps3	TriggerEvent	0x70	4	prim	f		flAlpha	scn
+ps3	TriggerEvent	0x74	4	prim	i		eMsgPassMethod	scn
+ps3	TriggerEvent	0x78	4	prim	i		dwMsgKey	scn
+ps3	TriggerEvent	0x7c	4	prim	i		dwTriggerFlags	scn
+ps3	TriggerEvent	0x80	4	prim	i		fIgnoreOwnerScale	scn
+ps3	TriggerEvent	0x84	4	prim	i		fIgnoreOwnerAlpha	scn
+ps3	TriggerEvent	0x88	4	prim	f		flScale	scn
+ps3	TriggerEvent	0x8c	4	prim	f		flFadeTime	scn
+ps3	TriggerEvent	0x90	4	prim	i		fUseParticleScalar	scn
+ps3	TriggerEvent	0x94	4	prim	f		flParticleScalar	scn
+ps3	TriggerEvent	0x98	4	prim	i		fUseMinimumSpeed	scn
+ps3	TriggerEvent	0x9c	4	prim	f		flMinimumSpeed	scn
+ps3	TriggerEvent	0xa0	4	prim	i		eFootstepType	scn
+ps3	TriggerEvent	0xa4	4	prim	i		eOutroAnimType	scn
+ps3	TriggerEvent	0xa8	4	prim	i		dwSpawnedActorLife	scn
+ps3	TriggerEvent	0xac	4	prim	4B		rgbaColorAdd	scn
+ps3	TriggerEvent	0xb0	4	prim	i		nHitFlashAddDuration	scn
+ps3	TriggerEvent	0xb4	4	prim	4B		rgbaColorMul	scn
+ps3	TriggerEvent	0xb8	4	prim	i		nHitFlashMulDuration	scn
+ps3	NavCell	-	32	RECORD SIZE			derived from switch	scn
+ps3	NavCell	0x0	12	prim	3f		tMin	scn
+ps3	NavCell	0xc	12	prim	3f		tMax	scn
+ps3	NavCell	0x18	2	prim	H		uFlags	scn
+ps3	NavCell	0x1a	2	prim	H		uNeighborCount	scn
+ps3	NavCell	0x1c	4	prim	i		uNeighborOffset	scn
+ps3	NavCellLookup	-	4	RECORD SIZE			derived from switch	scn
+ps3	NavCellLookup	0x0	2	prim	H		uCellFlags	scn
+ps3	NavCellLookup	0x2	2	prim	H		uCellIndex	scn
+ps3	NavGridSquare	-	6	RECORD SIZE			derived from switch	scn
+ps3	NavGridSquare	0x0	2	prim	H		uCellFlags	scn
+ps3	NavGridSquare	0x2	2	prim	H		uCellCount	scn
+ps3	NavGridSquare	0x4	2	prim	H		uLookupOffset	scn
+ps3	NavCellBorderData	-	4	RECORD SIZE			derived from switch	scn
+ps3	NavCellBorderData	0x0	2	prim	H		uCellIndex	scn
+ps3	NavCellBorderData	0x2	2	prim	H		uBorderFlags	scn
+ps3	dmFloat4	-	16	RECORD SIZE			same as switch	phm
+ps3	dmFloat4	0x0	4	prim	f		x	phm
+ps3	dmFloat4	0x4	4	prim	f		y	phm
+ps3	dmFloat4	0x8	4	prim	f		z	phm
+ps3	dmFloat4	0xc	4	prim	f		w	phm
+ps3	dmMeshTriangleP3	-	16	RECORD SIZE			ps3 table	phm
+ps3	dmMeshTriangleP3	0x0	2	prim	H		i1	phm
+ps3	dmMeshTriangleP3	0x2	2	prim	H		i2	phm
+ps3	dmMeshTriangleP3	0x4	2	prim	H		i3	phm
+ps3	dmMeshTriangleP3	0x6	2	prim	H		w1	phm
+ps3	dmMeshTriangleP3	0x8	2	prim	H		w2	phm
+ps3	dmMeshTriangleP3	0xa	2	prim	H		w3	phm
+ps3	dmMeshTriangleP3	0xc	2	prim	H		materialIndex	phm
+ps3	dmMeshTriangleP3	0xe	2	prim	H		collisionFlags	phm
+ps3	dmMeshNodeP3	-	8	RECORD SIZE			ps3 table	phm
+ps3	dmMeshNodeP3	0x0	4	prim	I		data	phm
+ps3	dmMeshNodeP3	0x4	2	prim	H		a	phm
+ps3	dmMeshNodeP3	0x6	2	prim	H		b	phm
+ps3	DRLGParams	-	120	RECORD SIZE			same as switch	wrl
+ps3	DRLGParams	0x0	8	pair		array:TileInfo	serTiles	wrl
+ps3	DRLGParams	0x8	56	raw	XGrowableArray<TileInfo, TileInfo>		arTiles	wrl
+ps3	DRLGParams	0x40	4	prim	i		nNumCommands	wrl
+ps3	DRLGParams	0x44	8	pair		array:DRLGCommand	serCommands	wrl
+ps3	DRLGParams	0x50	8	ptr	xptr64		ptCommands	wrl
+ps3	DRLGParams	0x58	8	pair		array:INT	serParentIndices	wrl
+ps3	DRLGParams	0x60	8	ptr	xptr64		pParentIndices	wrl
+ps3	DRLGParams	0x68	8	pair		tagmap:	serDRLGTagMap	wrl
+ps3	DRLGParams	0x70	8	ptr	xptr64		hDRLGTagMap	wrl
+ps3	SceneParams	-	24	RECORD SIZE			same as switch	wrl
+ps3	SceneParams	0x0	8	pair		array:SceneChunk	serSceneChunks	wrl
+ps3	SceneParams	0x8	4	prim	i		nSceneChunkCount	wrl
+ps3	SceneParams	0x10	8	ptr	xptr64		ptSceneChunks	wrl
+ps3	LabelRuleSet	-	24	RECORD SIZE			same as switch	wrl
+ps3	LabelRuleSet	0x0	4	prim	i		nNumRules	wrl
+ps3	LabelRuleSet	0x8	8	ptr	xptr64		arRules	wrl
+ps3	LabelRuleSet	0x10	8	pair		array:LabelRule	serRules	wrl
+ps3	SceneClusterSet	-	24	RECORD SIZE			same as switch	wrl
+ps3	SceneClusterSet	0x0	4	prim	i		nNumClusters	wrl
+ps3	SceneClusterSet	0x8	8	ptr	xptr64		arClusters	wrl
+ps3	SceneClusterSet	0x10	8	pair		array:SceneCluster	serClusters	wrl
+ps3	PRTransform	-	28	RECORD SIZE			same as switch	mrk
+ps3	PRTransform	0x0	16	struct	Quaternion		q	mrk
+ps3	PRTransform	0x10	12	prim	3f		wp	mrk
+ps3	SNOName	-	8	RECORD SIZE			same as switch	mrk
+ps3	SNOName	0x0	4	prim	i		snoGroup	mrk
+ps3	SNOName	0x4	4	prim	i		snoHandle	mrk
+ps3	MarkerLink	-	8	RECORD SIZE			derived from switch	mrk
+ps3	MarkerLink	0x0	4	prim	i		dwHash	mrk
+ps3	MarkerLink	0x4	4	prim	i		dwGroupHash	mrk
+ps3	Material	-	40	RECORD SIZE			ps3 table	mat
+ps3	Material	0x0	4	prim	4B		rgbaAmbient	mat
+ps3	Material	0x4	4	prim	f		flAmbientScale	mat
+ps3	Material	0x8	4	prim	4B		rgbaDiffuse	mat
+ps3	Material	0xc	4	prim	f		flDiffuseScale	mat
+ps3	Material	0x10	4	prim	4B		rgbaSpecular	mat
+ps3	Material	0x14	4	prim	f		flSpecularScale	mat
+ps3	Material	0x18	4	prim	4B		rgbaEmissive	mat
+ps3	Material	0x1c	4	prim	f		flEmissiveScale	mat
+ps3	Material	0x20	4	prim	f		flPower	mat
+ps3	Material	0x24	4	prim	i		nSortPri	mat
+ps3	MaterialTextureEntry	-	24	RECORD SIZE			ps3 table	mat
+ps3	MaterialTextureEntry	0x0	4	prim	i		eShaderTex	mat
+ps3	MaterialTextureEntry	0x4	8	pair		array:BYTE	serTexAnimCompParams	mat
+ps3	MaterialTextureEntry	0xc	8	ptr			pTexAnimCompParams	mat
+ps3	MaterialTextureEntry	0x14	4	prim	i		snoTex	mat
+ps3	PRSTransform	-	32	RECORD SIZE			same as switch	app
+ps3	PRSTransform	0x0	16	struct	Quaternion		q	app
+ps3	PRSTransform	0x10	12	prim	3f		wp	app
+ps3	PRSTransform	0x1c	4	prim	f		flScale	app
+ps3	CollisionShape	-	68	RECORD SIZE			ps3 table	app
+ps3	CollisionShape	0x0	4	prim	I		dwFlags	app
+ps3	CollisionShape	0x4	4	prim	i		eType	app
+ps3	CollisionShape	0x8	4	prim	i		eMaterial	app
+ps3	CollisionShape	0xc	4	prim	i		nDegrade	app
+ps3	CollisionShape	0x10	4	prim	f		flDensityFactor	app
+ps3	CollisionShape	0x14	4	prim	f		flExplosionFactor	app
+ps3	CollisionShape	0x18	4	prim	f		flVelocityFactor	app
+ps3	CollisionShape	0x1c	8	pair		array:PolytopeData	serPolytope	app
+ps3	CollisionShape	0x24	4	ptr			pPolytopeData	app
+ps3	CollisionShape	0x28	12	prim	3f		wp1	app
+ps3	CollisionShape	0x34	12	prim	3f		wp2	app
+ps3	CollisionShape	0x40	4	prim	f		flRadius	app
+ps3	SubObjectP3	-	308	RECORD SIZE			ps3 table	app
+ps3	SubObjectP3	0x0	4	prim	I		dwFlags	app
+ps3	SubObjectP3	0x4	4	prim	i		nVertCount	app
+ps3	SubObjectP3	0x8	8	pair		blob:	serVertList	app
+ps3	SubObjectP3	0x10	4	ptr			ptVertList	app
+ps3	SubObjectP3	0x14	8	pair		blob:	serInfluenceList	app
+ps3	SubObjectP3	0x1c	4	ptr			ptInfluenceList	app
+ps3	SubObjectP3	0x20	4	prim	i		nIndexCount	app
+ps3	SubObjectP3	0x24	8	pair		blob:	serIndexList	app
+ps3	SubObjectP3	0x2c	4	ptr			pwIndexList	app
+ps3	SubObjectP3	0x30	8	pair		array:ClothStructureP3	serClothStructure	app
+ps3	SubObjectP3	0x38	4	ptr			ptClothStructure	app
+ps3	SubObjectP3	0x3c	4	prim	i		snoSurface	app
+ps3	SubObjectP3	0x40	4	prim	i		nFadeGroup	app
+ps3	SubObjectP3	0x44	4	prim	f		flFadeAlpha	app
+ps3	SubObjectP3	0x48	128	prim	c		szName	app
+ps3	SubObjectP3	0xc8	4	prim	I		dwMaterialHash	app
+ps3	SubObjectP3	0xcc	4	prim	I		dwSubObjectHash	app
+ps3	SubObjectP3	0xd0	24	struct	AABB		aabbBounds	app
+ps3	SubObjectP3	0xe8	4	prim	i		nShapeCount	app
+ps3	SubObjectP3	0xec	8	pair		array:CollisionShape	serShapes	app
+ps3	SubObjectP3	0xf4	4	ptr			ptShapes	app
+ps3	SubObjectP3	0xf8	4	ptr			ptPostprocessed	app
+ps3	SubObjectP3	0xfc	4	prim	i		nDrawCount	app
+ps3	SubObjectP3	0x100	8	pair		array:DrawP3	serDraws	app
+ps3	SubObjectP3	0x108	4	ptr			ptDraws	app
+ps3	SubObjectP3	0x10c	8	pair		blob:	serCompInfluenceList	app
+ps3	SubObjectP3	0x114	4	ptr			ptCompInfluenceList	app
+ps3	SubObjectP3	0x118	12	prim	3f		wpFixedPointPosOffset	app
+ps3	SubObjectP3	0x124	12	prim	3f		wpFixedPointPosScale	app
+ps3	SubObjectP3	0x130	4	zero			u130	app
+ps3	HardpointHash	-	8	RECORD SIZE			same as switch	app
+ps3	HardpointHash	0x0	4	prim	i		dwHash	app
+ps3	HardpointHash	0x4	4	prim	i		dwHashFlag	app
+ps3	OctreeNode	-	48	RECORD SIZE			same as switch	app
+ps3	OctreeNode	0x0	16	struct	OctreeCube		tCube	app
+ps3	OctreeNode	0x10	32	prim	i		pdwChildren	app
+ps3	OctreeLeaf	-	24	RECORD SIZE			same as switch	app
+ps3	OctreeLeaf	0x0	16	struct	OctreeCube		tCube	app
+ps3	OctreeLeaf	0x10	4	prim	i		nPrimitiveIndex	app
+ps3	OctreeLeaf	0x14	4	prim	i		nPrimitiveCount	app
+ps3	OctreePrimitive	-	8	RECORD SIZE			same as switch	app
+ps3	OctreePrimitive	0x0	4	prim	i		dwUserData	app
+ps3	OctreePrimitive	0x4	4	prim	i		dwIndexListIndex	app
+ps3	TriggerConditions	-	36	RECORD SIZE			derived from switch	scn
+ps3	TriggerConditions	0x0	1	prim	B		bChance	scn
+ps3	TriggerConditions	0x4	4	prim	i		dwDelayMin	scn
+ps3	TriggerConditions	0x8	4	prim	i		dwDelayDelta	scn
+ps3	TriggerConditions	0xc	4	prim	i		dwRepeatTimeMin	scn
+ps3	TriggerConditions	0x10	4	prim	i		dwRepeatTimeDelta	scn
+ps3	TriggerConditions	0x14	4	prim	f		flImpulseMin	scn
+ps3	TriggerConditions	0x18	4	prim	f		flImpulseDelta	scn
+ps3	TriggerConditions	0x1c	4	prim	i		eMaterial	scn
+ps3	TriggerConditions	0x20	4	prim	i		dwConditionFlags	scn
+ps3	ConstraintLink	-	8	RECORD SIZE			derived from switch	scn
+ps3	ConstraintLink	0x0	4	prim	i		dwHash	scn
+ps3	ConstraintLink	0x4	4	prim	i		dwHashPadding	scn
+ps3	TileInfo	-	72	RECORD SIZE			derived from switch	wrl
+ps3	TileInfo	0x0	4	prim	i		nTileType	wrl
+ps3	TileInfo	0x4	4	prim	i		nTileSet	wrl
+ps3	TileInfo	0x8	4	prim	i		snoScene	wrl
+ps3	TileInfo	0xc	4	prim	i		dwWeight	wrl
+ps3	TileInfo	0x10	8	pair		tagmap:	serTileTagMap	wrl
+ps3	TileInfo	0x18	8	ptr	xptr64		hTileTagMap	wrl
+ps3	TileInfo	0x20	36	struct	CustomTileInfo		tCustomTileInfo	wrl
+ps3	TileInfo	0x44	4	prim	i		uClusterID	wrl
+ps3	DRLGCommand	-	152	RECORD SIZE			same as switch	wrl
+ps3	DRLGCommand	0x0	128	prim	c		szCommandName	wrl
+ps3	DRLGCommand	0x80	4	prim	i		nCommandType	wrl
+ps3	DRLGCommand	0x84	8	pair		tagmap:	serCommandTagMap	wrl
+ps3	DRLGCommand	0x90	8	ptr	xptr64		hCommandTagMap	wrl
+ps3	SceneChunk	-	240	RECORD SIZE			ps3 table	wrl
+ps3	SceneChunk	0x0	8	struct	SNOName		snoname	wrl
+ps3	SceneChunk	0x8	28	struct	PRTransform		transform	wrl
+ps3	SceneChunk	0x24	204	struct	SceneSpecification		tSceneSpec	wrl
+ps3	LabelRule	-	176	RECORD SIZE			same as switch	wrl
+ps3	LabelRule	0x0	128	prim	c		szRuleName	wrl
+ps3	LabelRule	0x80	24	struct	LabelCondition		tCondition	wrl
+ps3	LabelRule	0x98	4	prim	i		nNumToChoose	wrl
+ps3	LabelRule	0x9c	4	prim	i		nNumEntries	wrl
+ps3	LabelRule	0xa0	8	ptr	xptr64		arEntries	wrl
+ps3	LabelRule	0xa8	8	pair		array:LabelEntry	serEntries	wrl
+ps3	SceneCluster	-	176	RECORD SIZE			ps3 table	wrl
+ps3	SceneCluster	0x0	128	prim	c		szName	wrl
+ps3	SceneCluster	0x80	4	prim	i		uClusterID	wrl
+ps3	SceneCluster	0x84	4	prim	i		nNumSubSceneGroups	wrl
+ps3	SceneCluster	0x88	8	ptr	xptr64		arSubSceneGroups	wrl
+ps3	SceneCluster	0x90	8	pair		array:SubSceneGroup	serSubSceneGroups	wrl
+ps3	SceneCluster	0x98	24	struct	SubSceneGroup		tDefaultSubSceneGroup	wrl
+ps3	Quaternion	-	16	RECORD SIZE			same as switch	mrk
+ps3	Quaternion	0x0	12	prim	3f		wvImag	mrk
+ps3	Quaternion	0xc	4	prim	f		wdReal	mrk
+ps3	PolytopeData	-	96	RECORD SIZE			same as switch	app
+ps3	PolytopeData	0x0	8	ptr	rawptr		m_aVertices	app
+ps3	PolytopeData	0x8	8	ptr	rawptr		m_aPlanes	app
+ps3	PolytopeData	0x10	8	ptr	rawptr		m_aSubEdges	app
+ps3	PolytopeData	0x18	8	ptr	rawptr		m_aFaceSubEdges	app
+ps3	PolytopeData	0x20	12	struct	dmFloat3		m_centroid	app
+ps3	PolytopeData	0x2c	4	prim	i		m_vertexCount	app
+ps3	PolytopeData	0x30	4	prim	i		m_faceCount	app
+ps3	PolytopeData	0x34	4	prim	i		m_subEdgeCount	app
+ps3	PolytopeData	0x38	4	prim	f		m_volume	app
+ps3	PolytopeData	0x3c	4	prim	f		m_area	app
+ps3	PolytopeData	0x40	8	pair		array:dmFloat3	serVertices	app
+ps3	PolytopeData	0x48	8	pair		array:dmPlane	serPlanes	app
+ps3	PolytopeData	0x50	8	pair		array:dmSubEdge	serSubEdges	app
+ps3	PolytopeData	0x58	8	pair		array:BYTE	serFaceSubEdges	app
+ps3	ClothStructureP3	-	100	RECORD SIZE			ps3 table	app
+ps3	ClothStructureP3	0x0	4	prim	i		nVertexCount	app
+ps3	ClothStructureP3	0x4	8	pair		array:ClothVertexSerializable	serVertices	app
+ps3	ClothStructureP3	0xc	4	ptr			ptVertices	app
+ps3	ClothStructureP3	0x10	4	prim	i		nFaceCount	app
+ps3	ClothStructureP3	0x14	8	pair		array:ClothFaceSerializable	serFaces	app
+ps3	ClothStructureP3	0x1c	4	ptr			ptFaces	app
+ps3	ClothStructureP3	0x20	4	prim	i		nStapleCount	app
+ps3	ClothStructureP3	0x24	8	pair		array:ClothStaple	serStaples	app
+ps3	ClothStructureP3	0x2c	4	ptr			ptStaples	app
+ps3	ClothStructureP3	0x30	4	prim	i		nDistanceConstraintCount	app
+ps3	ClothStructureP3	0x34	8	pair		array:ClothConstraintSerializable	serDistanceConstraints	app
+ps3	ClothStructureP3	0x3c	4	ptr			ptDistanceConstraints	app
+ps3	ClothStructureP3	0x40	4	prim	i		nBendingConstraintCount	app
+ps3	ClothStructureP3	0x44	8	pair		array:ClothConstraintSerializable	serBendingConstraints	app
+ps3	ClothStructureP3	0x4c	4	ptr			ptBendingConstraints	app
+ps3	ClothStructureP3	0x50	4	prim	i		nIslandCount	app
+ps3	ClothStructureP3	0x54	4	prim	f		flArea	app
+ps3	ClothStructureP3	0x58	8	pair		array:WORD	serClothVertMapping	app
+ps3	ClothStructureP3	0x60	4	ptr			ptClothVertexMapping	app
+ps3	DrawP3	-	160	RECORD SIZE			ps3 table	app
+ps3	DrawP3	0x0	4	prim	I		dwFlags	app
+ps3	DrawP3	0x4	4	prim	I		u04	app
+ps3	DrawP3	0x8	8	pair		blob:	serDescriptor	app
+ps3	DrawP3	0x10	4	prim	i		nIndexCount	app
+ps3	DrawP3	0x14	4	prim	I		u14	app
+ps3	DrawP3	0x18	8	pair		blob:	serIndices	app
+ps3	DrawP3	0x20	4	prim	I		u20	app
+ps3	DrawP3	0x24	4	prim	i		nVertexCount	app
+ps3	DrawP3	0x28	4	prim	I		u28	app
+ps3	DrawP3	0x2c	8	pair		blob:	serStreamA	app
+ps3	DrawP3	0x34	32	raw			u34	app
+ps3	DrawP3	0x54	8	pair		blob:	serStreamB	app
+ps3	DrawP3	0x5c	4	prim	I		u5c	app
+ps3	DrawP3	0x60	4	prim	2H		wBoneRangeStart	app
+ps3	DrawP3	0x64	4	prim	2H		wBoneRangeSize	app
+ps3	DrawP3	0x68	4	prim	I		u68	app
+ps3	DrawP3	0x6c	8	pair		blob:	serStreamC	app
+ps3	DrawP3	0x74	12	raw			u74	app
+ps3	DrawP3	0x80	8	pair		blob:	serVertexFormatA	app
+ps3	DrawP3	0x88	8	raw			u88	app
+ps3	DrawP3	0x90	8	pair		blob:	serVertexFormatB	app
+ps3	DrawP3	0x98	8	raw			u98	app
+ps3	OctreeCube	-	16	RECORD SIZE			same as switch	app
+ps3	OctreeCube	0x0	12	prim	3f		wpOrigin	app
+ps3	OctreeCube	0xc	4	prim	f		wdSize	app
+ps3	CustomTileInfo	-	36	RECORD SIZE			derived from switch	wrl
+ps3	CustomTileInfo	0x0	4	prim	i		eCustomType	wrl
+ps3	CustomTileInfo	0x4	4	prim	i		nSizeX	wrl
+ps3	CustomTileInfo	0x8	4	prim	i		nSizeY	wrl
+ps3	CustomTileInfo	0xc	8	prim	2i		pointAnchor	wrl
+ps3	CustomTileInfo	0x14	8	pair		array:CustomTileCell	serTiles	wrl
+ps3	CustomTileInfo	0x1c	8	ptr	xptr64		arTiles	wrl
+ps3	SceneSpecification	-	204	RECORD SIZE			ps3 table	wrl
+ps3	SceneSpecification	0x0	4	prim	i		dHeight	wrl
+ps3	SceneSpecification	0x4	8	prim	2i		pointGridLocation	wrl
+ps3	SceneSpecification	0xc	16	prim	i		arSnoLevelAreas	wrl
+ps3	SceneSpecification	0x1c	4	prim	i		snoPrevWorld	wrl
+ps3	SceneSpecification	0x20	4	prim	i		uPrevEntranceGUID	wrl
+ps3	SceneSpecification	0x24	4	prim	i		snoPrevLevelArea	wrl
+ps3	SceneSpecification	0x28	4	prim	i		snoNextWorld	wrl
+ps3	SceneSpecification	0x2c	4	prim	i		uNextEntranceGUID	wrl
+ps3	SceneSpecification	0x30	4	prim	i		snoNextLevelArea	wrl
+ps3	SceneSpecification	0x34	4	prim	i		snoMusic	wrl
+ps3	SceneSpecification	0x38	4	prim	i		snoAmbient	wrl
+ps3	SceneSpecification	0x3c	4	prim	i		snoReverb	wrl
+ps3	SceneSpecification	0x40	4	prim	i		snoWeather	wrl
+ps3	SceneSpecification	0x44	4	prim	i		snoPresetWorld	wrl
+ps3	SceneSpecification	0x48	4	prim	i		nDRLGIndex	wrl
+ps3	SceneSpecification	0x4c	4	prim	i		nSceneChunk	wrl
+ps3	SceneSpecification	0x50	4	prim	i		dwOnPathBits	wrl
+ps3	SceneSpecification	0x54	36	raw			tDRLGInfoP3	wrl
+ps3	SceneSpecification	0x78	4	prim	I		uClusterID	wrl
+ps3	SceneSpecification	0x7c	80	struct	SceneCachedValues		tCachedValues	wrl
+ps3	LabelCondition	-	24	RECORD SIZE			same as switch	wrl
+ps3	LabelCondition	0x0	4	prim	i		eType	wrl
+ps3	LabelCondition	0x4	4	prim	i		uFlags	wrl
+ps3	LabelCondition	0x8	16	prim	i		nConditionParm	wrl
+ps3	LabelEntry	-	20	RECORD SIZE			same as switch	wrl
+ps3	LabelEntry	0x0	4	prim	i		gbidLabel	wrl
+ps3	LabelEntry	0x4	4	prim	i		uFlags	wrl
+ps3	LabelEntry	0x8	4	prim	f		flWeight	wrl
+ps3	LabelEntry	0xc	4	prim	i		nApplyCountMin	wrl
+ps3	LabelEntry	0x10	4	prim	i		nApplyCountMax	wrl
+ps3	SubSceneGroup	-	24	RECORD SIZE			ps3 table	wrl
+ps3	SubSceneGroup	0x0	4	prim	i		nNumScenesToChoose	wrl
+ps3	SubSceneGroup	0x4	4	prim	i		nNumSubScenes	wrl
+ps3	SubSceneGroup	0x8	8	ptr			arSubScenes	wrl
+ps3	SubSceneGroup	0x10	8	pair		array:SubSceneEntry	serSubScenes	wrl
+ps3	dmFloat3	-	12	RECORD SIZE			derived from switch	app
+ps3	dmFloat3	0x0	4	prim	f		x	app
+ps3	dmFloat3	0x4	4	prim	f		y	app
+ps3	dmFloat3	0x8	4	prim	f		z	app
+ps3	dmPlane	-	16	RECORD SIZE			derived from switch	app
+ps3	dmPlane	0x0	12	struct	dmFloat3		normal	app
+ps3	dmPlane	0xc	4	prim	f		offset	app
+ps3	dmSubEdge	-	4	RECORD SIZE			derived from switch	app
+ps3	dmSubEdge	0x0	1	raw	dm_int8		twinOffset	app
+ps3	dmSubEdge	0x1	1	prim	B		tail	app
+ps3	dmSubEdge	0x2	1	prim	B		left	app
+ps3	dmSubEdge	0x3	1	prim	B		next	app
+ps3	ClothVertexSerializable	-	44	RECORD SIZE			same as switch	app
+ps3	ClothVertexSerializable	0x0	12	prim	3f		wp	app
+ps3	ClothVertexSerializable	0xc	12	prim	3f		wp0	app
+ps3	ClothVertexSerializable	0x18	4	prim	f		flInvMass	app
+ps3	ClothVertexSerializable	0x1c	4	prim	i		nParentIndex	app
+ps3	ClothVertexSerializable	0x20	4	prim	i		nAttachmentDistance	app
+ps3	ClothVertexSerializable	0x24	4	prim	i		nFatVertexIndex	app
+ps3	ClothVertexSerializable	0x28	4	prim	i		nIslandIndex	app
+ps3	ClothFaceSerializable	-	16	RECORD SIZE			same as switch	app
+ps3	ClothFaceSerializable	0x0	4	prim	f		flRestArea	app
+ps3	ClothFaceSerializable	0x4	4	prim	i		nVertex1	app
+ps3	ClothFaceSerializable	0x8	4	prim	i		nVertex2	app
+ps3	ClothFaceSerializable	0xc	4	prim	i		nVertex3	app
+ps3	ClothStaple	-	28	RECORD SIZE			same as switch	app
+ps3	ClothStaple	0x0	4	prim	i		nVertex	app
+ps3	ClothStaple	0x4	12	prim	i		anBoneIndices	app
+ps3	ClothStaple	0x10	12	prim	f		aflBoneWeights	app
+ps3	ClothConstraintSerializable	-	16	RECORD SIZE			same as switch	app
+ps3	ClothConstraintSerializable	0x0	4	prim	i		nVertex1	app
+ps3	ClothConstraintSerializable	0x4	4	prim	i		nVertex2	app
+ps3	ClothConstraintSerializable	0x8	4	prim	f		flRestLengthSquared	app
+ps3	ClothConstraintSerializable	0xc	4	prim	f		flHorizontal	app
+ps3	CustomTileCell	-	36	RECORD SIZE			derived from switch	wrl
+ps3	CustomTileCell	0x0	4	prim	i		bEnabled	wrl
+ps3	CustomTileCell	0x4	4	prim	i		nTileType	wrl
+ps3	CustomTileCell	0x8	4	prim	i		nTileSet	wrl
+ps3	CustomTileCell	0xc	4	prim	i		snoScene	wrl
+ps3	CustomTileCell	0x10	4	prim	i		nTileHeight	wrl
+ps3	CustomTileCell	0x14	16	prim	i		arExitHeights	wrl
+ps3	SceneCachedValues	-	80	RECORD SIZE			same as switch	wrl
+ps3	SceneCachedValues	0x0	4	prim	i		dwCachedValuesValid	wrl
+ps3	SceneCachedValues	0x4	4	prim	i		nNavmeshSizeX	wrl
+ps3	SceneCachedValues	0x8	4	prim	i		nNavmeshSizeY	wrl
+ps3	SceneCachedValues	0xc	24	struct	AABB		aabbBounds	wrl
+ps3	SceneCachedValues	0x24	24	struct	AABB		aabbMarkerSetBounds	wrl
+ps3	SceneCachedValues	0x3c	16	prim	i		arNumNodesForDistByLevelArea	wrl
+ps3	SceneCachedValues	0x4c	4	prim	i		dwFlags	wrl
+ps3	SubSceneEntry	-	32	RECORD SIZE			same as switch	wrl
+ps3	SubSceneEntry	0x0	4	prim	i		snoScene	wrl
+ps3	SubSceneEntry	0x4	4	prim	i		nWeight	wrl
+ps3	SubSceneEntry	0x8	4	prim	i		nNumLabels	wrl
+ps3	SubSceneEntry	0x10	8	ptr	xptr64		arLabels	wrl
+ps3	SubSceneEntry	0x18	8	pair		array:SubSceneLabel	serLabels	wrl
+ps3	SubSceneLabel	-	8	RECORD SIZE			same as switch	wrl
+ps3	SubSceneLabel	0x0	4	prim	i		gbidLabel	wrl
+ps3	SubSceneLabel	0x4	4	prim	i		nWeight	wrl

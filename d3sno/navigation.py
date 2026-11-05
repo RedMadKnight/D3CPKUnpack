@@ -234,13 +234,13 @@ def _fill_sections(nav: Navigation, sections: list[bytes], order: str) -> None:
     nav.borders = [Border(*row) for row in _rows(borders, order, "HH", BORDER_SIZE)]
 
 
+SECTION_NAMES = ("grid", "cells", "neighbours", "coarse grid", "lookups", "borders")
+SECTION_PAIRS = (0x80, 0x190, 0x1A8, 0x1D0, 0x1E8, 0x200)  # body offsets of the Switch pairs
+
+
 def _switch_sections(view: ByteView, h: SceneHeader) -> list[bytes]:
     sections = []
-    for name, body, size in zip(
-        ("grid", "cells", "neighbours", "coarse grid", "lookups", "borders"),
-        (0x80, 0x190, 0x1A8, 0x1D0, 0x1E8, 0x200),
-        h.section_sizes,
-    ):
+    for name, body, size in zip(SECTION_NAMES, SECTION_PAIRS, h.section_sizes):
         pair = view.pair(0x10 + body, f"{name} pair")
         if pair.size != size:
             raise FormatError(f"{name}: pair size {pair.size}, expected {size}", 0x10 + body)
@@ -290,7 +290,7 @@ def _check_links(nav: Navigation) -> None:
 def parse_scene(
     data: bytes, build: str | None = None, nav: bytes | None = None, strict: bool = False,
 ) -> Navigation:
-    """Read a ``.scn``. On ps3, pass the ``.nav`` bytes; a scene of computed size 0 has none."""
+    """Read a ``.scn``. On ps3 and x360, pass the ``.nav`` bytes; a scene of computed size 0 has none."""
     sno = parse_header(data, build)
     resolved = resolve_build("scn", sno, build, strict)
     order = build_order(resolved)
@@ -306,9 +306,17 @@ def parse_scene(
         sections = _switch_sections(view, h)
         result.special_flags = view.pair_data(view.pair(0xA0), 0xA0, "special flags")
     else:
-        result.special_flags = view.take(
-            SPECIAL_FLAGS_PS3_AT, (inner + 1) // 2, "special flags",
-        )
+        if resolved == "x360":
+            # X4: the special flags as on Switch; the six section pairs are empty and the
+            # sections are in the scene's .nav, laid out as on ps3.
+            result.special_flags = view.pair_data(view.pair(0xA0), 0xA0, "special flags")
+            for name, body in zip(SECTION_NAMES, SECTION_PAIRS):
+                if not view.pair(0x10 + body, f"{name} pair").is_empty:
+                    result.warnings.append(f"x360 scene: {name} pair is not empty")
+        else:
+            result.special_flags = view.take(
+                SPECIAL_FLAGS_PS3_AT, (inner + 1) // 2, "special flags",
+            )
         if nav is None:
             if sum(h.section_sizes):
                 result.has_sections = False
