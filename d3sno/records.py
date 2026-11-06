@@ -19,6 +19,7 @@ from .power import TagMap, read_tag_map
 from .sno import SnoHeader, hash33, parse_header, resolve_build
 
 DATA = Path(__file__).parent / "data"
+from .datafiles import table_rows  # noqa: E402  (stage 10 row updates)
 TICKS_PER_SECOND = 60
 _MAX_DEPTH = 64
 _AREA_ALIGNMENT = 8
@@ -415,19 +416,38 @@ class Ps3Attribute:
         return self.status != "UNRESOLVED"
 
 
+# V9-G3-A (``21_corrections10.md``): the Paragon rows Strength, Dexterity, Intelligence of the ps3
+# build hold 10, 11 and 12, so 12 = Intelligence becomes SUPPORTED (was HYPOTHESIS). No table
+# ships this change; it is applied here on top of the ``s10`` rows.
+PS3_STATUS_UPDATES = {12: "SUPPORTED"}
+
+
 @lru_cache(maxsize=None)
 def ps3_attributes() -> dict[int, Ps3Attribute]:
-    with open(DATA / "ps3_attributes.tsv", encoding="utf-8", newline="") as handle:
-        return {
-            int(row["ps3_id"]): Ps3Attribute(
-                int(row["ps3_id"]),
-                # An UNRESOLVED id gets no single name, only its candidates.
-                (row["name"] or None) if row["status"] != "UNRESOLVED" else None,
-                int(row["switch_id"]) if row["switch_id"] else None, row["status"],
-                tuple(c for c in (row.get("candidates") or "").split(",") if c),
-            )
-            for row in csv.DictReader(handle, delimiter="\t")
-        }
+    """``ps3_attributes.tsv`` with the stage-10 rows of ``s10_ps3_attributes.tsv`` (G3-A) and
+    ``PS3_STATUS_UPDATES`` (V9-G3-A)."""
+    found = {}
+    for row in table_rows("ps3_attributes.tsv"):
+        ps3_id = int(row["ps3_id"])
+        status = PS3_STATUS_UPDATES.get(ps3_id, row["status"])
+        found[ps3_id] = Ps3Attribute(
+            ps3_id,
+            # An UNRESOLVED id gets no single name, only its candidates.
+            (row["name"] or None) if status != "UNRESOLVED" else None,
+            int(row["switch_id"]) if row["switch_id"] else None, status,
+            tuple(c for c in (row.get("candidates") or "").split(",") if c),
+        )
+    return found
+
+
+# G3-A: attributes of the ps3 build that no longer exist on Switch or x360 (no Switch id).
+PS3_ONLY_ATTRIBUTES = (31, 32, 33)
+# V9-G3-A: slot counts over all ps3 ``.gam`` files, as (all slots, slots in the ps3-only
+# item-enhancement table). The rest are the ``_Att`` / ``_Prec`` / ``_Def`` rows and staves.
+# Documentation of the check only: no reader uses these numbers.
+PS3_ATTRIBUTE_SLOT_COUNTS = {31: (36, 28), 32: (32, 28), 33: (32, 28), 13: (None, 35)}
+# G3-B: 199 stays UNRESOLVED; data cannot choose between its candidates. A neutral description.
+PS3_ATTRIBUTE_DESCRIPTIONS = {199: "weapon bonus maximum-damage delta"}
 
 
 def ps3_attribute(ps3_id: int, safe_only: bool = True) -> Ps3Attribute | None:

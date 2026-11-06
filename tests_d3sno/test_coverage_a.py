@@ -16,7 +16,7 @@ from d3sno.sno import hash33, hash33_ci
 
 class TagNames(unittest.TestCase):
     def test_table_sizes(self):
-        self.assertEqual(len(T.tag_table()), 2749)
+        self.assertEqual(len(T.tag_table()), 2752)  # 2749 + three unnamed ps3 rows (G3-D)
         self.assertEqual(len(T.tag_types()), 143)
 
     def test_lookup(self):

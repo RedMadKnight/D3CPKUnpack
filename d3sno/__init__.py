@@ -3,5 +3,5 @@
 from .binary import FormatError, Pair
 
 __all__ = ["FormatError", "Pair"]
-__version__ = "0.9.0"
-STAGE = 9  # description files up to 19_corrections8.md (with 17_x360.md)
+__version__ = "0.10.1"
+STAGE = 10  # description files up to 21_corrections10.md (with 17_x360.md); version 0.10.1

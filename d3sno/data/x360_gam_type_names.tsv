@@ -1,0 +1,38 @@
+type	executable_display_name	x360_gam_tables_name	agrees
+1	Item Types	Item Types	yes
+2	Items	Items	yes
+3	Experience Table	Experience Table	yes
+24	Help Codes	Help Codes	yes
+5	Monster Levels	Monster Levels	yes
+7	Heros	Heros	yes
+8	Affix List	Affix List	yes
+10	Movement Styles	Movement Styles	yes
+11	Labels	Labels	yes
+12	Loot Distribution	Loot Distribution	yes
+16	Rare Item Names	Rare Item Names	yes
+18	Monster Affixes	Monster Affixes	yes
+19	Monster Names	Monster Names	yes
+21	Socketed Effects	Socketed Effects	yes
+23	Item Enchantments	Item Enhancements	no
+25	Item Drop Table	Item Drop Table	yes
+26	Item Level Modifiers	Item Level Modifiers	yes
+27	Quality Classes	Quality Classes	yes
+28	Handicaps	Handicaps	yes
+29	Item Salvage Levels	Item Salvage Levels	yes
+17	Scenery		no table row
+4	Hirelings	Hirelings	yes
+33	Set Item Bonuses	Set Item Bonuses	yes
+34	Elite Modifiers	Elite Modifiers	yes
+35	Item Tiers	Item Tiers	yes
+36	Power Formula Tables	Power Formula Tables	yes
+32	Recipes	Recipes	yes
+37	Scripted Achievement Events	Scripted Achievement Events	yes
+38	Item Durability Cost Scalars	Item Durability Cost Scalars (no name in the Switch enum)	yes
+39	LootRun Quest Tiers	LootRun Quest Tiers	yes
+40	Paragon Bonuses	Paragon Bonuses	yes
+42	Made To Order Types	Made To Order Types (no name in the Switch enum)	yes
+43	Made To Order Affix Folders	Made To Order Affix Folders (no name in the Switch enum)	yes
+44	Devil's Hand Redeemable Sets	Devils Hand Redeemable Sets (no name in the Switch enum)	no
+45	Legacy Item Conversions	Legacy Item Conversions	yes
+46	Enchant Item Affix Use Count Cost Scalars	Enchant Item Affix Use Count Cost Scalars	yes
+49	Tiered Loot Run Levels	Tiered Loot Run Levels	yes

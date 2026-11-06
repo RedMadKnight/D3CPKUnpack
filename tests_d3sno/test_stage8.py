@@ -256,22 +256,24 @@ class Vertices(unittest.TestCase):
 
     def test_main_list_bounds_is_a_warning(self):
         parsed = app(">", sub_objects=[{"rigid": TRIANGLE, "index_count": 3, "half": (1.0, 1.0, 1.0)}])
-        self.assertIn("main list, sub-object 0: vertex outside bounds", parsed.warnings)
+        self.assertIn("high-poly set, sub-object 0: vertex outside bounds", parsed.warnings)
 
 
 # --- V7-T13, V7-T11: second list and the cloth vertex count ------------------------------------
 
 class SecondList(unittest.TestCase):
     def test_second_list_is_not_bounds_checked(self):
+        # Stage 10 (G1-1): the skip follows all-zero bounds, not the list.
         for order in ("<", ">"):
             version = 302 if order == ">" else 306
             data = B.build_app_switch(version=version, order=order, second=[
-                {"rigid": TRIANGLE, "index_count": 3, "half": (1.0, 1.0, 1.0)},
+                {"rigid": TRIANGLE, "index_count": 3, "zero_bounds": True},
             ])
             parsed = P.parse_appearance(data, strict=True)
             self.assertEqual(len(parsed.extra_sub_objects), 1)
-            self.assertEqual(parsed.extra_sub_objects[0].list_name, "second list")
-            self.assertEqual(parsed.notes, ["second list, sub-object 0: bounds check skipped (V7-T13)"])
+            self.assertEqual(parsed.extra_sub_objects[0].list_name, "low-poly set")
+            self.assertEqual(parsed.notes, ["low-poly set, sub-object 0: bounds not stored (all zero), "
+                                            "check skipped (G1-1)"])
 
     def test_main_list_rule_unchanged(self):
         data = B.build_app_switch(sub_objects=[{"rigid": TRIANGLE, "index_count": 3, "half": (1.0, 1.0, 1.0)}])
@@ -281,25 +283,26 @@ class SecondList(unittest.TestCase):
     def test_messages_name_the_list(self):
         data = B.build_app_switch(second=[{"index_count": 3}])
         parsed = P.parse_appearance(data)
-        self.assertTrue(parsed.warnings[0].startswith("second list, sub-object 0:"))
+        self.assertTrue(parsed.warnings[0].startswith("low-poly set, sub-object 0:"))
         self.assertEqual(P.SubObject(2, None, None, (0,) * 3, (1,) * 3, None, None, []).label,
-                         "main list, sub-object 2")
+                         "high-poly set, sub-object 2")
 
     def test_ps3_second_list(self):
-        sub = P.SubObject(0, None, None, (0.0,) * 3, (1.0,) * 3, (0.0,) * 3, (0.1,) * 3,
-                          [P.Draw(False, [(5.0, 0.0, 0.0)], [], [], [], [], [], [])], list_name="second list")
+        sub = P.SubObject(0, None, None, (0.0,) * 3, (1.0,) * 3, (0.0,) * 3, (0.0,) * 3,
+                          [P.Draw(False, [(5.0, 0.0, 0.0)], [], [], [], [], [], [])],
+                          geo_set=P.GEOSET_LOWPOLY, bounds_raw=bytes(24))
         warnings, notes = [], []
         P._check_bounds(sub, warnings, notes)
         self.assertEqual((warnings, len(notes)), ([], 1))
 
     def test_cloth_vertex_count(self):
-        parsed = app("<", sub_objects=[{"index_count": 3, "cloth": b"\1" * 8}])
+        parsed = app("<", sub_objects=[{"index_count": 3, "cloth": True}])
         self.assertEqual(parsed.sub_objects[0].cloth_vertex_count, 3)
         self.assertEqual(parsed.warnings, [])
         for spec in (
-            {"index_count": 3, "cloth": b"\1" * 8, "cloth_vertices": 0},  # cloth-only, word 0
+            {"index_count": 3, "cloth": True, "cloth_vertices": 0},  # cloth-only, word 0
             {"rigid": TRIANGLE, "index_count": 3, "cloth_vertices": 5},  # no cloth, word set
-            {"rigid": TRIANGLE, "index_count": 3, "cloth": b"\1" * 8, "cloth_vertices": 4},  # packed rigid
+            {"rigid": TRIANGLE, "index_count": 3, "cloth": True, "cloth_vertices": 4},  # packed rigid
         ):
             parsed = app("<", sub_objects=[spec])
             self.assertTrue(any("+0x04" in w for w in parsed.warnings), spec)
@@ -307,7 +310,7 @@ class SecondList(unittest.TestCase):
     def test_skinned_cloth_counts(self):
         skin = {"palette": [0], "vertices": TRIANGLE, "indices": [0, 1, 2], "weights": (255, 0, 0, 0)}
         parsed = app("<", bones=[(0x10, -1, (0.0, 0.0, 0.0))],
-                     sub_objects=[{"skin": skin, "cloth": b"\1" * 8}])
+                     sub_objects=[{"skin": skin, "cloth": True, "index_count": 3}])
         self.assertEqual(parsed.sub_objects[0].cloth_vertex_count, 3)
         self.assertEqual(parsed.warnings, [])
 
@@ -525,9 +528,10 @@ class Corrections(unittest.TestCase):
     def test_geometry_table_has_no_open_row(self):
         rows = [r for table in E.geometry_enums().values() for r in table.values()]
         self.assertNotIn("OPEN", {r.status for r in rows})
-        markers = [r for r in rows if r.status == "HYPOTHESIS"]
+        # Stage 10 (G3-F): the 16 marker types 76..101 are SUPPORTED labels without a constant.
+        markers = [r for r in rows if r.label.startswith("gizmo location") and not r.constant]
         self.assertEqual(len(markers), 16)
-        self.assertTrue(all(r.name is None for r in markers))
+        self.assertEqual({r.status for r in markers}, {"SUPPORTED"})
 
     def test_font_offset_is_a_body_offset(self):
         img = UF.font()

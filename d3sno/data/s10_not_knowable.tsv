@@ -1,0 +1,15 @@
+item	table	key	value	switch_count	ps3_count	x360_count	verdict	evidence
+ps3 attribute	ps3_attributes	ps3_id	199	-	57 slots	-	NOT_KNOWABLE_FROM_DATA	one PS3 id plays both Switch roles (Delta in single-max-damage affixes, Delta_X1 in min/max affixes); no PS3 text names it; PS3 executable encrypted
+script event	script_event (ps3)	ps3 id	31	-	0	-	NOT_KNOWABLE	never used in PS3 data; two of Switch 34,35,36; revised HYPOTHESIS 35
+script event	script_event (ps3)	ps3 id	32	-	0	-	NOT_KNOWABLE	never used in PS3 data; revised HYPOTHESIS 36
+tag	power_general	tag	0x50281	0	120 files	0	NOT_KNOWABLE	formula record (type 4), text 1 or 0; dropped from the same-named Switch and x360 powers without replacement; absent from the x360 power tag table
+tag	marker	tag	0x88010	0	14	0	NOT_KNOWABLE	int record (type 0), always 1; only on portal-type actor markers of Act 1 sets; dropped on Switch and x360 copies of the same markers; no marker tag table in any readable build
+tag	marker	tag	0x88020	0	19	0	NOT_KNOWABLE	int record (type 0), 3 (14) or 0 (5); same markers as 0x88010 plus 5 cart-scene markers; dropped on Switch and x360
+enum value	tag_value:gActorGizmoNames	value	22	1	1	1	NOT_KNOWABLE	no constant in the Switch enum or x360 constants; one actor on each build
+enum value	tag_value:gActorGizmoNames	value	24	1	0	0	NOT_KNOWABLE	no constant; one Switch actor (a stash actor; constant 25 is the shared stash)
+enum value	tag_value:gActorGizmoNames	value	45	1	1	1	NOT_KNOWABLE	no constant; one actor on each build
+enum value	tag_value:gActorBrainNames	value	22	2	0	0	NOT_KNOWABLE	no constant; two Switch actors, both of gizmo type 9 (healing well)
+enum value	tag_value:gActorBrainNames	value	23	2	0	0	NOT_KNOWABLE	no constant; two Switch actors, both of gizmo type 10 (power-up)
+enum value	tag_value:gActorBrainNames	value	39	1	1	1	NOT_KNOWABLE	no constant; one actor of kind 5 (environment) on each build
+enum value	tag_value:<anon_enum:AI_PROXIMITY_SHAPE_NONE>	value	-2147483648	157	4	110	NOT_KNOWABLE	no constant (enum is -1 none, 0 sphere, 1 box on Switch); stored explicitly on actor markers, beside -1 in other markers; label: minimum 32-bit integer, no shape constant
+enum value	tag_value:gTeamNames	value	-1	10822	4303	7577	NAMED	TEAM_INVALID in the Switch enum and the x360 script-binding constants (see G3_enums_core.tsv)

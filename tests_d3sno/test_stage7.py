@@ -28,7 +28,10 @@ class Names(unittest.TestCase):
         self.assertTrue(row.name)
 
     def test_open_and_hypothesis_rows_stay_unnamed(self):
-        self.assertIsNone(E.record_value("objective", "flags", 1).name)
+        # Stage 10 (G3-G): these four rows are NOT_KNOWABLE: no constant, the label is the name,
+        # and a set bit still goes to open_bits.
+        row = E.record_value("objective", "flags", 1)
+        self.assertEqual((row.status, row.constant, row.name), ("NOT_KNOWABLE", "", row.label))
         flags = E.record_flags("objective", "flags", 0b10010, "switch")
         self.assertEqual((flags.names, flags.open_bits), ([], [1, 4]))
         dynamic = E.record_flags("actor", "coll_dynamic_no_overlap", 1 << 17)
@@ -48,7 +51,7 @@ class Names(unittest.TestCase):
     def test_only_four_rows_unnamed(self):
         unnamed = [
             (key, v.value) for key, values in E.record_enums().items() for v in values.values()
-            if v.name is None
+            if not v.constant and v.status in E.NO_CONSTANT_STATUSES
         ]
         self.assertEqual(sorted(unnamed), sorted([
             (("actor", "coll_dynamic_no_overlap"), 17), (("objective", "flags"), 1),
@@ -161,10 +164,11 @@ class GeometryEnums(unittest.TestCase):
     def test_table(self):
         rows = [v for values in E.geometry_enums().values() for v in values.values()]
         self.assertEqual(len(rows), 439)
-        unnamed = [v for v in rows if v.name is None]
-        self.assertTrue(all(v.status in E.UNNAMED_STATUSES for v in unnamed))
-        self.assertEqual(sorted(v.value for v in unnamed), [76, 77, 78, 79, 80, 81, 82, 83, 84, 87, 88,
-                                                            91, 98, 99, 100, 101])
+        # Stage 10 (G3-F): the 16 marker rows 76..101 are SUPPORTED labels; nothing is unnamed.
+        self.assertEqual([v for v in rows if v.name is None], [])
+        labelled = [v.value for v in rows if not v.constant and v.label.startswith("gizmo location")]
+        self.assertEqual(sorted(labelled), [76, 77, 78, 79, 80, 81, 82, 83, 84, 87, 88,
+                                            91, 98, 99, 100, 101])
 
     def test_every_record_has_a_layout(self):
         for record, field in E.geometry_enums():
@@ -182,7 +186,10 @@ class GeometryEnums(unittest.TestCase):
             data = B.build_mrk(build, markers=[{"type": 50}, {"type": 76}, {"type": 999}])
             named = S.parse_structure(data, "mrk").named()
             types = [names["eType"] for record, _, names in named if record == "Marker"]
-            self.assertEqual(types, ["MARKERTYPE_GIZMOLOC", None, None])
+            # Stage 10 (G3-F): 76 is SUPPORTED with a label and no constant.
+            self.assertEqual(types[0], "MARKERTYPE_GIZMOLOC")
+            self.assertTrue(types[1].startswith("gizmo location 27"))
+            self.assertIsNone(types[2])
 
     def test_sub_object_flags(self):
         flags = E.geometry_flags("SubObject", "dwFlags", 1 << 8 | 1 << 15 | 1 << 20)
@@ -219,7 +226,7 @@ class SubObjects(unittest.TestCase):
 
     def test_cloth_implies_bit_8_not_the_reverse(self):
         data = B.build_app_switch(sub_objects=[
-            {"rigid": self.RIGID, "index_count": 3, "cloth": bytes(144), "flags": 1 << 15},
+            {"rigid": self.RIGID, "index_count": 3, "cloth": True, "flags": 1 << 15},
         ])
         self.assertIn("bit 8", P.parse_appearance(data).warnings[0])
         data = B.build_app_switch(sub_objects=[
@@ -228,14 +235,16 @@ class SubObjects(unittest.TestCase):
         self.assertEqual(P.parse_appearance(data).warnings, [])
 
     def test_cloth_without_vertex_list_is_not_damage(self):
+        # Stage 10, G1-3: the cloth-only sub-object is now read from its fat vertices.
         data = B.build_app_switch(sub_objects=[
-            {"index_count": 3, "cloth": bytes(144), "flags": 1 << 8},
+            {"index_count": 3, "cloth": True, "flags": 1 << 8},
         ])
         app = P.parse_appearance(data, strict=True)
         self.assertEqual(app.warnings, [])
         self.assertTrue(app.sub_objects[0].cloth_only)
-        self.assertEqual(app.skipped_sub_objects, [0])
-        self.assertIn("cloth", app.notes[0])
+        self.assertEqual(app.skipped_sub_objects, [])
+        self.assertEqual(app.sub_objects[0].draws[0].kind, "fat")
+        self.assertEqual(app.notes, [])
 
     def test_indices_without_vertices_or_cloth_stay_a_warning(self):
         data = B.build_app_switch(sub_objects=[{"index_count": 3, "flags": 0}])
@@ -243,10 +252,12 @@ class SubObjects(unittest.TestCase):
         self.assertIn("no vertices", app.warnings[0])
         self.assertFalse(app.sub_objects[0].cloth_only)
 
-    def test_ps3_bounds_is_a_note(self):
+    def test_ps3_bounds_is_a_warning_since_stage_10(self):
         data = B.build_app_ps3(bounds_half=(1.0, 1.0, 1.0))
+        with self.assertRaises(d3sno.FormatError):
+            P.parse_appearance(data, strict=True)
+        data = B.build_app_ps3(zero_bounds=True)  # G1-1: all-zero bounds, vertices off the origin
         app = P.parse_appearance(data, strict=True)
-        self.assertEqual(app.warnings, [])
         self.assertEqual(len(app.notes), 1)
 
     def test_switch_bounds_still_strict(self):
@@ -263,28 +274,29 @@ class Ps3Attributes(unittest.TestCase):
     def test_counts(self):
         statuses = [a.status for a in R.ps3_attributes().values()]
         self.assertEqual(len(statuses), 231)
+        # Stage 10 (G3-A): 13 HYPOTHESIS -> SUPPORTED; 31, 32, 78, 87, 128, 150 UNRESOLVED ->
+        # SUPPORTED; 33 UNRESOLVED -> PROVEN.
         self.assertEqual({s: statuses.count(s) for s in set(statuses)},
-                         {"PROVEN": 17, "SUPPORTED": 204, "HYPOTHESIS": 2, "UNRESOLVED": 8})
+                         {"PROVEN": 18, "SUPPORTED": 212, "UNRESOLVED": 1})  # V9-G3-A: 12 SUPPORTED
 
     def test_unresolved_have_candidates_and_no_name(self):
-        for ps3_id in (78, 87, 128, 150, 199):
+        for ps3_id in (199,):  # stage 10: the others are resolved (G3-A)
             row = R.ps3_attribute(ps3_id, safe_only=False)
             self.assertEqual(row.status, "UNRESOLVED")
             self.assertIsNone(row.name)
             self.assertFalse(row.resolved)
             self.assertGreaterEqual(len(row.candidates), 2)
             self.assertIsNone(R.ps3_attribute(ps3_id))
-        self.assertEqual(R.ps3_attribute(150, safe_only=False).candidates,
-                         ("Movement_Scalar", "Walking_Rate"))
+        self.assertEqual(R.ps3_attribute(150).name, "Movement_Scalar")
 
     def test_unknown_names(self):
-        for ps3_id in (31, 32, 33):
-            row = R.ps3_attribute(ps3_id, safe_only=False)
-            self.assertEqual((row.name, row.candidates), (None, ()))
+        for ps3_id, name in ((31, "Attack"), (32, "Precision"), (33, "Defense")):
+            row = R.ps3_attribute(ps3_id)  # stage 10 (G3-A): named, no Switch id
+            self.assertEqual((row.name, row.switch_id, row.candidates), (name, None, ()))
 
     def test_hypotheses(self):
         self.assertEqual(R.ps3_attribute(13, safe_only=False).name, "Vitality")
-        self.assertEqual(R.ps3_attribute(13, safe_only=False).status, "HYPOTHESIS")
+        self.assertEqual(R.ps3_attribute(13).status, "SUPPORTED")  # stage 10 (G3-A)
         self.assertEqual(R.ps3_attribute(0).status, "SUPPORTED")
 
 

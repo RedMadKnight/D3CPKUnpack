@@ -411,11 +411,139 @@ def bone_records(build, bones, order=None) -> bytes:
     return bytes(out)
 
 
+# --- Cloth records and fat vertices (stage 10, G1-2 to G1-4) --------------------------------
+
+def fat_vertex(position, order="<", normal=(192, 128, 64), colours=bytes(range(1, 9)), uv=(0x8200, 0x8000, 9, 10)):
+    """A 32-byte fat vertex: 3 x f32 in the file order, normal bytes and a zero, two colours,
+    UV1 and UV2 little-endian on every build (G1-3)."""
+    return (struct.pack(order + "3f", *position) + bytes((*normal, 0)) + bytes(colours)
+            + struct.pack("<4H", *uv))
+
+
+def _f32(value: float) -> float:
+    return struct.unpack("<f", struct.pack("<f", value))[0]
+
+
+def cloth_arrays(render, triangles, pins=(0,), bones=0):
+    """A consistent cloth (G1-4) for render positions in model axes: map identity, one face per
+    triangle, staples on ``pins``, distance constraints on the face edges without pinned-pinned
+    edges, no bending constraints. Returns the element arrays as Python values."""
+    n = len(render)
+    wp = [(_f32(y), _f32(z), _f32(x)) for x, y, z in render]  # model = (wp.z, wp.x, wp.y)
+    pinned = set(pins)
+    edges = []
+    for a, b, c in triangles:
+        for e in ((a, b), (b, c), (c, a)):
+            if frozenset(e) not in {frozenset(x) for x in edges} and not set(e) <= pinned:
+                edges.append(e)
+    neighbours = {i: set() for i in range(n)}
+    for a, b in edges:
+        neighbours[a].add(b)
+        neighbours[b].add(a)
+    parent, steps = {i: -1 for i in pinned}, {i: 0 for i in pinned}
+    frontier = sorted(pinned)
+    while frontier:
+        nxt = []
+        for v in frontier:
+            for w in sorted(neighbours[v]):
+                if w not in steps:
+                    parent[w], steps[w] = v, steps[v] + 1
+                    nxt.append(w)
+        frontier = nxt
+    label = {}
+    for start in range(n):
+        if start in label:
+            continue
+        stack, label[start] = [start], len(set(label.values()))
+        while stack:
+            v = stack.pop()
+            for w in neighbours[v]:
+                if w not in label:
+                    label[w] = label[start]
+                    stack.append(w)
+
+    def area(a, b, c):
+        u = [b[k] - a[k] for k in range(3)]
+        w = [c[k] - a[k] for k in range(3)]
+        x = (u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0])
+        return _f32(0.5 * sum(t * t for t in x) ** 0.5)
+
+    vertices = [(wp[i], wp[i], 0.0 if i in pinned else 1.0, parent.get(i, -1), steps.get(i, 0), i,
+                 label[i]) for i in range(n)]
+    faces = [(area(wp[a], wp[b], wp[c]), (a, b, c)) for a, b, c in triangles]
+    staples = [(v, (0, 0, 0), (1.0, 0.0, 0.0) if bones else (0.0, 0.0, 0.0)) for v in sorted(pinned)]
+    distance = []
+    for a, b in edges:
+        d2 = sum((wp[a][k] - wp[b][k]) ** 2 for k in range(3))
+        slope = abs(wp[a][1] - wp[b][1]) / d2 ** 0.5 if d2 else 0.0
+        distance.append(((a, b), _f32(d2), 1.0 if slope < 0.5 else 0.0))
+    return dict(vertices=vertices, faces=faces, staples=staples, distance=distance, bending=[],
+                islands=len(set(label.values())), area=_f32(sum(f[0] for f in faces)),
+                mapping=list(range(n)))
+
+
+def cloth_record(img, build, arrays, extra_faces=0, face_count=None, extra_entries=()):
+    """The cloth record bytes; its arrays are appended to ``img`` (pairs point into it).
+    ``extra_faces`` repeats the first face after the counted ones; ``extra_entries`` appends
+    the given (rest area, (a, b, c)) entries after them (V9-G1-4)."""
+    o = img.order
+    v = b"".join(struct.pack(o + "3f3ff4i", *a[0], *a[1], a[2], a[3], a[4], a[5], a[6])
+                 for a in arrays["vertices"])
+    faces = list(arrays["faces"]) + [arrays["faces"][0]] * extra_faces + list(extra_entries)
+    f = b"".join(struct.pack(o + "f3i", area, *vs) for area, vs in faces)
+    st = b"".join(struct.pack(o + "i3i3f", vtx, *bones, *w) for vtx, bones, w in arrays["staples"])
+    d = b"".join(struct.pack(o + "2iff", *vs, r, h) for vs, r, h in arrays["distance"])
+    bend = b"".join(struct.pack(o + "2iff", *vs, r, h) for vs, r, h in arrays["bending"])
+    m = struct.pack(o + f"{len(arrays['mapping'])}H", *arrays["mapping"])
+    counts = (len(arrays["vertices"]), len(arrays["faces"]) if face_count is None else face_count,
+              len(arrays["staples"]), len(arrays["distance"]), len(arrays["bending"]))
+    blobs = (v, f, st, d, bend)
+    if build == "ps3":
+        rec = Image(100, o)
+        for k, (at, blob) in enumerate(zip((0x00, 0x10, 0x20, 0x30, 0x40), blobs)):
+            rec.put(at, "i", counts[k])
+            if blob:
+                rec.put(at + 4, "II", *img.append(blob))
+        rec.put(0x50, "if", arrays["islands"], arrays["area"])
+        rec.put(0x58, "II", *img.append(m))
+    else:
+        rec = Image(144, o)
+        for k, (at, blob) in enumerate(zip((0x00, 0x18, 0x30, 0x48, 0x60), blobs)):
+            rec.put(at, "i", counts[k])
+            if blob:
+                rec.put(at + 4, "II", *img.append(blob))
+        rec.put(0x78, "if", arrays["islands"], arrays["area"])
+        rec.put(0x80, "II", *img.append(m))
+    return rec.done()
+
+
+TRIANGLE_FAT = [(0.0, 0.0, 0.0), (10.0, 0.0, 0.0), (0.0, 10.0, 0.0)]
+
+
+def _align16(value):
+    return (value + 15) // 16 * 16
+
+
+PS3_BLOCKS = {
+    0x81: (bytes.fromhex("0106010000000000" "0005030106000000"),
+           bytes.fromhex("010C010000000000" "000203010C000000")),
+    0x83: (bytes.fromhex("020A020000000000" "0005030106000000" "0607040204020000") + bytes(8),
+           bytes.fromhex("031C030000000000" "000203010C000000" "0C07040204020000" "100203040C0F0000")),
+}
+PS3_FIXED = {0x81: bytes.fromhex("FF0000FF1000"), 0x83: bytes.fromhex("FF00FFFF1300")}
+
+
 def build_app_ps3(version=295, skinned=False, bones=(), index_count=3, bad_descriptor=False,
                   vertices=((0, 0, 0), (10, 0, 0), (0, 10, 0)), pad_a=True, b_extra=0,
                   indices=(0, 1, 2), bounds_half=(1000.0, 1000.0, 1000.0), fmt=None,
                   weights=(200, 55, 0, 0), extra_draw_format=None,
-                  ranges=((48, 96), (48, 48))):
+                  ranges=((48, 96), (48, 48)), second=None, fat=None, cloth=False,
+                  zero_bounds=False, draw_fix=None, cloth_draw=False):
+    """``second`` adds geo set 1: a list of dicts with ``zero_bounds``, ``vertices`` (one draw)
+    and ``fat`` (fat positions with a cloth record). ``fat`` adds fat vertices (pool, G1-2) to the
+    sub-object of geo set 0; ``cloth`` gives it a cloth record. ``draw_fix`` changes the draw
+    record words after the G1-5 values are written: {offset: (fmt, value)}. ``cloth_draw`` keeps
+    the PS3 draw on a cloth sub-object with fat vertices (V9-G1-3)."""
     order = ">"
     img = Image(0x300, order)
     img.raw(0, sno_head(version, order))
@@ -425,13 +553,21 @@ def build_app_ps3(version=295, skinned=False, bones=(), index_count=3, bad_descr
         is_skinned = fmt_byte == 0x83
         descriptor = bytearray(16)
         descriptor[0] = fmt_byte
+        descriptor[1] = 8
+        if fmt_byte in PS3_FIXED:
+            descriptor[2:8] = PS3_FIXED[fmt_byte]
+        descriptor[12:16] = b"\xFF" * 4
         struct.pack_into(">HH", descriptor, 8, n + (1 if bad_descriptor else 0), index_count)
         draw = bytearray(160)
         d = Image(0, order)
         d.b = draw
         d.put(0x08, "II", *img.append(bytes(descriptor)))
         d.put(0x10, "I", index_count)
-        d.put(0x18, "II", *img.append(struct.pack(f">{len(indices)}H", *indices)))
+        index_raw = struct.pack(f">{len(indices)}H", *indices)
+        index_raw += bytes(_align16(len(index_raw)) - len(index_raw))
+        d.put(0x18, "II", *img.append(index_raw))
+        size = len(index_raw)
+        d.put(0x20, "HH", *((size, 0) if size <= 0x4000 else (0x4000, size - 0x4000)))
         d.put(0x24, "I", n)
         d.put(0x60, "HH", *ranges[0])
         d.put(0x64, "HH", *ranges[1])
@@ -452,36 +588,78 @@ def build_app_ps3(version=295, skinned=False, bones=(), index_count=3, bad_descr
             )
         if pad_a:
             a += bytes(-len(a) % 16)
+        if is_skinned and not b_extra:
+            b += bytes(-len(b) % 16)
         b += bytes(b_extra)
         d.put(0x2C, "II", *img.append(a))
+        d.put(0x34, "H", len(a))
         if b:
             d.put(0x54, "II", *img.append(b))
+        d.put(0x5C, "HH", len(b), 0)
         d.put(0x6C, "II", *img.append(c))
+        if fmt_byte in PS3_BLOCKS:
+            d.put(0x80, "II", *img.append(PS3_BLOCKS[fmt_byte][0]))
+            d.put(0x90, "II", *img.append(PS3_BLOCKS[fmt_byte][1]))
+        stride_out = 28 if is_skinned else 12
+        work = (stride_out * n + 2 * index_count + 320 + 127) // 128 * 128
+        area = (4 * n + 31) // 32 * 32 if is_skinned else _align16(2 * n)
+        d.put(0x98, "II", work, area)
+        for at, spec in (draw_fix or {}).items():
+            d.put(at, spec[0], *spec[1:])
         img.raw(record_at, bytes(draw))
 
     formats = [fmt if fmt is not None else (0x83 if skinned else 0x81)]
     if extra_draw_format is not None:
         formats.append(extra_draw_format)
 
-    sub = bytearray(308)
-    s = Image(0, order)
-    s.b = sub
-    s.raw(0x48, b"Body\0")
-    s.put(0xD0, "3f", 0.0, 0.0, 0.0)
-    s.put(0xDC, "3f", *bounds_half)
-    draws_position = len(img.b)
-    img.b += bytes(160 * len(formats))
-    s.put(0xFC, "III", len(formats), draws_position - 0x10, 160 * len(formats))
-    s.put(0x118, "3f", 1.0, 2.0, 3.0)
-    s.put(0x124, "3f", 0.5, 0.5, 0.5)
-    for i, f in enumerate(formats):
-        add_draw(f, draws_position + 160 * i)
+    fat_pool, index_pool = bytearray(), bytearray()
+
+    def sub_record(draw_formats, half, zero, fat_positions, with_cloth, name=b"Body\0"):
+        sub = bytearray(308)
+        s = Image(0, order)
+        s.b = sub
+        s.raw(0x48, name)
+        if not zero:
+            s.put(0xD0, "3f", 0.0, 0.0, 0.0)
+            s.put(0xDC, "3f", *half)
+        draws_position = len(img.b)
+        img.b += bytes(160 * len(draw_formats))
+        s.put(0xFC, "III", len(draw_formats), draws_position - 0x10, 160 * len(draw_formats))
+        s.put(0x118, "3f", 1.0, 2.0, 3.0)
+        s.put(0x124, "3f", 0.5, 0.5, 0.5)
+        for i, f in enumerate(draw_formats):
+            add_draw(f, draws_position + 160 * i)
+        if fat_positions:
+            tris = [(k, k + 1, k + 2) for k in range(0, len(fat_positions) - 2, 3)]
+            flat = [i for t in tris for i in t]
+            s.put(0x04, "i", len(fat_positions))
+            s.put(0x20, "i", len(flat))
+            fat_pool.extend(b"".join(fat_vertex(v, order) for v in fat_positions))
+            index_pool.extend(struct.pack(f">{len(flat)}H", *flat))
+            s.put(0x00, "I", 1 << 8)
+            if with_cloth:
+                s.put(0x30, "II", *img.append(cloth_record(img, "ps3", cloth_arrays(fat_positions, tris))))
+        return bytes(sub)
+
+    main = sub_record(formats if fat is None or cloth is False or cloth_draw else [], bounds_half, zero_bounds,
+                      fat, cloth)
+    extra = [sub_record([] if spec.get("fat") else [fmt if fmt is not None else (0x83 if skinned else 0x81)],
+                        spec.get("half", bounds_half), spec.get("zero_bounds", False), spec.get("fat"),
+                        bool(spec.get("fat")), b"Low\0")
+             for spec in (second or [])]
 
     img.put(0x24, "i", len(bones))
     if bones:
         img.pair(0x28, bone_records("ps3", bones))
     img.put(0x70, "i", 1)
-    img.pair(0x74, bytes(sub))
+    img.pair(0x74, main)
+    if extra:
+        img.put(0x88, "i", len(extra))
+        img.pair(0x8C, b"".join(extra))
+    if index_pool:
+        img.pair(0x230, bytes(index_pool))
+    if fat_pool:
+        img.pair(0x238, bytes(fat_pool))
     img.put(0xC8, "i", 1)
     img.pair(0xCC, hardpoint_bytes(order, -1))
     return img.done()
@@ -504,14 +682,17 @@ def switch_vertex(position, extra=b"", order="<") -> bytes:
 
 def build_app_switch(version=306, bones=(), sub_objects=None, pool_spare=2, indices=(0, 1, 2),
                      order="<", second=None):
-    """``sub_objects`` (and ``second``, the second list at 0x88) are lists of dicts: rigid,
-    index_count, skin, influences, flags, cloth, cloth_vertices. ``order`` ">" with an x360
-    version builds the x360 form (X6)."""
+    """``sub_objects`` (and ``second``, geo set 1 at 0x88) are lists of dicts: rigid,
+    index_count, skin, influences, flags, cloth, cloth_vertices, fat, zero_bounds, half.
+    ``cloth`` True builds a consistent cloth record (G1-4) over the fat vertices (default
+    ``TRIANGLE_FAT`` when there are no packed vertices) or the packed rigid vertices; bytes are
+    used as they are. ``order`` ">" with an x360 version builds the x360 form (X6)."""
     img = Image(0x400, order)
     img.raw(0, sno_head(version, order))
     if sub_objects is None:
         sub_objects = [{"rigid": [(0, 0, 0), (10, 0, 0), (0, 10, 0)], "index_count": 3}]
     pool = bytearray()
+    fat_pool = bytearray()
 
     def sub_records(specs):
         records = bytearray(240 * len(specs))
@@ -525,13 +706,24 @@ def build_app_switch(version=306, bones=(), sub_objects=None, pool_spare=2, indi
         rec.b = records
         base = i * 240
         rigid = spec.get("rigid", [])
+        cloth = spec.get("cloth")
+        fat = spec.get("fat")
+        if fat is None and cloth is not None and cloth is not False and not rigid:
+            fat = TRIANGLE_FAT
         # Flag bits 15/16 follow the packed data (stage 7, T10); bit 8 marks cloth.
         flags = 0x55 | (1 << 15 if rigid or spec.get("skin") else 0) | (1 << 16 if spec.get("skin") else 0)
-        rec.put(base, "I", spec.get("flags", flags | (1 << 8 if spec.get("cloth") else 0)))
-        if spec.get("cloth"):
-            rec.put(base + 0x40, "II", *img.append(spec["cloth"]))
-        # V7-T11: +0x04 is non-zero exactly for cloth without packed rigid vertices.
-        rec.put(base + 0x04, "I", spec.get("cloth_vertices", 3 if spec.get("cloth") and not rigid else 0))
+        rec.put(base, "I", spec.get("flags", flags | (1 << 8 if cloth else 0)))
+        if cloth is True:
+            render = fat if fat else [(x * 0.5 + 1.0, y * 0.5 + 2.0, z * 0.5 + 3.0) for x, y, z in rigid]
+            tris = [(k, k + 1, k + 2) for k in range(0, len(render) - 2, 3)]
+            cloth = cloth_record(img, "switch", cloth_arrays(render, tris, bones=len(bones)))
+        if cloth:
+            rec.put(base + 0x40, "II", *img.append(cloth))
+        # V7-T11 / G1-2: +0x04 is the fat vertex count, non-zero exactly for cloth without packed
+        # rigid vertices.
+        rec.put(base + 0x04, "I", spec.get("cloth_vertices", len(fat) if fat else 0))
+        if fat:
+            fat_pool.extend(b"".join(fat_vertex(v, order) for v in fat))
         index_count = spec.get("index_count", 0)
         rec.put(base + 0x28, "i", index_count)
         rec.put(base + 0xA0, "i", len(rigid))
@@ -556,13 +748,16 @@ def build_app_switch(version=306, bones=(), sub_objects=None, pool_spare=2, indi
             rec.put(base + 0xB8, "II", *img.append(s.done()))
         if spec.get("influences"):
             rec.put(base + 0xC8, "II", *img.append(spec["influences"]))
-        rec.put(base + 0x6C, "6f", 0.0, 0.0, 0.0, *spec.get("half", (1000.0, 1000.0, 1000.0)))
+        if not spec.get("zero_bounds"):
+            rec.put(base + 0x6C, "6f", 0.0, 0.0, 0.0, *spec.get("half", (1000.0, 1000.0, 1000.0)))
         rec.put(base + 0xD8, "3f", 1.0, 2.0, 3.0)
         rec.put(base + 0xE4, "3f", 0.5, 0.5, 0.5)
 
     records = sub_records(sub_objects)
     second_records = sub_records(second or [])
     img.pair(0x220, bytes(pool) + bytes(pool_spare))
+    if fat_pool:
+        img.pair(0x228, bytes(fat_pool))
     img.put(0x24, "i", len(bones))
     if bones:
         img.pair(0x28, bone_records("switch", bones, order))

@@ -1,0 +1,12 @@
+block	format	byte	meaning	value(s)
+format A/B	both	0	attribute count	A: 1 (0x81), 2 (0x83); B: 1 (0x81), 3 (0x83)
+format A/B	both	1	vertex stride in bytes	A: 6 / 10 (= stream A stride); B: 12 / 28
+format A/B	both	2	attribute count again	equal to byte 0
+format A/B	both	3..7	zero	0
+attribute entry (8 bytes, from block +8)	both	0	byte offset in the vertex	0, 6, 12, 16
+attribute entry	both	1	component type	2 = 32-bit float, 5 = signed 16-bit integer, 7 = unsigned byte
+attribute entry	both	2	component count	3 or 4
+attribute entry	both	3	attribute id	1 = position, 2 = normal, 4 = third attribute (3 floats, skinned output only)
+attribute entry	both	4	attribute size in bytes	6, 4, 12
+attribute entry	both	5	shader input slot	0 (position), 2 (normal), 15 (third attribute)
+attribute entry	both	6..7	zero	0

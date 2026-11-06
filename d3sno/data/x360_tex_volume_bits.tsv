@@ -1,0 +1,19 @@
+element_index_bit	value
+0	x0
+1	x1
+2	y0
+3	x2
+4	x3
+5	x4 xor y3 xor z2
+6	y1
+7	y2
+8	z0
+9	y3 xor z2
+10	z1
+11	x5
+12	y4
+13	y5
+14	z2
+15	z3
+16	z4
+17	z5

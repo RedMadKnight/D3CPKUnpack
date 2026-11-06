@@ -1,0 +1,17 @@
+reading	x360_offset	name	x360_ratio_to_kill_boss_mode	share	switch_ratio_to_kill_boss_mode	share	switch_over_x360_mode	share	rows_nonzero
+G2	124	KillUniqueXP	2.0	0.971	2.0	0.957	1.25	0.957	70
+G2	128	KillBossXP	1.0	1.0	1.0	1.0	1.25	0.986	70
+G2	132	CompleteEventXP	1.25	0.986	1.32	0.971	1.32	0.971	70
+G2	136	ClearDungeonXP	4.25	0.929	5.32	0.857	1.56	0.857	70
+G2	140	KillUniqueGold	2.0	0.571	2.0	0.7	2.0	0.7	70
+G2	144	KillBossGold	1.0	1.0	1.0	1.0	2.0	0.571	70
+G2	148	CompleteEventGold	1.5	0.557	1.38	0.814	1.84	0.414	70
+G2	152	ClearDungeonGold	4.01	0.286	5.26	0.329	2.63	0.643	70
+X2	124	KillBossXP	1.0	1.0	1.0	1.0	0.62	0.971	70
+X2	128	CompleteEventXP	0.5	0.971	1.32	0.971	1.65	0.971	70
+X2	132	ClearDungeonXP	0.62	0.971	5.32	0.857	5.32	0.857	70
+X2	136	CampsXP	2.12	0.929	1.32	0.971	0.39	0.929	70
+X2	140	KillBossGold	1.0	1.0	1.0	1.0	1.0	1.0	70
+X2	144	CompleteEventGold	0.5	0.871	1.38	0.814	2.75	0.357	70
+X2	148	ClearDungeonGold	0.75	0.857	5.26	0.329	7.01	0.243	70
+X2	152	CampsGold	2.0	0.7	1.38	0.814	0.69	0.871	70

@@ -9,6 +9,7 @@ import struct
 from dataclasses import dataclass, field
 
 from .binary import ByBuild, ByteView, FormatError, Pair, build_order
+from .cloth import ClothRecord, cloth_problems, read_cloth
 from .material import AppMaterials, read_app_materials, sub_object_texture
 from .sno import SnoHeader, parse_header, resolve_build
 from .transform import Transform, quat_normalise, read_transform, transforms_match
@@ -27,6 +28,15 @@ SKIN_RECORD = 104
 FORMAT_RIGID = 0x81
 FORMAT_SKINNED = 0x83
 SWITCH_INDEX_POOL_AT = 0x220
+# G1-2: serAppearanceSubObjectsIndices / ...Vertices (body 0x210/0x218 Switch, 0x220/0x228 PS3).
+POOL_PAIRS = ByBuild({"switch": (0x220, 0x228), "ps3": (0x230, 0x238)})
+FAT_VERTEX = 32
+# G1-1: the two geo sets of the structure record.
+GEOSET_HIGHPOLY = 0
+GEOSET_LOWPOLY = 1
+GEOSET_NAMES = {GEOSET_HIGHPOLY: "high-poly set", GEOSET_LOWPOLY: "low-poly set"}
+FAT_BOUNDS_TOLERANCE = 1e-3
+FAT_AXIS_TOLERANCE = 1e-4
 _FLOAT32_MAX = 3.4028234663852886e38
 
 
@@ -67,6 +77,7 @@ class Draw:
     weights: list[tuple[int, ...]] | None = None
     palette: list[int] | None = None
     local_joints: list[tuple[int, ...]] | None = None  # ps3: as stored, indices into palette
+    kind: str = "packed"  # "packed" (fixed point, skinned or rigid), "ps3" or "fat" (G1-3)
 
     def uv2(self, lightmap_v_scale: float = 0.0) -> list[tuple[float, float]]:
         """Lightmap coordinates. A non-zero V scale comes from the lightmap's ``.tex``."""
@@ -92,13 +103,32 @@ class SubObject:
     flags: int = 0  # dwFlags (on Switch also in ``format_bits``)
     has_cloth: bool = False  # the cloth pair is not empty
     cloth_only: bool = False  # indices whose vertices live in the cloth record (T11)
-    cloth_vertex_count: int = 0  # Switch/x360 +0x04: non-zero exactly for cloth without packed rigid vertices (V7-T11)
-    list_name: str = "main list"  # "main list" or "second list" (V7-T13)
+    # +0x04 nVertCount: the number of fat vertices this sub-object owns in the vertex pool (G1-2;
+    # V7-T11 on Switch and x360: non-zero exactly for cloth without packed rigid vertices).
+    cloth_vertex_count: int = 0
+    geo_set: int = GEOSET_HIGHPOLY  # G1-1
+    index_count: int = 0  # nIndexCount (Switch +0x28, PS3 +0x20)
+    fat_draw: Draw | None = None  # the fat vertices and pool indices (G1-2, G1-3)
+    cloth: ClothRecord | None = None  # G1-4
+    bounds_raw: bytes = b""  # aabbBounds as stored (24 bytes)
+
+    @property
+    def vert_count(self) -> int:
+        return self.cloth_vertex_count
+
+    @property
+    def list_name(self) -> str:
+        return GEOSET_NAMES[self.geo_set]
 
     @property
     def label(self) -> str:
-        """How messages name the sub-object: its list and index (V7-T13)."""
+        """How messages name the sub-object: its geo set and index (G1-1)."""
         return f"{self.list_name}, sub-object {self.index}"
+
+    @property
+    def bounds_stored(self) -> bool:
+        """G1-1: all-zero bounds mean no box is stored."""
+        return any(self.bounds_raw) if self.bounds_raw else True
 
 
 @dataclass(frozen=True)
@@ -120,7 +150,7 @@ class AppearanceFile:
     skipped_sub_objects: list[int]
     warnings: list[str]
     material_data: AppMaterials = field(default_factory=AppMaterials)
-    extra_sub_objects: list[SubObject] = field(default_factory=list)  # low-polygon meshes
+    extra_sub_objects: list[SubObject] = field(default_factory=list)  # geo set 1, low-poly (G1-1)
     source: bytearray = field(default_factory=bytearray, repr=False)
     notes: list[str] = field(default_factory=list)  # reported, never a strict failure
 
@@ -285,6 +315,83 @@ def _translate_joints(
     return tuple(joints)
 
 
+def _align(value: int, step: int) -> int:
+    return (value + step - 1) // step * step
+
+
+# G1-6: the vertex-format blocks of each format.
+PS3_FORMAT_BLOCKS = {
+    FORMAT_RIGID: (
+        bytes.fromhex("01060100 00000000 00050301 06000000".replace(" ", "")),
+        bytes.fromhex("010C0100 00000000 00020301 0C000000".replace(" ", "")),
+    ),
+    FORMAT_SKINNED: (
+        bytes.fromhex(("02 0A 02 00 00000000 00 05 03 01 06 00 00 00 06 07 04 02 04 02 00 00"
+                       + " 00" * 8).replace(" ", "")),
+        bytes.fromhex(("03 1C 03 00 00000000 00 02 03 01 0C 00 00 00 0C 07 04 02 04 02 00 00"
+                       " 10 02 03 04 0C 0F 00 00").replace(" ", "")),
+    ),
+}
+# G1-5: descriptor bytes 2..7 per format; bytes 12..15 are FF.
+PS3_DESCRIPTOR_FIXED = {
+    FORMAT_RIGID: bytes.fromhex("FF0000FF1000"),
+    FORMAT_SKINNED: bytes.fromhex("FF00FFFF1300"),
+}
+PS3_PIECE = 0x4000
+PS3_OUTPUT_STRIDE = {FORMAT_RIGID: 12, FORMAT_SKINNED: 28}
+
+
+def ps3_draw_problems(view: ByteView, record: bytes, descriptor: bytes, base: int) -> list[str]:
+    """G1-5 and G1-6: size words, buffer sizes, fixed descriptor bytes and format blocks of a
+    PS3 draw (``s10_ps3_draw_rules.tsv``; every rule holds in all 126,957 draws). The work-buffer
+    size at +0x98 is only bounded: its formula is open, so a writer keeps the stored value."""
+    r = ByteView(record, view.order)
+    fmt = descriptor[0]
+    skinned = fmt == FORMAT_SKINNED
+    a_stride, c_stride = (10, 16) if skinned else (6, 20)
+    nv, nidx = r.u32(0x24), r.u32(0x10)
+    found = []
+    index_size, a_size = r.pair(0x18).size, r.pair(0x2C).size
+    b_size, c_size = r.pair(0x54).size, r.pair(0x6C).size
+    pieces = (index_size, 0) if index_size <= PS3_PIECE else (PS3_PIECE, index_size - PS3_PIECE)
+    if r.unpack("HH", 0x20) != pieces:
+        found.append(f"+0x20 {r.unpack('HH', 0x20)} is not the index pair size {index_size} in pieces")
+    words = r.unpack("16H", 0x34)
+    if words[0] != a_size or any(words[1:]):
+        found.append("+0x34 is not (stream A pair size, 15 zeros)")
+    if a_size > PS3_PIECE or b_size > PS3_PIECE:
+        found.append("a stream pair is larger than 0x4000")
+    if r.unpack("HH", 0x5C) != (b_size, 0):
+        found.append("+0x5C is not (stream B pair size, 0)")
+    work, area = r.unpack("II", 0x98)
+    want_area = _align(4 * nv, 32) if skinned else _align(2 * nv, 16)
+    if area != want_area:
+        found.append(f"+0x9C is {area}, the per-vertex work area is {want_area}")
+    if work % 128 or work > 0xC000 or work < PS3_OUTPUT_STRIDE[fmt] * nv + 2 * nidx + 320:
+        found.append(f"+0x98 work-buffer size {work} is out of its bounds")
+    if index_size != _align(2 * nidx, 16):
+        found.append(f"index pair size {index_size} is not align16(2 x {nidx})")
+    if a_size != _align(a_stride * nv, 16):
+        found.append(f"stream A pair size {a_size} is not align16({a_stride} x {nv})")
+    if b_size != (_align(8 * nv, 16) if skinned else 0):
+        found.append(f"stream B pair size {b_size} does not follow the vertex count")
+    if c_size != c_stride * nv:
+        found.append(f"stream C pair size {c_size} is not {c_stride} x {nv}")
+    for at in (0x00, 0x04, 0x14, 0x28, 0x68):
+        if r.u32(at):
+            found.append(f"word +0x{at:02X} is not zero")
+    if any(record[0x74:0x80]) or any(record[0x88:0x90]):
+        found.append("+0x74..+0x7F or +0x88..+0x8F is not zero")
+    if descriptor[2:8] != PS3_DESCRIPTOR_FIXED[fmt] or descriptor[12:16] != b"\xFF" * 4:
+        found.append("descriptor bytes 2..7 or 12..15 are not the fixed bytes of the format")
+    blocks = PS3_FORMAT_BLOCKS[fmt]
+    for name, at, want in (("A", 0x80, blocks[0]), ("B", 0x90, blocks[1])):
+        got = view.pair_data(r.pair(at), base + at, f"vertex format block {name}")
+        if got != want:
+            found.append(f"vertex format block {name} is not the block of format 0x{fmt:02X}")
+    return found
+
+
 def _read_ps3_draw(
     view: ByteView, record: bytes, sub: SubObject, base: int, bone_count: int,
 ) -> tuple[Draw, str | None]:
@@ -319,8 +426,9 @@ def _read_ps3_draw(
         raise FormatError(f"index buffer of {len(index_raw)} for {index_count} indices", base + 0x18)
     indices = _read_indices(index_raw, view.order, index_count, vertex_count, base + 0x10)
 
-    draw = Draw(skinned, [], [], [], [], [], [], indices)
-    warning = None
+    draw = Draw(skinned, [], [], [], [], [], [], indices, kind="ps3")
+    problems = ps3_draw_problems(view, record, descriptor, base)
+    warning = f"{sub.label}: draw: {problems[0]} (G1-5)" if problems else None
     if skinned:
         draw.joints, draw.weights, draw.local_joints = [], [], []
         draw.palette = _read_palette(r, bone_count, base)
@@ -352,18 +460,30 @@ def _read_ps3_draw(
     return draw, warning
 
 
-def _check_bounds(sub: SubObject, warnings: list[str], notes: list[str] | None = None) -> None:
-    """The vertex-within-bounds rule (2 raw units), for the main list only (V7-T13).
+def _draw_tolerance(sub: SubObject, draw: Draw) -> list[float]:
+    """2 raw units for fixed-point vertices; 1e-3 for fat vertices (model space, G1-3)."""
+    if draw.kind == "fat":
+        return [FAT_BOUNDS_TOLERANCE] * 3
+    return [2 * abs(v) for v in sub.scale]
 
-    The stored bounds of second-list sub-objects do not enclose their vertices on any build;
-    the skipped check is a note. On PS3 the caller passes the notes list as ``warnings``.
-    """
-    if sub.list_name != "main list":
-        if notes is not None and any(d.positions for d in sub.draws):
-            notes.append(f"{sub.label}: bounds check skipped (V7-T13)")
+
+def _check_bounds(sub: SubObject, warnings: list[str], notes: list[str] | None = None) -> None:
+    """G1-1: the vertex-within-bounds rule for every sub-object of both geo sets whose bounds
+    are not all zero. All-zero bounds store no box: the rule is skipped, with a note when a
+    vertex lies farther than 2 raw units from the origin."""
+    draws = list(sub.draws)
+    if sub.fat_draw is not None and sub.fat_draw not in draws:
+        draws.append(sub.fat_draw)
+    if not sub.bounds_stored:
+        for draw in draws:
+            tolerance = _draw_tolerance(sub, draw)
+            if any(abs(p[k]) > tolerance[k] for p in draw.positions for k in range(3)):
+                if notes is not None:
+                    notes.append(f"{sub.label}: bounds not stored (all zero), check skipped (G1-1)")
+                return
         return
-    tolerance = [2 * abs(s) for s in sub.scale]
-    for draw in sub.draws:
+    for draw in draws:
+        tolerance = _draw_tolerance(sub, draw)
         for position in draw.positions:
             for axis in range(3):
                 reach = sub.bounds_half[axis] + tolerance[axis]
@@ -374,7 +494,7 @@ def _check_bounds(sub: SubObject, warnings: list[str], notes: list[str] | None =
 
 def _read_ps3_sub_objects(
     view: ByteView, raw: bytes, count: int, bone_count: int, warnings: list[str],
-    notes: list[str] | None = None, list_name: str = "main list",
+    notes: list[str] | None = None, geo_set: int = GEOSET_HIGHPOLY,
 ) -> list[SubObject]:
     size = _SUB_RECORD["ps3"]
     subs = []
@@ -384,8 +504,16 @@ def _read_ps3_sub_objects(
             i, record.cstring(0x48, 128) or None, None, record.f32s(0x118, 3),
             record.f32s(0x124, 3), record.f32s(0xD0, 3), record.f32s(0xDC, 3), [],
             material_hash=record.u32(0xC8), sub_hash=record.u32(0xCC),
-            flags=record.u32(0x00), has_cloth=record.pair(0x30).size > 0, list_name=list_name,
+            flags=record.u32(0x00), has_cloth=record.pair(0x30).size > 0,
+            cloth_vertex_count=record.i32(0x04), geo_set=geo_set, index_count=record.i32(0x20),
+            bounds_raw=record.take(0xD0, 24),
         )
+        if sub.cloth_vertex_count < 0 or sub.index_count < 0:
+            raise FormatError(f"{sub.label}: negative count", 0x74)
+        if sub.cloth_vertex_count and record.pair(0x24).size:
+            warnings.append(f"{sub.label}: own index pair is not empty (G1-2)")
+        if sub.has_cloth:
+            _read_sub_cloth(view, record.pair(0x30), "ps3", sub, warnings)
         warnings.extend(sub_object_flag_problems(sub, "ps3"))
         draw_count = record.i32(0xFC)
         draw_pair = record.pair(0x100)
@@ -398,7 +526,15 @@ def _read_ps3_sub_objects(
             sub.draws.append(draw)
             if warning:
                 warnings.append(warning)
-        _check_bounds(sub, warnings if notes is None else notes, notes)
+        if sub.has_cloth and sub.cloth_vertex_count and sub.draws:
+            # V9-G1-3: a PS3 cloth sub-object with fat vertices may also have one PS3 draw with
+            # the fat counts. Only the draw is exported (the fat vertices join ``draws`` only when
+            # there is no draw), as for the Switch skinned cloth.
+            counts = [(len(d.positions), len(d.indices)) for d in sub.draws]
+            if counts != [(sub.cloth_vertex_count, sub.index_count)]:
+                warnings.append(f"{sub.label}: cloth draws with counts {counts} differ from one "
+                                f"draw of nVertCount {sub.cloth_vertex_count}, nIndexCount "
+                                f"{sub.index_count} (V9-G1-3)")
         subs.append(sub)
     return subs
 
@@ -460,10 +596,17 @@ def _read_switch_skin(
     return draw
 
 
+def _read_sub_cloth(view: ByteView, pair: Pair, build: str, sub: SubObject, warnings: list[str]) -> None:
+    try:
+        sub.cloth = read_cloth(view, pair, build, pair.file_offset)
+    except FormatError as exc:
+        warnings.append(f"{sub.label}: cloth record not read: {exc}")
+
+
 def _read_switch_sub_objects(
     view: ByteView, raw: bytes, count: int, bone_count: int,
     skipped: list[int], warnings: list[str], running: int = 0, notes: list[str] | None = None,
-    list_name: str = "main list",
+    geo_set: int = GEOSET_HIGHPOLY, build: str = "switch",
 ) -> tuple[list[SubObject], int]:
     size = _SUB_RECORD["switch"]
     pool_pair = view.pair(SWITCH_INDEX_POOL_AT, "index pool pair")
@@ -476,8 +619,11 @@ def _read_switch_sub_objects(
             record.f32s(0x6C, 3), record.f32s(0x78, 3), [],
             material_hash=record.u32(0x64), sub_hash=record.u32(0x68),
             flags=record.u32(0x00), has_cloth=record.pair(0x40).size > 0,
-            cloth_vertex_count=record.u32(0x04), list_name=list_name,
+            cloth_vertex_count=record.u32(0x04), geo_set=geo_set, index_count=record.i32(0x28),
+            bounds_raw=record.take(0x6C, 24),
         )
+        if sub.has_cloth:
+            _read_sub_cloth(view, record.pair(0x40), build, sub, warnings)
         index_count = record.i32(0x28)
         vertex_count = record.i32(0xA0)
         if index_count < 0 or vertex_count < 0:
@@ -500,21 +646,27 @@ def _read_switch_sub_objects(
             )
             sub.draws.append(draw)
         elif index_count and not skin_raw:
-            skipped.append(i)
             if sub.has_cloth and record.pair(0x08).size == 0:
-                # T11: the vertices are the cloth simulation's; not damage, in strict mode too.
+                # T11 / G1-3: the vertices are fat vertices in the appearance vertex pool.
                 sub.cloth_only = True
-                (notes if notes is not None else []).append(
-                    f"{sub.label}: {index_count} indices with cloth vertices (layout open), skipped"
-                )
+            elif sub.cloth_vertex_count:
+                pass  # fat vertices without a cloth record (G1-2)
             else:
+                skipped.append(i)
                 warnings.append(f"{sub.label}: {index_count} indices but no vertices, skipped")
         warnings.extend(sub_object_flag_problems(sub, "switch", vertex_count > 0, bool(skin_raw)))
         for k in range(len(skin_raw) // SKIN_RECORD):
+            skin = skin_raw[k * SKIN_RECORD:(k + 1) * SKIN_RECORD]
             sub.draws.append(_read_switch_skin(
-                view, skin_raw[k * SKIN_RECORD:(k + 1) * SKIN_RECORD], sub, bone_count,
-                skin_pair.file_offset + k * SKIN_RECORD,
+                view, skin, sub, bone_count, skin_pair.file_offset + k * SKIN_RECORD,
             ))
+            if sub.has_cloth and sub.cloth_vertex_count:
+                # G1-3: a skinned cloth sub-object's skinning record has the fat counts.
+                r = ByteView(skin, view.order)
+                if (r.i32(0x18), r.i32(0x30)) != (sub.cloth_vertex_count, index_count):
+                    warnings.append(f"{sub.label}: skinning record counts {r.i32(0x18)}, "
+                                    f"{r.i32(0x30)} differ from nVertCount {sub.cloth_vertex_count}, "
+                                    f"nIndexCount {index_count} (G1-3)")
         influence = view.pair_data(record.pair(0xC8), 0x78, "influence stream")
         if len(influence) % 6:
             raise FormatError(f"influence stream size {len(influence)}", 0x78)
@@ -522,9 +674,74 @@ def _read_switch_sub_objects(
             sub.influences.append(tuple(
                 (influence[at + n], influence[at + n + 1]) for n in (0, 2, 4)
             ))
-        _check_bounds(sub, warnings, notes)
         subs.append(sub)
     return subs, running
+
+
+# --- Fat vertices and pools (G1-2, G1-3) -------------------------------------------------------
+
+def _fat_vertices(raw: bytes, order: str) -> Draw:
+    draw = Draw(False, [], [], [], [], [], [], [], kind="fat")
+    for at in range(0, len(raw), FAT_VERTEX):
+        position = struct.unpack_from(order + "3f", raw, at)
+        check_float32(position, "fat position")
+        draw.positions.append(position)
+        draw.normals.append(_normal(*raw[at + 12:at + 15]))
+        draw.colours_1.append(raw[at + 16:at + 20])
+        draw.colours_2.append(raw[at + 20:at + 24])
+        u1, v1, u2, v2 = struct.unpack_from("<4H", raw, at + 24)
+        draw.uv1.append(_uv1(u1, v1))
+        draw.uv2_raw.append((u2, v2))
+    return draw
+
+
+def _assign_fat(view: ByteView, build: str, subs: list[SubObject], warnings: list[str]) -> None:
+    """G1-2: walk geo set 0 then geo set 1 with running vertex and index sums."""
+    index_at, vertex_at = POOL_PAIRS[build]
+    index_pool = view.pair_data(view.pair(index_at, "index pool pair"), index_at, "index pool")
+    vertex_pool = view.pair_data(view.pair(vertex_at, "vertex pool pair"), vertex_at, "vertex pool")
+    total_vertices = sum(sub.cloth_vertex_count for sub in subs)
+    total_indices = sum(sub.index_count for sub in subs)
+    if (vertex_pool or total_vertices) and len(vertex_pool) != FAT_VERTEX * total_vertices:
+        warnings.append(f"vertex pool of {len(vertex_pool)} bytes for {total_vertices} fat vertices (G1-2)")
+    if build == "ps3" and (index_pool or total_indices) and len(index_pool) != 2 * total_indices:
+        warnings.append(f"index pool of {len(index_pool)} bytes for {total_indices} indices (G1-2)")
+    v_run = i_run = 0
+    for sub in subs:
+        n, count = sub.cloth_vertex_count, sub.index_count
+        if n > 0:
+            vertices = vertex_pool[v_run * FAT_VERTEX:(v_run + n) * FAT_VERTEX]
+            indices_raw = index_pool[i_run * 2:(i_run + count) * 2]
+            if len(vertices) != n * FAT_VERTEX or len(indices_raw) != count * 2:
+                warnings.append(f"{sub.label}: fat range outside its pool (G1-2)")
+            else:
+                draw = _fat_vertices(vertices, view.order)
+                try:
+                    draw.indices = _read_indices(indices_raw, view.order, count, n, index_at)
+                except FormatError as exc:
+                    warnings.append(f"{sub.label}: fat indices: {exc}")
+                if set(draw.indices) != set(range(n)):
+                    warnings.append(f"{sub.label}: a fat vertex is not used by the indices (G1-2)")
+                if any(vertices[at + 15] for at in range(0, len(vertices), FAT_VERTEX)):
+                    warnings.append(f"{sub.label}: fat normal byte 15 is not zero (G1-3)")
+                sub.fat_draw = draw
+                if not sub.draws:
+                    sub.draws.append(draw)
+            v_run += n
+        i_run += count
+
+
+def _cloth_checks(sub: SubObject, bone_count: int, warnings: list[str]) -> None:
+    if sub.cloth is None:
+        return
+    if sub.fat_draw is not None:
+        render, tolerance = sub.fat_draw.positions, (FAT_AXIS_TOLERANCE,) * 3
+    else:
+        packed = [d for d in sub.draws if d.kind == "packed" and not d.skinned]
+        if not packed:
+            return
+        render, tolerance = packed[0].positions, tuple(abs(v) for v in sub.scale)
+    warnings.extend(cloth_problems(sub.cloth, render, tolerance, bone_count, sub.label))
 
 
 def parse_appearance(data: bytes, build: str | None = None, strict: bool = False) -> AppearanceFile:
@@ -539,15 +756,15 @@ def parse_appearance(data: bytes, build: str | None = None, strict: bool = False
     hardpoints = _read_hardpoints(view, len(bones), warnings)
     skipped: list[int] = []
     _check_bone_chain(bones, warnings)
-    extra_count = view.i32(0x88, "second sub-object count")
+    extra_count = view.i32(0x88, "low-poly sub-object count")
     extra_raw = _section(
-        view, extra_count, view.pair(0x8C), _SUB_RECORD[resolved], 0x8C, "second sub-object list",
+        view, extra_count, view.pair(0x8C), _SUB_RECORD[resolved], 0x8C, "low-poly sub-objects",
     )
     notes: list[str] = []
     if resolved == "ps3":
         subs = _read_ps3_sub_objects(view, subs_raw, sub_count, len(bones), warnings, notes)
         extra = _read_ps3_sub_objects(
-            view, extra_raw, extra_count, len(bones), warnings, notes, "second list",
+            view, extra_raw, extra_count, len(bones), warnings, notes, GEOSET_LOWPOLY,
         )
         kinds = {draw.skinned for sub in subs + extra for draw in sub.draws}
         if kinds == {True, False}:
@@ -556,12 +773,16 @@ def parse_appearance(data: bytes, build: str | None = None, strict: bool = False
             raise FormatError("skinned draws in a file without bones", 0x24)
     else:
         subs, running = _read_switch_sub_objects(
-            view, subs_raw, sub_count, len(bones), skipped, warnings, notes=notes,
+            view, subs_raw, sub_count, len(bones), skipped, warnings, notes=notes, build=resolved,
         )
         extra, _ = _read_switch_sub_objects(
             view, extra_raw, extra_count, len(bones), skipped, warnings, running, notes,
-            "second list",
+            GEOSET_LOWPOLY, resolved,
         )
+    _assign_fat(view, resolved, subs + extra, warnings)
+    for sub in subs + extra:
+        _cloth_checks(sub, len(bones), warnings)
+        _check_bounds(sub, warnings, notes)
     material_data = AppMaterials()
     try:
         material_data = read_app_materials(view, resolved)
@@ -580,14 +801,22 @@ def parse_appearance(data: bytes, build: str | None = None, strict: bool = False
 
 def _object_name(sub: SubObject) -> str:
     name = "".join(c if c.isalnum() or c in "_-." else "_" for c in sub.name or "")
-    return name or f"subobject_{sub.index}"
+    name = name or f"subobject_{sub.index}"
+    return f"lowpoly_{name}" if sub.geo_set == GEOSET_LOWPOLY else name
 
 
-def to_obj(app: AppearanceFile, flip_v: bool = False) -> str:
-    """One object per sub-object: positions, normals, UV1."""
+def export_sub_objects(app: AppearanceFile, low_poly: bool = True) -> list[SubObject]:
+    """G1-1: the high-poly set, then the low-poly set as separate objects (``low_poly`` False
+    skips it). The two sets are never merged."""
+    return list(app.sub_objects) + (list(app.extra_sub_objects) if low_poly else [])
+
+
+def to_obj(app: AppearanceFile, flip_v: bool = False, low_poly: bool = True) -> str:
+    """One object per sub-object: positions, normals, UV1. Low-poly objects are named
+    ``lowpoly_...``."""
     lines = ["# d3sno appearance export"]
     base = 1
-    for sub in app.sub_objects:
+    for sub in export_sub_objects(app, low_poly):
         if not sub.draws:
             continue
         lines.append(f"o {_object_name(sub)}")
@@ -757,7 +986,7 @@ def _bone_node(bone: Bone) -> dict:
 
 def to_gltf(
     app: AppearanceFile, flip_v: bool = False, lightmap_v_scale: float | None = None,
-    extend=None, texture_resolver=None, look: int = 0,
+    extend=None, texture_resolver=None, look: int = 0, low_poly: bool = True,
 ) -> dict:
     """A glTF 2.0 document with one embedded buffer. Bones are nodes.
 
@@ -777,7 +1006,7 @@ def to_gltf(
             roots.append(bone.index)
         nodes.append(_bone_node(bone))
 
-    skinned = any(d.joints is not None for sub in app.sub_objects for d in sub.draws)
+    skinned = any(d.joints is not None for sub in export_sub_objects(app, low_poly) for d in sub.draws)
     skins = []
     if skinned:
         matrices = bytearray()
@@ -794,7 +1023,7 @@ def to_gltf(
         skins.append(skin)
 
     meshes = []
-    for sub in app.sub_objects:
+    for sub in export_sub_objects(app, low_poly):
         primitives = [
             _gltf_primitive(buf, draw, flip_v, lightmap_v_scale)
             for draw in sub.draws if draw.positions
@@ -844,8 +1073,9 @@ def gltf_dumps(document: dict) -> str:
 
 def to_gltf_json(
     app: AppearanceFile, flip_v: bool = False, lightmap_v_scale: float | None = None,
-    texture_resolver=None, look: int = 0,
+    texture_resolver=None, look: int = 0, low_poly: bool = True,
 ) -> str:
     return gltf_dumps(to_gltf(
         app, flip_v, lightmap_v_scale, texture_resolver=texture_resolver, look=look,
+        low_poly=low_poly,
     ))

@@ -1,0 +1,24 @@
+rule	pass	fail	status
++0x34 u16 == stream A pair size	126957	0	PROVEN
++0x36..+0x53 all zero	126957	0	PROVEN
+stream A pair size <= 0x4000	126957	0	PROVEN
+stream B pair size <= 0x4000	126957	0	PROVEN
++0x20 two u16 == split of index pair size into pieces of at most 0x4000	126957	0	PROVEN
++0x5C two u16 == (stream B pair size, 0)	126957	0	PROVEN
++0x9C == align16(2*nv) for 0x81, align32(4*nv) for 0x83	126957	0	PROVEN
++0x98 multiple of 128	126957	0	PROVEN
++0x98 <= 0xC000	126957	0	PROVEN
++0x98 >= S*nv + 2*nidx + 320 (S = output stride 12 or 28)	126957	0	PROVEN
+index pair size == align16(2*nidx)	126957	0	PROVEN
+stream A pair size == align16(stride*nv)	126957	0	PROVEN
+stream B pair size == align16(8*nv) (0 for 0x81)	126957	0	PROVEN
+stream C pair size == stride*nv	126957	0	PROVEN
+format A block == fixed block of its format	126957	0	PROVEN
+format B block == fixed block of its format	126957	0	PROVEN
+descriptor bytes 2..7 and 12..15 fixed per format	126957	0	PROVEN
+word +0x00 zero	126957	0	PROVEN
+word +0x04 zero	126957	0	PROVEN
+word +0x14 zero	126957	0	PROVEN
+word +0x28 zero	126957	0	PROVEN
+word +0x68 zero	126957	0	PROVEN
++0x74..+0x7F and +0x88..+0x8F zero	126957	0	PROVEN

@@ -142,13 +142,25 @@ def x360_gam_tables() -> dict[int, X360GamTable]:
         }
 
 
+@lru_cache(maxsize=None)
+def x360_type_names() -> dict[int, str]:
+    """The 37 type names the x360 executable lists (``x360_gam_type_names.tsv``, G2-S1)."""
+    with open(DATA / "x360_gam_type_names.tsv", encoding="utf-8", newline="") as handle:
+        return {int(row["type"]): row["executable_display_name"]
+                for row in csv.DictReader(handle, delimiter="\t")}
+
+
+# G2-S1: type 17 (Scenery) is a named type with no table on x360.
+X360_TYPES_WITHOUT_TABLE = (17,)
+
+
 def balance_type_name(kind: int, build: str = "switch") -> str | None:
-    """The type's name: the ``game_balance_type`` enum; on x360 the four x360-only types
-    (38, 42, 43, 44) take the name of ``x360_gam_tables.tsv`` (X10)."""
-    name = enum_name("game_balance_type", kind)
-    if name is None and build == "x360" and kind in x360_gam_tables():
-        return x360_gam_tables()[kind].type_name
-    return name
+    """The type's name. Switch and ps3: the ``game_balance_type`` enum. x360: the name its
+    executable lists (G2-S1; 23 is ``Item Enchantments``, 44 ``Devil's Hand Redeemable Sets``),
+    else the enum."""
+    if build == "x360" and kind in x360_type_names():
+        return x360_type_names()[kind]
+    return enum_name("game_balance_type", kind)
 
 
 @dataclass(frozen=True)
@@ -438,3 +450,24 @@ class TableContext(ValueContext):
             health = ByteView(rows[self.level - 1].raw, self.monster_levels.header.order)
             return health.f32(_MONSTER_HEALTH_AT) * self.difficulty_scalar
         return super().identifier(cls, a, b, c)
+
+
+# --- Help codes (type 24, G2-S2) -----------------------------------------------------------
+
+HELP_CODE_TYPE = 24
+HELP_CODE_TEXTS = (("code", 0, 256), ("text_1", 256, 256), ("text_2", 512, 128))
+
+
+def help_codes(file: "BalanceFile") -> list[dict[str, str]]:
+    """The three NUL-terminated texts of each help-code row (row of 640 bytes, every build;
+    table slot at file 0x68). x360 has no file of this type: the layout is from type information."""
+    if file.type != HELP_CODE_TYPE:
+        raise FormatError(f"type {file.type} is not the help-code table")
+    found = []
+    for row in file.rows:
+        values = {}
+        for name, at, size in HELP_CODE_TEXTS:
+            raw = bytes(row.raw[at:at + size])
+            values[name] = raw.split(b"\0", 1)[0].decode("latin-1")
+        found.append(values)
+    return found

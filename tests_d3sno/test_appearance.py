@@ -155,23 +155,25 @@ class Ps3(unittest.TestCase):
         with self.assertRaises(FormatError):
             P.parse_appearance(B.build_app_ps3(indices=(0, 1, 3)))
 
-    def test_bounds_is_a_note_not_strict(self):
-        # Stage 7, T13: the PS3 bounds rule fails in three shipped files; report it only.
+    def test_bounds_is_a_warning(self):
+        # Stage 10, G1-1: the three PS3 files of T13 have all-zero bounds in geo set 1; with the
+        # zero-bounds rule no bounds failure is left, so a failure is a warning on PS3 too.
         data = B.build_app_ps3(bounds_half=(1.0, 1.0, 1.0))
         app = P.parse_appearance(data)
-        self.assertEqual(app.warnings, [])
-        self.assertIn("outside bounds", app.notes[0])
-        self.assertTrue(P.parse_appearance(data, strict=True).notes)
+        self.assertIn("outside bounds", app.warnings[0])
+        self.assertEqual(app.notes, [])
+        with self.assertRaises(FormatError):
+            P.parse_appearance(data, strict=True)
 
     def test_bounds_tolerance_is_two_raw_units(self):
         # The furthest vertex is at 6.0 on x with scale 0.5, so 5.0 passes with tolerance 1.
         vertices = ((10, 0, 0),)
         data = B.build_app_ps3(vertices=vertices, indices=(), index_count=0,
                                bounds_half=(5.0, 5.0, 5.0))
-        self.assertEqual(P.parse_appearance(data).notes, [])
+        self.assertEqual(P.parse_appearance(data).warnings, [])
         data = B.build_app_ps3(vertices=vertices, indices=(), index_count=0,
                                bounds_half=(4.9, 5.0, 5.0))
-        self.assertTrue(P.parse_appearance(data).notes)
+        self.assertTrue(P.parse_appearance(data).warnings)
 
     def test_weights_checked(self):
         data = B.build_app_ps3(skinned=True, bones=BONES, weights=(55, 200, 0, 0))

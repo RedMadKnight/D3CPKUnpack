@@ -1,0 +1,5 @@
+record	field	kind	value	constant	label	nx_count	ps3_count	status
+objective	flags	bit	1		unnamed objective flag; no constant in the Switch or x360 type information	4556	444	NOT_KNOWABLE
+objective	flags	bit	4		unnamed objective flag, absent from PS3; no constant in the Switch or x360 type information	5523	0	NOT_KNOWABLE
+actor_event	pin_flags	bit	0		unnamed pin flag (one event on Switch); no constant in any readable build	1	0	NOT_KNOWABLE
+actor	coll_dynamic_no_overlap	bit	17		unnamed bit above the 13 defined dynamic flags (retired flag; almost always set together with bit 12)	470	264	NOT_KNOWABLE

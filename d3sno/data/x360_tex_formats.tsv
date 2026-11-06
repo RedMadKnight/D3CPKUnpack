@@ -1,0 +1,13 @@
+format_code	format	kind	bytes_per_element	element	byte_swap	channel_order	x360_files	payload_size_rule_ok	no_switch_file	switch_format_differs	switch_size_differs	compared	level0_match	level0_match_rate	all_levels_match	all_levels_match_rate	level0_exact_pixel_share_mean	level0_ctrl_bmad_median	tail_levels_exact_decided	tail_rule_strict_best_exact	tail_levels_bmad_decided	tail_rule_strict_best_bmad
+0	ARGB8888	2D	4	texel	none	bytes A, R, G, B	76	76 of 76	0	1	0	75	75	1.0000	75	1.0000	1.0000	11.9	49	47	0	0
+0	ARGB8888	volume	4	texel	none	bytes A, R, G, B	131	131 of 131	1	0	0	130	130	1.0000	130	1.0000	1.0000	43.0	0	0	0	0
+4	ARGB1555	2D	2	texel	swap the two bytes of every 16-bit word	after the swap a little-endian 16-bit word A1 R5 G5 B5 from the top bit (that is, a big-endian word as stored)	3	3 of 3	1	0	0	2	2	1.0000	2	1.0000	1.0000	35.2	0	0	0	0
+7	L8	2D	1	texel	none	L	4	4 of 4	0	0	0	4	4	1.0000	3	0.7500	0.9796	0.0	4	2	1	0
+9	DXT1	2D	8	4x4 block	swap the two bytes of every 16-bit word	DXT block, little-endian words after the swap	10517	10517 of 10517	130	5	32	10350	10297	0.9949	10126	0.9784	0.8095	16.1	15081	15080	5919	3988
+9	DXT1	cube	8	4x4 block	swap the two bytes of every 16-bit word	DXT block, little-endian words after the swap	33	33 of 33	0	0	0	33	33	1.0000	33	1.0000	0.7107	41.5	25	25	19	5
+10	DXT1 with 1-bit alpha	2D	8	4x4 block	swap the two bytes of every 16-bit word	as DXT1	1234	1234 of 1234	1	3	1	1229	1153	0.9382	437	0.3556	0.7382	30.2	2701	2659	952	821
+11	DXT3	2D	16	4x4 block	swap the two bytes of every 16-bit word	DXT3 block, little-endian after the swap	7822	7822 of 7822	22	42	14	7744	7702	0.9946	6575	0.8490	0.7572	20.3	8421	8417	6254	4966
+12	DXT5	2D	16	4x4 block	swap the two bytes of every 16-bit word	DXT5 block, little-endian after the swap	5833	5833 of 5833	102	32	48	5651	5544	0.9811	4292	0.7595	0.5419	29.0	1400	1333	14407	14129
+12	DXT5	cube	16	4x4 block	swap the two bytes of every 16-bit word	DXT5 block, little-endian after the swap	1	1 of 1	0	0	0	1	1	1.0000	1	1.0000	0.6829	119.1	0	0	2	2
+23	A8	2D	1	texel	none	A	1	1 of 1	0	0	0	1	1	1.0000	1	1.0000	1.0000	0.0	0	0	0	0
+43	DXT5 (normal map)	2D	16	4x4 block	swap the two bytes of every 16-bit word	as DXT5	2	2 of 2	1	0	0	1	1	1.0000	1	1.0000	1.0000	127.8	0	0	1	0

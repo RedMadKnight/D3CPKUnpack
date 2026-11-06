@@ -350,8 +350,8 @@ class Attributes(unittest.TestCase):
         self.assertEqual(R.ps3_attribute(65).name, "Level")
         self.assertEqual(R.ps3_attribute(65).switch_id, 57)
         self.assertEqual(R.ps3_attribute(66).status, "SUPPORTED")  # stage 7 table
-        self.assertIsNone(R.ps3_attribute(12))
-        self.assertEqual(R.ps3_attribute(12, safe_only=False).name, "Intelligence")
+        # V9-G3-A: 12 = Intelligence is SUPPORTED since stage 10.1 (was HYPOTHESIS).
+        self.assertEqual(R.ps3_attribute(12).name, "Intelligence")
         self.assertEqual(R.ps3_attribute(0).name, "Axe_Bad_Data")
         self.assertEqual(R.ps3_attribute(0).switch_id, 0)
         self.assertIsNone(R.ps3_attribute(99999))

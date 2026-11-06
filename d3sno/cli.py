@@ -146,13 +146,13 @@ def cmd_power(args) -> int:
 def cmd_mesh(args) -> int:
     app = appearance.parse_appearance(_read(args.file), args.build)
     if args.format == "obj":
-        text = appearance.to_obj(app, args.flip_v)
+        text = appearance.to_obj(app, args.flip_v, not args.skip_low_poly)
     else:
         resolver = None
         if args.texture_uri:
             resolver = lambda handle: args.texture_uri.format(handle=handle)
         text = appearance.to_gltf_json(
-            app, args.flip_v, args.lightmap_v_scale, resolver, args.look,
+            app, args.flip_v, args.lightmap_v_scale, resolver, args.look, not args.skip_low_poly,
         )
     Path(args.output).write_text(text, encoding="utf-8", newline="\n")
     for warning in app.warnings:
@@ -179,6 +179,18 @@ def cmd_texture(args) -> int:
         _texture_summary(tex)
         return 0
     target = Path(args.output)
+    if tex.build == "x360":
+        if not args.x360_pixels:
+            raise FormatError("x360 pixels are decoded only with --x360-pixels (G2-T)")
+        from . import x360_texture
+
+        levels = range(tex.levels) if args.all_levels else (args.level,)
+        for level in levels:
+            image = x360_texture.decode_image(tex, level, args.face, args.slice)
+            path = (target.with_name(f"{target.stem}_level{level}{target.suffix}")
+                    if args.all_levels else target)
+            path.write_bytes(texture.encode_png(image))
+        return 0
     if args.all_levels:
         for level, image in enumerate(texture.decode_levels(tex, args.face, args.slice)):
             path = target.with_name(f"{target.stem}_level{level}{target.suffix}")
@@ -360,6 +372,7 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--lightmap-v-scale", type=float, help="adds UV2 to glTF output")
     sub.add_argument("--texture-uri", help="glTF image URI, with {handle}, e.g. tex/{handle}.png")
     sub.add_argument("--look", type=int, default=0)
+    sub.add_argument("--skip-low-poly", action="store_true", help="leave out geo set 1 (G1-1)")
     add_build(sub)
     sub = add("texture", cmd_texture)
     sub.add_argument("file")
@@ -371,6 +384,8 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--all-levels", action="store_true")
     sub.add_argument("--strip", action="store_true", help="all faces or slices, stacked")
     sub.add_argument("--normal", action="store_true", help="format 43: X in red, Y in green")
+    sub.add_argument("--x360-pixels", action="store_true",
+                     help="decode an x360 payload by the G2-T layout (optional)")
     add_build(sub)
     sub = add("anim", cmd_anim)
     sub.add_argument("file")

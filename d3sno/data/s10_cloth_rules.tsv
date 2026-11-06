@@ -1,0 +1,107 @@
+rule_or_count	switch_true	switch_false	ps3_true	ps3_false	x360_true	x360_false
+attachment distance == parent's + 1	956	6	546	2	693	2
+bending constraint: rest length squared matches wp (rel 1e-3)	96062	36196	53213	20827	76785	29194
+bending pairs == opposite vertices across shared edges (minus pinned-pinned)	935	15	528	11	674	10
+bending pairs subset of opposite pairs	945	5	537	2	681	3
+bending: flHorizontal 0.0	132258		74040		105979	
+bending: flRestLengthSquared == |wp a - wp b|^2 (rel 1e-3)	333	617	210	329	254	430
+bending: pair size == count x 16	962	0	548	0	695	0
+bending: vertices < nVertexCount	950	0	539	0	684	0
+cloth pair size == one record	962	0	548	0	695	0
+cloth sub-objects	962		548		695	
+distance constraint: flHorizontal == (slope < 0.5)	162074	0	89143	0	126567	0
+distance constraint: rest length squared matches wp (rel 1e-3)	162074	0	89143	0	126567	0
+distance pairs == face edges	10	940	10	529	10	674
+distance pairs == face edges minus pinned-pinned edges	950	0	539	0	684	0
+distance pairs subset of face edges	950	0	539	0	684	0
+distance: flHorizontal 0.0	97206		52526		76365	
+distance: flHorizontal 1.0	64868		36617		50202	
+distance: flHorizontal == 1 - |dy|/length (abs 1e-3, cloth axes)	36	914	14	525	28	656
+distance: flHorizontal == 1 - |dz|/length (abs 1e-3, cloth axes)	0	950	0	539	0	684
+distance: flHorizontal=0.0 slope(cloth y) bin 5	6622		3139		4398	
+distance: flHorizontal=0.0 slope(cloth y) bin 6	8952		4717		6709	
+distance: flHorizontal=0.0 slope(cloth y) bin 7	13370		6145		9816	
+distance: flHorizontal=0.0 slope(cloth y) bin 8	12156		6485		10182	
+distance: flHorizontal=0.0 slope(cloth y) bin 9	56106		32040		45260	
+distance: flHorizontal=1.0 slope(cloth y) bin 0	40464		22403		31059	
+distance: flHorizontal=1.0 slope(cloth y) bin 1	8242		4979		6890	
+distance: flHorizontal=1.0 slope(cloth y) bin 2	5945		3619		4804	
+distance: flHorizontal=1.0 slope(cloth y) bin 3	5120		3016		3889	
+distance: flHorizontal=1.0 slope(cloth y) bin 4	5097		2600		3560	
+distance: flRestLengthSquared == |wp a - wp b|^2 (rel 1e-3)	950	0	539	0	684	0
+distance: pair size == count x 16	962	0	548	0	695	0
+distance: vertices < nVertexCount	950	0	539	0	684	0
+face flRestArea == triangle area of wp (rel 1e-3)	962	0	548	0	695	0
+face vertices < nVertexCount	962	0	548	0	695	0
+faces: pair size == count x 16	959	3	548	0	695	0
+fat normal byte 3 == 0	701	0	548	0	526	0
+fat range inside vertex pool	701	0	548	0	526	0
+fat uv2 == 0	604	97	358	190	437	89
+fat: every vertex used by indices	701	0	548	0	526	0
+fat: faces == mapped triangles as a set	238	2	169	0	203	0
+fat: faces == mapped triangles in order	461	240	379	169	323	203
+fat: index count % 3 == 0	701	0	548	0	526	0
+fat: index range inside index pool	701	0	548	0	526	0
+fat: indices < nVertCount	701	0	548	0	526	0
+fat: nFaceCount == triangles	699	2	548	0	526	0
+fat: nFatVertexIndex == first render vertex mapped to it	437	264	343	205	305	221
+fat: nFatVertexIndex valid and map[nFatVertexIndex] == own index	701	0	548	0	526	0
+fat: positions inside sub-object bounds (1e-3)	701	0	548	0	526	0
+files	11364		6033		8893	
+flArea == sum of face rest areas (rel 1e-4)	962	0	548	0	695	0
+invMass == 0 exactly on stapled vertices	962	0	548	0	695	0
+island index == distance-constraint component (bijection)	950	0	539	0	684	0
+island index in 0..nIslandCount-1	962	0	548	0	695	0
+islands used == nIslandCount	962	0	548	0	695	0
+kind=fat (pool)	701		548		526	
+kind=fat (pool): comp influences == 6 x render count	384	317	231	317	307	219
+kind=fat (pool): every cloth vertex mapped	701	0	548	0	526	0
+kind=fat (pool): map entries == render vertex count	701	0	548	0	526	0
+kind=fat (pool): map values < nVertexCount	701	0	548	0	526	0
+kind=fat (pool): map[nFatVertexIndex] == own index	701	0	548	0	526	0
+kind=fat (pool): render count >= cloth count	701	0	548	0	526	0
+kind=fat (pool): render pos == cloth wp[map] with identity	0	701	0	548	0	526
+kind=fat (pool): render pos == cloth wp[map] with render=(c.y,c.z,c.x)	0	701	0	548	0	526
+kind=fat (pool): render pos == cloth wp[map] with render=(c.z,c.x,c.y)	701	0	548	0	526	0
+kind=packed rigid	261				169	
+kind=packed rigid: comp influences == 6 x render count	0	261			0	169
+kind=packed rigid: every cloth vertex mapped	261	0			169	0
+kind=packed rigid: library render vertices == render count	261	0			169	0
+kind=packed rigid: map entries == render vertex count	261	0			169	0
+kind=packed rigid: map values < nVertexCount	261	0			169	0
+kind=packed rigid: map[nFatVertexIndex] == own index	261	0			169	0
+kind=packed rigid: render count >= cloth count	261	0			169	0
+kind=packed rigid: render pos == cloth wp[map] with identity	0	261			0	169
+kind=packed rigid: render pos == cloth wp[map] with render=(c.y,c.z,c.x)	0	261			0	169
+kind=packed rigid: render pos == cloth wp[map] with render=(c.z,c.x,c.y)	261	0			169	0
+nAttachmentDistance == 0 exactly on stapled vertices	962	0	548	0	695	0
+nIslandCount == components of distance-constraint graph	950	0	539	0	684	0
+nIslandCount == connected components of faces	368	594	202	346	228	467
+nParentIndex -1 or valid	962	0	548	0	695	0
+nParentIndex == -1 exactly on stapled vertices	962	0	548	0	695	0
+nParentIndex == -1 exactly when nAttachmentDistance == 0	962	0	548	0	695	0
+nVertCount > 0 without cloth			17			
+no distance constraints: nIslandCount == nVertexCount	12	0	9	0	11	0
+parent is a distance-constraint neighbour	944	6	537	2	682	2
+ps3 index pool size == 2 x sum(nIndexCount)			348	0		
+ps3 sub-object own index pair empty			548	0		
+staple bone indices < bone count (or 0 when no bones)	962	0	548	0	695	0
+staple vertices < nVertexCount	962	0	548	0	695	0
+staple vertices distinct	962	0	548	0	695	0
+staple weight sum 0.0	9071		5033		6327	
+staple weight sum 1.0	15092		8400		11870	
+staple weights descending	962	0	548	0	695	0
+staples: pair size == count x 28	962	0	548	0	695	0
+switch kind=fat (pool) b15=0 b16=0 skinrecs=0	631					
+switch kind=fat (pool) b15=1 b16=1 skinrecs=1	70					
+switch kind=packed rigid b15=1 b16=0 skinrecs=0	261					
+vertex invMass 0	24163		13433		18197	
+vertex invMass >0	62335		33818		47885	
+vertex pool non-empty in a file without cloth			1			
+vertex pool size == 32 x sum(nVertCount)	559	0	348	0	397	0
+vertices share island index iff same face component (spot check)	378	584	208	340	236	459
+vertices: pair size == count x 44	962	0	548	0	695	0
+wp == wp0 in every vertex	962	0	548	0	695	0
+x360 kind=fat (pool) b15=0 b16=0 skinrecs=0					480	
+x360 kind=fat (pool) b15=1 b16=1 skinrecs=1					46	
+x360 kind=packed rigid b15=1 b16=0 skinrecs=0					169	

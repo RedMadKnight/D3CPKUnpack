@@ -1,0 +1,4 @@
+table	tag_hex	name	xml_name	axe_type	record_type	record_kind	sno_group	value_enum	default_raw	tag_group
+power_general	0x50281				4	formula				
+marker	0x88010				0	int				
+marker	0x88020				0	int				

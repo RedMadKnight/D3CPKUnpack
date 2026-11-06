@@ -32,6 +32,9 @@ EVENT_PS3_TO_SWITCH = {
     25: 27, 26: 28, 27: 29, 28: 30, 29: 32, 30: 33, 33: 37, 34: 38, 35: 39, 36: 40, 37: 41,
     38: 42, 39: 43, 41: 45, 44: 48, 45: 49, 46: 50, 47: 51, 49: 53, 51: 55,
 }
+# G3-C: ps3 events 31 and 32 occur in no ps3 file and stay unmapped (raw). If a mapping is ever
+# needed, the better-supported guess is below (HYPOTHESIS); it is never applied.
+EVENT_PS3_GUESSES = {31: 35, 32: 36}
 
 
 @dataclass(frozen=True)

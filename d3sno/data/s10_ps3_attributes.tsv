@@ -1,0 +1,10 @@
+ps3_id	name	switch_id	status	candidates
+13	Vitality	13	SUPPORTED	
+31	Attack		SUPPORTED	
+32	Precision		SUPPORTED	
+33	Defense		PROVEN	
+78	Resource_Set_Point_Bonus	71	SUPPORTED	
+87	Health_Globe_Bonus_Chance	82	SUPPORTED	
+128	Hitpoints_Regen_Per_Second	126	SUPPORTED	
+150	Movement_Scalar	171	SUPPORTED	
+199			UNRESOLVED	Damage_Weapon_Bonus_Delta,Damage_Weapon_Bonus_Delta_X1
