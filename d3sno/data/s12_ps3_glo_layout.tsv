@@ -1,0 +1,30 @@
+build	ext	record	record_size	order	field	pair_offset	kind	element	element_size_or_count	alignment	empty_form	deferred_group
+ps3	glo	GlobalDefinition	568									
+ps3	glo	GlobalDefinition	568	0	ptServerData	0x18	array	GlobalServerData	424	8	zero	
+ps3	glo	GlobalDefinition	568	2	arStartLocationNames	0x30	array	StartLocationName	68	8	zero	
+ps3	glo	GlobalDefinition	568	45	tBannerParams	0x88	inline	BannerParams	1			
+ps3	glo	GlobalServerData	424									
+ps3	glo	GlobalServerData	424	0	arActorGroups	0x8	array	ActorGroup	68	8	zero	
+ps3	glo	GlobalServerData	424	1	arScriptGlobalVars	0x18	array	GlobalScriptVariable	40	8	zero	
+ps3	glo	GlobalServerData	424	2	tDifficultyParams	0x20	inline	DifficultyTuningParams	4			
+ps3	glo	StartLocationName	68									
+ps3	glo	BannerParams	232									
+ps3	glo	BannerParams	232	0	arTexBackgrounds	0x8	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	2	arTexPatterns	0x20	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	4	arTexMainSigils	0x38	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	5	arTexVariantSigils	0x48	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	7	arTexSigilAccents	0x60	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	9	arColorSets	0x78	array	BannerColorSet	84	8	zero	
+ps3	glo	BannerParams	232	10	arSigilPlacements	0x88	array	BannerSigilPlacement	68	8	zero	
+ps3	glo	BannerParams	232	11	arActorBases	0x98	array	SNO	4	8	zero	
+ps3	glo	BannerParams	232	12	arActorCaps	0xA8	array	SNO	4	8	zero	
+ps3	glo	BannerParams	232	13	arActorPoles	0xB8	array	SNO	4	8	zero	
+ps3	glo	BannerParams	232	14	arActorRibbons	0xC8	array	SNO	4	8	zero	
+ps3	glo	BannerParams	232	15	arEpicBannerDescriptions	0xD8	array	EpicBannerDescription	148	8	zero	
+ps3	glo	ActorGroup	68									
+ps3	glo	GlobalScriptVariable	40									
+ps3	glo	DifficultyTuningParams	52									
+ps3	glo	BannerTexturePair	16									
+ps3	glo	BannerColorSet	84									
+ps3	glo	BannerSigilPlacement	68									
+ps3	glo	EpicBannerDescription	148									

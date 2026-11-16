@@ -22,8 +22,8 @@ PATH = "SoundBank\\Bank\\0001.fsb"
 
 class Marker(unittest.TestCase):
     def test_version(self):
-        self.assertTrue(d3sno.__version__.startswith("0.11."))
-        self.assertEqual(d3sno.STAGE, 11)
+        self.assertTrue(d3sno.__version__.startswith(("0.11.", "0.12.")))
+        self.assertGreaterEqual(d3sno.STAGE, 11)
 
 
 # --- V11-1, V11-2, V11-5, V11-8: the layout table ---------------------------------------------

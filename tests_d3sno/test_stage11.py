@@ -25,8 +25,8 @@ BODY = 0x10
 
 class Marker(unittest.TestCase):
     def test_version(self):
-        self.assertTrue(d3sno.__version__.startswith("0.11."))
-        self.assertEqual(d3sno.STAGE, 11)
+        self.assertTrue(d3sno.__version__.startswith(("0.11.", "0.12.")))
+        self.assertGreaterEqual(d3sno.STAGE, 11)
 
 
 class HandLayout:
@@ -63,7 +63,7 @@ class Table(unittest.TestCase):
         # the table also has ps3 .dfn and .glo rows (Q345)
         self.assertEqual(len(L.covered_types("ps3")), 59)
         self.assertIn("glo", L.covered_types("ps3"))
-        self.assertIn(("ps3", "glo"), L.RESIDUE)
+        self.assertNotIn(("ps3", "glo"), L.RESIDUE)  # stage 12: W3-6 to W3-8 rows merged
 
     def test_records_by_build_then_type(self):
         # AABB is listed once for switch (under .acr) and found for .app

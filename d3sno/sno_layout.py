@@ -16,7 +16,8 @@ whether it points at the same block as an earlier pair (W11-6: such pairs hold t
 - W11-6: a pair sharing an earlier block stores that block's offset and its own size; nothing is
   written and the block's elements are not walked again.
 - W11-7: the file ends at the cursor.
-- W11-8: ps3 ``.glo`` is not described as rebuilt (``RESIDUE``); it is attempted and noted.
+- W11-8: ps3 ``.glo`` was not described as rebuilt; ``25`` W3-6 to W3-8 give its rows, merged
+  into the bundled table, so ``RESIDUE`` is now empty.
 
 Records are looked up by (build, extension, record) and else by (build, record): the table lists
 a record once per build under the first type that uses it (ps3: once per type).
@@ -44,7 +45,7 @@ CODE_ALIGN = 4
 # W11-4 does not give an alignment for fields that are empty in every file ("none (always
 # empty)"); a non-empty block there is placed with this one and noted (Q347).
 ALWAYS_EMPTY_ALIGN = {"switch": 8, "x360": 8, "ps3": 4}
-RESIDUE = frozenset({("ps3", "glo")})  # W11-8: no file of it is rebuilt by the description
+RESIDUE: frozenset = frozenset()  # W11-8; ps3 .glo is described by W3-6 to W3-8 (stage 12)
 
 
 @dataclass(frozen=True)

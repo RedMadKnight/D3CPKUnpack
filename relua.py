@@ -410,10 +410,36 @@ class Fn:
         self.regvar[reg] = v
         return v
 
-    def promote(self, top):
-        """Everything on the stack up to `top` is a local."""
+    def promote(self, top, pc=None):
+        """Everything on the stack up to `top` is a local.
+
+        With `pc`, locals made here that hold one value each and whose trailing
+        registers are never written after `pc` are printed as one statement,
+        `local a, b = f(), g()`, as the original most likely read.
+        """
         if self.pure:
             raise Bail
+        start = len(self.out)
+        self._promote(top)
+        if pc is not None:
+            self.merge_locals(start, pc)
+
+    def written_after(self, reg, pc):
+        return any(reg in self.flow.writes[q] for q in range(pc + 1, self.block_end))
+
+    def merge_locals(self, start, pc):
+        merged = []
+        for s in self.out[start:]:
+            prev = merged[-1] if merged else None
+            if prev is not None and len(s.vars) == len(s.exprs) == 1 \
+                    and prev.exprs and len(prev.vars) == len(prev.exprs) \
+                    and not self.written_after(s.vars[0].reg, pc):
+                merged[-1] = Local(prev.vars + s.vars, prev.exprs + s.exprs)
+            else:
+                merged.append(s)
+        self.out[start:] = merged
+
+    def _promote(self, top):
         for reg in sorted(self.pending):
             if reg > top:
                 break
@@ -469,6 +495,11 @@ class Fn:
         for q in range(pc + 1, self.block_end):
             if q in self.flow.pseudo:
                 continue
+            kill = self.flow.kills[q]
+            if kill is not None and kill <= r:
+                return False    # a CALL at or below r consumed it: r was an argument
+            if self.code[q].op == "FORPREP" and self.code[q].a <= r:
+                return False    # a for loop set up at or below r: r was free
             w = [x for x in self.flow.writes[q] if x >= r]
             if self.flow.kills[q] is not None and self.flow.kills[q] >= r:
                 w.append(self.flow.kills[q])
@@ -512,6 +543,14 @@ class Fn:
         if v >= _RK:
             return Const(self.proto.constants[v - _RK])
         return self.use(v, pc, dest)
+
+    def open_range(self, lo):
+        """Registers lo..top read by an op with B = 0 (up to the multiple
+        results on top). Every register in between is an operand, including
+        ones that already hold a local: picking only pending ones would drop
+        an argument such as `"Name"` in `o.F("Name", o.G())`."""
+        top = max((r for r in self.pending if r >= lo), default=lo - 1)
+        return list(range(lo, top + 1))
 
     def pop(self, r):
         """A register that can only be a temporary."""
@@ -586,6 +625,13 @@ class Fn:
             self.pending[a] = Method(obj, key.value)
             self.pending[a + 1] = SelfSlot()
         elif op in _ARITH:
+            # `local a, b = f(), g()` then `a = a * b`: the operand above the
+            # result stays on the stack (later code allocates above it, or reads
+            # it again), so it and everything below it were declared together.
+            hi = max((r for r in (i.b, i.c) if r < _RK), default=-1)
+            if hi > a and hi in self.pending \
+                    and (self.stack_keeps(hi, pc) or self.live_after(hi, pc)):
+                self.promote(hi, pc)
             if i.b < _RK and i.c <= i.b and i.c in self.pending:
                 self.promote(i.c)       # read twice, as in `x = x * x`, so x was a local
             c = self.rk(i.c, pc, a)
@@ -730,7 +776,7 @@ class Fn:
         if i.b:
             regs = range(a + 1, a + i.b + 1)
         else:
-            regs = sorted(r for r in self.pending if r > a)
+            regs = self.open_range(a + 1)
         for r in regs:
             t.array.append(self.pop(r))
 
@@ -784,7 +830,7 @@ class Fn:
         if i.b:
             regs = list(range(a + 1, a + i.b))
         else:
-            regs = sorted(r for r in self.pending if r > a)
+            regs = self.open_range(a + 1)
         args = [self.pop(r) for r in regs]
         f = self.pop(a)
         if isinstance(f, Method):
@@ -856,7 +902,7 @@ class Fn:
             self.promote_all()
             self.emit(Return([v]))
             return
-        regs = list(range(a, a + b - 1)) if b else sorted(r for r in self.pending if r >= a)
+        regs = list(range(a, a + b - 1)) if b else self.open_range(a)
         vals = [self.pop(r) for r in regs]
         self.promote_all()
         self.emit(Return(vals))
@@ -1329,7 +1375,31 @@ class Fn:
                 self.skip_to = None
         self.promote_all()
 
+    def entry_locals(self):
+        """`local x` as the first statement of the function.
+
+        Lua 5.1 drops the LOADNIL of a valueless local only at pc 0, so a
+        non-parameter register that is read before any write on some path from
+        the entry (live at pc 0, e.g. set inside an `if` and read after it) was
+        declared right at the top. Returns those registers' Vars, the gaps below
+        them included, or [] when there are none. A register read only by the
+        instruction at pc 0 is the `return nil` / `x = nil` case use() handles.
+        """
+        flow = self.flow
+        if not flow.code:
+            return []
+        live = [r for r in range(self.nact, 256) if flow.live_in[0] >> r & 1
+                and not (r in flow.reads[0] and not flow.live_out[0] >> r & 1)]
+        if not live:
+            return []
+        vs = [self.new_var(r) for r in range(self.nact, max(live) + 1)]
+        self.nact = max(live) + 1
+        return vs
+
     def run(self):
+        top = self.entry_locals()
+        if top:
+            self.out.append(Local(top, []))
         self.block(0, len(self.code))
         self.body = self.out
         return self

@@ -1890,30 +1890,34 @@ ps3	fnt	FontPointSizeData	72	0	serCharTable	0x24	blob			4	zero	0
 ps3	fnt	FontPointSizeData	72	1	ptKerningTable	0x34	array	FontConsoleKerning	16	4	zero	0
 ps3	fnt	FontConsoleKerning	16									
 ps3	glo	GlobalDefinition	568									
-ps3	glo	GlobalDefinition	568	0	ptServerData	0x18	array	GlobalServerData	424	4	zero	
-ps3	glo	GlobalDefinition	568	1	arStartLocationNames	0x70	array	StartLocationName	40	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	2	tBannerParams.arTexBackgrounds	0x90	array	BannerTexturePair	16	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	3	tBannerParams.arTexPatterns	0xA8	array	BannerTexturePair	16	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	4	tBannerParams.arTexMainSigils	0xC0	array	BannerTexturePair	16	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	5	tBannerParams.arTexVariantSigils	0xD0	array	BannerTexturePair	16	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	6	tBannerParams.arTexSigilAccents	0xE8	array	BannerTexturePair	16	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	7	tBannerParams.arColorSets	0x100	array	BannerColorSet	84	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	8	tBannerParams.arSigilPlacements	0x110	array	BannerSigilPlacement	68	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	9	tBannerParams.arActorBases	0x120	array	SNO	4	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	10	tBannerParams.arActorCaps	0x130	array	SNO	4	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	11	tBannerParams.arActorRibbons	0x150	array	SNO	4	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	12	tBannerParams.arActorPoles	0x140	array	SNO	4	none (always empty)	zero	
-ps3	glo	GlobalDefinition	568	13	tBannerParams.arEpicBannerDescriptions	0x160	array	EpicBannerDescription	148	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	0	ptServerData	0x18	array	GlobalServerData	424	8	zero	
+ps3	glo	GlobalDefinition	568	2	arStartLocationNames	0x30	array	StartLocationName	68	8	zero	
+ps3	glo	GlobalDefinition	568	45	tBannerParams	0x88	inline	BannerParams	1			
 ps3	glo	GlobalServerData	424									
-ps3	glo	GlobalServerData	424	0	arActorGroups	0x8	array	ActorGroup	68	4	zero	
-ps3	glo	GlobalServerData	424	1	arScriptGlobalVars	0x18	array	GlobalScriptVariable	40	4	zero	
-ps3	glo	StartLocationName	40									
+ps3	glo	GlobalServerData	424	0	arActorGroups	0x8	array	ActorGroup	68	8	zero	
+ps3	glo	GlobalServerData	424	1	arScriptGlobalVars	0x18	array	GlobalScriptVariable	40	8	zero	
+ps3	glo	GlobalServerData	424	2	tDifficultyParams	0x20	inline	DifficultyTuningParams	4			
+ps3	glo	StartLocationName	68									
+ps3	glo	BannerParams	232									
+ps3	glo	BannerParams	232	0	arTexBackgrounds	0x8	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	2	arTexPatterns	0x20	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	4	arTexMainSigils	0x38	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	5	arTexVariantSigils	0x48	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	7	arTexSigilAccents	0x60	array	BannerTexturePair	16	8	zero	
+ps3	glo	BannerParams	232	9	arColorSets	0x78	array	BannerColorSet	84	8	zero	
+ps3	glo	BannerParams	232	10	arSigilPlacements	0x88	array	BannerSigilPlacement	68	8	zero	
+ps3	glo	BannerParams	232	11	arActorBases	0x98	array	SNO	4	8	zero	
+ps3	glo	BannerParams	232	12	arActorCaps	0xA8	array	SNO	4	8	zero	
+ps3	glo	BannerParams	232	13	arActorPoles	0xB8	array	SNO	4	8	zero	
+ps3	glo	BannerParams	232	14	arActorRibbons	0xC8	array	SNO	4	8	zero	
+ps3	glo	BannerParams	232	15	arEpicBannerDescriptions	0xD8	array	EpicBannerDescription	148	8	zero	
+ps3	glo	ActorGroup	68									
+ps3	glo	GlobalScriptVariable	40									
+ps3	glo	DifficultyTuningParams	52									
 ps3	glo	BannerTexturePair	16									
 ps3	glo	BannerColorSet	84									
 ps3	glo	BannerSigilPlacement	68									
 ps3	glo	EpicBannerDescription	148									
-ps3	glo	ActorGroup	68									
-ps3	glo	GlobalScriptVariable	40									
 ps3	lit	LightDefinition	1096									
 ps3	lit	LightDefinition	1096	0	tStateA.pathInnerRadius.ptArrayNodes	0x58	array	FloatNode	12	4	zero	
 ps3	lit	LightDefinition	1096	1	tStateA.pathRadius.ptArrayNodes	0x80	array	FloatNode	12	4	zero	

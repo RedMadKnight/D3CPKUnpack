@@ -1,0 +1,19 @@
+file	repeat	order	section	size_word	element_bytes	count_source_in_parent	alignment	empty_form	notes
+can	per permutation (count = parent .ani records)	1	bone name hashes	u32 bytes, before section	4	.ani permutation +0x78 bone count	none	size 0	
+can	per permutation	2	blend weights	u32 bytes	8	.ani permutation +0x90 (0 or bone count)	none	size 0	
+can	per permutation	3	translation curves	u32 bytes of the table only (16 x bones)	16 per entry + blobs	bone count	blob: next multiple of 8 from table start	entry {0,0,0,0}	table always present; entry {offset from table start, size, 0, 0}; blobs in track order; gaps zero; section ends at last blob end
+can	per permutation	4	rotation curves	as 3	as 3	bone count	as 3	as 3	
+can	per permutation	5	scale curves	as 3	as 3	bone count	as 3	as 3	
+can	per permutation	6	attachments	u32 bytes	192	.ani permutation +0x12C attachment count	none	size 0	
+can	per permutation	7	nonlinear offsets	u32 bytes	12	.ani permutation +0xA8 keyframe count	none	size 0	
+can	file	-	end	none	-	-	none	-	no padding between permutations, none at end; big-endian
+nav	once	1	grid	none	4	.scn body 0x40..0x5C: (w-left-right) x (h-top-bottom)	none	absent	
+nav	once	2	cells	none	32	.scn body 0x180	none	absent	
+nav	once	3	neighbours	none	4	.scn body 0x198	none	absent	
+nav	once	4	coarse grid	none	6	.scn body 0x1BC x 0x1C0	none	absent	6-byte rows are not padded
+nav	once	5	lookups	none	4	.scn body 0x1D8	none	absent	
+nav	once	6	borders	none	4	.scn body 0x1F0	none	absent	
+nav	file	-	end	none	-	-	none	-	file size = sum of sections; total 0: ps3 has no file, x360 has a 0-byte file
+blob	translation	-	count S; codec u8; [pad to 4; base 3 x f32 if count>=2 | pad to 2S if count=1]; frames count x S; pad to codec; values 3 x codec per key; pad to 4	-	-	S = 1 if K<256, 2 if K<65536, else 4 (K = permutation keyframes)	-	-	all padding zero
+blob	rotation	-	count S; frames count x S; pad to 2; values 4 x int16 per key; pad to 4	-	-	as above	-	-	
+blob	scale	-	count S; codec u8; pad to S; frames count x S; pad to codec; values 1 x codec per key; pad to 4	-	-	as above	-	-	
