@@ -1,4 +1,5 @@
-"""Writers and edit helpers for ``.stl``, ``.pow``, ``.scr``, ``.tex``, ``.gam`` and ``.app``.
+"""Writers and edit helpers for ``.stl``, ``.pow``, ``.scr``, ``.tex``, ``.gam`` and ``.app``;
+every other SNO type of ``s11_layouts.tsv`` through ``sno_layout`` (W11).
 
 ``write(parsed)`` lays a parsed file out again, so parse then write gives the same bytes. The
 fixed part is kept as it was, with its revision and source hash, and only pairs change.
@@ -10,7 +11,7 @@ import struct
 from dataclasses import dataclass, replace
 from typing import Mapping
 
-from . import appearance, archive, balance, material, power, scripts, text, texture
+from . import appearance, archive, balance, material, power, scripts, sno_layout, text, texture
 from .transform import Transform
 from .binary import ByBuild, FormatError, build_order
 from .luachunk import LUA_SIGNATURE
@@ -462,9 +463,130 @@ _BONE_TRANSFORMS = ByBuild({
 })
 
 
-def write_app(app: appearance.AppearanceFile) -> bytes:
-    """The file with its in-place edits. Edits that would change a size are not supported."""
-    return bytes(app.source)
+def app_tree(app: appearance.AppearanceFile) -> sno_layout.SnoTree:
+    """The structure tree of an ``.app`` (``22`` section 3), from its source with the in-place
+    edits, and with the block edits of ``set_app_block`` applied."""
+    tree = sno_layout.parse_tree(bytes(app.source), "app", app.build)
+    for path, data in app.block_edits.items():
+        sno_layout.set_block(tree, path, data)
+    return tree
+
+
+def write_app(app: appearance.AppearanceFile, tree: sno_layout.SnoTree | None = None,
+              check_mesh: bool = True) -> bytes:
+    """Lay out an ``.app`` by the structure-level writer (``22`` section 3, W11-1 to W11-7).
+
+    In-place edits (bone transforms, hardpoints, material textures) are kept; block edits
+    (``set_app_block``, ``set_packed_vertices``) are laid out again with correct pairs. ``tree``
+    may be a tree from ``app_tree`` changed by the caller.
+
+    A source that is not laid out by W11 (its rebuild is not the same bytes; no game file, only
+    hand-made ones) is copied when nothing changes a block, and refused otherwise (Q348).
+
+    V11-9: with ``check_mesh`` (the default) a laid-out file whose mesh no longer reads raises
+    FormatError, for instance after a count-tied block changed length without its counts."""
+    source = bytes(app.source)
+    edited = tree is not None or bool(app.block_edits)
+    if not edited:
+        try:
+            out = sno_layout.write_tree(app_tree(app))
+        except FormatError:
+            return source
+        return out if out == source else source
+    if not sno_layout.is_canonical(source, "app", app.build):
+        raise FormatError("this .app is not laid out by W11; its blocks cannot be laid out again")
+    out = sno_layout.write_tree(tree if tree is not None else app_tree(app))
+    if check_mesh:
+        try:
+            appearance.parse_appearance(out, app.build)
+        except FormatError as exc:
+            raise FormatError(f"the laid-out .app does not read ({exc}); a block whose length is "
+                              "tied to a count changed without the count (V11-9)") from exc
+    return out
+
+
+# Pair offsets of the switch / x360 .app records (s11_layouts.tsv): the top record's tStructure
+# at 0x10 holds tGeoSets at 0x50 (two GeoSet of 24 bytes, ptSubObjects at +4); a SubObject has
+# serPackVertList at 0xB0 and ptSkinningInfo at 0xB8; a SkinningInfo has its vertex list at 0x28
+# and its index list at 0x40.
+_GEOSET_SUBOBJECTS = 0x10 + 0x50 + 4
+_GEOSET_SIZE = 24
+_SUB_PACKED = 0xB0
+_SUB_SKINNING = 0xB8
+_SKIN_LISTS = {"vertices": 0x28, "indices": 0x40}
+
+
+def app_pair_path(app: appearance.AppearanceFile, sub_object: int, geo_set: int = 0,
+                  skin: int | None = None, which: str = "vertices") -> str:
+    """The pair path of a sub-object's packed vertex list, or of a skinning record's vertex or
+    index list (switch and x360)."""
+    if app.build == "ps3":
+        raise FormatError("ps3 sub-objects have no packed vertex lists (their draws hold streams)")
+    tree = sno_layout.parse_tree(bytes(app.source), "app", app.build)
+    geo = tree.top.pairs.get(_GEOSET_SUBOBJECTS + geo_set * _GEOSET_SIZE)
+    if geo is None or geo.block is None or not 0 <= sub_object < len(geo.block.elements):
+        raise FormatError(f"no sub-object {sub_object} in geo set {geo_set}")
+    sub = geo.block.elements[sub_object]
+    target_record, target = sub, _SUB_PACKED
+    if skin is not None:
+        skins = sub.pairs.get(_SUB_SKINNING)
+        if skins is None or skins.block is None or not 0 <= skin < len(skins.block.elements):
+            raise FormatError(f"no skinning record {skin} in sub-object {sub_object}")
+        target_record, target = skins.block.elements[skin], _SKIN_LISTS[which]
+    for path, record, slot, _ in sno_layout.iter_pairs(tree):
+        if record is target_record and slot.offset == target:
+            return path
+    raise FormatError("pair not found")
+
+
+# V11-9, V12-1: blocks whose length is tied to a count (record, pair offset in the record):
+# packed vertex lists (count x stride), the skinning bone-id list (4 bytes per entry), the ps3
+# draw descriptor and streams A and C. The skinning index list is not shown to be tied (V12-1);
+# write_app's mesh check still covers it.
+APP_COUNT_TIED = {
+    "switch": frozenset({("SubObject", 0xB0), ("SkinningInfo", 0x28), ("SkinningInfo", 0x04)}),
+    "x360": frozenset({("SubObject", 0xB0), ("SkinningInfo", 0x28), ("SkinningInfo", 0x04)}),
+    "ps3": frozenset({("DrawP3", 0x08), ("DrawP3", 0x2C), ("DrawP3", 0x6C)}),
+}
+# Packed vertex lists and their strides: an empty one may get a whole number of vertices (Q372).
+APP_PACKED_STRIDES = {("SubObject", 0xB0): 28, ("SkinningInfo", 0x28): 36}
+
+
+def is_count_tied(app: appearance.AppearanceFile, path: str) -> bool:
+    """V11-9: whether the block at ``path`` has a length tied to a count."""
+    record, slot, _ = sno_layout.find_pair(sno_layout.parse_tree(bytes(app.source), "app", app.build), path)
+    return (record.name, slot.offset) in APP_COUNT_TIED.get(app.build, frozenset())
+
+
+def set_app_block(app: appearance.AppearanceFile, path: str, data: bytes,
+                  allow_count_change: bool = False) -> None:
+    """Replace one block of an ``.app`` by pair path (``sno_layout.iter_pairs``); ``write_app``
+    lays the file out again. The decoded mesh is not updated (mesh level is OPEN).
+
+    V11-9, V12-1: a block whose length is tied to a count (``APP_COUNT_TIED``) may change only
+    to the same length; ``allow_count_change`` lifts this for a caller who also changes the
+    counts. A packed vertex list that was empty may get a whole number of vertices (a multiple
+    of its stride); ``write_app`` then checks that the mesh reads."""
+    record, slot, value = sno_layout.find_pair(
+        sno_layout.parse_tree(bytes(app.source), "app", app.build), path)
+    old = 0 if value is None or value.block is None else value.block.size()
+    key = (record.name, slot.offset)
+    stride = APP_PACKED_STRIDES.get(key)
+    filled = old == 0 and stride is not None and len(data) % stride == 0
+    if (not allow_count_change and not filled and len(data) != old
+            and key in APP_COUNT_TIED.get(app.build, frozenset())):
+        raise FormatError(f"{path}: its length ({old}) is tied to a count; a block of {len(data)} "
+                          "bytes needs the counts changed too, and the mesh level is OPEN (V11-9)")
+    app.block_edits[path] = bytes(data)
+
+
+def set_packed_vertices(app: appearance.AppearanceFile, sub_object: int, raw: bytes,
+                        geo_set: int = 0, skin: int | None = None,
+                        allow_count_change: bool = False) -> None:
+    """A new packed vertex list for a sub-object or one of its skinning records. The bytes are
+    stored as given: counts, bounds, scale and bias are not changed (``22``: the mesh-level
+    writer is OPEN), so a new length is refused unless ``allow_count_change`` (V11-9)."""
+    set_app_block(app, app_pair_path(app, sub_object, geo_set, skin), raw, allow_count_change)
 
 
 def set_bone_transform(app: appearance.AppearanceFile, index: int, which: str, value: Transform) -> None:
@@ -524,6 +646,8 @@ def write(parsed) -> bytes:
         return write_gam(parsed)
     if isinstance(parsed, appearance.AppearanceFile):
         return write_app(parsed)
+    if isinstance(parsed, sno_layout.SnoTree):
+        return sno_layout.write_tree(parsed)  # W11: every type of s11_layouts.tsv
     raise FormatError(f"no writer for {type(parsed).__name__}")
 
 

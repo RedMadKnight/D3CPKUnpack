@@ -42,8 +42,8 @@ def tsv(name):
 
 class Marker(unittest.TestCase):
     def test_stage(self):
-        self.assertEqual(d3sno.STAGE, 10)  # 0.10.1 keeps stage 10
-        self.assertTrue(d3sno.__version__.startswith("0.10."))
+        self.assertGreaterEqual(d3sno.STAGE, 10)
+        self.assertFalse(d3sno.__version__.startswith("0.9."))
 
     def test_tables_shipped(self):
         for name in ("s10_cloth_rules", "s10_enums_core", "s10_enums_geometry", "s10_enums_records",

@@ -671,11 +671,17 @@ def parse_achievements(data: bytes) -> Achievements:
 
 FSB5_HEADER = 60
 CHUNK_LOOP = 3
+CHUNK_UNKNOWN_5 = 5  # S11-2: meaning OPEN; kept raw (4 zero bytes, once 8 bytes)
 CHUNK_VORBIS = 11
 MODE_VORBIS = 15
 MODE_FRAMES = 16
 FRAME_SIZE = 140
 FRAME_SAMPLES = 256
+DATA_ALIGN = 32  # V11-3, V11-6: sample data start at, and run to, a multiple of 32 in the file
+NAME_OFFSET = 4  # V11-6: the name offset word is 4 in every file
+NAME_TABLE_SIZES = (16, 104)  # V12-2: smallest and largest table in the files, not limits
+# V11-7: the chunk types that occur (3 loop, 4 markers, 5 raw, 11 Vorbis setup)
+CHUNK_TYPES = {3: "loop", 4: "markers", 5: "unknown (raw)", 11: "vorbis setup"}
 
 
 @dataclass
@@ -738,9 +744,39 @@ class Fsb5:
     sample: FsbSample
     header_raw: bytes
     data: bytes
+    headers_raw: bytes = b""  # the sample headers with their chunks, as stored
+    name_table: bytes = b""  # S11-1: as stored, padding included
+    data_area: bytes = b""  # the whole sample-data area of the header's data size
+    trailing: bytes = b""  # V11-6: bytes after the data area (none in the game files)
+
+    @property
+    def channels(self) -> int:
+        return 2 if self.sample.stereo else 1
+
+    @property
+    def name(self) -> str | None:
+        """S11-1: the sample's name from the name table (``<bank>-<NNNN>``), or None without one."""
+        names = fsb5_names(self.name_table, 1)
+        return names[0] if names else None
+
+    @property
+    def unknown_chunks(self) -> list[FsbChunk]:
+        """S11-2: chunks of type 5, raw."""
+        return [c for c in self.sample.chunks if c.type == CHUNK_UNKNOWN_5]
+
+    def frame_bytes(self) -> int:
+        """S11-3: mode 16 frame bytes, ceil(samples / 256) x 140 x channels."""
+        return -(-self.sample.sample_count // FRAME_SAMPLES) * FRAME_SIZE * self.channels
+
+    def padding(self) -> bytes:
+        """S11-3, V11-3: the bytes after the mode-16 frames (zero, up to a multiple of 32)."""
+        if self.mode != MODE_FRAMES:
+            return b""
+        return self.data[self.frame_bytes():]
 
     def packets(self) -> list[bytes]:
-        """Mode 15: u16-length-prefixed Vorbis packets. Mode 16: 140-byte frames."""
+        """Mode 15: u16-length-prefixed Vorbis packets. Mode 16: 140-byte frames (S11-3: the
+        padding after ceil(samples / 256) x channels frames is not a frame)."""
         if self.mode == MODE_VORBIS:
             out, pos = [], 0
             while pos + 2 <= len(self.data):
@@ -753,9 +789,113 @@ class Fsb5:
                 pos += 2 + size
             return out
         if self.mode == MODE_FRAMES:
-            usable = len(self.data) // FRAME_SIZE * FRAME_SIZE
+            usable = min(len(self.data), self.frame_bytes()) // FRAME_SIZE * FRAME_SIZE
             return [self.data[i:i + FRAME_SIZE] for i in range(0, usable, FRAME_SIZE)]
         raise FormatError(f"FSB5 mode {self.mode} is not described")
+
+
+def fsb5_names(table: bytes, count: int) -> list[str]:
+    """S11-1: a name table of ``count`` u32 offsets (from the table start), then NUL-terminated
+    names, padded with zero bytes to its declared size."""
+    if not table:
+        return []
+    if len(table) < 4 * count:
+        raise FormatError(f"name table of {len(table)} bytes for {count} names")
+    names = []
+    for k in range(count):
+        at = struct.unpack_from("<I", table, 4 * k)[0]
+        if not 4 * count <= at < len(table):
+            raise FormatError(f"name {k} at {at}, outside the name table")
+        end = table.find(b"\0", at)
+        if end < 0:
+            raise FormatError(f"name {k} has no NUL")
+        names.append(table[at:end].decode("latin-1"))
+    return names
+
+
+def _strip_locale(name: str) -> str:
+    """The name without a ``|xxYY`` locale suffix (or its file-system form ``@xxYY``)."""
+    for mark in ("|", "@"):
+        if mark in name:
+            name = name[:name.index(mark)]
+    return name
+
+
+def fsb5_problems(fsb: "Fsb5", path: str | None = None) -> list[str]:
+    """S11-1, S11-3, V11-3, V11-6, V11-7: a missing name table, a name offset other than 4, a
+    name other than the archive path's (``SoundBank\\<bank>\\NNNN.fsb`` gives ``<bank>-<NNNN>``;
+    a locale suffix such as ``|enUS`` is left out of the comparison), table padding not zero, a
+    table length other than the padding rule gives (V12-2: 16..104 is only the range seen, not
+    a limit), sample data not starting at or not running to a multiple of 32, bytes after the data area, a chunk type other than 3, 4, 5, 11, and a mode-16 data size
+    other than the frames plus zero padding to 32."""
+    found = []
+    if not fsb.name_table:
+        found.append("no name table (S11-1)")
+    else:
+        try:
+            names = fsb5_names(fsb.name_table, 1)
+            at = struct.unpack_from("<I", fsb.name_table, 0)[0]
+            if at != NAME_OFFSET:
+                found.append(f"name offset {at} is not {NAME_OFFSET} (V11-6)")
+            last = at + len(names[0].encode("latin-1")) + 1
+            if any(fsb.name_table[last:]):
+                found.append("name table padding is not zero (S11-1)")
+            if path is not None and _strip_locale(names[0]) != fsb5_name_for_path(path):
+                found.append(f"name {names[0]!r} is not {fsb5_name_for_path(path)!r} (S11-1)")
+        except FormatError as exc:
+            found.append(f"name table: {exc}")
+        else:
+            rule = fsb5_name_table(names[0], len(fsb.headers_raw))
+            if at == NAME_OFFSET and len(fsb.name_table) != len(rule):
+                found.append(f"name table of {len(fsb.name_table)} bytes, not the padding rule's "
+                             f"{len(rule)} (V12-2)")
+    data_at = FSB5_HEADER + len(fsb.headers_raw) + len(fsb.name_table)
+    if data_at % DATA_ALIGN:
+        found.append(f"sample data start at 0x{data_at:X}, not a multiple of {DATA_ALIGN} (V11-6)")
+    if len(fsb.data_area) % DATA_ALIGN:
+        found.append(f"sample data area of {len(fsb.data_area)} bytes, not a multiple of {DATA_ALIGN} (V11-6)")
+    if fsb.trailing:
+        found.append(f"{len(fsb.trailing)} bytes after the sample data (V11-6)")
+    for chunk in fsb.sample.chunks:
+        if chunk.type not in CHUNK_TYPES:
+            found.append(f"chunk type {chunk.type} (V11-7)")
+    if fsb.mode == MODE_FRAMES:
+        frames = fsb.frame_bytes()
+        expected = -(-frames // DATA_ALIGN) * DATA_ALIGN
+        if len(fsb.data) != expected:
+            found.append(f"mode-16 data of {len(fsb.data)} bytes, {expected} expected (S11-3)")
+        elif any(fsb.padding()):
+            found.append("mode-16 padding is not zero (S11-3)")
+    return found
+
+
+def fsb5_name_for_path(path: str) -> str:
+    """S11-1: ``SoundBank\\<bank>\\NNNN.fsb`` -> ``<bank>-<NNNN>``. A locale suffix of the
+    archive name (``|enUS``, or ``@enUS`` as ``cli`` writes it) is dropped."""
+    parts = _strip_locale(path).replace("/", "\\").split("\\")
+    if len(parts) < 2 or not parts[-1].lower().endswith(".fsb"):
+        raise FormatError(f"not a sound bank sample path: {path!r}")
+    return f"{parts[-2]}-{parts[-1][:-4]}"
+
+
+def fsb5_name_table(name: str, headers_size: int) -> bytes:
+    """V11-6: a name table for ``name``: the offset word 4, the name and its NUL, then zero bytes
+    until the sample data start at a multiple of 32 (60 + ``headers_size`` + table size)."""
+    table = struct.pack("<I", NAME_OFFSET) + name.encode("latin-1") + b"\0"
+    return table + bytes(-(FSB5_HEADER + headers_size + len(table)) % DATA_ALIGN)
+
+
+def fsb5_set_name(fsb: "Fsb5", name: str) -> None:
+    """V11-6: give the sample a new name; the table is padded again by the 32-byte rule."""
+    fsb.name_table = fsb5_name_table(name, len(fsb.headers_raw))
+
+
+def write_fsb5(fsb: "Fsb5") -> bytes:
+    """An FSB5 file again: header, sample headers, the name table as kept (S11-1), sample data.
+    The file ends at the end of the data area (V11-6); ``trailing`` is not written."""
+    head = bytearray(fsb.header_raw)
+    struct.pack_into("<III", head, 12, len(fsb.headers_raw), len(fsb.name_table), len(fsb.data_area))
+    return bytes(head) + fsb.headers_raw + fsb.name_table + fsb.data_area
 
 
 def parse_fsb5(data: bytes) -> Fsb5:
@@ -787,4 +927,7 @@ def parse_fsb5(data: bytes) -> Fsb5:
     data_at = FSB5_HEADER + headers_size + names_size
     view.need(data_at, data_size, "FSB5 data")
     start = data_at + sample.data_offset
-    return Fsb5(version, mode, sample, view.take(0, FSB5_HEADER), bytes(data[start:data_at + data_size]))
+    return Fsb5(version, mode, sample, view.take(0, FSB5_HEADER), bytes(data[start:data_at + data_size]),
+                view.take(FSB5_HEADER, headers_size, "sample headers"),
+                view.take(FSB5_HEADER + headers_size, names_size, "name table"),
+                view.take(data_at, data_size, "FSB5 data"), bytes(data[data_at + data_size:]))

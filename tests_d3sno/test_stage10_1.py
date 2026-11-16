@@ -21,8 +21,9 @@ from test_stage10 import _switch_with_cloth, tsv, x360_tex
 
 class Marker(unittest.TestCase):
     def test_version(self):
-        self.assertEqual(d3sno.__version__, "0.10.1")
-        self.assertEqual(d3sno.STAGE, 10)
+        major, minor, patch = (int(x) for x in d3sno.__version__.split("."))
+        self.assertGreaterEqual((major, minor, patch), (0, 10, 1))
+        self.assertGreaterEqual(d3sno.STAGE, 10)
 
 
 # --- V9-T4: packed levels from the fourth on ---------------------------------------------------
@@ -140,7 +141,8 @@ class ExtraFaces(unittest.TestCase):
 # --- V9-G1-3: PS3 cloth with a draw ------------------------------------------------------------
 
 class Ps3ClothDraw(unittest.TestCase):
-    FAT3 = [(0.0, 0.0, 0.0), (4.0, 0.0, 0.0), (0.0, 4.0, 0.0)]
+    # V10-G1-3: the draw holds the fat positions (its decoded triangle) within one step.
+    FAT3 = [(1.0, 2.0, 3.0), (6.0, 2.0, 3.0), (1.0, 7.0, 3.0)]
 
     def test_draw_exported_not_both(self):
         app = P.parse_appearance(B.build_app_ps3(fat=self.FAT3, cloth=True, cloth_draw=True), strict=True)

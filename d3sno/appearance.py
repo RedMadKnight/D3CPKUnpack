@@ -153,6 +153,9 @@ class AppearanceFile:
     extra_sub_objects: list[SubObject] = field(default_factory=list)  # geo set 1, low-poly (G1-1)
     source: bytearray = field(default_factory=bytearray, repr=False)
     notes: list[str] = field(default_factory=list)  # reported, never a strict failure
+    # Section 3 of 22: block changes for the structure-level writer, by pair path
+    # (``sno_layout.iter_pairs``); see ``write.set_app_block``.
+    block_edits: dict[str, bytes] = field(default_factory=dict, repr=False)
 
 
 # Sub-object flag bits (stage 7, T10).
@@ -744,6 +747,24 @@ def _cloth_checks(sub: SubObject, bone_count: int, warnings: list[str]) -> None:
     warnings.extend(cloth_problems(sub.cloth, render, tolerance, bone_count, sub.label))
 
 
+def ps3_cloth_draw_problems(sub: SubObject) -> list[str]:
+    """V10-G1-3: a PS3 cloth sub-object's draw holds the fat positions, within one quantisation
+    step per axis, in another vertex order (both ways)."""
+    fat = sub.fat_draw
+    draws = [d for d in sub.draws if d is not fat]
+    if fat is None or not sub.has_cloth or len(draws) != 1:
+        return []
+    step = tuple(abs(v) for v in sub.scale)
+
+    def near(a, b):
+        return all(abs(a[k] - b[k]) <= step[k] * (1 + 1e-6) for k in range(3))
+
+    drawn = draws[0].positions
+    if all(any(near(p, q) for q in fat.positions) for p in drawn) and             all(any(near(q, p) for p in drawn) for q in fat.positions):
+        return []
+    return [f"{sub.label}: draw positions are not the fat positions within one step (V10-G1-3)"]
+
+
 def parse_appearance(data: bytes, build: str | None = None, strict: bool = False) -> AppearanceFile:
     """Read an ``.app``. With ``strict``, data warnings become FormatError."""
     header = parse_header(data, build)
@@ -782,6 +803,8 @@ def parse_appearance(data: bytes, build: str | None = None, strict: bool = False
     _assign_fat(view, resolved, subs + extra, warnings)
     for sub in subs + extra:
         _cloth_checks(sub, len(bones), warnings)
+        if resolved == "ps3":
+            warnings.extend(ps3_cloth_draw_problems(sub))
         _check_bounds(sub, warnings, notes)
     material_data = AppMaterials()
     try:

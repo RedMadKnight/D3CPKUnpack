@@ -1,0 +1,2394 @@
+build	ext	record	record_size	order	field	pair_offset	kind	element	element_size_or_count	alignment	empty_form	deferred_group
+switch	aco	AccoladeDefinition	16									
+switch	acr	ActorDefinition	448									
+switch	acr	ActorDefinition	448	4	wcylBounds	0x1C	inline	AxialCylinder	1			
+switch	acr	ActorDefinition	448	5	wsBounds	0x30	inline	Sphere	1			
+switch	acr	ActorDefinition	448	6	aabbBounds	0x40	inline	AABB	1			
+switch	acr	ActorDefinition	448	7	hTagMap	0x58	tagmap			4	zero	
+switch	acr	ActorDefinition	448	12	ptMsgTriggeredEvents	0x78	array	MsgTriggeredEvent	192	8	zero	
+switch	acr	ActorDefinition	448	15	arActorLooks	0x9C	inline	WeightedLook	8			
+switch	acr	ActorDefinition	448	22	tCollData	0x114	inline	ActorCollisionData	1			
+switch	acr	ActorDefinition	448	23	tInvImages	0x160	inline	InventoryImages	7			
+switch	acr	ActorDefinition	448	25	szInterenalDescription	0x1A8	text			8	zero	
+switch	acr	ActorDefinition	448	26	szVORole	0x1B8	text			8	zero	
+switch	acr	AxialCylinder	20									
+switch	acr	Sphere	16									
+switch	acr	AABB	24									
+switch	acr	MsgTriggeredEvent	192									
+switch	acr	MsgTriggeredEvent	192	1	tTriggerEvent	0x4	inline	TriggerEvent	1			
+switch	acr	WeightedLook	12									
+switch	acr	WeightedLook	12	0	tLookLink	0x0	inline	LookLink	1			
+switch	acr	ActorCollisionData	76									
+switch	acr	ActorCollisionData	76	0	tCollFlags	0x0	inline	ActorCollisionFlags	1			
+switch	acr	ActorCollisionData	76	2	wcylCollision	0x14	inline	AxialCylinder	1			
+switch	acr	ActorCollisionData	76	3	aabbCollision	0x28	inline	AABB	1			
+switch	acr	InventoryImages	8									
+switch	acr	TriggerEvent	188									
+switch	acr	TriggerEvent	188	1	tConditions	0x4	inline	TriggerConditions	1			
+switch	acr	TriggerEvent	188	3	snoname	0x2C	inline	SNOName	1			
+switch	acr	TriggerEvent	188	6	tHardpointLinks	0x44	inline	HardpointLink	2			
+switch	acr	TriggerEvent	188	7	tLookLink	0x5C	inline	LookLink	1			
+switch	acr	TriggerEvent	188	8	tConstraintLink	0x64	inline	ConstraintLink	1			
+switch	acr	LookLink	8									
+switch	acr	ActorCollisionFlags	16									
+switch	acr	TriggerConditions	36									
+switch	acr	SNOName	8									
+switch	acr	HardpointLink	12									
+switch	acr	HardpointLink	12	0	tHash	0x0	inline	HardpointHash	1			
+switch	acr	ConstraintLink	8									
+switch	acr	HardpointHash	8									
+switch	act	ActDefinition	4192									
+switch	act	ActDefinition	4192	0	arQuests	0xC	array	ActQuestInfo	4	8	zero	
+switch	act	ActDefinition	4192	1	aWaypointInfo	0x20	inline	WaypointInfo	100			
+switch	act	ActDefinition	4192	2	tStartLocDefault	0xFC0	inline	ResolvedPortalDestination	1			
+switch	act	ActDefinition	4192	3	aStartLocOverride	0xFCC	inline	ActStartLocOverride	6			
+switch	act	ActQuestInfo	4									
+switch	act	WaypointInfo	40									
+switch	act	ResolvedPortalDestination	12									
+switch	act	ActStartLocOverride	24									
+switch	act	ActStartLocOverride	24	0	tStartLocation	0x0	inline	ResolvedPortalDestination	1			
+switch	adv	AdventureDefinition	36									
+switch	aib	AIBehaviorDefinition	48									
+switch	ais	AIStateDefinition	64									
+switch	ais	AIStateDefinition	64	0	arDecision	0x10	inline	AIDecision	2			
+switch	ais	AIDecision	24									
+switch	ais	AIDecision	24	0	arEntries	0x10	array	AIEntry	184	8	zero	
+switch	ais	AIEntry	184									
+switch	ais	AIEntry	184	4	arCondition	0x10	inline	AICondition	5			
+switch	ais	AICondition	28									
+switch	ams	AmbientSoundDefinition	96									
+switch	ams	AmbientSoundDefinition	96	2	tRandomSounds	0x14	inline	RandomAmbientSoundParams	2			
+switch	ams	RandomAmbientSoundParams	20									
+switch	an2	Animation2DDefinition	64									
+switch	an2	Animation2DDefinition	64	2	tFrameAnim	0x14	inline	FrameAnim	1			
+switch	an2	Animation2DDefinition	64	4	ptFrames	0x30	array	Anim2DFrame	68	8	zero	
+switch	an2	FrameAnim	20									
+switch	an2	Anim2DFrame	68									
+switch	ani	AnimationDefinition	56									
+switch	ani	AnimationDefinition	56	3	ptPermutations	0x18	array	AnimPermutation	360	8	zero	
+switch	ani	AnimPermutation	360									
+switch	ani	AnimPermutation	360	15	ptBoneNames	0x7C	array	BoneName	4	8	zero	
+switch	ani	AnimPermutation	360	18	ptBoneBlendWeights	0x98	array	BoneBlendWeights	8	8	zero	
+switch	ani	AnimPermutation	360	20	ptTranslationCurves	0xAC	array	TranslationCurve	16	8	zero	
+switch	ani	AnimPermutation	360	21	ptRotationCurves	0xC0	array	RotationCurve	16	8	zero	
+switch	ani	AnimPermutation	360	22	ptScaleCurves	0xD0	array	ScaleCurve	16	8	zero	
+switch	ani	AnimPermutation	360	32	ptKeyedAttachments	0x124	array	KeyframedAttachment	192	8	zero	
+switch	ani	AnimPermutation	360	34	pwvNonlinearOffset	0x138	array	VECTOR3D	12	8	zero	
+switch	ani	AnimPermutation	360	35	wvAvgVel	0x148	inline	VelocityVector3D	1			
+switch	ani	AnimPermutation	360	36	tHardpointLink	0x154	inline	HardpointLink	1			
+switch	ani	BoneName	4									
+switch	ani	BoneBlendWeights	8									
+switch	ani	TranslationCurve	16									
+switch	ani	TranslationCurve	16	0	ptKeysComp	0x0	array	BYTE	1	8	zero	
+switch	ani	RotationCurve	16									
+switch	ani	RotationCurve	16	0	ptKeysComp	0x0	array	BYTE	1	8	zero	
+switch	ani	ScaleCurve	16									
+switch	ani	ScaleCurve	16	0	ptKeysComp	0x0	array	BYTE	1	8	zero	
+switch	ani	KeyframedAttachment	192									
+switch	ani	KeyframedAttachment	192	1	tTriggeredEvent	0x4	inline	TriggerEvent	1			
+switch	ani	VelocityVector3D	12									
+switch	ans	AnimSetDefinition	480									
+switch	ans	AnimSetDefinition	480	1	hTagMapAnimDefault	0x10	tagmap			4	zero	
+switch	ans	AnimSetDefinition	480	2	tWeaponAnimTagMap	0x20	inline	AnimSetTagMap	28			
+switch	ans	AnimSetTagMap	16									
+switch	ans	AnimSetTagMap	16	0	hTagMap	0x0	tagmap			4	zero	
+switch	ant	AnimTreeDefinition	96									
+switch	ant	AnimTreeDefinition	96	2	ptLeaf	0x18	array	AnimTreeLeaf	36	8	zero	
+switch	ant	AnimTreeDefinition	96	4	ptNode	0x2C	array	AnimTreeNode	300	8	zero	
+switch	ant	AnimTreeDefinition	96	6	ptSyncGroup	0x44	array	INT	4	8	zero	
+switch	ant	AnimTreeLeaf	36									
+switch	ant	AnimTreeLeaf	36	8	tLayerName	0x20	inline	AnimTreeLayerName	1			
+switch	ant	AnimTreeNode	300									
+switch	ant	AnimTreeNode	300	4	tBlendCase	0x4C	inline	AnimTreeBlendCase	16			
+switch	ant	AnimTreeNode	300	5	tBlendRamp	0x10C	inline	AnimTreeBlendRamp	1			
+switch	ant	AnimTreeNode	300	7	tLayerName	0x128	inline	AnimTreeLayerName	1			
+switch	ant	AnimTreeLayerName	4									
+switch	ant	AnimTreeBlendCase	12									
+switch	ant	AnimTreeBlendRamp	24									
+switch	app	AppearanceDefinition	552									
+switch	app	AppearanceDefinition	552	0	ptAppearanceMaterials	0x170	array	AppearanceMaterial	24	8	zero	
+switch	app	AppearanceDefinition	552	2	ptAppearanceLooks	0x180	array	AppearanceLook	4	8	zero	
+switch	app	AppearanceDefinition	552	4	tStructure	0x10	inline	Structure	1			
+switch	app	AppearanceDefinition	552	5	ptStaticLights	0x194	array	StaticLight	92	8	zero	
+switch	app	AppearanceDefinition	552	23	tSubgridsAABB	0x1E8	inline	AABB	1			
+switch	app	AppearanceDefinition	552	24	ptSubgrids	0x200	array	AppearanceSamplingSubgrid	56	8	zero	
+switch	app	AppearanceDefinition	552	25	serAppearanceSubObjectsIndices	0x210	blob			1	cursor	0
+switch	app	AppearanceDefinition	552	26	serAppearanceSubObjectsVertices	0x218	blob			1	cursor	1
+switch	app	AppearanceMaterial	24									
+switch	app	AppearanceMaterial	24	2	ptSOAs	0x8	array	SubObjectAppearance	248	8	zero	
+switch	app	AppearanceLook	4									
+switch	app	Structure	344									
+switch	app	Structure	344	2	ptBoneStructure	0x8	array	BoneStructure	256	8	zero	
+switch	app	Structure	344	3	tLookAtData	0x18	inline	LookAtData	1			
+switch	app	Structure	344	5	ptBonePulses	0x48	array	BonePulseData	20	8	zero	
+switch	app	Structure	344	6	tGeoSets	0x50	inline	GeoSet	2			
+switch	app	Structure	344	7	wsBounds	0x80	inline	Sphere	1			
+switch	app	Structure	344	9	ptCollisionCapsules	0x94	array	CollisionCapsule	48	8	zero	
+switch	app	Structure	344	11	ptHardpoints	0xAC	array	Hardpoint	40	8	zero	
+switch	app	Structure	344	13	tOctreeVisualMesh	0xD0	inline	Octree	1			
+switch	app	Structure	344	14	aabbBounds	0x118	inline	AABB	1			
+switch	app	Structure	344	17	ptLoopConstraints	0x134	array	ConstraintParameters	236	8	zero	
+switch	app	StaticLight	92									
+switch	app	AppearanceSamplingSubgrid	56									
+switch	app	AppearanceSamplingSubgrid	56	3	ptSamples	0x10	array	AppearanceSample	12	8	zero	
+switch	app	AppearanceSamplingSubgrid	56	4	aabb	0x20	inline	AABB	1			
+switch	app	SubObjectAppearance	248									
+switch	app	SubObjectAppearance	248	2	hTagMap	0x8	tagmap			4	zero	
+switch	app	SubObjectAppearance	248	3	tUberMaterial	0x18	inline	UberMaterial	1			
+switch	app	SubObjectAppearance	248	5	tCompositeUberMaterial	0x88	inline	UberMaterial	1			
+switch	app	BoneStructure	256									
+switch	app	BoneStructure	256	3	aabb	0xC	inline	AABB	1			
+switch	app	BoneStructure	256	4	wsBounds	0x24	inline	Sphere	1			
+switch	app	BoneStructure	256	5	transform	0x34	inline	PRSTransform	1			
+switch	app	BoneStructure	256	6	transformInv	0x54	inline	PRSTransform	1			
+switch	app	BoneStructure	256	7	transformParentRel	0x74	inline	PRSTransform	1			
+switch	app	BoneStructure	256	8	transformBindPose	0x94	inline	PRSTransform	1			
+switch	app	BoneStructure	256	9	transformBindPoseInv	0xB4	inline	PRSTransform	1			
+switch	app	BoneStructure	256	11	ptShapes	0xD8	array	CollisionShape	80	8	zero	
+switch	app	BoneStructure	256	12	ptConstraint	0xE8	array	ConstraintParameters	236	8	zero	
+switch	app	LookAtData	36									
+switch	app	BonePulseData	20									
+switch	app	GeoSet	24									
+switch	app	GeoSet	24	1	ptSubObjects	0x4	array	SubObject	240	8	zero	
+switch	app	CollisionCapsule	48									
+switch	app	CollisionCapsule	48	2	tHardpoint	0x8	inline	Hardpoint	1			
+switch	app	Hardpoint	40									
+switch	app	Hardpoint	40	0	tHash	0x0	inline	HardpointHash	1			
+switch	app	Hardpoint	40	2	transform	0xC	inline	PRTransform	1			
+switch	app	Octree	72									
+switch	app	Octree	72	6	ptNodes	0x18	array	OctreeNode	48	8	zero	
+switch	app	Octree	72	7	ptLeaves	0x28	array	OctreeLeaf	24	8	zero	
+switch	app	Octree	72	8	ptPrimitives	0x38	array	OctreePrimitive	8	8	zero	
+switch	app	ConstraintParameters	236									
+switch	app	ConstraintParameters	236	6	frame	0x18	inline	PRTransform	1			
+switch	app	ConstraintParameters	236	8	localFrame1	0x40	inline	PRTransform	1			
+switch	app	ConstraintParameters	236	9	localFrame2	0x5C	inline	PRTransform	1			
+switch	app	AppearanceSample	12									
+switch	app	UberMaterial	104									
+switch	app	UberMaterial	104	0	mat	0x4	inline	Material	1			
+switch	app	UberMaterial	104	2	ptMatTexList	0x4C	array	MaterialTextureEntry	32	8	zero	
+switch	app	PRSTransform	32									
+switch	app	PRSTransform	32	0	q	0x0	inline	Quaternion	1			
+switch	app	CollisionShape	80									
+switch	app	CollisionShape	80	7	pPolytopeData	0x1C	array	PolytopeData	96	8	zero	
+switch	app	SubObject	240									
+switch	app	SubObject	240	2	ptVertList	0x8	array	FatVertex	32	8	zero	
+switch	app	SubObject	240	3	ptInfluenceList	0x18	array	VertInfluences	24	8	zero	
+switch	app	SubObject	240	5	pwIndexList	0x2C	array	WORD	2	8	zero	
+switch	app	SubObject	240	6	ptClothStructure	0x40	array	ClothStructure	144	8	zero	
+switch	app	SubObject	240	14	aabbBounds	0x6C	inline	AABB	1			
+switch	app	SubObject	240	16	ptShapes	0x88	array	CollisionShape	80	8	zero	
+switch	app	SubObject	240	21	serPackVertList	0xB0	blob			1	zero	2
+switch	app	SubObject	240	22	ptSkinningInfo	0xB8	array	SkinningInfo	104	8	zero	
+switch	app	SubObject	240	23	ptCompInfluenceList	0xC8	array	CompVertInfluences	6	8	zero	
+switch	app	PRTransform	28									
+switch	app	PRTransform	28	0	q	0x0	inline	Quaternion	1			
+switch	app	OctreeNode	48									
+switch	app	OctreeNode	48	0	tCube	0x0	inline	OctreeCube	1			
+switch	app	OctreeLeaf	24									
+switch	app	OctreeLeaf	24	0	tCube	0x0	inline	OctreeCube	1			
+switch	app	OctreePrimitive	8									
+switch	app	Material	72									
+switch	app	MaterialTextureEntry	32									
+switch	app	MaterialTextureEntry	32	2	tMatTex	0x8	inline	MaterialTexture	1			
+switch	app	Quaternion	16									
+switch	app	PolytopeData	96									
+switch	app	PolytopeData	96	0	m_centroid	0x20	inline	dmFloat3	1			
+switch	app	PolytopeData	96	1	m_aVertices	0x40	array	dmFloat3	12	8	zero	
+switch	app	PolytopeData	96	2	m_aPlanes	0x48	array	dmPlane	16	8	zero	
+switch	app	PolytopeData	96	3	m_aSubEdges	0x50	array	dmSubEdge	4	8	zero	
+switch	app	PolytopeData	96	4	m_aFaceSubEdges	0x58	array	BYTE	1	8	zero	
+switch	app	FatVertex	32									
+switch	app	VertInfluences	24									
+switch	app	VertInfluences	24	0	tBoneInfluence	0x0	inline	Influence	3			
+switch	app	ClothStructure	144									
+switch	app	ClothStructure	144	1	ptVertices	0x4	array	ClothVertexSerializable	44	8	zero	
+switch	app	ClothStructure	144	3	ptFaces	0x1C	array	ClothFaceSerializable	16	8	zero	
+switch	app	ClothStructure	144	5	ptStaples	0x34	array	ClothStaple	28	8	zero	
+switch	app	ClothStructure	144	7	ptDistanceConstraints	0x4C	array	ClothConstraintSerializable	16	8	zero	
+switch	app	ClothStructure	144	9	ptBendingConstraints	0x64	array	ClothConstraintSerializable	16	8	zero	
+switch	app	ClothStructure	144	12	ptClothVertexMapping	0x80	array	WORD	2	8	zero	
+switch	app	SkinningInfo	104									
+switch	app	SkinningInfo	104	1	pBoneIDs	0x4	array	INT	4	8	zero	
+switch	app	SkinningInfo	104	4	serPackVertList	0x28	blob			1	zero	2
+switch	app	SkinningInfo	104	7	serPackIndexList	0x40	blob			1	zero	2
+switch	app	CompVertInfluences	6									
+switch	app	CompVertInfluences	6	0	tBoneInfluence	0x0	inline	CompInfluence	3			
+switch	app	OctreeCube	16									
+switch	app	MaterialTexture	24									
+switch	app	MaterialTexture	24	1	pTexAnimCompParams	0x0	array	BYTE	1	8	zero	
+switch	app	dmFloat3	12									
+switch	app	dmPlane	16									
+switch	app	dmPlane	16	0	normal	0x0	inline	dmFloat3	1			
+switch	app	dmSubEdge	4									
+switch	app	Influence	8									
+switch	app	ClothVertexSerializable	44									
+switch	app	ClothFaceSerializable	16									
+switch	app	ClothStaple	28									
+switch	app	ClothConstraintSerializable	16									
+switch	app	CompInfluence	2									
+switch	bos	BossEncounterDefinition	104									
+switch	clt	ClothDefinition	100									
+switch	cnd	ConditionDefinition	1240									
+switch	cnd	ConditionDefinition	1240	8	tLoreSubconditions	0x40	inline	LoreSubcondition	3			
+switch	cnd	ConditionDefinition	1240	9	tQuestSubconditions	0x58	inline	QuestSubcondition	3			
+switch	cnd	ConditionDefinition	1240	13	tItemSubconditions	0x94	inline	ItemSubcondition	3			
+switch	cnd	ConditionDefinition	1240	29	tFollowerSubcondition	0x104	inline	FollowerSubcondition	1			
+switch	cnd	ConditionDefinition	1240	30	tLabelSubconditions	0x10C	inline	LabelSubcondition	3			
+switch	cnd	ConditionDefinition	1240	31	tSkillSubconditions	0x124	inline	SkillSubcondition	3			
+switch	cnd	ConditionDefinition	1240	41	tMonsterSubconditions	0x16C	inline	MonsterSubcondition	15			
+switch	cnd	ConditionDefinition	1240	42	tGameFlagSubconditions	0x1A8	inline	GameFlagSubcondition	3			
+switch	cnd	ConditionDefinition	1240	43	tPlayerFlagSubconditions	0x328	inline	PlayerFlagSubcondition	3			
+switch	cnd	ConditionDefinition	1240	44	tBuffSubconditions	0x4A8	inline	BuffSubcondition	3			
+switch	cnd	LoreSubcondition	8									
+switch	cnd	QuestSubcondition	16									
+switch	cnd	ItemSubcondition	16									
+switch	cnd	FollowerSubcondition	8									
+switch	cnd	LabelSubcondition	8									
+switch	cnd	SkillSubcondition	12									
+switch	cnd	MonsterSubcondition	4									
+switch	cnd	GameFlagSubcondition	128									
+switch	cnd	PlayerFlagSubcondition	128									
+switch	cnd	BuffSubcondition	12									
+switch	cnl	ConversationListDefinition	32									
+switch	cnl	ConversationListDefinition	32	0	ptConvList	0x18	array	ConversationListEntry	332	8	zero	
+switch	cnl	ConversationListEntry	332									
+switch	cnv	ConversationDefinition	272									
+switch	cnv	ConversationDefinition	272	12	arRootTreeNodes	0xC8	array	ConversationTreeNode	136	8	zero	
+switch	cnv	ConversationDefinition	272	13	pCompiledScript	0xD8	array	BYTE	1	8	zero	
+switch	cnv	ConversationTreeNode	136									
+switch	cnv	ConversationTreeNode	136	10	ptCompressedDisplayTimes	0x30	array	INT	4	8	zero	
+switch	cnv	ConversationTreeNode	136	19	arTrueNodes	0x60	array	ConversationTreeNode	136	8	zero	
+switch	cnv	ConversationTreeNode	136	20	arFalseNodes	0x70	array	ConversationTreeNode	136	8	zero	
+switch	cnv	ConversationTreeNode	136	21	arChildNodes	0x80	array	ConversationTreeNode	136	8	zero	
+switch	con	ConductorDefinition	72									
+switch	con	ConductorDefinition	72	0	arPhases	0x20	array	ConductorPhase	32	8	zero	
+switch	con	ConductorDefinition	72	4	pCompiledScript	0x38	array	BYTE	1	8	zero	
+switch	con	ConductorPhase	32									
+switch	con	ConductorPhase	32	3	arSequences	0x10	array	ConductorSequence	32	8	zero	
+switch	con	ConductorSequence	32									
+switch	con	ConductorSequence	32	1	arScriptMessageMap	0x10	array	ScriptMessageMap	192	8	zero	
+switch	con	ScriptMessageMap	192									
+switch	con	ScriptMessageMap	192	4	arMessageFilters_Console	0x8	inline	ScriptEventVariantParamLW	4			
+switch	con	ScriptMessageMap	192	5	arMessageFilters_Strings	0x68	inline	ScriptEventVariantParamString_Console	4			
+switch	con	ScriptMessageMap	192	6	szHandlerFunction	0xA8	array	BYTE	1	8	zero	
+switch	con	ScriptEventVariantParamLW	24									
+switch	con	ScriptEventVariantParamString_Console	16									
+switch	con	ScriptEventVariantParamString_Console	16	0	szString	0x0	array	BYTE	1	8	zero	
+switch	ctr	ControlSchemeDefinition	444									
+switch	ctr	ControlSchemeDefinition	444	0	arBindings	0xC	inline	ButtonBinding	98			
+switch	ctr	ButtonBinding	4									
+switch	dfn	DungeonFinderDefinition	40									
+switch	dfn	DungeonFinderDefinition	40	0	arDungeonFinderLevelTables	0x18	array	DungeonFinderLevelTable	72	8	zero	
+switch	dfn	DungeonFinderLevelTable	72									
+switch	dfn	DungeonFinderLevelTable	72	2	arTransitions	0x10	array	WeightedTransition	16	8	zero	
+switch	dfn	DungeonFinderLevelTable	72	3	arPopulations	0x20	array	WeightedPopulation	80	8	zero	
+switch	dfn	WeightedTransition	16									
+switch	dfn	WeightedPopulation	80									
+switch	efg	EffectGroupDefinition	120									
+switch	efg	EffectGroupDefinition	120	5	ptEffects	0x10	array	EffectItem	200	8	zero	
+switch	efg	EffectItem	200									
+switch	efg	EffectItem	200	2	tMsgTriggeredEvents	0x8	inline	MsgTriggeredEvent	1			
+switch	enc	EncounterDefinition	32									
+switch	enc	EncounterDefinition	32	1	arSpawnOptions	0x18	array	EncounterSpawnOption	16	8	zero	
+switch	enc	EncounterSpawnOption	16									
+switch	flg	FlagSetDefinition	32									
+switch	flg	FlagSetDefinition	32	0	arFlagLookups	0x18	array	FlagLookup	388	8	zero	
+switch	flg	FlagLookup	388									
+switch	fnt	FontDefinition	216									
+switch	fnt	FontDefinition	216	9	ptTextureTable	0xA8	array	FontConsoleTexture	40	8	zero	
+switch	fnt	FontDefinition	216	12	ptPointSizeTable	0xC0	array	FontPointSizeData	88	8	zero	
+switch	fnt	FontConsoleTexture	40									
+switch	fnt	FontConsoleTexture	40	4	serTextureData	0x10	blob			1	zero	1
+switch	fnt	FontConsoleTexture	40	7	serFrameData	0x20	blob			1	zero	1
+switch	fnt	FontPointSizeData	88									
+switch	fnt	FontPointSizeData	88	10	serCharTable	0x28	blob			1	zero	0
+switch	fnt	FontPointSizeData	88	14	ptKerningTable	0x40	array	FontConsoleKerning	16	8	zero	
+switch	fnt	FontConsoleKerning	16									
+switch	glo	GlobalDefinition	1016									
+switch	glo	GlobalDefinition	1016	0	ptServerData	0x18	array	GlobalServerData	896	8	zero	
+switch	glo	GlobalDefinition	1016	2	arStartLocationNames	0x30	array	StartLocationName	68	8	zero	
+switch	glo	GlobalDefinition	1016	45	tBannerParams	0x98	inline	BannerParams	1			
+switch	glo	GlobalDefinition	1016	64	tAssetLists	0x220	inline	AssetList	9			
+switch	glo	GlobalServerData	896									
+switch	glo	GlobalServerData	896	0	arActorGroups	0x8	array	ActorGroup	68	8	zero	
+switch	glo	GlobalServerData	896	1	arScriptGlobalVars	0x18	array	GlobalScriptVariable	40	8	zero	
+switch	glo	GlobalServerData	896	2	tDifficultyParams	0x20	inline	DifficultyTuningParams	6			
+switch	glo	StartLocationName	68									
+switch	glo	BannerParams	240									
+switch	glo	BannerParams	240	0	arTexBackgrounds	0x8	array	BannerTexturePair	16	8	zero	
+switch	glo	BannerParams	240	2	arTexPatterns	0x20	array	BannerTexturePair	16	8	zero	
+switch	glo	BannerParams	240	4	arTexMainSigils	0x38	array	BannerTexturePair	16	8	zero	
+switch	glo	BannerParams	240	5	arTexVariantSigils	0x48	array	BannerTexturePair	16	8	zero	
+switch	glo	BannerParams	240	7	arTexSigilAccents	0x60	array	BannerTexturePair	16	8	zero	
+switch	glo	BannerParams	240	9	arColorSets	0x78	array	BannerColorSet	84	8	zero	
+switch	glo	BannerParams	240	10	arSigilPlacements	0x88	array	BannerSigilPlacement	68	8	zero	
+switch	glo	BannerParams	240	11	arActorBases	0x98	array	SNO	4	8	zero	
+switch	glo	BannerParams	240	12	arActorCaps	0xA8	array	SNO	4	8	zero	
+switch	glo	BannerParams	240	13	arActorPoles	0xB8	array	SNO	4	8	zero	
+switch	glo	BannerParams	240	14	arActorRibbons	0xC8	array	SNO	4	8	zero	
+switch	glo	BannerParams	240	15	arEpicBannerDescriptions	0xD8	array	EpicBannerDescription	148	8	zero	
+switch	glo	AssetList	16									
+switch	glo	AssetList	16	0	arEntries	0x8	array	AssetListEntry	8	8	zero	
+switch	glo	ActorGroup	68									
+switch	glo	GlobalScriptVariable	40									
+switch	glo	DifficultyTuningParams	52									
+switch	glo	BannerTexturePair	16									
+switch	glo	BannerColorSet	84									
+switch	glo	BannerSigilPlacement	68									
+switch	glo	EpicBannerDescription	148									
+switch	glo	AssetListEntry	8									
+switch	lit	LightDefinition	1312									
+switch	lit	LightDefinition	1312	3	tMatTexProjected	0x18	inline	MaterialTexture	1			
+switch	lit	LightDefinition	1312	7	tStateA	0x40	inline	LightStateParams	1			
+switch	lit	LightDefinition	1312	8	tStateB	0x2B0	inline	LightStateParams	1			
+switch	lit	LightStateParams	624									
+switch	lit	LightStateParams	624	0	pathInnerRadius	0x0	inline	FloatPath	1			
+switch	lit	LightStateParams	624	1	pathRadius	0x30	inline	FloatPath	1			
+switch	lit	LightStateParams	624	2	pathAttenuation	0x60	inline	FloatPath	3			
+switch	lit	LightStateParams	624	3	pathHotspot	0xF0	inline	AnglePath	1			
+switch	lit	LightStateParams	624	4	pathFalloff	0x120	inline	AnglePath	1			
+switch	lit	LightStateParams	624	5	pathAmbientColor	0x150	inline	ColorPath	1			
+switch	lit	LightStateParams	624	6	pathAmbientIntensity	0x180	inline	FloatPath	1			
+switch	lit	LightStateParams	624	7	pathColor	0x1B0	inline	ColorPath	1			
+switch	lit	LightStateParams	624	8	pathIntensity	0x1E0	inline	FloatPath	1			
+switch	lit	LightStateParams	624	9	pathSpecularColor	0x210	inline	ColorPath	1			
+switch	lit	LightStateParams	624	10	pathSpecularIntensity	0x240	inline	FloatPath	1			
+switch	lit	FloatPath	48									
+switch	lit	FloatPath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	lit	FloatPath	48	1	ptArrayNodes	0x28	array	FloatNode	12	8	zero	
+switch	lit	AnglePath	48									
+switch	lit	AnglePath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	lit	AnglePath	48	1	ptArrayNodes	0x28	array	AngleNode	12	8	zero	
+switch	lit	ColorPath	48									
+switch	lit	ColorPath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	lit	ColorPath	48	1	ptArrayNodes	0x28	array	ColorNode	12	8	zero	
+switch	lit	InterpolationPathHeader	28									
+switch	lit	InterpolationPathHeader	28	4	tInterpScalar	0x10	inline	InterpolationScalar	1			
+switch	lit	FloatNode	12									
+switch	lit	AngleNode	12									
+switch	lit	ColorNode	12									
+switch	lit	InterpolationScalar	12									
+switch	lor	LoreDefinition	36									
+switch	lvl	LevelAreaDefinition	40									
+switch	lvl	LevelAreaDefinition	40	3	ptServerData	0x20	array	LevelAreaServerData	864	8	zero	
+switch	lvl	LevelAreaServerData	864									
+switch	lvl	LevelAreaServerData	864	1	tGizmoLocSet	0x8	inline	GizmoLocSet	1			
+switch	lvl	LevelAreaServerData	864	3	arSpawnPopulations	0x358	array	LevelAreaSpawnPopulation	152	8	zero	
+switch	lvl	GizmoLocSet	832									
+switch	lvl	GizmoLocSet	832	0	arSpawnArray	0x0	inline	GizmoLocSpawnType	52			
+switch	lvl	LevelAreaSpawnPopulation	152									
+switch	lvl	LevelAreaSpawnPopulation	152	6	arDungeonFinderWeatherSNOs	0x88	array	SNO	4	8	zero	
+switch	lvl	LevelAreaSpawnPopulation	152	7	arSpawnGroups	0x78	array	LevelAreaSpawnGroup	56	8	zero	
+switch	lvl	GizmoLocSpawnType	16									
+switch	lvl	GizmoLocSpawnType	16	0	arEntry	0x8	array	GizmoLocSpawnEntry	40	8	zero	
+switch	lvl	LevelAreaSpawnGroup	56									
+switch	lvl	LevelAreaSpawnGroup	56	4	arSpawnItems	0x20	array	LevelAreaSpawnItem	32	8	zero	
+switch	lvl	GizmoLocSpawnEntry	40									
+switch	lvl	GizmoLocSpawnEntry	40	6	arChoice	0x20	array	GizmoLocSpawnChoice	20	8	zero	
+switch	lvl	LevelAreaSpawnItem	32									
+switch	lvl	LevelAreaSpawnItem	32	0	snonameToSpawn	0x0	inline	SNOName	1			
+switch	lvl	GizmoLocSpawnChoice	20									
+switch	lvl	GizmoLocSpawnChoice	20	0	snonameToSpawn	0x0	inline	SNOName	1			
+switch	mat	MaterialDefinition	136									
+switch	mat	MaterialDefinition	136	1	hTagMap	0x10	tagmap			4	zero	
+switch	mat	MaterialDefinition	136	2	tUberMaterial	0x20	inline	UberMaterial	1			
+switch	mon	MonsterDefinition	1368									
+switch	mon	MonsterDefinition	1368	18	tHealthDropNormal	0x2A8	inline	HealthDropInfo	1			
+switch	mon	MonsterDefinition	1368	19	tHealthDropChampion	0x2B4	inline	HealthDropInfo	1			
+switch	mon	MonsterDefinition	1368	20	tHealthDropRare	0x2C0	inline	HealthDropInfo	1			
+switch	mon	MonsterDefinition	1368	21	tHealthDropMinion	0x2CC	inline	HealthDropInfo	1			
+switch	mon	MonsterDefinition	1368	26	tSkills	0x2DC	inline	SkillDeclaration	8			
+switch	mon	MonsterDefinition	1368	27	tMonsterSkills	0x31C	inline	MonsterSkillDeclaration	8			
+switch	mon	MonsterDefinition	1368	33	tAwareness	0x24	inline	MonsterAwarenessInfo	1			
+switch	mon	MonsterDefinition	1368	53	hTagMap	0x480	tagmap			4	zero	
+switch	mon	MonsterDefinition	1368	54	arMinionSpawnGroups	0x4A0	array	MonsterMinionSpawnGroup	24	8	zero	
+switch	mon	MonsterDefinition	1368	56	arChampionSpawnGroups	0x4B8	array	MonsterChampionSpawnGroup	24	8	zero	
+switch	mon	HealthDropInfo	12									
+switch	mon	SkillDeclaration	8									
+switch	mon	MonsterSkillDeclaration	16									
+switch	mon	MonsterAwarenessInfo	20									
+switch	mon	MonsterMinionSpawnGroup	24									
+switch	mon	MonsterMinionSpawnGroup	24	1	arSpawnItems	0x10	array	MonsterMinionSpawnItem	20	8	zero	
+switch	mon	MonsterChampionSpawnGroup	24									
+switch	mon	MonsterChampionSpawnGroup	24	1	arSpawnItems	0x10	array	MonsterChampionSpawnItem	8	8	zero	
+switch	mon	MonsterMinionSpawnItem	20									
+switch	mon	MonsterChampionSpawnItem	8									
+switch	mrk	MarkerSetDefinition	200									
+switch	mrk	MarkerSetDefinition	200	0	tMarkerSet	0xC	array	Marker	88	8	zero	
+switch	mrk	MarkerSetDefinition	200	1	tNoSpawnSet	0x50	array	Circle	12	8	zero	
+switch	mrk	MarkerSetDefinition	200	3	aabbBounds	0x90	inline	AABB	1			
+switch	mrk	MarkerSetDefinition	200	5	pwSpecialIndexList	0xB4	array	WORD	2	8	zero	
+switch	mrk	Marker	88									
+switch	mrk	Marker	88	3	transform	0xC	inline	PRTransform	1			
+switch	mrk	Marker	88	4	snoname	0x28	inline	SNOName	1			
+switch	mrk	Marker	88	5	hTagMap	0x30	tagmap			4	zero	
+switch	mrk	Marker	88	7	ptMarkerLinks	0x44	array	MarkerLink	8	8	zero	
+switch	mrk	Circle	12									
+switch	mrk	MarkerLink	8									
+switch	mus	MusicDefinition	80									
+switch	mus	MusicDefinition	80	4	ptPlaylistEntries	0x1C	array	PlaylistEntry	76	8	zero	
+switch	mus	MusicDefinition	80	6	tRandomSounds	0x30	inline	RandomMusicSoundParams	2			
+switch	mus	PlaylistEntry	76									
+switch	mus	RandomMusicSoundParams	16									
+switch	obs	ObserverDefinition	152									
+switch	phm	PhysMeshDefinition	48									
+switch	phm	PhysMeshDefinition	48	1	ptCollisionMeshes	0x14	array	CollisionMesh	112	8	zero	
+switch	phm	CollisionMesh	112									
+switch	phm	CollisionMesh	112	1	m_pRoot	0x60	array	dmMeshNode	16	16	zero	
+switch	phm	CollisionMesh	112	3	m_aVertices	0x50	array	dmFloat4	16	16	zero	
+switch	phm	CollisionMesh	112	5	m_aTriangles	0x58	array	dmMeshTriangle	28	8	zero	
+switch	phm	CollisionMesh	112	6	m_center	0x18	inline	dmFloat3	1			
+switch	phm	CollisionMesh	112	7	m_extents	0x24	inline	dmFloat3	1			
+switch	phm	CollisionMesh	112	8	m_unquantize	0x30	inline	dmFloat3	1			
+switch	phm	dmMeshNode	16									
+switch	phm	dmFloat4	16									
+switch	phm	dmMeshTriangle	28									
+switch	phy	PhysicsDefinition	68									
+switch	prt	ParticleDefinition	704									
+switch	prt	ParticleDefinition	704	5	tSystemDurationScalar	0x20	inline	InterpolationScalar	1			
+switch	prt	ParticleDefinition	704	7	pathSystemScale	0x118	array	FloatPath	48	8	zero	
+switch	prt	ParticleDefinition	704	8	pathSystemCount	0x128	array	IntPath	48	8	zero	
+switch	prt	ParticleDefinition	704	9	pathSystemAlpha	0x138	array	FloatPath	48	8	zero	
+switch	prt	ParticleDefinition	704	10	pathParticleDuration	0x148	array	TimePath	48	8	zero	
+switch	prt	ParticleDefinition	704	11	pathInitialScale	0x158	array	FloatPath	48	8	zero	
+switch	prt	ParticleDefinition	704	12	pathInitialSourceRelativeSpread	0x168	array	AnglePath	48	8	zero	
+switch	prt	ParticleDefinition	704	13	pathSystemSpawnRate	0x178	array	VelocityPath	48	8	zero	
+switch	prt	ParticleDefinition	704	14	pathSystemSpeedDurationFactor	0x188	array	VelocityPath	48	8	zero	
+switch	prt	ParticleDefinition	704	15	tUberMaterial	0x38	inline	UberMaterial	1			
+switch	prt	ParticleDefinition	704	27	tEmitterParams	0xD0	inline	EmitterParams	1			
+switch	prt	ParticleDefinition	704	28	pathParticleAlpha	0x1A8	array	FloatPath	48	8	zero	
+switch	prt	ParticleDefinition	704	29	pathParticleColor	0x198	array	ColorPath	48	8	zero	
+switch	prt	ParticleDefinition	704	30	pathParticleScale	0x1B8	array	FloatPath	48	8	zero	
+switch	prt	ParticleDefinition	704	31	pathParticleStretch	0x1C8	array	FloatPath	48	8	zero	
+switch	prt	ParticleDefinition	704	32	pathAngularPosition	0x1D8	array	AnglePath	48	8	zero	
+switch	prt	ParticleDefinition	704	33	pathAngularVelocity	0x1E8	array	AngularVelocityPath	48	8	zero	
+switch	prt	ParticleDefinition	704	34	pathOrientationAxis	0x1F8	array	VectorPath	48	8	zero	
+switch	prt	ParticleDefinition	704	35	pathMotionCylinderRadialVel	0x208	array	VelocityPath	48	8	zero	
+switch	prt	ParticleDefinition	704	36	pathMotionCylinderAngleVel	0x218	array	AngularVelocityPath	48	8	zero	
+switch	prt	ParticleDefinition	704	37	pathMotionCylinderAxis	0x228	array	VectorPath	48	8	zero	
+switch	prt	ParticleDefinition	704	38	pathMotionCartesianPos	0x238	array	VectorPath	48	8	zero	
+switch	prt	ParticleDefinition	704	39	pathMotionCartesianVel	0x248	array	VelocityVectorPath	48	8	zero	
+switch	prt	ParticleDefinition	704	40	pathMotionCartesianAcc	0x258	array	AccelVectorPath	48	8	zero	
+switch	prt	ParticleDefinition	704	41	pathMotionRelativeCartesianPos	0x268	array	VectorPath	48	8	zero	
+switch	prt	ParticleDefinition	704	42	pathMotionRelativeCartesianVel	0x278	array	VelocityVectorPath	48	8	zero	
+switch	prt	ParticleDefinition	704	43	ptExtendedPath_Console	0x288	array	ExtendedPath_Console	192	8	zero	
+switch	prt	ParticleDefinition	704	48	ptMsgTriggeredEvents	0x2AC	array	MsgTriggeredEvent	192	8	zero	
+switch	prt	ParticleDefinition	704	50	ptParticleQuadStructure	0x298	array	ParticleQuad	16	8	zero	
+switch	prt	IntPath	48									
+switch	prt	IntPath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	prt	IntPath	48	1	ptArrayNodes	0x28	array	IntNode	12	8	zero	
+switch	prt	TimePath	48									
+switch	prt	TimePath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	prt	TimePath	48	1	ptArrayNodes	0x28	array	TimeNode	12	8	zero	
+switch	prt	VelocityPath	48									
+switch	prt	VelocityPath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	prt	VelocityPath	48	1	ptArrayNodes	0x28	array	VelocityNode	12	8	zero	
+switch	prt	EmitterParams	64									
+switch	prt	EmitterParams	64	1	pathRadius	0x18	array	FloatPath	48	8	zero	
+switch	prt	EmitterParams	64	2	pathHeight	0x20	array	FloatPath	48	8	zero	
+switch	prt	EmitterParams	64	3	pathBoxExtents	0x28	array	VectorPath	48	8	zero	
+switch	prt	AngularVelocityPath	48									
+switch	prt	AngularVelocityPath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	prt	AngularVelocityPath	48	1	ptArrayNodes	0x28	array	AngularVelocityNode	12	8	zero	
+switch	prt	VectorPath	48									
+switch	prt	VectorPath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	prt	VectorPath	48	1	ptArrayNodes	0x28	array	VectorNode	28	8	zero	
+switch	prt	VelocityVectorPath	48									
+switch	prt	VelocityVectorPath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	prt	VelocityVectorPath	48	1	ptArrayNodes	0x28	array	VelocityVectorNode	28	8	zero	
+switch	prt	AccelVectorPath	48									
+switch	prt	AccelVectorPath	48	0	tHeader	0x0	inline	InterpolationPathHeader	1			
+switch	prt	AccelVectorPath	48	1	ptArrayNodes	0x28	array	AccelVectorNode	28	8	zero	
+switch	prt	ExtendedPath_Console	192									
+switch	prt	ExtendedPath_Console	192	0	pathInitialSourceRelativeVelocity_Console	0x8	array	VelocityVectorPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	1	pathInitialWorldRelativeVelocity_Console	0x18	array	VelocityVectorPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	2	pathSystemSpeedSpawnRate_Console	0x28	array	VelocityPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	3	pathParticleAlphaAux_Console	0x38	array	FloatPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	4	pathOrientationVelocity_Console	0x48	array	AngularVelocityPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	5	pathOrientationPosition_Console	0x58	array	AnglePath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	6	pathMotionCylinderRadialPos_Console	0x68	array	FloatPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	7	pathMotionSphereRadialPos_Console	0x78	array	FloatPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	8	pathMotionSphereRadialVel_Console	0x88	array	VelocityPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	9	pathMotionRelativeCartesianAcc_Console	0x98	array	AccelVectorPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	10	pathMotionAttractorVel_Console	0xA8	array	VelocityPath	48	8	zero	
+switch	prt	ExtendedPath_Console	192	11	pathMotionAttractorPos_Console	0xB8	array	FloatPath	48	8	zero	
+switch	prt	ParticleQuad	16									
+switch	prt	IntNode	12									
+switch	prt	TimeNode	12									
+switch	prt	VelocityNode	12									
+switch	prt	AngularVelocityNode	12									
+switch	prt	VectorNode	28									
+switch	prt	VelocityVectorNode	28									
+switch	prt	VelocityVectorNode	28	0	tValueMin	0x0	inline	VelocityVector3D	1			
+switch	prt	VelocityVectorNode	28	1	tValueMax	0xC	inline	VelocityVector3D	1			
+switch	prt	AccelVectorNode	28									
+switch	prt	AccelVectorNode	28	0	tValueMin	0x0	inline	AccelVector3D	1			
+switch	prt	AccelVectorNode	28	1	tValueMax	0xC	inline	AccelVector3D	1			
+switch	prt	AccelVector3D	12									
+switch	qsr	QuestRangeDefinition	32									
+switch	qsr	QuestRangeDefinition	32	1	arQuestRanges	0x18	array	QuestRange	16	8	zero	
+switch	qsr	QuestRange	16									
+switch	qsr	QuestRange	16	0	tStart	0x0	inline	QuestTime	1			
+switch	qsr	QuestRange	16	1	tEnd	0x8	inline	QuestTime	1			
+switch	qsr	QuestTime	8									
+switch	qst	QuestDefinition	288									
+switch	qst	QuestDefinition	288	2	tQuestUnassignedStep	0x28	inline	QuestUnassignedStep	1			
+switch	qst	QuestDefinition	288	3	arQuestSteps	0x58	array	QuestStep	176	8	zero	
+switch	qst	QuestDefinition	288	5	arQuestCompletionSteps	0x68	array	QuestCompletionStep	24	8	zero	
+switch	qst	QuestDefinition	288	13	tBountyData	0xC0	inline	BountyData	1			
+switch	qst	QuestUnassignedStep	40									
+switch	qst	QuestUnassignedStep	40	2	arStepObjectiveSets	0x10	array	QuestStepObjectiveSet	24	8	zero	
+switch	qst	QuestUnassignedStep	40	3	arStepFailureConditionSets	0x20	array	QuestStepFailureConditionSet	16	8	zero	
+switch	qst	QuestStep	176									
+switch	qst	QuestStep	176	0	szStepName_VariableArray	0x8	text			8	zero	
+switch	qst	QuestStep	176	12	arStepObjectiveSets	0x88	array	QuestStepObjectiveSet	24	8	zero	
+switch	qst	QuestStep	176	13	arStepBonusObjectiveSets	0x98	array	QuestStepBonusObjectiveSet	40	8	zero	
+switch	qst	QuestStep	176	14	arStepFailureConditionSets	0xA8	array	QuestStepFailureConditionSet	16	8	zero	
+switch	qst	QuestCompletionStep	24									
+switch	qst	QuestCompletionStep	24	0	szStepName_VariableArray	0x8	text			8	zero	
+switch	qst	BountyData	92									
+switch	qst	QuestStepObjectiveSet	24									
+switch	qst	QuestStepObjectiveSet	24	1	arStepObjectives	0x10	array	QuestStepObjective	88	8	zero	
+switch	qst	QuestStepFailureConditionSet	16									
+switch	qst	QuestStepFailureConditionSet	16	0	arStepFailureConditions	0x8	array	QuestStepFailureCondition	72	8	zero	
+switch	qst	QuestStepBonusObjectiveSet	40									
+switch	qst	QuestStepBonusObjectiveSet	40	5	arStepBonusObjectives	0x20	array	QuestStepObjective	88	8	zero	
+switch	qst	QuestStepObjective	88									
+switch	qst	QuestStepObjective	88	4	snoname1	0x10	inline	SNOName	1			
+switch	qst	QuestStepObjective	88	5	snoname2	0x18	inline	SNOName	1			
+switch	qst	QuestStepObjective	88	8	szParam1_VariableArray	0x30	text			8	zero	
+switch	qst	QuestStepObjective	88	9	szParam2_VariableArray	0x40	text			8	zero	
+switch	qst	QuestStepFailureCondition	72									
+switch	qst	QuestStepFailureCondition	72	3	snoname1	0xC	inline	SNOName	1			
+switch	qst	QuestStepFailureCondition	72	4	snoname2	0x14	inline	SNOName	1			
+switch	qst	QuestStepFailureCondition	72	7	szParam1_VariableArray	0x30	text			8	zero	
+switch	qst	QuestStepFailureCondition	72	8	szParam2_VariableArray	0x40	text			8	zero	
+switch	rcp	RecipeDefinition	72									
+switch	rcp	RecipeDefinition	72	0	tSpecificItem	0xC	inline	ItemSpecifierData	1			
+switch	rcp	ItemSpecifierData	56									
+switch	rev	ReverbDefinition	104									
+switch	rev	ReverbDefinition	104	0	tParams	0xC	inline	ReverbParams	1			
+switch	rev	ReverbParams	88									
+switch	rop	RopeDefinition	1120									
+switch	rop	RopeDefinition	1120	8	tUberMaterial	0x30	inline	UberMaterial	1			
+switch	rop	RopeDefinition	1120	14	pathColorOverTime	0xB0	inline	ColorPath	1			
+switch	rop	RopeDefinition	1120	15	pathColorOverLength	0xE0	inline	ColorPath	1			
+switch	rop	RopeDefinition	1120	16	pathAlpha	0x110	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	17	pathAlphaOverLength	0x140	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	18	pathWidthOverTime	0x170	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	19	pathWidthOverLength	0x1A0	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	20	pathSourcePointWorldUpMotion	0x1D0	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	21	pathSourcePointAlongRopeMotion	0x200	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	22	pathSourcePointPerpendicularMotion	0x230	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	23	pathDestPointWorldUpMotion	0x260	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	24	pathDestPointAlongRopeMotion	0x290	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	25	pathDestPointPerpendicularMotion	0x2C0	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	26	pathJitterAmplitude	0x2F0	inline	VectorPath	1			
+switch	rop	RopeDefinition	1120	27	pathJitterRate	0x320	inline	VelocityPath	1			
+switch	rop	RopeDefinition	1120	30	pathSeparation	0x358	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	31	pathXAmpOverLength	0x388	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	32	pathYAmpOverLength	0x3B8	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	33	pathFreqOverTime	0x3E8	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	34	pathPhaseSpeedOverTime	0x418	inline	FloatPath	1			
+switch	rop	RopeDefinition	1120	35	ptMsgTriggeredEvents	0x448	array	MsgTriggeredEvent	192	8	zero	
+switch	sbk	SoundBankDefinition	40									
+switch	sbk	SoundBankDefinition	40	0	ptSoundSamples	0xC	array	SoundSample	16	8	zero	
+switch	sbk	SoundSample	16									
+switch	scg	SceneGroupDefinition	40									
+switch	scg	SceneGroupDefinition	40	0	arScenes	0x10	array	SceneGroupItem	12	8	zero	
+switch	scg	SceneGroupItem	12									
+switch	scn	SceneDefinition	536									
+switch	scn	SceneDefinition	536	3	aabbBounds	0x10	inline	AABB	1			
+switch	scn	SceneDefinition	536	4	aabbMarkerSetBounds	0x28	inline	AABB	1			
+switch	scn	SceneDefinition	536	5	tNavMeshData	0x40	inline	NavMeshDef	1			
+switch	scn	SceneDefinition	536	6	arExclusions	0xA0	array	SNO	4	8	zero	
+switch	scn	SceneDefinition	536	7	arInclusions	0xE0	array	SNO	4	8	zero	
+switch	scn	SceneDefinition	536	8	arMarkerSets	0x120	array	SNO	4	8	zero	
+switch	scn	SceneDefinition	536	9	tLookLink	0x160	inline	LookLink	1			
+switch	scn	SceneDefinition	536	10	ptMsgTriggeredEvents	0x168	array	MsgTriggeredEvent	192	8	zero	
+switch	scn	SceneDefinition	536	12	tNavZoneDef	0x180	inline	NavZoneDefinition	1			
+switch	scn	NavMeshDef	96									
+switch	scn	NavMeshDef	96	10	tEdge	0x28	inline	NavMeshSquare	1			
+switch	scn	NavMeshDef	96	12	ptCompNavMeshArraySquares	0x40	array	CompNavMeshSquare	4	8	zero	
+switch	scn	NavMeshDef	96	13	ptCompNavMeshArraySquaresSpecialFlags	0x50	array	BYTE	1	8	zero	
+switch	scn	NavZoneDefinition	136									
+switch	scn	NavZoneDefinition	136	0	arNavCells	0x10	array	NavCell	32	8	zero	
+switch	scn	NavZoneDefinition	136	2	arNavCellNeighbors	0x28	array	NavCellLookup	4	8	zero	
+switch	scn	NavZoneDefinition	136	8	arGridSquares	0x50	array	NavGridSquare	6	8	zero	
+switch	scn	NavZoneDefinition	136	9	arCellLookups	0x68	array	NavCellLookup	4	8	zero	
+switch	scn	NavZoneDefinition	136	11	arBorderData	0x80	array	NavCellBorderData	4	8	zero	
+switch	scn	NavMeshSquare	8									
+switch	scn	CompNavMeshSquare	4									
+switch	scn	NavCell	32									
+switch	scn	NavCellLookup	4									
+switch	scn	NavGridSquare	6									
+switch	scn	NavCellBorderData	4									
+switch	shd	ShaderDefinition	56									
+switch	shd	ShaderDefinition	56	2	ptPasses	0x18	array	RenderPass	224	8	zero	
+switch	shd	ShaderDefinition	56	4	serConsoleShaderData	0x28	blob			1	zero	
+switch	shd	RenderPass	224									
+switch	shd	RenderPass	224	2	tRenderParams	0x8	inline	RenderParams	1			
+switch	shd	RenderPass	224	4	ptsParams	0x70	array	TextureStageParams	24	8	zero	
+switch	shd	RenderPass	224	7	hTagMap	0x84	tagmap			4	zero	
+switch	shd	RenderPass	224	10	pVertexShader	0xB8	array	BYTE	1	8	zero	
+switch	shd	RenderPass	224	11	pPixelShader	0xC8	array	BYTE	1	8	zero	
+switch	shd	RenderParams	96									
+switch	shd	TextureStageParams	24									
+switch	shk	ShakeDefinition	416									
+switch	shk	ShakeDefinition	416	5	pathCameraPositionAmplitude	0x20	inline	VectorPath	1			
+switch	shk	ShakeDefinition	416	6	pathCameraPositionFrequency	0x50	inline	VectorPath	1			
+switch	shk	ShakeDefinition	416	7	pathCameraRollAmplitude	0x80	inline	AnglePath	1			
+switch	shk	ShakeDefinition	416	8	pathCameraRollFrequency	0xB0	inline	FloatPath	1			
+switch	shk	ShakeDefinition	416	9	pathCameraPitchAmplitude	0xE0	inline	AnglePath	1			
+switch	shk	ShakeDefinition	416	10	pathCameraPitchFrequency	0x110	inline	FloatPath	1			
+switch	shk	ShakeDefinition	416	11	pathCameraYawAmplitude	0x140	inline	AnglePath	1			
+switch	shk	ShakeDefinition	416	12	pathCameraYawFrequency	0x170	inline	FloatPath	1			
+switch	shm	ShaderMapDefinition	32									
+switch	shm	ShaderMapDefinition	32	1	hTagMap	0x10	tagmap			4	zero	
+switch	skl	SkillKitDefinition	64									
+switch	skl	SkillKitDefinition	64	0	arTraitEntries	0x18	array	TraitEntry	16	8	zero	
+switch	skl	SkillKitDefinition	64	1	arActiveSkillEntries	0x28	array	ActiveSkillEntry	64	8	zero	
+switch	skl	SkillKitDefinition	64	2	arPowerFallbacks	0x38	array	INT	4	8	zero	
+switch	skl	TraitEntry	16									
+switch	skl	ActiveSkillEntry	64									
+switch	snd	SoundDefinition	168									
+switch	snd	SoundDefinition	168	14	ptPermutations	0x44	array	SoundPermutation	64	8	zero	
+switch	snd	SoundDefinition	168	21	arDspEffects	0x70	array	DspEffect	264	8	zero	
+switch	snd	SoundDefinition	168	22	arRTPCParams	0x80	array	RTPCParams	24	8	zero	
+switch	snd	SoundPermutation	64									
+switch	snd	DspEffect	264									
+switch	snd	DspEffect	264	2	tChorusDryMix	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	3	tChorusWetMix1	0x18	inline	DspParam	1			
+switch	snd	DspEffect	264	4	tChorusWetMix2	0x28	inline	DspParam	1			
+switch	snd	DspEffect	264	5	tChorusWetMix3	0x38	inline	DspParam	1			
+switch	snd	DspEffect	264	6	tChorusDelay	0x48	inline	DspParam	1			
+switch	snd	DspEffect	264	7	tChorusRate	0x58	inline	DspParam	1			
+switch	snd	DspEffect	264	8	tChorusDepth	0x68	inline	DspParam	1			
+switch	snd	DspEffect	264	9	tChorusFeedback	0x78	inline	DspParam	1			
+switch	snd	DspEffect	264	10	tCompressorThreshold	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	11	tCompressorAttack	0x18	inline	DspParam	1			
+switch	snd	DspEffect	264	12	tCompressorRelease	0x28	inline	DspParam	1			
+switch	snd	DspEffect	264	13	tCompressorGainMakeup	0x38	inline	DspParam	1			
+switch	snd	DspEffect	264	14	tDistortionLevel	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	15	tEchoDelay	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	16	tEchoDecayRatio	0x18	inline	DspParam	1			
+switch	snd	DspEffect	264	17	tEchoMaxChannels	0x28	inline	DspParam	1			
+switch	snd	DspEffect	264	18	tEchoDryMix	0x38	inline	DspParam	1			
+switch	snd	DspEffect	264	19	tEchoWetMix	0x48	inline	DspParam	1			
+switch	snd	DspEffect	264	20	tFlangeDryMix	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	21	tFlangeWetMix	0x18	inline	DspParam	1			
+switch	snd	DspEffect	264	22	tFlangeDepth	0x28	inline	DspParam	1			
+switch	snd	DspEffect	264	23	tFlangeRate	0x38	inline	DspParam	1			
+switch	snd	DspEffect	264	24	tHighpassCutoff	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	25	tHighpassResonance	0x18	inline	DspParam	1			
+switch	snd	DspEffect	264	26	tLowpassCutoff	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	27	tLowpassResonance	0x18	inline	DspParam	1			
+switch	snd	DspEffect	264	28	tLowpassSimpleCutoff	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	29	tParamEqCenter	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	30	tParamEqBandwidth	0x18	inline	DspParam	1			
+switch	snd	DspEffect	264	31	tParamEqGain	0x28	inline	DspParam	1			
+switch	snd	DspEffect	264	32	tReverbDryLevel	0x8	inline	DspParam	1			
+switch	snd	DspEffect	264	33	tReverbRoom	0x18	inline	DspParam	1			
+switch	snd	DspEffect	264	34	tReverbRoomHF	0x28	inline	DspParam	1			
+switch	snd	DspEffect	264	35	tReverbRoomRolloffFactor	0x38	inline	DspParam	1			
+switch	snd	DspEffect	264	36	tReverbDecayTime	0x48	inline	DspParam	1			
+switch	snd	DspEffect	264	37	tReverbDecayHFRatio	0x58	inline	DspParam	1			
+switch	snd	DspEffect	264	38	tReverbReflectionsLevel	0x68	inline	DspParam	1			
+switch	snd	DspEffect	264	39	tReverbReflectionsDelay	0x78	inline	DspParam	1			
+switch	snd	DspEffect	264	40	tReverbReverbLevel	0x88	inline	DspParam	1			
+switch	snd	DspEffect	264	41	tReverbReverbDelay	0x98	inline	DspParam	1			
+switch	snd	DspEffect	264	42	tReverbDiffusion	0xA8	inline	DspParam	1			
+switch	snd	DspEffect	264	43	tReverbDensity	0xB8	inline	DspParam	1			
+switch	snd	DspEffect	264	44	tReverbHFReference	0xC8	inline	DspParam	1			
+switch	snd	DspEffect	264	45	tReverbRoomLF	0xD8	inline	DspParam	1			
+switch	snd	DspEffect	264	46	tReverbLFReference	0xE8	inline	DspParam	1			
+switch	snd	RTPCParams	24									
+switch	snd	RTPCParams	24	3	tScalar	0x4	inline	InterpolationScalar	1			
+switch	snd	DspParam	16									
+switch	srf	SurfaceDefinition	40									
+switch	srf	SurfaceDefinition	40	3	hTagMap	0x18	tagmap			4	zero	
+switch	tme	TimedEventDefinition	16									
+switch	trl	TrailDefinition	344									
+switch	trl	TrailDefinition	344	7	pathColorOverTime	0x28	inline	ColorPath	1			
+switch	trl	TrailDefinition	344	8	pathColorOverLength	0x58	inline	ColorPath	1			
+switch	trl	TrailDefinition	344	9	pathAlpha	0x88	inline	FloatPath	1			
+switch	trl	TrailDefinition	344	10	pathAlphaOverLength	0xB8	inline	FloatPath	1			
+switch	trl	TrailDefinition	344	13	tUberMaterial	0xF0	inline	UberMaterial	1			
+switch	trs	TreasureClassDefinition	56									
+switch	trs	TreasureClassDefinition	56	3	ptModifierList	0x28	array	LootDropModifier	132	8	zero	
+switch	trs	LootDropModifier	132									
+switch	trs	LootDropModifier	132	2	tSpecificItem	0x20	inline	ItemSpecifierData	1			
+switch	tut	TutorialDefinition	48									
+switch	ui	UIDialogDefinition	184									
+switch	ui	UIDialogDefinition	184	1	ptControlList	0x14	array	UIControlData	368	8	zero	
+switch	ui	UIDialogDefinition	184	3	ptStyleList	0x2C	array	UIStyle	160	8	zero	
+switch	ui	UIDialogDefinition	184	5	tConstants	0x40	inline	DataElements	1			
+switch	ui	UIControlData	368									
+switch	ui	UIControlData	368	2	szName	0x10	array	BYTE	1	8	zero	
+switch	ui	UIControlData	368	4	szParentKey	0x28	array	BYTE	1	8	zero	
+switch	ui	UIControlData	368	6	tInlineStyle	0x40	inline	UIStyle	1			
+switch	ui	UIControlData	368	7	tAnimationElements	0xE0	inline	UIAnimationElements	1			
+switch	ui	UIStyle	160									
+switch	ui	UIStyle	160	1	szName	0x8	array	BYTE	1	8	zero	
+switch	ui	UIStyle	160	2	tAttributes	0x18	inline	DataElements	1			
+switch	ui	UIStyle	160	3	ptChildSpecs	0x64	array	UIStyleChildSpec	112	8	zero	
+switch	ui	DataElements	72									
+switch	ui	DataElements	72	1	ptStringElements	0x4	array	UIControlElement	24	8	zero	
+switch	ui	DataElements	72	3	ptInt32Elements	0x1C	array	UIDataElementInt32	16	8	zero	
+switch	ui	DataElements	72	5	ptFloat32Elements	0x34	array	UIDataElementFloat32	16	8	zero	
+switch	ui	UIAnimationElements	120									
+switch	ui	UIAnimationElements	120	1	ptInt32Elements	0x4	array	UIAnimationElementInt32	8	8	zero	
+switch	ui	UIAnimationElements	120	3	ptFloatElements	0x1C	array	UIAnimationElementFloat	8	8	zero	
+switch	ui	UIAnimationElements	120	5	ptVector2DElements	0x34	array	UIAnimationElementVector2D	12	8	zero	
+switch	ui	UIAnimationElements	120	7	ptAnimationDescriptions	0x4C	array	UIAnimationDescription	40	8	zero	
+switch	ui	UIAnimationElements	120	9	ptAnimationBindings	0x64	array	UIControlAnimationBinding	24	8	zero	
+switch	ui	UIStyleChildSpec	112									
+switch	ui	UIStyleChildSpec	112	0	szPathToChild	0x0	array	BYTE	1	8	zero	
+switch	ui	UIStyleChildSpec	112	1	tAttributes	0x10	inline	DataElements	1			
+switch	ui	UIControlElement	24									
+switch	ui	UIControlElement	24	1	szAttrib	0x8	array	BYTE	1	8	zero	
+switch	ui	UIDataElementInt32	16									
+switch	ui	UIDataElementFloat32	16									
+switch	ui	UIAnimationElementInt32	8									
+switch	ui	UIAnimationElementFloat	8									
+switch	ui	UIAnimationElementVector2D	12									
+switch	ui	UIAnimationDescription	40									
+switch	ui	UIAnimationDescription	40	1	szName	0x8	array	BYTE	1	8	zero	
+switch	ui	UIControlAnimationBinding	24									
+switch	ui	UIControlAnimationBinding	24	0	szAnimationName	0x0	array	BYTE	1	8	zero	
+switch	vib	VibrationDefinition	136									
+switch	vib	VibrationDefinition	136	6	primaryVibrationIntensityCurve	0x28	inline	FloatPath	1			
+switch	vib	VibrationDefinition	136	7	outroVibrationIntensityCurve	0x58	inline	FloatPath	1			
+switch	wrl	WorldDefinition	192									
+switch	wrl	WorldDefinition	192	1	ptServerData	0x10	array	WorldServerData	144	8	zero	
+switch	wrl	WorldDefinition	192	2	arMarkerSets	0x20	array	SNO	4	8	zero	
+switch	wrl	WorldDefinition	192	3	tEnvironment	0x60	inline	Environment	1			
+switch	wrl	WorldServerData	144									
+switch	wrl	WorldServerData	144	0	ptDRLG	0x0	array	DRLGParams	120	8	zero	
+switch	wrl	WorldServerData	144	1	ptScene	0x10	array	SceneParams	24	8	zero	
+switch	wrl	WorldServerData	144	2	tLabelRuleSet	0x20	inline	LabelRuleSet	1			
+switch	wrl	WorldServerData	144	4	tSceneClusterSet	0x40	inline	SceneClusterSet	1			
+switch	wrl	WorldServerData	144	9	arWeatherSNOs	0x88	array	SNO	4	8	zero	
+switch	wrl	Environment	84									
+switch	wrl	Environment	84	1	tPostFXParams	0x4	inline	PostFXParams	1			
+switch	wrl	DRLGParams	120									
+switch	wrl	DRLGParams	120	0	arTiles	0x0	array	TileInfo	80	8	zero	
+switch	wrl	DRLGParams	120	1	ptCommands	0x44	array	DRLGCommand	152	8	zero	
+switch	wrl	DRLGParams	120	3	pParentIndices	0x58	array	INT	4	8	zero	
+switch	wrl	DRLGParams	120	4	hDRLGTagMap	0x68	tagmap			4	zero	
+switch	wrl	SceneParams	24									
+switch	wrl	SceneParams	24	0	ptSceneChunks	0x0	array	SceneChunk	256	8	zero	
+switch	wrl	LabelRuleSet	24									
+switch	wrl	LabelRuleSet	24	1	arRules	0x10	array	LabelRule	176	8	zero	
+switch	wrl	SceneClusterSet	24									
+switch	wrl	SceneClusterSet	24	1	arClusters	0x10	array	SceneCluster	184	8	zero	
+switch	wrl	PostFXParams	32									
+switch	wrl	TileInfo	80									
+switch	wrl	TileInfo	80	4	hTileTagMap	0x10	tagmap			4	zero	
+switch	wrl	TileInfo	80	5	tCustomTileInfo	0x20	inline	CustomTileInfo	1			
+switch	wrl	DRLGCommand	152									
+switch	wrl	DRLGCommand	152	2	hCommandTagMap	0x84	tagmap			4	zero	
+switch	wrl	SceneChunk	256									
+switch	wrl	SceneChunk	256	0	snoname	0x0	inline	SNOName	1			
+switch	wrl	SceneChunk	256	1	transform	0x8	inline	PRTransform	1			
+switch	wrl	SceneChunk	256	2	tSceneSpec	0x24	inline	SceneSpecification	1			
+switch	wrl	LabelRule	176									
+switch	wrl	LabelRule	176	1	tCondition	0x80	inline	LabelCondition	1			
+switch	wrl	LabelRule	176	4	arEntries	0xA8	array	LabelEntry	20	8	zero	
+switch	wrl	SceneCluster	184									
+switch	wrl	SceneCluster	184	3	arSubSceneGroups	0x90	array	SubSceneGroup	32	8	zero	
+switch	wrl	SceneCluster	184	4	tDefaultSubSceneGroup	0x98	inline	SubSceneGroup	1			
+switch	wrl	CustomTileInfo	40									
+switch	wrl	CustomTileInfo	40	4	arTiles	0x14	array	CustomTileCell	36	8	zero	
+switch	wrl	SceneSpecification	220									
+switch	wrl	SceneSpecification	220	18	tCachedValues	0x8C	inline	SceneCachedValues	1			
+switch	wrl	LabelCondition	24									
+switch	wrl	LabelEntry	20									
+switch	wrl	SubSceneGroup	32									
+switch	wrl	SubSceneGroup	32	3	arSubScenes	0x18	array	SubSceneEntry	32	8	zero	
+switch	wrl	CustomTileCell	36									
+switch	wrl	SceneCachedValues	80									
+switch	wrl	SceneCachedValues	80	3	aabbBounds	0xC	inline	AABB	1			
+switch	wrl	SceneCachedValues	80	4	aabbMarkerSetBounds	0x24	inline	AABB	1			
+switch	wrl	SubSceneEntry	32									
+switch	wrl	SubSceneEntry	32	3	arLabels	0x18	array	SubSceneLabel	8	8	zero	
+switch	wrl	SubSceneLabel	8									
+switch	wth	WeatherDefinition	432									
+switch	wth	WeatherDefinition	432	2	pathWind	0x18	inline	VelocityVectorPath	1			
+switch	wth	WeatherDefinition	432	3	pathWindLocal	0x48	inline	VelocityVectorPath	1			
+switch	wth	WeatherDefinition	432	5	pathWeatherIntensity	0x80	inline	FloatPath	1			
+switch	wth	WeatherDefinition	432	20	tParamsNotRaining	0xE8	inline	WeatherStateParams	1			
+switch	wth	WeatherDefinition	432	21	tParamsWhenRaining	0x134	inline	WeatherStateParams	1			
+switch	wth	WeatherDefinition	432	23	tColorCorrection	0x184	inline	ColorCorrectionParams	1			
+switch	wth	WeatherDefinition	432	24	arRandomWeatherSNOs	0x1A0	array	SNO	4	8	zero	
+switch	wth	WeatherStateParams	76									
+switch	wth	ColorCorrectionParams	16									
+switch	xpl	ExplosionDefinition	64									
+x360	aco	Accolade	16									
+x360	acr	Actor	440									
+x360	acr	Actor	440	4	AxialCylinder@28	0x1C	inline	AxialCylinder	1			
+x360	acr	Actor	440	5	Sphere@48	0x30	inline	Sphere	1			
+x360	acr	Actor	440	6	AABB@64	0x40	inline	AABB	1			
+x360	acr	Actor	440	7	tagmap@96	0x58	tagmap			4	zero	
+x360	acr	Actor	440	13	array@136	0x78	array	MsgTriggeredEvent	192	8	zero	
+x360	acr	Actor	440	15	WeightedLook[]@156	0x9C	inline	WeightedLook	8			
+x360	acr	Actor	440	22	ActorCollisionData@276	0x114	inline	ActorCollisionData	1			
+x360	acr	Actor	440	23	InventoryImages[]@352	0x160	inline	InventoryImages	6			
+x360	acr	Actor	440	25	cstring@408	0x1A0	text			8	zero	
+x360	acr	Actor	440	26	cstring@424	0x1B0	text			8	zero	
+x360	acr	AxialCylinder	20									
+x360	acr	Sphere	16									
+x360	acr	AABB	24									
+x360	acr	MsgTriggeredEvent	192									
+x360	acr	MsgTriggeredEvent	192	1	TriggerEvent@4	0x4	inline	TriggerEvent	1			
+x360	acr	WeightedLook	12									
+x360	acr	WeightedLook	12	0	LookLink@0	0x0	inline	LookLink	1			
+x360	acr	ActorCollisionData	76									
+x360	acr	ActorCollisionData	76	0	ActorCollisionFlags@0	0x0	inline	ActorCollisionFlags	1			
+x360	acr	ActorCollisionData	76	2	AxialCylinder@20	0x14	inline	AxialCylinder	1			
+x360	acr	ActorCollisionData	76	3	AABB@40	0x28	inline	AABB	1			
+x360	acr	InventoryImages	8									
+x360	acr	TriggerEvent	188									
+x360	acr	TriggerEvent	188	1	TriggerConditions@4	0x4	inline	TriggerConditions	1			
+x360	acr	TriggerEvent	188	3	SNOName@44	0x2C	inline	SNOName	1			
+x360	acr	TriggerEvent	188	6	HardpointLink[]@68	0x44	inline	HardpointLink	2			
+x360	acr	TriggerEvent	188	7	LookLink@92	0x5C	inline	LookLink	1			
+x360	acr	TriggerEvent	188	8	ConstraintLink@100	0x64	inline	ConstraintLink	1			
+x360	acr	LookLink	8									
+x360	acr	ActorCollisionFlags	16									
+x360	acr	TriggerConditions	36									
+x360	acr	SNOName	8									
+x360	acr	HardpointLink	12									
+x360	acr	HardpointLink	12	0	HardpointHash@0	0x0	inline	HardpointHash	1			
+x360	acr	ConstraintLink	8									
+x360	acr	HardpointHash	8									
+x360	act	Act	4200									
+x360	act	Act	4200	0	array@24	0xC	array	ActQuestInfo	4	8	zero	
+x360	act	Act	4200	1	WaypointInfo[]@32	0x20	inline	WaypointInfo	100			
+x360	act	Act	4200	2	ResolvedPortalDestination@4032	0xFC0	inline	ResolvedPortalDestination	1			
+x360	act	Act	4200	3	ActStartLocOverride[]@4044	0xFCC	inline	ActStartLocOverride	6			
+x360	act	ActQuestInfo	4									
+x360	act	WaypointInfo	40									
+x360	act	ResolvedPortalDestination	12									
+x360	act	ActStartLocOverride	24									
+x360	act	ActStartLocOverride	24	0	ResolvedPortalDestination@0	0x0	inline	ResolvedPortalDestination	1			
+x360	adv	Adventure	36									
+x360	aib	AIBehavior	48									
+x360	ais	AIState	64									
+x360	ais	AIState	64	0	AIDecision[]@16	0x10	inline	AIDecision	2			
+x360	ais	AIDecision	24									
+x360	ais	AIDecision	24	1	array@8	0x10	array	AIEntry	184	8	zero	
+x360	ais	AIEntry	184									
+x360	ais	AIEntry	184	4	AICondition[]@16	0x10	inline	AICondition	5			
+x360	ais	AICondition	28									
+x360	ams	AmbientSound	96									
+x360	ams	AmbientSound	96	2	RandomAmbientSoundParams[]@20	0x14	inline	RandomAmbientSoundParams	2			
+x360	ams	RandomAmbientSoundParams	20									
+x360	an2	Anim2D	64									
+x360	an2	Anim2D	64	2	FrameAnim@20	0x14	inline	FrameAnim	1			
+x360	an2	Anim2D	64	5	array@56	0x30	array	Anim2DFrame	68	8	zero	
+x360	an2	FrameAnim	20									
+x360	an2	Anim2DFrame	68									
+x360	ani	Anim	64									
+x360	ani	Anim	64	4	array@40	0x18	array	AnimPermutation	360	8	zero	
+x360	ani	AnimPermutation	360									
+x360	ani	AnimPermutation	360	15	array@136	0x7C	array	BoneName	4	8	zero	
+x360	ani	AnimPermutation	360	18	array@160	0x98	array	BoneBlendWeights	8	8	zero	
+x360	ani	AnimPermutation	360	20	array@184	0xAC	array	TranslationCurve	16	8	zero	
+x360	ani	AnimPermutation	360	21	array@200	0xC0	array	RotationCurve	16	8	zero	
+x360	ani	AnimPermutation	360	22	array@216	0xD0	array	ScaleCurve	16	8	zero	
+x360	ani	AnimPermutation	360	33	array@304	0x124	array	KeyframedAttachment	192	8	zero	
+x360	ani	AnimPermutation	360	34	array@320	0x138	array	VECTOR3D	12	8	zero	
+x360	ani	AnimPermutation	360	35	VelocityVector3D@328	0x148	inline	VelocityVector3D	1			
+x360	ani	AnimPermutation	360	36	HardpointLink@340	0x154	inline	HardpointLink	1			
+x360	ani	BoneName	4									
+x360	ani	BoneBlendWeights	8									
+x360	ani	TranslationCurve	16									
+x360	ani	TranslationCurve	16	0	array@8	0x0	array	BYTE	1	8	zero	
+x360	ani	RotationCurve	16									
+x360	ani	RotationCurve	16	0	array@8	0x0	array	BYTE	1	8	zero	
+x360	ani	ScaleCurve	16									
+x360	ani	ScaleCurve	16	0	array@8	0x0	array	BYTE	1	8	zero	
+x360	ani	KeyframedAttachment	192									
+x360	ani	KeyframedAttachment	192	1	TriggerEvent@4	0x4	inline	TriggerEvent	1			
+x360	ani	VelocityVector3D	12									
+x360	ans	AnimSet	480									
+x360	ans	AnimSet	480	1	tagmap@24	0x10	tagmap			4	zero	
+x360	ans	AnimSet	480	2	AnimSetTagMap[]@32	0x20	inline	AnimSetTagMap	28			
+x360	ans	AnimSetTagMap	16									
+x360	ans	AnimSetTagMap	16	0	tagmap@8	0x0	tagmap			4	zero	
+x360	ant	AnimTree	96									
+x360	ant	AnimTree	96	3	array@32	0x18	array	AnimTreeLeaf	36	8	zero	
+x360	ant	AnimTree	96	5	array@56	0x2C	array	AnimTreeNode	300	8	zero	
+x360	ant	AnimTree	96	7	array@80	0x44	array	INT	4	8	zero	
+x360	ant	AnimTreeLeaf	36									
+x360	ant	AnimTreeLeaf	36	8	AnimTreeLayerName@32	0x20	inline	AnimTreeLayerName	1			
+x360	ant	AnimTreeNode	300									
+x360	ant	AnimTreeNode	300	4	AnimTreeBlendCase[]@76	0x4C	inline	AnimTreeBlendCase	16			
+x360	ant	AnimTreeNode	300	5	AnimTreeBlendRamp@268	0x10C	inline	AnimTreeBlendRamp	1			
+x360	ant	AnimTreeNode	300	7	AnimTreeLayerName@296	0x128	inline	AnimTreeLayerName	1			
+x360	ant	AnimTreeLayerName	4									
+x360	ant	AnimTreeBlendCase	12									
+x360	ant	AnimTreeBlendRamp	24									
+x360	app	Appearance	552									
+x360	app	Appearance	552	1	array@376	0x170	array	AppearanceMaterial	24	8	zero	
+x360	app	Appearance	552	2	array@392	0x180	array	AppearanceLook	4	8	zero	
+x360	app	Appearance	552	3	Structure@16	0x10	inline	Structure	1			
+x360	app	Appearance	552	6	array@416	0x194	array	StaticLight	92	8	zero	
+x360	app	Appearance	552	23	AABB@488	0x1E8	inline	AABB	1			
+x360	app	Appearance	552	24	array@520	0x200	array	AppearanceSamplingSubgrid	56	8	zero	
+x360	app	Appearance	552	25	ser@528	0x210	blob			1	cursor	0
+x360	app	Appearance	552	26	ser@536	0x218	blob			1	cursor	1
+x360	app	AppearanceMaterial	24									
+x360	app	AppearanceMaterial	24	2	array@16	0x8	array	SubObjectAppearance	248	8	zero	
+x360	app	AppearanceLook	4									
+x360	app	Structure	344									
+x360	app	Structure	344	2	array@16	0x8	array	BoneStructure	256	8	zero	
+x360	app	Structure	344	3	LookAtData@24	0x18	inline	LookAtData	1			
+x360	app	Structure	344	5	array@64	0x48	array	BonePulseData	20	8	zero	
+x360	app	Structure	344	6	GeoSet[]@80	0x50	inline	GeoSet	2			
+x360	app	Structure	344	7	Sphere@128	0x80	inline	Sphere	1			
+x360	app	Structure	344	9	array@160	0x94	array	CollisionCapsule	48	8	zero	
+x360	app	Structure	344	11	array@184	0xAC	array	Hardpoint	40	8	zero	
+x360	app	Structure	344	13	Octree@208	0xD0	inline	Octree	1			
+x360	app	Structure	344	14	AABB@280	0x118	inline	AABB	1			
+x360	app	Structure	344	17	array@320	0x134	array	ConstraintParameters	236	8	zero	
+x360	app	StaticLight	92									
+x360	app	AppearanceSamplingSubgrid	56									
+x360	app	AppearanceSamplingSubgrid	56	3	array@24	0x10	array	AppearanceSample	12	8	zero	
+x360	app	AppearanceSamplingSubgrid	56	4	AABB@32	0x20	inline	AABB	1			
+x360	app	SubObjectAppearance	248									
+x360	app	SubObjectAppearance	248	2	tagmap@16	0x8	tagmap			4	zero	
+x360	app	SubObjectAppearance	248	3	UberMaterial@24	0x18	inline	UberMaterial	1			
+x360	app	SubObjectAppearance	248	5	UberMaterial@136	0x88	inline	UberMaterial	1			
+x360	app	BoneStructure	256									
+x360	app	BoneStructure	256	3	AABB@12	0xC	inline	AABB	1			
+x360	app	BoneStructure	256	4	Sphere@36	0x24	inline	Sphere	1			
+x360	app	BoneStructure	256	5	PRSTransform@52	0x34	inline	PRSTransform	1			
+x360	app	BoneStructure	256	6	PRSTransform@84	0x54	inline	PRSTransform	1			
+x360	app	BoneStructure	256	7	PRSTransform@116	0x74	inline	PRSTransform	1			
+x360	app	BoneStructure	256	8	PRSTransform@148	0x94	inline	PRSTransform	1			
+x360	app	BoneStructure	256	9	PRSTransform@180	0xB4	inline	PRSTransform	1			
+x360	app	BoneStructure	256	11	array@224	0xD8	array	CollisionShape	80	8	zero	
+x360	app	BoneStructure	256	12	array@240	0xE8	array	ConstraintParameters	236	8	zero	
+x360	app	LookAtData	36									
+x360	app	BonePulseData	20									
+x360	app	GeoSet	24									
+x360	app	GeoSet	24	1	array@16	0x4	array	SubObject	240	8	zero	
+x360	app	CollisionCapsule	48									
+x360	app	CollisionCapsule	48	2	Hardpoint@8	0x8	inline	Hardpoint	1			
+x360	app	Hardpoint	40									
+x360	app	Hardpoint	40	0	HardpointHash@0	0x0	inline	HardpointHash	1			
+x360	app	Hardpoint	40	2	PRTransform@12	0xC	inline	PRTransform	1			
+x360	app	Octree	72									
+x360	app	Octree	72	6	array@32	0x18	array	OctreeNode	48	8	zero	
+x360	app	Octree	72	7	array@48	0x28	array	OctreeLeaf	24	8	zero	
+x360	app	Octree	72	8	array@64	0x38	array	OctreePrimitive	8	8	zero	
+x360	app	ConstraintParameters	236									
+x360	app	ConstraintParameters	236	6	PRTransform@24	0x18	inline	PRTransform	1			
+x360	app	ConstraintParameters	236	8	PRTransform@64	0x40	inline	PRTransform	1			
+x360	app	ConstraintParameters	236	9	PRTransform@92	0x5C	inline	PRTransform	1			
+x360	app	AppearanceSample	12									
+x360	app	UberMaterial	104									
+x360	app	UberMaterial	104	0	Material@4	0x4	inline	Material#72	1			
+x360	app	UberMaterial	104	2	array@88	0x4C	array	MaterialTextureEntry	32	8	zero	
+x360	app	PRSTransform	32									
+x360	app	PRSTransform	32	0	Quaternion@0	0x0	inline	Quaternion	1			
+x360	app	CollisionShape	80									
+x360	app	CollisionShape	80	7	array@40	0x1C	array	PolytopeData	96	8	zero	
+x360	app	SubObject	240									
+x360	app	SubObject	240	2	array@16	0x8	array	FatVertex	32	8	zero	
+x360	app	SubObject	240	3	array@32	0x18	array	VertInfluences	24	8	zero	
+x360	app	SubObject	240	5	array@56	0x2C	array	WORD	2	8	zero	
+x360	app	SubObject	240	6	array@72	0x40	array	ClothStructure	144	8	zero	
+x360	app	SubObject	240	14	AABB@108	0x6C	inline	AABB	1			
+x360	app	SubObject	240	16	array@144	0x88	array	CollisionShape	80	8	zero	
+x360	app	SubObject	240	21	ser@176	0xB0	blob			1	zero	2
+x360	app	SubObject	240	22	array@192	0xB8	array	SkinningInfo	104	8	zero	
+x360	app	SubObject	240	23	array@208	0xC8	array	CompVertInfluences	6	8	zero	
+x360	app	PRTransform	28									
+x360	app	PRTransform	28	0	Quaternion@0	0x0	inline	Quaternion	1			
+x360	app	OctreeNode	48									
+x360	app	OctreeNode	48	0	OctreeCube@0	0x0	inline	OctreeCube	1			
+x360	app	OctreeLeaf	24									
+x360	app	OctreeLeaf	24	0	OctreeCube@0	0x0	inline	OctreeCube	1			
+x360	app	OctreePrimitive	8									
+x360	app	Material#72	72									
+x360	app	MaterialTextureEntry	32									
+x360	app	MaterialTextureEntry	32	2	MaterialTexture@8	0x8	inline	MaterialTexture	1			
+x360	app	Quaternion	16									
+x360	app	PolytopeData	96									
+x360	app	PolytopeData	96	0	dmFloat3@32	0x20	inline	dmFloat3	1			
+x360	app	PolytopeData	96	1	array@0	0x40	array	dmFloat3	12	8	zero	
+x360	app	PolytopeData	96	2	array@8	0x48	array	dmPlane	16	8	zero	
+x360	app	PolytopeData	96	3	array@16	0x50	array	dmSubEdge	4	8	zero	
+x360	app	PolytopeData	96	4	array@24	0x58	array	BYTE	1	8	zero	
+x360	app	FatVertex	32									
+x360	app	VertInfluences	24									
+x360	app	VertInfluences	24	0	Influence[]@0	0x0	inline	Influence	3			
+x360	app	ClothStructure	144									
+x360	app	ClothStructure	144	1	array@16	0x4	array	ClothVertexSerializable	44	8	zero	
+x360	app	ClothStructure	144	3	array@40	0x1C	array	ClothFaceSerializable	16	8	zero	
+x360	app	ClothStructure	144	5	array@64	0x34	array	ClothStaple	28	8	zero	
+x360	app	ClothStructure	144	7	array@88	0x4C	array	ClothConstraintSerializable	16	8	zero	
+x360	app	ClothStructure	144	9	array@112	0x64	array	ClothConstraintSerializable	16	8	zero	
+x360	app	ClothStructure	144	12	array@136	0x80	array	WORD	2	8	zero	
+x360	app	SkinningInfo	104									
+x360	app	SkinningInfo	104	1	array@16	0x4	array	INT	4	8	zero	
+x360	app	SkinningInfo	104	4	ser@40	0x28	blob			1	zero	2
+x360	app	SkinningInfo	104	7	ser@64	0x40	blob			1	zero	2
+x360	app	CompVertInfluences	6									
+x360	app	CompVertInfluences	6	0	CompInfluence[]@0	0x0	inline	CompInfluence	3			
+x360	app	OctreeCube	16									
+x360	app	MaterialTexture	24									
+x360	app	MaterialTexture	24	1	array@8	0x0	array	BYTE	1	8	zero	
+x360	app	dmFloat3	12									
+x360	app	dmPlane	16									
+x360	app	dmPlane	16	0	dmFloat3@0	0x0	inline	dmFloat3	1			
+x360	app	dmSubEdge	4									
+x360	app	Influence	8									
+x360	app	ClothVertexSerializable	44									
+x360	app	ClothFaceSerializable	16									
+x360	app	ClothStaple	28									
+x360	app	ClothConstraintSerializable	16									
+x360	app	CompInfluence	2									
+x360	bos	BossEncounter	104									
+x360	clt	Cloth	100									
+x360	cnd	Condition	1188									
+x360	cnd	Condition	1188	8	LoreSubcondition[]@60	0x3C	inline	LoreSubcondition	3			
+x360	cnd	Condition	1188	9	QuestSubcondition[]@84	0x54	inline	QuestSubcondition	3			
+x360	cnd	Condition	1188	10	ItemSubcondition[]@132	0x84	inline	ItemSubcondition	3			
+x360	cnd	Condition	1188	24	FollowerSubcondition@236	0xEC	inline	FollowerSubcondition	1			
+x360	cnd	Condition	1188	25	LabelSubcondition[]@244	0xF4	inline	LabelSubcondition	3			
+x360	cnd	Condition	1188	26	SkillSubcondition[]@268	0x10C	inline	SkillSubcondition	3			
+x360	cnd	Condition	1188	32	MonsterSubcondition[]@324	0x144	inline	MonsterSubcondition	15			
+x360	cnd	Condition	1188	33	GameFlagSubcondition[]@384	0x180	inline	GameFlagSubcondition	3			
+x360	cnd	Condition	1188	34	PlayerFlagSubcondition[]@768	0x300	inline	PlayerFlagSubcondition	3			
+x360	cnd	Condition	1188	35	BuffSubcondition[]@1152	0x480	inline	BuffSubcondition	3			
+x360	cnd	LoreSubcondition	8									
+x360	cnd	QuestSubcondition	16									
+x360	cnd	ItemSubcondition	16									
+x360	cnd	FollowerSubcondition	8									
+x360	cnd	LabelSubcondition	8									
+x360	cnd	SkillSubcondition	12									
+x360	cnd	MonsterSubcondition	4									
+x360	cnd	GameFlagSubcondition	128									
+x360	cnd	PlayerFlagSubcondition	128									
+x360	cnd	BuffSubcondition	12									
+x360	cnl	ConversationList	32									
+x360	cnl	ConversationList	32	0	array@16	0x18	array	ConversationListEntry	332	8	zero	
+x360	cnl	ConversationListEntry	332									
+x360	cnv	Conversation	272									
+x360	cnv	Conversation	272	12	array@192	0xC8	array	ConversationTreeNode	136	8	zero	
+x360	cnv	Conversation	272	13	array@208	0xD8	array	BYTE	1	8	zero	
+x360	cnv	ConversationTreeNode	136									
+x360	cnv	ConversationTreeNode	136	10	array@40	0x30	array	INT	4	8	zero	
+x360	cnv	ConversationTreeNode	136	19	array@88	0x60	array	ConversationTreeNode	136	8	zero	
+x360	cnv	ConversationTreeNode	136	20	array@104	0x70	array	ConversationTreeNode	136	8	zero	
+x360	cnv	ConversationTreeNode	136	21	array@120	0x80	array	ConversationTreeNode	136	8	zero	
+x360	con	Conductor	72									
+x360	con	Conductor	72	0	array@24	0x20	array	ConductorPhase	32	8	zero	
+x360	con	Conductor	72	4	array@48	0x38	array	BYTE	1	8	zero	
+x360	con	ConductorPhase	32									
+x360	con	ConductorPhase	32	3	array@8	0x10	array	ConductorSequence	32	8	zero	
+x360	con	ConductorSequence	32									
+x360	con	ConductorSequence	32	1	array@8	0x10	array	ScriptMessageMap	192	8	zero	
+x360	con	ScriptMessageMap	192									
+x360	con	ScriptMessageMap	192	4	ScriptEventVariantParamLW[]@8	0x8	inline	ScriptEventVariantParamLW	4			
+x360	con	ScriptMessageMap	192	5	ScriptEventVariantParamString_Console[]@104	0x68	inline	ScriptEventVariantParamString_Console	4			
+x360	con	ScriptMessageMap	192	6	array@176	0xA8	array	BYTE	1	8	zero	
+x360	con	ScriptEventVariantParamLW	24									
+x360	con	ScriptEventVariantParamString_Console	16									
+x360	con	ScriptEventVariantParamString_Console	16	0	array@8	0x0	array	BYTE	1	8	zero	
+x360	ctr	ControlScheme	420									
+x360	ctr	ControlScheme	420	0	ButtonBinding[]@12	0xC	inline	ButtonBinding	92			
+x360	ctr	ButtonBinding	4									
+x360	dfn	DungeonFinder	40									
+x360	dfn	DungeonFinder	40	0	array@16	0x18	array	DungeonFinderLevelTable	64	8	zero	
+x360	dfn	DungeonFinderLevelTable	64									
+x360	dfn	DungeonFinderLevelTable	64	2	array@8	0x10	array	WeightedTransition	8	8	zero	
+x360	dfn	DungeonFinderLevelTable	64	3	array@24	0x20	array	WeightedPopulation	76	8	zero	
+x360	dfn	WeightedTransition	8									
+x360	dfn	WeightedPopulation	76									
+x360	efg	EffectGroup	120									
+x360	efg	EffectGroup	120	6	array@32	0x10	array	EffectItem	200	8	zero	
+x360	efg	EffectItem	200									
+x360	efg	EffectItem	200	2	MsgTriggeredEvent@8	0x8	inline	MsgTriggeredEvent	1			
+x360	enc	Encounter	32									
+x360	enc	Encounter	32	1	array@16	0x18	array	EncounterSpawnOption	12	8	zero	
+x360	enc	EncounterSpawnOption	12									
+x360	flg	FlagSet	32									
+x360	flg	FlagSet	32	0	array@16	0x18	array	FlagLookup	388	8	zero	
+x360	flg	FlagLookup	388									
+x360	fnt	Font	216									
+x360	fnt	Font	216	9	array@176	0xA8	array	FontConsoleTexture	40	8	zero	
+x360	fnt	Font	216	12	array@200	0xC0	array	FontPointSizeData	88	8	zero	
+x360	fnt	FontConsoleTexture	40									
+x360	fnt	FontConsoleTexture	40	4	ser@16	0x10	blob			1	zero	1
+x360	fnt	FontConsoleTexture	40	7	ser@32	0x20	blob			1	zero	1
+x360	fnt	FontPointSizeData	88									
+x360	fnt	FontPointSizeData	88	10	ser@40	0x28	blob			1	zero	0
+x360	fnt	FontPointSizeData	88	14	array@72	0x40	array	FontConsoleKerning	16	8	zero	
+x360	fnt	FontConsoleKerning	16									
+x360	glo	Globals	936									
+x360	glo	Globals	936	0	array@16	0x18	array	GlobalServerData	656	8	zero	
+x360	glo	Globals	936	2	array@40	0x30	array	StartLocationName	68	8	zero	
+x360	glo	Globals	936	45	BannerParams@152	0x98	inline	BannerParams	1			
+x360	glo	Globals	936	60	AssetList[]@520	0x208	inline	AssetList	7			
+x360	glo	GlobalServerData	656									
+x360	glo	GlobalServerData	656	0	array@0	0x8	array	ActorGroup	68	8	zero	
+x360	glo	GlobalServerData	656	1	array@16	0x18	array	GlobalScriptVariable	40	8	zero	
+x360	glo	GlobalServerData	656	2	DifficultyTuningParams[]@32	0x20	inline	DifficultyTuningParams	6			
+x360	glo	StartLocationName	68									
+x360	glo	BannerParams	232									
+x360	glo	BannerParams	232	0	array@0	0x8	array	BannerTexturePair	16	8	zero	
+x360	glo	BannerParams	232	2	array@24	0x20	array	BannerTexturePair	16	8	zero	
+x360	glo	BannerParams	232	4	array@48	0x38	array	BannerTexturePair	16	8	zero	
+x360	glo	BannerParams	232	5	array@64	0x48	array	BannerTexturePair	16	8	zero	
+x360	glo	BannerParams	232	7	array@88	0x60	array	BannerTexturePair	16	8	zero	
+x360	glo	BannerParams	232	9	array@112	0x78	array	BannerColorSet	84	8	zero	
+x360	glo	BannerParams	232	10	array@128	0x88	array	BannerSigilPlacement	68	8	zero	
+x360	glo	BannerParams	232	11	array@144	0x98	array	SNO	4	8	zero	
+x360	glo	BannerParams	232	12	array@160	0xA8	array	SNO	4	8	zero	
+x360	glo	BannerParams	232	13	array@176	0xB8	array	SNO	4	8	zero	
+x360	glo	BannerParams	232	14	array@192	0xC8	array	SNO	4	8	zero	
+x360	glo	BannerParams	232	15	array@208	0xD8	array	EpicBannerDescription	148	8	zero	
+x360	glo	AssetList	16									
+x360	glo	AssetList	16	0	array@0	0x8	array	AssetListEntry	8	8	zero	
+x360	glo	ActorGroup	68									
+x360	glo	GlobalScriptVariable	40									
+x360	glo	DifficultyTuningParams	52									
+x360	glo	BannerTexturePair	16									
+x360	glo	BannerColorSet	84									
+x360	glo	BannerSigilPlacement	68									
+x360	glo	EpicBannerDescription	148									
+x360	glo	AssetListEntry	8									
+x360	lit	Light	1312									
+x360	lit	Light	1312	3	MaterialTexture@24	0x18	inline	MaterialTexture	1			
+x360	lit	Light	1312	7	LightStateParams@64	0x40	inline	LightStateParams	1			
+x360	lit	Light	1312	8	LightStateParams@688	0x2B0	inline	LightStateParams	1			
+x360	lit	LightStateParams	624									
+x360	lit	LightStateParams	624	0	FloatPath@0	0x0	inline	FloatPath	1			
+x360	lit	LightStateParams	624	1	FloatPath@48	0x30	inline	FloatPath	1			
+x360	lit	LightStateParams	624	2	FloatPath[]@96	0x60	inline	FloatPath	3			
+x360	lit	LightStateParams	624	3	AnglePath@240	0xF0	inline	AnglePath	1			
+x360	lit	LightStateParams	624	4	AnglePath@288	0x120	inline	AnglePath	1			
+x360	lit	LightStateParams	624	5	ColorPath@336	0x150	inline	ColorPath	1			
+x360	lit	LightStateParams	624	6	FloatPath@384	0x180	inline	FloatPath	1			
+x360	lit	LightStateParams	624	7	ColorPath@432	0x1B0	inline	ColorPath	1			
+x360	lit	LightStateParams	624	8	FloatPath@480	0x1E0	inline	FloatPath	1			
+x360	lit	LightStateParams	624	9	ColorPath@528	0x210	inline	ColorPath	1			
+x360	lit	LightStateParams	624	10	FloatPath@576	0x240	inline	FloatPath	1			
+x360	lit	FloatPath	48									
+x360	lit	FloatPath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	lit	FloatPath	48	1	array@32	0x28	array	FloatNode	12	8	zero	
+x360	lit	AnglePath	48									
+x360	lit	AnglePath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	lit	AnglePath	48	1	array@32	0x28	array	AngleNode	12	8	zero	
+x360	lit	ColorPath	48									
+x360	lit	ColorPath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	lit	ColorPath	48	1	array@32	0x28	array	ColorNode	12	8	zero	
+x360	lit	InterpolationPathHeader	28									
+x360	lit	InterpolationPathHeader	28	4	InterpolationScalar@16	0x10	inline	InterpolationScalar	1			
+x360	lit	FloatNode	12									
+x360	lit	AngleNode	12									
+x360	lit	ColorNode	12									
+x360	lit	InterpolationScalar	12									
+x360	lor	Lore	36									
+x360	lvl	LevelArea	40									
+x360	lvl	LevelArea	40	3	array@24	0x20	array	LevelAreaServerData	864	8	zero	
+x360	lvl	LevelAreaServerData	864									
+x360	lvl	LevelAreaServerData	864	1	GizmoLocSet@8	0x8	inline	GizmoLocSet	1			
+x360	lvl	LevelAreaServerData	864	4	array@848	0x358	array	LevelAreaSpawnPopulation	152	8	zero	
+x360	lvl	GizmoLocSet	832									
+x360	lvl	GizmoLocSet	832	0	GizmoLocSpawnType[]@0	0x0	inline	GizmoLocSpawnType	52			
+x360	lvl	LevelAreaSpawnPopulation	152									
+x360	lvl	LevelAreaSpawnPopulation	152	6	array@128	0x88	array	SNO	4	8	zero	
+x360	lvl	LevelAreaSpawnPopulation	152	8	array@112	0x78	array	LevelAreaSpawnGroup	56	8	zero	
+x360	lvl	GizmoLocSpawnType	16									
+x360	lvl	GizmoLocSpawnType	16	0	array@0	0x8	array	GizmoLocSpawnEntry	40	8	zero	
+x360	lvl	LevelAreaSpawnGroup	56									
+x360	lvl	LevelAreaSpawnGroup	56	5	array@24	0x20	array	LevelAreaSpawnItem	32	8	zero	
+x360	lvl	GizmoLocSpawnEntry	40									
+x360	lvl	GizmoLocSpawnEntry	40	6	array@24	0x20	array	GizmoLocSpawnChoice	20	8	zero	
+x360	lvl	LevelAreaSpawnItem	32									
+x360	lvl	LevelAreaSpawnItem	32	0	SNOName@0	0x0	inline	SNOName	1			
+x360	lvl	GizmoLocSpawnChoice	20									
+x360	lvl	GizmoLocSpawnChoice	20	0	SNOName@0	0x0	inline	SNOName	1			
+x360	mat	Material#136	136									
+x360	mat	Material#136	136	1	tagmap@24	0x10	tagmap			4	zero	
+x360	mat	Material#136	136	2	UberMaterial@32	0x20	inline	UberMaterial	1			
+x360	mon	Monster#1360	1360									
+x360	mon	Monster#1360	1360	18	HealthDropInfo@680	0x2A8	inline	HealthDropInfo	1			
+x360	mon	Monster#1360	1360	19	HealthDropInfo@692	0x2B4	inline	HealthDropInfo	1			
+x360	mon	Monster#1360	1360	20	HealthDropInfo@704	0x2C0	inline	HealthDropInfo	1			
+x360	mon	Monster#1360	1360	21	HealthDropInfo@716	0x2CC	inline	HealthDropInfo	1			
+x360	mon	Monster#1360	1360	26	SkillDeclaration[]@732	0x2DC	inline	SkillDeclaration	8			
+x360	mon	Monster#1360	1360	27	MonsterSkillDeclaration[]@796	0x31C	inline	MonsterSkillDeclaration	8			
+x360	mon	Monster#1360	1360	33	Monster@36	0x24	inline	Monster#20	1			
+x360	mon	Monster#1360	1360	52	tagmap@1160	0x480	tagmap			4	zero	
+x360	mon	Monster#1360	1360	54	array@1176	0x4A0	array	MonsterMinionSpawnGroup	24	8	zero	
+x360	mon	Monster#1360	1360	56	array@1200	0x4B8	array	MonsterChampionSpawnGroup	24	8	zero	
+x360	mon	HealthDropInfo	12									
+x360	mon	SkillDeclaration	8									
+x360	mon	MonsterSkillDeclaration	16									
+x360	mon	Monster#20	20									
+x360	mon	MonsterMinionSpawnGroup	24									
+x360	mon	MonsterMinionSpawnGroup	24	2	array@8	0x10	array	MonsterMinionSpawnItem	20	8	zero	
+x360	mon	MonsterChampionSpawnGroup	24									
+x360	mon	MonsterChampionSpawnGroup	24	2	array@8	0x10	array	MonsterChampionSpawnItem	8	8	zero	
+x360	mon	MonsterMinionSpawnItem	20									
+x360	mon	MonsterChampionSpawnItem	8									
+x360	mrk	MarkerSet	200									
+x360	mrk	MarkerSet	200	0	array@24	0xC	array	Marker	88	8	zero	
+x360	mrk	MarkerSet	200	1	array@88	0x50	array	Circle	12	8	zero	
+x360	mrk	MarkerSet	200	3	AABB@144	0x90	inline	AABB	1			
+x360	mrk	MarkerSet	200	6	array@192	0xB4	array	WORD	2	8	zero	
+x360	mrk	Marker	88									
+x360	mrk	Marker	88	3	PRTransform@12	0xC	inline	PRTransform	1			
+x360	mrk	Marker	88	4	SNOName@40	0x28	inline	SNOName	1			
+x360	mrk	Marker	88	5	tagmap@56	0x30	tagmap			4	zero	
+x360	mrk	Marker	88	7	array@80	0x44	array	MarkerLink	8	8	zero	
+x360	mrk	Circle	12									
+x360	mrk	MarkerLink	8									
+x360	mus	Music	80									
+x360	mus	Music	80	5	array@40	0x1C	array	PlaylistEntry	76	8	zero	
+x360	mus	Music	80	6	RandomMusicSoundParams[]@48	0x30	inline	RandomMusicSoundParams	2			
+x360	mus	PlaylistEntry	76									
+x360	mus	RandomMusicSoundParams	16									
+x360	obs	Observer	148									
+x360	phm	PhysMesh	48									
+x360	phm	PhysMesh	48	2	array@32	0x14	array	CollisionMesh	112	8	zero	
+x360	phm	CollisionMesh	112									
+x360	phm	CollisionMesh	112	1	array@0	0x60	array	dmMeshNode	16	16	zero	
+x360	phm	CollisionMesh	112	3	array@8	0x50	array	dmFloat4	16	16	zero	
+x360	phm	CollisionMesh	112	5	array@16	0x58	array	dmMeshTriangle	28	8	zero	
+x360	phm	CollisionMesh	112	6	dmFloat3@24	0x18	inline	dmFloat3	1			
+x360	phm	CollisionMesh	112	7	dmFloat3@36	0x24	inline	dmFloat3	1			
+x360	phm	CollisionMesh	112	8	dmFloat3@48	0x30	inline	dmFloat3	1			
+x360	phm	dmMeshNode	16									
+x360	phm	dmFloat4	16									
+x360	phm	dmMeshTriangle	28									
+x360	phy	Physics	68									
+x360	prt	Particle	688									
+x360	prt	Particle	688	5	InterpolationScalar@32	0x20	inline	InterpolationScalar	1			
+x360	prt	Particle	688	7	array@272	0x118	array	FloatPath	48	8	zero	
+x360	prt	Particle	688	8	array@288	0x128	array	IntPath	48	8	zero	
+x360	prt	Particle	688	9	array@304	0x138	array	FloatPath	48	8	zero	
+x360	prt	Particle	688	10	array@320	0x148	array	TimePath	48	8	zero	
+x360	prt	Particle	688	11	array@336	0x158	array	FloatPath	48	8	zero	
+x360	prt	Particle	688	12	array@352	0x168	array	AnglePath	48	8	zero	
+x360	prt	Particle	688	13	array@368	0x178	array	VelocityPath	48	8	zero	
+x360	prt	Particle	688	14	array@384	0x188	array	VelocityPath	48	8	zero	
+x360	prt	Particle	688	15	UberMaterial@56	0x38	inline	UberMaterial	1			
+x360	prt	Particle	688	27	EmitterParams@208	0xD0	inline	EmitterParams	1			
+x360	prt	Particle	688	28	array@416	0x1A8	array	FloatPath	48	8	zero	
+x360	prt	Particle	688	29	array@400	0x198	array	ColorPath	48	8	zero	
+x360	prt	Particle	688	30	array@432	0x1B8	array	FloatPath	48	8	zero	
+x360	prt	Particle	688	31	array@448	0x1C8	array	FloatPath	48	8	zero	
+x360	prt	Particle	688	32	array@464	0x1D8	array	AnglePath	48	8	zero	
+x360	prt	Particle	688	33	array@480	0x1E8	array	AngularVelocityPath	48	8	zero	
+x360	prt	Particle	688	34	array@496	0x1F8	array	VectorPath	48	8	zero	
+x360	prt	Particle	688	35	array@512	0x208	array	VelocityPath	48	8	zero	
+x360	prt	Particle	688	36	array@528	0x218	array	AngularVelocityPath	48	8	zero	
+x360	prt	Particle	688	37	array@544	0x228	array	VectorPath	48	8	zero	
+x360	prt	Particle	688	38	array@560	0x238	array	VectorPath	48	8	zero	
+x360	prt	Particle	688	39	array@576	0x248	array	VelocityVectorPath	48	8	zero	
+x360	prt	Particle	688	40	array@592	0x258	array	AccelVectorPath	48	8	zero	
+x360	prt	Particle	688	41	array@608	0x268	array	VectorPath	48	8	zero	
+x360	prt	Particle	688	42	array@624	0x278	array	VelocityVectorPath	48	8	zero	
+x360	prt	Particle	688	43	array@640	0x288	array	ExtendedPath_Console	192	8	zero	
+x360	prt	Particle	688	49	array@680	0x29C	array	MsgTriggeredEvent	192	8	zero	
+x360	prt	IntPath	48									
+x360	prt	IntPath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	prt	IntPath	48	1	array@32	0x28	array	IntNode	12	8	zero	
+x360	prt	TimePath	48									
+x360	prt	TimePath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	prt	TimePath	48	1	array@32	0x28	array	TimeNode	12	8	zero	
+x360	prt	VelocityPath	48									
+x360	prt	VelocityPath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	prt	VelocityPath	48	1	array@32	0x28	array	VelocityNode	12	8	zero	
+x360	prt	EmitterParams	64									
+x360	prt	EmitterParams	64	1	array@0	0x18	array	FloatPath	48	8	zero	
+x360	prt	EmitterParams	64	2	array@8	0x20	array	FloatPath	48	8	zero	
+x360	prt	EmitterParams	64	3	array@16	0x28	array	VectorPath	48	8	zero	
+x360	prt	AngularVelocityPath	48									
+x360	prt	AngularVelocityPath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	prt	AngularVelocityPath	48	1	array@32	0x28	array	AngularVelocityNode	12	8	zero	
+x360	prt	VectorPath	48									
+x360	prt	VectorPath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	prt	VectorPath	48	1	array@32	0x28	array	VectorNode	28	8	zero	
+x360	prt	VelocityVectorPath	48									
+x360	prt	VelocityVectorPath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	prt	VelocityVectorPath	48	1	array@32	0x28	array	VelocityVectorNode	28	8	zero	
+x360	prt	AccelVectorPath	48									
+x360	prt	AccelVectorPath	48	0	InterpolationPathHeader@0	0x0	inline	InterpolationPathHeader	1			
+x360	prt	AccelVectorPath	48	1	array@32	0x28	array	AccelVectorNode	28	8	zero	
+x360	prt	ExtendedPath_Console	192									
+x360	prt	ExtendedPath_Console	192	0	array@0	0x8	array	VelocityVectorPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	1	array@16	0x18	array	VelocityVectorPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	2	array@32	0x28	array	VelocityPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	3	array@48	0x38	array	FloatPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	4	array@64	0x48	array	AngularVelocityPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	5	array@80	0x58	array	AnglePath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	6	array@96	0x68	array	FloatPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	7	array@112	0x78	array	FloatPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	8	array@128	0x88	array	VelocityPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	9	array@144	0x98	array	AccelVectorPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	10	array@160	0xA8	array	VelocityPath	48	8	zero	
+x360	prt	ExtendedPath_Console	192	11	array@176	0xB8	array	FloatPath	48	8	zero	
+x360	prt	IntNode	12									
+x360	prt	TimeNode	12									
+x360	prt	VelocityNode	12									
+x360	prt	AngularVelocityNode	12									
+x360	prt	VectorNode	28									
+x360	prt	VelocityVectorNode	28									
+x360	prt	VelocityVectorNode	28	0	VelocityVector3D@0	0x0	inline	VelocityVector3D	1			
+x360	prt	VelocityVectorNode	28	1	VelocityVector3D@12	0xC	inline	VelocityVector3D	1			
+x360	prt	AccelVectorNode	28									
+x360	prt	AccelVectorNode	28	0	AccelVector3D@0	0x0	inline	AccelVector3D	1			
+x360	prt	AccelVectorNode	28	1	AccelVector3D@12	0xC	inline	AccelVector3D	1			
+x360	prt	AccelVector3D	12									
+x360	qsr	QuestRange#32	32									
+x360	qsr	QuestRange#32	32	1	array@16	0x18	array	QuestRange#16	16	8	zero	
+x360	qsr	QuestRange#16	16									
+x360	qsr	QuestRange#16	16	0	QuestTime@0	0x0	inline	QuestTime	1			
+x360	qsr	QuestRange#16	16	1	QuestTime@8	0x8	inline	QuestTime	1			
+x360	qsr	QuestTime	8									
+x360	qst	Quest	272									
+x360	qst	Quest	272	4	QuestUnassignedStep@40	0x28	inline	QuestUnassignedStep	1			
+x360	qst	Quest	272	5	array@80	0x58	array	QuestStep	168	8	zero	
+x360	qst	Quest	272	6	array@96	0x68	array	QuestCompletionStep	24	8	zero	
+x360	qst	Quest	272	13	BountyData@192	0xC0	inline	BountyData	1			
+x360	qst	QuestUnassignedStep	40									
+x360	qst	QuestUnassignedStep	40	2	array@8	0x10	array	QuestStepObjectiveSet	24	8	zero	
+x360	qst	QuestUnassignedStep	40	3	array@24	0x20	array	QuestStepFailureConditionSet	16	8	zero	
+x360	qst	QuestStep	168									
+x360	qst	QuestStep	168	0	cstring@0	0x8	text			8	zero	
+x360	qst	QuestStep	168	12	array@120	0x80	array	QuestStepObjectiveSet	24	8	zero	
+x360	qst	QuestStep	168	13	array@136	0x90	array	QuestStepBonusObjectiveSet	40	8	zero	
+x360	qst	QuestStep	168	14	array@152	0xA0	array	QuestStepFailureConditionSet	16	8	zero	
+x360	qst	QuestCompletionStep	24									
+x360	qst	QuestCompletionStep	24	0	cstring@0	0x8	text			8	zero	
+x360	qst	BountyData	76									
+x360	qst	QuestStepObjectiveSet	24									
+x360	qst	QuestStepObjectiveSet	24	1	array@8	0x10	array	QuestStepObjective	88	8	zero	
+x360	qst	QuestStepFailureConditionSet	16									
+x360	qst	QuestStepFailureConditionSet	16	0	array@0	0x8	array	QuestStepFailureCondition	72	8	zero	
+x360	qst	QuestStepBonusObjectiveSet	40									
+x360	qst	QuestStepBonusObjectiveSet	40	5	array@24	0x20	array	QuestStepObjective	88	8	zero	
+x360	qst	QuestStepObjective	88									
+x360	qst	QuestStepObjective	88	4	SNOName@16	0x10	inline	SNOName	1			
+x360	qst	QuestStepObjective	88	5	SNOName@24	0x18	inline	SNOName	1			
+x360	qst	QuestStepObjective	88	8	cstring@40	0x30	text			8	zero	
+x360	qst	QuestStepObjective	88	9	cstring@56	0x40	text			8	zero	
+x360	qst	QuestStepFailureCondition	72									
+x360	qst	QuestStepFailureCondition	72	3	SNOName@12	0xC	inline	SNOName	1			
+x360	qst	QuestStepFailureCondition	72	4	SNOName@20	0x14	inline	SNOName	1			
+x360	qst	QuestStepFailureCondition	72	7	cstring@40	0x30	text			8	zero	
+x360	qst	QuestStepFailureCondition	72	8	cstring@56	0x40	text			8	zero	
+x360	rcp	Recipe	72									
+x360	rcp	Recipe	72	0	ItemSpecifierData@12	0xC	inline	ItemSpecifierData	1			
+x360	rcp	ItemSpecifierData	56									
+x360	rev	Reverb	104									
+x360	rev	Reverb	104	0	ReverbParams@12	0xC	inline	ReverbParams	1			
+x360	rev	ReverbParams	88									
+x360	rop	Rope	1120									
+x360	rop	Rope	1120	8	UberMaterial@48	0x30	inline	UberMaterial	1			
+x360	rop	Rope	1120	14	ColorPath@176	0xB0	inline	ColorPath	1			
+x360	rop	Rope	1120	15	ColorPath@224	0xE0	inline	ColorPath	1			
+x360	rop	Rope	1120	16	FloatPath@272	0x110	inline	FloatPath	1			
+x360	rop	Rope	1120	17	FloatPath@320	0x140	inline	FloatPath	1			
+x360	rop	Rope	1120	18	FloatPath@368	0x170	inline	FloatPath	1			
+x360	rop	Rope	1120	19	FloatPath@416	0x1A0	inline	FloatPath	1			
+x360	rop	Rope	1120	20	FloatPath@464	0x1D0	inline	FloatPath	1			
+x360	rop	Rope	1120	21	FloatPath@512	0x200	inline	FloatPath	1			
+x360	rop	Rope	1120	22	FloatPath@560	0x230	inline	FloatPath	1			
+x360	rop	Rope	1120	23	FloatPath@608	0x260	inline	FloatPath	1			
+x360	rop	Rope	1120	24	FloatPath@656	0x290	inline	FloatPath	1			
+x360	rop	Rope	1120	25	FloatPath@704	0x2C0	inline	FloatPath	1			
+x360	rop	Rope	1120	26	VectorPath@752	0x2F0	inline	VectorPath	1			
+x360	rop	Rope	1120	27	VelocityPath@800	0x320	inline	VelocityPath	1			
+x360	rop	Rope	1120	30	FloatPath@856	0x358	inline	FloatPath	1			
+x360	rop	Rope	1120	31	FloatPath@904	0x388	inline	FloatPath	1			
+x360	rop	Rope	1120	32	FloatPath@952	0x3B8	inline	FloatPath	1			
+x360	rop	Rope	1120	33	FloatPath@1000	0x3E8	inline	FloatPath	1			
+x360	rop	Rope	1120	34	FloatPath@1048	0x418	inline	FloatPath	1			
+x360	rop	Rope	1120	36	array@1112	0x448	array	MsgTriggeredEvent	192	8	zero	
+x360	sbk	SoundBank	40									
+x360	sbk	SoundBank	40	0	array@24	0xC	array	SoundSample	16	8	zero	
+x360	sbk	SoundSample	16									
+x360	scg	SceneGroup	40									
+x360	scg	SceneGroup	40	1	array@24	0x10	array	SceneGroupItem	12	8	zero	
+x360	scg	SceneGroupItem	12									
+x360	scn	Scene	536									
+x360	scn	Scene	536	3	AABB@16	0x10	inline	AABB	1			
+x360	scn	Scene	536	4	AABB@40	0x28	inline	AABB	1			
+x360	scn	Scene	536	5	NavMeshDef@64	0x40	inline	NavMeshDef	1			
+x360	scn	Scene	536	6	array@168	0xA0	array	SNO	4	8	zero	
+x360	scn	Scene	536	7	array@232	0xE0	array	SNO	4	8	zero	
+x360	scn	Scene	536	8	array@296	0x120	array	SNO	4	8	zero	
+x360	scn	Scene	536	9	LookLink@352	0x160	inline	LookLink	1			
+x360	scn	Scene	536	11	array@376	0x168	array	MsgTriggeredEvent	192	8	zero	
+x360	scn	Scene	536	12	NavZoneDefinition@384	0x180	inline	NavZoneDefinition	1			
+x360	scn	NavMeshDef	96									
+x360	scn	NavMeshDef	96	10	NavMeshSquare@40	0x28	inline	NavMeshSquare	1			
+x360	scn	NavMeshDef	96	12	array@72	0x40	array	CompNavMeshSquare	4	8	zero	
+x360	scn	NavMeshDef	96	13	array@88	0x50	array	BYTE	1	8	zero	
+x360	scn	NavZoneDefinition	136									
+x360	scn	NavZoneDefinition	136	1	array@8	0x10	array	NavCell	32	8	zero	
+x360	scn	NavZoneDefinition	136	3	array@32	0x28	array	NavCellLookup	4	8	zero	
+x360	scn	NavZoneDefinition	136	8	array@72	0x50	array	NavGridSquare	6	8	zero	
+x360	scn	NavZoneDefinition	136	10	array@96	0x68	array	NavCellLookup	4	8	zero	
+x360	scn	NavZoneDefinition	136	12	array@120	0x80	array	NavCellBorderData	4	8	zero	
+x360	scn	NavMeshSquare	8									
+x360	scn	CompNavMeshSquare	4									
+x360	scn	NavCell	32									
+x360	scn	NavCellLookup	4									
+x360	scn	NavGridSquare	6									
+x360	scn	NavCellBorderData	4									
+x360	shd	Shaders	56									
+x360	shd	Shaders	56	3	array@32	0x18	array	RenderPass	224	8	zero	
+x360	shd	Shaders	56	4	ser@40	0x28	blob			1	zero	
+x360	shd	RenderPass	224									
+x360	shd	RenderPass	224	2	RenderParams@8	0x8	inline	RenderParams	1			
+x360	shd	RenderPass	224	5	array@120	0x70	array	TextureStageParams	24	8	zero	
+x360	shd	RenderPass	224	7	tagmap@144	0x84	tagmap			4	zero	
+x360	shd	RenderPass	224	10	array@192	0xB8	array	BYTE	1	8	zero	
+x360	shd	RenderPass	224	11	array@208	0xC8	array	BYTE	1	8	zero	
+x360	shd	RenderParams	96									
+x360	shd	TextureStageParams	24									
+x360	shk	Shakes	416									
+x360	shk	Shakes	416	5	VectorPath@32	0x20	inline	VectorPath	1			
+x360	shk	Shakes	416	6	VectorPath@80	0x50	inline	VectorPath	1			
+x360	shk	Shakes	416	7	AnglePath@128	0x80	inline	AnglePath	1			
+x360	shk	Shakes	416	8	FloatPath@176	0xB0	inline	FloatPath	1			
+x360	shk	Shakes	416	9	AnglePath@224	0xE0	inline	AnglePath	1			
+x360	shk	Shakes	416	10	FloatPath@272	0x110	inline	FloatPath	1			
+x360	shk	Shakes	416	11	AnglePath@320	0x140	inline	AnglePath	1			
+x360	shk	Shakes	416	12	FloatPath@368	0x170	inline	FloatPath	1			
+x360	shm	ShaderMap	32									
+x360	shm	ShaderMap	32	1	tagmap@24	0x10	tagmap			4	zero	
+x360	skl	SkillKit	64									
+x360	skl	SkillKit	64	0	array@16	0x18	array	TraitEntry	16	8	zero	
+x360	skl	SkillKit	64	1	array@32	0x28	array	ActiveSkillEntry	64	8	zero	
+x360	skl	SkillKit	64	2	array@48	0x38	array	INT	4	8	zero	
+x360	skl	TraitEntry	16									
+x360	skl	ActiveSkillEntry	64									
+x360	snd	Sound	168									
+x360	snd	Sound	168	14	array@80	0x44	array	SoundPermutation	64	8	zero	
+x360	snd	Sound	168	21	array@104	0x70	array	DspEffect	264	8	zero	
+x360	snd	Sound	168	22	array@120	0x80	array	RTPCParams	24	8	zero	
+x360	snd	SoundPermutation	64									
+x360	snd	DspEffect	264									
+x360	snd	DspEffect	264	2	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	3	DspParam@24	0x18	inline	DspParam	1			
+x360	snd	DspEffect	264	4	DspParam@40	0x28	inline	DspParam	1			
+x360	snd	DspEffect	264	5	DspParam@56	0x38	inline	DspParam	1			
+x360	snd	DspEffect	264	6	DspParam@72	0x48	inline	DspParam	1			
+x360	snd	DspEffect	264	7	DspParam@88	0x58	inline	DspParam	1			
+x360	snd	DspEffect	264	8	DspParam@104	0x68	inline	DspParam	1			
+x360	snd	DspEffect	264	9	DspParam@120	0x78	inline	DspParam	1			
+x360	snd	DspEffect	264	10	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	11	DspParam@24	0x18	inline	DspParam	1			
+x360	snd	DspEffect	264	12	DspParam@40	0x28	inline	DspParam	1			
+x360	snd	DspEffect	264	13	DspParam@56	0x38	inline	DspParam	1			
+x360	snd	DspEffect	264	14	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	15	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	16	DspParam@24	0x18	inline	DspParam	1			
+x360	snd	DspEffect	264	17	DspParam@40	0x28	inline	DspParam	1			
+x360	snd	DspEffect	264	18	DspParam@56	0x38	inline	DspParam	1			
+x360	snd	DspEffect	264	19	DspParam@72	0x48	inline	DspParam	1			
+x360	snd	DspEffect	264	20	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	21	DspParam@24	0x18	inline	DspParam	1			
+x360	snd	DspEffect	264	22	DspParam@40	0x28	inline	DspParam	1			
+x360	snd	DspEffect	264	23	DspParam@56	0x38	inline	DspParam	1			
+x360	snd	DspEffect	264	24	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	25	DspParam@24	0x18	inline	DspParam	1			
+x360	snd	DspEffect	264	26	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	27	DspParam@24	0x18	inline	DspParam	1			
+x360	snd	DspEffect	264	28	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	29	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	30	DspParam@24	0x18	inline	DspParam	1			
+x360	snd	DspEffect	264	31	DspParam@40	0x28	inline	DspParam	1			
+x360	snd	DspEffect	264	32	DspParam@8	0x8	inline	DspParam	1			
+x360	snd	DspEffect	264	33	DspParam@24	0x18	inline	DspParam	1			
+x360	snd	DspEffect	264	34	DspParam@40	0x28	inline	DspParam	1			
+x360	snd	DspEffect	264	35	DspParam@56	0x38	inline	DspParam	1			
+x360	snd	DspEffect	264	36	DspParam@72	0x48	inline	DspParam	1			
+x360	snd	DspEffect	264	37	DspParam@88	0x58	inline	DspParam	1			
+x360	snd	DspEffect	264	38	DspParam@104	0x68	inline	DspParam	1			
+x360	snd	DspEffect	264	39	DspParam@120	0x78	inline	DspParam	1			
+x360	snd	DspEffect	264	40	DspParam@136	0x88	inline	DspParam	1			
+x360	snd	DspEffect	264	41	DspParam@152	0x98	inline	DspParam	1			
+x360	snd	DspEffect	264	42	DspParam@168	0xA8	inline	DspParam	1			
+x360	snd	DspEffect	264	43	DspParam@184	0xB8	inline	DspParam	1			
+x360	snd	DspEffect	264	44	DspParam@200	0xC8	inline	DspParam	1			
+x360	snd	DspEffect	264	45	DspParam@216	0xD8	inline	DspParam	1			
+x360	snd	DspEffect	264	46	DspParam@232	0xE8	inline	DspParam	1			
+x360	snd	RTPCParams	24									
+x360	snd	RTPCParams	24	3	InterpolationScalar@4	0x4	inline	InterpolationScalar	1			
+x360	snd	DspParam	16									
+x360	srf	Surface	40									
+x360	srf	Surface	40	3	tagmap@32	0x18	tagmap			4	zero	
+x360	tme	TimedEvent	16									
+x360	trl	Trail	344									
+x360	trl	Trail	344	7	ColorPath@40	0x28	inline	ColorPath	1			
+x360	trl	Trail	344	8	ColorPath@88	0x58	inline	ColorPath	1			
+x360	trl	Trail	344	9	FloatPath@136	0x88	inline	FloatPath	1			
+x360	trl	Trail	344	10	FloatPath@184	0xB8	inline	FloatPath	1			
+x360	trl	Trail	344	13	UberMaterial@240	0xF0	inline	UberMaterial	1			
+x360	trs	TreasureClass	40									
+x360	trs	TreasureClass	40	3	array@24	0x20	array	LootDropModifier	120	8	zero	
+x360	trs	LootDropModifier	120									
+x360	trs	LootDropModifier	120	2	ItemSpecifierData@32	0x20	inline	ItemSpecifierData	1			
+x360	tut	Tutorial	48									
+x360	ui	UI	184									
+x360	ui	UI	184	2	array@32	0x14	array	UIControlData	368	8	zero	
+x360	ui	UI	184	4	array@56	0x2C	array	UIStyle	160	8	zero	
+x360	ui	UI	184	5	DataElements@64	0x40	inline	DataElements	1			
+x360	ui	UIControlData	368									
+x360	ui	UIControlData	368	2	array@24	0x10	array	BYTE	1	8	zero	
+x360	ui	UIControlData	368	4	array@48	0x28	array	BYTE	1	8	zero	
+x360	ui	UIControlData	368	6	UIStyle@64	0x40	inline	UIStyle	1			
+x360	ui	UIControlData	368	7	UIAnimationElements@224	0xE0	inline	UIAnimationElements	1			
+x360	ui	UIStyle	160									
+x360	ui	UIStyle	160	1	array@16	0x8	array	BYTE	1	8	zero	
+x360	ui	UIStyle	160	2	DataElements@24	0x18	inline	DataElements	1			
+x360	ui	UIStyle	160	4	array@112	0x64	array	UIStyleChildSpec	112	8	zero	
+x360	ui	DataElements	72									
+x360	ui	DataElements	72	1	array@16	0x4	array	UIControlElement	24	8	zero	
+x360	ui	DataElements	72	3	array@40	0x1C	array	UIDataElementInt32	16	8	zero	
+x360	ui	DataElements	72	5	array@64	0x34	array	UIDataElementFloat32	16	8	zero	
+x360	ui	UIAnimationElements	120									
+x360	ui	UIAnimationElements	120	1	array@16	0x4	array	UIAnimationElementInt32	8	8	zero	
+x360	ui	UIAnimationElements	120	3	array@40	0x1C	array	UIAnimationElementFloat	8	8	zero	
+x360	ui	UIAnimationElements	120	5	array@64	0x34	array	UIAnimationElementVector2D	12	8	zero	
+x360	ui	UIAnimationElements	120	7	array@88	0x4C	array	UIAnimationDescription	40	8	zero	
+x360	ui	UIAnimationElements	120	9	array@112	0x64	array	UIControlAnimationBinding	24	8	zero	
+x360	ui	UIStyleChildSpec	112									
+x360	ui	UIStyleChildSpec	112	0	array@8	0x0	array	BYTE	1	8	zero	
+x360	ui	UIStyleChildSpec	112	1	DataElements@16	0x10	inline	DataElements	1			
+x360	ui	UIControlElement	24									
+x360	ui	UIControlElement	24	1	array@16	0x8	array	BYTE	1	8	zero	
+x360	ui	UIDataElementInt32	16									
+x360	ui	UIDataElementFloat32	16									
+x360	ui	UIAnimationElementInt32	8									
+x360	ui	UIAnimationElementFloat	8									
+x360	ui	UIAnimationElementVector2D	12									
+x360	ui	UIAnimationDescription	40									
+x360	ui	UIAnimationDescription	40	1	array@16	0x8	array	BYTE	1	8	zero	
+x360	ui	UIControlAnimationBinding	24									
+x360	ui	UIControlAnimationBinding	24	0	array@8	0x0	array	BYTE	1	8	zero	
+x360	vib	Vibrations	136									
+x360	vib	Vibrations	136	6	FloatPath@40	0x28	inline	FloatPath	1			
+x360	vib	Vibrations	136	7	FloatPath@88	0x58	inline	FloatPath	1			
+x360	wrl	Worlds	192									
+x360	wrl	Worlds	192	1	array@24	0x10	array	WorldServerData	144	8	zero	
+x360	wrl	Worlds	192	2	array@40	0x20	array	SNO	4	8	zero	
+x360	wrl	Worlds	192	3	Environment@96	0x60	inline	Environment	1			
+x360	wrl	WorldServerData	144									
+x360	wrl	WorldServerData	144	0	array@8	0x0	array	DRLGParams	120	8	zero	
+x360	wrl	WorldServerData	144	1	array@24	0x10	array	SceneParams	24	8	zero	
+x360	wrl	WorldServerData	144	2	LabelRuleSet@32	0x20	inline	LabelRuleSet	1			
+x360	wrl	WorldServerData	144	4	SceneClusterSet@64	0x40	inline	SceneClusterSet	1			
+x360	wrl	WorldServerData	144	9	array@128	0x88	array	SNO	4	8	zero	
+x360	wrl	Environment	84									
+x360	wrl	Environment	84	1	PostFXParams@4	0x4	inline	PostFXParams	1			
+x360	wrl	DRLGParams	120									
+x360	wrl	DRLGParams	120	0	array@8	0x0	array	TileInfo	80	8	zero	
+x360	wrl	DRLGParams	120	2	array@80	0x44	array	DRLGCommand	152	8	zero	
+x360	wrl	DRLGParams	120	3	array@96	0x58	array	INT	4	8	zero	
+x360	wrl	DRLGParams	120	4	tagmap@112	0x68	tagmap			4	zero	
+x360	wrl	SceneParams	24									
+x360	wrl	SceneParams	24	0	array@16	0x0	array	SceneChunk	256	8	zero	
+x360	wrl	LabelRuleSet	24									
+x360	wrl	LabelRuleSet	24	1	array@8	0x10	array	LabelRule	176	8	zero	
+x360	wrl	SceneClusterSet	24									
+x360	wrl	SceneClusterSet	24	1	array@8	0x10	array	SceneCluster	184	8	zero	
+x360	wrl	PostFXParams	32									
+x360	wrl	TileInfo	80									
+x360	wrl	TileInfo	80	4	tagmap@24	0x10	tagmap			4	zero	
+x360	wrl	TileInfo	80	5	CustomTileInfo@32	0x20	inline	CustomTileInfo	1			
+x360	wrl	DRLGCommand	152									
+x360	wrl	DRLGCommand	152	2	tagmap@144	0x84	tagmap			4	zero	
+x360	wrl	SceneChunk	256									
+x360	wrl	SceneChunk	256	0	SNOName@0	0x0	inline	SNOName	1			
+x360	wrl	SceneChunk	256	1	PRTransform@8	0x8	inline	PRTransform	1			
+x360	wrl	SceneChunk	256	2	SceneSpecification@36	0x24	inline	SceneSpecification	1			
+x360	wrl	LabelRule	176									
+x360	wrl	LabelRule	176	1	LabelCondition@128	0x80	inline	LabelCondition	1			
+x360	wrl	LabelRule	176	4	array@160	0xA8	array	LabelEntry	20	8	zero	
+x360	wrl	SceneCluster	184									
+x360	wrl	SceneCluster	184	3	array@136	0x90	array	SubSceneGroup	32	8	zero	
+x360	wrl	SceneCluster	184	4	SubSceneGroup@152	0x98	inline	SubSceneGroup	1			
+x360	wrl	CustomTileInfo	40									
+x360	wrl	CustomTileInfo	40	4	array@32	0x14	array	CustomTileCell	36	8	zero	
+x360	wrl	SceneSpecification	220									
+x360	wrl	SceneSpecification	220	18	SceneCachedValues@140	0x8C	inline	SceneCachedValues	1			
+x360	wrl	LabelCondition	24									
+x360	wrl	LabelEntry	20									
+x360	wrl	SubSceneGroup	32									
+x360	wrl	SubSceneGroup	32	3	array@16	0x18	array	SubSceneEntry	32	8	zero	
+x360	wrl	CustomTileCell	36									
+x360	wrl	SceneCachedValues	80									
+x360	wrl	SceneCachedValues	80	3	AABB@12	0xC	inline	AABB	1			
+x360	wrl	SceneCachedValues	80	4	AABB@36	0x24	inline	AABB	1			
+x360	wrl	SubSceneEntry	32									
+x360	wrl	SubSceneEntry	32	3	array@16	0x18	array	SubSceneLabel	8	8	zero	
+x360	wrl	SubSceneLabel	8									
+x360	wth	Weather	424									
+x360	wth	Weather	424	2	VelocityVectorPath@24	0x18	inline	VelocityVectorPath	1			
+x360	wth	Weather	424	3	VelocityVectorPath@72	0x48	inline	VelocityVectorPath	1			
+x360	wth	Weather	424	5	FloatPath@128	0x80	inline	FloatPath	1			
+x360	wth	Weather	424	20	WeatherStateParams@232	0xE8	inline	WeatherStateParams	1			
+x360	wth	Weather	424	21	WeatherStateParams@308	0x134	inline	WeatherStateParams	1			
+x360	wth	Weather	424	23	ColorCorrectionParams@388	0x184	inline	ColorCorrectionParams	1			
+x360	wth	Weather	424	24	array@400	0x198	array	SNO	4	8	zero	
+x360	wth	WeatherStateParams	76									
+x360	wth	ColorCorrectionParams	12									
+x360	xpl	Explosion	64									
+ps3	aco	AccoladeDefinition	16									
+ps3	acr	actor	432									
+ps3	acr	actor	432	0	tag_map	0x58	tagmap			4	zero	
+ps3	acr	actor	432	1	events	0x78	array	actor_event	192	8	zero	
+ps3	acr	actor	432	2	internal_description	0x198	text			8	zero	
+ps3	acr	actor	432	3	voice_role	0x1A8	text			8	zero	
+ps3	acr	actor_event	192									
+ps3	act	ActDefinition	1040									
+ps3	act	ActDefinition	1040	0	arQuests	0xC	array	ActQuestInfo	4	4	zero	
+ps3	act	ActQuestInfo	4									
+ps3	adv	AdventureDefinition	36									
+ps3	aib	AIBehaviorDefinition	44									
+ps3	ais	AIStateDefinition	64									
+ps3	ais	AIStateDefinition	64	0	arDecision[0].arEntries	0x20	array	AIEntry	128	4	zero	
+ps3	ais	AIStateDefinition	64	1	arDecision[1].arEntries	0x38	array	AIEntry	128	4	zero	
+ps3	ais	AIEntry	128									
+ps3	ams	AmbientSoundDefinition	96									
+ps3	an2	Animation2DDefinition	60									
+ps3	an2	Animation2DDefinition	60	0	ptFrames	0x30	array	Anim2DFrame	68	4	zero	
+ps3	an2	Anim2DFrame	68									
+ps3	ani	AnimationDefinition	64									
+ps3	ani	AnimationDefinition	64	0	serPermutations	0x18	array	AnimPermutation	360	4	zero	
+ps3	ani	AnimationDefinition	64	1	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	ani	AnimPermutation	360									
+ps3	ani	AnimPermutation	360	0	serBoneNames	0x7C	array	BoneName	4	none (always empty)	zero	
+ps3	ani	AnimPermutation	360	1	serBoneBlendWeights	0x98	array	BoneBlendWeights	8	none (always empty)	zero	
+ps3	ani	AnimPermutation	360	2	serTranslationCurves	0xAC	array	TranslationCurve	16	none (always empty)	zero	
+ps3	ani	AnimPermutation	360	3	serRotationCurves	0xC0	array	RotationCurve	16	none (always empty)	zero	
+ps3	ani	AnimPermutation	360	4	serScaleCurves	0xD0	array	ScaleCurve	16	none (always empty)	zero	
+ps3	ani	AnimPermutation	360	5	serKeyedAttachments	0x124	array	KeyframedAttachment	192	none (always empty)	zero	
+ps3	ani	AnimPermutation	360	6	serNonlinearOffset	0x138	array	VECTOR3D	12	none (always empty)	zero	
+ps3	ani	AnimPermutation	360	7	tHardpointLink	0x154	inline	HardpointLink	1			
+ps3	ani	RequiredDefinitionHeader	12									
+ps3	ani	BoneName	4									
+ps3	ani	BoneBlendWeights	8									
+ps3	ani	TranslationCurve	16									
+ps3	ani	TranslationCurve	16	0	serKeysComp	0x0	array	BYTE	1	none (always empty)	zero	
+ps3	ani	RotationCurve	16									
+ps3	ani	RotationCurve	16	0	serKeysComp	0x0	array	BYTE	1	none (always empty)	zero	
+ps3	ani	ScaleCurve	16									
+ps3	ani	ScaleCurve	16	0	serKeysComp	0x0	array	BYTE	1	none (always empty)	zero	
+ps3	ani	KeyframedAttachment	192									
+ps3	ani	KeyframedAttachment	192	0	tTriggeredEvent	0x4	inline	TriggerEvent	1			
+ps3	ani	HardpointLink	12									
+ps3	ani	HardpointLink	12	0	tHash	0x0	inline	HardpointHash	1			
+ps3	ani	TriggerEvent	188									
+ps3	ani	TriggerEvent	188	0	tConditions	0x4	inline	TriggerConditions	1			
+ps3	ani	TriggerEvent	188	1	snoname	0x2C	inline	SNOName	1			
+ps3	ani	TriggerEvent	188	2	tHardpointLinks	0x44	inline	HardpointLink	2			
+ps3	ani	TriggerEvent	188	3	tLookLink	0x5C	inline	LookLink	1			
+ps3	ani	TriggerEvent	188	4	tConstraintLink	0x64	inline	ConstraintLink	1			
+ps3	ani	HardpointHash	8									
+ps3	ani	TriggerConditions	36									
+ps3	ani	SNOName	8									
+ps3	ani	LookLink	8									
+ps3	ani	ConstraintLink	8									
+ps3	ans	AnimSetDefinition	336									
+ps3	ans	AnimSetDefinition	336	0	serTagMapAnimDefault	0x10	tagmap			4	zero	
+ps3	ans	AnimSetDefinition	336	1	tWeaponAnimTagMap	0x20	inline	AnimSetTagMap	19			
+ps3	ans	AnimSetDefinition	336	2	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	ans	AnimSetTagMap	16									
+ps3	ans	AnimSetTagMap	16	0	serTagMap	0x0	tagmap			4	zero	
+ps3	ans	RequiredDefinitionHeader	12									
+ps3	ant	AnimTreeDefinition	608									
+ps3	ant	AnimTreeDefinition	608	0	ptLeaf	0x218	array	AnimTreeLeaf	36	4	zero	
+ps3	ant	AnimTreeDefinition	608	1	ptNode	0x22C	array	AnimTreeNode	300	8	zero	
+ps3	ant	AnimTreeDefinition	608	2	ptSyncGroup	0x244	array	INT	4	8	zero	
+ps3	ant	AnimTreeLeaf	36									
+ps3	ant	AnimTreeNode	300									
+ps3	app	AppearanceDefinition	568									
+ps3	app	AppearanceDefinition	568	0	serAppearanceMaterials	0x180	array	AppearanceMaterial	20	4	zero	
+ps3	app	AppearanceDefinition	568	1	serAppearanceLooks	0x190	array	AppearanceLook	4	8	zero	
+ps3	app	AppearanceDefinition	568	2	tStructure	0x10	inline	Structure	1			
+ps3	app	AppearanceDefinition	568	3	serStaticLights	0x1A4	array	StaticLight	92	none (always empty)	zero	
+ps3	app	AppearanceDefinition	568	4	tSubgridsAABB	0x1F8	inline	AABB	1			
+ps3	app	AppearanceDefinition	568	5	serSubgrids	0x210	array	AppearanceSamplingSubgrid	56	8	zero	
+ps3	app	AppearanceDefinition	568	6	serAppearanceSubObjectsIndices	0x220	array	BYTE	1	4	cursor	
+ps3	app	AppearanceDefinition	568	7	serAppearanceSubObjectsVertices	0x228	array	BYTE	1	2	cursor	
+ps3	app	AppearanceDefinition	568	8	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	app	AppearanceMaterial	20									
+ps3	app	AppearanceMaterial	20	0	serSOAs	0x8	array	SubObjectAppearance	184	4	zero	
+ps3	app	AppearanceLook	4									
+ps3	app	Structure	344									
+ps3	app	Structure	344	0	serBoneStructure	0x8	array	BoneStructure	176	8	zero	
+ps3	app	Structure	344	1	tLookAtData	0x18	inline	LookAtData	1			
+ps3	app	Structure	344	2	serBonePulses	0x48	array	BonePulseData	20	none (always empty)	zero	
+ps3	app	Structure	344	3	tGeoSets	0x50	inline	GeoSet	2			
+ps3	app	Structure	344	4	wsBounds	0x80	inline	Sphere	1			
+ps3	app	Structure	344	5	serCollisionCapsules	0x94	array	CollisionCapsule	48	8	zero	
+ps3	app	Structure	344	6	serHardpoints	0xAC	array	Hardpoint	40	8	zero	
+ps3	app	Structure	344	7	tOctreeVisualMesh	0xD0	inline	Octree	1			
+ps3	app	Structure	344	8	aabbBounds	0x118	inline	AABB	1			
+ps3	app	Structure	344	9	serLoopConstraints	0x134	array	ConstraintParameters	228	4	zero	
+ps3	app	StaticLight	92									
+ps3	app	AABB	24									
+ps3	app	AppearanceSamplingSubgrid	56									
+ps3	app	AppearanceSamplingSubgrid	56	0	serSamples	0x10	array	AppearanceSample	12	4	zero	
+ps3	app	AppearanceSamplingSubgrid	56	1	aabb	0x20	inline	AABB	1			
+ps3	app	RequiredDefinitionHeader	12									
+ps3	app	SubObjectAppearance	184									
+ps3	app	SubObjectAppearance	184	0	serTagMap	0x8	tagmap			4	zero	
+ps3	app	SubObjectAppearance	184	1	tUberMaterial	0x18	inline	UberMaterial	1			
+ps3	app	SubObjectAppearance	184	2	tCompositeUberMaterial	0x68	inline	UberMaterial	1			
+ps3	app	BoneStructure	176									
+ps3	app	BoneStructure	176	0	aabb	0x8	inline	AABB	1			
+ps3	app	BoneStructure	176	1	wsBounds	0x20	inline	Sphere	1			
+ps3	app	BoneStructure	176	2	transform	0x30	inline	PRSTransform	1			
+ps3	app	BoneStructure	176	3	transformInv	0x50	inline	PRSTransform	1			
+ps3	app	BoneStructure	176	4	transformParentRel	0x70	inline	PRSTransform	1			
+ps3	app	BoneStructure	176	5	serShapes	0x94	array	CollisionShape	68	4	zero	
+ps3	app	BoneStructure	176	6	serConstraint	0xA0	array	ConstraintParameters	228	4	zero	
+ps3	app	LookAtData	36									
+ps3	app	BonePulseData	20									
+ps3	app	GeoSet	24									
+ps3	app	GeoSet	24	0	serSubObjects	0x4	array	SubObjectP3	308	8	zero	
+ps3	app	Sphere	16									
+ps3	app	CollisionCapsule	48									
+ps3	app	CollisionCapsule	48	0	tHardpoint	0x8	inline	Hardpoint	1			
+ps3	app	Hardpoint	40									
+ps3	app	Hardpoint	40	0	tHash	0x0	inline	HardpointHash	1			
+ps3	app	Hardpoint	40	1	transform	0xC	inline	PRTransform	1			
+ps3	app	Octree	72									
+ps3	app	Octree	72	0	serNodes	0x18	array	OctreeNode	48	4	zero	
+ps3	app	Octree	72	1	serLeaves	0x28	array	OctreeLeaf	24	4	zero	
+ps3	app	Octree	72	2	serPrimitives	0x38	array	OctreePrimitive	8	4	zero	
+ps3	app	ConstraintParameters	228									
+ps3	app	ConstraintParameters	228	0	frame	0x18	inline	PRTransform	1			
+ps3	app	ConstraintParameters	228	1	localFrame1	0x40	inline	PRTransform	1			
+ps3	app	ConstraintParameters	228	2	localFrame2	0x5C	inline	PRTransform	1			
+ps3	app	AppearanceSample	12									
+ps3	app	UberMaterial	72									
+ps3	app	UberMaterial	72	0	mat	0x4	inline	Material	1			
+ps3	app	UberMaterial	72	1	serMatTexList	0x2C	array	MaterialTextureEntry	24	8	zero	
+ps3	app	PRSTransform	32									
+ps3	app	PRSTransform	32	0	q	0x0	inline	Quaternion	1			
+ps3	app	CollisionShape	68									
+ps3	app	CollisionShape	68	0	serPolytope	0x1C	array	PolytopeData	96	4	zero	
+ps3	app	SubObjectP3	308									
+ps3	app	SubObjectP3	308	0	serVertList	0x8	array	BYTE	1	none (always empty)	zero	
+ps3	app	SubObjectP3	308	1	serInfluenceList	0x14	array	BYTE	1	none (always empty)	zero	
+ps3	app	SubObjectP3	308	2	serIndexList	0x24	array	BYTE	1	none (always empty)	zero	
+ps3	app	SubObjectP3	308	3	serClothStructure	0x30	array	ClothStructureP3	100	4	zero	
+ps3	app	SubObjectP3	308	4	aabbBounds	0xD0	inline	AABB	1			
+ps3	app	SubObjectP3	308	5	serShapes	0xEC	array	CollisionShape	68	4	zero	
+ps3	app	SubObjectP3	308	6	serDraws	0x100	array	DrawP3	160	4	zero	
+ps3	app	SubObjectP3	308	7	serCompInfluenceList	0x10C	array	BYTE	1	4	zero	
+ps3	app	HardpointHash	8									
+ps3	app	PRTransform	28									
+ps3	app	PRTransform	28	0	q	0x0	inline	Quaternion	1			
+ps3	app	OctreeNode	48									
+ps3	app	OctreeNode	48	0	tCube	0x0	inline	OctreeCube	1			
+ps3	app	OctreeLeaf	24									
+ps3	app	OctreeLeaf	24	0	tCube	0x0	inline	OctreeCube	1			
+ps3	app	OctreePrimitive	8									
+ps3	app	Material	40									
+ps3	app	MaterialTextureEntry	24									
+ps3	app	MaterialTextureEntry	24	0	serTexAnimCompParams	0x4	array	BYTE	1	4	zero	
+ps3	app	Quaternion	16									
+ps3	app	PolytopeData	96									
+ps3	app	PolytopeData	96	0	m_centroid	0x20	inline	dmFloat3	1			
+ps3	app	PolytopeData	96	1	serVertices	0x40	array	dmFloat3	12	4	zero	
+ps3	app	PolytopeData	96	2	serPlanes	0x48	array	dmPlane	16	4	zero	
+ps3	app	PolytopeData	96	3	serSubEdges	0x50	array	dmSubEdge	4	4	zero	
+ps3	app	PolytopeData	96	4	serFaceSubEdges	0x58	array	BYTE	1	4	zero	
+ps3	app	ClothStructureP3	100									
+ps3	app	ClothStructureP3	100	0	serVertices	0x4	array	ClothVertexSerializable	44	4	zero	
+ps3	app	ClothStructureP3	100	1	serFaces	0x14	array	ClothFaceSerializable	16	4	zero	
+ps3	app	ClothStructureP3	100	2	serStaples	0x24	array	ClothStaple	28	4	zero	
+ps3	app	ClothStructureP3	100	3	serDistanceConstraints	0x34	array	ClothConstraintSerializable	16	4	zero	
+ps3	app	ClothStructureP3	100	4	serBendingConstraints	0x44	array	ClothConstraintSerializable	16	4	zero	
+ps3	app	ClothStructureP3	100	5	serClothVertMapping	0x58	array	WORD	2	4	zero	
+ps3	app	DrawP3	160									
+ps3	app	DrawP3	160	0	serDescriptor	0x8	array	BYTE	1	16	zero	
+ps3	app	DrawP3	160	1	serIndices	0x18	array	BYTE	1	2	zero	1
+ps3	app	DrawP3	160	2	serStreamA	0x2C	array	BYTE	1	2	zero	1
+ps3	app	DrawP3	160	3	serStreamB	0x54	array	BYTE	1	2	cursor	1
+ps3	app	DrawP3	160	4	serStreamC	0x6C	array	BYTE	1	2	zero	2
+ps3	app	DrawP3	160	5	serVertexFormatA	0x80	array	BYTE	1	4	zero	
+ps3	app	DrawP3	160	6	serVertexFormatB	0x90	array	BYTE	1	4	zero	
+ps3	app	OctreeCube	16									
+ps3	app	dmFloat3	12									
+ps3	app	dmPlane	16									
+ps3	app	dmPlane	16	0	normal	0x0	inline	dmFloat3	1			
+ps3	app	dmSubEdge	4									
+ps3	app	ClothVertexSerializable	44									
+ps3	app	ClothFaceSerializable	16									
+ps3	app	ClothStaple	28									
+ps3	app	ClothConstraintSerializable	16									
+ps3	bos	BossEncounterDefinition	88									
+ps3	clt	ClothDefinition	84									
+ps3	cnd	condition	1080									
+ps3	cnl	conversation_list	32									
+ps3	cnl	conversation_list	32	0	entries	0x18	array	list_entry	304	4	zero	
+ps3	cnl	list_entry	304									
+ps3	cnv	conversation	528									
+ps3	cnv	conversation	528	0	root_nodes	0xC0	array	conversation_node	104	4	zero	
+ps3	cnv	conversation	528	1	script	0x1D8	array	BYTE	1	8	zero	
+ps3	cnv	conversation_node	104									
+ps3	cnv	conversation_node	104	0	display_times	0x28	array	INT	4	8	zero	
+ps3	cnv	conversation_node	104	1	true_nodes	0x40	array	conversation_node	104	8	zero	
+ps3	cnv	conversation_node	104	2	false_nodes	0x50	array	conversation_node	104	8	zero	
+ps3	cnv	conversation_node	104	3	children	0x60	array	conversation_node	104	8	zero	
+ps3	con	ConductorDefinition	72									
+ps3	con	ConductorDefinition	72	0	arPhases	0x20	array	ConductorPhase	32	4	zero	
+ps3	con	ConductorDefinition	72	1	pCompiledScript	0x38	array	BYTE	1	8	zero	
+ps3	con	ConductorPhase	32									
+ps3	con	ConductorPhase	32	0	arSequences	0x10	array	ConductorSequence	32	8	zero	
+ps3	con	ConductorSequence	32									
+ps3	con	ConductorSequence	32	0	arScriptMessageMap	0x10	array	ScriptMessageMap	176	8	zero	
+ps3	con	ScriptMessageMap	176									
+ps3	con	ScriptMessageMap	176	0	arMessageFilters_Strings[0].szString	0x58	array	BYTE	1	4	zero	
+ps3	con	ScriptMessageMap	176	1	arMessageFilters_Strings[1].szString	0x68	array	BYTE	1	8	zero	
+ps3	con	ScriptMessageMap	176	2	arMessageFilters_Strings[2].szString	0x98	array	BYTE	1	4	zero	
+ps3	ctr	ControlSchemeDefinition	400									
+ps3	dfn	DungeonFinderDefinition	40									
+ps3	dfn	DungeonFinderDefinition	40	0	arDungeonFinderLevelTables	0x18	array	DungeonFinderLevelTable	72	none (always empty)	zero	
+ps3	dfn	DungeonFinderLevelTable	72									
+ps3	dfn	DungeonFinderLevelTable	72	2	arTransitions	0x10	array	WeightedTransition	16	none (always empty)	zero	
+ps3	dfn	DungeonFinderLevelTable	72	3	arPopulations	0x20	array	WeightedPopulation	80	none (always empty)	zero	
+ps3	dfn	WeightedTransition	16									
+ps3	dfn	WeightedPopulation	80									
+ps3	efg	EffectGroupDefinition	112									
+ps3	efg	EffectGroupDefinition	112	0	ptEffects	0x10	array	EffectItem	200	4	zero	
+ps3	efg	EffectItem	200									
+ps3	enc	EncounterDefinition	32									
+ps3	enc	EncounterDefinition	32	0	arSpawnOptions	0x18	array	EncounterSpawnOption	16	4	zero	
+ps3	enc	EncounterSpawnOption	16									
+ps3	flg	FlagSetDefinition	32									
+ps3	flg	FlagSetDefinition	32	0	arFlagLookups	0x18	array	FlagLookup	388	4	zero	
+ps3	flg	FlagLookup	388									
+ps3	fnt	FontDefinition	204									
+ps3	fnt	FontDefinition	204	0	ptTextureTable	0xAC	array	FontConsoleTexture	40	4	zero	
+ps3	fnt	FontDefinition	204	1	ptPointSizeTable	0xBC	array	FontPointSizeData	72	4	zero	
+ps3	fnt	FontConsoleTexture	40									
+ps3	fnt	FontConsoleTexture	40	0	serTextureData	0x10	blob			4	zero	1
+ps3	fnt	FontConsoleTexture	40	1	serFrameData	0x20	blob			4	zero	1
+ps3	fnt	FontPointSizeData	72									
+ps3	fnt	FontPointSizeData	72	0	serCharTable	0x24	blob			4	zero	0
+ps3	fnt	FontPointSizeData	72	1	ptKerningTable	0x34	array	FontConsoleKerning	16	4	zero	0
+ps3	fnt	FontConsoleKerning	16									
+ps3	glo	GlobalDefinition	568									
+ps3	glo	GlobalDefinition	568	0	ptServerData	0x18	array	GlobalServerData	424	4	zero	
+ps3	glo	GlobalDefinition	568	1	arStartLocationNames	0x70	array	StartLocationName	40	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	2	tBannerParams.arTexBackgrounds	0x90	array	BannerTexturePair	16	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	3	tBannerParams.arTexPatterns	0xA8	array	BannerTexturePair	16	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	4	tBannerParams.arTexMainSigils	0xC0	array	BannerTexturePair	16	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	5	tBannerParams.arTexVariantSigils	0xD0	array	BannerTexturePair	16	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	6	tBannerParams.arTexSigilAccents	0xE8	array	BannerTexturePair	16	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	7	tBannerParams.arColorSets	0x100	array	BannerColorSet	84	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	8	tBannerParams.arSigilPlacements	0x110	array	BannerSigilPlacement	68	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	9	tBannerParams.arActorBases	0x120	array	SNO	4	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	10	tBannerParams.arActorCaps	0x130	array	SNO	4	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	11	tBannerParams.arActorRibbons	0x150	array	SNO	4	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	12	tBannerParams.arActorPoles	0x140	array	SNO	4	none (always empty)	zero	
+ps3	glo	GlobalDefinition	568	13	tBannerParams.arEpicBannerDescriptions	0x160	array	EpicBannerDescription	148	none (always empty)	zero	
+ps3	glo	GlobalServerData	424									
+ps3	glo	GlobalServerData	424	0	arActorGroups	0x8	array	ActorGroup	68	4	zero	
+ps3	glo	GlobalServerData	424	1	arScriptGlobalVars	0x18	array	GlobalScriptVariable	40	4	zero	
+ps3	glo	StartLocationName	40									
+ps3	glo	BannerTexturePair	16									
+ps3	glo	BannerColorSet	84									
+ps3	glo	BannerSigilPlacement	68									
+ps3	glo	EpicBannerDescription	148									
+ps3	glo	ActorGroup	68									
+ps3	glo	GlobalScriptVariable	40									
+ps3	lit	LightDefinition	1096									
+ps3	lit	LightDefinition	1096	0	tStateA.pathInnerRadius.ptArrayNodes	0x58	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	1	tStateA.pathRadius.ptArrayNodes	0x80	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	2	tStateA.pathAttenuation[0].ptArrayNodes	0xA8	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	3	tStateA.pathAttenuation[1].ptArrayNodes	0xD0	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	4	tStateA.pathAttenuation[2].ptArrayNodes	0xF8	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	5	tStateA.pathHotspot.ptArrayNodes	0x120	array	AngleNode	12	4	zero	
+ps3	lit	LightDefinition	1096	6	tStateA.pathFalloff.ptArrayNodes	0x148	array	AngleNode	12	none (always empty)	zero	
+ps3	lit	LightDefinition	1096	7	tStateA.pathAmbientColor.ptArrayNodes	0x170	array	ColorNode	12	4	zero	
+ps3	lit	LightDefinition	1096	8	tStateA.pathAmbientIntensity.ptArrayNodes	0x198	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	9	tStateA.pathColor.ptArrayNodes	0x1C0	array	ColorNode	12	4	zero	
+ps3	lit	LightDefinition	1096	10	tStateA.pathIntensity.ptArrayNodes	0x1E8	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	11	tStateA.pathSpecularColor.ptArrayNodes	0x210	array	ColorNode	12	4	zero	
+ps3	lit	LightDefinition	1096	12	tStateA.pathSpecularIntensity.ptArrayNodes	0x238	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	13	tStateB.pathInnerRadius.ptArrayNodes	0x260	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	14	tStateB.pathRadius.ptArrayNodes	0x288	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	15	tStateB.pathAttenuation[0].ptArrayNodes	0x2B0	array	FloatNode	12	none (always empty)	zero	
+ps3	lit	LightDefinition	1096	16	tStateB.pathAttenuation[1].ptArrayNodes	0x2D8	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	17	tStateB.pathAttenuation[2].ptArrayNodes	0x300	array	FloatNode	12	none (always empty)	zero	
+ps3	lit	LightDefinition	1096	18	tStateB.pathHotspot.ptArrayNodes	0x328	array	AngleNode	12	none (always empty)	zero	
+ps3	lit	LightDefinition	1096	19	tStateB.pathFalloff.ptArrayNodes	0x350	array	AngleNode	12	none (always empty)	zero	
+ps3	lit	LightDefinition	1096	20	tStateB.pathAmbientColor.ptArrayNodes	0x378	array	ColorNode	12	4	zero	
+ps3	lit	LightDefinition	1096	21	tStateB.pathAmbientIntensity.ptArrayNodes	0x3A0	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	22	tStateB.pathColor.ptArrayNodes	0x3C8	array	ColorNode	12	4	zero	
+ps3	lit	LightDefinition	1096	23	tStateB.pathIntensity.ptArrayNodes	0x3F0	array	FloatNode	12	4	zero	
+ps3	lit	LightDefinition	1096	24	tStateB.pathSpecularColor.ptArrayNodes	0x418	array	ColorNode	12	4	zero	
+ps3	lit	LightDefinition	1096	25	tStateB.pathSpecularIntensity.ptArrayNodes	0x440	array	FloatNode	12	4	zero	
+ps3	lit	FloatNode	12									
+ps3	lit	AngleNode	12									
+ps3	lit	ColorNode	12									
+ps3	lor	LoreDefinition	36									
+ps3	lvl	LevelAreaDefinition	32									
+ps3	lvl	LevelAreaDefinition	32	0	ptServerData	0x18	array	LevelAreaServerData	9200	4	zero	
+ps3	lvl	LevelAreaServerData	9200									
+ps3	lvl	LevelAreaServerData	9200	0	tGizmoLocSet.arSpawnArray[0].arEntry	0x20	array	GizmoLocSpawnEntry	20	4	zero	
+ps3	lvl	LevelAreaServerData	9200	1	tGizmoLocSet.arSpawnArray[1].arEntry	0x180	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	2	tGizmoLocSet.arSpawnArray[2].arEntry	0x2E0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	3	tGizmoLocSet.arSpawnArray[3].arEntry	0x440	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	4	tGizmoLocSet.arSpawnArray[4].arEntry	0x5A0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	5	tGizmoLocSet.arSpawnArray[5].arEntry	0x700	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	6	tGizmoLocSet.arSpawnArray[6].arEntry	0x860	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	7	tGizmoLocSet.arSpawnArray[7].arEntry	0x9C0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	8	tGizmoLocSet.arSpawnArray[8].arEntry	0xB20	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	9	tGizmoLocSet.arSpawnArray[9].arEntry	0xC80	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	10	tGizmoLocSet.arSpawnArray[10].arEntry	0xDE0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	11	tGizmoLocSet.arSpawnArray[11].arEntry	0xF40	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	12	tGizmoLocSet.arSpawnArray[12].arEntry	0x10A0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	13	tGizmoLocSet.arSpawnArray[13].arEntry	0x1200	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	14	tGizmoLocSet.arSpawnArray[14].arEntry	0x1360	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	15	tGizmoLocSet.arSpawnArray[15].arEntry	0x14C0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	16	tGizmoLocSet.arSpawnArray[16].arEntry	0x1620	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	17	tGizmoLocSet.arSpawnArray[17].arEntry	0x1780	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	18	tGizmoLocSet.arSpawnArray[18].arEntry	0x18E0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	19	tGizmoLocSet.arSpawnArray[19].arEntry	0x1A40	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	20	tGizmoLocSet.arSpawnArray[20].arEntry	0x1BA0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	21	tGizmoLocSet.arSpawnArray[21].arEntry	0x1D00	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	22	tGizmoLocSet.arSpawnArray[22].arEntry	0x1E60	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	23	tGizmoLocSet.arSpawnArray[23].arEntry	0x1FC0	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	24	tGizmoLocSet.arSpawnArray[24].arEntry	0x2120	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	25	tGizmoLocSet.arSpawnArray[25].arEntry	0x2280	array	GizmoLocSpawnEntry	20	8	zero	
+ps3	lvl	LevelAreaServerData	9200	26	arSpawnPopulations	0x23E8	array	LevelAreaSpawnPopulation	128	8	zero	
+ps3	lvl	GizmoLocSpawnEntry	20									
+ps3	lvl	LevelAreaSpawnPopulation	128									
+ps3	lvl	LevelAreaSpawnPopulation	128	0	arSpawnGroups	0x78	array	LevelAreaSpawnGroup	48	4	zero	
+ps3	lvl	LevelAreaSpawnGroup	48									
+ps3	lvl	LevelAreaSpawnGroup	48	0	arSpawnItems	0x20	array	LevelAreaSpawnItem	32	4	zero	
+ps3	lvl	LevelAreaSpawnItem	32									
+ps3	mat	MaterialDefinition	104									
+ps3	mat	MaterialDefinition	104	0	serTagMap	0x10	tagmap			4	zero	
+ps3	mat	MaterialDefinition	104	1	tUberMaterial	0x20	inline	UberMaterial	1			
+ps3	mat	MaterialDefinition	104	2	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	mat	UberMaterial	72									
+ps3	mat	UberMaterial	72	0	mat	0x4	inline	Material	1			
+ps3	mat	UberMaterial	72	1	serMatTexList	0x2C	array	MaterialTextureEntry	24	8	zero	
+ps3	mat	RequiredDefinitionHeader	12									
+ps3	mat	Material	40									
+ps3	mat	MaterialTextureEntry	24									
+ps3	mat	MaterialTextureEntry	24	0	serTexAnimCompParams	0x4	array	BYTE	1	4	zero	
+ps3	mon	monster	1336									
+ps3	mon	monster	1336	0	tag_map	0x480	tagmap			4	zero	
+ps3	mon	monster	1336	1	minion_groups	0x4A0	array	minion_group	24	8	zero	
+ps3	mon	minion_group	24									
+ps3	mon	minion_group	24	0	items	0x10	array	minion_entry	20	8	zero	
+ps3	mon	minion_entry	20									
+ps3	mrk	MarkerSetDefinition	200									
+ps3	mrk	MarkerSetDefinition	200	0	serMarkers	0xC	array	Marker	88	4	zero	
+ps3	mrk	MarkerSetDefinition	200	1	serNoSpawns	0x50	array	Circle	12	8	zero	
+ps3	mrk	MarkerSetDefinition	200	2	aabbBounds	0x90	inline	AABB	1			
+ps3	mrk	MarkerSetDefinition	200	3	serSpecialIndexList	0xB4	array	WORD	2	8	zero	
+ps3	mrk	MarkerSetDefinition	200	4	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	mrk	Marker	88									
+ps3	mrk	Marker	88	0	transform	0xC	inline	PRTransform	1			
+ps3	mrk	Marker	88	1	snoname	0x28	inline	SNOName	1			
+ps3	mrk	Marker	88	2	serTagMap	0x30	tagmap			4	zero	
+ps3	mrk	Marker	88	3	serMarkerLinks	0x44	array	MarkerLink	8	8	zero	
+ps3	mrk	Circle	12									
+ps3	mrk	AABB	24									
+ps3	mrk	RequiredDefinitionHeader	12									
+ps3	mrk	PRTransform	28									
+ps3	mrk	PRTransform	28	0	q	0x0	inline	Quaternion	1			
+ps3	mrk	SNOName	8									
+ps3	mrk	MarkerLink	8									
+ps3	mrk	Quaternion	16									
+ps3	mus	MusicDefinition	76									
+ps3	mus	MusicDefinition	76	0	ptPlaylistEntries	0x1C	array	PlaylistEntry	60	4	zero	
+ps3	mus	PlaylistEntry	60									
+ps3	obs	ObserverDefinition	144									
+ps3	phm	PhysMeshDefinition	48									
+ps3	phm	PhysMeshDefinition	48	0	serCollisionMeshes	0x14	array	CollisionMesh	136	4	zero	
+ps3	phm	PhysMeshDefinition	48	1	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	phm	CollisionMesh	136									
+ps3	phm	CollisionMesh	136	0	serDominoNodes	0x78	array	dmMeshNodeP3	8	4	zero	
+ps3	phm	CollisionMesh	136	1	serDominoVertices	0x60	array	dmFloat4	16	16	zero	
+ps3	phm	CollisionMesh	136	2	serDominoTriangles	0x68	array	dmMeshTriangleP3	16	4	zero	
+ps3	phm	CollisionMesh	136	3	serUnused70	0x70	array	BYTE	1	none (always empty)	zero	
+ps3	phm	RequiredDefinitionHeader	12									
+ps3	phm	dmMeshNodeP3	8									
+ps3	phm	dmFloat4	16									
+ps3	phm	dmMeshTriangleP3	16									
+ps3	phy	PhysicsDefinition	68									
+ps3	prt	ParticleDefinition	728									
+ps3	prt	ParticleDefinition	728	0	pathSystemScale	0x1B0	array	FloatPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	1	pathSystemCount	0x1B8	array	IntPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	2	pathSystemAlpha	0x1C0	array	FloatPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	3	pathParticleDuration	0x1C8	array	TimePath	40	4	zero	
+ps3	prt	ParticleDefinition	728	4	pathInitialScale	0x1D0	array	FloatPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	5	slot@1E0	0x1E0	array	anon:ParticleDefinition@1E0	40	4	zero	
+ps3	prt	ParticleDefinition	728	6	pathInitialSourceRelativeSpread	0x1D8	array	AnglePath	40	4	zero	
+ps3	prt	ParticleDefinition	728	7	slot@1E8	0x1E8	array	anon:ParticleDefinition@1E8	40	4	zero	
+ps3	prt	ParticleDefinition	728	8	pathSystemSpawnRate	0x1F0	array	VelocityPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	9	slot@1F8	0x1F8	array	anon:ParticleDefinition@1F8	40	4	zero	
+ps3	prt	ParticleDefinition	728	10	pathSystemSpeedDurationFactor	0x200	array	VelocityPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	11	tUberMaterial.ptMatTexList	0x5C	array	MaterialTextureEntry	24	8	zero	
+ps3	prt	ParticleDefinition	728	12	tEmitterParams.pathRadius	0xC8	array	FloatPath	12	4	zero	
+ps3	prt	ParticleDefinition	728	13	tEmitterParams.pathHeight	0xF0	array	FloatPath	12	4	zero	
+ps3	prt	ParticleDefinition	728	14	tEmitterParams.pathBoxExtents	0x118	array	VectorPath	28	4	zero	
+ps3	prt	ParticleDefinition	728	15	pathParticleAlpha	0x210	array	FloatPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	16	pathParticleColor	0x208	array	ColorPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	17	pathParticleScale	0x218	array	FloatPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	18	pathParticleStretch	0x220	array	FloatPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	19	pathAngularPosition	0x228	array	AnglePath	40	4	zero	
+ps3	prt	ParticleDefinition	728	20	pathAngularVelocity	0x230	array	AngularVelocityPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	21	slot@238	0x238	array	anon:ParticleDefinition@238	40	4	zero	
+ps3	prt	ParticleDefinition	728	22	slot@240	0x240	array	anon:ParticleDefinition@240	40	4	zero	
+ps3	prt	ParticleDefinition	728	23	pathOrientationAxis	0x248	array	VectorPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	24	slot@250	0x250	array	anon:ParticleDefinition@250	40	4	zero	
+ps3	prt	ParticleDefinition	728	25	pathMotionCylinderRadialVel	0x258	array	VelocityPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	26	pathMotionCylinderAngleVel	0x260	array	AngularVelocityPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	27	slot@268	0x268	array	anon:ParticleDefinition@268	40	4	zero	
+ps3	prt	ParticleDefinition	728	28	pathMotionCylinderAxis	0x270	array	VectorPath#2	40	4	zero	
+ps3	prt	ParticleDefinition	728	29	pathMotionCartesianPos	0x278	array	VectorPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	30	pathMotionCartesianVel	0x280	array	VelocityVectorPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	31	pathMotionCartesianAcc	0x288	array	AccelVectorPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	32	pathMotionRelativeCartesianPos	0x290	array	VectorPath#1	40	4	zero	
+ps3	prt	ParticleDefinition	728	33	pathMotionRelativeCartesianVel	0x298	array	VelocityVectorPath	40	4	zero	
+ps3	prt	ParticleDefinition	728	34	ptExtendedPath_Console	0x2A0	array	ExtendedPath_Console	40	4	zero	
+ps3	prt	ParticleDefinition	728	35	slot@2A8	0x2A8	array	anon:ParticleDefinition@2A8	40	4	zero	
+ps3	prt	ParticleDefinition	728	36	ptParticleQuadStructure	0x2B0	array	ParticleQuad	40	4	zero	
+ps3	prt	ParticleDefinition	728	37	ptMsgTriggeredEvents	0x2C4	array	MsgTriggeredEvent	192	4	zero	
+ps3	prt	FloatPath#1	40									
+ps3	prt	FloatPath#1	40	0	ptArrayNodes	0x20	array	FloatNode	12	4	zero	
+ps3	prt	IntPath	40									
+ps3	prt	IntPath	40	0	ptArrayNodes	0x20	array	IntNode	12	4	zero	
+ps3	prt	TimePath	40									
+ps3	prt	TimePath	40	0	ptArrayNodes	0x20	array	TimeNode	12	4	zero	
+ps3	prt	anon:ParticleDefinition@1E0	40									
+ps3	prt	anon:ParticleDefinition@1E0	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	AnglePath	40									
+ps3	prt	AnglePath	40	0	ptArrayNodes	0x20	array	AngleNode	12	4	zero	
+ps3	prt	anon:ParticleDefinition@1E8	40									
+ps3	prt	anon:ParticleDefinition@1E8	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	VelocityPath	40									
+ps3	prt	VelocityPath	40	0	ptArrayNodes	0x20	array	VelocityNode	12	4	zero	
+ps3	prt	anon:ParticleDefinition@1F8	40									
+ps3	prt	anon:ParticleDefinition@1F8	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	MaterialTextureEntry	24									
+ps3	prt	MaterialTextureEntry	24	0	tMatTex.pTexAnimCompParams	0x4	array	BYTE	1	4	zero	
+ps3	prt	FloatPath	12									
+ps3	prt	VectorPath	28									
+ps3	prt	ColorPath	40									
+ps3	prt	ColorPath	40	0	ptArrayNodes	0x20	array	ColorNode	12	4	zero	
+ps3	prt	AngularVelocityPath	40									
+ps3	prt	AngularVelocityPath	40	0	ptArrayNodes	0x20	array	AngularVelocityNode	12	4	zero	
+ps3	prt	anon:ParticleDefinition@238	40									
+ps3	prt	anon:ParticleDefinition@238	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	anon:ParticleDefinition@240	40									
+ps3	prt	anon:ParticleDefinition@240	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	VectorPath#1	40									
+ps3	prt	VectorPath#1	40	0	ptArrayNodes	0x20	array	VectorNode	28	4	zero	
+ps3	prt	anon:ParticleDefinition@250	40									
+ps3	prt	anon:ParticleDefinition@250	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	anon:ParticleDefinition@268	40									
+ps3	prt	anon:ParticleDefinition@268	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	VectorPath#2	40									
+ps3	prt	VectorPath#2	40	0	ptArrayNodes	0x20	array	VectorNode#1	12	4	zero	
+ps3	prt	VelocityVectorPath	40									
+ps3	prt	VelocityVectorPath	40	0	ptArrayNodes	0x20	array	VelocityVectorNode	28	4	zero	
+ps3	prt	AccelVectorPath	40									
+ps3	prt	AccelVectorPath	40	0	ptArrayNodes	0x20	array	AccelVectorNode	28	4	zero	
+ps3	prt	ExtendedPath_Console	40									
+ps3	prt	ExtendedPath_Console	40	0	pathMotionRelativeCartesianAcc_Console	0x20	array	AccelVectorPath#1	28	4	zero	
+ps3	prt	anon:ParticleDefinition@2A8	40									
+ps3	prt	anon:ParticleDefinition@2A8	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	ParticleQuad	40									
+ps3	prt	ParticleQuad	40	0	slot@20	0x20	array	BYTE	1	4	zero	
+ps3	prt	MsgTriggeredEvent	192									
+ps3	prt	FloatNode	12									
+ps3	prt	IntNode	12									
+ps3	prt	TimeNode	12									
+ps3	prt	AngleNode	12									
+ps3	prt	VelocityNode	12									
+ps3	prt	ColorNode	12									
+ps3	prt	AngularVelocityNode	12									
+ps3	prt	VectorNode	28									
+ps3	prt	VectorNode#1	12									
+ps3	prt	VelocityVectorNode	28									
+ps3	prt	AccelVectorNode	28									
+ps3	prt	AccelVectorPath#1	28									
+ps3	qsr	QuestRangeDefinition	28									
+ps3	qst	quest	144									
+ps3	qst	quest	144	0	unassigned_objective_sets	0x38	array	objective_set	24	4	zero	
+ps3	qst	quest	144	1	unassigned_failure_sets	0x48	array	failure_set	16	none (always empty)	zero	
+ps3	qst	quest	144	2	steps	0x58	array	quest_step	224	8	zero	
+ps3	qst	quest	144	3	completion_steps	0x68	array	completion_step	72	8	zero	
+ps3	qst	objective_set	24									
+ps3	qst	objective_set	24	0	objectives	0x10	array	objective	564	8	zero	
+ps3	qst	failure_set	16									
+ps3	qst	failure_set	16	0	conditions	0x8	array	failure_condition	548	4	zero	
+ps3	qst	quest_step	224									
+ps3	qst	quest_step	224	0	objective_sets	0xB8	array	objective_set	24	8	zero	
+ps3	qst	quest_step	224	1	bonus_sets	0xC8	array	bonus_set	56	8	zero	
+ps3	qst	quest_step	224	2	failure_sets	0xD8	array	failure_set	16	8	zero	
+ps3	qst	completion_step	72									
+ps3	qst	objective	564									
+ps3	qst	failure_condition	548									
+ps3	qst	bonus_set	56									
+ps3	qst	bonus_set	56	0	objectives	0x30	array	objective	564	4	zero	
+ps3	rcp	recipe	60									
+ps3	rev	ReverbDefinition	100									
+ps3	rop	RopeDefinition	928									
+ps3	rop	RopeDefinition	928	0	tUberMaterial.ptMatTexList	0x5C	array	MaterialTextureEntry	24	4	zero	
+ps3	rop	RopeDefinition	928	1	pathColorOverTime.ptArrayNodes	0xAC	array	ColorNode	12	4	zero	
+ps3	rop	RopeDefinition	928	2	pathColorOverLength.ptArrayNodes	0xD4	array	ColorNode	12	4	zero	
+ps3	rop	RopeDefinition	928	3	pathAlpha.ptArrayNodes	0xFC	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	4	pathAlphaOverLength.ptArrayNodes	0x124	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	5	pathWidthOverTime.ptArrayNodes	0x14C	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	6	pathWidthOverLength.ptArrayNodes	0x174	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	7	pathSourcePointWorldUpMotion.ptArrayNodes	0x19C	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	8	pathSourcePointAlongRopeMotion.ptArrayNodes	0x1C4	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	9	pathSourcePointPerpendicularMotion.ptArrayNodes	0x1EC	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	10	pathDestPointWorldUpMotion.ptArrayNodes	0x214	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	11	pathDestPointAlongRopeMotion.ptArrayNodes	0x23C	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	12	pathDestPointPerpendicularMotion.ptArrayNodes	0x264	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	13	pathJitterAmplitude.ptArrayNodes	0x28C	array	VectorNode	28	4	zero	
+ps3	rop	RopeDefinition	928	14	pathJitterRate.ptArrayNodes	0x2B4	array	VelocityNode	12	4	zero	
+ps3	rop	RopeDefinition	928	15	pathSeparation.ptArrayNodes	0x2E4	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	16	pathXAmpOverLength.ptArrayNodes	0x30C	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	17	pathYAmpOverLength.ptArrayNodes	0x334	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	18	pathFreqOverTime.ptArrayNodes	0x35C	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	19	pathPhaseSpeedOverTime.ptArrayNodes	0x384	array	FloatNode	12	4	zero	
+ps3	rop	RopeDefinition	928	20	ptMsgTriggeredEvents	0x38C	array	MsgTriggeredEvent	192	4	zero	
+ps3	rop	MaterialTextureEntry	24									
+ps3	rop	MaterialTextureEntry	24	0	tMatTex.pTexAnimCompParams	0x4	array	BYTE	1	4	zero	
+ps3	rop	ColorNode	12									
+ps3	rop	FloatNode	12									
+ps3	rop	VectorNode	28									
+ps3	rop	VelocityNode	12									
+ps3	rop	MsgTriggeredEvent	192									
+ps3	sbk	SoundBankDefinition	28									
+ps3	sbk	SoundBankDefinition	28	0	serSoundSamples	0xC	array	SoundSampleP3	40	4	zero	
+ps3	sbk	SoundBankDefinition	28	1	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	sbk	SoundSampleP3	40									
+ps3	sbk	RequiredDefinitionHeader	12									
+ps3	scg	SceneGroupDefinition	40									
+ps3	scn	SceneDefinition	536									
+ps3	scn	SceneDefinition	536	0	aabbBounds	0x10	inline	AABB	1			
+ps3	scn	SceneDefinition	536	1	aabbMarkerSetBounds	0x28	inline	AABB	1			
+ps3	scn	SceneDefinition	536	2	tNavMeshData	0x40	inline	NavMeshDef	1			
+ps3	scn	SceneDefinition	536	3	serExclusions	0xA0	array	SNO	4	4	zero	
+ps3	scn	SceneDefinition	536	4	serInclusions	0xE0	array	SNO	4	8	zero	
+ps3	scn	SceneDefinition	536	5	serMarkerSets	0x120	array	SNO	4	8	zero	
+ps3	scn	SceneDefinition	536	6	tLookLink	0x160	inline	LookLink	1			
+ps3	scn	SceneDefinition	536	7	serMsgTriggeredEvents	0x168	array	MsgTriggeredEvent	192	8	zero	
+ps3	scn	SceneDefinition	536	8	tNavZoneDef	0x180	inline	NavZoneDefinition	1			
+ps3	scn	SceneDefinition	536	9	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	scn	AABB	24									
+ps3	scn	NavMeshDef	96									
+ps3	scn	NavMeshDef	96	0	tEdge	0x28	inline	NavMeshSquare	1			
+ps3	scn	NavMeshDef	96	1	serCompNavMeshArraySquares	0x40	array	CompNavMeshSquare	4	none (always empty)	zero	
+ps3	scn	NavMeshDef	96	2	serCompNavMeshArraySquaresSpecialFlags	0x50	array	BYTE	1	4	zero	
+ps3	scn	LookLink	8									
+ps3	scn	MsgTriggeredEvent	192									
+ps3	scn	MsgTriggeredEvent	192	0	tTriggerEvent	0x4	inline	TriggerEvent	1			
+ps3	scn	NavZoneDefinition	136									
+ps3	scn	NavZoneDefinition	136	0	serNavCells	0x10	array	NavCell	32	none (always empty)	zero	
+ps3	scn	NavZoneDefinition	136	1	serNavCellNeighbors	0x28	array	NavCellLookup	4	none (always empty)	zero	
+ps3	scn	NavZoneDefinition	136	2	serGridSquares	0x50	array	NavGridSquare	6	none (always empty)	zero	
+ps3	scn	NavZoneDefinition	136	3	serCellLookups	0x68	array	NavCellLookup	4	none (always empty)	zero	
+ps3	scn	NavZoneDefinition	136	4	serBorderData	0x80	array	NavCellBorderData	4	none (always empty)	zero	
+ps3	scn	RequiredDefinitionHeader	12									
+ps3	scn	NavMeshSquare	8									
+ps3	scn	CompNavMeshSquare	4									
+ps3	scn	TriggerEvent	188									
+ps3	scn	TriggerEvent	188	0	tConditions	0x4	inline	TriggerConditions	1			
+ps3	scn	TriggerEvent	188	1	snoname	0x2C	inline	SNOName	1			
+ps3	scn	TriggerEvent	188	2	tHardpointLinks	0x44	inline	HardpointLink	2			
+ps3	scn	TriggerEvent	188	3	tLookLink	0x5C	inline	LookLink	1			
+ps3	scn	TriggerEvent	188	4	tConstraintLink	0x64	inline	ConstraintLink	1			
+ps3	scn	NavCell	32									
+ps3	scn	NavCellLookup	4									
+ps3	scn	NavGridSquare	6									
+ps3	scn	NavCellBorderData	4									
+ps3	scn	TriggerConditions	36									
+ps3	scn	SNOName	8									
+ps3	scn	HardpointLink	12									
+ps3	scn	HardpointLink	12	0	tHash	0x0	inline	HardpointHash	1			
+ps3	scn	ConstraintLink	8									
+ps3	scn	HardpointHash	8									
+ps3	shd	ShaderDefinition	48									
+ps3	shd	ShaderDefinition	48	0	ptPasses	0x14	array	RenderPass	200	4	zero	
+ps3	shd	ShaderDefinition	48	1	serConsoleShaderData	0x20	blob			4	zero	
+ps3	shd	RenderPass	200									
+ps3	shd	RenderPass	200	0	slot@74	0x74	array	BYTE	1	4	zero	
+ps3	shd	RenderPass	200	1	ptsParams	0x90	array	TextureStageParams	24	4	zero	
+ps3	shd	TextureStageParams	24									
+ps3	shk	ShakeDefinition	352									
+ps3	shk	ShakeDefinition	352	0	pathCameraPositionAmplitude.ptArrayNodes	0x40	array	VectorNode	28	4	zero	
+ps3	shk	ShakeDefinition	352	1	pathCameraPositionFrequency.ptArrayNodes	0x68	array	VectorNode	28	4	zero	
+ps3	shk	ShakeDefinition	352	2	pathCameraRollAmplitude.ptArrayNodes	0x90	array	AngleNode	12	4	zero	
+ps3	shk	ShakeDefinition	352	3	pathCameraRollFrequency.ptArrayNodes	0xB8	array	FloatNode	12	4	zero	
+ps3	shk	ShakeDefinition	352	4	pathCameraPitchAmplitude.ptArrayNodes	0xE0	array	AngleNode	12	4	zero	
+ps3	shk	ShakeDefinition	352	5	pathCameraPitchFrequency.ptArrayNodes	0x108	array	FloatNode	12	4	zero	
+ps3	shk	ShakeDefinition	352	6	pathCameraYawAmplitude.ptArrayNodes	0x130	array	AngleNode	12	4	zero	
+ps3	shk	ShakeDefinition	352	7	pathCameraYawFrequency.ptArrayNodes	0x158	array	FloatNode	12	4	zero	
+ps3	shk	VectorNode	28									
+ps3	shk	AngleNode	12									
+ps3	shk	FloatNode	12									
+ps3	shm	ShaderMapDefinition	28									
+ps3	shm	ShaderMapDefinition	28	0	hTagMap	0x10	tagmap			4	zero	
+ps3	skl	SkillKitDefinition	48									
+ps3	skl	SkillKitDefinition	48	0	arTraitEntries	0x18	array	TraitEntry	12	4	zero	
+ps3	skl	SkillKitDefinition	48	1	arActiveSkillEntries	0x28	array	ActiveSkillEntry	40	8	zero	
+ps3	skl	TraitEntry	12									
+ps3	skl	ActiveSkillEntry	40									
+ps3	snd	SoundDefinition	124									
+ps3	snd	SoundDefinition	124	0	serPermutations	0x40	array	SoundPermutationP3	44	4	zero	
+ps3	snd	SoundDefinition	124	1	serDspEffects	0x5C	array	DspEffect	264	4	zero	
+ps3	snd	SoundDefinition	124	2	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	snd	SoundPermutationP3	44									
+ps3	snd	DspEffect	264									
+ps3	snd	RequiredDefinitionHeader	12									
+ps3	srf	SurfaceDefinition	36									
+ps3	srf	SurfaceDefinition	36	0	hTagMap	0x18	tagmap			4	zero	
+ps3	tme	TimedEventDefinition	16									
+ps3	trl	TrailDefinition	280									
+ps3	trl	TrailDefinition	280	0	pathColorOverTime.ptArrayNodes	0x48	array	ColorNode	12	4	zero	
+ps3	trl	TrailDefinition	280	1	pathColorOverLength.ptArrayNodes	0x70	array	ColorNode	12	4	zero	
+ps3	trl	TrailDefinition	280	2	pathAlpha.ptArrayNodes	0x98	array	FloatNode	12	4	zero	
+ps3	trl	TrailDefinition	280	3	pathAlphaOverLength.ptArrayNodes	0xC0	array	FloatNode	12	4	zero	
+ps3	trl	TrailDefinition	280	4	tUberMaterial.ptMatTexList	0xFC	array	MaterialTextureEntry	24	8	zero	
+ps3	trl	ColorNode	12									
+ps3	trl	FloatNode	12									
+ps3	trl	MaterialTextureEntry	24									
+ps3	trl	MaterialTextureEntry	24	0	tMatTex.pTexAnimCompParams	0x4	array	BYTE	1	4	zero	
+ps3	trs	treasure_class	40									
+ps3	trs	treasure_class	40	0	modifiers	0x20	array	drop_modifier	104	4	zero	
+ps3	trs	drop_modifier	104									
+ps3	tut	TutorialDefinition	44									
+ps3	ui	UIDialogDefinition	120									
+ps3	ui	UIDialogDefinition	120	0	ptControlList	0x14	array	UIControlData	272	4	zero	
+ps3	ui	UIDialogDefinition	120	1	ptStyleList	0x24	array	UIStyle	112	4	zero	
+ps3	ui	UIDialogDefinition	120	2	tConstants.ptStringElements	0x34	array	UIControlElement	24	4	zero	
+ps3	ui	UIDialogDefinition	120	3	tConstants.ptInt32Elements	0x44	array	UIDataElementInt32	16	4	zero	
+ps3	ui	UIDialogDefinition	120	4	tConstants.ptFloat32Elements	0x54	array	UIDataElementFloat32	16	4	zero	
+ps3	ui	UIControlData	272									
+ps3	ui	UIControlData	272	0	szName	0x10	array	BYTE	1	4	zero	
+ps3	ui	UIControlData	272	1	szParentKey	0x28	array	BYTE	1	4	zero	
+ps3	ui	UIControlData	272	2	tInlineStyle.szName	0x48	array	BYTE	1	4	zero	
+ps3	ui	UIControlData	272	3	tInlineStyle.tAttributes.ptStringElements	0x5C	array	UIControlElement	24	4	zero	
+ps3	ui	UIControlData	272	4	tInlineStyle.tAttributes.ptInt32Elements	0x6C	array	UIDataElementInt32	16	4	zero	
+ps3	ui	UIControlData	272	5	tInlineStyle.tAttributes.ptFloat32Elements	0x7C	array	UIDataElementFloat32	16	4	zero	
+ps3	ui	UIControlData	272	6	tInlineStyle.ptChildSpecs	0x8C	array	UIStyleChildSpec	76	4	zero	
+ps3	ui	UIControlData	272	7	tAnimationElements.ptInt32Elements	0xB4	array	UIAnimationElementInt32	8	4	zero	
+ps3	ui	UIControlData	272	8	tAnimationElements.ptFloatElements	0xC4	array	UIAnimationElementFloat	8	4	zero	
+ps3	ui	UIControlData	272	9	tAnimationElements.ptVector2DElements	0xD4	array	UIAnimationElementVector2D	12	4	zero	
+ps3	ui	UIControlData	272	10	tAnimationElements.ptAnimationDescriptions	0xE4	array	UIAnimationDescription	40	4	zero	
+ps3	ui	UIControlData	272	11	tAnimationElements.ptAnimationBindings	0xF4	array	UIControlAnimationBinding	20	4	zero	
+ps3	ui	UIStyle	112									
+ps3	ui	UIStyle	112	0	szName	0x8	array	BYTE	1	4	zero	
+ps3	ui	UIStyle	112	1	tAttributes.ptStringElements	0x1C	array	UIControlElement	24	4	zero	
+ps3	ui	UIStyle	112	2	tAttributes.ptInt32Elements	0x2C	array	UIDataElementInt32	16	4	zero	
+ps3	ui	UIStyle	112	3	tAttributes.ptFloat32Elements	0x3C	array	UIDataElementFloat32	16	4	zero	
+ps3	ui	UIStyle	112	4	ptChildSpecs	0x4C	array	UIStyleChildSpec	76	4	zero	
+ps3	ui	UIControlElement	24									
+ps3	ui	UIControlElement	24	0	szAttrib	0x8	array	BYTE	1	4	zero	
+ps3	ui	UIDataElementInt32	16									
+ps3	ui	UIDataElementFloat32	16									
+ps3	ui	UIStyleChildSpec	76									
+ps3	ui	UIStyleChildSpec	76	0	szPathToChild	0x0	array	BYTE	1	4	zero	
+ps3	ui	UIStyleChildSpec	76	1	tAttributes.ptStringElements	0x14	array	UIControlElement	24	4	zero	
+ps3	ui	UIStyleChildSpec	76	2	tAttributes.ptInt32Elements	0x24	array	UIDataElementInt32	16	4	zero	
+ps3	ui	UIAnimationElementInt32	8									
+ps3	ui	UIAnimationElementFloat	8									
+ps3	ui	UIAnimationElementVector2D	12									
+ps3	ui	UIAnimationDescription	40									
+ps3	ui	UIAnimationDescription	40	0	szName	0x8	array	BYTE	1	4	zero	
+ps3	ui	UIControlAnimationBinding	20									
+ps3	ui	UIControlAnimationBinding	20	0	szAnimationName	0x0	array	BYTE	1	4	zero	
+ps3	vib	VibrationDefinition	116									
+ps3	vib	VibrationDefinition	116	0	primaryVibrationIntensityCurve.ptArrayNodes	0x44	array	FloatNode	12	4	zero	
+ps3	vib	VibrationDefinition	116	1	outroVibrationIntensityCurve.ptArrayNodes	0x6C	array	FloatNode	12	4	zero	
+ps3	vib	FloatNode	12									
+ps3	wrl	WorldDefinition	256									
+ps3	wrl	WorldDefinition	256	0	serServerData	0x10	array	WorldServerData	112	4	zero	
+ps3	wrl	WorldDefinition	256	1	serMarkerSets	0x20	array	SNO	4	8	zero	
+ps3	wrl	WorldDefinition	256	2	tHeader	0x0	inline	RequiredDefinitionHeader	1			
+ps3	wrl	WorldDefinition	256	3	tPostFXParams	0x64	inline	PostFXParams	1			
+ps3	wrl	WorldDefinition	256	4	serBC	0xBC	array	BYTE	1	8	zero	
+ps3	wrl	WorldServerData	112									
+ps3	wrl	WorldServerData	112	0	serDRLGParams	0x0	array	DRLGParams	120	4	zero	
+ps3	wrl	WorldServerData	112	1	serSceneParams	0x10	array	SceneParams	24	4	zero	
+ps3	wrl	WorldServerData	112	2	tLabelRuleSet	0x20	inline	LabelRuleSet	1			
+ps3	wrl	WorldServerData	112	3	tSceneClusterSet	0x40	inline	SceneClusterSet	1			
+ps3	wrl	RequiredDefinitionHeader	12									
+ps3	wrl	PostFXParams	32									
+ps3	wrl	DRLGParams	120									
+ps3	wrl	DRLGParams	120	0	serTiles	0x0	array	TileInfo	72	4	zero	
+ps3	wrl	DRLGParams	120	1	serCommands	0x44	array	DRLGCommand	152	8	zero	
+ps3	wrl	DRLGParams	120	2	serParentIndices	0x58	array	INT	4	8	zero	
+ps3	wrl	DRLGParams	120	3	serDRLGTagMap	0x68	tagmap			4	zero	
+ps3	wrl	SceneParams	24									
+ps3	wrl	SceneParams	24	0	serSceneChunks	0x0	array	SceneChunk	240	4	zero	
+ps3	wrl	LabelRuleSet	24									
+ps3	wrl	LabelRuleSet	24	0	serRules	0x10	array	LabelRule	176	8	zero	
+ps3	wrl	SceneClusterSet	24									
+ps3	wrl	SceneClusterSet	24	0	serClusters	0x10	array	SceneCluster	176	8	zero	
+ps3	wrl	TileInfo	72									
+ps3	wrl	TileInfo	72	0	serTileTagMap	0x10	tagmap			4	zero	
+ps3	wrl	TileInfo	72	1	tCustomTileInfo	0x20	inline	CustomTileInfo	1			
+ps3	wrl	DRLGCommand	152									
+ps3	wrl	DRLGCommand	152	0	serCommandTagMap	0x84	tagmap			4	zero	
+ps3	wrl	SceneChunk	240									
+ps3	wrl	SceneChunk	240	0	snoname	0x0	inline	SNOName	1			
+ps3	wrl	SceneChunk	240	1	transform	0x8	inline	PRTransform	1			
+ps3	wrl	SceneChunk	240	2	tSceneSpec	0x24	inline	SceneSpecification	1			
+ps3	wrl	LabelRule	176									
+ps3	wrl	LabelRule	176	0	tCondition	0x80	inline	LabelCondition	1			
+ps3	wrl	LabelRule	176	1	serEntries	0xA8	array	LabelEntry	20	8	zero	
+ps3	wrl	SceneCluster	176									
+ps3	wrl	SceneCluster	176	0	serSubSceneGroups	0x90	array	SubSceneGroup	24	4	zero	
+ps3	wrl	SceneCluster	176	1	tDefaultSubSceneGroup	0x98	inline	SubSceneGroup	1			
+ps3	wrl	CustomTileInfo	36									
+ps3	wrl	CustomTileInfo	36	0	serTiles	0x14	array	CustomTileCell	36	8	zero	
+ps3	wrl	SNOName	8									
+ps3	wrl	PRTransform	28									
+ps3	wrl	PRTransform	28	0	q	0x0	inline	Quaternion	1			
+ps3	wrl	SceneSpecification	204									
+ps3	wrl	SceneSpecification	204	0	tCachedValues	0x7C	inline	SceneCachedValues	1			
+ps3	wrl	LabelCondition	24									
+ps3	wrl	LabelEntry	20									
+ps3	wrl	SubSceneGroup	24									
+ps3	wrl	SubSceneGroup	24	0	serSubScenes	0x10	array	SubSceneEntry	32	4	zero	
+ps3	wrl	CustomTileCell	36									
+ps3	wrl	Quaternion	16									
+ps3	wrl	SceneCachedValues	80									
+ps3	wrl	SceneCachedValues	80	0	aabbBounds	0xC	inline	AABB	1			
+ps3	wrl	SceneCachedValues	80	1	aabbMarkerSetBounds	0x24	inline	AABB	1			
+ps3	wrl	SubSceneEntry	32									
+ps3	wrl	SubSceneEntry	32	0	serLabels	0x18	array	SubSceneLabel	8	4	zero	
+ps3	wrl	AABB	24									
+ps3	wrl	SubSceneLabel	8									
+ps3	wth	WeatherDefinition	340									
+ps3	wth	WeatherDefinition	340	0	pathWind.ptArrayNodes	0x34	array	VelocityVectorNode	28	4	zero	
+ps3	wth	WeatherDefinition	340	1	pathWindLocal.ptArrayNodes	0x5C	array	VelocityVectorNode	28	4	zero	
+ps3	wth	WeatherDefinition	340	2	pathWeatherIntensity.ptArrayNodes	0x88	array	FloatNode	12	4	zero	
+ps3	wth	VelocityVectorNode	28									
+ps3	wth	FloatNode	12									
+ps3	xpl	ExplosionDefinition	60									
