@@ -9,19 +9,25 @@ A block whose new bytes equal the stored ones keeps its stored block (so shared 
 shared and an unchanged mesh gives the source bytes); a block whose bytes change gets a block of
 its own (W2-14). Records are changed only where something they describe changed.
 
-Not built here (Q376): adding or removing sub-objects, draws or skinning records, changing a
-palette, and rebuilding the visual-mesh octree (an empty octree is stored instead, W2-13).
+Not built here (Q376): adding or removing sub-objects, draws or skinning records and changing a
+palette; without the stage-13 rules the visual-mesh octree of a changed mesh is emptied (W2-13).
+The ``derive`` option applies the rules of ``26_corrections15.md`` (W13-1 to W13-7): derived
+work-buffer sizes, steps and ps3 bone ranges, an octree built again for a changed mesh (module
+``octree``), first-use palettes split at 45 bones, compact influence lists, and empty skinning
+records dropped.
 """
 
 from __future__ import annotations
 
+import dataclasses
 import math
 import re
 import struct
 
+from . import octree as O
 from . import sno_layout as L
 from .appearance import (
-    FAT_VERTEX, FORMAT_RIGID, FORMAT_SKINNED, PS3_DESCRIPTOR_FIXED, PS3_PIECE, AppearanceFile,
+    BONE_RANGE_UNIT, FAT_VERTEX, FORMAT_RIGID, FORMAT_SKINNED, PS3_DESCRIPTOR_FIXED, PS3_PIECE, AppearanceFile,
     Draw, SubObject, parse_appearance,
 )
 from .binary import FormatError, build_order
@@ -39,7 +45,7 @@ OCTREE_PAIRS = (STRUCT_OCTREE + 0x18, STRUCT_OCTREE + 0x28, STRUCT_OCTREE + 0x38
 # Sub-object record offsets (switch and x360; ps3).
 SWITCH_SUB = {"fat": 0x04, "index": 0x28, "box": 0x6C, "packed_count": 0xA0, "packed": 0xB0,
               "skins": 0xB8, "influence": 0xC8, "bias": 0xD8, "scale": 0xE4}
-PS3_SUB = {"fat": 0x04, "index": 0x20, "box": 0xD0, "draws": 0x100, "influence": 0x10C,
+PS3_SUB = {"fat": 0x04, "index": 0x20, "box": 0xD0, "draw_count": 0xFC, "draws": 0x100, "influence": 0x10C,
            "bias": 0x118, "scale": 0x124}
 # Skinning record (switch, x360) and ps3 draw record offsets.
 SKIN = {"bones": 0x00, "palette": 0x04, "vertex_count": 0x18, "vertices": 0x28,
@@ -52,6 +58,9 @@ RAW_LIMIT = 32767  # W2-3
 BASE_STEP_BONES = 1 / 512
 BASE_STEP_NO_BONES = 1 / 128
 PS3_WORK_LIMIT = 0xC000
+SKIN_PALETTE_LIMIT = 45  # W13-5
+PS3_RANGES = 0x60  # W13-4: offset0, offset1, size0, size1 (u16)
+RULES = ("W13-1", "W13-2", "W13-3", "W13-4", "W13-5", "W13-6", "W13-7")
 PACKED_RIGID = 28
 PACKED_SKINNED = 36
 INFLUENCE_RECORD = 6
@@ -241,6 +250,159 @@ def ps3_work_size(fmt: int, vertex_count: int, index_count: int, stored: int | N
     return value
 
 
+# --- Stage 13 rules (26_corrections15.md) ----------------------------------------------------------
+
+def rule_set(derive) -> frozenset[str]:
+    """The W13 rules a ``derive`` option names: False / None (none), True (all) or an iterable of
+    rule names from ``RULES``."""
+    if derive is True:
+        return frozenset(RULES)
+    if not derive:
+        return frozenset()
+    if isinstance(derive, str):
+        derive = (derive,)
+    rules = frozenset(derive)
+    unknown = rules - set(RULES)
+    if unknown:
+        raise FormatError(f"unknown rules {sorted(unknown)}; known: {', '.join(RULES)}")
+    return rules
+
+
+def ps3_skinned_work_size(vertex_count: int, index_count: int, command_space: int, ranges) -> int:
+    """W13-1: the work-buffer size (+0x98) of a format 0x83 draw. ``ranges`` = (offset0, offset1,
+    size0, size1) in bytes; span = offset1 + size1 - offset0 when size1 > 0, else size0.
+    P = align(2 ni, 16) + 16 h + 28 align(nv, 8) + 208; Q = align(2 ni, 16) + 18 align(nv, 8) +
+    span + 448; work = align(max(P, Q), 128)."""
+    offset0, offset1, size0, size1 = ranges
+    span = offset1 + size1 - offset0 if size1 > 0 else size0
+    indices = _align(2 * index_count, 16)
+    vertices = _align(vertex_count, 8)
+    p = indices + 16 * command_space + 28 * vertices + 208
+    q = indices + 18 * vertices + span + 448
+    return _align(max(p, q), 128)
+
+
+def quantisation_steps(centre, half, bias, has_bones: bool) -> tuple[float, float, float]:
+    """W13-2: per axis, reach = half-extent + |centre - bias| + 1; the step is the smallest power
+    of two not below the base step (1/512 with bones, 1/128 without) with reach / step <= 32767."""
+    base = BASE_STEP_BONES if has_bones else BASE_STEP_NO_BONES
+    steps = []
+    for k in range(3):
+        check_float(centre[k], "box centre")
+        check_float(half[k], "box half-extent")
+        check_float(bias[k], "bias")
+        reach = abs(half[k]) + abs(centre[k] - bias[k]) + 1
+        step = base
+        while reach / step > RAW_LIMIT:
+            step *= 2
+        steps.append(step)
+    return tuple(steps)
+
+
+def ps3_bone_ranges(bones) -> tuple[int, int, int, int]:
+    """W13-4: (offset0, offset1, size0, size1) of a set of skeleton bones: one range when no two
+    sorted neighbours differ by more than 1, else two ranges split at the leftmost largest gap.
+    48 bytes per bone."""
+    ordered = sorted(set(bones))
+    if not ordered:
+        return (0, 0, 0, 0)
+    gaps = [ordered[i + 1] - ordered[i] for i in range(len(ordered) - 1)]
+    unit = BONE_RANGE_UNIT
+    if not gaps or max(gaps) <= 1:
+        ranges = (unit * ordered[0], 0, unit * (ordered[-1] - ordered[0] + 1), 0)
+    else:
+        cut = gaps.index(max(gaps))
+        first, last = ordered[cut], ordered[cut + 1]
+        ranges = (unit * ordered[0], unit * last, unit * (first - ordered[0] + 1),
+                  unit * (ordered[-1] - last + 1))
+    for name, value in zip(("offset0", "offset1", "size0", "size1"), ranges):
+        check_word(value, "H", f"ps3 bone range {name} (W13-4)")
+    return ranges
+
+
+def ranges_palette(ranges) -> list[int]:
+    """W13-4: the palette is range 0 followed by range 1, bone by bone."""
+    offset0, offset1, size0, size1 = ranges
+    unit = BONE_RANGE_UNIT
+    return list(range(offset0 // unit, (offset0 + size0) // unit)) + \
+        list(range(offset1 // unit, (offset1 + size1) // unit))
+
+
+def first_use_palette(joints, weights) -> list[int]:
+    """W13-5: skeleton bones in order of first use over the vertices and their slots in order
+    (weighted slots; zero-weight slots are 0 on a changed mesh and name palette position 0)."""
+    palette: list[int] = []
+    for vertex_joints, vertex_weights in zip(joints, weights):
+        for joint, weight in zip(vertex_joints, vertex_weights):
+            if weight and joint not in palette:
+                palette.append(joint)
+    return palette
+
+
+def _vertex_bones(draw: Draw, i: int) -> set:
+    return {j for j, w in zip(draw.joints[i], draw.weights[i]) if w}
+
+
+def _subset(draw: Draw, ids: list[int], indices: list[int]) -> Draw:
+    def pick(values):
+        return [values[i] for i in ids] if values is not None else None
+    return dataclasses.replace(
+        draw, positions=pick(draw.positions), normals=pick(draw.normals),
+        colours_1=pick(draw.colours_1), colours_2=pick(draw.colours_2), uv1=pick(draw.uv1),
+        uv2_raw=pick(draw.uv2_raw), indices=indices, joints=pick(draw.joints),
+        weights=pick(draw.weights), local_joints=None)
+
+
+def split_skinned_draw(draw: Draw, limit: int = SKIN_PALETTE_LIMIT) -> list[tuple[Draw, list[int]]]:
+    """W13-5: the draw as skinning records of at most ``limit`` bones. Triangles are taken in
+    order and a new record starts before one would exceed the limit; each record holds the
+    vertices its triangles use, in vertex order. Returns (record draw, source vertex ids); a draw
+    that fits is returned whole."""
+    if len(first_use_palette(draw.joints, draw.weights)) <= limit:
+        return [(draw, list(range(len(draw.positions))))]
+    if len(draw.indices) % 3:
+        raise FormatError(f"{len(draw.indices)} indices are not whole triangles; "
+                          "the record cannot be split (W13-5)")
+    groups: list[list[int]] = []
+    current: list[int] = []
+    bones: set = set()
+    for t in range(0, len(draw.indices), 3):
+        triangle = draw.indices[t:t + 3]
+        need = set().union(*(_vertex_bones(draw, v) for v in triangle))
+        if len(need) > limit:
+            raise FormatError(f"a triangle uses {len(need)} bones, above {limit} (W13-5)")
+        if current and len(bones | need) > limit:
+            groups.append(current)
+            current, bones = [], set()
+        current += triangle
+        bones |= need
+    if current:
+        groups.append(current)
+    out = []
+    for group in groups:
+        ids = sorted(set(group))
+        where = {v: n for n, v in enumerate(ids)}
+        out.append((_subset(draw, ids, [where[v] for v in group]), ids))
+    return out
+
+
+def influence_entry(draw: Draw, i: int) -> bytes:
+    """W13-6 (Switch): the vertex's weighted slots in slot order as (skeleton bone, weight), at
+    most three, then (0, 0)."""
+    pairs = [(j, w) for j, w in zip(draw.joints[i], draw.weights[i]) if w][:3]
+    pairs += [(0, 0)] * (3 - len(pairs))
+    return _packed("<", "6B", f"vertex {i} compact influence entry", *(x for pair in pairs for x in pair))
+
+
+def _same_draw(a: Draw, b: Draw) -> bool:
+    return all(getattr(a, name) == getattr(b, name) for name in (
+        "positions", "normals", "colours_1", "colours_2", "uv1", "uv2_raw", "indices", "joints", "weights"))
+
+
+def _empty(draw: Draw) -> bool:
+    return not draw.positions or not draw.indices
+
+
 def encode_ps3_draw(draw: Draw, bias, scale, stored_slots=None) -> dict[str, bytes]:
     """W2-9: the descriptor, index list and streams A, B and C of a ps3 draw."""
     fmt = FORMAT_SKINNED if draw.skinned else FORMAT_RIGID
@@ -300,8 +462,10 @@ def _pack(raw: bytearray, order: str, fmt: str, offset: int, *values, field: str
 
 
 class _Context:
-    def __init__(self, app: AppearanceFile, tree: L.SnoTree, old: AppearanceFile):
+    def __init__(self, app: AppearanceFile, tree: L.SnoTree, old: AppearanceFile, rules=frozenset()):
         self.build, self.tree, self.old = app.build, tree, old
+        self.rules = rules
+        self.bone_count = len(old.bones)
         self.order = build_order(app.build)
         self.has_bones = bool(old.bones)
         index_at, vertex_at = POOLS[app.build]
@@ -317,18 +481,38 @@ class _Context:
     def stored_index_slice(self, count: int) -> bytes:
         return self.old_index_pool[self.old_index_run * 2:(self.old_index_run + count) * 2]
 
+    def check_bone(self, bone: int, label: str, rule: str) -> None:
+        if not 0 <= bone < self.bone_count:
+            raise FormatError(f"{label}: joint {bone} is not one of the {self.bone_count} bones ({rule})")
 
-def _fixed_point(sub: SubObject, positions, moved: bool, has_bones: bool):
+
+def _fixed_point(sub: SubObject, positions, moved: bool, has_bones: bool, rules=frozenset()):
     """W2-2, W2-3: an unchanged mesh keeps its bias and step. A changed one keeps its bias while
     it stays within 1 of the new box centre on every axis (else round(box centre)) and takes the
-    step of the W2-3 rule (Q375)."""
+    step of the W2-3 rule (Q375). With W13-2 the step of every sub-object comes from its box
+    (the stored box, or the vertex extremes when it is all zero; for a changed mesh the box of
+    the new positions) and its bias (Q395)."""
     bias, scale = tuple(sub.bias), tuple(sub.scale)
-    if not moved or not positions:
+    if not positions:
         return bias, scale
-    centre = [(min(p[k] for p in positions) + max(p[k] for p in positions)) / 2 for k in range(3)]
-    if not all(abs(bias[k] - centre[k]) <= 1 for k in range(3)):
-        bias = fixed_point_bias(positions)
-    return bias, fixed_point_steps(positions, bias, has_bones)
+    low = [min(p[k] for p in positions) for k in range(3)]
+    high = [max(p[k] for p in positions) for k in range(3)]
+    if moved:
+        centre = [(low[k] + high[k]) / 2 for k in range(3)]
+        if not all(abs(bias[k] - centre[k]) <= 1 for k in range(3)):
+            bias = fixed_point_bias(positions)
+        if "W13-2" not in rules:
+            return bias, fixed_point_steps(positions, bias, has_bones)
+        half = [(high[k] - low[k]) / 2 for k in range(3)]
+        return bias, quantisation_steps(centre, half, bias, has_bones)
+    if "W13-2" not in rules:
+        return bias, scale
+    if any(sub.bounds_raw) and sub.bounds_centre is not None:
+        centre, half = sub.bounds_centre, sub.bounds_half
+    else:  # G1-1: an all-zero box stores nothing; the decoded extremes are the box
+        centre = [(low[k] + high[k]) / 2 for k in range(3)]
+        half = [(high[k] - low[k]) / 2 for k in range(3)]
+    return bias, quantisation_steps(centre, half, bias, has_bones)
 
 
 def _decoded(positions, bias, scale):
@@ -386,8 +570,72 @@ def _positions(draws) -> list:
     return [p for d in draws for p in d.positions]
 
 
+def _empty_record(ctx: _Context, sub: SubObject, what: str) -> None:
+    """W13-7: an empty skinning record or skinned draw is dropped with the rule, else refused."""
+    if "W13-7" not in ctx.rules:
+        raise FormatError(f"{sub.label}: an empty {what} (no vertices or no indices) is not "
+                          "written; drop it with rule W13-7")
+
+
+def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_skins, bias, scale):
+    """The skinning records of a switch / x360 sub-object (W2-1, W2-6; W13-5, W13-7). Returns
+    (any record changed, triangles changed, compact influence entries or None)."""
+    order, rules = ctx.order, ctx.rules
+    skin_value = record.pairs.get(SWITCH_SUB["skins"])
+    skin_records = skin_value.block.elements if skin_value is not None and skin_value.block else []
+    new_records: list[L.Record] = []
+    entries = bytearray()
+    any_changed = triangles = False
+    for skin, draw, before in zip(skin_records, skins, old_skins):
+        same = _same_draw(draw, before)
+        triangles |= draw.indices != before.indices
+        if _empty(draw) and not (same and _empty(before)):
+            _empty_record(ctx, sub, "skinning record")
+            any_changed = triangles = True
+            continue
+        rebuild = "W13-5" in rules and not same
+        pieces = split_skinned_draw(draw) if rebuild else [(draw, list(range(len(draw.positions))))]
+        used: set = set()
+        for n, (piece, ids) in enumerate(pieces):
+            target = skin if n == 0 else L.Record(skin.name, bytearray(skin.raw), {})
+            changed = n > 0
+            if rebuild:  # W13-5: palette by first use, zero-weight slots 0
+                palette = first_use_palette(piece.joints, piece.weights)
+                if not palette:
+                    raise FormatError(f"{sub.label}: a skinning record with no weighted slot has "
+                                      "an empty palette, which is not observed (W13-7)")
+                for bone in palette:
+                    ctx.check_bone(bone, sub.label, "W13-5")
+                piece = dataclasses.replace(piece, palette=palette)
+                changed |= _set_bytes(target, SKIN["palette"], _packed(
+                    order, f"{len(palette)}i", "skinning palette (pBoneIDs)", *palette))
+                slots = None
+            else:
+                stored = _block_bytes(skin.pairs.get(SKIN["vertices"]))
+                slots = [stored[i * PACKED_SKINNED + 28:i * PACKED_SKINNED + 32]
+                         for i in range(len(stored) // PACKED_SKINNED)]
+                if order == ">":
+                    slots = [s[::-1] for s in slots]
+            changed |= _set_bytes(target, SKIN["vertices"], encode_packed_vertices(piece, bias, scale, order, slots))
+            changed |= _set_bytes(target, SKIN["indices"], encode_indices(piece.indices, order))
+            if changed:  # W2-1, W2-6
+                _pack(target.raw, order, "i", SKIN["vertex_count"], len(piece.positions), field="skinning nPackVertCount (+0x18)")
+                _pack(target.raw, order, "i", SKIN["index_count"], len(piece.indices), field="skinning nPackIndexCount (+0x30)")
+                _pack(target.raw, order, "i", SKIN["bones"], len(_block_bytes(target.pairs.get(SKIN["palette"]))) // 4, field="skinning bone count (+0x00)")
+                start, end = SKIN["zero"]
+                target.raw[start:end] = bytes(end - start)
+            any_changed |= changed or not same
+            new_records.append(target)
+            used.update(ids)
+        for i in sorted(used):  # W13-6: one entry per vertex, each distinct vertex once
+            entries += influence_entry(draw, i)
+    if len(new_records) != len(skin_records) or any(a is not b for a, b in zip(new_records, skin_records)):
+        record.pairs[SWITCH_SUB["skins"]] = L.PairValue(L.Block(elements=new_records) if new_records else None)
+    return any_changed, triangles, bytes(entries)
+
+
 def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) -> tuple[bool, bool]:
-    order, raw = ctx.order, record.raw
+    order, raw, rules = ctx.order, record.raw, ctx.rules
     rigid = [d for d in sub.draws if d.kind == "packed" and not d.skinned]
     skins = [d for d in sub.draws if d.kind == "packed" and d.skinned]
     old_rigid = [d for d in old.draws if d.kind == "packed" and not d.skinned]
@@ -396,8 +644,8 @@ def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject)
         raise FormatError(f"{sub.label}: adding or removing packed lists is not described (Q376)")
     fixed, old_fixed = _positions(rigid + skins), _positions(old_rigid + old_skins)
     moved = fixed != old_fixed
-    bias, scale = _fixed_point(sub, fixed, moved, ctx.has_bones)
-    if moved:
+    bias, scale = _fixed_point(sub, fixed, moved, ctx.has_bones, rules)
+    if moved or (bias, scale) != (tuple(sub.bias), tuple(sub.scale)):
         _pack(raw, order, "3f", SWITCH_SUB["bias"], *bias, field="sub-object bias")
         _pack(raw, order, "3f", SWITCH_SUB["scale"], *scale, field="sub-object step")
     triangles = moved
@@ -405,32 +653,21 @@ def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject)
         _set_bytes(record, SWITCH_SUB["packed"], encode_packed_vertices(draw, bias, scale, order))
         _pack(raw, order, "i", SWITCH_SUB["packed_count"], len(draw.positions), field="nPackVertCount (+0xA0)")
         triangles |= draw.indices != before.indices
-    skin_value = record.pairs.get(SWITCH_SUB["skins"])
-    skin_records = skin_value.block.elements if skin_value is not None and skin_value.block else []
-    for skin, draw, before in zip(skin_records, skins, old_skins):
-        stored = _block_bytes(skin.pairs.get(SKIN["vertices"]))
-        slots = [stored[i * PACKED_SKINNED + 28:i * PACKED_SKINNED + 32] for i in range(len(stored) // PACKED_SKINNED)]
-        if order == ">":
-            slots = [s[::-1] for s in slots]
-        changed = _set_bytes(skin, SKIN["vertices"], encode_packed_vertices(draw, bias, scale, order, slots))
-        changed |= _set_bytes(skin, SKIN["indices"], encode_indices(draw.indices, order))
-        if changed:  # W2-1, W2-6
-            _pack(skin.raw, order, "i", SKIN["vertex_count"], len(draw.positions), field="skinning nPackVertCount (+0x18)")
-            _pack(skin.raw, order, "i", SKIN["index_count"], len(draw.indices), field="skinning nPackIndexCount (+0x30)")
-            _pack(skin.raw, order, "i", SKIN["bones"], len(_block_bytes(skin.pairs.get(SKIN["palette"]))) // 4, field="skinning bone count (+0x00)")
-            start, end = SKIN["zero"]
-            skin.raw[start:end] = bytes(end - start)
-        triangles |= draw.indices != before.indices
+    skins_changed, skin_triangles, entries = _switch_skins(ctx, record, sub, skins, old_skins, bias, scale)
+    triangles |= skin_triangles
     fat_moved = sub.fat_draw is not None and old.fat_draw is not None and \
         sub.fat_draw.positions != old.fat_draw.positions
     if sub.fat_draw is not None and old.fat_draw is not None:
         triangles |= fat_moved or sub.fat_draw.indices != old.fat_draw.indices
     _fat_and_pools(ctx, record, sub, old, rigid[0].indices if rigid else None, SWITCH_SUB["index"])
-    old_n = sum(len(d.positions) for d in old_skins) or (
-        len(old.fat_draw.positions) if old.fat_draw is not None and ctx.has_bones else 0)
-    new_n = sum(len(d.positions) for d in skins) or (
-        len(sub.fat_draw.positions) if sub.fat_draw is not None and ctx.has_bones else 0)
-    _resize_influences(record, SWITCH_SUB["influence"], old_n, new_n)
+    if "W13-6" in rules and skins and skins_changed:
+        _set_bytes(record, SWITCH_SUB["influence"], entries)  # W13-6: vertex order (Q399)
+    else:
+        old_n = sum(len(d.positions) for d in old_skins) or (
+            len(old.fat_draw.positions) if old.fat_draw is not None and ctx.has_bones else 0)
+        new_n = sum(len(d.positions) for d in skins) or (
+            len(sub.fat_draw.positions) if sub.fat_draw is not None and ctx.has_bones else 0)
+        _resize_influences(record, SWITCH_SUB["influence"], old_n, new_n)
     if moved:
         _write_box(raw, order, SWITCH_SUB["box"], _decoded(fixed, bias, scale))
     elif fat_moved and not fixed:
@@ -438,8 +675,30 @@ def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject)
     return moved or fat_moved, triangles
 
 
+def _ps3_ranges(ctx: _Context, draw: Draw, before: Draw, same: bool, label: str):
+    """W13-4: the bone ranges of a skinned draw and the slots to encode it with. B is the weighted
+    bones plus, for an unchanged draw, the bones its stored zero-weight slots name; a changed draw
+    writes zero-weight slots as 0."""
+    bones: set = set()
+    for i in range(len(draw.positions)):
+        bones |= _vertex_bones(draw, i)
+    old_palette = before.palette or []
+    if same and before.local_joints is not None:
+        for weights, slots in zip(before.weights, before.local_joints):
+            bones.update(old_palette[s] for w, s in zip(weights, slots) if not w and s < len(old_palette))
+    for bone in bones:
+        ctx.check_bone(bone, label, "W13-4")
+    ranges = ps3_bone_ranges(bones)
+    palette = ranges_palette(ranges)
+    slots = None
+    if same and before.local_joints is not None:
+        slots = [tuple(palette.index(old_palette[s]) if s < len(old_palette) and old_palette[s] in palette else 0
+                       for s in vertex) for vertex in before.local_joints]
+    return ranges, dataclasses.replace(draw, palette=palette), slots
+
+
 def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) -> tuple[bool, bool]:
-    order, raw = ctx.order, record.raw
+    order, raw, rules = ctx.order, record.raw, ctx.rules
     fat, old_fat = sub.fat_draw, old.fat_draw
     draws = [d for d in sub.draws if d.kind == "ps3"]
     old_draws = [d for d in old.draws if d.kind == "ps3"]
@@ -449,31 +708,66 @@ def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) ->
         raise FormatError(f"{sub.label}: adding or removing draws is not described (Q376)")
     fixed, old_fixed = _positions(draws), _positions(old_draws)
     moved = fixed != old_fixed
-    bias, scale = _fixed_point(sub, fixed, moved, ctx.has_bones)
-    if moved:
+    bias, scale = _fixed_point(sub, fixed, moved, ctx.has_bones, rules)
+    if moved or (bias, scale) != (tuple(sub.bias), tuple(sub.scale)):
         _pack(raw, order, "3f", PS3_SUB["bias"], *bias, field="sub-object bias")
         _pack(raw, order, "3f", PS3_SUB["scale"], *scale, field="sub-object step")
     triangles = moved
+    kept, kept_draws = [], []
+    changed_mesh = moved
     for k, (draw_record, draw, before) in enumerate(zip(records, draws, old_draws)):
-        blocks = encode_ps3_draw(draw, bias, scale, before.local_joints)
+        same = _same_draw(draw, before)
         triangles |= draw.indices != before.indices
-        if all(_block_bytes(draw_record.pairs.get(DRAW[name])) == blocks[name]
-               for name in ("descriptor", "indices", "a", "b", "c")):
+        changed_mesh |= not same
+        if _empty(draw) and not (same and _empty(before)):
+            _empty_record(ctx, sub, "ps3 draw")
+            triangles = True
             continue
-        words = _ps3_draw_words(draw_record, blocks, len(draw.positions), len(draw.indices),
-                                f"{sub.label}, draw {k}")
-        for name in ("descriptor", "indices", "a", "b", "c"):
-            _set_bytes(draw_record, DRAW[name], blocks[name])
+        label = f"{sub.label}, draw {k}"
+        stored_ranges = struct.unpack_from(">4H", draw_record.raw, PS3_RANGES)
+        ranges, slots = stored_ranges, before.local_joints
+        if draw.skinned and "W13-4" in rules:
+            ranges, draw, slots = _ps3_ranges(ctx, draw, before, same, label)
+        blocks = encode_ps3_draw(draw, bias, scale, slots)
+        work = None
+        if draw.skinned and "W13-1" in rules:
+            work = ps3_skinned_work_size(len(draw.positions), len(draw.indices), blocks["descriptor"][1], ranges)
+            if work > PS3_WORK_LIMIT:
+                raise FormatError(f"{label}: skinned draw work buffer {work} is above 0xC000 (W13-1)")
+        kept.append(draw_record)
+        kept_draws.append(draw)
         r = draw_record.raw
-        for name, fmt, values in words:
-            _pack(r, ">", fmt, DRAW[name], *values, field=name)
+        if not all(_block_bytes(draw_record.pairs.get(DRAW[name])) == blocks[name]
+                   for name in ("descriptor", "indices", "a", "b", "c")):
+            words = _ps3_draw_words(draw_record, blocks, len(draw.positions), len(draw.indices), label, work)
+            for name in ("descriptor", "indices", "a", "b", "c"):
+                _set_bytes(draw_record, DRAW[name], blocks[name])
+            for name, fmt, values in words:
+                _pack(r, ">", fmt, DRAW[name], *values, field=name)
+        elif work is not None:
+            _pack(r, ">", "I", DRAW["work"], work, field=f"{label}: work-buffer size (+0x98, W13-1)")
+        if tuple(ranges) != tuple(stored_ranges):
+            _pack(r, ">", "4H", PS3_RANGES, *ranges, field=f"{label}: bone ranges (+0x60, W13-4)")
+    if len(kept) != len(records):  # W13-7: dropped draws
+        record.pairs[PS3_SUB["draws"]] = L.PairValue(L.Block(elements=kept) if kept else None)
+        _pack(raw, order, "i", PS3_SUB["draw_count"], len(kept), field="draw count (+0xFC)")
     fat_moved = fat is not None and old_fat is not None and fat.positions != old_fat.positions
     if fat is not None and old_fat is not None:
         triangles |= fat_moved or fat.indices != old_fat.indices
+        changed_mesh |= fat_moved or fat.indices != old_fat.indices
     _fat_and_pools(ctx, record, sub, old, None, PS3_SUB["index"])
-    old_n = sum(len(d.positions) for d in old_draws) or (len(old_fat.positions) if old_fat else 0)
-    new_n = sum(len(d.positions) for d in draws) or (len(fat.positions) if fat else 0)
-    _resize_influences(record, PS3_SUB["influence"], old_n, new_n)
+    if "W13-6" in rules and changed_mesh:
+        # W13-6: present exactly in sub-objects owning fat vertices in a file with bones; 6 x the
+        # skinned draws' vertices, else 6 x the fat vertices; stored entries kept (Q400)
+        fat_n = len(fat.positions) if fat is not None else 0
+        skinned_n = sum(len(d.positions) for d in kept_draws if d.skinned)
+        want = INFLUENCE_RECORD * (skinned_n or fat_n) if fat_n and ctx.has_bones else 0
+        stored = _block_bytes(record.pairs.get(PS3_SUB["influence"]))
+        _set_bytes(record, PS3_SUB["influence"], stored[:want] + bytes(max(0, want - len(stored))))
+    else:
+        old_n = sum(len(d.positions) for d in old_draws) or (len(old_fat.positions) if old_fat else 0)
+        new_n = sum(len(d.positions) for d in draws) or (len(fat.positions) if fat else 0)
+        _resize_influences(record, PS3_SUB["influence"], old_n, new_n)
     if moved:
         _write_box(raw, order, PS3_SUB["box"], _decoded(fixed, bias, scale))
     elif fat_moved and not fixed:
@@ -481,16 +775,18 @@ def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) ->
     return moved or fat_moved, triangles
 
 
-def _ps3_draw_words(record: L.Record, blocks: dict, nv: int, nidx: int, label: str) -> list:
+def _ps3_draw_words(record: L.Record, blocks: dict, nv: int, nidx: int, label: str, work: int | None = None) -> list:
     """W2-9, W2-10: the record words of a changed ps3 draw, every one checked before anything is
     written: the work buffer (0xC000) first, then the stream sizes (each at most 0x4000, G1-5),
-    then the 16-bit index-pair pieces and size words."""
+    then the 16-bit index-pair pieces and size words. ``work`` is a value already derived and
+    checked (W13-1)."""
     fmt = blocks["descriptor"][0]
-    stored_work = struct.unpack_from(">I", record.raw, DRAW["work"])[0]
-    try:
-        work = ps3_work_size(fmt, nv, nidx, stored_work)
-    except FormatError as exc:
-        raise FormatError(f"{label}: {exc}") from None
+    if work is None:
+        stored_work = struct.unpack_from(">I", record.raw, DRAW["work"])[0]
+        try:
+            work = ps3_work_size(fmt, nv, nidx, stored_work)
+        except FormatError as exc:
+            raise FormatError(f"{label}: {exc}") from None
     a_size, b_size = len(blocks["a"]), len(blocks["b"])
     for name, size in (("stream A", a_size), ("stream B", b_size)):
         if size > PS3_PIECE:
@@ -510,7 +806,8 @@ def _ps3_draw_words(record: L.Record, blocks: dict, nv: int, nidx: int, label: s
 
 def _structure(ctx: _Context, records: list[L.Record], box_at: int) -> None:
     """W2-11: the union of the geo-set-0 sub-object boxes and a sphere around its centre reaching
-    the farthest corner of any sub-object box. W2-13: an empty octree when triangles changed."""
+    the farthest corner of any sub-object box. W2-13: an empty octree when triangles changed
+    (without W13-3; with it the octree is built again, ``_rebuild_octree``)."""
     top, order = ctx.tree.top, ctx.order
     if ctx.geo0_moved:
         boxes = []
@@ -529,15 +826,49 @@ def _structure(ctx: _Context, records: list[L.Record], box_at: int) -> None:
                     point = [b[k] + (b[k + 3] if corner >> k & 1 else -b[k + 3]) for k in range(3)]
                     radius = max(radius, math.dist(point, centre))
             _pack(top.raw, order, "4f", STRUCT_SPHERE, *centre, radius, field="structure sphere")
-    if ctx.geo0_triangles:
+    if ctx.geo0_triangles and "W13-3" not in ctx.rules:
         top.raw[STRUCT_OCTREE:STRUCT_OCTREE + OCTREE_COUNTS] = bytes(OCTREE_COUNTS)
         for offset in OCTREE_PAIRS:
             top.pairs[offset] = L.PairValue(None)
 
 
-def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None) -> L.SnoTree:
+def changed_mesh_octree(mesh: AppearanceFile, stored: O.Octree | None) -> O.Octree | None:
+    """W13-3, rule for a changed mesh: keep the stored root cube when the new primitives' box
+    fits inside it, else a derived root (doubled while a primitive would lie on its open high
+    face, Q397); build the tree by the subdivision rule. Without primitives: no octree when none
+    was stored, else the stored root with 8 empty leaves and the stored maxima, raised to the
+    counts where needed (Q396, V15-4, V15-5)."""
+    triangles = O.octree_triangles(mesh)
+    if not triangles:
+        if stored is None:
+            return None
+        empty = O.build_octree(mesh, stored.root, triangles)
+        empty.maxima = O.raised_maxima(stored.maxima, empty)
+        return empty
+    if stored is not None and O.root_holds(stored.root, triangles):
+        return O.build_octree(mesh, stored.root, triangles)
+    low, size = O.derived_root(triangles)
+    centre = [low[k] + size / 2 for k in range(3)]
+    while not O.root_holds((low, size), triangles):
+        size *= 2
+        low = tuple(O.f32(centre[k] - size / 2) for k in range(3))
+    return O.build_octree(mesh, (low, size), triangles)
+
+
+def _rebuild_octree(tree: L.SnoTree, stored: O.Octree | None) -> None:
+    """W13-3 in the writer: the tree is laid out, read back, and its octree built from the mesh
+    as written (decoded positions), then stored as new blocks."""
+    mesh = parse_appearance(L.write_tree(tree), tree.build)
+    O.set_octree(tree, changed_mesh_octree(mesh, stored))
+
+
+def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None, derive=False) -> L.SnoTree:
     """W2-1 to W2-15: the structure tree of ``app``'s source with every mesh block of ``mesh`` (a
-    decoded ``.app``, by default ``app`` itself, changed by the caller) encoded again."""
+    decoded ``.app``, by default ``app`` itself, changed by the caller) encoded again.
+    ``derive`` (True, or rule names of ``RULES``) applies the stage-13 rules: W13-1, W13-2 and
+    W13-4 derive the values the writer otherwise keeps; W13-3, W13-5 and W13-6 apply to changed
+    meshes; W13-7 drops empty skinning records and skinned draws (else they are refused)."""
+    rules = rule_set(derive)
     mesh = app if mesh is None else mesh
     if mesh.build != app.build:
         raise FormatError(f"mesh of build {mesh.build} for an .app of build {app.build}")
@@ -545,8 +876,9 @@ def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None) -> L.
     tree = L.parse_tree(source, "app", app.build)
     for path, data in app.block_edits.items():
         L.set_block(tree, path, data)
+    stored_octree = O.read_octree(tree)
     old = parse_appearance(source, app.build)
-    ctx = _Context(app, tree, old)
+    ctx = _Context(app, tree, old, rules)
     sub_fn = _ps3_sub if app.build == "ps3" else _switch_sub
     box_at = (PS3_SUB if app.build == "ps3" else SWITCH_SUB)["box"]
     geo0_records: list[L.Record] = []
@@ -567,20 +899,30 @@ def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None) -> L.
     _set_bytes(tree.top, index_at, bytes(ctx.index_pool))
     _set_bytes(tree.top, vertex_at, bytes(ctx.vertex_pool))
     _structure(ctx, geo0_records, box_at)
+    if ctx.geo0_triangles and "W13-3" in rules:
+        _rebuild_octree(tree, stored_octree)
     return tree
 
 
-def write_app_mesh(app: AppearanceFile, mesh: AppearanceFile | None = None, check: bool = True) -> bytes:
+def write_app_mesh(app: AppearanceFile, mesh: AppearanceFile | None = None, check: bool = True,
+                   derive=False) -> bytes:
     """Encode ``mesh`` (default: ``app`` as changed by the caller) into ``app``'s ``.app`` and lay
-    it out (W2-1 to W2-15, W11). An unchanged mesh gives the source bytes. With ``check`` the
-    output is read again and must give the same counts."""
-    out = L.write_tree(app_mesh_tree(app, mesh))
+    it out (W2-1 to W2-15, W11; ``derive``: the W13 rules, see ``app_mesh_tree``). An unchanged
+    mesh gives the source bytes (with ``derive`` too, for a file that follows the rules). With
+    ``check`` the output is read again and must give the same counts (the same index count per
+    sub-object when W13-5 or W13-7 may split or drop records)."""
+    rules = rule_set(derive)
+    out = L.write_tree(app_mesh_tree(app, mesh, rules))
     if check:
         again = parse_appearance(out, app.build)
         mesh = app if mesh is None else mesh
         for a, b in zip(again.sub_objects + again.extra_sub_objects, mesh.sub_objects + mesh.extra_sub_objects):
-            if [len(d.positions) for d in a.draws] != [len(d.positions) for d in b.draws] or \
-                    [len(d.indices) for d in a.draws] != [len(d.indices) for d in b.draws]:
+            if rules & {"W13-5", "W13-7"}:
+                same = sum(len(d.indices) for d in a.draws) == sum(len(d.indices) for d in b.draws)
+            else:
+                same = [len(d.positions) for d in a.draws] == [len(d.positions) for d in b.draws] and \
+                    [len(d.indices) for d in a.draws] == [len(d.indices) for d in b.draws]
+            if not same:
                 raise FormatError(f"{b.label}: the written mesh does not read back with its counts")
     return out
 
@@ -599,8 +941,10 @@ def index_pool_problems(app: AppearanceFile) -> list[str]:
 
 
 __all__ = [
-    "app_mesh_tree", "encode_fat_vertices", "encode_indices", "encode_packed_vertices",
-    "encode_ps3_draw", "fixed_point_bias", "fixed_point_steps", "index_pool_problems",
-    "normal_bytes", "ps3_command_space", "ps3_work_size", "raw_coordinates", "skin_slots",
-    "uv1_words", "write_app_mesh",
+    "RULES", "app_mesh_tree", "changed_mesh_octree", "encode_fat_vertices", "encode_indices",
+    "encode_packed_vertices", "encode_ps3_draw", "first_use_palette", "fixed_point_bias",
+    "fixed_point_steps", "index_pool_problems", "influence_entry", "normal_bytes",
+    "ps3_bone_ranges", "ps3_command_space", "ps3_skinned_work_size", "ps3_work_size",
+    "quantisation_steps", "ranges_palette", "raw_coordinates", "rule_set", "skin_slots",
+    "split_skinned_draw", "uv1_words", "write_app_mesh",
 ]

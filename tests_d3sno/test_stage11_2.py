@@ -40,7 +40,7 @@ def block(app, path):
 
 class Marker(unittest.TestCase):
     def test_version(self):
-        self.assertTrue(d3sno.__version__.startswith(("0.11.", "0.12.")))
+        self.assertGreaterEqual(tuple(int(x) for x in d3sno.__version__.split(".")), (0, 11))
         self.assertGreaterEqual(d3sno.STAGE, 11)
 
 

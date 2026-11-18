@@ -76,8 +76,8 @@ def ps3(**options):
 
 class Marker(unittest.TestCase):
     def test_version(self):
-        self.assertTrue(d3sno.__version__.startswith("0.12."))
-        self.assertEqual(d3sno.STAGE, 12)
+        self.assertGreaterEqual(tuple(int(x) for x in d3sno.__version__.split(".")), (0, 12))
+        self.assertGreaterEqual(d3sno.STAGE, 12)
 
 
 # --- Section 1: the mesh-level .app writer --------------------------------------------------------

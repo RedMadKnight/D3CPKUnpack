@@ -39,8 +39,8 @@ def ps3_skinned():
 
 class Marker(unittest.TestCase):
     def test_version(self):
-        self.assertEqual(d3sno.__version__, "0.12.1")
-        self.assertEqual(d3sno.STAGE, 12)
+        self.assertGreaterEqual(tuple(int(x) for x in d3sno.__version__.split(".")), (0, 12, 1))
+        self.assertGreaterEqual(d3sno.STAGE, 12)
 
 
 class Words(unittest.TestCase):
