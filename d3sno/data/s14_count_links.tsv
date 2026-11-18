@@ -1,0 +1,570 @@
+build	ext	record	pair_offset	pair_kind	element	count_offset	count_is	instances	max_elements	status
+switch	acr	ActorDefinition	0x78	array	MsgTriggeredEvent	0x80	elements	19009	30	PROVEN
+switch	ais	AIStateDefinition	0x20	array	AIEntry	0x10	elements	1120	67	PROVEN
+switch	ais	AIStateDefinition	0x38	array	AIEntry	0x28	elements	1120	2	PROVEN
+switch	an2	Animation2DDefinition	0x30	array	Anim2DFrame	0x2C	elements	16	64	PROVEN
+switch	ani	AnimPermutation	0x7C	array	BoneName	0x78	elements	17701	208	PROVEN
+switch	ani	AnimPermutation	0x98	array	BoneBlendWeights	0x90	elements	17701	120	PROVEN
+switch	ani	AnimPermutation	0xAC	array	TranslationCurve	0x78	elements	17701	208	PROVEN
+switch	ani	AnimPermutation	0xC0	array	RotationCurve	0x78	elements	17701	208	PROVEN
+switch	ani	AnimPermutation	0xD0	array	ScaleCurve	0x78	elements	17701	208	PROVEN
+switch	ani	AnimPermutation	0x124	array	KeyframedAttachment	0x12C	elements	17701	71	PROVEN
+switch	ani	AnimPermutation	0x138	array	VECTOR3D	0xA8	elements	17701	2401	PROVEN
+switch	ani	AnimationDefinition	0x18	array	AnimPermutation	0x20	elements	15824	10	PROVEN
+switch	ant	AnimTreeDefinition	0x18	array	AnimTreeLeaf	0x14	elements	4	19	HYPOTHESIS
+switch	ant	AnimTreeDefinition	0x2C	array	AnimTreeNode	0x28	elements	4	13	HYPOTHESIS
+switch	ant	AnimTreeDefinition	0x44	array	INT	0x40	elements	4	2	HYPOTHESIS
+switch	con	ConductorDefinition	0x20	array	ConductorPhase	0xC	elements	631	16	PROVEN
+switch	con	ConductorPhase	0x10	array	ConductorSequence	0x18	elements	2213	16	PROVEN
+switch	efg	EffectGroupDefinition	0x10	array	EffectItem	0x18	elements	6222	28	PROVEN
+switch	fnt	FontDefinition	0xA8	array	FontConsoleTexture	0xB8	elements	21	723	PROVEN
+switch	fnt	FontDefinition	0xC0	array	FontPointSizeData	0xBC	elements	21	25	PROVEN
+switch	fnt	FontPointSizeData	0x40	array	FontConsoleKerning	0x38	elements	249	312	PROVEN
+switch	glo	GlobalDefinition	0xF8	array	BannerTexturePair	0x19C	elements-1	1	101	HYPOTHESIS
+switch	glo	GlobalDefinition	0x170	array	EpicBannerDescription	0x48	elements	1	3	HYPOTHESIS (several candidates)
+switch	glo	GlobalDefinition	0x170	array	EpicBannerDescription	0x1FC	elements	1	3	HYPOTHESIS (several candidates)
+switch	glo	GlobalDefinition	0x170	array	EpicBannerDescription	0x344	elements-1	1	3	HYPOTHESIS (several candidates)
+switch	glo	GlobalDefinition	0x170	array	EpicBannerDescription	0x3C8	elements	1	3	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x3F8	array	AngleNode	0x130	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x3F8	array	AngleNode	0x160	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x3F8	array	AngleNode	0x3A0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x3F8	array	AngleNode	0x3D0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x68	array	FloatNode	0x40	elements	1486	6	PROVEN
+switch	lit	LightDefinition	0x428	array	ColorNode	0x400	elements	1486	7	PROVEN
+switch	lit	LightDefinition	0x458	array	FloatNode	0x430	elements	1486	6	PROVEN
+switch	lit	LightDefinition	0x488	array	ColorNode	0x460	elements	1486	9	PROVEN
+switch	lit	LightDefinition	0x4B8	array	FloatNode	0x490	elements	1486	27	PROVEN
+switch	lit	LightDefinition	0x4E8	array	ColorNode	0x4C0	elements	1486	5	PROVEN
+switch	lit	LightDefinition	0x518	array	FloatNode	0x4F0	elements	1486	7	PROVEN
+switch	lit	LightDefinition	0x98	array	FloatNode	0x70	elements	1486	12	PROVEN
+switch	lit	LightDefinition	0xC8	array	FloatNode	0xA0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xC8	array	FloatNode	0xD0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xC8	array	FloatNode	0x2E0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xC8	array	FloatNode	0x310	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xC8	array	FloatNode	0x340	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xC8	array	FloatNode	0x370	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xF8	array	FloatNode	0xA0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xF8	array	FloatNode	0xD0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xF8	array	FloatNode	0x2E0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xF8	array	FloatNode	0x310	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xF8	array	FloatNode	0x340	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0xF8	array	FloatNode	0x370	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x128	array	FloatNode	0x100	elements	1486	7	PROVEN
+switch	lit	LightDefinition	0x158	array	AngleNode	0x130	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x158	array	AngleNode	0x160	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x158	array	AngleNode	0x3A0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x158	array	AngleNode	0x3D0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x188	array	AngleNode	0x130	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x188	array	AngleNode	0x160	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x188	array	AngleNode	0x3A0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x188	array	AngleNode	0x3D0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x1B8	array	ColorNode	0x190	elements	1486	8	PROVEN
+switch	lit	LightDefinition	0x1E8	array	FloatNode	0x1C0	elements	1486	13	PROVEN
+switch	lit	LightDefinition	0x218	array	ColorNode	0x1F0	elements	1486	8	PROVEN
+switch	lit	LightDefinition	0x248	array	FloatNode	0x220	elements	1486	29	PROVEN
+switch	lit	LightDefinition	0x278	array	ColorNode	0x250	elements	1486	8	PROVEN
+switch	lit	LightDefinition	0x2A8	array	FloatNode	0x280	elements	1486	13	PROVEN
+switch	lit	LightDefinition	0x308	array	FloatNode	0xA0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x308	array	FloatNode	0xD0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x308	array	FloatNode	0x2E0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x308	array	FloatNode	0x310	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x308	array	FloatNode	0x340	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x308	array	FloatNode	0x370	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x338	array	FloatNode	0xA0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x338	array	FloatNode	0xD0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x338	array	FloatNode	0x2E0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x338	array	FloatNode	0x310	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x338	array	FloatNode	0x340	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x338	array	FloatNode	0x370	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x368	array	FloatNode	0xA0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x368	array	FloatNode	0xD0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x368	array	FloatNode	0x2E0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x368	array	FloatNode	0x310	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x368	array	FloatNode	0x340	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x368	array	FloatNode	0x370	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x398	array	FloatNode	0xA0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x398	array	FloatNode	0xD0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x398	array	FloatNode	0x2E0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x398	array	FloatNode	0x310	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x398	array	FloatNode	0x340	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x398	array	FloatNode	0x370	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x3C8	array	AngleNode	0x130	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x3C8	array	AngleNode	0x160	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x3C8	array	AngleNode	0x3A0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lit	LightDefinition	0x3C8	array	AngleNode	0x3D0	elements	1486	2	HYPOTHESIS (several candidates)
+switch	lvl	LevelAreaServerData	0x358	array	LevelAreaSpawnPopulation	0x34C	elements	709	98	PROVEN
+switch	lvl	LevelAreaSpawnGroup	0x20	array	LevelAreaSpawnItem	0x10	elements	8743	6	PROVEN
+switch	lvl	LevelAreaSpawnPopulation	0x78	array	LevelAreaSpawnGroup	0x6C	elements	627	172	PROVEN
+switch	mon	MonsterChampionSpawnGroup	0x10	array	MonsterChampionSpawnItem	0x0	elements	5900	3	PROVEN
+switch	mon	MonsterDefinition	0x4A0	array	MonsterMinionSpawnGroup	0x490	elements	3102	5	PROVEN
+switch	mon	MonsterDefinition	0x4B8	array	MonsterChampionSpawnGroup	0x4A8	elements	3102	2	PROVEN
+switch	mon	MonsterMinionSpawnGroup	0x10	array	MonsterMinionSpawnItem	0x4	elements	4193	3	PROVEN
+switch	mrk	Marker	0x44	array	MarkerLink	0x40	elements	171298	124	PROVEN
+switch	mrk	MarkerSetDefinition	0xB4	array	WORD	0xB0	elements	19103	158	PROVEN
+switch	mus	MusicDefinition	0x1C	array	PlaylistEntry	0x24	elements	549	159	PROVEN
+switch	phm	CollisionMesh	0x50	array	dmFloat4	0x40	elements	4204	89680	PROVEN
+switch	phm	CollisionMesh	0x58	array	dmMeshTriangle	0x44	elements	4204	111070	PROVEN
+switch	phm	CollisionMesh	0x60	array	dmMeshNode	0x3C	elements	4204	74545	PROVEN
+switch	phm	PhysMeshDefinition	0x14	array	CollisionMesh	0x10	elements	2651	5	PROVEN
+switch	prt	AccelVectorPath	0x28	array	AccelVectorNode	0x0	elements	6400	9	PROVEN
+switch	prt	AnglePath	0x28	array	AngleNode	0x0	elements	5936	19	PROVEN
+switch	prt	AngularVelocityPath	0x28	array	AngularVelocityNode	0x0	elements	11650	8	PROVEN
+switch	prt	ColorPath	0x28	array	ColorNode	0x0	elements	14527	10	PROVEN
+switch	prt	FloatPath	0x28	array	FloatNode	0x0	elements	101991	31	PROVEN
+switch	prt	IntPath	0x28	array	IntNode	0x0	elements	19416	17	PROVEN
+switch	prt	ParticleDefinition	0x2AC	array	MsgTriggeredEvent	0x2B4	elements	21142	12	PROVEN
+switch	prt	TimePath	0x28	array	TimeNode	0x0	elements	19058	5	PROVEN
+switch	prt	VectorPath	0x28	array	VectorNode	0x0	elements	28189	22	PROVEN
+switch	prt	VelocityPath	0x28	array	VelocityNode	0x0	elements	22314	21	PROVEN
+switch	prt	VelocityVectorPath	0x28	array	VelocityVectorNode	0x0	elements	13657	13	PROVEN
+switch	qsr	QuestRangeDefinition	0x18	array	QuestRange	0xC	elements	1336	4	PROVEN
+switch	qst	QuestDefinition	0x68	array	QuestCompletionStep	0x14	elements	1148	2	PROVEN
+switch	qst	QuestDefinition	0x58	array	QuestStep	0x10	elements	1148	19	PROVEN
+switch	rop	RopeDefinition	0x410	array	FloatNode	0x3E8	elements	280	5	PROVEN
+switch	rop	RopeDefinition	0x440	array	FloatNode	0x418	elements	280	5	PROVEN
+switch	rop	RopeDefinition	0x448	array	MsgTriggeredEvent	0x450	elements	280	12	PROVEN
+switch	rop	RopeDefinition	0xD8	array	ColorNode	0xB0	elements	280	4	PROVEN
+switch	rop	RopeDefinition	0x108	array	ColorNode	0xE0	elements	280	5	PROVEN
+switch	rop	RopeDefinition	0x138	array	FloatNode	0x110	elements	280	8	PROVEN
+switch	rop	RopeDefinition	0x168	array	FloatNode	0x140	elements	280	11	PROVEN
+switch	rop	RopeDefinition	0x198	array	FloatNode	0x170	elements	280	6	PROVEN
+switch	rop	RopeDefinition	0x1C8	array	FloatNode	0x1A0	elements	280	7	PROVEN
+switch	rop	RopeDefinition	0x1F8	array	FloatNode	0x1D0	elements	280	3	PROVEN
+switch	rop	RopeDefinition	0x228	array	FloatNode	0x200	elements	280	5	PROVEN
+switch	rop	RopeDefinition	0x258	array	FloatNode	0x230	elements	280	3	PROVEN
+switch	rop	RopeDefinition	0x288	array	FloatNode	0x260	elements	280	7	PROVEN
+switch	rop	RopeDefinition	0x2B8	array	FloatNode	0x290	elements	280	5	PROVEN
+switch	rop	RopeDefinition	0x2E8	array	FloatNode	0x2C0	elements	280	4	PROVEN
+switch	rop	RopeDefinition	0x318	array	VectorNode	0x2F0	elements	280	5	PROVEN
+switch	rop	RopeDefinition	0x348	array	VelocityNode	0x320	elements	280	5	PROVEN
+switch	rop	RopeDefinition	0x380	array	FloatNode	0x358	elements	280	7	PROVEN
+switch	rop	RopeDefinition	0x3B0	array	FloatNode	0x388	elements	280	8	PROVEN
+switch	rop	RopeDefinition	0x3E0	array	FloatNode	0x3B8	elements	280	6	PROVEN
+switch	sbk	SoundBankDefinition	0xC	array	SoundSample	0x20	elements	4530	998	PROVEN
+switch	scn	SceneDefinition	0x168	array	MsgTriggeredEvent	0x170	elements	3753	20	PROVEN
+switch	scn	SceneDefinition	0x190	array	NavCell	0x180	elements	3753	999	PROVEN
+switch	scn	SceneDefinition	0x1A8	array	NavCellLookup	0x198	elements	3753	5772	PROVEN
+switch	scn	SceneDefinition	0x1E8	array	NavCellLookup	0x1D8	elements	3753	9582	PROVEN
+switch	scn	SceneDefinition	0x200	array	NavCellBorderData	0x1F0	elements	3753	84	PROVEN
+switch	shd	RenderPass	0x70	array	TextureStageParams	0x6C	elements	1896	18	PROVEN
+switch	shd	ShaderDefinition	0x18	array	RenderPass	0x14	elements	1564	4	PROVEN
+switch	shk	ShakeDefinition	0x78	array	VectorNode	0x50	elements	350	14	PROVEN
+switch	shk	ShakeDefinition	0xA8	array	AngleNode	0x80	elements	350	9	PROVEN
+switch	shk	ShakeDefinition	0xD8	array	FloatNode	0xB0	elements	350	5	PROVEN
+switch	shk	ShakeDefinition	0x108	array	AngleNode	0xE0	elements	350	9	PROVEN
+switch	shk	ShakeDefinition	0x138	array	FloatNode	0x110	elements	350	5	PROVEN
+switch	shk	ShakeDefinition	0x168	array	AngleNode	0x140	elements	350	7	PROVEN
+switch	shk	ShakeDefinition	0x198	array	FloatNode	0x170	elements	350	5	PROVEN
+switch	shk	ShakeDefinition	0x48	array	VectorNode	0x20	elements	350	8	PROVEN
+switch	snd	SoundDefinition	0x44	array	SoundPermutation	0x4C	elements	32310	101	PROVEN
+switch	trl	TrailDefinition	0x80	array	ColorNode	0x58	elements	297	4	PROVEN
+switch	trl	TrailDefinition	0xB0	array	FloatNode	0x88	elements	297	14	PROVEN
+switch	trl	TrailDefinition	0xE0	array	FloatNode	0xB8	elements	297	9	PROVEN
+switch	trl	TrailDefinition	0x50	array	ColorNode	0x28	elements	297	4	PROVEN
+switch	trs	TreasureClassDefinition	0x28	array	LootDropModifier	0x1C	elements	1239	44	PROVEN
+switch	ui	UIControlData	0x74	array	UIDataElementInt32	0x70	elements	15149	22	PROVEN
+switch	ui	UIControlData	0x8C	array	UIDataElementFloat32	0x88	elements	15149	4	PROVEN
+switch	ui	UIControlData	0xA4	array	UIStyleChildSpec	0xA0	elements	15149	56	PROVEN
+switch	ui	UIControlData	0xE4	array	UIAnimationElementInt32	0xE0	elements	15149	80	PROVEN
+switch	ui	UIControlData	0xFC	array	UIAnimationElementFloat	0xF8	elements	15149	40	PROVEN
+switch	ui	UIControlData	0x114	array	UIAnimationElementVector2D	0x110	elements	15149	15	PROVEN
+switch	ui	UIControlData	0x12C	array	UIAnimationDescription	0x128	elements	15149	24	PROVEN
+switch	ui	UIControlData	0x144	array	UIControlAnimationBinding	0x140	elements	15149	15	PROVEN
+switch	ui	UIControlData	0x5C	array	UIControlElement	0x58	elements	15149	23	PROVEN
+switch	ui	UIDialogDefinition	0x74	array	UIDataElementFloat32	0x70	elements	397	4	PROVEN
+switch	ui	UIDialogDefinition	0x14	array	UIControlData	0x10	elements	397	481	PROVEN
+switch	ui	UIDialogDefinition	0x2C	array	UIStyle	0x28	elements	397	28	PROVEN
+switch	ui	UIDialogDefinition	0x44	array	UIControlElement	0x40	elements	397	3	PROVEN
+switch	ui	UIDialogDefinition	0x5C	array	UIDataElementInt32	0x58	elements	397	199	PROVEN
+switch	ui	UIStyle	0x64	array	UIStyleChildSpec	0x60	elements	96	1	PROVEN
+switch	ui	UIStyle	0x1C	array	UIControlElement	0x18	elements	96	10	PROVEN
+switch	ui	UIStyle	0x34	array	UIDataElementInt32	0x30	elements	96	15	PROVEN
+switch	ui	UIStyle	0x4C	array	UIDataElementFloat32	0x48	elements	96	4	PROVEN
+switch	ui	UIStyleChildSpec	0x14	array	UIControlElement	0x10	elements	1041	7	PROVEN
+switch	ui	UIStyleChildSpec	0x2C	array	UIDataElementInt32	0x28	elements	1041	5	PROVEN
+switch	vib	VibrationDefinition	0x50	array	FloatNode	0x28	elements	15	4	PROVEN
+switch	wrl	DRLGParams	0x44	array	DRLGCommand	0x40	elements	362	254	PROVEN
+switch	wrl	DRLGParams	0x58	array	INT	0x40	elements	362	254	PROVEN
+switch	wrl	LabelRule	0xA8	array	LabelEntry	0x9C	elements	591	12	PROVEN
+switch	wrl	SceneCluster	0x90	array	SubSceneGroup	0x84	elements	90	6	PROVEN
+switch	wrl	SceneCluster	0xB0	array	SubSceneEntry	0xA0	elements	90	10	PROVEN
+switch	wrl	SceneParams	0x0	array	SceneChunk	0x8	elements	265	230	PROVEN
+switch	wrl	SubSceneEntry	0x18	array	SubSceneLabel	0x8	elements	491	4	PROVEN
+switch	wrl	SubSceneGroup	0x18	array	SubSceneEntry	0x8	elements	79	5	PROVEN
+switch	wrl	WorldServerData	0x30	array	LabelRule	0x20	elements	627	23	PROVEN
+switch	wrl	WorldServerData	0x50	array	SceneCluster	0x40	elements	627	23	PROVEN
+switch	wth	WeatherDefinition	0x70	array	VelocityVectorNode	0x48	elements	636	3	PROVEN
+switch	wth	WeatherDefinition	0xA8	array	FloatNode	0x80	elements	636	21	PROVEN
+switch	wth	WeatherDefinition	0x40	array	VelocityVectorNode	0x18	elements	636	8	PROVEN
+x360	acr	Actor	0x78	array	MsgTriggeredEvent	0x80	elements	14111	24	PROVEN
+x360	ais	AIState	0x20	array	AIEntry	0x10	elements	855	20	PROVEN
+x360	ais	AIState	0x38	array	AIEntry	0x28	elements	855	2	PROVEN
+x360	an2	Anim2D	0x30	array	Anim2DFrame	0x2C	elements	14	60	PROVEN
+x360	ani	Anim	0x18	array	AnimPermutation	0x20	elements	12673	10	PROVEN
+x360	ant	AnimTree	0x18	array	AnimTreeLeaf	0x14	elements	4	19	HYPOTHESIS
+x360	ant	AnimTree	0x2C	array	AnimTreeNode	0x28	elements	4	13	HYPOTHESIS
+x360	ant	AnimTree	0x44	array	INT	0x40	elements	4	2	HYPOTHESIS
+x360	con	Conductor	0x20	array	ConductorPhase	0xC	elements	461	16	PROVEN
+x360	con	ConductorPhase	0x10	array	ConductorSequence	0x18	elements	1653	16	PROVEN
+x360	efg	EffectGroup	0x10	array	EffectItem	0x18	elements	4742	28	PROVEN
+x360	fnt	Font	0xA8	array	FontConsoleTexture	0xB8	elements	5	49	PROVEN
+x360	fnt	Font	0xC0	array	FontPointSizeData	0xBC	elements	5	33	PROVEN
+x360	fnt	FontPointSizeData	0x40	array	FontConsoleKerning	0x38	elements	72	188	PROVEN
+x360	glo	Globals	0xB8	array	BannerTexturePair	0x2B4	elements-1	1	51	HYPOTHESIS
+x360	glo	Globals	0x170	array	EpicBannerDescription	0x48	elements	1	3	HYPOTHESIS (several candidates)
+x360	glo	Globals	0x170	array	EpicBannerDescription	0x1F4	elements	1	3	HYPOTHESIS (several candidates)
+x360	glo	Globals	0x170	array	EpicBannerDescription	0x30C	elements-1	1	3	HYPOTHESIS (several candidates)
+x360	glo	Globals	0x170	array	EpicBannerDescription	0x390	elements	1	3	HYPOTHESIS (several candidates)
+x360	lit	Light	0x3F8	array	AngleNode	0x130	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x3F8	array	AngleNode	0x160	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x3F8	array	AngleNode	0x3A0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x3F8	array	AngleNode	0x3D0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x68	array	FloatNode	0x40	elements	1178	6	PROVEN
+x360	lit	Light	0x428	array	ColorNode	0x400	elements	1178	7	PROVEN
+x360	lit	Light	0x458	array	FloatNode	0x430	elements	1178	6	PROVEN
+x360	lit	Light	0x488	array	ColorNode	0x460	elements	1178	9	PROVEN
+x360	lit	Light	0x4B8	array	FloatNode	0x490	elements	1178	27	PROVEN
+x360	lit	Light	0x4E8	array	ColorNode	0x4C0	elements	1178	5	PROVEN
+x360	lit	Light	0x518	array	FloatNode	0x4F0	elements	1178	7	PROVEN
+x360	lit	Light	0x98	array	FloatNode	0x70	elements	1178	12	PROVEN
+x360	lit	Light	0xC8	array	FloatNode	0xA0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xC8	array	FloatNode	0xD0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xC8	array	FloatNode	0x2E0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xC8	array	FloatNode	0x310	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xC8	array	FloatNode	0x340	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xC8	array	FloatNode	0x370	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xF8	array	FloatNode	0xA0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xF8	array	FloatNode	0xD0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xF8	array	FloatNode	0x2E0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xF8	array	FloatNode	0x310	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xF8	array	FloatNode	0x340	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0xF8	array	FloatNode	0x370	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x128	array	FloatNode	0x100	elements	1178	7	PROVEN
+x360	lit	Light	0x158	array	AngleNode	0x130	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x158	array	AngleNode	0x160	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x158	array	AngleNode	0x3A0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x158	array	AngleNode	0x3D0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x188	array	AngleNode	0x130	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x188	array	AngleNode	0x160	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x188	array	AngleNode	0x3A0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x188	array	AngleNode	0x3D0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x1B8	array	ColorNode	0x190	elements	1178	8	PROVEN
+x360	lit	Light	0x1E8	array	FloatNode	0x1C0	elements	1178	13	PROVEN
+x360	lit	Light	0x218	array	ColorNode	0x1F0	elements	1178	8	PROVEN
+x360	lit	Light	0x248	array	FloatNode	0x220	elements	1178	29	PROVEN
+x360	lit	Light	0x278	array	ColorNode	0x250	elements	1178	8	PROVEN
+x360	lit	Light	0x2A8	array	FloatNode	0x280	elements	1178	13	PROVEN
+x360	lit	Light	0x308	array	FloatNode	0xA0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x308	array	FloatNode	0xD0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x308	array	FloatNode	0x2E0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x308	array	FloatNode	0x310	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x308	array	FloatNode	0x340	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x308	array	FloatNode	0x370	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x338	array	FloatNode	0xA0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x338	array	FloatNode	0xD0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x338	array	FloatNode	0x2E0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x338	array	FloatNode	0x310	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x338	array	FloatNode	0x340	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x338	array	FloatNode	0x370	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x368	array	FloatNode	0xA0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x368	array	FloatNode	0xD0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x368	array	FloatNode	0x2E0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x368	array	FloatNode	0x310	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x368	array	FloatNode	0x340	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x368	array	FloatNode	0x370	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x398	array	FloatNode	0xA0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x398	array	FloatNode	0xD0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x398	array	FloatNode	0x2E0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x398	array	FloatNode	0x310	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x398	array	FloatNode	0x340	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x398	array	FloatNode	0x370	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x3C8	array	AngleNode	0x130	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x3C8	array	AngleNode	0x160	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x3C8	array	AngleNode	0x3A0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lit	Light	0x3C8	array	AngleNode	0x3D0	elements	1178	2	HYPOTHESIS (several candidates)
+x360	lvl	LevelAreaServerData	0x358	array	LevelAreaSpawnPopulation	0x34C	elements	466	62	PROVEN
+x360	lvl	LevelAreaSpawnGroup	0x20	array	LevelAreaSpawnItem	0x10	elements	7783	5	PROVEN
+x360	lvl	LevelAreaSpawnPopulation	0x78	array	LevelAreaSpawnGroup	0x6C	elements	566	126	PROVEN
+x360	mon	Monster#1360	0x4A0	array	MonsterMinionSpawnGroup	0x490	elements	2292	5	PROVEN
+x360	mon	Monster#1360	0x4B8	array	MonsterChampionSpawnGroup	0x4A8	elements	2292	2	PROVEN
+x360	mon	MonsterChampionSpawnGroup	0x10	array	MonsterChampionSpawnItem	0x0	elements	4580	3	PROVEN
+x360	mon	MonsterMinionSpawnGroup	0x10	array	MonsterMinionSpawnItem	0x4	elements	2990	3	PROVEN
+x360	mrk	Marker	0x44	array	MarkerLink	0x40	elements	124617	124	PROVEN
+x360	mrk	MarkerSet	0xB4	array	WORD	0xB0	elements	14730	157	PROVEN
+x360	mus	Music	0x1C	array	PlaylistEntry	0x24	elements	512	159	PROVEN
+x360	phm	CollisionMesh	0x50	array	dmFloat4	0x40	elements	3593	89680	PROVEN
+x360	phm	CollisionMesh	0x58	array	dmMeshTriangle	0x44	elements	3593	111070	PROVEN
+x360	phm	CollisionMesh	0x60	array	dmMeshNode	0x3C	elements	3593	74545	PROVEN
+x360	phm	PhysMesh	0x14	array	CollisionMesh	0x10	elements	2289	5	PROVEN
+x360	prt	AccelVectorPath	0x28	array	AccelVectorNode	0x0	elements	5386	9	PROVEN
+x360	prt	AnglePath	0x28	array	AngleNode	0x0	elements	5016	19	PROVEN
+x360	prt	AngularVelocityPath	0x28	array	AngularVelocityNode	0x0	elements	9576	8	PROVEN
+x360	prt	ColorPath	0x28	array	ColorNode	0x0	elements	11731	10	PROVEN
+x360	prt	FloatPath	0x28	array	FloatNode	0x0	elements	80164	31	PROVEN
+x360	prt	IntPath	0x28	array	IntNode	0x0	elements	14824	17	PROVEN
+x360	prt	Particle	0x29C	array	MsgTriggeredEvent	0x2A4	elements	16382	12	PROVEN
+x360	prt	TimePath	0x28	array	TimeNode	0x0	elements	15527	5	PROVEN
+x360	prt	VectorPath	0x28	array	VectorNode	0x0	elements	23122	22	PROVEN
+x360	prt	VelocityPath	0x28	array	VelocityNode	0x0	elements	17743	21	PROVEN
+x360	prt	VelocityVectorPath	0x28	array	VelocityVectorNode	0x0	elements	11179	13	PROVEN
+x360	qsr	QuestRange#32	0x18	array	QuestRange#16	0xC	elements	1334	4	PROVEN
+x360	qst	Quest	0x68	array	QuestCompletionStep	0x14	elements	629	2	PROVEN
+x360	qst	Quest	0x58	array	QuestStep	0x10	elements	629	19	PROVEN
+x360	rop	Rope	0x410	array	FloatNode	0x3E8	elements	210	5	PROVEN
+x360	rop	Rope	0x440	array	FloatNode	0x418	elements	210	5	PROVEN
+x360	rop	Rope	0x448	array	MsgTriggeredEvent	0x450	elements	210	12	PROVEN
+x360	rop	Rope	0xD8	array	ColorNode	0xB0	elements	210	4	PROVEN
+x360	rop	Rope	0x108	array	ColorNode	0xE0	elements	210	5	PROVEN
+x360	rop	Rope	0x138	array	FloatNode	0x110	elements	210	8	PROVEN
+x360	rop	Rope	0x168	array	FloatNode	0x140	elements	210	9	PROVEN
+x360	rop	Rope	0x198	array	FloatNode	0x170	elements	210	6	PROVEN
+x360	rop	Rope	0x1C8	array	FloatNode	0x1A0	elements	210	7	PROVEN
+x360	rop	Rope	0x1F8	array	FloatNode	0x1D0	elements	210	3	PROVEN
+x360	rop	Rope	0x228	array	FloatNode	0x200	elements	210	5	PROVEN
+x360	rop	Rope	0x258	array	FloatNode	0x230	elements	210	3	PROVEN
+x360	rop	Rope	0x288	array	FloatNode	0x260	elements	210	7	PROVEN
+x360	rop	Rope	0x2B8	array	FloatNode	0x290	elements	210	4	PROVEN
+x360	rop	Rope	0x2E8	array	FloatNode	0x2C0	elements	210	4	PROVEN
+x360	rop	Rope	0x318	array	VectorNode	0x2F0	elements	210	5	PROVEN
+x360	rop	Rope	0x348	array	VelocityNode	0x320	elements	210	5	PROVEN
+x360	rop	Rope	0x380	array	FloatNode	0x358	elements	210	7	PROVEN
+x360	rop	Rope	0x3B0	array	FloatNode	0x388	elements	210	8	PROVEN
+x360	rop	Rope	0x3E0	array	FloatNode	0x3B8	elements	210	6	PROVEN
+x360	sbk	SoundBank	0xC	array	SoundSample	0x20	elements	4228	998	PROVEN
+x360	scn	Scene	0x168	array	MsgTriggeredEvent	0x170	elements	2569	20	PROVEN
+x360	shd	RenderPass	0x70	array	TextureStageParams	0x6C	elements	1645	18	PROVEN
+x360	shd	Shaders	0x18	array	RenderPass	0x14	elements	1355	4	PROVEN
+x360	shk	Shakes	0x78	array	VectorNode	0x50	elements	390	6	PROVEN
+x360	shk	Shakes	0xA8	array	AngleNode	0x80	elements	390	9	PROVEN
+x360	shk	Shakes	0xD8	array	FloatNode	0xB0	elements	390	6	PROVEN
+x360	shk	Shakes	0x108	array	AngleNode	0xE0	elements	390	9	PROVEN
+x360	shk	Shakes	0x138	array	FloatNode	0x110	elements	390	5	PROVEN
+x360	shk	Shakes	0x168	array	AngleNode	0x140	elements	390	7	PROVEN
+x360	shk	Shakes	0x198	array	FloatNode	0x170	elements	390	5	PROVEN
+x360	shk	Shakes	0x48	array	VectorNode	0x20	elements	390	11	PROVEN
+x360	snd	Sound	0x44	array	SoundPermutation	0x4C	elements	28127	101	PROVEN
+x360	trl	Trail	0x80	array	ColorNode	0x58	elements	226	3	PROVEN
+x360	trl	Trail	0xB0	array	FloatNode	0x88	elements	226	14	PROVEN
+x360	trl	Trail	0xE0	array	FloatNode	0xB8	elements	226	9	PROVEN
+x360	trl	Trail	0x50	array	ColorNode	0x28	elements	226	4	PROVEN
+x360	trs	TreasureClass	0x20	array	LootDropModifier	0x14	elements	761	39	PROVEN
+x360	ui	UI	0x74	array	UIDataElementFloat32	0x70	elements	334	4	PROVEN
+x360	ui	UI	0x14	array	UIControlData	0x10	elements	334	461	PROVEN
+x360	ui	UI	0x2C	array	UIStyle	0x28	elements	334	18	PROVEN
+x360	ui	UI	0x44	array	UIControlElement	0x40	elements	334	3	PROVEN
+x360	ui	UI	0x5C	array	UIDataElementInt32	0x58	elements	334	199	PROVEN
+x360	ui	UIControlData	0x74	array	UIDataElementInt32	0x70	elements	11055	22	PROVEN
+x360	ui	UIControlData	0x8C	array	UIDataElementFloat32	0x88	elements	11055	4	PROVEN
+x360	ui	UIControlData	0xA4	array	UIStyleChildSpec	0xA0	elements	11055	56	PROVEN
+x360	ui	UIControlData	0xE4	array	UIAnimationElementInt32	0xE0	elements	11055	35	PROVEN
+x360	ui	UIControlData	0xFC	array	UIAnimationElementFloat	0xF8	elements	11055	38	PROVEN
+x360	ui	UIControlData	0x114	array	UIAnimationElementVector2D	0x110	elements	11055	15	PROVEN
+x360	ui	UIControlData	0x12C	array	UIAnimationDescription	0x128	elements	11055	24	PROVEN
+x360	ui	UIControlData	0x144	array	UIControlAnimationBinding	0x140	elements	11055	10	PROVEN
+x360	ui	UIControlData	0x5C	array	UIControlElement	0x58	elements	11055	23	PROVEN
+x360	ui	UIStyle	0x64	array	UIStyleChildSpec	0x60	elements	86	1	PROVEN
+x360	ui	UIStyle	0x1C	array	UIControlElement	0x18	elements	86	10	PROVEN
+x360	ui	UIStyle	0x34	array	UIDataElementInt32	0x30	elements	86	15	PROVEN
+x360	ui	UIStyle	0x4C	array	UIDataElementFloat32	0x48	elements	86	4	PROVEN
+x360	ui	UIStyleChildSpec	0x14	array	UIControlElement	0x10	elements	864	7	PROVEN
+x360	ui	UIStyleChildSpec	0x2C	array	UIDataElementInt32	0x28	elements	864	5	PROVEN
+x360	vib	Vibrations	0x50	array	FloatNode	0x28	elements	14	4	PROVEN
+x360	wrl	DRLGParams	0x44	array	DRLGCommand	0x40	elements	268	254	PROVEN
+x360	wrl	DRLGParams	0x58	array	INT	0x40	elements	268	254	PROVEN
+x360	wrl	LabelRule	0xA8	array	LabelEntry	0x9C	elements	476	12	PROVEN
+x360	wrl	SceneCluster	0x90	array	SubSceneGroup	0x84	elements	68	6	PROVEN
+x360	wrl	SceneCluster	0xB0	array	SubSceneEntry	0xA0	elements	68	9	PROVEN
+x360	wrl	SceneParams	0x0	array	SceneChunk	0x8	elements	171	230	PROVEN
+x360	wrl	SubSceneEntry	0x18	array	SubSceneLabel	0x8	elements	360	3	PROVEN
+x360	wrl	SubSceneGroup	0x18	array	SubSceneEntry	0x8	elements	77	5	PROVEN
+x360	wrl	WorldServerData	0x30	array	LabelRule	0x20	elements	439	23	PROVEN
+x360	wrl	WorldServerData	0x50	array	SceneCluster	0x40	elements	439	23	PROVEN
+x360	wth	Weather	0x70	array	VelocityVectorNode	0x48	elements	494	3	PROVEN
+x360	wth	Weather	0xA8	array	FloatNode	0x80	elements	494	21	PROVEN
+x360	wth	Weather	0x40	array	VelocityVectorNode	0x18	elements	494	8	PROVEN
+ps3	acr	actor	0x78	array	actor_event	0x80	elements	9508	24	PROVEN
+ps3	ais	AIStateDefinition	0x20	array	AIEntry	0x10	elements	529	18	PROVEN
+ps3	ais	AIStateDefinition	0x38	array	AIEntry	0x28	elements	529	2	PROVEN
+ps3	an2	Animation2DDefinition	0x30	array	Anim2DFrame	0x2C	elements	13	60	PROVEN
+ps3	ani	AnimationDefinition	0x18	array	AnimPermutation	0x20	elements	9140	10	PROVEN
+ps3	ant	AnimTreeDefinition	0x218	array	AnimTreeLeaf	0x214	elements	4	19	HYPOTHESIS
+ps3	ant	AnimTreeDefinition	0x22C	array	AnimTreeNode	0x228	elements	4	13	HYPOTHESIS
+ps3	ant	AnimTreeDefinition	0x244	array	INT	0x240	elements	4	2	HYPOTHESIS
+ps3	con	ConductorDefinition	0x20	array	ConductorPhase	0xC	elements	255	16	PROVEN
+ps3	con	ConductorPhase	0x10	array	ConductorSequence	0x18	elements	848	15	PROVEN
+ps3	efg	EffectGroupDefinition	0x10	array	EffectItem	0x18	elements	3413	28	PROVEN
+ps3	fnt	FontDefinition	0xAC	array	FontConsoleTexture	0xA8	elements	9	45	PROVEN
+ps3	fnt	FontDefinition	0xBC	array	FontPointSizeData	0xB8	elements	9	30	PROVEN
+ps3	fnt	FontPointSizeData	0x34	array	FontConsoleKerning	0x30	elements	132	188	PROVEN
+ps3	glo	GlobalDefinition	0x160	array	EpicBannerDescription	0x48	elements	1	3	HYPOTHESIS (several candidates)
+ps3	glo	GlobalDefinition	0x160	array	EpicBannerDescription	0x218	elements-1	1	3	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x3F0	array	FloatNode	0x3D0	elements	723	27	PROVEN
+ps3	lit	LightDefinition	0x418	array	ColorNode	0x3F8	elements	723	5	PROVEN
+ps3	lit	LightDefinition	0x440	array	FloatNode	0x420	elements	723	7	PROVEN
+ps3	lit	LightDefinition	0x80	array	FloatNode	0x60	elements	723	12	PROVEN
+ps3	lit	LightDefinition	0xA8	array	FloatNode	0x88	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xA8	array	FloatNode	0xB0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xA8	array	FloatNode	0x268	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xA8	array	FloatNode	0x290	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xA8	array	FloatNode	0x2B8	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xA8	array	FloatNode	0x2E0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xD0	array	FloatNode	0x88	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xD0	array	FloatNode	0xB0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xD0	array	FloatNode	0x268	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xD0	array	FloatNode	0x290	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xD0	array	FloatNode	0x2B8	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xD0	array	FloatNode	0x2E0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0xF8	array	FloatNode	0xD8	elements	723	7	PROVEN
+ps3	lit	LightDefinition	0x120	array	AngleNode	0x100	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x120	array	AngleNode	0x128	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x120	array	AngleNode	0x308	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x120	array	AngleNode	0x330	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x148	array	AngleNode	0x100	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x148	array	AngleNode	0x128	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x148	array	AngleNode	0x308	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x148	array	AngleNode	0x330	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x170	array	ColorNode	0x150	elements	723	8	PROVEN
+ps3	lit	LightDefinition	0x198	array	FloatNode	0x178	elements	723	13	PROVEN
+ps3	lit	LightDefinition	0x1C0	array	ColorNode	0x1A0	elements	723	8	PROVEN
+ps3	lit	LightDefinition	0x1E8	array	FloatNode	0x1C8	elements	723	29	PROVEN
+ps3	lit	LightDefinition	0x210	array	ColorNode	0x1F0	elements	723	8	PROVEN
+ps3	lit	LightDefinition	0x238	array	FloatNode	0x218	elements	723	13	PROVEN
+ps3	lit	LightDefinition	0x288	array	FloatNode	0x88	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x288	array	FloatNode	0xB0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x288	array	FloatNode	0x268	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x288	array	FloatNode	0x290	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x288	array	FloatNode	0x2B8	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x288	array	FloatNode	0x2E0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2B0	array	FloatNode	0x88	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2B0	array	FloatNode	0xB0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2B0	array	FloatNode	0x268	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2B0	array	FloatNode	0x290	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2B0	array	FloatNode	0x2B8	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2B0	array	FloatNode	0x2E0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2D8	array	FloatNode	0x88	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2D8	array	FloatNode	0xB0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2D8	array	FloatNode	0x268	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2D8	array	FloatNode	0x290	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2D8	array	FloatNode	0x2B8	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x2D8	array	FloatNode	0x2E0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x300	array	FloatNode	0x88	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x300	array	FloatNode	0xB0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x300	array	FloatNode	0x268	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x300	array	FloatNode	0x290	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x300	array	FloatNode	0x2B8	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x300	array	FloatNode	0x2E0	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x328	array	AngleNode	0x100	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x328	array	AngleNode	0x128	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x328	array	AngleNode	0x308	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x328	array	AngleNode	0x330	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x350	array	AngleNode	0x100	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x350	array	AngleNode	0x128	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x350	array	AngleNode	0x308	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x350	array	AngleNode	0x330	elements	723	2	HYPOTHESIS (several candidates)
+ps3	lit	LightDefinition	0x58	array	FloatNode	0x38	elements	723	3	PROVEN
+ps3	lit	LightDefinition	0x378	array	ColorNode	0x358	elements	723	7	PROVEN
+ps3	lit	LightDefinition	0x3A0	array	FloatNode	0x380	elements	723	6	PROVEN
+ps3	lit	LightDefinition	0x3C8	array	ColorNode	0x3A8	elements	723	9	PROVEN
+ps3	lvl	LevelAreaServerData	0x23E8	array	LevelAreaSpawnPopulation	0x23D8	elements	260	4	PROVEN
+ps3	lvl	LevelAreaSpawnGroup	0x20	array	LevelAreaSpawnItem	0x10	elements	2499	5	PROVEN
+ps3	lvl	LevelAreaSpawnPopulation	0x78	array	LevelAreaSpawnGroup	0x6C	elements	214	125	PROVEN
+ps3	mon	minion_group	0x10	array	minion_entry	0x4	elements	1411	3	PROVEN
+ps3	mon	monster	0x4A0	array	minion_group	0x490	elements	1454	3	PROVEN
+ps3	mrk	Marker	0x44	array	MarkerLink	0x40	elements	72906	84	PROVEN
+ps3	mrk	MarkerSetDefinition	0xB4	array	WORD	0xB0	elements	9712	107	PROVEN
+ps3	mus	MusicDefinition	0x1C	array	PlaylistEntry	0x24	elements	313	159	PROVEN
+ps3	phm	CollisionMesh	0x68	array	dmMeshTriangleP3	0x54	elements	2301	28677	PROVEN
+ps3	phm	CollisionMesh	0x78	array	dmMeshNodeP3	0x44	elements	2301	19193	PROVEN
+ps3	phm	CollisionMesh	0x60	array	dmFloat4	0x48	elements	2301	32991	PROVEN
+ps3	phm	PhysMeshDefinition	0x14	array	CollisionMesh	0x10	elements	1684	4	PROVEN
+ps3	prt	AccelVectorPath	0x20	array	AccelVectorNode	0x0	elements	3318	9	PROVEN
+ps3	prt	AnglePath	0x20	array	AngleNode	0x0	elements	3348	6	PROVEN
+ps3	prt	AngularVelocityPath	0x20	array	AngularVelocityNode	0x0	elements	6367	8	PROVEN
+ps3	prt	ColorPath	0x20	array	ColorNode	0x0	elements	8235	10	PROVEN
+ps3	prt	ExtendedPath_Console	0x20	array	AccelVectorPath#1	0x0	elements	602	5	PROVEN
+ps3	prt	FloatPath#1	0x20	array	FloatNode	0x0	elements	47129	27	PROVEN
+ps3	prt	IntPath	0x20	array	IntNode	0x0	elements	10410	17	PROVEN
+ps3	prt	ParticleDefinition	0xC8	array	FloatPath	0xA8	elements	11573	5	PROVEN
+ps3	prt	ParticleDefinition	0xF0	array	FloatPath	0xD0	elements	11573	5	PROVEN
+ps3	prt	ParticleDefinition	0x118	array	VectorPath	0xF8	elements	11573	3	PROVEN
+ps3	prt	ParticleDefinition	0x2C4	array	MsgTriggeredEvent	0x2CC	elements	11573	12	PROVEN
+ps3	prt	TimePath	0x20	array	TimeNode	0x0	elements	11031	5	PROVEN
+ps3	prt	VectorPath#1	0x20	array	VectorNode	0x0	elements	7371	22	PROVEN
+ps3	prt	VectorPath#2	0x20	array	VectorNode#1	0x0	elements	1072	7	PROVEN
+ps3	prt	VelocityPath	0x20	array	VelocityNode	0x0	elements	10131	21	PROVEN
+ps3	prt	VelocityVectorPath	0x20	array	VelocityVectorNode	0x0	elements	6579	9	PROVEN
+ps3	qst	quest	0x68	array	completion_step	0x14	elements	68	1	PROVEN
+ps3	qst	quest	0x58	array	quest_step	0x10	elements	68	18	PROVEN
+ps3	rop	RopeDefinition	0xAC	array	ColorNode	0x8C	elements	141	4	PROVEN
+ps3	rop	RopeDefinition	0xD4	array	ColorNode	0xB4	elements	141	5	PROVEN
+ps3	rop	RopeDefinition	0xFC	array	FloatNode	0xDC	elements	141	8	PROVEN
+ps3	rop	RopeDefinition	0x124	array	FloatNode	0x104	elements	141	9	PROVEN
+ps3	rop	RopeDefinition	0x14C	array	FloatNode	0x12C	elements	141	6	PROVEN
+ps3	rop	RopeDefinition	0x174	array	FloatNode	0x154	elements	141	7	PROVEN
+ps3	rop	RopeDefinition	0x19C	array	FloatNode	0x17C	elements	141	3	PROVEN
+ps3	rop	RopeDefinition	0x1C4	array	FloatNode	0x1A4	elements	141	4	PROVEN
+ps3	rop	RopeDefinition	0x1EC	array	FloatNode	0x1CC	elements	141	3	PROVEN
+ps3	rop	RopeDefinition	0x214	array	FloatNode	0x1F4	elements	141	7	PROVEN
+ps3	rop	RopeDefinition	0x23C	array	FloatNode	0x21C	elements	141	4	PROVEN
+ps3	rop	RopeDefinition	0x264	array	FloatNode	0x244	elements	141	4	PROVEN
+ps3	rop	RopeDefinition	0x28C	array	VectorNode	0x26C	elements	141	5	PROVEN
+ps3	rop	RopeDefinition	0x2B4	array	VelocityNode	0x294	elements	141	5	PROVEN
+ps3	rop	RopeDefinition	0x2E4	array	FloatNode	0x2C4	elements	141	7	PROVEN
+ps3	rop	RopeDefinition	0x30C	array	FloatNode	0x2EC	elements	141	8	PROVEN
+ps3	rop	RopeDefinition	0x334	array	FloatNode	0x314	elements	141	6	PROVEN
+ps3	rop	RopeDefinition	0x35C	array	FloatNode	0x33C	elements	141	2	HYPOTHESIS (several candidates)
+ps3	rop	RopeDefinition	0x35C	array	FloatNode	0x370	elements-1	141	2	HYPOTHESIS (several candidates)
+ps3	rop	RopeDefinition	0x384	array	FloatNode	0x364	elements	141	4	PROVEN
+ps3	rop	RopeDefinition	0x38C	array	MsgTriggeredEvent	0x394	elements	141	12	PROVEN
+ps3	sbk	SoundBankDefinition	0xC	array	SoundSampleP3	0x14	elements	8610	654	PROVEN
+ps3	scn	SceneDefinition	0x168	array	MsgTriggeredEvent	0x170	elements	1747	20	PROVEN
+ps3	shd	RenderPass	0x90	array	TextureStageParams	0x6C	elements	1148	12	PROVEN
+ps3	shd	ShaderDefinition	0x14	array	RenderPass	0x10	elements	960	4	PROVEN
+ps3	shk	ShakeDefinition	0x68	array	VectorNode	0x48	elements	328	6	PROVEN
+ps3	shk	ShakeDefinition	0x90	array	AngleNode	0x70	elements	328	9	PROVEN
+ps3	shk	ShakeDefinition	0xB8	array	FloatNode	0x98	elements	328	6	PROVEN
+ps3	shk	ShakeDefinition	0xE0	array	AngleNode	0xC0	elements	328	9	PROVEN
+ps3	shk	ShakeDefinition	0x108	array	FloatNode	0xE8	elements	328	5	PROVEN
+ps3	shk	ShakeDefinition	0x130	array	AngleNode	0x110	elements	328	7	PROVEN
+ps3	shk	ShakeDefinition	0x158	array	FloatNode	0x138	elements	328	5	PROVEN
+ps3	shk	ShakeDefinition	0x40	array	VectorNode	0x20	elements	328	11	PROVEN
+ps3	snd	SoundDefinition	0x40	array	SoundPermutationP3	0x48	elements	18522	101	PROVEN
+ps3	trl	TrailDefinition	0x70	array	ColorNode	0x50	elements	172	3	PROVEN
+ps3	trl	TrailDefinition	0x98	array	FloatNode	0x78	elements	172	8	PROVEN
+ps3	trl	TrailDefinition	0xC0	array	FloatNode	0xA0	elements	172	8	PROVEN
+ps3	trl	TrailDefinition	0x48	array	ColorNode	0x28	elements	172	3	PROVEN
+ps3	trs	treasure_class	0x20	array	drop_modifier	0x14	elements	483	19	PROVEN
+ps3	ui	UIControlData	0x6C	array	UIDataElementInt32	0x68	elements	8008	22	PROVEN
+ps3	ui	UIControlData	0x7C	array	UIDataElementFloat32	0x78	elements	8008	4	PROVEN
+ps3	ui	UIControlData	0x8C	array	UIStyleChildSpec	0x88	elements	8008	36	PROVEN
+ps3	ui	UIControlData	0xB4	array	UIAnimationElementInt32	0xB0	elements	8008	33	PROVEN
+ps3	ui	UIControlData	0xC4	array	UIAnimationElementFloat	0xC0	elements	8008	38	PROVEN
+ps3	ui	UIControlData	0xD4	array	UIAnimationElementVector2D	0xD0	elements	8008	15	PROVEN
+ps3	ui	UIControlData	0xE4	array	UIAnimationDescription	0xE0	elements	8008	24	PROVEN
+ps3	ui	UIControlData	0xF4	array	UIControlAnimationBinding	0xF0	elements	8008	10	PROVEN
+ps3	ui	UIControlData	0x5C	array	UIControlElement	0x58	elements	8008	23	PROVEN
+ps3	ui	UIDialogDefinition	0x14	array	UIControlData	0x10	elements	251	428	PROVEN
+ps3	ui	UIDialogDefinition	0x24	array	UIStyle	0x20	elements	251	17	PROVEN
+ps3	ui	UIDialogDefinition	0x34	array	UIControlElement	0x30	elements	251	2	PROVEN
+ps3	ui	UIDialogDefinition	0x44	array	UIDataElementInt32	0x40	elements	251	199	PROVEN
+ps3	ui	UIDialogDefinition	0x54	array	UIDataElementFloat32	0x50	elements	251	4	PROVEN
+ps3	ui	UIStyle	0x1C	array	UIControlElement	0x18	elements	75	9	PROVEN
+ps3	ui	UIStyle	0x2C	array	UIDataElementInt32	0x28	elements	75	14	PROVEN
+ps3	ui	UIStyle	0x3C	array	UIDataElementFloat32	0x38	elements	75	4	PROVEN
+ps3	ui	UIStyle	0x4C	array	UIStyleChildSpec	0x48	elements	75	1	PROVEN
+ps3	ui	UIStyleChildSpec	0x14	array	UIControlElement	0x10	elements	520	7	PROVEN
+ps3	ui	UIStyleChildSpec	0x24	array	UIDataElementInt32	0x20	elements	520	4	PROVEN
+ps3	vib	VibrationDefinition	0x44	array	FloatNode	0x24	elements	12	4	PROVEN
+ps3	wrl	DRLGParams	0x44	array	DRLGCommand	0x40	elements	105	254	PROVEN
+ps3	wrl	DRLGParams	0x58	array	INT	0x40	elements	105	254	PROVEN
+ps3	wrl	LabelRule	0xA8	array	LabelEntry	0x9C	elements	256	12	PROVEN
+ps3	wrl	SceneCluster	0x90	array	SubSceneGroup	0x84	elements	46	5	PROVEN
+ps3	wrl	SceneCluster	0xA8	array	SubSceneEntry	0x9C	elements	46	9	PROVEN
+ps3	wrl	SceneParams	0x0	array	SceneChunk	0x8	elements	105	230	PROVEN
+ps3	wrl	SubSceneEntry	0x18	array	SubSceneLabel	0x8	elements	209	3	PROVEN
+ps3	wrl	SubSceneGroup	0x10	array	SubSceneEntry	0x4	elements	52	5	PROVEN
+ps3	wrl	WorldServerData	0x30	array	LabelRule	0x20	elements	210	21	PROVEN
+ps3	wrl	WorldServerData	0x50	array	SceneCluster	0x40	elements	210	23	PROVEN
+ps3	wth	WeatherDefinition	0x88	array	FloatNode	0x68	elements	131	21	PROVEN
+ps3	wth	WeatherDefinition	0x34	array	VelocityVectorNode	0x14	elements	131	7	PROVEN
+ps3	wth	WeatherDefinition	0x5C	array	VelocityVectorNode	0x3C	elements	131	3	PROVEN

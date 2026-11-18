@@ -67,6 +67,9 @@ class CollisionMesh:
     table: list[Triangle]
     nodes: list[TreeNode]
     triangles: list[Triangle]  # in use; on ps3 these come from the tree
+    # The stored vertex rows (x, y, z, w) relative to the centre; None for a mesh built in memory
+    # without them. ``collision_write`` keeps them when ``positions`` are unchanged.
+    vertices: list[tuple[float, float, float, float]] | None = None
 
 
 @dataclass
@@ -76,6 +79,8 @@ class CollisionFile:
     flags: int
     meshes: list[CollisionMesh]
     warnings: list[str] = field(default_factory=list)
+    # The parsed bytes; ``collision_write.write_collision`` keeps every byte it does not model.
+    source: bytes | None = field(default=None, repr=False, compare=False)
 
 
 def _read_triangles(raw: bytes, build: str, order: str) -> list[Triangle]:
@@ -149,10 +154,8 @@ def _read_mesh(view: ByteView, raw: bytes, build: str, base: int, warnings: list
         raise FormatError(f"{entries} table entries for {triangle_count} triangles", base)
     centre = r.f32s(f["centre"], 3)
     vertices = _sized(view, r, f["vertex_pair"], base, vertex_count * _VERTEX_SIZE, "vertices")
-    positions = [
-        (row[0] + centre[0], row[1] + centre[1], row[2] + centre[2])
-        for row in struct.iter_unpack(view.order + "4f", vertices)
-    ]
+    rows = list(struct.iter_unpack(view.order + "4f", vertices))
+    positions = [(row[0] + centre[0], row[1] + centre[1], row[2] + centre[2]) for row in rows]
     table_raw = _sized(view, r, f["triangle_pair"], base, entries * _TRIANGLE_SIZE[build], "triangles")
     table = _read_triangles(table_raw, build, view.order)
     nodes_raw = _sized(view, r, f["node_pair"], base, node_count * _NODE_SIZE[build], "nodes")
@@ -171,7 +174,7 @@ def _read_mesh(view: ByteView, raw: bytes, build: str, base: int, warnings: list
             raise FormatError(f"triangle vertex {triangle.vertices} of {vertex_count}", base)
     return CollisionMesh(
         centre, r.f32s(f["half"], 3), r.f32s(f["scale"], 3), r.i32(f["height"]), triangle_count,
-        r.u32(f["flags"]), r.u32(f["material"]), positions, table, nodes, triangles,
+        r.u32(f["flags"]), r.u32(f["material"]), positions, table, nodes, triangles, rows,
     )
 
 
@@ -194,7 +197,7 @@ def parse_collision(data: bytes, build: str | None = None, strict: bool = False)
     ]
     if strict and warnings:
         raise FormatError(warnings[0], 0x24)
-    return CollisionFile(header, resolved, view.u32(0x1C), meshes, warnings)
+    return CollisionFile(header, resolved, view.u32(0x1C), meshes, warnings, bytes(data))
 
 
 def to_obj(collision: CollisionFile) -> str:

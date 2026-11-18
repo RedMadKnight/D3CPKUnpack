@@ -202,6 +202,9 @@ class Record:
     name: str
     raw: bytearray  # the whole record; pair fields are overwritten when written (W11-1)
     pairs: dict[int, PairValue] = field(default_factory=dict)  # by slot offset
+    # pair sizes when parsed, by slot offset (29_corrections17.md V16-2): a list whose element
+    # count differs from this has changed, however it was replaced; a new record has none (0)
+    parsed: dict[int, int] = field(default_factory=dict)
 
 
 @dataclass(eq=False)
@@ -260,6 +263,7 @@ class _Reader(_Walk):
         at = pos + slot.offset
         offset, size = struct.unpack_from(self.order + "II", self.data, at)
         where = f"{path}{slot.path}"
+        record.parsed[slot.offset] = size
         if size == 0:
             record.pairs[slot.offset] = PairValue(None, 0, (offset, 0))
             want_cursor = f.kind == "code" or f.empty_form == "cursor"
@@ -366,9 +370,15 @@ def parse_tree(data: bytes, ext: str, build: str | None = None) -> SnoTree:
     return tree
 
 
-def write_tree(tree: SnoTree) -> bytes:
-    """W11-1 to W11-7: lay a tree out."""
+def write_tree(tree: SnoTree, derive: bool = False) -> bytes:
+    """W11-1 to W11-7: lay a tree out.
+
+    With ``derive`` (W14-20), every PROVEN count word of ``s14_count_links.tsv`` whose list has a
+    different element count than when the tree was parsed is set first (in the tree itself);
+    unchanged lists keep their stored words, so an unchanged tree gives the same bytes."""
     record_layout(tree.build, tree.ext, tree.top.name)
+    if derive:
+        derive_counts(tree)
     writer = _Writer(tree)
     writer.run(tree.top, BODY)
     return bytes(writer.out)
@@ -421,9 +431,10 @@ def find_pair(tree: SnoTree, path: str) -> tuple[Record, PairSlot, PairValue | N
     raise KeyError(path)
 
 
-def set_block(tree: SnoTree, path: str, data: bytes) -> None:
+def set_block(tree: SnoTree, path: str, data: bytes, update_counts: bool = False) -> None:
     """Give one pair new bytes (a blob, text, tag map, code or value array). The pair gets a block
-    of its own; pairs that shared the old block keep it."""
+    of its own; pairs that shared the old block keep it. With ``update_counts`` (W14-20) the
+    PROVEN count word linked to a value array is set to its new element count."""
     record, slot, _ = find_pair(tree, path)
     if slot.field.is_record_array:
         raise FormatError(f"{path} is an array of records: use set_elements")
@@ -432,10 +443,13 @@ def set_block(tree: SnoTree, path: str, data: bytes) -> None:
         if len(data) % unit:
             raise FormatError(f"{path}: {len(data)} bytes is not a whole number of {slot.field.element}")
     record.pairs[slot.offset] = PairValue(Block(bytes(data)) if data else None)
+    if update_counts:
+        update_count_words(tree, record, slot.offset)
 
 
-def set_elements(tree: SnoTree, path: str, elements: list[Record]) -> None:
-    """Give an array of records new elements (records of the field's element type)."""
+def set_elements(tree: SnoTree, path: str, elements: list[Record], update_counts: bool = False) -> None:
+    """Give an array of records new elements (records of the field's element type). With
+    ``update_counts`` (W14-20) the PROVEN count word linked to this list is set."""
     record, slot, _ = find_pair(tree, path)
     if not slot.field.is_record_array:
         raise FormatError(f"{path} is not an array of records")
@@ -444,6 +458,122 @@ def set_elements(tree: SnoTree, path: str, elements: list[Record]) -> None:
         if element.name != slot.field.element or len(element.raw) != size:
             raise FormatError(f"{path}: an element is not a {slot.field.element} of {size} bytes")
     record.pairs[slot.offset] = PairValue(Block(elements=list(elements)) if elements else None)
+    if update_counts:
+        update_count_words(tree, record, slot.offset)
+
+
+# --- Count fields (28_derived_values.md W14-20) -------------------------------------------------
+
+COUNT_TABLE = "s14_count_links.tsv"
+PROVEN = "PROVEN"
+
+
+@dataclass(frozen=True)
+class CountLink:
+    """A 32-bit word of a record that equals the element count of one of its lists (W14-20).
+    Offsets are in the record, inline members expanded as in ``pair_slots``."""
+
+    pair_offset: int
+    count_offset: int
+    minus_one: bool  # the word is the element count minus one
+    element_size: int
+    status: str
+
+    @property
+    def proven(self) -> bool:
+        return self.status == PROVEN
+
+
+@lru_cache(maxsize=None)
+def _count_table() -> dict[tuple[str, str, str], tuple[CountLink, ...]]:
+    """Rows keyed by the layout record they resolve to (as ``record_layout`` resolves names).
+    Rows naming no array pair of the table are skipped."""
+    records, by_name, _ = _table()
+    found: dict[tuple[str, str, str], list[CountLink]] = {}
+    with open(DATA / COUNT_TABLE, encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle, delimiter="\t"):
+            key = (row["build"], row["ext"], row["record"])
+            if key not in records:
+                key = by_name.get((row["build"], row["record"]))
+                if key is None:
+                    continue
+            offset = int(row["pair_offset"], 16)
+            slot = next((s for s in pair_slots(*key) if s.offset == offset), None)
+            if slot is None or slot.field.kind != "array":
+                continue
+            size = slot.field.count or (VALUE_ELEMENTS.get(slot.field.element)
+                                        or record_layout(key[0], key[1], slot.field.element).size)
+            found.setdefault(key, []).append(CountLink(
+                offset, int(row["count_offset"], 16), row["count_is"].strip() == "elements-1", size,
+                row["status"].strip(),
+            ))
+    return {key: tuple(links) for key, links in found.items()}
+
+
+def count_links(build: str, ext: str, name: str, proven_only: bool = True) -> tuple[CountLink, ...]:
+    """The W14-20 count links of a record (by default the PROVEN ones only)."""
+    layout = record_layout(build, ext, name)
+    links = _count_table().get((layout.build, layout.ext, layout.name), ())
+    return tuple(link for link in links if link.proven or not proven_only)
+
+
+def _elements(value: PairValue | None, size: int) -> int:
+    if value is None or value.block is None:
+        return 0
+    return value.pair_size() // size
+
+
+def _parsed_elements(record: Record, pair_offset: int, size: int) -> int:
+    """V16-2: the element count of a list when the file was parsed (0 for a new record), kept on
+    the record so that a list emptied or replaced through any setter counts as changed."""
+    return record.parsed.get(pair_offset, 0) // size
+
+
+def _set_words(tree: SnoTree, record: Record, forced: int | None, strict: bool) -> int:
+    """Set the linked words of one record whose list changed; returns the words written."""
+    groups: dict[int, list[CountLink]] = {}
+    for link in count_links(tree.build, tree.ext, record.name):
+        groups.setdefault(link.count_offset, []).append(link)
+    order = build_order(tree.build)
+    written = 0
+    for word, links in groups.items():
+        changed = [link for link in links if link.pair_offset == forced or (
+            forced is None and _elements(record.pairs.get(link.pair_offset), link.element_size)
+            != _parsed_elements(record, link.pair_offset, link.element_size))]
+        if not changed:
+            continue
+        values = {_elements(record.pairs.get(link.pair_offset), link.element_size) - link.minus_one
+                  for link in (links if strict else changed)}
+        if len(values) > 1:
+            raise FormatError(f"{record.name}: lists linked to the count word at +0x{word:X} have "
+                              f"different counts {sorted(values)} (W14-20)")
+        value = values.pop()
+        struct.pack_into(order + ("i" if value < 0 else "I"), record.raw, word, value)
+        written += 1
+    return written
+
+
+def update_count_words(tree: SnoTree, record: Record, pair_offset: int) -> int:
+    """W14-20: set the PROVEN count words linked to one list of ``record`` to its element count."""
+    return _set_words(tree, record, pair_offset, strict=False)
+
+
+def tree_records(tree: SnoTree) -> list[Record]:
+    """Every record of the tree that is reached by the walk, top first, each once."""
+    found: dict[int, Record] = {id(tree.top): tree.top}
+    for _, record, _, value in iter_pairs(tree):
+        found.setdefault(id(record), record)
+        if value is not None and value.block is not None and value.block.elements:
+            for element in value.block.elements:
+                found.setdefault(id(element), element)
+    return list(found.values())
+
+
+def derive_counts(tree: SnoTree) -> int:
+    """W14-20 for a whole tree: for every PROVEN link whose list's element count differs from the
+    count when parsed (a new list counts from 0), set the linked word. Lists sharing one word
+    must then agree. Returns the number of words written."""
+    return sum(_set_words(tree, record, None, strict=True) for record in tree_records(tree))
 
 
 def new_record(build: str, ext: str, name: str) -> Record:
@@ -452,8 +582,8 @@ def new_record(build: str, ext: str, name: str) -> Record:
 
 
 __all__ = [
-    "Block", "LayoutField", "PairSlot", "PairValue", "Record", "RecordLayout", "SnoTree",
-    "covered_types", "find_pair", "is_canonical", "iter_pairs", "new_record", "pair_slots",
-    "parse_tree", "rebuild_sno", "record_layout", "set_block", "set_elements", "shared_pairs",
-    "top_record", "write_tree",
+    "Block", "CountLink", "LayoutField", "PairSlot", "PairValue", "Record", "RecordLayout", "SnoTree",
+    "count_links", "covered_types", "derive_counts", "find_pair", "is_canonical", "iter_pairs",
+    "new_record", "pair_slots", "parse_tree", "rebuild_sno", "record_layout", "set_block",
+    "set_elements", "shared_pairs", "top_record", "tree_records", "update_count_words", "write_tree",
 ]
