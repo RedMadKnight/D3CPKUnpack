@@ -142,7 +142,9 @@ python3 -m d3sno collision Tile.phm -o tile.obj
 `prefetch`, `power`, `mesh`, `texture`, `anim`, `strings`, `balance`, `level`
 and `collision`. Its writers are used from Python (`d3sno.write`,
 `d3sno.index_write`, `d3sno.texture_write`, `d3sno.collision_write`,
-`d3sno.derived` and others).
+`d3sno.derived`, `d3sno.formula_write`, `d3sno.lua_write`, `d3sno.anim_write`,
+`d3sno.sound_write`, `d3sno.material_write`, `d3sno.shader`, `d3sno.ui_write`
+and others).
 
 `replace` patches same-size replacements in-place and falls back to a full
 rebuild via the extension layer when the new data no longer fits in its sector
@@ -218,9 +220,9 @@ builds; **X** means not implemented yet.
 | `.phm` | Collision mesh | V | V | V | V | V | OBJ export; tree, bounds and neighbours built from triangles |
 | `.stl` | String list | V | V | V | V | X | |
 | `.gam` | Game balance tables | V | V | V | V | X | |
-| `.pow` | Power | V | V | V | V | X | Formulas disassembled and evaluated; Lua scripts recovered. Formula compiler: stage 15 |
-| `.scr`, `.con` | Script, conductor | V | V | V | V | X | Lua source recovered; script replacement: stage 15 |
-| `.ani` | Animation | V | V | V | V | X | Sampling and glTF export. Curve encoding: stage 15 |
+| `.pow` | Power | V | V | V | V | X | Formulas disassembled, evaluated, compiled from text and decompiled; Lua scripts recovered |
+| `.scr`, `.con` | Script, conductor | V | V | V | V | X | Lua source recovered; Lua chunks written and ported to another build |
+| `.ani` | Animation | V | V | V | V | V | Sampling and glTF export; curves encoded from key frames, new permutations |
 | `.can` | Animation codec data (PS3, Xbox 360) | V | V | V | V | X | |
 | `.nav` | Navigation (PS3, Xbox 360) | V | V | V | V | X | |
 | `.scn` | Scene | V | V | V | V | X | Navigation cells and neighbours derived |
@@ -228,19 +230,19 @@ builds; **X** means not implemented yet.
 | `.acr`, `.mon` | Actor, monster | V | V | V | V | X | Actor bounds derived from the appearance |
 | `.qst`, `.cnv`, `.cnl`, `.trs`, `.cnd`, `.rcp`, `.lor`, `.skl`, `.tme` | Gameplay records | V | V | V | V | X | List counts derived |
 | `.snd`, `.sbk` | Sound, sound bank | V | V | V | V | X | Bank rows derived from the sample files |
-| `.fsb` | FSB5 sample bank | V | V | V | X | X | Headers and sample names; audio is not decoded. Writer for new sounds: stage 15 |
-| `.mat` | Material | V | V | V | X | X | Material writer: stage 15 |
-| `.shd`, `.shm` | Shader, shader map | V | V | V | X | X | Shader replacement from a donor: stage 15. Compiling GPU programs is not planned |
-| `.ui`, `.fnt` | UI layout, font | V | V | V | V | X | Decoded on PS3; Switch and Xbox 360 layouts: stage 15. Kerning order derived |
-| `.ans` | Anim set | V | V | V | X | X | Anim set writer: stage 15 |
+| `.fsb` | FSB5 sample bank | V | V | V | V | V | Headers and sample names; audio is not decoded. New banks from Ogg Vorbis or frames, with seek tables |
+| `.mat` | Material | V | V | V | V | V | New materials; texture links set, added and checked |
+| `.shd`, `.shm` | Shader, shader map | V | V | V | V | X | Programs replaced from a donor shader; shader map links set and checked. Compiling GPU programs is not planned |
+| `.ui`, `.fnt` | UI layout, font | V | V | V | V | X | Decoded on all three builds; controls can be added, UI keys and font values derived |
+| `.ans` | Anim set | V | V | V | V | X | Animation tags can be added |
 | `.glo` | Globals | V | V | V | X | X | |
 | `.prt`, `.efg`, `.lit`, `.mus`, `.ams`, `.aib`, `.ais`, `.adv`, `.qsr`, `.xpl`, `.wth`, `.trl`, `.rop`, `.clt`, `.shk`, `.srf`, `.obs`, `.phy`, `.rev`, `.tut`, `.bos`, `.aco`, `.act`, `.enc`, `.an2`, `.scg`, `.flg`, `.ctr`, `.ant`, `.vib`, `.dfn` | Other SNO types | V | V | X | V | X | Fields, tags, enum values and flag bits are named, and list counts are derived; the meaning of the content is not decoded |
 
 **Status:** every file of the three builds is read and written back byte for byte.
 Decoding, editing with recomputed values and creating new files are done for the
-formats marked V. Stage 15, which adds content creation (formulas, Lua, animation,
-sound, materials, shaders, UI and fonts), is being verified and is not in this
-repository yet. Nothing has been tested in the game (§21.3).
+formats marked V. Stage 15 added content creation: formulas, Lua chunks,
+animation, sound, materials, shaders, UI and fonts. Nothing has been tested in the
+game (§21.3).
 
 ---
 
@@ -1185,7 +1187,9 @@ Scripts read the formulas of their power through `Hydra.PowerGetFormulaValue(n)`
 (below), so a changed `SF_n` also changes the values the Lua script sees.
 
 `d3sno` disassembles and evaluates formulas (`python3 -m d3sno power <file>
---disasm`); its compiler arrives with stage 15 (see "Supported formats").
+--disasm`). From Python, `d3sno.formula_write` compiles formula text to bytecode
+(`compile_formula`), builds the record (`formula_record`) and turns bytecode back
+into text (`decompile`).
 
 ### 12.5 Script formulas and string hashes
 
@@ -1525,7 +1529,7 @@ this document:
 | `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Run on `Common.cpk`: all 28,394 files extracted |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
 | `lua51.py` / `luadec.py` / `relua.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompilers to pseudo-Lua and to compilable source, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 4,755 chunks of the corpus (§14.2) |
-| `d3sno/` | Library and command line for three builds (Switch, PS3, Xbox 360): archives, index files, powers and formulas, meshes with OBJ and glTF export, animation, navigation, textures to PNG (Xbox 360 tiled textures included), text, balance tables, worlds, collision, materials, sound, gameplay records (actors, monsters, quests, conversations, scenes, recipes), PS3 UI and fonts, shaders, FSB5 headers and sample names, names for tags, enum values and flag bits, structure checks, and writers for `.stl`, `.pow`, `.scr`, `.tex`, `.gam`, a generic writer for every other SNO type, a mesh-level `.app` writer with an octree builder, `.can` and `.nav` writers, an FSB5 writer, writers for CoreTOC, Prefetch, manifests and sprite tables with adding new files, a `.tex` encoder for all three builds, a collision mesh builder, and derivation of scene navigation, marker lists, list counts, actor bounds and sound-bank rows; Xbox 360 archive writer | `*.cpk` and files inside them | Every file of all three builds parses in strict mode; writers are byte-identical on every file (`.gam` 54 of 54 Switch, 41 of 41 PS3, all Xbox 360); every tag-map record is named; all 24 Xbox 360 archives rebuild byte for byte; the generic writer rebuilds every other SNO file of all three builds, PS3 `globals.glo` included; the `.app` writer rebuilds all 26,292 meshes with every count, size, quantisation step and PS3 skinning value re-derived; every index file and every texture payload rebuilds byte for byte, and every collision mesh rebuilds from its triangles |
+| `d3sno/` | Library and command line for three builds (Switch, PS3, Xbox 360): archives, index files, powers and formulas, meshes with OBJ and glTF export, animation, navigation, textures to PNG (Xbox 360 tiled textures included), text, balance tables, worlds, collision, materials, sound, gameplay records (actors, monsters, quests, conversations, scenes, recipes), UI and fonts for all three builds, shaders, FSB5 headers and sample names, names for tags, enum values and flag bits, structure checks, and writers for `.stl`, `.pow`, `.scr`, `.tex`, `.gam`, a generic writer for every other SNO type, a mesh-level `.app` writer with an octree builder, `.can` and `.nav` writers, an FSB5 writer, writers for CoreTOC, Prefetch, manifests and sprite tables with adding new files, a `.tex` encoder for all three builds, a collision mesh builder, and derivation of scene navigation, marker lists, list counts, actor bounds and sound-bank rows; Xbox 360 archive writer; content creation: a formula compiler and decompiler, a Lua chunk writer with porting between builds, animation curve encoding, FSB5 banks from Ogg Vorbis, new materials, shader program replacement, UI and font writers | `*.cpk` and files inside them | Every file of all three builds parses in strict mode; writers are byte-identical on every file (`.gam` 54 of 54 Switch, 41 of 41 PS3, all Xbox 360); every tag-map record is named; all 24 Xbox 360 archives rebuild byte for byte; the generic writer rebuilds every other SNO file of all three builds, PS3 `globals.glo` included; the `.app` writer rebuilds all 26,292 meshes with every count, size, quantisation step and PS3 skinning value re-derived; every index file and every texture payload rebuilds byte for byte, and every collision mesh rebuilds from its triangles; every formula with text compiles to its stored bytecode except two per build, every `.ani` (15,824 Switch) and every Switch and Xbox 360 UI dialog (397 and 334) is rebuilt from its decoded form, and every material is rebuilt from its fields |
 | `coretoc_parser.py` | Global asset index parser, both forms | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser, both byte orders | `Prefetch.dat` + `CoreTOC.dat` | Every byte accounted for on both builds |
 
@@ -1663,6 +1667,11 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   for byte, and new files can be added to them and to the archives.
 - **Collision meshes** — rebuilt from their triangles, tree and neighbours
   included.
+- **Content creation** — formulas compile from text to the stored bytecode (§12.2);
+  Lua chunks are written back and ported between builds; animation curves are
+  encoded from key frames; FSB5 banks are built from Ogg Vorbis with their seek
+  tables; materials are built from their fields; shader programs are replaced from
+  a donor; Switch and Xbox 360 UI dialogs and fonts are decoded and written.
 
 ### 21.2 Open
 
@@ -1686,12 +1695,9 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 
 ### 21.3 Highest-leverage next steps
 
-1. **Content creation (stage 15)** — compile formulas, write Lua scripts, encode
-   animation curves, write new sounds, materials, shaders, UI layouts and fonts.
-   It is implemented and being verified on every file.
-2. **Modding tools** — PNG to `.tex`, mesh import from OBJ and glTF, and adding or
+1. **Modding tools** — PNG to `.tex`, mesh import from OBJ and glTF, and adding or
    replacing files from the command line.
-3. **The open items above.**
+2. **The open items above.**
 
 Nobody has tested a rebuilt archive or a changed file in the game. Every result
 here comes from data alone.

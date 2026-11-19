@@ -7,7 +7,8 @@
 - W14-20 count fields live in ``sno_layout`` (``write_tree(derive=True)``,
   ``set_elements(..., update_counts=True)``); ``count_links`` and ``derive_counts`` are re-exported.
 - W14-21 ``derive_actor_bounds``: actor box, sphere centre and radius from the appearance.
-- W14-22 ``update_bank_row``: a sound-bank row's stored and decompressed sizes.
+- W14-22 ``update_bank_row``: a sound-bank row's stored and decompressed sizes (W15-B5 adds the
+  ``.ogg`` granule rule, the mode-16 PCM length and, with ``codes``, compression and format).
 - W14-23 ``insert_kerning`` / ``kerning_order_problems``: kerning pairs in (first, second) order.
   Animation counts follow W14-20; root-motion values are authored and kept (nothing to derive).
 
@@ -246,11 +247,30 @@ def fsb_decompressed_size(fsb_bytes: bytes) -> int | None:
     return 2 * (word >> 34) * channels
 
 
+def _sample_decompressed(sample: bytes, original_samples: int | None) -> int | None:
+    """W15-B5 on top of W14-22: a valid switch ``.ogg`` gives 2 x channels x its final granule
+    position; a mode-16 FSB5 with ``original_samples`` gives 2 x channels x that PCM length."""
+    from . import sound_write as SW
+    if sample[:4] == b"OggS":
+        try:
+            return SW.sample_info(sample, SW.KIND_OGG).decompressed_size
+        except FormatError:
+            return None  # not a valid Ogg stream (W15-B6): keep the stored value (Q505)
+    if original_samples is not None and len(sample) >= 0x44 and sample[:4] == b"FSB5" \
+            and struct.unpack_from("<I", sample, 24)[0] == FSB_MODE_FRAMES:
+        return SW.sample_info(sample, SW.KIND_FRAMES, original_samples).decompressed_size
+    return fsb_decompressed_size(sample)
+
+
 def update_bank_row(bank: bytes, index: int, fsb_bytes: bytes | None, build: str | None = None,
-                    decompressed: bool = True) -> bytes:
-    """W14-22: row ``index`` of a ``.sbk`` gets stored size = ``len(fsb_bytes)`` (PROVEN) and, with
-    ``decompressed``, the decompressed size of ``fsb_decompressed_size``. With no sample file
-    (``fsb_bytes`` None) the row is kept. Hash, compression, quality and format are inputs."""
+                    decompressed: bool = True, original_samples: int | None = None,
+                    codes: bool = False) -> bytes:
+    """W14-22 / W15-B5: row ``index`` of a ``.sbk`` gets stored size = ``len(fsb_bytes)`` (PROVEN)
+    and, with ``decompressed``, the decompressed size: FSB5 by ``fsb_decompressed_size``, a mode-16
+    sample with ``original_samples`` (the PCM length before padding) by that length, a valid
+    switch ``.ogg`` by its final granule position (W15-B5). With ``codes`` the compression and
+    format codes are set from the file too (W15-B5); otherwise they, the hash and quality are
+    inputs and kept. With no sample file (``fsb_bytes`` None) the row is kept."""
     header = parse_header(bank, build)
     resolved = resolve_build("sbk", header, build)
     size, decompressed_at, stored_at = _BANK_ROW[resolved]
@@ -263,9 +283,21 @@ def update_bank_row(bank: bytes, index: int, fsb_bytes: bytes | None, build: str
     at = pair.file_offset + index * size
     out = bytearray(bank)
     struct.pack_into(header.order + "I", out, at + stored_at, len(fsb_bytes))
-    value = fsb_decompressed_size(fsb_bytes) if decompressed else None
+    value = _sample_decompressed(fsb_bytes, original_samples) if decompressed else None
     if value is not None:
         struct.pack_into(header.order + "I", out, at + decompressed_at, value)
+    if codes:
+        from . import sound_write as SW
+        info = SW.sample_info(fsb_bytes, None, original_samples)
+        compression = SW.compression_code(resolved, info.kind)
+        fmt = SW.format_code(info.channels, info.rate_index)
+        if resolved == "ps3":
+            struct.pack_into(header.order + "I", out, at + 0x0C, compression)
+            struct.pack_into(header.order + "I", out, at + 0x18, fmt)
+        else:
+            word = struct.unpack_from(header.order + "I", out, at + 4)[0]
+            word = word & ~(0x3FF << 2 | 0x3FF << 22) & 0xFFFFFFFF | compression << 2 | fmt << 22
+            struct.pack_into(header.order + "I", out, at + 4, word)
     return bytes(out)
 
 

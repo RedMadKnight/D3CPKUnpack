@@ -193,18 +193,72 @@ def set_formula(file: power.PowerFile, map_name: str, tag: int, formula_text: st
     _store_map(file, tag_map)
 
 
-def _check_chunk(chunk: bytes) -> None:
+def _check_chunk(chunk: bytes, build: str | None = None) -> None:
     if chunk and not chunk.startswith(LUA_SIGNATURE):
         raise FormatError("not a Lua chunk")
+    if chunk and build is not None:
+        from .luachunk import parse_chunk
+
+        parsed = parse_chunk(bytes(chunk), build)  # W15-A8: the build's header, whole chunk
+        if parsed.trailing_bytes:
+            raise FormatError(f"{parsed.trailing_bytes} bytes follow the chunk's main function")
 
 
-def replace_script(file: power.PowerFile | scripts.ScriptFile, chunk: bytes) -> None:
-    """Replace the script bytes of a ``.pow`` or ``.scr``."""
-    _check_chunk(chunk)
+# W15-A10: script pair positions in the top record (file position - 0x10) of .con and .cnv.
+_TREE_SCRIPT_TYPES = ("con", "cnv")
+
+
+def _tree_script_slot(tree: sno_layout.SnoTree) -> int:
+    from .luachunk import SCRIPT_PAIRS
+
+    if tree.ext not in _TREE_SCRIPT_TYPES:
+        raise FormatError(f".{tree.ext} holds no script chunk")
+    offset = SCRIPT_PAIRS[tree.ext][0 if tree.build == "ps3" else 1] - 0x10
+    if not any(s.offset == offset for s in sno_layout.pair_slots(tree.build, tree.ext, tree.top.name)):
+        raise FormatError(f"{tree.build} .{tree.ext}: no pair at +0x{offset:X} in the layout")
+    return offset
+
+
+def tree_script(tree: sno_layout.SnoTree) -> bytes:
+    """The script chunk of a ``.con`` or ``.cnv`` tree (empty bytes for none)."""
+    value = tree.top.pairs.get(_tree_script_slot(tree))
+    return b"" if value is None or value.block is None else bytes(value.block.data or b"")
+
+
+def replace_script(file, chunk, check_handlers: bool = False) -> None:
+    """W15-A10: replace the script chunk of a ``.pow`` (``PowerFile``), ``.scr`` (``ScriptFile``),
+    ``.con`` or ``.cnv`` (``sno_layout.SnoTree``); then lay it out with the type's writer
+    (``write_pow``, ``write_scr``, ``sno_layout.write_tree``, or ``write``). Empty bytes remove
+    the chunk (pair {0, 0}).
+
+    ``chunk`` is chunk bytes, or a ``LuaChunk`` / ``LuaFunction`` tree, which is serialised
+    with the file's build (W15-A8). Chunk bytes must carry the file's build header and nothing
+    after the main function. With ``check_handlers`` a ``.scr`` whose message handler names are
+    not all global functions of the chunk is refused (``scripts.handler_problems``)."""
+    from .luachunk import LuaChunk, LuaFunction
+
+    build = getattr(file, "build", None)
+    if isinstance(chunk, (LuaChunk, LuaFunction)):
+        from .lua_write import dump_chunk
+
+        if build is None:
+            raise FormatError("the file has no build to serialise the chunk with")
+        chunk = dump_chunk(chunk, build)
+    chunk = bytes(chunk)
+    _check_chunk(chunk, build)
     if isinstance(file, power.PowerFile):
-        file.script = bytes(chunk)
+        file.script = chunk
+    elif isinstance(file, scripts.ScriptFile):
+        if check_handlers:
+            problems = scripts.handler_problems(file, chunk)
+            if problems:
+                raise FormatError(problems[0])
+        file.chunk = chunk
+    elif isinstance(file, sno_layout.SnoTree):
+        offset = _tree_script_slot(file)
+        file.top.pairs[offset] = sno_layout.PairValue(sno_layout.Block(chunk) if chunk else None)
     else:
-        file.chunk = bytes(chunk)
+        raise FormatError(f"no script chunk in a {type(file).__name__}")
 
 
 # --- .scr ---------------------------------------------------------------------------------

@@ -144,7 +144,7 @@ class ChunkTypes(unittest.TestCase):
         self.assertEqual(fsb.sample.loop, (0, 255))
         self.assertEqual([(m.position, m.name) for m in fsb.sample.markers()], [(7, "cue")])
         self.assertEqual([c.data for c in fsb.unknown_chunks], [bytes(4)])
-        self.assertEqual(fsb.sample.vorbis_setup, (9, [(0, 0)]))
+        self.assertEqual(fsb.sample.vorbis_setup, (9, []))  # W15-B4: CRC, table size 0, no entries
         self.assertEqual(V.write_fsb5(fsb), data)
 
     def test_v11_7_other_type_reported(self):

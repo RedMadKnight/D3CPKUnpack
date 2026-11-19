@@ -58,6 +58,13 @@ class Permutation:
     scale_blobs: list[bytes] = field(default_factory=list)
     attachments: list[bytes] = field(default_factory=list)
     nonlinear_offsets: list[tuple[float, float, float]] = field(default_factory=list)
+    # switch: the 8 bytes after {offset, size} of each curve entry, by kind, kept only when one
+    # of them is non-zero (Q122); a writer uses zeros otherwise
+    curve_tails: dict[str, list[bytes]] = field(default_factory=dict)
+    # switch (31 V18-3): each non-empty per-permutation block as parsed, by field name
+    # (``BLOCK_FIELDS``): (body offset of its pair, ``block_keys`` value then). A writer keeps a
+    # block where it was stored while its key is unchanged; empty for a new permutation.
+    stored_blocks: dict[str, tuple[int, object]] = field(default_factory=dict, compare=False)
 
     @property
     def fps(self) -> float:
@@ -108,6 +115,47 @@ def _split(raw: bytes, width: int) -> list[bytes]:
     return [raw[pos:pos + width] for pos in range(0, len(raw), width)]
 
 
+# 31 V18-3: the per-permutation blocks a switch .ani may share between permutations (same field
+# only), with the record offset of each one's pair
+BLOCK_FIELDS = {
+    "track_hashes": 0x7C, "blend_weights": 0x98, "translation": 0xAC, "rotation": 0xC0,
+    "scale": 0xD0, "attachments": 0x124, "nonlinear_offsets": 0x138,
+}
+_ZERO_TAIL = bytes(CURVE_ENTRY_SIZE - 8)
+
+
+def curve_table_key(perm: Permutation, kind: str) -> tuple | None:
+    """A curve-entry table's content: (blob, 8-byte entry tail) per track; None for no tracks.
+    With curve blobs shared by content (W15-B2), two tables have equal bytes exactly when their
+    keys are equal."""
+    blobs = getattr(perm, f"{kind}_blobs")
+    if not blobs:
+        return None
+    tails = perm.curve_tails.get(kind, [])
+    return tuple(
+        (bytes(blob), bytes(tails[i]) if i < len(tails) and len(tails[i]) == 8 else _ZERO_TAIL)
+        for i, blob in enumerate(blobs)
+    )
+
+
+def block_keys(perm: Permutation) -> dict[str, object]:
+    """31 V18-3: per field of ``BLOCK_FIELDS``, a value equal for two permutations exactly when
+    their blocks of that field have equal bytes (the block bytes themselves for the value lists,
+    ``curve_table_key`` for the curve tables, the joined 192-byte records for attachments); None
+    for an empty block."""
+    order = build_order(perm.build)
+    keys: dict[str, object] = {
+        "track_hashes": struct.pack(f"{order}{len(perm.track_hashes)}I", *perm.track_hashes),
+        "blend_weights": b"".join(struct.pack(order + "2f", *w) for w in perm.blend_weights),
+        "attachments": b"".join(bytes(a) for a in perm.attachments),
+        "nonlinear_offsets": b"".join(struct.pack(order + "3f", *row)
+                                      for row in perm.nonlinear_offsets),
+    }
+    for kind in ("translation", "rotation", "scale"):
+        keys[kind] = curve_table_key(perm, kind)
+    return {name: (keys[name] or None) for name in BLOCK_FIELDS}
+
+
 def _read_switch_data(view: ByteView, perm: Permutation, base: int) -> None:
     r = ByteView(perm.raw, view.order)
     bones = perm.bone_count
@@ -131,6 +179,9 @@ def _read_switch_data(view: ByteView, perm: Permutation, base: int) -> None:
             pair = entries.pair(track * CURVE_ENTRY_SIZE)
             blobs.append(view.pair_data(pair, base + at, f"{name} blob {track}"))
         tables.append(blobs)
+        tails = [table[i + 8:i + CURVE_ENTRY_SIZE] for i in range(0, len(table), CURVE_ENTRY_SIZE)]
+        if any(any(tail) for tail in tails):
+            perm.curve_tails[name] = tails
     perm.translation_blobs, perm.rotation_blobs, perm.scale_blobs = tables
     attachments = _sized(
         view, r, 0x124, base, ATTACHMENT_SIZE * perm.attachment_count, "attachments",
@@ -139,6 +190,13 @@ def _read_switch_data(view: ByteView, perm: Permutation, base: int) -> None:
     nonlinear = _sized(view, r, 0x138, base, NONLINEAR_SIZE * perm.keyframes, "nonlinear offsets")
     perm.nonlinear_offsets = _read_rows(nonlinear, view.order, "3f", NONLINEAR_SIZE)
     perm.has_data = True
+    # V18-3: a pair may point at the block of an earlier permutation; it reads like any other.
+    # Where each block was stored is kept so that a writer can keep the stored layout.
+    keys = block_keys(perm)
+    perm.stored_blocks = {
+        name: (r.pair(at).offset, keys[name])
+        for name, at in BLOCK_FIELDS.items() if r.pair(at).size and keys[name] is not None
+    }
 
 
 def parse_ani(
@@ -293,6 +351,9 @@ class Curve:
     values: list[tuple[float, ...]]
     codec: int | None = None
     base: Vector = (0.0, 0.0, 0.0)
+    # the stored components as decoded (W15-B1: a re-write keeps them while ``values`` still
+    # decode from them); None for a curve not read from a blob
+    raw: list[tuple] | None = None
 
 
 @dataclass
@@ -371,7 +432,8 @@ def decode_translation(blob: bytes, keyframes: int, order: str) -> Curve:
         decoded = [base[i % 3] + x / 32767 - 1 for i, x in enumerate(raw)]
     else:
         decoded = [base[i % 3] + x for i, x in enumerate(raw)]
-    return Curve(frames, [tuple(decoded[i:i + 3]) for i in range(0, count * 3, 3)], codec, base)
+    return Curve(frames, [tuple(decoded[i:i + 3]) for i in range(0, count * 3, 3)], codec, base,
+                 [tuple(raw[i:i + 3]) for i in range(0, count * 3, 3)])
 
 
 def decode_rotation(blob: bytes, keyframes: int, order: str) -> Curve:
@@ -385,7 +447,8 @@ def decode_rotation(blob: bytes, keyframes: int, order: str) -> Curve:
     raw = view.unpack(f"{count * 4}h", values_at, "curve values")
     _check_blob_end(blob, values_at + count * 8)
     decoded = [to_f32(x * _ROTATION_UNIT) for x in raw]
-    return Curve(frames, [tuple(decoded[i:i + 4]) for i in range(0, count * 4, 4)])
+    return Curve(frames, [tuple(decoded[i:i + 4]) for i in range(0, count * 4, 4)],
+                 raw=[tuple(raw[i:i + 4]) for i in range(0, count * 4, 4)])
 
 
 def decode_scale(blob: bytes, keyframes: int, order: str) -> Curve:
@@ -401,7 +464,7 @@ def decode_scale(blob: bytes, keyframes: int, order: str) -> Curve:
     raw = _read_components(view, values_at, count, codec)
     _check_blob_end(blob, values_at + count * codec)
     divisor = {1: 127, 2: 32767, 4: 1}[codec]
-    return Curve(frames, [(x / divisor,) for x in raw], codec)
+    return Curve(frames, [(x / divisor,) for x in raw], codec, raw=[(x,) for x in raw])
 
 
 def decode_permutation(perm: Permutation) -> DecodedPermutation:

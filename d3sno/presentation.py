@@ -442,7 +442,12 @@ class ShaderRecord:
 
 
 def parse_shader_block(block: bytes, pass_count: int, build: str) -> list[tuple[ShaderRecord, ShaderRecord]]:
-    """A compiled block: 2 x pass count pairs relative to the table end, vertex then pixel."""
+    """A compiled block: 2 x pass count pairs relative to the table end, vertex then pixel.
+
+    x360 record head (``31`` V18-1, correcting W15-A13): four words {h, n, a, b}; h is 0 or 1
+    (1 is seen only on vertex-program records), a and b are multiples of 4 and size - 16 - a - b
+    is a non-negative multiple of 8. Both values of h are read; h = 1 on a pixel record is not
+    refused here (``shader.read_shader`` lists it as a problem)."""
     order = build_order(build)  # x360: big-endian (X11)
     view = ByteView(block, order)
     table_end = pass_count * 2 * 8
@@ -457,6 +462,14 @@ def parse_shader_block(block: bytes, pass_count: int, build: str) -> list[tuple[
             if length > size:
                 raise FormatError(f"code length {length} in a {size}-byte record", table_end + offset)
             code = raw[size - length:]
+        elif build == "x360":
+            # V18-1: x360 head {h, n, a, b}, h 0 or 1, a and b multiples of 4,
+            # size - 16 - a - b a non-negative multiple of 8
+            words = r.unpack("4I", 0, "shader record head")
+            rest = size - 16 - words[2] - words[3]
+            if words[0] not in (0, 1) or words[2] % 4 or words[3] % 4 or rest < 0 or rest % 8:
+                raise FormatError(f"x360 shader record head {words}", table_end + offset)
+            code = raw[16:]
         else:
             words = r.unpack("4I", 0, "shader record head")
             if words != (0, 0, size - 16, 0):
@@ -728,12 +741,17 @@ class FsbSample:
 
     @property
     def vorbis_setup(self) -> tuple[int, list[tuple[int, int]]] | None:
-        """The setup CRC and the (byte offset, sample) seek pairs."""
+        """W15-B4: the chunk is {u32 setup CRC, u32 table size in bytes, entries}; returns the CRC
+        and the (sample position, byte offset in the data area) entries of the table."""
         chunk = next((c for c in self.chunks if c.type == CHUNK_VORBIS), None)
         if chunk is None or len(chunk.data) < 4:
             return None
         crc = struct.unpack_from("<I", chunk.data, 0)[0]
-        pairs = list(struct.iter_unpack("<II", chunk.data[4:4 + (len(chunk.data) - 4) // 8 * 8]))
+        if len(chunk.data) < 8:
+            return crc, []
+        size = struct.unpack_from("<I", chunk.data, 4)[0]
+        table = chunk.data[8:8 + min(size, len(chunk.data) - 8)]
+        pairs = list(struct.iter_unpack("<II", table[:len(table) // 8 * 8]))
         return crc, pairs
 
 

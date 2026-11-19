@@ -234,12 +234,25 @@ def parse_ps3_font(data: bytes) -> TableRead:
     return read
 
 
-def font_problems(font: dict, data: bytes) -> list[str]:
-    """The font rules of T6 beyond list sizes, slots and tiling."""
+def font_problems(font: dict, data: bytes | None = None, build: str = "ps3",
+                  derived: bool | None = None) -> list[str]:
+    """The font rules of T6 beyond list sizes, slots and tiling, for any build.
+
+    Images: ps3 width x height bytes; switch and x360 the W15-B10 image form
+    (``ui_write.font_image_problems``). The ps3 custom-data offset is checked when ``data`` is
+    given (the switch-form one by ``ui_write.parse_font``). With ``derived`` the W15-B11 rules
+    are added (``ui_write.font_derived_problems``); by default they are on for switch and x360
+    and off for ps3, so the stage-7 ps3 result is unchanged."""
+    if derived is None:
+        derived = build != "ps3"
     found = []
     textures = font.get("textures", [])
     for i, texture in enumerate(textures):
-        if len(texture["image"]) != texture["width"] * texture["height"]:
+        if build != "ps3":
+            from .ui_write import font_image_problems
+            found += [f"texture {i}: {p}" for p in font_image_problems(
+                texture.get("image") or b"", texture["width"], texture["height"], build)]
+        elif len(texture["image"]) != texture["width"] * texture["height"]:
             found.append(f"texture {i}: image of {len(texture['image'])} bytes for "
                          f"{texture['width']} x {texture['height']}")
     for p, size in enumerate(font.get("point_sizes", [])):
@@ -252,12 +265,15 @@ def font_problems(font: dict, data: bytes) -> list[str]:
             elif frame != -1 and not 0 <= frame < textures[index]["frame_count"]:
                 found.append(f"point size {p} glyph {g}: frame {frame} of "
                              f"{textures[index]['frame_count']}")
-    if textures:
+    if textures and build == "ps3" and data is not None:
         first = ByteView(data, ">").pair(BODY + 0xAC).file_offset  # texture records
         image_offset = ByteView(data, ">").u32(first + 0x10)  # first texture's image pair offset
         if font["custom_data_offset"] != image_offset:
             found.append(f"custom-data offset 0x{font['custom_data_offset']:X} is not the first "
                          f"image block 0x{image_offset:X}")
+    if derived:
+        from .ui_write import font_derived_problems
+        found += font_derived_problems(font, build)
     return found
 
 
@@ -278,3 +294,21 @@ def verify_ps3_font(data: bytes) -> list[str]:
 def fixed_26_6(value: int) -> float:
     """A 26.6 fixed-point metric in pixels."""
     return value / 64
+
+
+# Stage 15 (W15-B8 to B11) lives in ``ui_write``; its public names are reachable from here too.
+_UI_WRITE_NAMES = frozenset({
+    "parse_ui", "write_ui", "verify_ui", "ui_key", "derive_ui_keys", "control_paths",
+    "ui_link_problems", "append_control", "binding_target", "parse_font", "write_font",
+    "verify_font", "font_image_bytes", "font_image_pixels", "font_image_problems",
+    "derive_glyph", "line_break_glyph", "derive_font_values", "font_derived_problems",
+    "remove_control", "ordinal_problems", "glyph_order_problems",  # corrections 18
+    "list_layout", "LIST_SHARING",  # corrections 19
+})
+
+
+def __getattr__(name: str):
+    if name in _UI_WRITE_NAMES:
+        from . import ui_write
+        return getattr(ui_write, name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

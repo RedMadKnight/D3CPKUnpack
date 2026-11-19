@@ -198,7 +198,7 @@ class Protobuf(unittest.TestCase):
 class Fsb(unittest.TestCase):
     def test_header_and_vorbis_packets(self):
         packets = struct.pack("<H", 3) + b"abc" + struct.pack("<H", 1) + b"d"
-        setup = struct.pack("<I", 0xC0FFEE) + struct.pack("<2I", 0, 0) + struct.pack("<2I", 100, 512)
+        setup = struct.pack("<II", 0xC0FFEE, 16) + struct.pack("<2I", 0, 0) + struct.pack("<2I", 100, 512)
         data = B.fsb5(15, packets, chunks=[(3, struct.pack("<II", 10, 900)), (11, setup)])
         fsb = V.parse_fsb5(data)
         self.assertEqual((fsb.mode, fsb.sample.rate_index, fsb.sample.stereo), (15, 9, True))

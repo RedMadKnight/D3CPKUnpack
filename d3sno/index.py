@@ -60,6 +60,17 @@ class CoreToc:
     def keys(self) -> set[tuple[int, int]]:
         return {(e.group, e.handle) for e in self.entries}
 
+    def key_set(self) -> frozenset[tuple[int, int]]:
+        """``31`` V18-9: the (group, handle) keys, built once per TOC object and kept (not a
+        dataclass field). Built again only when ``entries`` is replaced by another list or
+        changes length; an in-place edit of the same length is not noticed."""
+        cache = self.__dict__.get("_key_cache")
+        entries = self.entries
+        if cache is None or cache[0] is not entries or cache[1] != len(entries):
+            cache = (entries, len(entries), frozenset((e.group, e.handle) for e in entries))
+            self.__dict__["_key_cache"] = cache
+        return cache[2]
+
 
 def _is_ps3_toc(data: bytes) -> bool:
     if len(data) < 4:

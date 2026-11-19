@@ -139,6 +139,21 @@ def _read_filter(view: ByteView, base: int, build: str, slot: int, warnings: lis
     )
 
 
+def handler_problems(file: ScriptFile, chunk: bytes | None = None) -> list[str]:
+    """W15-A10: every message handler name must be a global function the chunk defines (one
+    the main function assigns a closure to). ``chunk`` defaults to the file's own."""
+    from .lua_write import defined_globals
+
+    source = file.chunk if chunk is None else chunk
+    defined = defined_globals(source, file.build) if source else set()
+    problems = []
+    for i, message in enumerate(file.messages):
+        if message.handler and message.handler not in defined:
+            problems.append(f"message {i}: handler {message.handler!r} is not a global function "
+                            "of the chunk")
+    return problems
+
+
 def parse_script(data: bytes, build: str | None = None, strict: bool = False) -> ScriptFile:
     """Read a ``.scr``. A filter hash mismatch stays a warning, even with ``strict``."""
     header = parse_header(data, build)
