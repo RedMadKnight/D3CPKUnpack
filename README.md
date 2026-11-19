@@ -1045,11 +1045,149 @@ to 871, and five tags changed from type 0 to type 4, so use each record's own ty
 
 Attribute numbers differ by build, so none can be carried across.
 
-Bytecode keeps each opcode in the first byte of its word, with operands in the build's
-byte order. A formula value is five zero uint32s, `textLength`, a zero uint32 and
-`codeLength`, then the source text padded to 4 bytes, then stack bytecode. The
-text is readable, for example `Rune_A ? 3 : 1`. Of 13,456 formulas recompiled,
-13,452 gave the stored bytecode.
+### 12.1 Formula records
+
+A type-4 value stores a formula twice: as readable source text and as compiled
+stack bytecode.
+
+```
+uint32 zero[5]
+uint32 textLength      // includes the terminating NUL
+uint32 zero
+uint32 codeLength      // a multiple of 4
+char   text[textLength], padded with zeros to a multiple of 4
+uint32 code[codeLength / 4]
+```
+
+An empty formula has the text `"\0"` and no code. The text is readable, for
+example `Rune_A ? 3 : 1`. The game data carries the bytecode, so a tool that
+changes a formula must write the text and a matching bytecode together. Changing
+the text alone is not enough.
+
+### 12.2 Bytecode
+
+Each word is 4 bytes. The opcode is the first byte of its word on both builds,
+and the other three bytes are zero. Operands follow in the build's byte order, so
+on build A an opcode word reads as little-endian while its operands are
+big-endian. The code is reverse Polish: operands first, then the operator. It
+always ends with `END`, and it contains no jumps.
+
+| Op | Name | Operands | Meaning |
+|---|---|---|---|
+| 0 | `END` | | Ends the formula; the value on top is the result |
+| 1 | `CALL` | 1 word: function id in its first byte | Calls a function on the values before it |
+| 5 | `PUSHID` | 4 words: class, a, b, c | Pushes a named value (below) |
+| 6 | `PUSHF` | float32 | Pushes a constant |
+| 7, 8 | `LT`, `GT` | | `<`, `>` |
+| 9, 10 | `EQ`, `NE` | | `==`, `!=` |
+| 11 to 14 | `ADD`, `SUB`, `MUL`, `DIV` | | The left operand is pushed first |
+| 16 | `NEG` | | Unary minus |
+| 17 | `SELECT` | | `cond ? a : b`, with cond, a and b pushed in that order |
+
+**Function ids**, matched from the names in the text: 0 `Min`, 1 `Max`,
+2 `Pin`, 3 `RangeInt`, 4 `RandomInt`, 5 `Floor`, 6 `Diminishing`, 7 `Pow`,
+8 `Log`, 9 `RangeFloat`, 10 `RandomFloat`, 11 `Table`.
+
+**Named values.** The class of a `PUSHID` says what a name in the text refers to:
+
+| Text | Class | Operands |
+|---|---|---|
+| Attribute name, e.g. `Rune_A` | 0 | a = attribute id, b = parameter or −2 for none |
+| `sLevel`, `iLevel`, `mLevel` | 1, 2, 3 | none |
+| `mDamageMin#T`, `mDamageDelta#T` | 6 + 2T, +1 for delta | T = damage type: Physical, Fire, Lightning, Cold, Poison, Arcane… |
+| `PowerTag.<power>."<tag>"` | 22 | a = the power's SNO handle, b = the tag id |
+| `SF_n`, script formula n of the same power | 23 + n | none |
+| Balance table names, e.g. `DmgTier1` | 63 + row (build B: 87 + row) | none |
+
+Attribute ids differ between builds; for example `Rune_A` is 0x221 on build A and
+0x2B2 on build B. A compiled formula therefore cannot be copied from one build to
+another. Compile the text again for each build.
+
+**Literals.** A literal is built digit by digit, rounding to float32 after every
+step: v = v × 10 + d before the point, then v = v + d / 10ᵏ for the k-th digit
+after it. About one literal in six then differs by one unit in the last place
+from a correctly rounded conversion, and the stored bits follow this rule. A
+formula with no name and no call is stored as one `PUSHF` of its value.
+
+**Recompilation.** Of 13,456 formulas recompiled, 13,452 gave the stored bytecode.
+With the rules above, every formula with text compiles to its stored bytecode on
+all three builds, except two per build that refer to a power no longer present in
+`CoreTOC.dat`.
+
+### 12.3 Worked formula
+
+The following formula is made up for this example, in the style of shipped
+powers:
+
+```
+SF_0 * (Rune_B ? 1.25 : 1) + Min(sLevel * 0.05, 0.5)
+```
+
+It reads: take script formula 0 of this power, raise it by 25 % when rune B is
+chosen, and add 5 % per skill level, at most 50 %. For build A it compiles to:
+
+```
+05000000 00000017 00000000 00000000 00000000   PUSHID 23 0 0 0     SF_0
+05000000 00000000 00000222 FFFFFFFE 00000000   PUSHID 0 0x222 -2 0 Rune_B
+06000000 3FA00000                              PUSHF 1.25
+06000000 3F800000                              PUSHF 1.0
+11000000                                       SELECT
+0D000000                                       MUL
+05000000 00000001 00000000 00000000 00000000   PUSHID 1 0 0 0      sLevel
+06000000 3D4CCCCD                              PUSHF 0.05
+0D000000                                       MUL
+06000000 3F000000                              PUSHF 0.5
+01000000 00000000                              CALL Min
+0B000000                                       ADD
+00000000                                       END
+```
+
+The record is 208 bytes: 32 bytes of head, 56 bytes of text (53 with the NUL,
+padded) and 120 bytes of code.
+
+Evaluated as a stack, with `SF_0 = 2.0`, rune B chosen and `sLevel = 5`:
+
+| Step | Stack |
+|---|---|
+| `PUSHID SF_0`, `PUSHID Rune_B` | 2.0, 1 |
+| `PUSHF 1.25`, `PUSHF 1.0` | 2.0, 1, 1.25, 1.0 |
+| `SELECT`: the condition is true, so 1.25 is kept | 2.0, 1.25 |
+| `MUL` | 2.5 |
+| `PUSHID sLevel`, `PUSHF 0.05`, `MUL` | 2.5, 0.25 |
+| `PUSHF 0.5`, `CALL Min` | 2.5, 0.25 |
+| `ADD`, `END` | **2.75** |
+
+Without rune B the result is 2.25.
+
+### 12.4 What a formula edit can change
+
+These changes follow from the layout alone, and none has been tested in the game:
+
+- **Constants:** `1.25` → `1.5` gives a stronger rune bonus, and `0.5` → `1.0`
+  raises the level cap.
+- **Conditions:** use another rune (`Rune_C`), comparisons such as
+  `sLevel > 10 ? 2 : 1`, or nested conditions.
+- **Inputs:**
+  - any attribute of the build's attribute table;
+  - item or monster level;
+  - monster damage by type;
+  - a formula of another power, through `PowerTag.<power>."<tag>"`.
+- **Functions:**
+  - `Max`, and `Pin(x, low, high)` to clamp a value;
+  - `Pow`, `Log` and `Floor`;
+  - the random functions;
+  - `Table` for balance tables.
+- **Length:** the new formula may be longer or shorter than the old one. The
+  record size then changes, and so do the map size, the pairs after it and the
+  script offset (§12). A writer must recompute them.
+
+Scripts read the formulas of their power through `Hydra.PowerGetFormulaValue(n)`
+(below), so a changed `SF_n` also changes the values the Lua script sees.
+
+`d3sno` disassembles and evaluates formulas (`python3 -m d3sno power <file>
+--disasm`); its compiler arrives with stage 15 (see "Supported formats").
+
+### 12.5 Script formulas and string hashes
 
 **Script formulas.** `Hydra.PowerGetFormulaValue(n)` reads the type-4 record in
 `General` with tag `0x41100 + (n / 10) * 0x100 + (n % 10) * 0x10`. Of 2,933 such
