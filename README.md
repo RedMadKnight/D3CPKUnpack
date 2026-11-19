@@ -62,10 +62,15 @@ prefetch_parser.py
 lua_tool.py     — recover embedded Lua scripts as pseudo-Lua (§14)
 lua51.py, luadec.py
                 — Lua 5.1 chunk reader / disassembler, and decompiler
+relua.py        — Lua decompiler to source that recompiles to the same
+                  instructions (lua_tool.py --exact)
+d3sno/          — library and command line for the files inside the
+                  archives, for all three builds (PS3, Switch, Xbox 360);
+                  see "Supported formats" below and §19.1
 ```
 
 The files work as they are, or `pip install .` adds the commands `cpk-tool`,
-`d3cutscene-tool`, `d3cpk-extractor` and `lua-tool`.
+`d3cutscene-tool`, `d3cpk-extractor`, `lua-tool` and `d3sno`.
 
 Common operations:
 
@@ -121,7 +126,23 @@ python3 d3cutscene_tool.py extract enUS_Cutscene.cpk --out ./cutscenes \
 # or extract only basenames, useful for quick media inspection
 python3 d3cutscene_tool.py extract enUS_Cutscene.cpk --out ./hero --flat \
   --iname Hero_Create --validate
+
+# d3sno: files inside the archives (--build ps3|switch|x360 where the
+# build cannot be detected from the bytes)
+python3 -m d3sno info Common.cpk
+python3 -m d3sno mesh Barbarian_Male.app -o barbarian.gltf --format gltf
+python3 -m d3sno texture Icon.tex -o icon.png
+python3 -m d3sno strings Items.stl
+python3 -m d3sno power Barbarian_Bash.pow --disasm
+python3 -m d3sno level Act1.wrl --archive Act1.cpk --toc CoreTOC.dat
+python3 -m d3sno collision Tile.phm -o tile.obj
 ```
+
+`d3sno` has these subcommands: `info`, `verify`, `list`, `extract`, `toc`,
+`prefetch`, `power`, `mesh`, `texture`, `anim`, `strings`, `balance`, `level`
+and `collision`. Its writers are used from Python (`d3sno.write`,
+`d3sno.index_write`, `d3sno.texture_write`, `d3sno.collision_write`,
+`d3sno.derived` and others).
 
 `replace` patches same-size replacements in-place and falls back to a full
 rebuild via the extension layer when the new data no longer fits in its sector
@@ -144,11 +165,12 @@ names the affected files.
 archives and hand them to `d3cutscene.py`, where `verify` validates each Ogg
 stream. `d3cutscene_tool.py` offers the Ogg-specific options.
 
-Tests use synthetic archives only (no game data). CI runs them on Ubuntu and
-Windows with Python 3.10 and 3.14:
+Tests use synthetic data only (no game data). CI runs both suites on Ubuntu
+and Windows with Python 3.10 and 3.14:
 
 ```
 python3 -m unittest discover -s tests
+python3 -m unittest discover -s tests_d3sno
 ```
 
 The cutscene tool targets the raw cutscene CPK layout observed in localized
@@ -161,23 +183,91 @@ each range as an Ogg stream before writing it.
 
 ---
 
+## Supported formats
+
+The goal is full support for every file format of the three console builds: read
+every file, write it back byte for byte, decode its content, edit it with every
+dependent value recomputed, and create new files. The table shows where the
+tools stand today. **V** means implemented and checked on every file of the three
+builds; **X** means not implemented yet.
+
+| Column | Meaning |
+|---|---|
+| Read | Every file parses in strict mode, and its fields are named |
+| Write 1:1 | Every file is rebuilt byte for byte from what was read |
+| Decode | The content is understood, not only laid out. Examples: a mesh exported to OBJ or glTF, a texture to PNG, text, formulas, Lua source, named records |
+| Edit | After a change, the dependent values are recomputed. Examples: counts, sizes, bounds, trees, index entries |
+| Create | A new file can be built from source data, such as an image, a mesh or triangles |
+
+**Archives and index files**
+
+| Format | Read | Write 1:1 | Decode | Edit | Create | Notes |
+|---|:-:|:-:|:-:|:-:|:-:|---|
+| `.cpk` archive (v6, v7) | V | V | V | V | V | Add, replace and delete files; build a new archive from a directory |
+| `.cpk` cutscene archive | V | X | V | X | X | Read and extract to `.ogv` (Ogg Theora / Vorbis) |
+| `CoreTOC.dat` (all forms, 6 Xbox 360 TOC files) | V | V | V | V | V | New entries with a free handle |
+| `Prefetch.dat` | V | V | V | V | V | The dependency list of a new file is supplied by the caller |
+| Manifests, sprite tables, descriptor sizes, `.slo` | V | V | V | V | V | |
+
+**SNO files**
+
+| Format | Content | Read | Write 1:1 | Decode | Edit | Create | Notes |
+|---|---|:-:|:-:|:-:|:-:|:-:|---|
+| `.app` | Appearance (mesh) | V | V | V | V | X | OBJ and glTF export with skin and animation; octree and every mesh value recomputed. Import from OBJ / glTF is not written yet |
+| `.tex` | Texture | V | V | V | V | V | PNG export; encoder for all three builds, Xbox 360 tiling included |
+| `.phm` | Collision mesh | V | V | V | V | V | OBJ export; tree, bounds and neighbours built from triangles |
+| `.stl` | String list | V | V | V | V | X | |
+| `.gam` | Game balance tables | V | V | V | V | X | |
+| `.pow` | Power | V | V | V | V | X | Formulas disassembled and evaluated; Lua scripts recovered. Formula compiler: stage 15 |
+| `.scr`, `.con` | Script, conductor | V | V | V | V | X | Lua source recovered; script replacement: stage 15 |
+| `.ani` | Animation | V | V | V | V | X | Sampling and glTF export. Curve encoding: stage 15 |
+| `.can` | Animation codec data (PS3, Xbox 360) | V | V | V | V | X | |
+| `.nav` | Navigation (PS3, Xbox 360) | V | V | V | V | X | |
+| `.scn` | Scene | V | V | V | V | X | Navigation cells and neighbours derived |
+| `.wrl`, `.mrk`, `.lvl` | World, marker set, level area | V | V | V | V | X | Cluster counter and marker list derived |
+| `.acr`, `.mon` | Actor, monster | V | V | V | V | X | Actor bounds derived from the appearance |
+| `.qst`, `.cnv`, `.cnl`, `.trs`, `.cnd`, `.rcp`, `.lor`, `.skl`, `.tme` | Gameplay records | V | V | V | V | X | List counts derived |
+| `.snd`, `.sbk` | Sound, sound bank | V | V | V | V | X | Bank rows derived from the sample files |
+| `.fsb` | FSB5 sample bank | V | V | V | X | X | Headers and sample names; audio is not decoded. Writer for new sounds: stage 15 |
+| `.mat` | Material | V | V | V | X | X | Material writer: stage 15 |
+| `.shd`, `.shm` | Shader, shader map | V | V | V | X | X | Shader replacement from a donor: stage 15. Compiling GPU programs is not planned |
+| `.ui`, `.fnt` | UI layout, font | V | V | V | V | X | Decoded on PS3; Switch and Xbox 360 layouts: stage 15. Kerning order derived |
+| `.ans` | Anim set | V | V | V | X | X | Anim set writer: stage 15 |
+| `.glo` | Globals | V | V | V | X | X | |
+| `.prt`, `.efg`, `.lit`, `.mus`, `.ams`, `.aib`, `.ais`, `.adv`, `.qsr`, `.xpl`, `.wth`, `.trl`, `.rop`, `.clt`, `.shk`, `.srf`, `.obs`, `.phy`, `.rev`, `.tut`, `.bos`, `.aco`, `.act`, `.enc`, `.an2`, `.scg`, `.flg`, `.ctr`, `.ant`, `.vib`, `.dfn` | Other SNO types | V | V | X | V | X | Fields, tags, enum values and flag bits are named, and list counts are derived; the meaning of the content is not decoded |
+
+**Status:** every file of the three builds is read and written back byte for byte.
+Decoding, editing with recomputed values and creating new files are done for the
+formats marked V. Stage 15, which adds content creation (formulas, Lua, animation,
+sound, materials, shaders, UI and fonts), is being verified and is not in this
+repository yet. Nothing has been tested in the game (§21.3).
+
+---
+
 ## 1. Build under observation
 
 | Field | Value | Source of identification |
 |---|---|---|
 | Game | Diablo III | Packaging |
 | Target platform | Console release (7th generation), and a later handheld release | File naming, packaging, archive variant |
-| Archive variant examined | CPK v6 (big-endian) | Magic + version field in the archive header |
+| Archive variants examined | CPK v6 (big-endian), CPK v7 (little-endian and big-endian) | Magic + version field in the archive header |
 
 The observations in this document apply to the big-endian console CPK v6
-data distribution. A v7 little-endian variant is also supported by the
-reference reader (see §3.3.1).
+data distribution unless a section says otherwise. The v7 variants are also
+supported by the reference reader (see §3.3.1).
 
-Two builds are covered. **Build A** is the big-endian v6 build: 28 CPK archives,
-217,396 files. **Build B** is a later little-endian v7 build with Act 5: 23 archives,
-347,833 files. Counts called corpus-wide mean build A, and other counts name what they
-cover. Sections describe build A unless they say otherwise. Nothing in this document
-that comes from data alone has been tested in the game.
+Three builds are covered:
+
+- **Build A** (PS3) is the big-endian v6 build: 28 CPK archives, 217,396 files.
+- **Build B** (Switch) is a later little-endian v7 build with Act 5: 23 archives,
+  347,833 files.
+- **Build C** (Xbox 360) is a big-endian v7 build: 24 archives with 239,882
+  distinct files, six CoreTOC files and a title update.
+
+This document describes builds A and B. `d3sno` (§19.1) supports all three.
+Counts called corpus-wide mean build A, and other counts name what they cover.
+Sections describe build A unless they say otherwise. Nothing in this document that
+comes from data alone has been tested in the game.
 
 ---
 
@@ -1424,30 +1514,49 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   Reader and writer in `cpklib.py` branch on `fmt_const`; round-trip
   identity holds for both layouts on every shipped archive tested
   (Act\*.cpk, CoreCommon.cpk, Patch2_6_7…2_7_7.cpk).
+- **Every file of the three builds** — read in strict mode and written back byte
+  for byte by `d3sno` (§19.1), Xbox 360 archives included. The formats it decodes,
+  edits and creates are listed under "Supported formats" at the top of this
+  document.
+- **`.tex`** — decoded to PNG on all three builds, Xbox 360 tiling included, and
+  encoded from images with every payload rebuilt byte for byte.
+- **`.can` and `.nav`** — decoded and written on PS3 and Xbox 360.
+- **Index files** — CoreTOC, Prefetch, manifests and sprite tables are written byte
+  for byte, and new files can be added to them and to the archives.
+- **Collision meshes** — rebuilt from their triangles, tree and neighbours
+  included.
 
 ### 21.2 Open
 
-- **`.pow` details** — `powerFlags` bits, collision blocks, and the names of most
-  of the 559 tags and hash values (§12).
+- **`.pow` details** — `powerFlags` bits and the meaning of collision blocks
+  (§12).
 - **`flags` and `fileHash` in the SNO header** (§7.1) — the meaning of `flags`, the
   input of the hash, and the exact zeroing rule at sector edges on build A.
 - **Why files are repeated** inside an archive (§3.5) — the load unit behind the
   copies, and whether the game accepts a rebuilt archive that stores each file
   once.
-- **`.app` details** (§13) — the colour-like values, UV2, the UV1 divisor and V
-  direction, the source of tangents if any, and where build A keeps its bone
-  palette.
-- **Non-SNO files** (§7.3) — `.can` codec payloads and the 804 files that do not
-  walk, and the `.nav` short-grid rule.
-- **`.tex`** — not decoded.
+- **`.app` details** (§13) — the colour-like values, the scale of UV2, the V
+  direction and the source of tangents if any; the root of the
+  octree, the order of the Switch compact lists, and the tail and zero-weight
+  slots of the bone palette.
+- **Values not yet derived** — how scenes are cut into navigation cells, marker
+  bounds, the Prefetch dependency list of a new file, and root motion.
+- **Sound** — the Switch frame codec (FSB5 mode 16) is not decoded.
+- **Shaders** — GPU programs cannot be compiled, only copied from another
+  shader; the shader pass keys are not derived.
+- **Fonts** — the Xbox 360 font texture tiling is not decoded in every case.
 
 ### 21.3 Highest-leverage next steps
 
-1. **Test in the game** — load a rebuilt archive and a changed script. This is the
-   only way to learn whether the header fields are read, and every result here
-   comes from data alone.
-2. **Decode `.tex`** — this would also test the UV1 divisor against real
-   images.
+1. **Content creation (stage 15)** — compile formulas, write Lua scripts, encode
+   animation curves, write new sounds, materials, shaders, UI layouts and fonts.
+   It is implemented and being verified on every file.
+2. **Modding tools** — PNG to `.tex`, mesh import from OBJ and glTF, and adding or
+   replacing files from the command line.
+3. **The open items above.**
+
+Nobody has tested a rebuilt archive or a changed file in the game. Every result
+here comes from data alone.
 
 ---
 
