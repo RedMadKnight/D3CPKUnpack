@@ -4,7 +4,9 @@
 - W14-2/3: ``write_core_toc`` (ps3, switch and x360 forms), ``add_toc_entry``, ``write_x360_tocs``.
 - W14-4: ``write_prefetch``, ``add_prefetch_parent``.
 - W14-5: ``write_manifest``, ``write_sprite_table``, ``write_descriptor_sizes``, ``write_slo``.
-- W14-6: ``add_file``, ``replace_file`` on ps3 / switch / x360 archives.
+- W14-6: ``add_file``, ``replace_file`` (``replace_files``) on ps3 / switch / x360 archives.
+- W16-12 / W16-13: ``add_sno_file`` (archive entry, identity and index files in one step),
+  ``x360_pack``.
 
 Every writer accepts what the matching parser of ``index.py`` returns, so parse -> write gives
 the same bytes for a file that follows the rules.
@@ -22,13 +24,13 @@ from .index import (
     DESCRIPTOR_MAGIC, GROUP_SLOTS, MANIFEST_MAGIC, SPRITE_MAGIC, SWITCH_TOC_HEADER, CoreToc,
     DescriptorSize, Manifest, Prefetch, PrefetchParent, Sprite, SpriteTable, TocEntry,
 )
-from .sno import SNO_HEADER_SIZE, SNO_SIGNATURE, group_by_id, hash33
+from .sno import SNO_HEADER_SIZE, SNO_SIGNATURE, group_by_extension, group_by_id, hash33
 
 __all__ = [
     "SLO_MAGIC", "X360_MAIN_TOCS", "SnoIdentity", "new_handle", "sno_identity", "write_core_toc",
     "add_toc_entry", "write_x360_tocs", "prefetch_bucket", "write_prefetch", "add_prefetch_parent",
     "write_manifest", "write_sprite_table", "write_descriptor_sizes", "write_slo", "add_file",
-    "replace_file",
+    "replace_file", "replace_files", "AddedFile", "split_archive_name", "x360_pack", "add_sno_file",
 ]
 
 SLO_MAGIC = 0xACBF0004
@@ -515,3 +517,225 @@ def add_file(archive, name: str, data: bytes) -> bytes:
 def replace_file(archive, name: str, data: bytes) -> bytes:
     """W14-6: the archive with every copy of ``name`` replaced (its size may change)."""
     return _change(archive, {name: bytes(data)}, {})
+
+
+def replace_files(archive, replace: Mapping[str, bytes], add: Mapping[str, bytes] | None = None) -> bytes:
+    """W14-6 / W16-12: ``replace_file`` and ``add_file`` for several names in one rebuild (every
+    replaced name must be in the archive, every added one must not)."""
+    return _change(archive, {n: bytes(d) for n, d in replace.items()},
+                   {n: bytes(d) for n, d in (add or {}).items()})
+
+
+# --- W16-12 / W16-13: add_sno_file ------------------------------------------------------------
+
+class AddedFile(tuple):
+    """``(archive, index_files)``: the new archive bytes and ``{name: bytes}`` of every index
+    file that changed. ``identity`` is the SnoIdentity given to the file (None for a non-SNO or
+    child file)."""
+
+    def __new__(cls, archive: bytes, index_files: dict, identity: SnoIdentity | None = None):
+        self = super().__new__(cls, (archive, index_files))
+        self.identity = identity
+        return self
+
+    @property
+    def archive(self) -> bytes:
+        return self[0]
+
+    @property
+    def index_files(self) -> dict:
+        return self[1]
+
+
+def split_archive_name(name: str) -> tuple[str, str, str, str | None]:
+    """``Group\\name.ext|locale`` -> (folder, stem, lower-case extension, locale or None)."""
+    locale = None
+    if "|" in name:
+        name, locale = name.split("|", 1)
+        if not locale or "|" in locale:
+            raise FormatError(f"bad locale suffix in {name!r}")
+    folder, _, base = name.replace("/", "\\").rpartition("\\")
+    stem, dot, ext = base.rpartition(".")
+    if not dot or not stem:
+        return folder, base, "", locale
+    return folder, stem, ext.lower(), locale
+
+
+def _toc_key(name: str) -> str:
+    return os.path.basename(name.replace("\\", "/")).lower()
+
+
+# ``35`` V21-6: the stems that name a pack after the locale and ``Cache`` are removed
+X360_PACK_NAMES = ("common", "act1", "act2", "act3", "act4", "act5")
+
+
+def x360_pack(archive_name: str | None, toc_names: Iterable[str], pack: str | None = None) -> str:
+    """W16-12: the main x360 TOC (one of ``toc_names``) of the pack an archive belongs to.
+
+    ``pack`` (a TOC name such as ``Act1TOC.dat`` or a pack name such as ``Act1``) wins.
+    Otherwise the archive's base name decides (``35`` V21-6, replacing Q722): take the stem with
+    case ignored, remove a leading four-ASCII-letter locale and ``_`` (``enUS_``, V22-4), then a leading
+    ``Cache``; the rest must be exactly ``Common`` or ``Act1`` .. ``Act5``. Anything else, the
+    ``Patch`` and ``Cutscene`` archives included, is unclear and refused."""
+    mains = [n for n in toc_names if _is_main_toc(n)]
+    if pack is not None:
+        wanted = pack.lower()
+        if not wanted.endswith(".dat"):
+            wanted += "toc.dat"
+        found = [n for n in mains if _toc_key(n) == _toc_key(wanted)]
+        if len(found) != 1:
+            raise FormatError(f"pack {pack!r} names no single main x360 TOC of {sorted(mains)}")
+        return found[0]
+    if not archive_name:
+        raise FormatError("the x360 pack is not known: pass pack (--pack)")
+    stem = os.path.basename(archive_name.replace("\\", "/")).lower()
+    stem = stem.rsplit(".", 1)[0] if "." in stem else stem
+    # ``36`` V22-4: the locale is four ASCII letters
+    if len(stem) > 5 and stem[4] == "_" and stem[:4].isascii() and stem[:4].isalpha():
+        stem = stem[5:]
+    if stem.startswith("cache"):
+        stem = stem[len("cache"):]
+    found = []
+    if stem in X360_PACK_NAMES:
+        found = [n for n in mains if _toc_key(n)[:-len("toc.dat")] == stem]
+    if len(found) != 1:
+        raise FormatError(f"the pack of archive {archive_name!r} is not clear: pass pack (--pack)")
+    return found[0]
+
+
+def _copy_toc(toc, build: str) -> CoreToc:
+    if isinstance(toc, (bytes, bytearray, memoryview)):
+        from .index import parse_core_toc
+
+        return parse_core_toc(bytes(toc), build)
+    if isinstance(toc, CoreToc):
+        if toc.build != build:
+            raise FormatError(f"a {toc.build} CoreTOC does not fit a {build} archive")
+        return CoreToc(toc.build, list(toc.entries), toc.unknown, toc.name_padding_problems, toc.totals)
+    return CoreToc(build, list(_entries_of(toc)))
+
+
+def _named_tocs(tocs, build: str) -> dict[str, CoreToc]:
+    if tocs is None:
+        return {}
+    if isinstance(tocs, Mapping):
+        items = list(tocs.items())
+    elif isinstance(tocs, (CoreToc, bytes, bytearray, memoryview)):
+        items = [("CoreTOC.dat", tocs)]
+    else:
+        tocs = list(tocs)
+        if tocs and isinstance(tocs[0], (TocEntry, tuple)):
+            items = [("CoreTOC.dat", tocs)]
+        elif len(tocs) == 1:
+            items = [("CoreTOC.dat", tocs[0])]
+        else:
+            items = [(f"CoreTOC{i}.dat", t) for i, t in enumerate(tocs)]
+    seen = set()
+    for name, _ in items:
+        if _toc_key(name) in seen:
+            raise FormatError(f"two TOC files named {os.path.basename(name)!r}")
+        seen.add(_toc_key(name))
+    return {name: _copy_toc(t, build) for name, t in items}
+
+
+def _resolve_dependency(dep, named: Mapping[str, CoreToc]) -> tuple[int, int]:
+    if not isinstance(dep, str):
+        g, h = dep
+        return int(g), int(h)
+    folder, stem, ext, _ = split_archive_name(dep)
+    group = group_by_extension(ext) if ext else None
+    if group is None:
+        raise FormatError(f"dependency {dep!r} has no SNO extension")
+    if folder and folder.lower() != group.name.lower():
+        raise FormatError(f"dependency {dep!r}: .{ext} files are in {group.name}\\")
+    for toc in named.values():
+        for e in toc.entries:
+            if e.group == group.id and e.name.lower() == stem.lower():
+                return e.group, e.handle & _U32
+    raise FormatError(f"dependency {dep!r} is in no given CoreTOC")
+
+
+def add_sno_file(archive, name: str, data: bytes, tocs, prefetch=None, depends=(), *,
+                 pack: str | None = None) -> AddedFile:
+    """W16-12 / W16-13: add ``name`` to the archive and give an SNO file its identity (W14-1).
+
+    - ``tocs``: one CoreToc (parsed, bytes or an entry list), or ``{file name: toc}``; on x360
+      all six main TOC files (``CommonTOC.dat``, ``Act1TOC.dat`` .. ``Act5TOC.dat``), title-update
+      TOC files may be added for the handle. Given TOCs are not changed.
+    - SNO extension (group by extension, folder must be the group's): a new handle over every
+      given TOC (``new_handle``), the CoreTOC entry (x360: in the TOC of ``pack``, see
+      ``x360_pack``; ps3 / switch: the one TOC, or ``pack`` naming it), the handle at 0x10.
+    - ``.nav`` / ``.can`` / ``.fsb`` and names without an SNO extension: archive only.
+    - ``prefetch`` (Prefetch, bytes or ``{file name: prefetch}``) with ``depends`` (``(group,
+      handle)`` pairs or SNO names such as ``Textures\\x.tex``, looked up in the TOCs) adds a
+      Prefetch parent (W14-4). Without ``depends`` Prefetch is unchanged and not returned.
+    - Refused: a name already in the archive, an SNO name (group, name) already in a TOC.
+
+    Returns ``AddedFile(archive, index_files)`` (unpacks as a pair); index file names are the
+    keys of ``tocs`` / ``prefetch`` (default ``CoreTOC.dat`` / ``Prefetch.dat``)."""
+    from .index import parse_prefetch
+
+    cpk = _read(archive)
+    build = cpk.header.build
+    if cpk.find(name) is not None:
+        raise FormatError(f"{name!r} is already in the archive; use replace")
+    depends = list(depends or ())
+    if depends and prefetch is None:
+        raise ValueError("dependencies need the Prefetch file (--prefetch)")
+    folder, stem, ext, locale = split_archive_name(name)
+    group = group_by_extension(ext) if ext and ext not in CHILD_EXTENSIONS else None
+    if group is None:
+        if depends:
+            raise ValueError(f"{name!r} is no SNO file with a CoreTOC entry: it takes no dependencies")
+        return AddedFile(add_file(cpk, name, data), {}, None)
+    if folder.lower() != group.name.lower():
+        raise FormatError(f"{name!r}: .{ext} files belong in {group.name}\\")
+    named = _named_tocs(tocs, build)
+    if not named:
+        raise ValueError(f"{name!r} is an SNO file: pass its CoreTOC (--toc)")
+    for toc_name, toc in named.items():
+        for e in toc.entries:
+            if e.group == group.id and e.name.lower() == stem.lower():
+                raise FormatError(f"SNO {group.name}\\{stem} is already in {os.path.basename(toc_name)} "
+                                  f"(handle {e.handle})")
+    if build == "x360":
+        mains = sorted(_toc_key(n) for n in named if _is_main_toc(n))
+        if mains != sorted(X360_MAIN_TOCS):
+            raise FormatError("x360: pass all six main TOC files (CommonTOC.dat, Act1TOC.dat .. "
+                              "Act5TOC.dat), W14-3")
+        target = x360_pack(None, list(named), pack) if pack is not None else None
+        if target is None:
+            raise FormatError("x360: the pack of the archive is not known: pass pack (--pack)")
+    elif pack is not None:
+        found = [n for n in named if _toc_key(n) in (_toc_key(pack), _toc_key(pack) + "toc.dat")]
+        if len(found) != 1:
+            raise FormatError(f"pack {pack!r} names no single given TOC")
+        target = found[0]
+    elif len(named) == 1:
+        target = next(iter(named))
+    else:
+        raise FormatError("several TOC files: pass pack to name the one that gets the entry")
+    handle = new_handle(list(named.values()))
+    ident = sno_identity(group.id, stem, handle, locale)
+    stamped = ident.stamp(data)
+    add_toc_entry(named[target], group.id, handle, stem)
+    if build == "x360":
+        written = write_x360_tocs(named)
+        index_files = {n: d for n, d in written.items() if _is_main_toc(n)}
+    else:
+        index_files = {target: write_core_toc(named[target], build)}
+    if depends:
+        if isinstance(prefetch, Mapping):
+            if len(prefetch) != 1:
+                raise ValueError("pass one Prefetch file")
+            pf_name, pf = next(iter(prefetch.items()))
+        else:
+            pf_name, pf = "Prefetch.dat", prefetch
+        if isinstance(pf, Prefetch):
+            pf = Prefetch(pf.build, list(pf.parents), list(pf.deps))
+        else:
+            pf = parse_prefetch(bytes(pf), build)
+        deps = [_resolve_dependency(d, named) for d in depends]
+        add_prefetch_parent(pf, group.id, handle, deps, build)
+        index_files[pf_name] = write_prefetch(pf, build)
+    return AddedFile(add_file(cpk, name, stamped), index_files, ident)

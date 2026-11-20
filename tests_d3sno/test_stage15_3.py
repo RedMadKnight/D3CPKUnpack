@@ -40,7 +40,7 @@ def cross_dialog() -> dict:
 class Marker(unittest.TestCase):
     def test_version(self):
         self.assertGreaterEqual(tuple(int(x) for x in d3sno.__version__.split(".")), (0, 15, 3))
-        self.assertEqual(d3sno.STAGE, 15)
+        self.assertGreaterEqual(d3sno.STAGE, 15)
 
 
 class StringListsAcrossFields(unittest.TestCase):

@@ -828,6 +828,25 @@ def _object_name(sub: SubObject) -> str:
     return f"lowpoly_{name}" if sub.geo_set == GEOSET_LOWPOLY else name
 
 
+REPEATED_NAME_SUFFIX = "__sub"  # V21-5
+
+
+def export_object_names(app: AppearanceFile) -> dict[tuple[int, int], str]:
+    """V21-5: the exported object name of every sub-object of the file, by (geo set, index).
+    When an object name (``_object_name``, the ``lowpoly_`` prefix included) occurs more than
+    once among all sub-objects of the file, every occurrence is written as
+    ``<name>__sub<i>``, i the sub-object index in its geo set. Unique names stay as they are."""
+    subs = list(app.sub_objects) + list(app.extra_sub_objects)
+    counts: dict[str, int] = {}
+    for sub in subs:
+        counts[_object_name(sub)] = counts.get(_object_name(sub), 0) + 1
+    out = {}
+    for sub in subs:
+        name = _object_name(sub)
+        out[(sub.geo_set, sub.index)] = f"{name}{REPEATED_NAME_SUFFIX}{sub.index}" if counts[name] > 1 else name
+    return out
+
+
 def export_sub_objects(app: AppearanceFile, low_poly: bool = True) -> list[SubObject]:
     """G1-1: the high-poly set, then the low-poly set as separate objects (``low_poly`` False
     skips it). The two sets are never merged."""
@@ -836,14 +855,20 @@ def export_sub_objects(app: AppearanceFile, low_poly: bool = True) -> list[SubOb
 
 def to_obj(app: AppearanceFile, flip_v: bool = False, low_poly: bool = True) -> str:
     """One object per sub-object: positions, normals, UV1. Low-poly objects are named
-    ``lowpoly_...``."""
+    ``lowpoly_...``. W16-5: each draw starts with ``g draw_<k>`` (k its index in the
+    sub-object's draw list, counting the draws without positions, which are skipped). V21-5:
+    repeated object names are written as ``<name>__sub<i>`` (``export_object_names``)."""
     lines = ["# d3sno appearance export"]
     base = 1
+    names = export_object_names(app)
     for sub in export_sub_objects(app, low_poly):
         if not sub.draws:
             continue
-        lines.append(f"o {_object_name(sub)}")
-        for draw in sub.draws:
+        lines.append(f"o {names[(sub.geo_set, sub.index)]}")
+        for k, draw in enumerate(sub.draws):
+            if not draw.positions:
+                continue
+            lines.append(f"g draw_{k}")
             for x, y, z in draw.positions:
                 lines.append(f"v {x:.6f} {y:.6f} {z:.6f}")
             for x, y, z in draw.normals:
@@ -892,6 +917,7 @@ class _GltfBuffer:
 
 _FLOAT = 5126
 _USHORT = 5123
+_UBYTE = 5121
 _ARRAY = 34962
 _REPEAT = 10497
 _ELEMENTS = 34963
@@ -930,6 +956,13 @@ def _gltf_primitive(
             struct.pack(f"<{count * 2}f", *_flat(draw.uv2(lightmap_v_scale))),
             _FLOAT, "VEC2", count, _ARRAY,
         )
+    # W16-5: the stored colours and UV2 as application-specific attributes.
+    for name, colours in (("_D3_COLOR1", draw.colours_1), ("_D3_COLOR2", draw.colours_2)):
+        if colours:
+            attributes[name] = buf.add(b"".join(bytes(c) for c in colours), _UBYTE, "VEC4", count, _ARRAY)
+    attributes["_D3_UV2"] = buf.add(
+        struct.pack(f"<{count * 2}H", *_flat(draw.uv2_raw)), _USHORT, "VEC2", count, _ARRAY,
+    )
     primitive: dict = {"attributes": attributes, "mode": 4}
     if draw.indices:
         primitive["indices"] = buf.add(
@@ -952,7 +985,10 @@ def _gltf_primitive(
 
 
 class _GltfMaterials:
-    """One glTF material per texture handle, made from what the resolver returns."""
+    """One glTF texture per texture handle, made from what the resolver returns (called once
+    per handle). W16-5: every primitive gets a material of its own kind, named
+    ``texture_<handle>_draw_<k>`` with a texture, else ``d3sno_draw_<k>``; materials with the same
+    name are shared."""
 
     def __init__(self, buf: _GltfBuffer, resolver) -> None:
         self.buf = buf
@@ -961,13 +997,28 @@ class _GltfMaterials:
         self.textures: list[dict] = []
         self.materials: list[dict] = []
         self.by_handle: dict[int, int | None] = {}
+        self.by_name: dict[str, int] = {}
 
-    def index(self, handle: int | None) -> int | None:
-        if handle is None or handle == -1:
+    def texture(self, handle: int | None) -> int | None:
+        if self.resolver is None or handle is None or handle == -1:
             return None
         if handle not in self.by_handle:
             self.by_handle[handle] = self._make(handle)
         return self.by_handle[handle]
+
+    def material(self, handle: int | None, draw: int) -> int:
+        texture = self.texture(handle)
+        name = f"texture_{handle}_draw_{draw}" if texture is not None else f"d3sno_draw_{draw}"
+        if name not in self.by_name:
+            material: dict = {"name": name}
+            if texture is not None:
+                material["pbrMetallicRoughness"] = {
+                    "baseColorTexture": {"index": texture},
+                    "metallicFactor": 0.0,
+                }
+            self.by_name[name] = len(self.materials)
+            self.materials.append(material)
+        return self.by_name[name]
 
     def _make(self, handle: int) -> int | None:
         target = self.resolver(handle)
@@ -979,18 +1030,12 @@ class _GltfMaterials:
             image = {"bufferView": self.buf.add_view(bytes(target)), "mimeType": "image/png"}
         self.images.append(image)
         self.textures.append({"source": len(self.images) - 1, "sampler": 0})
-        self.materials.append({
-            "name": f"texture_{handle}",
-            "pbrMetallicRoughness": {
-                "baseColorTexture": {"index": len(self.textures) - 1},
-                "metallicFactor": 0.0,
-            },
-        })
-        return len(self.materials) - 1
+        return len(self.textures) - 1
 
     def write(self, document: dict) -> None:
         if self.materials:
             document["materials"] = self.materials
+        if self.textures:
             document["textures"] = self.textures
             document["images"] = self.images
             document["samplers"] = [{"wrapS": _REPEAT, "wrapT": _REPEAT}]
@@ -1016,7 +1061,15 @@ def to_gltf(
     ``lightmap_v_scale`` adds UV2 as TEXCOORD_1; pass 0 for a lightmap with no V scale.
     ``extend(buffer, document)`` runs before the buffer is sealed.
     ``texture_resolver(handle)`` gives a URI, PNG bytes to embed, or None. With it, each
-    sub-object gets a material from its diffuse texture for ``look``.
+    sub-object's materials use its diffuse texture for ``look``.
+
+    W16-5: meshes carry ``extras.d3sno`` (geo set, sub-object index), primitives
+    ``extras.d3sno.draw`` and a material per draw (``texture_<handle>_draw_<k>`` or
+    ``d3sno_draw_<k>``), the skin ``extras.d3sno.bones``; colours are written as ``_D3_COLOR1`` /
+    ``_D3_COLOR2`` (u8 VEC4) and UV2 as ``_D3_UV2`` (u16 VEC2), as stored.
+    V21-4: a draw with vertices and no indices is a primitive without indices with
+    ``extras.d3sno.no_indices`` true. V21-5: repeated object names (mesh and node) are written as
+    ``<name>__sub<i>``.
     """
     buf = _GltfBuffer()
     materials = _GltfMaterials(buf, texture_resolver)
@@ -1041,27 +1094,36 @@ def to_gltf(
             "joints": list(range(len(app.bones))),
             "inverseBindMatrices": buf.add(bytes(matrices), _FLOAT, "MAT4", len(app.bones)),
         }
-        if app.build == "ps3":
-            skin["extras"] = {"bind_from_rest_inverse": True}
+        extras: dict = {"bind_from_rest_inverse": True} if app.build == "ps3" else {}
+        extras["d3sno"] = {"bones": len(app.bones)}  # W16-5
+        skin["extras"] = extras
         skins.append(skin)
 
     meshes = []
+    names = export_object_names(app)
     for sub in export_sub_objects(app, low_poly):
-        primitives = [
-            _gltf_primitive(buf, draw, flip_v, lightmap_v_scale)
-            for draw in sub.draws if draw.positions
-        ]
+        handle = sub_object_texture(app, sub, look) if texture_resolver is not None else None
+        primitives = []
+        for k, draw in enumerate(sub.draws):
+            if not draw.positions:
+                continue  # skipped, but counted in k (W16-5)
+            primitive = _gltf_primitive(buf, draw, flip_v, lightmap_v_scale)
+            primitive["material"] = materials.material(handle, k)
+            info: dict = {"draw": k}
+            if not draw.indices:
+                info["no_indices"] = True  # V21-4: vertices without triangles
+            primitive["extras"] = {"d3sno": info}
+            primitives.append(primitive)
         if not primitives:
             continue
-        if texture_resolver is not None:
-            material = materials.index(sub_object_texture(app, sub, look))
-            if material is not None:
-                for primitive in primitives:
-                    primitive["material"] = material
-        node = {"name": _object_name(sub), "mesh": len(meshes)}
+        name = names[(sub.geo_set, sub.index)]
+        node = {"name": name, "mesh": len(meshes)}
         if skinned and any("JOINTS_0" in p["attributes"] for p in primitives):
             node["skin"] = 0
-        meshes.append({"name": _object_name(sub), "primitives": primitives})
+        meshes.append({
+            "name": name, "primitives": primitives,
+            "extras": {"d3sno": {"geo_set": sub.geo_set, "sub_object": sub.index}},
+        })
         roots.append(len(nodes))
         nodes.append(node)
 

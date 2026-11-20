@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
+import importlib
+import os
+import re
 import sys
 from pathlib import Path
 
@@ -179,31 +182,53 @@ def cmd_texture(args) -> int:
         _texture_summary(tex)
         return 0
     target = Path(args.output)
+    # ``35`` V21-7: one path for every build; an option that cannot be honoured is refused,
+    # never silently ignored
+    modes = [name for name, on in (("--all-levels", args.all_levels), ("--strip", args.strip),
+                                   ("--frame", args.frame is not None), ("--normal", args.normal)) if on]
+    if len(modes) > 1:
+        raise FormatError(f"{' and '.join(modes)} cannot be combined")
+    if args.strip and (args.face or args.slice):
+        raise FormatError("--strip takes every face or slice: --face and --slice do not apply")
+    if args.frame is not None and (args.face or args.slice):
+        raise FormatError("--frame crops level images of face 0: --face and --slice do not apply")
+    if args.normal and args.slice:
+        raise FormatError("--normal does not take --slice")
     if tex.build == "x360":
         if not args.x360_pixels:
             raise FormatError("x360 pixels are decoded only with --x360-pixels (G2-T)")
         from . import x360_texture
 
-        levels = range(tex.levels) if args.all_levels else (args.level,)
-        for level in levels:
-            image = x360_texture.decode_image(tex, level, args.face, args.slice)
-            path = (target.with_name(f"{target.stem}_level{level}{target.suffix}")
-                    if args.all_levels else target)
-            path.write_bytes(texture.encode_png(image))
-        return 0
+        decode = x360_texture.decode_image
+    else:
+        decode = texture.decode_image
     if args.all_levels:
-        for level, image in enumerate(texture.decode_levels(tex, args.face, args.slice)):
+        for level in range(tex.levels):
+            image = decode(tex, level, args.face, args.slice)
             path = target.with_name(f"{target.stem}_level{level}{target.suffix}")
             path.write_bytes(texture.encode_png(image))
         return 0
     if args.strip:
-        image = texture.vertical_strip(texture.decode_surfaces(tex, args.level))
+        image = texture.vertical_strip([
+            decode(tex, args.level, face, z)
+            for face in range(tex.faces) for z in range(tex.level_depth(args.level))
+        ])
     elif args.frame is not None:
-        image = texture.frame_image(tex, args.frame, args.level)
+        if not 0 <= args.frame < len(tex.frames):
+            raise FormatError(f"no frame {args.frame}: the file has {len(tex.frames)}", 0x220)
+        rect = tex.frames[args.frame].rect(tex.width, tex.height)
+        image = texture.crop(decode(tex, args.level), *(value >> args.level for value in rect))
     elif args.normal:
-        image = texture.decode_normal(tex, args.level, args.face)
+        if tex.format != texture.FORMAT_NORMAL:
+            raise FormatError(f"format {tex.format} does not hold a normal map", 0x20)
+        plain = decode(tex, args.level, args.face)
+        out = bytearray(len(plain.rgba))
+        out[0::4] = plain.rgba[3::4]
+        out[1::4] = plain.rgba[1::4]
+        out[3::4] = b"\xFF" * (len(out) // 4)
+        image = texture.Image(plain.width, plain.height, bytes(out))
     else:
-        image = texture.decode_image(tex, args.level, args.face, args.slice)
+        image = decode(tex, args.level, args.face, args.slice)
     target.write_bytes(texture.encode_png(image))
     return 0
 
@@ -329,6 +354,211 @@ def cmd_collision(args) -> int:
     return 0
 
 
+# --- stage 16: import and archive write commands (W16-12) -------------------------------------
+
+def _module(name: str):
+    """Import a d3sno module when a command needs it (the import modules are optional)."""
+    return importlib.import_module(f"{__package__}.{name}")
+
+
+def _same_path(a, b) -> bool:
+    pa, pb = Path(a), Path(b)
+    try:
+        if pa.exists() and pb.exists():
+            return os.path.samefile(pa, pb)
+    except OSError:
+        pass
+    return os.path.normcase(os.path.abspath(pa)) == os.path.normcase(os.path.abspath(pb))
+
+
+def refuse_overwrite(outputs, inputs) -> None:
+    """W16-12: write commands never overwrite their input."""
+    for out in outputs:
+        for given in inputs:
+            if _same_path(out, given):
+                raise ValueError(f"output {out} is the input {given}: write commands never overwrite "
+                                 "their input")
+
+
+def archive_name_of(relative: Path) -> str:
+    """The inverse of ``output_path``: a path below the extract folder -> archive name
+    (``/`` -> ``\\``, ``@locale`` -> ``|locale``)."""
+    parts = relative.parts
+    if not parts or any(part in ("", ".", "..") for part in parts):
+        raise FormatError(f"no archive name for {relative}")
+    return "\\".join(parts).replace("@", "|")
+
+
+_LEVEL_FILE = re.compile(r"_level(\d+)\.png$", re.IGNORECASE)
+
+
+def level_order(paths: list[str]) -> list[str]:
+    """W16-12: files named ``*_level<n>.png`` (as ``texture --all-levels`` writes them) are
+    sorted by n; any other list keeps the given order."""
+    found = [_LEVEL_FILE.search(Path(p).name) for p in paths]
+    if len(paths) < 2 or not all(found):
+        return list(paths)
+    levels = [int(m.group(1)) for m in found]
+    if len(set(levels)) != len(levels):
+        raise ValueError("two images have the same level number")
+    return [p for _, p in sorted(zip(levels, paths))]
+
+
+def cmd_texture_import(args) -> int:
+    paths = level_order(args.images)
+    refuse_overwrite([args.output], [args.template, *paths])
+    png = _module("png")
+    importer = _module("texture_import")
+    template = texture.parse_texture(_read(args.template), args.build)
+    images = [png.read_png(_read(p)) for p in paths]
+    surfaces = template.faces * template.depth
+    if args.strip:
+        if len(images) != 1:
+            raise ValueError("--strip takes one strip image")
+        if surfaces == 1:
+            raise ValueError("--strip needs a cube or volume template")
+        given = importer.split_strip(images[0], surfaces)
+    elif surfaces > 1:
+        if len(images) != surfaces:
+            kind = "cube faces" if template.faces > 1 else "volume slices"
+            raise ValueError(f"the template needs {surfaces} {kind}, {len(images)} images given")
+        given = images
+    else:
+        given = images[0] if len(images) == 1 else images
+    out = importer.import_texture(template, given, levels=args.levels, format=args.format)
+    Path(args.output).write_bytes(out)
+    _print(f"wrote {args.output}: {len(out)} bytes")
+    return 0
+
+
+def read_model(path: str):
+    """W16-12: a glTF (``.gltf`` / ``.glb``) or OBJ model, by its extension."""
+    importer = _module("mesh_import")
+    suffix = Path(path).suffix.lower()
+    if suffix in (".gltf", ".glb"):
+        return importer.read_gltf(_read(path), base_path=str(Path(path).resolve().parent))
+    if suffix == ".obj":
+        return importer.read_obj(_read(path).decode("utf-8"))
+    raise ValueError(f"{path}: the model must be .gltf, .glb or .obj")
+
+
+def cmd_mesh_import(args) -> int:
+    refuse_overwrite([args.output], [args.template, args.model])
+    importer = _module("mesh_import")
+    template = appearance.parse_appearance(_read(args.template), args.build)
+    document = read_model(args.model)
+    out, report = importer.import_mesh_report(
+        template, document, flip_v=args.flip_v, lightmap_v_scale=args.lightmap_v_scale,
+        missing=args.missing, skin=args.skin, low_poly=not args.skip_low_poly)
+    Path(args.output).write_bytes(out)
+    for label in report.changed:
+        _print(f"changed {label}")
+    for label in report.kept:
+        _print(f"kept {label}")
+    for warning in report.warnings:
+        _print(f"warning: {warning}")
+    _print(f"wrote {args.output}: {len(report.changed)} changed, {len(report.kept)} kept")
+    return 0
+
+
+def cmd_replace(args) -> int:
+    from . import index_write
+
+    if args.from_dir is None:
+        if args.name is None or args.file is None:
+            raise ValueError("replace needs NAME FILE, or --from-dir DIR")
+        if args.add_new:
+            raise ValueError("--add-new goes with --from-dir")
+        refuse_overwrite([args.output], [args.archive, args.file])
+        cpk = archive.read_archive(_read(args.archive), strict=False)
+        out = index_write.replace_file(cpk, args.name, _read(args.file))
+        Path(args.output).write_bytes(out)
+        _print("replaced 1, added 0")
+        return 0
+    if args.name is not None or args.file is not None:
+        raise ValueError("pass NAME FILE or --from-dir, not both")
+    root = Path(args.from_dir)
+    if not root.is_dir():
+        raise ValueError(f"{root} is not a folder")
+    files = sorted(p for p in root.rglob("*") if p.is_file())
+    refuse_overwrite([args.output], [args.archive, *files])
+    cpk = archive.read_archive(_read(args.archive), strict=False)
+    replace: dict[str, bytes] = {}
+    add: dict[str, bytes] = {}
+    unknown = []
+    seen: dict[int, Path] = {}
+    for path in files:
+        name = archive_name_of(path.relative_to(root))
+        key = archive.name_hash(name)
+        if key in seen:
+            raise FormatError(f"{path} and {seen[key]} map to the same archive name {name!r}")
+        seen[key] = path
+        entry = cpk.find(name)
+        if entry is not None:
+            replace[entry.name if entry.name is not None else name] = _read(path)
+        elif args.add_new:
+            add[name] = _read(path)
+        else:
+            unknown.append(name)
+    if unknown:
+        raise FormatError(f"{len(unknown)} files map to no archive name (pass --add-new to add them): "
+                          + ", ".join(unknown[:10]))
+    if not replace and not add:
+        raise ValueError(f"{root} holds no file")
+    out = index_write.replace_files(cpk, replace, add)
+    Path(args.output).write_bytes(out)
+    _print(f"replaced {len(replace)}, added {len(add)}")
+    return 0
+
+
+def cmd_add(args) -> int:
+    from . import index_write
+
+    tocs = list(args.toc or [])
+    inputs = [args.archive, args.file, *tocs] + ([args.prefetch] if args.prefetch else [])
+    refuse_overwrite([args.output], inputs)
+    if args.depends and not args.prefetch:
+        raise ValueError("--depends needs --prefetch")
+    names = [Path(t).name for t in tocs] + ([Path(args.prefetch).name] if args.depends else [])
+    if len({n.lower() for n in names}) != len(names):
+        raise ValueError("two index files share a base name; --index-out would write both to one file")
+    if names:
+        if not args.index_out:
+            raise ValueError("--toc and --prefetch need --index-out")
+        refuse_overwrite([Path(args.index_out) / n for n in names], inputs)
+        refuse_overwrite([args.output], [Path(args.index_out) / n for n in names])
+    cpk = archive.read_archive(_read(args.archive), strict=False)
+    pack = args.pack
+    if cpk.header.build == "x360" and pack is None and tocs:
+        pack = index_write.x360_pack(Path(args.archive).name, [Path(t).name for t in tocs])
+    toc_map = {Path(t).name: _read(t) for t in tocs}
+    prefetch = {Path(args.prefetch).name: _read(args.prefetch)} if args.prefetch else None
+    result = index_write.add_sno_file(cpk, args.name, _read(args.file), toc_map, prefetch,
+                                      args.depends or (), pack=pack)
+    Path(args.output).write_bytes(result.archive)
+    if result.index_files:
+        target = Path(args.index_out)
+        target.mkdir(parents=True, exist_ok=True)
+        for name, data in result.index_files.items():
+            (target / name).write_bytes(data)
+            _print(f"wrote {target / name}")
+    ident = result.identity
+    if ident is not None:
+        _print(f"added {args.name}: group {ident.group}, handle {ident.handle}")
+    else:
+        _print(f"added {args.name} (no CoreTOC entry)")
+    return 0
+
+
+MESH_IMPORT_NOTE = (
+    "To empty a draw from an editor, remove its primitive (or OBJ group) and import with "
+    "--missing empty; a glTF primitive without indices and without extras.d3sno.no_indices is "
+    "read as triangles 0..count-1 (V21-4)."
+)
+
+_WRITE_COMMANDS = ("texture-import", "mesh-import", "replace", "add")
+
+
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="d3sno")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -412,6 +642,44 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("file")
     sub.add_argument("-o", "--output", help="OBJ to write")
     add_build(sub)
+    sub = add("texture-import", cmd_texture_import)
+    sub.add_argument("template", help="the .tex to replace")
+    sub.add_argument("images", nargs="+", help="PNG files: a mip chain, or cube faces / volume slices")
+    sub.add_argument("-o", "--output", required=True)
+    sub.add_argument("--format", type=int)
+    sub.add_argument("--levels", type=int)
+    sub.add_argument("--strip", action="store_true", help="one vertical strip of faces or slices")
+    add_build(sub)
+    sub = add("mesh-import", cmd_mesh_import)
+    # ``35`` V21-4
+    sub.epilog = MESH_IMPORT_NOTE
+    sub.add_argument("template", help="the .app to replace")
+    sub.add_argument("model", help=".gltf, .glb or .obj")
+    sub.add_argument("-o", "--output", required=True)
+    sub.add_argument("--flip-v", action="store_true")
+    sub.add_argument("--lightmap-v-scale", type=float)
+    sub.add_argument("--missing", choices=("keep", "empty"), default="keep")
+    sub.add_argument("--skin", choices=("refuse", "nearest"), default="refuse")
+    sub.add_argument("--skip-low-poly", action="store_true")
+    add_build(sub)
+    sub = add("replace", cmd_replace)
+    sub.add_argument("archive")
+    sub.add_argument("name", nargs="?", help="archive name as list prints it")
+    sub.add_argument("file", nargs="?")
+    sub.add_argument("--from-dir", help="a folder laid out as extract writes it")
+    sub.add_argument("--add-new", action="store_true", help="with --from-dir: add unknown files")
+    sub.add_argument("-o", "--output", required=True)
+    sub = add("add", cmd_add)
+    sub.add_argument("archive")
+    sub.add_argument("name")
+    sub.add_argument("file")
+    sub.add_argument("-o", "--output", required=True)
+    sub.add_argument("--toc", nargs="+", help="CoreTOC.dat, or on x360 all six TOC files")
+    sub.add_argument("--prefetch")
+    sub.add_argument("--depends", nargs="+", help="SNO names (Group\\name.ext) of the dependencies")
+    sub.add_argument("--index-out", help="folder for the written index files")
+    sub.add_argument("--pack", help="x360: the pack (Common, Act1 .. Act5) when the archive name "
+                                    "does not tell")
     return parser
 
 
@@ -423,6 +691,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     except OSError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    except ValueError as exc:
+        if args.command not in _WRITE_COMMANDS:
+            raise
         print(f"error: {exc}", file=sys.stderr)
         return 2
 

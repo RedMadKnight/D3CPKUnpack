@@ -110,9 +110,12 @@ class GltfMaterials(unittest.TestCase):
         return P.to_gltf(app, texture_resolver=resolver, look=look)
 
     def test_no_resolver_no_material(self):
+        # W16-5: without a texture every primitive still gets a plain material of its own draw
         doc = P.to_gltf(P.parse_appearance(app_with_materials("switch")))
-        self.assertNotIn("materials", doc)
-        self.assertNotIn("material", doc["meshes"][0]["primitives"][0])
+        self.assertEqual(doc["materials"], [{"name": "d3sno_draw_0"}])
+        self.assertEqual(doc["meshes"][0]["primitives"][0]["material"], 0)
+        self.assertNotIn("textures", doc)
+        self.assertNotIn("images", doc)
 
     def test_uri(self):
         for build in BUILDS:
@@ -120,6 +123,7 @@ class GltfMaterials(unittest.TestCase):
             self.assertEqual(doc["images"], [{"uri": "tex/41.png"}])
             self.assertEqual(doc["textures"], [{"source": 0, "sampler": 0}])
             self.assertEqual(doc["meshes"][0]["primitives"][0]["material"], 0)
+            self.assertEqual(doc["materials"][0]["name"], "texture_41_draw_0")  # W16-5
             pbr = doc["materials"][0]["pbrMetallicRoughness"]
             self.assertEqual(pbr["baseColorTexture"], {"index": 0})
 
@@ -139,7 +143,9 @@ class GltfMaterials(unittest.TestCase):
         self.assertEqual(blob[start:start + view["byteLength"]], b"\x89PNGdata")
 
     def test_unresolved_texture(self):
-        self.assertNotIn("materials", self.doc(resolver=lambda handle: None))
+        doc = self.doc(resolver=lambda handle: None)
+        self.assertEqual(doc["materials"], [{"name": "d3sno_draw_0"}])  # W16-5
+        self.assertNotIn("textures", doc)
 
     def test_resolver_called_once_per_handle(self):
         calls = []

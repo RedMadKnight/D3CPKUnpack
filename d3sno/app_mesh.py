@@ -462,9 +462,11 @@ def _pack(raw: bytearray, order: str, fmt: str, offset: int, *values, field: str
 
 
 class _Context:
-    def __init__(self, app: AppearanceFile, tree: L.SnoTree, old: AppearanceFile, rules=frozenset()):
+    def __init__(self, app: AppearanceFile, tree: L.SnoTree, old: AppearanceFile, rules=frozenset(),
+                 keep_skin: bool = False):
         self.build, self.tree, self.old = app.build, tree, old
         self.rules = rules
+        self.keep_skin = keep_skin  # V21-2
         self.bone_count = len(old.bones)
         self.order = build_order(app.build)
         self.has_bones = bool(old.bones)
@@ -577,14 +579,127 @@ def _empty_record(ctx: _Context, sub: SubObject, what: str) -> None:
                           "written; drop it with rule W13-7")
 
 
+def skin_edit_only(draw: Draw, before: Draw) -> bool:
+    """V21-2: a skinned record whose vertex count, positions and index list are the stored ones
+    (only per-vertex values such as joints and weights changed)."""
+    return draw.skinned and before.skinned and draw.joints is not None and before.joints is not None \
+        and draw.positions == before.positions and draw.indices == before.indices
+
+
+def _changed_skin_vertices(draw: Draw, before: Draw) -> list[int]:
+    return [i for i in range(len(draw.positions))
+            if draw.joints[i] != before.joints[i] or draw.weights[i] != before.weights[i]]
+
+
+def _renumbered_slots(before: Draw, i: int, stored, palette: list[int]) -> bytes:
+    """V21-2: an unchanged vertex keeps its stored bones, as slots of a derived palette. A
+    zero-weight slot names the position of the bone its stored slot named, else 0."""
+    old = before.palette or []
+    out = []
+    for j, (joint, weight) in enumerate(zip(before.joints[i], before.weights[i])):
+        if weight:
+            out.append(palette.index(joint))
+        else:
+            bone = old[stored[j]] if stored[j] < len(old) else None
+            out.append(palette.index(bone) if bone in palette else 0)
+    return bytes(out)
+
+
+def kept_skin_slots(draw: Draw, before: Draw, stored, palette: list[int], derived: bool) -> list:
+    """V21-2: the slots to encode a skin-edited record with. An unchanged vertex (joints and
+    weights as stored) keeps its stored slot bytes, zero-weight slots included, renumbered into
+    the palette when it was ``derived``; a changed vertex gets None (W2-6: the first palette
+    position of each weighted bone, zero-weight slots 0)."""
+    changed = set(_changed_skin_vertices(draw, before))
+    out = []
+    for i in range(len(draw.positions)):
+        slots = stored[i] if stored is not None and i < len(stored) else None
+        if i in changed or slots is None:
+            out.append(None)
+        elif derived:
+            out.append(_renumbered_slots(before, i, slots, palette))
+        else:
+            out.append(bytes(slots))
+    return out
+
+
+def patched_influences(stored: bytes, edits) -> bytes | None:
+    """V21-2 (HYPOTHESIS): the stored compact influence list with, for each changed vertex
+    ``(old entry, new entry)`` (W13-6 entry form), the unique stored entry equal to its old
+    entry replaced by the new one. None when an entry matches no or several stored entries (or
+    two vertices the same one): the list is then rebuilt by W13-6.
+
+    ``36`` V22-1: on real switch and x360 files the old entry is almost never found exactly once,
+    so a skin edit usually rewrites the whole compact list (and may change its length). For this
+    list "an edit changes only what was edited" does not hold; which layout the game needs is
+    OPEN. The palette, the ranges and the slots of unchanged vertices are kept (PROVEN)."""
+    if len(stored) % INFLUENCE_RECORD:
+        return None
+    chunks = [stored[k:k + INFLUENCE_RECORD] for k in range(0, len(stored), INFLUENCE_RECORD)]
+    out = list(chunks)
+    taken: set = set()
+    for old, new in edits:
+        if old == new:
+            continue
+        hits = [k for k, chunk in enumerate(chunks) if chunk == old]
+        if len(hits) != 1 or hits[0] in taken:
+            return None
+        taken.add(hits[0])
+        out[hits[0]] = new
+    return b"".join(out)
+
+
+def _skin_record_words(target: L.Record, piece: Draw, order: str) -> None:
+    """W2-1, W2-6: the count words of a changed skinning record."""
+    _pack(target.raw, order, "i", SKIN["vertex_count"], len(piece.positions), field="skinning nPackVertCount (+0x18)")
+    _pack(target.raw, order, "i", SKIN["index_count"], len(piece.indices), field="skinning nPackIndexCount (+0x30)")
+    _pack(target.raw, order, "i", SKIN["bones"], len(_block_bytes(target.pairs.get(SKIN["palette"]))) // 4, field="skinning bone count (+0x00)")
+    start, end = SKIN["zero"]
+    target.raw[start:end] = bytes(end - start)
+
+
+def _stored_switch_slots(skin: L.Record, order: str) -> list[bytes]:
+    stored = _block_bytes(skin.pairs.get(SKIN["vertices"]))
+    slots = [stored[i * PACKED_SKINNED + 28:i * PACKED_SKINNED + 32] for i in range(len(stored) // PACKED_SKINNED)]
+    return [s[::-1] for s in slots] if order == ">" else slots
+
+
+def _kept_switch_record(ctx: _Context, skin: L.Record, sub: SubObject, draw: Draw, before: Draw, bias, scale):
+    """V21-2 for one switch / x360 skinning record of a skin-only edit: the stored palette while
+    every weighted bone is in it, else a first-use palette (W13-5). None when the derived palette
+    would need a split (above 45 bones): the record is then derived as before."""
+    order = ctx.order
+    bones = set().union(*(_vertex_bones(draw, i) for i in range(len(draw.positions))))
+    palette, derived = list(before.palette or []), False
+    if not bones <= set(palette):
+        palette, derived = first_use_palette(draw.joints, draw.weights), True
+        if not palette or len(palette) > SKIN_PALETTE_LIMIT:
+            return None
+        for bone in palette:
+            ctx.check_bone(bone, sub.label, "W13-5")
+    piece = dataclasses.replace(draw, palette=palette)
+    slots = kept_skin_slots(draw, before, _stored_switch_slots(skin, order), palette, derived)
+    changed = False
+    if derived:
+        changed |= _set_bytes(skin, SKIN["palette"], _packed(order, f"{len(palette)}i", "skinning palette (pBoneIDs)", *palette))
+    changed |= _set_bytes(skin, SKIN["vertices"], encode_packed_vertices(piece, bias, scale, order, slots))
+    changed |= _set_bytes(skin, SKIN["indices"], encode_indices(piece.indices, order))
+    if changed:
+        _skin_record_words(skin, piece, order)
+    return changed
+
+
 def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_skins, bias, scale):
-    """The skinning records of a switch / x360 sub-object (W2-1, W2-6; W13-5, W13-7). Returns
-    (any record changed, triangles changed, compact influence entries or None)."""
+    """The skinning records of a switch / x360 sub-object (W2-1, W2-6; W13-5, W13-7; V21-2).
+    Returns (any record changed, triangles changed, compact influence entries, compact list edits
+    or None). The edits (old entry, new entry per changed vertex) are given when every changed
+    record is a skin-only edit kept by V21-2."""
     order, rules = ctx.order, ctx.rules
     skin_value = record.pairs.get(SWITCH_SUB["skins"])
     skin_records = skin_value.block.elements if skin_value is not None and skin_value.block else []
     new_records: list[L.Record] = []
     entries = bytearray()
+    edits: list | None = []
     any_changed = triangles = False
     for skin, draw, before in zip(skin_records, skins, old_skins):
         same = _same_draw(draw, before)
@@ -592,7 +707,21 @@ def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_sk
         if _empty(draw) and not (same and _empty(before)):
             _empty_record(ctx, sub, "skinning record")
             any_changed = triangles = True
+            edits = None
             continue
+        if ctx.keep_skin and not same and "W13-5" in rules and skin_edit_only(draw, before):
+            changed = _kept_switch_record(ctx, skin, sub, draw, before, bias, scale)
+            if changed is not None:  # V21-2
+                any_changed = True
+                new_records.append(skin)
+                for i in range(len(draw.positions)):
+                    entries += influence_entry(draw, i)
+                if edits is not None:
+                    edits += [(influence_entry(before, i), influence_entry(draw, i))
+                              for i in _changed_skin_vertices(draw, before)]
+                continue
+        if not same:
+            edits = None
         rebuild = "W13-5" in rules and not same
         pieces = split_skinned_draw(draw) if rebuild else [(draw, list(range(len(draw.positions))))]
         used: set = set()
@@ -611,19 +740,11 @@ def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_sk
                     order, f"{len(palette)}i", "skinning palette (pBoneIDs)", *palette))
                 slots = None
             else:
-                stored = _block_bytes(skin.pairs.get(SKIN["vertices"]))
-                slots = [stored[i * PACKED_SKINNED + 28:i * PACKED_SKINNED + 32]
-                         for i in range(len(stored) // PACKED_SKINNED)]
-                if order == ">":
-                    slots = [s[::-1] for s in slots]
+                slots = _stored_switch_slots(skin, order)
             changed |= _set_bytes(target, SKIN["vertices"], encode_packed_vertices(piece, bias, scale, order, slots))
             changed |= _set_bytes(target, SKIN["indices"], encode_indices(piece.indices, order))
             if changed:  # W2-1, W2-6
-                _pack(target.raw, order, "i", SKIN["vertex_count"], len(piece.positions), field="skinning nPackVertCount (+0x18)")
-                _pack(target.raw, order, "i", SKIN["index_count"], len(piece.indices), field="skinning nPackIndexCount (+0x30)")
-                _pack(target.raw, order, "i", SKIN["bones"], len(_block_bytes(target.pairs.get(SKIN["palette"]))) // 4, field="skinning bone count (+0x00)")
-                start, end = SKIN["zero"]
-                target.raw[start:end] = bytes(end - start)
+                _skin_record_words(target, piece, order)
             any_changed |= changed or not same
             new_records.append(target)
             used.update(ids)
@@ -631,7 +752,7 @@ def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_sk
             entries += influence_entry(draw, i)
     if len(new_records) != len(skin_records) or any(a is not b for a, b in zip(new_records, skin_records)):
         record.pairs[SWITCH_SUB["skins"]] = L.PairValue(L.Block(elements=new_records) if new_records else None)
-    return any_changed, triangles, bytes(entries)
+    return any_changed, triangles, bytes(entries), edits
 
 
 def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) -> tuple[bool, bool]:
@@ -653,7 +774,7 @@ def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject)
         _set_bytes(record, SWITCH_SUB["packed"], encode_packed_vertices(draw, bias, scale, order))
         _pack(raw, order, "i", SWITCH_SUB["packed_count"], len(draw.positions), field="nPackVertCount (+0xA0)")
         triangles |= draw.indices != before.indices
-    skins_changed, skin_triangles, entries = _switch_skins(ctx, record, sub, skins, old_skins, bias, scale)
+    skins_changed, skin_triangles, entries, edits = _switch_skins(ctx, record, sub, skins, old_skins, bias, scale)
     triangles |= skin_triangles
     fat_moved = sub.fat_draw is not None and old.fat_draw is not None and \
         sub.fat_draw.positions != old.fat_draw.positions
@@ -661,6 +782,9 @@ def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject)
         triangles |= fat_moved or sub.fat_draw.indices != old.fat_draw.indices
     _fat_and_pools(ctx, record, sub, old, rigid[0].indices if rigid else None, SWITCH_SUB["index"])
     if "W13-6" in rules and skins and skins_changed:
+        if edits is not None:  # V21-2: the stored list with the changed entries replaced
+            patched = patched_influences(_block_bytes(record.pairs.get(SWITCH_SUB["influence"])), edits)
+            entries = entries if patched is None else patched
         _set_bytes(record, SWITCH_SUB["influence"], entries)  # W13-6: vertex order (Q399)
     else:
         old_n = sum(len(d.positions) for d in old_skins) or (
@@ -697,6 +821,24 @@ def _ps3_ranges(ctx: _Context, draw: Draw, before: Draw, same: bool, label: str)
     return ranges, dataclasses.replace(draw, palette=palette), slots
 
 
+def _ps3_kept_ranges(ctx: _Context, draw: Draw, before: Draw, stored_ranges, label: str):
+    """V21-2 for a skin-only edit of a ps3 draw: the stored bone ranges while every weighted bone
+    of the draw is in them, else ranges derived by W13-4 from the weighted bones. Unchanged
+    vertices keep their stored slots (renumbered when the ranges were derived)."""
+    bones: set = set()
+    for i in range(len(draw.positions)):
+        bones |= _vertex_bones(draw, i)
+    for bone in bones:
+        ctx.check_bone(bone, label, "W13-4")
+    palette = list(before.palette or [])
+    ranges, derived = tuple(stored_ranges), False
+    if not bones <= set(palette):
+        ranges, derived = ps3_bone_ranges(bones), True
+        palette = ranges_palette(ranges)
+    slots = kept_skin_slots(draw, before, before.local_joints, palette, derived)
+    return ranges, dataclasses.replace(draw, palette=palette), slots
+
+
 def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) -> tuple[bool, bool]:
     order, raw, rules = ctx.order, record.raw, ctx.rules
     fat, old_fat = sub.fat_draw, old.fat_draw
@@ -727,7 +869,10 @@ def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) ->
         stored_ranges = struct.unpack_from(">4H", draw_record.raw, PS3_RANGES)
         ranges, slots = stored_ranges, before.local_joints
         if draw.skinned and "W13-4" in rules:
-            ranges, draw, slots = _ps3_ranges(ctx, draw, before, same, label)
+            if ctx.keep_skin and not same and before.local_joints is not None and skin_edit_only(draw, before):
+                ranges, draw, slots = _ps3_kept_ranges(ctx, draw, before, stored_ranges, label)  # V21-2
+            else:
+                ranges, draw, slots = _ps3_ranges(ctx, draw, before, same, label)
         blocks = encode_ps3_draw(draw, bias, scale, slots)
         work = None
         if draw.skinned and "W13-1" in rules:
@@ -862,12 +1007,17 @@ def _rebuild_octree(tree: L.SnoTree, stored: O.Octree | None) -> None:
     O.set_octree(tree, changed_mesh_octree(mesh, stored))
 
 
-def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None, derive=False) -> L.SnoTree:
+def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None, derive=False,
+                  keep_skin_bytes: bool = False) -> L.SnoTree:
     """W2-1 to W2-15: the structure tree of ``app``'s source with every mesh block of ``mesh`` (a
     decoded ``.app``, by default ``app`` itself, changed by the caller) encoded again.
     ``derive`` (True, or rule names of ``RULES``) applies the stage-13 rules: W13-1, W13-2 and
     W13-4 derive the values the writer otherwise keeps; W13-3, W13-5 and W13-6 apply to changed
-    meshes; W13-7 drops empty skinning records and skinned draws (else they are refused)."""
+    meshes; W13-7 drops empty skinning records and skinned draws (else they are refused).
+    ``keep_skin_bytes`` (V21-2, used by the mesh import): a skinning record or ps3 draw whose
+    vertex count, positions and indices are unchanged keeps its stored palette or bone ranges
+    while every weighted bone is in them, the stored slot bytes of its unchanged vertices, and
+    (switch, x360) the stored compact influence list with only the changed entries replaced."""
     rules = rule_set(derive)
     mesh = app if mesh is None else mesh
     if mesh.build != app.build:
@@ -878,7 +1028,7 @@ def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None, deriv
         L.set_block(tree, path, data)
     stored_octree = O.read_octree(tree)
     old = parse_appearance(source, app.build)
-    ctx = _Context(app, tree, old, rules)
+    ctx = _Context(app, tree, old, rules, keep_skin_bytes)
     sub_fn = _ps3_sub if app.build == "ps3" else _switch_sub
     box_at = (PS3_SUB if app.build == "ps3" else SWITCH_SUB)["box"]
     geo0_records: list[L.Record] = []
@@ -905,14 +1055,15 @@ def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None, deriv
 
 
 def write_app_mesh(app: AppearanceFile, mesh: AppearanceFile | None = None, check: bool = True,
-                   derive=False) -> bytes:
+                   derive=False, keep_skin_bytes: bool = False) -> bytes:
     """Encode ``mesh`` (default: ``app`` as changed by the caller) into ``app``'s ``.app`` and lay
-    it out (W2-1 to W2-15, W11; ``derive``: the W13 rules, see ``app_mesh_tree``). An unchanged
+    it out (W2-1 to W2-15, W11; ``derive``: the W13 rules, ``keep_skin_bytes``: V21-2, see
+    ``app_mesh_tree``). An unchanged
     mesh gives the source bytes (with ``derive`` too, for a file that follows the rules). With
     ``check`` the output is read again and must give the same counts (the same index count per
     sub-object when W13-5 or W13-7 may split or drop records)."""
     rules = rule_set(derive)
-    out = L.write_tree(app_mesh_tree(app, mesh, rules))
+    out = L.write_tree(app_mesh_tree(app, mesh, rules, keep_skin_bytes))
     if check:
         again = parse_appearance(out, app.build)
         mesh = app if mesh is None else mesh
@@ -943,7 +1094,8 @@ def index_pool_problems(app: AppearanceFile) -> list[str]:
 __all__ = [
     "RULES", "app_mesh_tree", "changed_mesh_octree", "encode_fat_vertices", "encode_indices",
     "encode_packed_vertices", "encode_ps3_draw", "first_use_palette", "fixed_point_bias",
-    "fixed_point_steps", "index_pool_problems", "influence_entry", "normal_bytes",
+    "fixed_point_steps", "index_pool_problems", "influence_entry", "kept_skin_slots", "normal_bytes",
+    "patched_influences", "skin_edit_only",
     "ps3_bone_ranges", "ps3_command_space", "ps3_skinned_work_size", "ps3_work_size",
     "quantisation_steps", "ranges_palette", "raw_coordinates", "rule_set", "skin_slots",
     "split_skinned_draw", "uv1_words", "write_app_mesh",
