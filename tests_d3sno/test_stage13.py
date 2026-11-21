@@ -7,6 +7,7 @@ are worked out from the description by hand.
 
 import struct
 import unittest
+from unittest import mock
 
 import builders as B
 import d3sno
@@ -135,9 +136,14 @@ class WorkBuffer(unittest.TestCase):
     def test_refused_above_0xc000(self):
         app = P.parse_appearance(ps3(skinned=True, bones=BONES), "ps3")
         draw = app.sub_objects[0].draws[0]
-        positions = [(float(i % 30), float(i // 30), 0.0) for i in range(1500)]
-        set_mesh(draw, positions, list(range(1500)) * 3)
-        with self.assertRaisesRegex(FormatError, r"draw 0: skinned draw work buffer \d+ is above 0xC000 \(W13-1\)"):
+        # ``39`` V24-4: a changed draw is checked as V23-2 orders it (budget, stream A, work buffer):
+        # 1000 vertices and 12,000 indices are within the budget (58,000) but over the work buffer
+        positions = [(float(i % 30), float(i // 30), 0.0) for i in range(1000)]
+        set_mesh(draw, positions, [(t + k) % 1000 for t in range(4000) for k in range(3)])
+        with self.assertRaisesRegex(FormatError, r"draw 0: work buffer \d+ is above 0xC000 \(W2-10, W13-1\)"):
+            M.write_app_mesh(app, derive=True)
+        set_mesh(draw, [(float(i % 30), float(i // 30), 0.0) for i in range(1500)], list(range(1500)) * 3)
+        with self.assertRaisesRegex(FormatError, r"draw 0: budget value 73500 is above 58168"):  # budget first
             M.write_app_mesh(app, derive=True)
 
 
@@ -508,20 +514,27 @@ class CompactList(unittest.TestCase):
         # fat (cloth) vertices in a file with bones: 6 x the fat vertex count
         app = P.parse_appearance(ps3(fat=fat, cloth=True, bones=BONES), "ps3")
         app.sub_objects[0].fat_draw.positions[1] = (5.0, 0.0, 0.0)
-        out = M.write_app_mesh(app, derive={"W13-6"})
+        with self.assertRaisesRegex(FormatError, "fat vertices: .*V23-5"):  # ``39`` V24-1
+            M.write_app_mesh(app, derive={"W13-6"})
+        with mock.patch.object(M, "_cloth_parts_unchanged", lambda *args: None):  # the W13-6 rule itself
+            out = M.write_app_mesh(app, derive={"W13-6"})
         record = L.parse_tree(out, "app", "ps3").top.pairs[0x64].block.elements[0]
         self.assertEqual(len(M._block_bytes(record.pairs.get(0x10C))), 18)
         # no bones: no list
         app = P.parse_appearance(ps3(fat=fat, cloth=True), "ps3")
         app.sub_objects[0].fat_draw.positions[1] = (5.0, 0.0, 0.0)
-        record = L.parse_tree(M.write_app_mesh(app, derive={"W13-6"}), "app", "ps3").top.pairs[0x64].block.elements[0]
+        with mock.patch.object(M, "_cloth_parts_unchanged", lambda *args: None):
+            record = L.parse_tree(M.write_app_mesh(app, derive={"W13-6"}), "app", "ps3").top.pairs[0x64].block.elements[0]
         self.assertEqual(M._block_bytes(record.pairs.get(0x10C)), b"")
 
     def test_ps3_skinned_cloth_length(self):
         fat = [(0.0, 0.0, 0.0), (4.0, 0.0, 0.0), (0.0, 4.0, 0.0), (4.0, 4.0, 0.0)]
         app = P.parse_appearance(ps3(skinned=True, bones=BONES, fat=fat, cloth=True, cloth_draw=True), "ps3")
         app.sub_objects[0].draws[0].weights[0] = (255, 0, 0, 0)
-        record = L.parse_tree(M.write_app_mesh(app, derive={"W13-6"}), "app", "ps3").top.pairs[0x64].block.elements[0]
+        with self.assertRaisesRegex(FormatError, "V23-5"):  # ``38`` V23-5: a cloth part is not changed
+            M.write_app_mesh(app, derive={"W13-6"})
+        with mock.patch.object(M, "_cloth_parts_unchanged", lambda *args: None):  # the W13-6 rule itself
+            record = L.parse_tree(M.write_app_mesh(app, derive={"W13-6"}), "app", "ps3").top.pairs[0x64].block.elements[0]
         self.assertEqual(len(M._block_bytes(record.pairs.get(0x10C))), 18)  # 6 x 3 draw vertices
 
     def test_ps3_skinned_without_cloth_has_none(self):

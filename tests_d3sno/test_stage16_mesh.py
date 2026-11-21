@@ -128,8 +128,10 @@ class Exporter(unittest.TestCase):
     def test_mesh_and_primitive_extras(self):
         app = P.parse_appearance(ROUND_TRIP["ps3 two draws, low poly"][0], "ps3")
         doc = P.to_gltf(app)
+        # stage 17 (W17-12): the mesh extras also carry the sub-object name and material hash
         self.assertEqual([m["extras"] for m in doc["meshes"]],
-                         [{"d3sno": {"geo_set": 0, "sub_object": 0}}, {"d3sno": {"geo_set": 1, "sub_object": 0}}])
+                         [{"d3sno": {"geo_set": 0, "sub_object": 0, "name": "Body", "material": 0}},
+                          {"d3sno": {"geo_set": 1, "sub_object": 0, "name": "Low", "material": 0}}])
         self.assertEqual([p["extras"] for p in doc["meshes"][0]["primitives"]],
                          [{"d3sno": {"draw": 0}}, {"d3sno": {"draw": 1}}])
 
@@ -434,27 +436,33 @@ class Matching(unittest.TestCase):
             I.import_mesh(app, P.to_obj(app).replace("__sub0", "").replace("__sub1", ""))
 
     def test_unmatched_mesh(self):
+        # stage 17 (W17-12): a mesh that matches no sub-object is a new sub-object (was refused, W16-7)
         app = two_subs()
         doc = self.strip(P.to_gltf(app))
         doc["meshes"][1]["name"] = doc["nodes"][1]["name"] = "Extra"
-        with self.assertRaisesRegex(FormatError, "matches no sub-object"):
+        for document in (read(doc), P.to_obj(app).replace("o subobject_1", "o Extra")):
+            out, report = I.import_mesh_report(app, document)
+            self.assertEqual(report.added, ["high-poly set, sub-object 2"])
+            self.assertEqual(len(P.parse_appearance(out).sub_objects), 3)
+        doc["meshes"][1].pop("name")
+        doc["nodes"][1].pop("name")
+        with self.assertRaisesRegex(FormatError, "matches no sub-object and has no name"):
             I.import_mesh(app, read(doc))
-        with self.assertRaisesRegex(FormatError, "matches no sub-object"):
-            I.import_mesh(app, P.to_obj(app).replace("o subobject_1", "o Extra"))
 
     def test_two_meshes_for_one_sub_object(self):
+        # stage 17 (W17-12): the second mesh for one sub-object is an editor copy and becomes a new
+        # sub-object (was refused "two meshes for ...", W16-7)
         app = two_subs()
         doc = P.to_gltf(app)
         doc["nodes"].append({"name": "copy", "mesh": 0})
-        with self.assertRaisesRegex(FormatError, "two meshes for high-poly set, sub-object 0"):
-            I.import_mesh(app, read(doc))
-        doc = self.strip(P.to_gltf(app))
-        doc["meshes"][1]["name"] = doc["nodes"][1]["name"] = "subobject_0.002"
-        with self.assertRaisesRegex(FormatError, "two meshes"):
-            I.import_mesh(app, read(doc))
+        doc2 = self.strip(P.to_gltf(app))
+        doc2["meshes"][1]["name"] = doc2["nodes"][1]["name"] = "subobject_0.002"
         text = P.to_obj(app).replace("o subobject_1", "o subobject_0.001")
-        with self.assertRaisesRegex(FormatError, "two OBJ objects"):
-            I.import_mesh(app, text)
+        for document, copied in ((read(doc), 0), (read(doc2), 1), (text, 1)):
+            out, report = I.import_mesh_report(app, document)
+            self.assertEqual(report.added, ["high-poly set, sub-object 2"])
+            again = P.parse_appearance(out)
+            self.assertEqual(again.sub_objects[2].draws[0].positions, app.sub_objects[copied].draws[0].positions)
 
     def test_draw_by_material_name(self):
         app = P.parse_appearance(ps3(extra_draw_format=0x81), "ps3")
@@ -488,8 +496,8 @@ class Matching(unittest.TestCase):
         with self.assertRaisesRegex(FormatError, "no 'g draw_<k>' groups and 2 draws"):
             I.import_mesh(app, text)
         text = P.to_obj(app).replace("g draw_1", "g other")
-        with self.assertRaisesRegex(FormatError, "faces outside a 'g draw_<k>' group"):
-            I.import_mesh(app, text)
+        # stage 17 (W17-12): a group that matches no draw is new geometry (was refused, W16-10)
+        self.assertEqual(I.import_mesh_report(app, text)[1].added, ["high-poly set, sub-object 0, draw 2"])
         with self.assertRaisesRegex(FormatError, "draw 7 of"):
             I.import_mesh(app, P.to_obj(app).replace("g draw_1", "g draw_7"))
 
@@ -506,15 +514,20 @@ class Matching(unittest.TestCase):
         out, report = I.import_mesh_report(app, read(doc), missing="empty")  # ps3 rigid draws: dropped
         self.assertEqual(report.changed, ["high-poly set, sub-object 0, draw 1", "low-poly set, sub-object 0, draw 0"])
         again = P.parse_appearance(out, "ps3")
-        self.assertEqual([len(s.draws) for s in again.sub_objects + again.extra_sub_objects], [1, 0])
+        # stage 17 (W17-13, W17-14): the low-poly sub-object left without draws is removed
+        self.assertEqual([len(s.draws) for s in again.sub_objects + again.extra_sub_objects], [1])
         self.assertEqual(again.sub_objects[0].draws[0].positions, app.sub_objects[0].draws[0].positions)
         empty = {"asset": {"version": "2.0"}}
         sapp = P.parse_appearance(switch_rigid())
-        with self.assertRaisesRegex(FormatError, "empty rigid packed list is not accepted"):
-            I.import_mesh(sapp, read(empty), missing="empty")
+        # stage 17 (W17-13, W17-14): the emptied rigid list and only skinning record are removed with
+        # their sub-object (were refused: Q376 / V21-3)
+        out, report = I.import_mesh_report(sapp, read(empty), missing="empty")
+        self.assertEqual(P.parse_appearance(out).sub_objects, [])
+        self.assertEqual(report.removed, ["high-poly set, sub-object 0, rigid list", "high-poly set, sub-object 0"])
         skinned = P.parse_appearance(derived(switch_skinned3()))
-        with self.assertRaisesRegex(FormatError, "V21-3"):  # its only skinning record (V21-3)
-            I.import_mesh(skinned, read(empty), missing="empty")
+        out, report = I.import_mesh_report(skinned, read(empty), missing="empty")
+        self.assertEqual(P.parse_appearance(out).sub_objects, [])
+        self.assertEqual(report.removed, ["high-poly set, sub-object 0, skinning record 0", "high-poly set, sub-object 0"])
         with self.assertRaisesRegex(FormatError, "cloth"):
             I.import_mesh(P.parse_appearance(switch_cloth()), read(empty), missing="empty")
         with self.assertRaises(ValueError):
@@ -996,7 +1009,8 @@ class Writing(unittest.TestCase):
         edited = copy.deepcopy(app)
         positions = [(float(i % 30), float(i // 30), 0.0) for i in range(1500)]
         set_mesh(edited.sub_objects[0].draws[0], positions, list(range(1500)) * 3)
-        with self.assertRaisesRegex(FormatError, r"^high-poly set, sub-object 0, draw 0: .*work buffer"):
+        # ``39`` V24-4: the budget is checked first (V23-2 order)
+        with self.assertRaisesRegex(FormatError, r"^high-poly set, sub-object 0, draw 0: budget value"):
             I.import_mesh(app, read(P.to_gltf(edited)))
 
     def test_report_and_bad_arguments(self):

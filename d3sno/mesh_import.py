@@ -11,6 +11,20 @@ Corrections 21 (``35_corrections21.md``): V21-1 sub-objects with cloth or fat ve
 value; V21-2 skin edits keep the stored bytes of unchanged vertices; V21-3 emptying every
 skinning record of a switch/x360 sub-object is refused; V21-4 ``extras.d3sno.no_indices``;
 V21-5 ``<name>__sub<i>`` object names.
+
+Stage 17 (``37_mesh_parts.md``): W17-12 new meshes and primitives become new sub-objects and new
+geometry (editor copies included), W17-13 ``missing`` = keep | empty | remove (replaces the
+V21-3 / Q699 refusals: emptying every part of a sub-object removes it), W17-14 the report lists
+every added and removed part (``ImportReport.added`` / ``removed``).
+
+Corrections 23 (``38_corrections23.md``): V23-3 a changed ps3 draw over a limit is refused (import
+the geometry as a new mesh, which is cut); V23-6 an editor copy of a cloth or fat sub-object is
+refused; V23-7 the import creates no material entry, and an ``extras.d3sno.material`` hash not in
+the table gives a warning; V23-8 the weights of a new part (editor copies included) come from the
+glTF floats quantised by W16-9 to a sum of 255, so on x360, where 12 % of stored skinned vertices
+sum to 252-254, a copy's weights may differ from its source by 1 or 2 per vertex (unchanged parts
+keep their stored bytes, so round trips are not affected); V23-9 a writer refusal names its draw
+once.
 """
 
 from __future__ import annotations
@@ -28,8 +42,10 @@ from dataclasses import dataclass, field
 from fractions import Fraction
 
 from . import app_mesh as M
+from .app_parts import free_name, name_hash, ps3_name_field
 from .appearance import (
-    GEOSET_LOWPOLY, AppearanceFile, Draw, SubObject, _bone_node, _object_name, _unit, export_sub_objects,
+    GEOSET_LOWPOLY, AppearanceFile, Draw, SubObject, _bone_node, _object_name, _unit, export_object_names,
+    export_sub_objects,
     parse_appearance,
 )
 from .binary import FormatError
@@ -49,6 +65,8 @@ _DRAW_SUFFIX = re.compile(r"_draw_(\d+)$")
 _COPY_SUFFIX = re.compile(r"^(.*)\.\d{3}$")
 _BONE_NAME = re.compile(r"bone_(\d+)_([0-9A-Fa-f]{8})")
 _REPEATED = re.compile(r"(.+)__sub(\d+)")  # V21-5
+_TEXTURE_MATERIAL = re.compile(r"texture_(-?\d+)_draw_\d+")  # W16-5 material names (W17-12 rule 3)
+LOWPOLY_PREFIX = "lowpoly_"  # G1-1 object names of geo set 1
 
 
 def _f32(value: float) -> float:
@@ -508,10 +526,15 @@ def read_obj(text: str) -> ObjDocument:
 
 @dataclass
 class ImportReport:
-    """What ``import_mesh_report`` did: draw labels changed and kept, and warnings (W16-9)."""
+    """What ``import_mesh_report`` did: draw labels changed and kept, and warnings (W16-9).
+    W17-14: ``added`` and ``removed`` hold the label of every added and removed part (sub-object,
+    ps3 draw, skinning record, rigid list, material entry), as the writer's ``PartsReport`` gives
+    them (a removed part by its template place, an added one by its output place)."""
     changed: list = field(default_factory=list)
     kept: list = field(default_factory=list)
     warnings: list = field(default_factory=list)
+    added: list = field(default_factory=list)
+    removed: list = field(default_factory=list)
 
 
 @dataclass
@@ -537,6 +560,30 @@ class _Options:
     lightmap_v_scale: float | None
     missing: str
     skin: str
+    look: int = 0
+
+
+@dataclass
+class _Match:
+    """A mesh (object) matched to a template sub-object: its primitives (groups) by draw index,
+    and the ones that match no draw, which are new geometry of the sub-object (W17-12)."""
+    sources: dict
+    joint_map: object
+    extra: list = field(default_factory=list)
+
+
+@dataclass
+class _NewPart:
+    """A mesh (glTF) or object (OBJ) that becomes a new sub-object (W17-12). ``template`` is the
+    matched sub-object of an editor copy (its template part), else None."""
+    what: str
+    name: str | None
+    geo_set: int
+    template: SubObject | None
+    info: dict | None  # the mesh's extras.d3sno
+    textures: list  # texture handles of primitive materials ``texture_<handle>_draw_<k>``, in order
+    sources: list
+    joint_map: object = None
 
 
 def _label(sub: SubObject, k: int) -> str:
@@ -585,16 +632,22 @@ def _match_sub(extras, names, candidates: list[SubObject]) -> SubObject | None:
     return None
 
 
-def _match_draws(sub: SubObject, keys: list, what: str) -> list[int]:
+def _match_draws(sub: SubObject, keys: list, what: str) -> list:
     """W16-7 draws: ``keys`` holds, per primitive, the draw named by extras or material (or
-    None). The rest are matched by order when the counts allow it."""
+    None). The rest are matched by order when the counts allow it. W17-12: when they do not and
+    some primitive names a draw, a primitive naming none matches no draw and is new geometry of the
+    sub-object (None in the result); when no primitive names a draw, the counts must agree."""
     positioned = [k for k, d in enumerate(sub.draws) if d.positions]
+    by_order = len(keys) == len(positioned)
     out = []
     for p, k in enumerate(keys):
         if k is None:
-            if len(keys) != len(positioned):
+            if not by_order and all(key is None for key in keys):
                 raise FormatError(f"{what}: primitive {p} names no draw and {len(keys)} primitives "
                                   f"do not match the {len(positioned)} draws of {sub.label} by order")
+            if not by_order:
+                out.append(None)  # W17-12: new geometry
+                continue
             k = positioned[p]
         if not 0 <= k < len(sub.draws):
             raise FormatError(f"{what}: draw {k} of {sub.label}, which has {len(sub.draws)} draws")
@@ -833,13 +886,50 @@ def _to_int(value, high: int, what: str) -> int:
     return value
 
 
-def _gltf_matches(doc: GltfDocument, app: AppearanceFile, candidates, skipped, report) -> dict:
+def _d3sno_info(extras) -> dict | None:
+    info = extras.get("d3sno") if isinstance(extras, dict) else None
+    return info if isinstance(info, dict) else None
+
+
+def _has_joints(primitive: dict) -> bool:
+    return any(name.startswith(("JOINTS_", "WEIGHTS_")) for name in primitive["attributes"])
+
+
+def _new_geo_set(info: dict | None, name: str | None) -> int:
+    """W17-12: ``extras.d3sno.geo_set`` when present (0 or 1), else 1 for a ``lowpoly_`` name,
+    else 0."""
+    if info is not None and _is_int(info.get("geo_set")) and info["geo_set"] in (0, 1):
+        return info["geo_set"]
+    return 1 if isinstance(name, str) and name.startswith(LOWPOLY_PREFIX) else 0
+
+
+def _choose_matches(found, names) -> dict:
+    """W17-12 editor copies: of the meshes matching one sub-object, the one whose name equals the
+    exporter's name exactly, else the first in node order, is the match. ``found`` holds (names of
+    the mesh, sub-object or None); returns {(geo set, index): position in ``found``}."""
+    chosen: dict = {}
+    for p, (given, sub) in enumerate(found):
+        if sub is None:
+            continue
+        key = (sub.geo_set, sub.index)
+        exact = names.get(key) in given
+        if key not in chosen or (exact and not chosen[key][1]):
+            chosen[key] = (p, exact)
+    return {key: p for key, (p, _) in chosen.items()}
+
+
+def _refuse_bones(app: AppearanceFile, primitive: dict, what: str) -> None:
+    """W17-12: in a file without bones, a primitive with joints is refused."""
+    if not app.bones and _has_joints(primitive):
+        raise FormatError(f"{what}: a primitive with joints in a file without bones (W17-12)")
+
+
+def _gltf_matches(doc: GltfDocument, app: AppearanceFile, candidates, skipped, report):
+    """W16-7, W17-12: (matches by (geo set, index), new parts in node order)."""
     nodes = doc.json.get("nodes", [])
     meshes = doc.json.get("meshes", [])
     worlds = _world_matrices(doc)
-    matches: dict = {}
-    owners: dict = {}
-    joint_maps: dict = {}
+    found = []  # (node index, node, mesh, what, sub-object or None)
     for n, node in enumerate(nodes):
         if "mesh" not in node:
             continue
@@ -847,48 +937,79 @@ def _gltf_matches(doc: GltfDocument, app: AppearanceFile, candidates, skipped, r
         _need(_is_int(m) and 0 <= m < len(meshes), f"node {n}: mesh {m!r}")
         mesh = meshes[m]
         what = f"glTF mesh {m} ({mesh.get('name')!r})"
+        given = (mesh.get("name"), node.get("name"))
         try:
-            sub = _match_sub(mesh.get("extras"), (mesh.get("name"), node.get("name")), candidates)
-            if sub is None and _match_sub(mesh.get("extras"), (mesh.get("name"), node.get("name")), skipped):
+            sub = _match_sub(mesh.get("extras"), given, candidates)
+            if sub is None and _match_sub(mesh.get("extras"), given, skipped):
                 report.warnings.append(f"{what} is a low-poly sub-object and is not imported")
                 continue
         except FormatError as exc:
             raise FormatError(f"{what}: {exc.message}") from None
-        if sub is None:
-            raise FormatError(f"{what} matches no sub-object; adding sub-objects is not described (W16-14)")
-        key = (sub.geo_set, sub.index)
-        if key in owners:
-            raise FormatError(f"two meshes for {sub.label}: {owners[key]} and {what}")
-        owners[key] = what
-        joint_map = None
-        if "skin" in node:
-            if node["skin"] not in joint_maps:
-                joint_maps[node["skin"]] = _JointMap(doc, node["skin"], app, report.warnings)
-            joint_map = joint_maps[node["skin"]]
-        keys = []
-        for primitive in mesh["primitives"]:
-            k = None
-            extras = primitive.get("extras")
-            info = extras.get("d3sno") if isinstance(extras, dict) else None
-            if isinstance(info, dict) and _is_int(info.get("draw")):
-                k = info["draw"]
-            elif "material" in primitive:
+        found.append((n, node, mesh, what, sub))
+    chosen = _choose_matches([((mesh.get("name"), node.get("name")), sub) for _, node, mesh, _, sub in found],
+                             export_object_names(app))
+    joint_maps: dict = {}
+
+    def joint_map_of(node):
+        if "skin" not in node:
+            return None
+        if node["skin"] not in joint_maps:
+            joint_maps[node["skin"]] = _JointMap(doc, node["skin"], app, report.warnings)
+        return joint_maps[node["skin"]]
+
+    matches: dict = {}
+    new_parts: list[_NewPart] = []
+    for p, (n, node, mesh, what, sub) in enumerate(found):
+        if sub is not None and chosen[(sub.geo_set, sub.index)] == p:
+            joint_map = joint_map_of(node)
+            keys = []
+            for primitive in mesh["primitives"]:
+                k = None
+                info = _d3sno_info(primitive.get("extras"))
+                if info is not None and _is_int(info.get("draw")):
+                    k = info["draw"]
+                elif "material" in primitive:
+                    material = doc._get("materials", primitive["material"], "material")
+                    match = _DRAW_SUFFIX.search(material.get("name") or "")
+                    k = int(match.group(1)) if match else None
+                keys.append(k)
+            draws = _match_draws(sub, keys, what)
+            sources, extra = {}, []
+            for q, (k, primitive) in enumerate(zip(draws, mesh["primitives"])):
+                pwhat = f"{what} primitive {q}"
+                if k is None:
+                    _refuse_bones(app, primitive, pwhat)
+                    extra.append(_gltf_source(doc, primitive, worlds[n], joint_map, pwhat))
+                else:
+                    sources[k] = _gltf_source(doc, primitive, worlds[n], joint_map, pwhat)
+            matches[(sub.geo_set, sub.index)] = _Match(sources, joint_map, extra)
+            continue
+        # W17-12: a mesh that matches no sub-object, or an editor copy of a matched one
+        name = mesh.get("name") if isinstance(mesh.get("name"), str) and mesh.get("name") else node.get("name")
+        if sub is None and not (isinstance(name, str) and name):
+            raise FormatError(f"{what} matches no sub-object and has no name for a new one (W17-12)")
+        info = _d3sno_info(mesh.get("extras"))
+        textures = []
+        for q, primitive in enumerate(mesh["primitives"]):
+            _refuse_bones(app, primitive, f"{what} primitive {q}")
+            if "material" in primitive:
                 material = doc._get("materials", primitive["material"], "material")
-                match = _DRAW_SUFFIX.search(material.get("name") or "")
-                k = int(match.group(1)) if match else None
-            keys.append(k)
-        draws = _match_draws(sub, keys, what)
-        sources = {k: _gltf_source(doc, primitive, worlds[n], joint_map, f"{what} primitive {p}")
-                   for p, (k, primitive) in enumerate(zip(draws, mesh["primitives"]))}
-        matches[key] = (sources, joint_map)
-    return matches
+                match = _TEXTURE_MATERIAL.fullmatch(material.get("name") or "")
+                if match:
+                    textures.append(int(match.group(1)))
+        joint_map = joint_map_of(node)
+        sources = [_gltf_source(doc, primitive, worlds[n], joint_map, f"{what} primitive {q}")
+                   for q, primitive in enumerate(mesh["primitives"])]
+        geo = _new_geo_set(info, name)
+        new_parts.append(_NewPart(what, name, geo, sub, info, textures, sources, joint_map))
+    return matches, new_parts
 
 
 # --- OBJ sources -------------------------------------------------------------------------------
 
-def _obj_matches(doc: ObjDocument, candidates, skipped, report) -> dict:
-    matches: dict = {}
-    owners: dict = {}
+def _obj_matches(doc: ObjDocument, app: AppearanceFile, candidates, skipped, report):
+    """W16-10, W17-12: (matches by (geo set, index), new parts in file order)."""
+    found = []  # (object, groups, what, sub-object or None)
     for obj in doc.objects:
         groups = [g for g in obj.groups if g.faces]
         if not groups:
@@ -901,12 +1022,18 @@ def _obj_matches(doc: ObjDocument, candidates, skipped, report) -> dict:
                 continue
         except FormatError as exc:
             raise FormatError(f"{what}: {exc.message}") from None
-        if sub is None:
-            raise FormatError(f"{what} matches no sub-object; adding sub-objects is not described (W16-14)")
-        key = (sub.geo_set, sub.index)
-        if key in owners:
-            raise FormatError(f"two OBJ objects for {sub.label}")
-        owners[key] = what
+        if sub is None and not obj.name:
+            raise FormatError(f"{what} matches no sub-object and has no name for a new one (W17-12)")
+        found.append((obj, groups, what, sub))
+    chosen = _choose_matches([((obj.name,), sub) for obj, _, _, sub in found], export_object_names(app))
+    matches: dict = {}
+    new_parts: list[_NewPart] = []
+    for p, (obj, groups, what, sub) in enumerate(found):
+        if sub is None or chosen[(sub.geo_set, sub.index)] != p:
+            # W17-12: an ``o`` name that matches no sub-object, or an editor copy (no extras in OBJ)
+            geo = _new_geo_set(None, obj.name)
+            new_parts.append(_NewPart(what, obj.name, geo, sub, None, [], [_obj_source(doc, groups, what)]))
+            continue
         named = {}
         plain = []
         for g in groups:
@@ -916,9 +1043,10 @@ def _obj_matches(doc: ObjDocument, candidates, skipped, report) -> dict:
             else:
                 plain.append(g)
         positioned = [k for k, d in enumerate(sub.draws) if d.positions]
+        extra = []
         if plain and named:
-            raise FormatError(f"{what}: faces outside a 'g draw_<k>' group next to such groups")
-        if plain:
+            extra = [_obj_source(doc, plain, f"{what} new geometry")]  # W17-12: a ``g`` matching no draw
+        elif plain:
             if len(positioned) != 1:
                 raise FormatError(f"{what}: no 'g draw_<k>' groups and {len(positioned)} draws with positions "
                                   f"in {sub.label}")
@@ -928,8 +1056,8 @@ def _obj_matches(doc: ObjDocument, candidates, skipped, report) -> dict:
             if not 0 <= k < len(sub.draws):
                 raise FormatError(f"{what}: draw {k} of {sub.label}, which has {len(sub.draws)} draws")
             out[k] = _obj_source(doc, parts, f"{what} draw {k}")
-        matches[key] = (out, None)
-    return matches
+        matches[(sub.geo_set, sub.index)] = _Match(out, None, extra)
+    return matches, new_parts
 
 
 def _obj_source(doc: ObjDocument, groups, what: str) -> _Source:
@@ -1193,30 +1321,262 @@ def _validate(app: AppearanceFile, draw: Draw, label: str) -> None:
 
 
 def _empty_draw(sub: SubObject, k: int, build: str) -> Draw:
-    """W16-7 ``missing="empty"``: skinned draws follow W13-7 (dropped by the writer); a rigid
-    draw only where the writer accepts an empty list (a ps3 draw record, dropped like W13-7)."""
+    """W16-7 ``missing="empty"`` (W17-13: kept for compatibility): the draw emptied in place. The
+    writer (``derive=True``) drops an emptied ps3 draw or skinning record (W13-7) and removes an
+    emptied rigid list and a sub-object left without geometry (W17-14). A sub-object with cloth
+    data or fat vertices keeps every value (V21-1)."""
     stored = sub.draws[k]
     if keeps_every_value(sub):
         raise _kept_refusal(sub, k, "vertex count (emptying the draw)")
-    if not stored.skinned and stored.kind != "ps3":
-        raise FormatError(f"{_label(sub, k)}: an empty rigid {stored.kind} list is not accepted by the writer "
-                          "(flag bits are not changed, Q376)")
     return dataclasses.replace(stored, positions=[], normals=[], colours_1=[], colours_2=[], uv1=[], uv2_raw=[],
                                indices=[], joints=[] if stored.skinned else None,
                                weights=[] if stored.skinned else None, local_joints=None)
 
 
+# --- new parts (W17-12) ---------------------------------------------------------------------------
+
+def _normal_unit(value) -> tuple:
+    length = math.sqrt(sum(c * c for c in value))
+    return tuple(c / length for c in value) if length else (0.0, 0.0, 0.0)
+
+
+def _uv_back(value, flip_v: bool) -> tuple:
+    u, v = value
+    return (float(u), 1.0 - v if flip_v else float(v))
+
+
+def _nearest_slots(template: SubObject, positions, label: str) -> tuple[list, list]:
+    """W17-12 ``skin="nearest"``: each vertex takes the joints and weights of the nearest vertex of
+    the template part (ties: the first in draw order)."""
+    pool = [(p, j, w) for d in template.draws if d.joints is not None and d.weights is not None
+            for p, j, w in zip(d.positions, d.joints, d.weights)]
+    if not pool:
+        raise FormatError(f"{label}: the template part {template.label} has no skinned vertex to take the "
+                          "skin from (W17-12)")
+    joints, weights = [], []
+    for p in positions:
+        best = min(range(len(pool)), key=lambda q: (sum((p[c] - pool[q][0][c]) ** 2 for c in range(3)), q))
+        joints.append(tuple(pool[best][1]))
+        weights.append(tuple(pool[best][2]))
+    return joints, weights
+
+
+def _new_draw(app: AppearanceFile, src: _Source, opts: _Options, joint_map, template: SubObject, label: str,
+              warnings: list[str]) -> Draw:
+    """W17-12: the geometry of a primitive (OBJ object or group) that matches no draw, as a new
+    draw of the file's kind (ps3 draw, or a switch / x360 packed list). Normals and UV1 are needed;
+    colours not given are 0 (a warning), UV2 not given is (0x8000, 0x8000). In a file with bones
+    the part needs joints and weights (W16-9), from OBJ only with ``skin="nearest"``; in a file
+    without bones joints are refused."""
+    n = len(src.positions)
+    if src.has_joints and not app.bones:
+        raise FormatError(f"{label}: a primitive with joints in a file without bones (W17-12)")
+    for values, what in ((src.normals, "normals"), (src.uv1, "UV1 (texture coordinates)")):
+        if values is None or any(v is None for v in values):
+            raise FormatError(f"{label}: {what} missing for a new part (W17-12)")
+    positions = [tuple(float(c) for c in p) for p in src.positions]
+    normals = [_normal_unit(v) for v in src.normals]
+    uv1 = [_uv_back(v, opts.flip_v) for v in src.uv1]
+    if src.uv2_raw is not None:
+        uv2 = [tuple(row) for row in src.uv2_raw]
+    elif src.uv2_float is not None:
+        factor = opts.lightmap_v_scale or 1.0
+        uv2 = [(round(u * 8192 + 0x8000), round(v / factor * 8192 + 0x8000)) for u, v in src.uv2_float]
+    else:
+        uv2 = [(0x8000, 0x8000)] * n
+    for i, (u, v) in enumerate(uv2):
+        if not (0 <= u <= 0xFFFF and 0 <= v <= 0xFFFF):
+            raise FormatError(f"{label}: vertex {i} UV2 {(u, v)} outside the u16 range")
+    colours = []
+    for given in (src.colours_1, src.colours_2):
+        if given is None:
+            colours.append([bytes(4)] * n)
+        else:
+            colours.append(list(given))
+    if src.colours_1 is None or src.colours_2 is None:
+        warnings.append(f"{label}: no colours given for a new part; its vertices get colour 0")
+    joints = weights = None
+    skinned = bool(app.bones)
+    if skinned:
+        if src.influences is not None:
+            joints, weights = [], []
+            for i, pairs in enumerate(src.influences):
+                mapped = [(joint_map.need(joint, f"{label}: vertex {i}"), weight) for joint, weight in pairs if weight != 0]
+                try:
+                    j, w = weight_bytes(mapped)
+                except FormatError as exc:
+                    raise FormatError(f"{label}: vertex {i}: {exc.message}") from None
+                joints.append(tuple(j))
+                weights.append(tuple(w))
+        elif src.form == "obj" and opts.skin == "nearest":
+            joints, weights = _nearest_slots(template, positions, label)
+        elif src.form == "obj":
+            raise FormatError(f"{label}: a new skinned part from OBJ (the file has bones) is refused unless "
+                              "skin='nearest' (W17-12)")
+        else:
+            raise FormatError(f"{label}: a new part in a file with bones needs joints and weights (W17-12, W16-9)")
+    draw = Draw(skinned, positions, normals, colours[0], colours[1], uv1, uv2, list(src.indices), joints, weights,
+                kind="ps3" if app.build == "ps3" else "packed")
+    _validate(app, draw, label)
+    return draw
+
+
+def _appended(base: Draw | None, parts: list[Draw]) -> Draw:
+    """W17-12 switch / x360 rigid: the vertices and triangles of ``parts`` appended to the single
+    rigid list ``base`` (or, without one, joined as a new list)."""
+    draws = ([base] if base is not None else []) + list(parts)
+    values = {name: [v for d in draws for v in getattr(d, name)]
+              for name in ("positions", "normals", "colours_1", "colours_2", "uv1", "uv2_raw")}
+    indices, offset = [], 0
+    for d in draws:
+        indices += [i + offset for i in d.indices]
+        offset += len(d.positions)
+    return dataclasses.replace(draws[0], indices=indices, **values)
+
+
+def _all_subs(app: AppearanceFile) -> list[SubObject]:
+    return list(app.sub_objects) + list(app.extra_sub_objects)
+
+
+def _named_sub(app: AppearanceFile, info: dict | None, geo: int) -> SubObject | None:
+    """The template sub-object named by ``extras.d3sno`` (``sub_object``, in ``geo_set`` when
+    given, else in the new part's geo set)."""
+    if info is None or not _is_int(info.get("sub_object")):
+        return None
+    g = info["geo_set"] if _is_int(info.get("geo_set")) else geo
+    subs = (app.sub_objects, app.extra_sub_objects)[g] if g in (0, 1) else []
+    return subs[info["sub_object"]] if 0 <= info["sub_object"] < len(subs) else None
+
+
+def new_part_material(app: AppearanceFile, info: dict | None, textures, geo: int, template: SubObject | None,
+                      look: int = 0, warnings: list | None = None, what: str = "new part") -> tuple[int | None, SubObject]:
+    """W17-12: (material hash, template part) of a new sub-object. Material, first that applies:
+    1. ``extras.d3sno.material`` when it is in the material table;
+    2. the material of the sub-object named by ``extras.d3sno``;
+    3. a primitive material ``texture_<handle>_draw_<k>``: the material of the first sub-object
+       (geo set 0, then 1) whose export (``look``) uses that texture handle;
+    4. the material of the template part (W17-10).
+    Template part: ``template`` (the matched sub-object of an editor copy), else the sub-object
+    named by ``extras.d3sno``, else W17-10: the first sub-object with the chosen material, else the
+    file's first sub-object.
+
+    ``38`` V23-7: the import creates no material entry. When ``extras.d3sno.material`` is a hash
+    that is not in the table, rule 1 does not apply; a warning naming the part (``what``), the hash
+    and the rule used instead is added to ``warnings``."""
+    from .material import sub_object_texture
+
+    everything = _all_subs(app)
+    if not everything:
+        raise FormatError("the template has no sub-object to copy values from (W17-10)")
+    named = _named_sub(app, info, geo)
+    material = None
+    rule = None
+    unknown = info.get("material") if info is not None and _is_int(info.get("material")) else None
+    if unknown is not None and app.material_data.find(unknown) is not None:
+        material, rule, unknown = unknown, 1, None  # rule 1
+    elif named is not None and named.material_hash is not None:
+        material, rule = named.material_hash, 2  # rule 2
+    else:
+        for handle in textures:  # rule 3
+            user = next((s for s in everything if sub_object_texture(app, s, look) == handle), None)
+            if user is not None and user.material_hash is not None:
+                material, rule = user.material_hash, 3
+                break
+    part = template if template is not None else named
+    if part is None:
+        part = next((s for s in everything if material is not None and s.material_hash == material), everything[0])
+    if material is None:
+        material, rule = part.material_hash, 4  # rule 4
+    if unknown is not None and warnings is not None:  # V23-7
+        shown = "none" if material is None else f"0x{material:08X}"
+        warnings.append(f"{what}: extras.d3sno.material 0x{unknown & 0xFFFFFFFF:08X} is not in the material table "
+                        f"and the import creates no material entry (V23-7); material rule {rule} gave {shown}")
+    return material, part
+
+
+def new_part_name(name: str, build: str, taken: set) -> str:
+    """W17-12: the mesh name without the ``lowpoly_`` prefix, ``.`` replaced by ``_``; when its
+    W17-2 hash is taken (``taken``), ``_2``, ``_3``, ...: the smallest free number. ps3 names are
+    ASCII of at most 127 bytes; a longer or non-ASCII name is refused (any build: W17-2 hashes ASCII
+    bytes)."""
+    base = name[len(LOWPOLY_PREFIX):] if name.startswith(LOWPOLY_PREFIX) else name
+    base = base.replace(".", "_")
+    if not base:
+        raise FormatError(f"name {name!r} leaves no sub-object name (W17-12)")
+    out = free_name(base, taken)
+    if build == "ps3":
+        ps3_name_field(out)
+    return out
+
+
+def _taken_hashes(subs, build: str) -> set:
+    taken = set()
+    for s in subs:
+        if s.sub_hash is not None:
+            taken.add(s.sub_hash)
+        if build == "ps3" and s.name:
+            try:
+                taken.add(name_hash(s.name))
+            except FormatError:
+                pass
+    return taken
+
+
+def _new_sub(app: AppearanceFile, part: _NewPart, opts: _Options, index: int, taken: set,
+             warnings: list[str]) -> SubObject:
+    """W17-12: a new sub-object (origin None) from a mesh or OBJ object. ``38`` V23-6: an editor
+    copy of a V21-1 sub-object (cloth record or fat vertices) is refused: cloth data cannot be
+    copied by import."""
+    if part.template is not None and keeps_every_value(part.template):
+        raise FormatError(f"{part.what}: an editor copy of {part.template.label}, a sub-object with cloth data or "
+                          "fat vertices; cloth data cannot be copied by import (V21-1, V23-6)")
+    try:
+        name = new_part_name(part.name, app.build, taken)
+    except FormatError as exc:
+        raise FormatError(f"{part.what}: {exc.message}") from None
+    material, template = new_part_material(app, part.info, part.textures, part.geo_set, part.template, opts.look,
+                                           warnings, part.what)
+    draws = [_new_draw(app, src, opts, part.joint_map, template,
+                       f"{part.what} primitive {q}" if src.form == "gltf" else part.what, warnings)
+             for q, src in enumerate(part.sources)]
+    if app.build != "ps3" and not app.bones and len(draws) > 1:
+        draws = [_appended(None, draws)]  # one rigid list (W17-7, W17-12)
+    taken.add(name_hash(name))
+    return SubObject(index, name, None, (0.0,) * 3, (0.0,) * 3, None, None, draws, material_hash=material,
+                     geo_set=part.geo_set, origin=None, template_part=(template.geo_set, template.index))
+
+
+def _dropped_label(sub: SubObject, draw: Draw) -> str | None:
+    """The writer's label of a template part emptied in place, which it drops (W13-7) or removes
+    (W17-14): a ps3 draw or skinning record without vertices or triangles, a rigid list without
+    vertices."""
+    if draw.origin is None:
+        return None
+    if draw.kind == "ps3" and (not draw.positions or not draw.indices):
+        return f"{sub.label}, draw {draw.origin}"
+    if draw.kind == "packed" and draw.skinned and (not draw.positions or not draw.indices):
+        return f"{sub.label}, skinning record {draw.origin}"
+    if draw.kind == "packed" and not draw.skinned and not draw.positions:
+        return f"{sub.label}, rigid list"
+    return None
+
+
 # --- the API --------------------------------------------------------------------------------------
 
-def _options(flip_v, lightmap_v_scale, missing, skin) -> _Options:
-    if missing not in ("keep", "empty"):
-        raise ValueError(f"missing must be 'keep' or 'empty', not {missing!r}")
+MISSING = ("keep", "empty", "remove")  # W17-13
+
+
+def _options(flip_v, lightmap_v_scale, missing, skin, look=0) -> _Options:
+    if missing not in MISSING:
+        raise ValueError(f"missing must be 'keep', 'empty' or 'remove', not {missing!r}")
     if skin not in ("refuse", "nearest"):
         raise ValueError(f"skin must be 'refuse' or 'nearest', not {skin!r}")
     if lightmap_v_scale is not None and (not isinstance(lightmap_v_scale, (int, float))
                                          or not math.isfinite(lightmap_v_scale)):
         raise ValueError(f"lightmap_v_scale {lightmap_v_scale!r} is not a finite number")
-    return _Options(bool(flip_v), lightmap_v_scale, missing, skin)
+    if not _is_int(look) or look < 0:
+        raise ValueError(f"look {look!r} is not an integer >= 0")
+    return _Options(bool(flip_v), lightmap_v_scale, missing, skin, look)
 
 
 def _document(document):
@@ -1232,29 +1592,44 @@ def _document(document):
 
 
 def import_mesh_report(template_app, document, *, flip_v=False, lightmap_v_scale=None, missing="keep",
-                       skin="refuse", low_poly=True) -> tuple[bytes, ImportReport]:
-    """``import_mesh`` that also returns an ``ImportReport`` (changed and kept draw labels,
-    warnings)."""
-    opts = _options(flip_v, lightmap_v_scale, missing, skin)
+                       skin="refuse", low_poly=True, look=0) -> tuple[bytes, ImportReport]:
+    """``import_mesh`` that also returns an ``ImportReport`` (changed and kept draw labels, added
+    and removed parts, warnings)."""
+    opts = _options(flip_v, lightmap_v_scale, missing, skin, look)
     app = template_app if isinstance(template_app, AppearanceFile) else parse_appearance(bytes(template_app))
     document = _document(document)
     report = ImportReport()
     candidates = export_sub_objects(app, low_poly)
     skipped = [] if low_poly else list(app.extra_sub_objects)
     if isinstance(document, GltfDocument):
-        matches = _gltf_matches(document, app, candidates, skipped, report)
+        matches, new_parts = _gltf_matches(document, app, candidates, skipped, report)
     else:
-        matches = _obj_matches(document, candidates, skipped, report)
+        matches, new_parts = _obj_matches(document, app, candidates, skipped, report)
 
-    changed: list[tuple[SubObject, int, Draw]] = []
+    changed: list[tuple[SubObject, int, Draw]] = []  # template draws changed in place
+    plans: dict = {}  # id(sub-object) -> (draws, {template k: draw}) or None when it goes (W17-13)
+    structural = False  # a part is added or removed
     for sub in candidates:
-        found, joint_map = matches.get((sub.geo_set, sub.index), (None, None))
+        match = matches.get((sub.geo_set, sub.index))
+        if match is None and opts.missing == "remove" and any(d.positions for d in sub.draws):
+            plans[id(sub)] = None  # W17-13: removed whole (W17-10; cloth too, V21-1)
+            structural = True
+            continue
+        found = match.sources if match is not None else {}
+        draws, by_k = [], {}
         for k, stored in enumerate(sub.draws):
             label = _label(sub, k)
-            if found is not None and k in found:
-                draw = _make_draw(app, sub, k, found[k], opts, joint_map, report.warnings)
-            elif opts.missing == "empty" and stored.positions:
+            if k in found:
+                draw = _make_draw(app, sub, k, found[k], opts, match.joint_map, report.warnings)
+            elif not stored.positions:
+                draw = stored
+            elif opts.missing == "empty":
                 draw = _empty_draw(sub, k, app.build)
+            elif opts.missing == "remove":
+                if keeps_every_value(sub):
+                    raise _kept_refusal(sub, k, "draw list (removing the draw)")
+                structural = True  # W17-13: the draw, skinning record or rigid list goes
+                continue
             else:
                 draw = stored
             if draw is stored:
@@ -1262,44 +1637,81 @@ def import_mesh_report(template_app, document, *, flip_v=False, lightmap_v_scale
             else:
                 report.changed.append(label)
                 changed.append((sub, k, draw))
+            draws.append(draw)
+            by_k[k] = draw
+        extra = match.extra if match is not None else []
+        if extra:
+            if keeps_every_value(sub):
+                raise FormatError(f"{sub.label}: new geometry for a sub-object with cloth data or fat vertices, "
+                                  "which is only removed whole or kept unchanged (V21-1, W17-10)")
+            new = [_new_draw(app, src, opts, match.joint_map, sub, f"{sub.label}, new geometry {q}",
+                             report.warnings) for q, src in enumerate(extra)]
+            structural = True
+            if app.build != "ps3" and not app.bones:  # W17-12: appended to the single rigid list
+                at = next((p for p, d in enumerate(draws) if d.kind == "packed" and not d.skinned), None)
+                if at is None:
+                    draws.append(_appended(None, new))
+                else:
+                    k = next(k for k, d in by_k.items() if d is draws[at])
+                    draws[at] = by_k[k] = _appended(draws[at], new)
+                    label = _label(sub, k)
+                    if label in report.kept:
+                        report.kept.remove(label)
+                        report.changed.append(label)
+                    changed[:] = [c for c in changed if not (c[0] is sub and c[1] == k)] + [(sub, k, draws[at])]
+            else:
+                draws.extend(new)  # ps3: new draws cut by W17-5a; skinned: records rebuilt by W17-7
+        plans[id(sub)] = (draws, by_k)
     for sub in skipped:
         report.kept.extend(_label(sub, k) for k in range(len(sub.draws)))
-    _check_skinning_records(app, changed)
-    if not changed:
+
+    lists = []
+    for subs in (app.sub_objects, app.extra_sub_objects):
+        out = []
+        for sub in subs:
+            plan = plans.get(id(sub), ())
+            if plan is None:
+                continue
+            if plan == ():
+                out.append(sub)
+                continue
+            draws, by_k = plan
+            fat = sub.fat_draw
+            for k, d in enumerate(sub.draws):
+                if d is sub.fat_draw and k in by_k:
+                    fat = by_k[k]
+            out.append(dataclasses.replace(sub, draws=draws, fat_draw=fat))
+        lists.append(out)
+    taken = [_taken_hashes(lists[0], app.build), _taken_hashes(lists[1], app.build)]
+    for part in new_parts:
+        if part.geo_set == 1 and not low_poly:
+            report.warnings.append(f"{part.what} is a new low-poly sub-object and is not imported (low_poly=False)")
+            continue
+        lists[part.geo_set].append(_new_sub(app, part, opts, len(lists[part.geo_set]), taken[part.geo_set],
+                                            report.warnings))
+        structural = True
+
+    if not changed and not structural:
         return bytes(app.source), report  # W16-11 rule 1
+    mesh = dataclasses.replace(app, sub_objects=lists[0], extra_sub_objects=lists[1])
     try:
-        return _write(app, changed), report
+        out, parts = M.write_app_mesh_report(app, mesh, derive=True, keep_skin_bytes=True)  # V21-2
     except FormatError as exc:
+        if structural:
+            raise
         for one in changed:  # W16-11 rule 3: name the draw the writer refuses
             try:
                 _write(app, [one])
             except FormatError as single:
+                if single.message.startswith(f"{one[0].label},"):  # ``38`` V23-9: the label once
+                    raise FormatError(single.message) from None
                 raise FormatError(f"{_label(one[0], one[1])}: {single.message}") from None
         raise FormatError(f"{'; '.join(_label(s, k) for s, k, _ in changed)}: {exc.message}") from None
-
-
-def _check_skinning_records(app: AppearanceFile, changed) -> None:
-    """V21-3: on switch and x360 a skinned sub-object keeps at least one skinning record. An
-    import that empties every one of them (no vertices or no indices, W13-7) is refused before
-    writing: the skinning flag bit would have to be cleared, and flag bits are not changed (Q376).
-    Emptying some of several records is accepted. ``36`` V22-2: removing the last triangle of
-    the only skinning record counts as emptying it (no indices), so it is refused here; the
-    ``no_indices`` mark (V21-4) applies only where the result is still allowed. On ps3 a skinned
-    draw that loses its last triangle is dropped with its vertices (W13-7)."""
-    if app.build == "ps3":
-        return
-    by_sub: dict = {}
-    for sub, k, draw in changed:
-        by_sub.setdefault(id(sub), (sub, {}))[1][k] = draw
-    for sub, draws in by_sub.values():
-        skins = [(k, d) for k, d in enumerate(sub.draws) if d.kind == "packed" and d.skinned]
-        if not skins or not any(k in draws for k, _ in skins):
-            continue
-        empty = lambda d: not d.positions or not d.indices  # noqa: E731 (W13-7)
-        if all(empty(draws.get(k, d)) for k, d in skins) and not all(empty(d) for _, d in skins):
-            raise FormatError(f"{sub.label}: the import empties every skinning record of a skinned sub-object; "
-                              "its skinning flag bit would have to be cleared, and flag bits are not changed "
-                              "(V21-3, Q376, Q699)")
+    removed = [label for sub, _, draw in changed if (label := _dropped_label(sub, draw)) is not None]
+    report.removed = removed + [label for label in parts.removed if label not in removed]
+    report.added = list(parts.added)
+    report.warnings.extend(f"{label}: a new part without geometry is not written" for label in parts.skipped)
+    return out, report
 
 
 def _write(app: AppearanceFile, changed) -> bytes:
@@ -1321,15 +1733,23 @@ def _write(app: AppearanceFile, changed) -> bytes:
 
 
 def import_mesh(template_app, document, *, flip_v=False, lightmap_v_scale=None, missing="keep",
-                skin="refuse", low_poly=True) -> bytes:
-    """W16-11: the template ``.app`` (parsed, or its bytes) with the mesh of ``document`` (a
-    ``read_gltf`` or ``read_obj`` result, or OBJ text). Unchanged: the template bytes as they
-    are; else ``write_app_mesh(template, mesh, derive=True)``."""
+                skin="refuse", low_poly=True, look=0) -> bytes:
+    """W16-11, W17-12 to W17-14: the template ``.app`` (parsed, or its bytes) with the mesh of
+    ``document`` (a ``read_gltf`` or ``read_obj`` result, or OBJ text). Unchanged: the template
+    bytes as they are; else ``write_app_mesh(template, mesh, derive=True)``.
+
+    W17-12: a mesh (OBJ ``o``) that matches no sub-object, and every editor copy of a matched one,
+    becomes a new sub-object at the end of its geo set; a primitive (OBJ ``g``) that matches no draw
+    is new geometry of its sub-object. W17-13 ``missing``: "keep" (default) keeps template parts
+    the document does not hold, "empty" empties their draws (an emptied part, and a sub-object left
+    without geometry, is removed), "remove" removes them. ``look`` is the look the export used for
+    ``texture_<handle>_draw_<k>`` material names (W17-12 material rule 3)."""
     return import_mesh_report(template_app, document, flip_v=flip_v, lightmap_v_scale=lightmap_v_scale,
-                              missing=missing, skin=skin, low_poly=low_poly)[0]
+                              missing=missing, skin=skin, low_poly=low_poly, look=look)[0]
 
 
 __all__ = [
-    "GltfDocument", "ImportReport", "ObjDocument", "export_weights", "gltf_to_glb", "import_mesh",
-    "import_mesh_report", "keeps_every_value", "read_gltf", "read_obj", "weight_bytes",
+    "GltfDocument", "ImportReport", "MISSING", "ObjDocument", "export_weights", "gltf_to_glb", "import_mesh",
+    "import_mesh_report", "keeps_every_value", "new_part_material", "new_part_name", "read_gltf", "read_obj",
+    "weight_bytes",
 ]

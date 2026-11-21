@@ -44,15 +44,20 @@ def without_triangles(app):
 
 class LastTriangle(unittest.TestCase):
     def test_switch_and_x360_only_record_refused(self):
+        # stage 17 (W17-13, W17-14) replaces V21-3 / V22-2: the record without triangles is dropped
+        # (W13-7) and the sub-object left without geometry is removed
         for order, build in (("<", None), (">", "x360")):
             app = P.parse_appearance(derived(switch_skinned3(order), build), build)
-            with self.assertRaisesRegex(FormatError, "V21-3"):
-                I.import_mesh(app, without_triangles(app))
+            out, report = I.import_mesh_report(app, without_triangles(app))
+            self.assertEqual(P.parse_appearance(out, build).sub_objects, [])
+            self.assertEqual(report.removed, ["high-poly set, sub-object 0, skinning record 0",
+                                              "high-poly set, sub-object 0"])
 
     def test_ps3_skinned_draw_dropped(self):
         app = P.parse_appearance(ps3(skinned=True, bones=BONES), "ps3")
         out = I.import_mesh(app, without_triangles(app))
-        self.assertEqual(P.parse_appearance(out, "ps3").sub_objects[0].draws, [])
+        # stage 17 (W17-14): the last draw goes, and the sub-object without fat vertices goes with it
+        self.assertEqual(P.parse_appearance(out, "ps3").sub_objects, [])
 
 
 if __name__ == "__main__":

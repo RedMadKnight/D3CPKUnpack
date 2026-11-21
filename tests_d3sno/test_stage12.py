@@ -9,6 +9,7 @@ files come from the builders and from the rules.
 import math
 import struct
 import unittest
+from unittest import mock
 
 import builders as B
 import d3sno
@@ -277,7 +278,10 @@ class SwitchChanges(unittest.TestCase):
         app = P.parse_appearance(switch_cloth())
         fat = app.sub_objects[0].fat_draw
         fat.positions[0] = (fat.positions[0][0] - 1.0, *fat.positions[0][1:])
-        out = M.write_app_mesh(app)
+        with self.assertRaisesRegex(FormatError, r"sub-object 0, fat vertices: .*V23-5"):  # ``39`` V24-1
+            M.write_app_mesh(app)
+        with mock.patch.object(M, "_cloth_parts_unchanged", lambda *args: None):  # the W2-8 encoder itself
+            out = M.write_app_mesh(app)
         again = P.parse_appearance(out)
         self.assertEqual(again.sub_objects[0].fat_draw.positions[0], fat.positions[0])
         xs = [p[0] for p in fat.positions]
@@ -328,7 +332,10 @@ class Ps3Changes(unittest.TestCase):
         app = P.parse_appearance(ps3(fat=fat, cloth=True), "ps3")
         sub = app.sub_objects[0]
         sub.fat_draw.positions[1] = (5.0, 0.0, 0.0)
-        out = M.write_app_mesh(app)
+        with self.assertRaisesRegex(FormatError, r"sub-object 0, fat vertices: .*V23-5"):  # ``39`` V24-1
+            M.write_app_mesh(app)
+        with mock.patch.object(M, "_cloth_parts_unchanged", lambda *args: None):  # the W2-8 encoder itself
+            out = M.write_app_mesh(app)
         again = P.parse_appearance(out, "ps3")
         self.assertEqual(again.sub_objects[0].fat_draw.positions[1], (5.0, 0.0, 0.0))
         self.assertEqual(again.sub_objects[0].index_count, 3)

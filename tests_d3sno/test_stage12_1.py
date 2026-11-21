@@ -62,7 +62,8 @@ class OversizedSkinnedPs3Draw(unittest.TestCase):
     def test_work_buffer_before_the_words(self):
         app = ps3_skinned()
         grow(app.sub_objects[0].draws[0], vertices=3000)  # streams A, B and the work all too big
-        with self.assertRaisesRegex(FormatError, r"draw 0: .*above 0xC000 \(W2-10\)"):
+        # ``38`` V23-3: a changed draw over any limit is refused, the budget first
+        with self.assertRaisesRegex(FormatError, r"draw 0: budget value .* \(W17-5a\); a changed draw is not cut"):
             M.write_app_mesh(app)
 
     def test_index_pieces_after_the_work_check(self):
@@ -90,13 +91,14 @@ class OversizedRigidPs3Draw(unittest.TestCase):
     def test_stream_a(self):
         app = ps3_rigid()
         grow(app.sub_objects[0].draws[0], vertices=3000)  # 3003 x 6 bytes
-        with self.assertRaisesRegex(FormatError, r"stream A of 18032 bytes is above 0x4000"):
+        with self.assertRaisesRegex(FormatError, r"draw 0: budget value 72066 is above 55998 .*V23-3"):  # ``38`` V23-3
             M.write_app_mesh(app)
 
     def test_index_pieces(self):
         app = ps3_rigid()
         grow(app.sub_objects[0].draws[0], triangles=15000)  # 45,003 indices, 90,016 bytes
-        with self.assertRaisesRegex(FormatError, r"index-pair piece 1 \(\+0x22\).*H word"):
+        # ``38`` V23-3: the work buffer of a changed 0x81 draw is refused before the index-pair words
+        with self.assertRaisesRegex(FormatError, r"draw 0: work buffer 91264 is above 0xC000 .*V23-3"):
             M.write_app_mesh(app)
 
     def test_descriptor_index_count(self):

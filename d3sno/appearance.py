@@ -78,6 +78,10 @@ class Draw:
     palette: list[int] | None = None
     local_joints: list[tuple[int, ...]] | None = None  # ps3: as stored, indices into palette
     kind: str = "packed"  # "packed" (fixed point, skinned or rigid), "ps3" or "fat" (G1-3)
+    # W17-10: the stored record this draw was read from: the ps3 draw index, the switch / x360
+    # skinning record index, 0 for the switch / x360 rigid list; None for a fat draw and for a new
+    # draw. Not compared (two draws with equal values are equal wherever they come from).
+    origin: int | None = field(default=None, compare=False)
 
     def uv2(self, lightmap_v_scale: float = 0.0) -> list[tuple[float, float]]:
         """Lightmap coordinates. A non-zero V scale comes from the lightmap's ``.tex``."""
@@ -111,6 +115,17 @@ class SubObject:
     fat_draw: Draw | None = None  # the fat vertices and pool indices (G1-2, G1-3)
     cloth: ClothRecord | None = None  # G1-4
     bounds_raw: bytes = b""  # aabbBounds as stored (24 bytes)
+    # W17-10 identity fields (not compared). ``origin``: (geo set, index) of the template
+    # sub-object this one was read from; None marks a new sub-object. For a new one,
+    # ``template_part`` names the template sub-object (geo set, index) whose copied values it takes
+    # (W17-3), ``material_source`` the source of a new material entry when its ``material_hash`` is
+    # not in the table (an int hash of the same file, ``app_parts.MaterialSource`` or (donor file,
+    # hash), W17-8), and ``stored_from`` (set by ``app_mesh.transplant``) the
+    # ``app_mesh.PartSource`` whose stored record it copies (W17-11).
+    origin: tuple[int, int] | None = field(default=None, compare=False)
+    template_part: tuple[int, int] | None = field(default=None, compare=False)
+    material_source: object = field(default=None, compare=False, repr=False)
+    stored_from: object = field(default=None, compare=False, repr=False)
 
     @property
     def vert_count(self) -> int:
@@ -509,7 +524,7 @@ def _read_ps3_sub_objects(
             material_hash=record.u32(0xC8), sub_hash=record.u32(0xCC),
             flags=record.u32(0x00), has_cloth=record.pair(0x30).size > 0,
             cloth_vertex_count=record.i32(0x04), geo_set=geo_set, index_count=record.i32(0x20),
-            bounds_raw=record.take(0xD0, 24),
+            bounds_raw=record.take(0xD0, 24), origin=(geo_set, i),
         )
         if sub.cloth_vertex_count < 0 or sub.index_count < 0:
             raise FormatError(f"{sub.label}: negative count", 0x74)
@@ -526,6 +541,7 @@ def _read_ps3_sub_objects(
             draw, warning = _read_ps3_draw(
                 view, draws_raw[k * DRAW_RECORD:(k + 1) * DRAW_RECORD], sub, base, bone_count,
             )
+            draw.origin = k  # W17-10
             sub.draws.append(draw)
             if warning:
                 warnings.append(warning)
@@ -623,7 +639,7 @@ def _read_switch_sub_objects(
             material_hash=record.u32(0x64), sub_hash=record.u32(0x68),
             flags=record.u32(0x00), has_cloth=record.pair(0x40).size > 0,
             cloth_vertex_count=record.u32(0x04), geo_set=geo_set, index_count=record.i32(0x28),
-            bounds_raw=record.take(0x6C, 24),
+            bounds_raw=record.take(0x6C, 24), origin=(geo_set, i),
         )
         if sub.has_cloth:
             _read_sub_cloth(view, record.pair(0x40), build, sub, warnings)
@@ -647,6 +663,7 @@ def _read_switch_sub_objects(
             draw.indices = _read_indices(
                 pool[start * 2:], view.order, index_count, vertex_count, SWITCH_INDEX_POOL_AT,
             )
+            draw.origin = 0  # W17-10: the rigid list
             sub.draws.append(draw)
         elif index_count and not skin_raw:
             if sub.has_cloth and record.pair(0x08).size == 0:
@@ -660,9 +677,11 @@ def _read_switch_sub_objects(
         warnings.extend(sub_object_flag_problems(sub, "switch", vertex_count > 0, bool(skin_raw)))
         for k in range(len(skin_raw) // SKIN_RECORD):
             skin = skin_raw[k * SKIN_RECORD:(k + 1) * SKIN_RECORD]
-            sub.draws.append(_read_switch_skin(
+            skin_draw = _read_switch_skin(
                 view, skin, sub, bone_count, skin_pair.file_offset + k * SKIN_RECORD,
-            ))
+            )
+            skin_draw.origin = k  # W17-10: skinning record k
+            sub.draws.append(skin_draw)
             if sub.has_cloth and sub.cloth_vertex_count:
                 # G1-3: a skinned cloth sub-object's skinning record has the fat counts.
                 r = ByteView(skin, view.order)
@@ -1069,7 +1088,8 @@ def to_gltf(
     ``_D3_COLOR2`` (u8 VEC4) and UV2 as ``_D3_UV2`` (u16 VEC2), as stored.
     V21-4: a draw with vertices and no indices is a primitive without indices with
     ``extras.d3sno.no_indices`` true. V21-5: repeated object names (mesh and node) are written as
-    ``<name>__sub<i>``.
+    ``<name>__sub<i>``. W17-12: mesh ``extras.d3sno`` also holds ``name`` (the ps3 sub-object name;
+    on switch / x360, which store none, the object name) and ``material`` (the material hash).
     """
     buf = _GltfBuffer()
     materials = _GltfMaterials(buf, texture_resolver)
@@ -1120,10 +1140,12 @@ def to_gltf(
         node = {"name": name, "mesh": len(meshes)}
         if skinned and any("JOINTS_0" in p["attributes"] for p in primitives):
             node["skin"] = 0
-        meshes.append({
-            "name": name, "primitives": primitives,
-            "extras": {"d3sno": {"geo_set": sub.geo_set, "sub_object": sub.index}},
-        })
+        # W17-12: the sub-object's name (switch / x360 store none: the object name) and material
+        mesh_info: dict = {"geo_set": sub.geo_set, "sub_object": sub.index,
+                           "name": sub.name if app.build == "ps3" and sub.name else name}
+        if sub.material_hash is not None:
+            mesh_info["material"] = sub.material_hash
+        meshes.append({"name": name, "primitives": primitives, "extras": {"d3sno": mesh_info}})
         roots.append(len(nodes))
         nodes.append(node)
 

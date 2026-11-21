@@ -451,13 +451,45 @@ def cmd_mesh_import(args) -> int:
         template, document, flip_v=args.flip_v, lightmap_v_scale=args.lightmap_v_scale,
         missing=args.missing, skin=args.skin, low_poly=not args.skip_low_poly)
     Path(args.output).write_bytes(out)
+    added, removed = getattr(report, "added", []), getattr(report, "removed", [])
     for label in report.changed:
         _print(f"changed {label}")
     for label in report.kept:
         _print(f"kept {label}")
+    for label in added:  # W17-14: every added and removed part, with its label
+        _print(f"added {label}")
+    for label in removed:
+        _print(f"removed {label}")
     for warning in report.warnings:
         _print(f"warning: {warning}")
-    _print(f"wrote {args.output}: {len(report.changed)} changed, {len(report.kept)} kept")
+    parts = f", {len(added)} added, {len(removed)} removed" if added or removed else ""
+    _print(f"wrote {args.output}: {len(report.changed)} changed, {len(report.kept)} kept{parts}")
+    return 0
+
+
+def sub_object_place(text: str) -> tuple[int, int]:
+    """``--sub-object G:I``: geo set G (0 or 1) and sub-object index I."""
+    match = re.fullmatch(r"([01]):(\d+)", text.strip())
+    if match is None:
+        raise ValueError(f"--sub-object {text!r}: give G:I, geo set 0 or 1 and a sub-object index")
+    return int(match.group(1)), int(match.group(2))
+
+
+def cmd_mesh_transplant(args) -> int:
+    """W17-11 as a command: TARGET with sub-object G:I of SOURCE added at the end of geo set G."""
+    refuse_overwrite([args.output], [args.target, args.source])
+    geo_set, index = sub_object_place(args.sub_object)
+    app_mesh = _module("app_mesh")
+    target = appearance.parse_appearance(_read(args.target), args.build)
+    source = appearance.parse_appearance(_read(args.source), args.build)
+    mesh = app_mesh.transplant(target, source, geo_set, index, name=args.name)
+    out, report = app_mesh.write_app_mesh_report(target, mesh, derive=True)
+    Path(args.output).write_bytes(out)
+    for label in report.added:
+        _print(f"added {label}")
+    for label in report.removed:
+        _print(f"removed {label}")
+    _print(f"wrote {args.output}: {len(out)} bytes")
     return 0
 
 
@@ -553,10 +585,20 @@ def cmd_add(args) -> int:
 MESH_IMPORT_NOTE = (
     "To empty a draw from an editor, remove its primitive (or OBJ group) and import with "
     "--missing empty; a glTF primitive without indices and without extras.d3sno.no_indices is "
-    "read as triangles 0..count-1 (V21-4)."
+    "read as triangles 0..count-1 (V21-4). --missing remove removes every template sub-object, "
+    "draw or skinning record the model does not hold; a sub-object left without geometry goes "
+    "(W17-13). A mesh (OBJ object) that matches no sub-object, or an editor copy of one, is added "
+    "as a new sub-object; a primitive (OBJ group) that matches no draw is new geometry (W17-12). "
+    "Every added and removed part is printed (W17-14)."
 )
 
-_WRITE_COMMANDS = ("texture-import", "mesh-import", "replace", "add")
+MESH_TRANSPLANT_NOTE = (
+    "Copies sub-object G:I of SOURCE (same build, same skeleton; on ps3 the same draw format) to the "
+    "end of geo set G of TARGET, with every stored value; its material entry comes along when TARGET "
+    "lacks it; a taken name gets _2, _3, ... (W17-11, W17-12). The output may not be an input."
+)
+
+_WRITE_COMMANDS = ("texture-import", "mesh-import", "mesh-transplant", "replace", "add")
 
 
 def make_parser() -> argparse.ArgumentParser:
@@ -658,9 +700,17 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("-o", "--output", required=True)
     sub.add_argument("--flip-v", action="store_true")
     sub.add_argument("--lightmap-v-scale", type=float)
-    sub.add_argument("--missing", choices=("keep", "empty"), default="keep")
+    sub.add_argument("--missing", choices=("keep", "empty", "remove"), default="keep")
     sub.add_argument("--skin", choices=("refuse", "nearest"), default="refuse")
     sub.add_argument("--skip-low-poly", action="store_true")
+    add_build(sub)
+    sub = add("mesh-transplant", cmd_mesh_transplant)
+    sub.epilog = MESH_TRANSPLANT_NOTE
+    sub.add_argument("target", help="the .app to add the sub-object to")
+    sub.add_argument("source", help="the .app to copy it from")
+    sub.add_argument("--sub-object", required=True, metavar="G:I", help="geo set and index in SOURCE")
+    sub.add_argument("-o", "--output", required=True)
+    sub.add_argument("--name", help="the new sub-object's name (W17-2)")
     add_build(sub)
     sub = add("replace", cmd_replace)
     sub.add_argument("archive")

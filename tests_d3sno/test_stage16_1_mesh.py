@@ -342,12 +342,14 @@ def two_records(order="<"):
 
 
 class EmptyEveryRecord(unittest.TestCase):
+    # stage 17 (W17-13, W17-14) replaces the V21-3 refusal: emptying every skinning record of a
+    # sub-object removes the sub-object
     def test_only_record_refused(self):
         for order, build in (("<", None), (">", "x360")):
             app = P.parse_appearance(derived(switch_skinned3(order), build), build)
-            with self.assertRaisesRegex(FormatError, "^high-poly set, sub-object 0: the import empties every "
-                                                     "skinning record.*V21-3"):
-                I.import_mesh(app, read({"asset": {"version": "2.0"}}), missing="empty")
+            out, report = I.import_mesh_report(app, read({"asset": {"version": "2.0"}}), missing="empty")
+            self.assertEqual(P.parse_appearance(out, build).sub_objects, [])
+            self.assertEqual(report.removed[-1], "high-poly set, sub-object 0")
 
     def test_no_indices_mark_on_the_only_record_refused(self):
         app = P.parse_appearance(derived(switch_skinned3()))
@@ -355,8 +357,9 @@ class EmptyEveryRecord(unittest.TestCase):
         primitive = doc["meshes"][0]["primitives"][0]
         del primitive["indices"]
         primitive["extras"]["d3sno"]["no_indices"] = True
-        with self.assertRaisesRegex(FormatError, "^high-poly set, sub-object 0: .*V21-3"):
-            I.import_mesh(app, read(doc))
+        out, report = I.import_mesh_report(app, read(doc))
+        self.assertEqual(P.parse_appearance(out).sub_objects, [])
+        self.assertEqual(report.removed, ["high-poly set, sub-object 0, skinning record 0", "high-poly set, sub-object 0"])
 
     def test_some_of_several_records(self):
         for order in ("<", ">"):
@@ -370,13 +373,14 @@ class EmptyEveryRecord(unittest.TestCase):
             again = P.parse_appearance(out, build)
             self.assertEqual(len(again.sub_objects[0].draws), 1)
             self.assertEqual(again.sub_objects[0].draws[0].positions, app.sub_objects[0].draws[0].positions)
-            with self.assertRaisesRegex(FormatError, "V21-3"):
-                I.import_mesh(app, read({"asset": {"version": "2.0"}}), missing="empty")
+            out = I.import_mesh(app, read({"asset": {"version": "2.0"}}), missing="empty")  # stage 17: removed
+            self.assertEqual(P.parse_appearance(out, build).sub_objects, [])
 
     def test_ps3_not_affected(self):
         app = P.parse_appearance(ps3(skinned=True, bones=BONES), "ps3")
         out = I.import_mesh(app, read({"asset": {"version": "2.0"}}), missing="empty")  # W13-7: dropped
-        self.assertEqual(P.parse_appearance(out, "ps3").sub_objects[0].draws, [])
+        # stage 17 (W17-13, W17-14): a sub-object left with no geometry is removed
+        self.assertEqual(P.parse_appearance(out, "ps3").sub_objects, [])
 
 
 # --- V21-4 -----------------------------------------------------------------------------------------
@@ -503,8 +507,10 @@ class RepeatedNames(unittest.TestCase):
         app = named(["Body", "Head"])
         text = P.to_obj(app)
         for wrong in ("Body__sub1", "Body__sub7", "Head__sub0"):  # sub-object i is not named <name>
-            with self.assertRaisesRegex(FormatError, "matches no sub-object", msg=wrong):
-                I.import_mesh(app, text.replace("o Head", f"o {wrong}"))
+            # stage 17 (W17-12): a name that matches no sub-object makes a new one (was refused)
+            out, report = I.import_mesh_report(app, text.replace("o Head", f"o {wrong}"))
+            self.assertEqual(report.added, ["high-poly set, sub-object 2"], wrong)
+            self.assertEqual(report.kept, ["high-poly set, sub-object 0, draw 0", "high-poly set, sub-object 1, draw 0"])
         self.assertEqual(I.import_mesh(app, text.replace("o Head", "o Head__sub1")), bytes(app.source))
 
     def test_literal_name_and_suffix_ambiguous(self):

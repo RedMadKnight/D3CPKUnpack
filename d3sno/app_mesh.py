@@ -9,9 +9,14 @@ A block whose new bytes equal the stored ones keeps its stored block (so shared 
 shared and an unchanged mesh gives the source bytes); a block whose bytes change gets a block of
 its own (W2-14). Records are changed only where something they describe changed.
 
-Not built here (Q376): adding or removing sub-objects, draws or skinning records and changing a
-palette; without the stage-13 rules the visual-mesh octree of a changed mesh is emptied (W2-13).
-The ``derive`` option applies the rules of ``26_corrections15.md`` (W13-1 to W13-7): derived
+Stage 17 (``37_mesh_parts.md`` W17-10, W17-11, W17-14; record rules in ``app_parts``): the mesh may
+add and remove sub-objects (either geo set), ps3 draws, switch / x360 skinning records and rigid
+lists; ``SubObject.origin`` and ``Draw.origin`` say which stored part each comes from (None: new).
+New sub-objects are built from zero (W17-3), new ps3 draws by W17-5 / W17-5a, skinning records by
+W17-7, material entries by W17-8; ``transplant`` moves a sub-object in from another file and
+``rebuild_from_zero`` rebuilds every record of a file (the "Check" of ``37``). This replaces the
+refusals of Q376. Without the stage-13 rules the visual-mesh octree of a changed mesh is emptied
+(W2-13). The ``derive`` option applies the rules of ``26_corrections15.md`` (W13-1 to W13-7): derived
 work-buffer sizes, steps and ps3 bone ranges, an octree built again for a changed mesh (module
 ``octree``), first-use palettes split at 45 bones, compact influence lists, and empty skinning
 records dropped.
@@ -19,16 +24,18 @@ records dropped.
 
 from __future__ import annotations
 
+import copy
 import dataclasses
 import math
 import re
 import struct
 
+from . import app_parts as PP
 from . import octree as O
 from . import sno_layout as L
 from .appearance import (
-    BONE_RANGE_UNIT, FAT_VERTEX, FORMAT_RIGID, FORMAT_SKINNED, PS3_DESCRIPTOR_FIXED, PS3_PIECE, AppearanceFile,
-    Draw, SubObject, parse_appearance,
+    BONE_RANGE_UNIT, FAT_VERTEX, FORMAT_RIGID, FORMAT_SKINNED, GEOSET_NAMES, PS3_DESCRIPTOR_FIXED,
+    PS3_FORMAT_BLOCKS, PS3_PIECE, AppearanceFile, Draw, SubObject, parse_appearance,
 )
 from .binary import FormatError, build_order
 
@@ -60,7 +67,7 @@ BASE_STEP_NO_BONES = 1 / 128
 PS3_WORK_LIMIT = 0xC000
 SKIN_PALETTE_LIMIT = 45  # W13-5
 PS3_RANGES = 0x60  # W13-4: offset0, offset1, size0, size1 (u16)
-RULES = ("W13-1", "W13-2", "W13-3", "W13-4", "W13-5", "W13-6", "W13-7")
+RULES = ("W13-1", "W13-2", "W13-3", "W13-4", "W13-5", "W13-6", "W13-7", "W17-14")
 PACKED_RIGID = 28
 PACKED_SKINNED = 36
 INFLUENCE_RECORD = 6
@@ -174,10 +181,11 @@ def _colour(colour: bytes, flip: bool) -> bytes:
     return bytes(colour[::-1]) if flip else bytes(colour)
 
 
-def encode_packed_vertices(draw: Draw, bias, scale, order: str, slots=None) -> bytes:
+def encode_packed_vertices(draw: Draw, bias, scale, order: str, slots=None, label: str = "") -> bytes:
     """W2-5: 28-byte rigid or 36-byte skinned packed vertices in the file byte order. On x360
     (big-endian) the colour, joint-slot and weight groups are byte-reversed. ``slots`` gives the
-    stored slot bytes per vertex (W2-6); weighted slots come from the palette."""
+    stored slot bytes per vertex (W2-6); weighted slots come from the palette. ``label`` (the
+    part's label, ``39`` V24-2) begins a palette refusal."""
     flip = order == ">"
     out = bytearray()
     for i, position in enumerate(draw.positions):
@@ -188,21 +196,23 @@ def encode_packed_vertices(draw: Draw, bias, scale, order: str, slots=None) -> b
         out += _packed("<", "2H", f"vertex {i} UV2", *draw.uv2_raw[i])
         if draw.skinned:
             weights = _packed("<", "4B", f"vertex {i} weights", *draw.weights[i])
-            joint_slots = skin_slots(draw, i, slots[i] if slots is not None and i < len(slots) else None)
+            joint_slots = skin_slots(draw, i, slots[i] if slots is not None and i < len(slots) else None, label)
             out += (joint_slots[::-1] + weights[::-1]) if flip else (joint_slots + weights)
     return bytes(out)
 
 
-def skin_slots(draw: Draw, i: int, stored: bytes | None) -> bytes:
+def skin_slots(draw: Draw, i: int, stored: bytes | None, label: str = "") -> bytes:
     """W2-6: a weighted slot is the first palette position of the vertex's joint (a stored slot
     that already names the joint is kept, Q379); a slot of weight 0 keeps its stored value (0 for
-    a new vertex)."""
+    a new vertex). ``39`` V24-2: a refusal begins with ``label`` (the draw or record label) when
+    given."""
     palette = draw.palette or []
     slots = []
     for j, (joint, weight) in enumerate(zip(draw.joints[i], draw.weights[i])):
         if weight:
             if joint not in palette:
-                raise FormatError(f"vertex {i}: joint {joint} is not in the palette (W2-6)")
+                where = f"{label}: " if label else ""
+                raise FormatError(f"{where}vertex {i}: joint {joint} is not in the palette (W2-6)")
             if stored is not None and stored[j] < len(palette) and palette[stored[j]] == joint:
                 slots.append(stored[j])
             else:
@@ -354,7 +364,9 @@ def _subset(draw: Draw, ids: list[int], indices: list[int]) -> Draw:
 
 
 def split_skinned_draw(draw: Draw, limit: int = SKIN_PALETTE_LIMIT) -> list[tuple[Draw, list[int]]]:
-    """W13-5: the draw as skinning records of at most ``limit`` bones. Triangles are taken in
+    """W13-5: the draw as skinning records of at most ``limit`` bones. ``38`` V23-4: a written
+    non-last record may hold fewer than 45 entries (the next triangle brings two or three new
+    bones); stored files always have 45 there, and no check requires it of written output. Triangles are taken in
     order and a new record starts before one would exceed the limit; each record holds the
     vertices its triangles use, in vertex order. Returns (record draw, source vertex ids); a draw
     that fits is returned whole."""
@@ -403,7 +415,7 @@ def _empty(draw: Draw) -> bool:
     return not draw.positions or not draw.indices
 
 
-def encode_ps3_draw(draw: Draw, bias, scale, stored_slots=None) -> dict[str, bytes]:
+def encode_ps3_draw(draw: Draw, bias, scale, stored_slots=None, label: str = "") -> dict[str, bytes]:
     """W2-9: the descriptor, index list and streams A, B and C of a ps3 draw."""
     fmt = FORMAT_SKINNED if draw.skinned else FORMAT_RIGID
     nv, nidx = len(draw.positions), len(draw.indices)
@@ -418,7 +430,8 @@ def encode_ps3_draw(draw: Draw, bias, scale, stored_slots=None) -> dict[str, byt
         colours = _colour(draw.colours_1[i], False) + _colour(draw.colours_2[i], False)
         if draw.skinned:
             a += normal_bytes(draw.normals[i]) + b"\x80"
-            slots = skin_slots(draw, i, stored_slots[i] if stored_slots is not None and i < len(stored_slots) else None)
+            slots = skin_slots(draw, i, stored_slots[i] if stored_slots is not None and i < len(stored_slots) else None,
+                               label)
             weights = _packed("<", "4B", f"vertex {i} weights", *draw.weights[i])
             b += bytes(x for pair in zip(weights, slots) for x in pair)
             c += colours + uv
@@ -461,6 +474,52 @@ def _pack(raw: bytearray, order: str, fmt: str, offset: int, *values, field: str
     struct.pack_into(order + fmt, raw, offset, *values)
 
 
+@dataclasses.dataclass
+class PartSource:
+    """W17-11: the sub-object (``geo_set``, ``index``) of ``app``, another parsed ``.app`` of the
+    same build, whose stored record a new sub-object copies (``SubObject.stored_from``)."""
+
+    app: AppearanceFile
+    geo_set: int
+    index: int
+
+
+@dataclasses.dataclass
+class _Pools:
+    """The stored pools a sub-object's runs are read from and where its runs start (G1-2)."""
+
+    index_pool: bytes = b""
+    vertex_pool: bytes = b""
+    index_start: int = 0
+    vertex_start: int = 0
+
+    def index_slice(self, count: int) -> bytes:
+        return self.index_pool[self.index_start * 2:(self.index_start + count) * 2]
+
+    def vertex_slice(self, count: int) -> bytes:
+        return self.vertex_pool[self.vertex_start * FAT_VERTEX:(self.vertex_start + count) * FAT_VERTEX]
+
+
+def _pool_runs(app: AppearanceFile) -> dict[tuple[int, int], tuple[int, int]]:
+    """G1-2, W2-12: where each sub-object's runs start (vertex, index), geo set 0 then 1."""
+    runs, vertices, indices = {}, 0, 0
+    for sub in list(app.sub_objects) + list(app.extra_sub_objects):
+        runs[(sub.geo_set, sub.index)] = (vertices, indices)
+        vertices += sub.cloth_vertex_count
+        indices += sub.index_count
+    return runs
+
+
+def _file_format(app: AppearanceFile) -> int:
+    """W17-5: the ps3 draw format of the file: that of its draws, else 0x83 with bones and 0x81
+    without."""
+    formats = {FORMAT_SKINNED if d.skinned else FORMAT_RIGID
+               for sub in app.sub_objects + app.extra_sub_objects for d in sub.draws if d.kind == "ps3"}
+    if len(formats) == 1:
+        return formats.pop()
+    return FORMAT_SKINNED if app.bones else FORMAT_RIGID
+
+
 class _Context:
     def __init__(self, app: AppearanceFile, tree: L.SnoTree, old: AppearanceFile, rules=frozenset(),
                  keep_skin: bool = False):
@@ -473,32 +532,64 @@ class _Context:
         index_at, vertex_at = POOLS[app.build]
         self.old_index_pool = _block_bytes(tree.top.pairs.get(index_at))
         self.old_vertex_pool = _block_bytes(tree.top.pairs.get(vertex_at))
+        self.runs = _pool_runs(old)
         self.index_pool = bytearray()
         self.vertex_pool = bytearray()
-        self.old_index_run = 0
-        self.old_vertex_run = 0
         self.geo0_moved = False
         self.geo0_triangles = False
+        self.report = PP.PartsReport()  # W17-10, W17-14
+        self.parts_changed = False  # a part was added or removed somewhere (W17-6 pass)
+        self.ps3_format = _file_format(old) if app.build == "ps3" else None
+        self.donors: dict[int, tuple] = {}
+        self.written: list[tuple] = []  # (record, mesh sub-object, label, exact counts)
 
-    def stored_index_slice(self, count: int) -> bytes:
-        return self.old_index_pool[self.old_index_run * 2:(self.old_index_run + count) * 2]
+    def template_pools(self, geo: int, index: int) -> _Pools:
+        vertices, indices = self.runs[(geo, index)]
+        return _Pools(self.old_index_pool, self.old_vertex_pool, indices, vertices)
+
+    def donor(self, app: AppearanceFile):
+        """A donor file (W17-11, W17-8): its tree, parse, pool runs and pools, read once."""
+        if app.build != self.build:
+            raise FormatError(f"a part of a {app.build} file for a {self.build} file (W17-11)")
+        key = id(app)
+        if key not in self.donors:
+            source = bytes(app.source)
+            tree = L.parse_tree(source, "app", app.build)
+            parsed = parse_appearance(source, app.build)
+            index_at, vertex_at = POOLS[app.build]
+            self.donors[key] = (tree, parsed, _pool_runs(parsed), _block_bytes(tree.top.pairs.get(index_at)),
+                                _block_bytes(tree.top.pairs.get(vertex_at)), app)
+        return self.donors[key]
+
+    def mark(self) -> tuple[int, int]:
+        return len(self.index_pool), len(self.vertex_pool)
+
+    def rollback(self, mark: tuple[int, int]) -> None:
+        del self.index_pool[mark[0]:]
+        del self.vertex_pool[mark[1]:]
 
     def check_bone(self, bone: int, label: str, rule: str) -> None:
         if not 0 <= bone < self.bone_count:
             raise FormatError(f"{label}: joint {bone} is not one of the {self.bone_count} bones ({rule})")
 
 
-def _fixed_point(sub: SubObject, positions, moved: bool, has_bones: bool, rules=frozenset()):
+def _fixed_point(sub: SubObject, positions, moved: bool, has_bones: bool, rules=frozenset(), new: bool = False):
     """W2-2, W2-3: an unchanged mesh keeps its bias and step. A changed one keeps its bias while
     it stays within 1 of the new box centre on every axis (else round(box centre)) and takes the
     step of the W2-3 rule (Q375). With W13-2 the step of every sub-object comes from its box
     (the stored box, or the vertex extremes when it is all zero; for a changed mesh the box of
-    the new positions) and its bias (Q395)."""
+    the new positions) and its bias (Q395). ``new`` (W17-3, a part built from zero): bias
+    round(box centre), step by W13-2."""
     bias, scale = tuple(sub.bias), tuple(sub.scale)
     if not positions:
         return bias, scale
     low = [min(p[k] for p in positions) for k in range(3)]
     high = [max(p[k] for p in positions) for k in range(3)]
+    if new:
+        bias = fixed_point_bias(positions)
+        centre = [(low[k] + high[k]) / 2 for k in range(3)]
+        half = [(high[k] - low[k]) / 2 for k in range(3)]
+        return bias, quantisation_steps(centre, half, bias, has_bones)
     if moved:
         centre = [(low[k] + high[k]) / 2 for k in range(3)]
         if not all(abs(bias[k] - centre[k]) <= 1 for k in range(3)):
@@ -522,9 +613,10 @@ def _decoded(positions, bias, scale):
             for p in positions]
 
 
-def _write_box(raw: bytearray, order: str, at: int, positions) -> None:
-    """W2-4: centre = (min + max) / 2, half-extent = (max - min) / 2; all-zero boxes stay zero."""
-    if not any(raw[at:at + 24]) or not positions:
+def _write_box(raw: bytearray, order: str, at: int, positions, force: bool = False) -> None:
+    """W2-4: centre = (min + max) / 2, half-extent = (max - min) / 2; all-zero boxes stay zero
+    (``force``: a part built from zero, W17-3, always gets its box)."""
+    if (not force and not any(raw[at:at + 24])) or not positions:
         return
     low = [min(p[k] for p in positions) for k in range(3)]
     high = [max(p[k] for p in positions) for k in range(3)]
@@ -546,26 +638,24 @@ def _resize_influences(record: L.Record, offset: int, old_count: int, new_count:
 
 
 def _fat_and_pools(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject, own_indices,
-                   index_field: int) -> None:
+                   index_field: int, pools: _Pools) -> None:
     """W2-8, W2-12: the sub-object's fat vertices go to the vertex pool; its run of the index
-    pool is its own list (switch rigid), else its fat indices, else the stored slice."""
+    pool is its own list (switch rigid), else its fat indices, else the stored slice (read from
+    ``pools``: the template's, or a donor's for a moved part)."""
     order, raw = ctx.order, record.raw
     if sub.fat_draw is not None:
         ctx.vertex_pool += encode_fat_vertices(sub.fat_draw, order)
         _pack(raw, order, "I", SWITCH_SUB["fat"], len(sub.fat_draw.positions), field="nVertCount (+0x04)")
     elif old.cloth_vertex_count:
-        start = ctx.old_vertex_run * FAT_VERTEX
-        ctx.vertex_pool += ctx.old_vertex_pool[start:start + old.cloth_vertex_count * FAT_VERTEX]
-    ctx.old_vertex_run += old.cloth_vertex_count
+        ctx.vertex_pool += pools.vertex_slice(old.cloth_vertex_count)
     if own_indices is not None:
         run = encode_indices(own_indices, order)
     elif sub.fat_draw is not None:
         run = encode_indices(sub.fat_draw.indices, order)
     else:
-        run = ctx.stored_index_slice(old.index_count)
+        run = pools.index_slice(old.index_count)
     ctx.index_pool += run
     _pack(raw, order, "i", index_field, len(run) // 2, field="nIndexCount")
-    ctx.old_index_run += old.index_count
 
 
 def _positions(draws) -> list:
@@ -664,7 +754,8 @@ def _stored_switch_slots(skin: L.Record, order: str) -> list[bytes]:
     return [s[::-1] for s in slots] if order == ">" else slots
 
 
-def _kept_switch_record(ctx: _Context, skin: L.Record, sub: SubObject, draw: Draw, before: Draw, bias, scale):
+def _kept_switch_record(ctx: _Context, skin: L.Record, sub: SubObject, draw: Draw, before: Draw, bias, scale,
+                        label: str = ""):
     """V21-2 for one switch / x360 skinning record of a skin-only edit: the stored palette while
     every weighted bone is in it, else a first-use palette (W13-5). None when the derived palette
     would need a split (above 45 bones): the record is then derived as before."""
@@ -682,7 +773,7 @@ def _kept_switch_record(ctx: _Context, skin: L.Record, sub: SubObject, draw: Dra
     changed = False
     if derived:
         changed |= _set_bytes(skin, SKIN["palette"], _packed(order, f"{len(palette)}i", "skinning palette (pBoneIDs)", *palette))
-    changed |= _set_bytes(skin, SKIN["vertices"], encode_packed_vertices(piece, bias, scale, order, slots))
+    changed |= _set_bytes(skin, SKIN["vertices"], encode_packed_vertices(piece, bias, scale, order, slots, label))
     changed |= _set_bytes(skin, SKIN["indices"], encode_indices(piece.indices, order))
     if changed:
         _skin_record_words(skin, piece, order)
@@ -701,7 +792,8 @@ def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_sk
     entries = bytearray()
     edits: list | None = []
     any_changed = triangles = False
-    for skin, draw, before in zip(skin_records, skins, old_skins):
+    for k, (skin, draw, before) in enumerate(zip(skin_records, skins, old_skins)):
+        rlabel = f"{sub.label}, skinning record {k}"
         same = _same_draw(draw, before)
         triangles |= draw.indices != before.indices
         if _empty(draw) and not (same and _empty(before)):
@@ -710,7 +802,7 @@ def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_sk
             edits = None
             continue
         if ctx.keep_skin and not same and "W13-5" in rules and skin_edit_only(draw, before):
-            changed = _kept_switch_record(ctx, skin, sub, draw, before, bias, scale)
+            changed = _kept_switch_record(ctx, skin, sub, draw, before, bias, scale, rlabel)
             if changed is not None:  # V21-2
                 any_changed = True
                 new_records.append(skin)
@@ -741,7 +833,8 @@ def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_sk
                 slots = None
             else:
                 slots = _stored_switch_slots(skin, order)
-            changed |= _set_bytes(target, SKIN["vertices"], encode_packed_vertices(piece, bias, scale, order, slots))
+            changed |= _set_bytes(target, SKIN["vertices"], encode_packed_vertices(piece, bias, scale, order, slots,
+                                                                                    rlabel))
             changed |= _set_bytes(target, SKIN["indices"], encode_indices(piece.indices, order))
             if changed:  # W2-1, W2-6
                 _skin_record_words(target, piece, order)
@@ -755,33 +848,201 @@ def _switch_skins(ctx: _Context, record: L.Record, sub: SubObject, skins, old_sk
     return any_changed, triangles, bytes(entries), edits
 
 
-def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) -> tuple[bool, bool]:
+def _match_parts(parts, count: int, label: str, what: str, all_new: bool = False):
+    """W17-10: match the mesh's parts of one kind (draws, skinning records, rigid list) to the
+    ``count`` stored ones by ``Draw.origin``. Returns ([(part, stored index or None)], removed stored
+    indices). When no part carries an origin, they match by position (extra parts are new, missing
+    ones removed). ``all_new``: every part is new (a sub-object built from zero)."""
+    if all_new:
+        return [(p, None) for p in parts], []
+    if all(getattr(p, "origin", None) is None for p in parts):
+        return [(p, k if k < count else None) for k, p in enumerate(parts)], list(range(len(parts), count))
+    seen: set = set()
+    out = []
+    for part in parts:
+        origin = getattr(part, "origin", None)
+        if origin is not None:
+            if isinstance(origin, bool) or not isinstance(origin, int) or not 0 <= origin < count:
+                raise FormatError(f"{label}: {what} origin {origin!r} is not one of the {count} stored "
+                                  f"{what}s (W17-10)")
+            if origin in seen:
+                raise FormatError(f"{label}: two {what}s come from stored {what} {origin}; mark the copy "
+                                  "new (origin None) (W17-10)")
+            seen.add(origin)
+        out.append((part, origin))
+    return out, [k for k in range(count) if k not in seen]
+
+
+def _check_draw(draw: Draw, label: str) -> None:
+    """The per-vertex lists of a new draw have one entry per position; indices are whole triangles
+    within the vertices."""
+    n = len(draw.positions)
+    names = ["normals", "colours_1", "colours_2", "uv1", "uv2_raw"] + (["joints", "weights"] if draw.skinned else [])
+    for name in names:
+        values = getattr(draw, name)
+        if values is None or len(values) != n:
+            raise FormatError(f"{label}: {name} has {0 if values is None else len(values)} entries for {n} vertices")
+    if len(draw.indices) % 3:
+        raise FormatError(f"{label}: {len(draw.indices)} indices are not whole triangles")
+    if draw.indices and not 0 <= min(draw.indices) <= max(draw.indices) < n:
+        raise FormatError(f"{label}: an index is past the {n} vertices")
+
+
+def merge_draws(draws) -> Draw:
+    """W17-14, W17-7: the geometry of several skinned records as one list (vertices in order, a
+    vertex of two records twice), to be split again by W17-7."""
+    out = Draw(True, [], [], [], [], [], [], [], joints=[], weights=[], kind="packed")
+    for draw in draws:
+        base = len(out.positions)
+        for name in ("positions", "normals", "colours_1", "colours_2", "uv1", "uv2_raw", "joints", "weights"):
+            getattr(out, name).extend(getattr(draw, name))
+        out.indices.extend(i + base for i in draw.indices)
+    return out
+
+
+def _regroup_skins(ctx: _Context, record: L.Record, label: str, skins, bias, scale) -> int:
+    """W17-7 (W17-14): the skinning records of a sub-object from zero: its non-empty skinned
+    geometry, in order, is split before a triangle would bring the palette to a 46th bone; palette by
+    first use with zero-weight slots 0, local indices, a vertex used by two records written in both;
+    the compact influence list by W13-6. Returns the number of records."""
+    order = ctx.order
+    live = [d for d in skins if not _empty(d)]
+    records: list[L.Record] = []
+    entries = bytearray()
+    if live:
+        merged = merge_draws(live)
+        for i in range(len(merged.positions)):
+            for bone in _vertex_bones(merged, i):
+                ctx.check_bone(bone, label, "W17-7")
+        used: set = set()
+        for piece, ids in split_skinned_draw(merged):
+            palette = first_use_palette(piece.joints, piece.weights)
+            if not palette:
+                raise FormatError(f"{label}: a skinning record with no weighted slot has an empty palette (W13-7)")
+            piece = dataclasses.replace(piece, palette=palette)
+            skin = L.new_record(ctx.build, "app", PP.SKIN_RECORD_NAME)
+            _set_bytes(skin, SKIN["palette"], _packed(order, f"{len(palette)}i", "skinning palette (pBoneIDs)", *palette))
+            _set_bytes(skin, SKIN["vertices"], encode_packed_vertices(piece, bias, scale, order, None,
+                                                                      f"{label}, skinning record {len(records)}"))
+            _set_bytes(skin, SKIN["indices"], encode_indices(piece.indices, order))
+            skin.raw[:] = PP.skin_record_words(skin, order)
+            records.append(skin)
+            used.update(ids)
+        for i in sorted(used):  # W13-6: one entry per vertex, each distinct vertex once
+            entries += influence_entry(merged, i)
+    record.pairs[SWITCH_SUB["skins"]] = L.PairValue(L.Block(elements=records) if records else None)
+    _set_bytes(record, SWITCH_SUB["influence"], bytes(entries))
+    return len(records)
+
+
+def _cloth_part(old: SubObject) -> bool:
+    return bool(old.has_cloth or old.cloth_vertex_count or old.fat_draw is not None)
+
+
+def _cloth_parts_unchanged(label: str, parts, origins) -> None:
+    """``38`` V23-5: a V21-1 sub-object (cloth record or fat vertices) is kept unchanged or removed
+    whole: any change to one of its draws or skinning records (including emptying it in place, or
+    reordering) is refused with the part's label. ``39`` V24-1: the fat part counts as a part: any
+    change to its positions, normals, colours, UVs or indices, or dropping it, is refused too."""
+    if origins != list(range(len(origins))):
+        raise FormatError(f"{label}: the parts of a cloth sub-object (cloth record or fat vertices) are not "
+                          "reordered; it is only removed whole or kept unchanged (V21-1, V23-5)")
+    for part_label, draw, before in parts:
+        if (draw is None) != (before is None) or draw is not None and not _same_draw(draw, before):
+            raise FormatError(f"{part_label}: a part of a cloth sub-object (cloth record or fat vertices) is not "
+                              "changed; the sub-object is only removed whole or kept unchanged (V21-1, V23-5)")
+
+
+def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject, pools: _Pools,
+                label: str | None = None, from_zero: bool = False, new: bool = False):
+    """One switch / x360 sub-object (W2-1 to W2-8, W13-5 to W13-7, V21-2; W17-1, W17-3, W17-7,
+    W17-10, W17-14). Returns (moved, triangles changed, keep): keep is False when the sub-object
+    is left without geometry and goes (W17-14)."""
     order, raw, rules = ctx.order, record.raw, ctx.rules
-    rigid = [d for d in sub.draws if d.kind == "packed" and not d.skinned]
-    skins = [d for d in sub.draws if d.kind == "packed" and d.skinned]
+    label = label or sub.label
+    packed = [d for d in sub.draws if d.kind != "fat"]
+    rigid = [d for d in packed if not d.skinned]
+    skins = [d for d in packed if d.skinned]
     old_rigid = [d for d in old.draws if d.kind == "packed" and not d.skinned]
     old_skins = [d for d in old.draws if d.kind == "packed" and d.skinned]
-    if len(rigid) != len(old_rigid) or len(skins) != len(old_skins):
-        raise FormatError(f"{sub.label}: adding or removing packed lists is not described (Q376)")
-    fixed, old_fixed = _positions(rigid + skins), _positions(old_rigid + old_skins)
+    if len(rigid) > 1:
+        raise FormatError(f"{label}: a second rigid list in a switch/x360 sub-object (W17-10)")
+    rigid_pairs, rigid_removed = _match_parts(rigid, len(old_rigid), label, "rigid list", from_zero)
+    skin_pairs, skin_removed = _match_parts(skins, len(old_skins), label, "skinning record", from_zero)
+    added_rigid = any(k is None for _, k in rigid_pairs)
+    added_skins = any(k is None for _, k in skin_pairs)
+    for draw, k in rigid_pairs + skin_pairs:
+        if k is None:
+            _check_draw(draw, label)
+    if rigid and added_rigid and ctx.has_bones:
+        raise FormatError(f"{label}: rigid geometry in a switch/x360 file with bones (W17-10)")
+    if skins and (added_skins or from_zero) and not ctx.has_bones:
+        raise FormatError(f"{label}: skinned geometry in a file without bones (W17-10)")
+    if rigid and len(rigid[0].positions) > 0x10000:
+        raise FormatError(f"{label}: a rigid list of {len(rigid[0].positions)} vertices, above 65,536 (W17-10)")
+    regroup = from_zero or added_skins or bool(skin_removed) or \
+        [k for _, k in skin_pairs] != list(range(len(skin_pairs)))
+    if _cloth_part(old) and not from_zero and (added_rigid or rigid_removed or added_skins or skin_removed):
+        raise FormatError(f"{label}: a cloth sub-object (cloth record or fat vertices) is only removed whole "
+                          "or kept unchanged (V21-1, W17-10)")
+    if _cloth_part(old) and not from_zero:  # ``38`` V23-5: no change to its parts either
+        _cloth_parts_unchanged(label, [(f"{label}, rigid list", d, old_rigid[k]) for d, k in rigid_pairs]
+                               + [(f"{label}, skinning record {k}", d, old_skins[k]) for d, k in skin_pairs]
+                               + [(f"{label}, fat vertices", sub.fat_draw, old.fat_draw)],  # V24-1
+                               [k for _, k in skin_pairs])
+    removed_explicitly = bool(rigid_removed or skin_removed)
+    if not new:  # V23-5: parts dropped by W13-7 / W17-14 are reported by the writer too
+        for draw, k in skin_pairs:
+            if k is not None and _empty(draw) and not _empty(old_skins[k]) and "W13-7" in rules:
+                ctx.report.add("removed", "skinning record", f"{old.label}, skinning record {k}")
+        if rigid and rigid_pairs[0][1] is not None and not rigid[0].positions and "W17-14" in rules:
+            ctx.report.add("removed", "rigid list", f"{old.label}, rigid list")
+    if rigid and not rigid[0].positions and (from_zero or "W17-14" in rules or added_rigid):
+        if not added_rigid:  # W17-14: an emptied rigid list goes with its sub-object
+            removed_explicitly = True
+        rigid = []
+    if not new:  # a new sub-object is reported whole
+        for k in rigid_removed:
+            ctx.report.add("removed", "rigid list", f"{old.label}, rigid list")
+        for k in skin_removed:
+            ctx.report.add("removed", "skinning record", f"{old.label}, skinning record {k}")
+    fixed = _positions(rigid + skins)
+    old_fixed = _positions(old_rigid + old_skins)
     moved = fixed != old_fixed
-    bias, scale = _fixed_point(sub, fixed, moved, ctx.has_bones, rules)
-    if moved or (bias, scale) != (tuple(sub.bias), tuple(sub.scale)):
+    bias, scale = _fixed_point(sub, fixed, moved, ctx.has_bones, rules, new=from_zero)
+    if moved or (bias, scale) != (tuple(sub.bias), tuple(sub.scale)) or from_zero:
         _pack(raw, order, "3f", SWITCH_SUB["bias"], *bias, field="sub-object bias")
         _pack(raw, order, "3f", SWITCH_SUB["scale"], *scale, field="sub-object step")
     triangles = moved
-    for draw, before in zip(rigid, old_rigid):
+    if rigid:
+        draw = rigid[0]
         _set_bytes(record, SWITCH_SUB["packed"], encode_packed_vertices(draw, bias, scale, order))
         _pack(raw, order, "i", SWITCH_SUB["packed_count"], len(draw.positions), field="nPackVertCount (+0xA0)")
-        triangles |= draw.indices != before.indices
-    skins_changed, skin_triangles, entries, edits = _switch_skins(ctx, record, sub, skins, old_skins, bias, scale)
-    triangles |= skin_triangles
+        before = old_rigid[0] if old_rigid and not added_rigid else None
+        triangles |= before is None or draw.indices != before.indices
+    elif old_rigid:  # removed or emptied (W17-14)
+        _set_bytes(record, SWITCH_SUB["packed"], b"")
+        _pack(raw, order, "i", SWITCH_SUB["packed_count"], 0, field="nPackVertCount (+0xA0)")
+        triangles = True
+    if regroup:
+        skin_count = _regroup_skins(ctx, record, label, skins, bias, scale)
+        triangles |= bool(skins or old_skins)
+        skins_changed, entries, edits = True, None, None
+    else:
+        skins_changed, skin_triangles, entries, edits = _switch_skins(ctx, record, sub, skins, old_skins, bias, scale)
+        triangles |= skin_triangles
+        value = record.pairs.get(SWITCH_SUB["skins"])
+        skin_count = len(value.block.elements) if value is not None and value.block else 0
     fat_moved = sub.fat_draw is not None and old.fat_draw is not None and \
         sub.fat_draw.positions != old.fat_draw.positions
     if sub.fat_draw is not None and old.fat_draw is not None:
         triangles |= fat_moved or sub.fat_draw.indices != old.fat_draw.indices
-    _fat_and_pools(ctx, record, sub, old, rigid[0].indices if rigid else None, SWITCH_SUB["index"])
-    if "W13-6" in rules and skins and skins_changed:
+    # W17-3: the rigid list's indices, else the fat ones, else none (a regrouped skinned part has 0)
+    own = rigid[0].indices if rigid else ([] if old_rigid or (regroup and sub.fat_draw is None) else None)
+    _fat_and_pools(ctx, record, sub, old, own, SWITCH_SUB["index"], pools)
+    if regroup:
+        pass  # W13-6 list set with the records
+    elif "W13-6" in rules and skins and skins_changed:
         if edits is not None:  # V21-2: the stored list with the changed entries replaced
             patched = patched_influences(_block_bytes(record.pairs.get(SWITCH_SUB["influence"])), edits)
             entries = entries if patched is None else patched
@@ -792,11 +1053,30 @@ def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject)
         new_n = sum(len(d.positions) for d in skins) or (
             len(sub.fat_draw.positions) if sub.fat_draw is not None and ctx.has_bones else 0)
         _resize_influences(record, SWITCH_SUB["influence"], old_n, new_n)
-    if moved:
-        _write_box(raw, order, SWITCH_SUB["box"], _decoded(fixed, bias, scale))
+    if moved or from_zero:
+        _write_box(raw, order, SWITCH_SUB["box"], _decoded(fixed, bias, scale), force=from_zero)
     elif fat_moved and not fixed:
         _write_box(raw, order, SWITCH_SUB["box"], sub.fat_draw.positions)
-    return moved or fat_moved, triangles
+    structure = from_zero or added_rigid or bool(old_rigid) != bool(rigid) or regroup or skin_count != len(old_skins)
+    fat_count = struct.unpack_from(order + "I", raw, SWITCH_SUB["fat"])[0]
+    if structure:  # W17-1, W17-3
+        ctx.parts_changed = True
+        if not rigid and not skin_count:
+            _pack(raw, order, "6f", SWITCH_SUB["bias"], *(0.0,) * 6, field="sub-object bias and step")
+        stored = struct.unpack_from(order + "I", raw, 0)[0]
+        flags = PP.sub_object_flags(
+            ctx.build, stored, fat=bool(fat_count), cloth=bool(PP.pair_size(record, PP.SWITCH_FIELDS["cloth"])),
+            rigid=bool(rigid), skin_records=skin_count, keep_bit8=bool(stored >> PP.BIT_FAT & 1))
+        _pack(raw, order, "I", 0, flags, field="sub-object flags (W17-1)")
+        if not new:
+            for k, (draw, origin) in enumerate(skin_pairs):
+                if origin is None and not _empty(draw):
+                    ctx.report.add("added", "skinning record", f"{label}, skinning record {k}")
+            if added_rigid and rigid:
+                ctx.report.add("added", "rigid list", f"{label}, rigid list")
+    alive = bool(rigid) or skin_count > 0 or fat_count > 0
+    keep = alive or not (from_zero or removed_explicitly or "W17-14" in rules)
+    return moved or fat_moved or structure, triangles or structure, keep
 
 
 def _ps3_ranges(ctx: _Context, draw: Draw, before: Draw, same: bool, label: str):
@@ -839,69 +1119,238 @@ def _ps3_kept_ranges(ctx: _Context, draw: Draw, before: Draw, stored_ranges, lab
     return ranges, dataclasses.replace(draw, palette=palette), slots
 
 
-def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) -> tuple[bool, bool]:
+def ps3_draw_fits(fmt: int, vertex_count: int, index_count: int, bones=()) -> bool:
+    """W17-5a: a ps3 draw of these counts is within the size budget (21 nv + ni <= 55,998 for 0x81,
+    46 nv + ni <= 58,168 for 0x83), stream A and B at most 0x4000 bytes, the index pair pieces and
+    counts within their words and the work buffer at most 0xC000 (W2-10 / W13-1 with the ranges of
+    ``bones``)."""
+    if not PP.within_budget(fmt, vertex_count, index_count):
+        return False
+    if vertex_count > 0xFFFF or index_count > 0xFFFF:
+        return False
+    skinned = fmt == FORMAT_SKINNED
+    if _align((10 if skinned else 6) * vertex_count, 16) > PS3_PIECE:
+        return False
+    if skinned and _align(8 * vertex_count, 16) > PS3_PIECE:
+        return False
+    if _align(2 * index_count, 16) > PS3_PIECE + 0xFFFF:
+        return False
+    byte1 = ps3_command_space(fmt, index_count)
+    if byte1 > 0xFF:
+        return False
+    if skinned:
+        work = ps3_skinned_work_size(vertex_count, index_count, byte1, ps3_bone_ranges(bones))
+    else:
+        work = _align(12 * _align(vertex_count, 8) + _align(2 * index_count, 16) + 16 * byte1 + 192, 128)
+    return work <= PS3_WORK_LIMIT
+
+
+def cut_ps3_draw(draw: Draw, fmt: int | None = None) -> list[Draw]:
+    """W17-5a: a new ps3 draw as several draws within the size budget. A draw that fits is
+    returned whole. Else the triangles are walked in order and a new draw starts before one would
+    break a limit (``ps3_draw_fits``); each draw holds the vertices its triangles use, renumbered by
+    first use. ``38`` V23-2: every limit cuts (the budget value, stream A 0x4000 bytes, the work
+    buffer 0xC000); on dense geometry the work buffer is reached first. A changed existing draw is
+    never cut but refused over a limit (V23-3, ``_changed_draw_limits``)."""
+    fmt = fmt if fmt is not None else (FORMAT_SKINNED if draw.skinned else FORMAT_RIGID)
+    skinned = fmt == FORMAT_SKINNED
+
+    def bones_of(ids):
+        found: set = set()
+        if skinned:
+            for v in ids:
+                found |= _vertex_bones(draw, v)
+        return found
+
+    if ps3_draw_fits(fmt, len(draw.positions), len(draw.indices), bones_of(range(len(draw.positions)))):
+        return [draw]
+    if len(draw.indices) % 3:
+        raise FormatError(f"{len(draw.indices)} indices are not whole triangles; the draw cannot be cut (W17-5a)")
+    groups: list[list[int]] = []
+    current: list[int] = []
+    used: dict[int, None] = {}
+    bones: set = set()
+    for t in range(0, len(draw.indices), 3):
+        triangle = draw.indices[t:t + 3]
+        grown = dict(used)
+        grown.update((v, None) for v in triangle)
+        need = bones | bones_of(triangle)
+        if current and not ps3_draw_fits(fmt, len(grown), len(current) + 3, need):
+            groups.append(current)
+            current, used, bones = [], {}, set()
+            grown = dict.fromkeys(triangle)
+            need = bones_of(triangle)
+        if not ps3_draw_fits(fmt, len(grown), len(current) + 3, need):
+            raise FormatError("a triangle does not fit a ps3 draw (W17-5a)")
+        current += triangle
+        used, bones = grown, need
+    if current:
+        groups.append(current)
+    out = []
+    for group in groups:
+        ids = list(dict.fromkeys(group))  # first use
+        where = {v: n for n, v in enumerate(ids)}
+        out.append(_subset(draw, ids, [where[v] for v in group]))
+    return out
+
+
+def _ps3_new_geometry(ctx: _Context, draw: Draw, label: str) -> Draw:
+    """W17-5: a new ps3 draw takes the file's format. Rigid geometry in a file of format 0x83 is
+    written skinned, one bone per vertex with weight 255 (its joints when it has them, else bone 0,
+    Q-S17-6); skinned geometry needs bones and a 0x83 file."""
+    _check_draw(draw, label)
+    fmt = ctx.ps3_format
+    if draw.skinned:
+        if not ctx.has_bones:
+            raise FormatError(f"{label}: skinned geometry in a file without bones (W17-10)")
+        if fmt != FORMAT_SKINNED:
+            raise FormatError(f"{label}: a skinned draw in a ps3 file of rigid draws: a mixed ps3 file (W17-5)")
+        return dataclasses.replace(draw, kind="ps3", palette=None, local_joints=None, origin=None)
+    if fmt == FORMAT_SKINNED:
+        n = len(draw.positions)
+        joints = [tuple(j) for j in draw.joints] if draw.joints is not None and draw.weights is not None else None
+        weights = [tuple(w) for w in draw.weights] if joints is not None else None
+        if joints is None or len(joints) != n:
+            joints, weights = [(0, 0, 0, 0)] * n, [(255, 0, 0, 0)] * n
+        return dataclasses.replace(draw, skinned=True, joints=joints, weights=weights, palette=None,
+                                   local_joints=None, kind="ps3", origin=None)
+    return dataclasses.replace(draw, kind="ps3", joints=None, weights=None, palette=None, local_joints=None,
+                               origin=None)
+
+
+def _new_ps3_draw(ctx: _Context, draw: Draw, bias, scale, label: str) -> tuple[L.Record, Draw]:
+    """W17-5: a ps3 draw record from zero: W2-9 blocks, G1-5 / W2-10 / W13-1 words, W13-4 ranges
+    (zero-weight slots 0), G1-6 vertex-format blocks."""
+    fmt = FORMAT_SKINNED if draw.skinned else FORMAT_RIGID
+    ranges = (0, 0, 0, 0)
+    if draw.skinned:
+        bones: set = set()
+        for i in range(len(draw.positions)):
+            bones |= _vertex_bones(draw, i)
+        for bone in bones:
+            ctx.check_bone(bone, label, "W13-4")
+        ranges = ps3_bone_ranges(bones)
+        draw = dataclasses.replace(draw, palette=ranges_palette(ranges))
+    blocks = encode_ps3_draw(draw, bias, scale, None, label)
+    work = None
+    if draw.skinned:
+        work = ps3_skinned_work_size(len(draw.positions), len(draw.indices), blocks["descriptor"][1], ranges)
+        if work > PS3_WORK_LIMIT:
+            raise FormatError(f"{label}: skinned draw work buffer {work} is above 0xC000 (W13-1)")
+    record = PP.new_draw_record(fmt)
+    words = _ps3_draw_words(record, blocks, len(draw.positions), len(draw.indices), label, work)
+    for name in ("descriptor", "indices", "a", "b", "c"):
+        _set_bytes(record, DRAW[name], blocks[name])
+    for name, fmt_words, values in words:
+        _pack(record.raw, ">", fmt_words, DRAW[name], *values, field=name)
+    _pack(record.raw, ">", "4H", PS3_RANGES, *ranges, field=f"{label}: bone ranges (+0x60, W13-4)")
+    return record, draw
+
+
+def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject, pools: _Pools,
+             label: str | None = None, from_zero: bool = False, new: bool = False):
+    """One ps3 sub-object (W2-8 to W2-10, W13-1, W13-4, W13-6, W13-7, V21-2; W17-1, W17-3, W17-5,
+    W17-10, W17-14). Returns (moved, triangles changed, keep)."""
     order, raw, rules = ctx.order, record.raw, ctx.rules
+    label = label or sub.label
     fat, old_fat = sub.fat_draw, old.fat_draw
-    draws = [d for d in sub.draws if d.kind == "ps3"]
+    draws = [d for d in sub.draws if d.kind != "fat"]
     old_draws = [d for d in old.draws if d.kind == "ps3"]
     value = record.pairs.get(PS3_SUB["draws"])
     records = value.block.elements if value is not None and value.block else []
-    if len(draws) != len(old_draws) or len(records) != len(draws):
-        raise FormatError(f"{sub.label}: adding or removing draws is not described (Q376)")
-    fixed, old_fixed = _positions(draws), _positions(old_draws)
+    if len(records) != len(old_draws):
+        raise FormatError(f"{label}: {len(records)} draw records for {len(old_draws)} draws")
+    pairs, removed = _match_parts(draws, len(old_draws), label, "draw", from_zero)
+    added = any(k is None for _, k in pairs)
+    if _cloth_part(old) and not from_zero and (added or removed):
+        raise FormatError(f"{label}: a cloth sub-object (cloth record or fat vertices) is only removed whole "
+                          "or kept unchanged (V21-1, W17-10)")
+    if from_zero and fat is not None:
+        raise FormatError(f"{label}: a new sub-object with fat vertices is only moved in whole (W17-11, V21-1)")
+    if _cloth_part(old) and not from_zero:  # ``38`` V23-5
+        _cloth_parts_unchanged(label, [(f"{label}, draw {k}", d, old_draws[k]) for d, k in pairs]
+                               + [(f"{label}, fat vertices", fat, old_fat)],  # V24-1
+                               [k for _, k in pairs])
+    for k in removed if not new else ():  # a new sub-object is reported whole
+        ctx.report.add("removed", "draw", f"{old.label}, draw {k}")
+    plan = []  # (stored record or None, draw, stored draw or None)
+    for draw, k in pairs:
+        if k is not None:
+            plan.append((records[k], draw, old_draws[k]))
+        elif not _empty(draw):
+            for piece in cut_ps3_draw(_ps3_new_geometry(ctx, draw, label), ctx.ps3_format):
+                plan.append((None, piece, None))
+    fixed = _positions([d for _, d, _ in plan])
+    old_fixed = _positions(old_draws)
     moved = fixed != old_fixed
-    bias, scale = _fixed_point(sub, fixed, moved, ctx.has_bones, rules)
-    if moved or (bias, scale) != (tuple(sub.bias), tuple(sub.scale)):
+    bias, scale = _fixed_point(sub, fixed, moved, ctx.has_bones, rules, new=from_zero)
+    if moved or (bias, scale) != (tuple(sub.bias), tuple(sub.scale)) or from_zero:
         _pack(raw, order, "3f", PS3_SUB["bias"], *bias, field="sub-object bias")
         _pack(raw, order, "3f", PS3_SUB["scale"], *scale, field="sub-object step")
-    triangles = moved
+    triangles = moved or bool(removed)
     kept, kept_draws = [], []
-    changed_mesh = moved
-    for k, (draw_record, draw, before) in enumerate(zip(records, draws, old_draws)):
+    changed_mesh = moved or bool(removed)
+    for draw_record, draw, before in plan:
+        dlabel = f"{label}, draw {len(kept)}"
+        if before is None:  # W17-5: a new draw
+            new_record, draw = _new_ps3_draw(ctx, draw, bias, scale, dlabel)
+            kept.append(new_record)
+            kept_draws.append(draw)
+            triangles = changed_mesh = True
+            if not new:
+                ctx.report.add("added", "draw", dlabel)
+            continue
         same = _same_draw(draw, before)
         triangles |= draw.indices != before.indices
         changed_mesh |= not same
         if _empty(draw) and not (same and _empty(before)):
             _empty_record(ctx, sub, "ps3 draw")
             triangles = True
+            if not new:  # V23-5: a draw dropped by W13-7 is reported by the writer too
+                stored_k = next(i for i, r in enumerate(records) if r is draw_record)
+                ctx.report.add("removed", "draw", f"{old.label}, draw {stored_k}")
             continue
-        label = f"{sub.label}, draw {k}"
         stored_ranges = struct.unpack_from(">4H", draw_record.raw, PS3_RANGES)
         ranges, slots = stored_ranges, before.local_joints
         if draw.skinned and "W13-4" in rules:
             if ctx.keep_skin and not same and before.local_joints is not None and skin_edit_only(draw, before):
-                ranges, draw, slots = _ps3_kept_ranges(ctx, draw, before, stored_ranges, label)  # V21-2
+                ranges, draw, slots = _ps3_kept_ranges(ctx, draw, before, stored_ranges, dlabel)  # V21-2
             else:
-                ranges, draw, slots = _ps3_ranges(ctx, draw, before, same, label)
-        blocks = encode_ps3_draw(draw, bias, scale, slots)
+                ranges, draw, slots = _ps3_ranges(ctx, draw, before, same, dlabel)
+        blocks = encode_ps3_draw(draw, bias, scale, slots, dlabel)
         work = None
         if draw.skinned and "W13-1" in rules:
             work = ps3_skinned_work_size(len(draw.positions), len(draw.indices), blocks["descriptor"][1], ranges)
+        if not same:  # ``39`` V24-4: budget, stream A, then the work buffer (the order of V23-2)
+            _changed_draw_limits(draw_record, blocks, len(draw.positions), len(draw.indices), work, dlabel)
+        if work is not None:
             if work > PS3_WORK_LIMIT:
-                raise FormatError(f"{label}: skinned draw work buffer {work} is above 0xC000 (W13-1)")
+                raise FormatError(f"{dlabel}: skinned draw work buffer {work} is above 0xC000 (W13-1); "
+                                  f"{CHANGED_DRAW_HINT}")
         kept.append(draw_record)
         kept_draws.append(draw)
         r = draw_record.raw
         if not all(_block_bytes(draw_record.pairs.get(DRAW[name])) == blocks[name]
                    for name in ("descriptor", "indices", "a", "b", "c")):
-            words = _ps3_draw_words(draw_record, blocks, len(draw.positions), len(draw.indices), label, work)
+            words = _ps3_draw_words(draw_record, blocks, len(draw.positions), len(draw.indices), dlabel, work)
             for name in ("descriptor", "indices", "a", "b", "c"):
                 _set_bytes(draw_record, DRAW[name], blocks[name])
             for name, fmt, values in words:
                 _pack(r, ">", fmt, DRAW[name], *values, field=name)
         elif work is not None:
-            _pack(r, ">", "I", DRAW["work"], work, field=f"{label}: work-buffer size (+0x98, W13-1)")
+            _pack(r, ">", "I", DRAW["work"], work, field=f"{dlabel}: work-buffer size (+0x98, W13-1)")
         if tuple(ranges) != tuple(stored_ranges):
-            _pack(r, ">", "4H", PS3_RANGES, *ranges, field=f"{label}: bone ranges (+0x60, W13-4)")
-    if len(kept) != len(records):  # W13-7: dropped draws
+            _pack(r, ">", "4H", PS3_RANGES, *ranges, field=f"{dlabel}: bone ranges (+0x60, W13-4)")
+    structure = from_zero or len(kept) != len(records) or any(a is not b for a, b in zip(kept, records))
+    if structure:  # W13-7 drops, W17-14 removals, W17-5 additions
         record.pairs[PS3_SUB["draws"]] = L.PairValue(L.Block(elements=kept) if kept else None)
         _pack(raw, order, "i", PS3_SUB["draw_count"], len(kept), field="draw count (+0xFC)")
     fat_moved = fat is not None and old_fat is not None and fat.positions != old_fat.positions
     if fat is not None and old_fat is not None:
         triangles |= fat_moved or fat.indices != old_fat.indices
         changed_mesh |= fat_moved or fat.indices != old_fat.indices
-    _fat_and_pools(ctx, record, sub, old, None, PS3_SUB["index"])
-    if "W13-6" in rules and changed_mesh:
+    _fat_and_pools(ctx, record, sub, old, None, PS3_SUB["index"], pools)
+    if ("W13-6" in rules or from_zero) and changed_mesh:
         # W13-6: present exactly in sub-objects owning fat vertices in a file with bones; 6 x the
         # skinned draws' vertices, else 6 x the fat vertices; stored entries kept (Q400)
         fat_n = len(fat.positions) if fat is not None else 0
@@ -911,13 +1360,49 @@ def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject) ->
         _set_bytes(record, PS3_SUB["influence"], stored[:want] + bytes(max(0, want - len(stored))))
     else:
         old_n = sum(len(d.positions) for d in old_draws) or (len(old_fat.positions) if old_fat else 0)
-        new_n = sum(len(d.positions) for d in draws) or (len(fat.positions) if fat else 0)
+        new_n = sum(len(d.positions) for d in kept_draws) or (len(fat.positions) if fat else 0)
         _resize_influences(record, PS3_SUB["influence"], old_n, new_n)
-    if moved:
-        _write_box(raw, order, PS3_SUB["box"], _decoded(fixed, bias, scale))
+    if moved or from_zero:
+        _write_box(raw, order, PS3_SUB["box"], _decoded(fixed, bias, scale), force=from_zero)
     elif fat_moved and not fixed:
         _write_box(raw, order, PS3_SUB["box"], fat.positions)
-    return moved or fat_moved, triangles
+    fat_count = struct.unpack_from(order + "i", raw, PS3_SUB["fat"])[0]
+    if structure:  # W17-1, W17-3
+        ctx.parts_changed = True
+        if not kept_draws:
+            _pack(raw, order, "6f", PS3_SUB["bias"], *(0.0,) * 6, field="sub-object bias and step")
+        stored = struct.unpack_from(order + "I", raw, 0)[0]
+        flags = PP.sub_object_flags("ps3", stored, fat=bool(fat_count), draws=len(kept),
+                                    skinned_draws=sum(d.skinned for d in kept_draws))
+        _pack(raw, order, "I", 0, flags, field="sub-object flags (W17-1)")
+    alive = bool(kept) or fat_count > 0
+    keep = alive or not (from_zero or bool(removed) or "W17-14" in rules)
+    return moved or fat_moved or structure, triangles or structure, keep
+
+
+CHANGED_DRAW_HINT = ("a changed draw is not cut (V23-3); import the geometry as a new mesh, which is cut "
+                     "into draws (W17-5a)")
+
+
+def _changed_draw_limits(record: L.Record, blocks: dict, nv: int, nidx: int, work: int | None, label: str) -> None:
+    """``38`` V23-3: an existing ps3 draw whose geometry changed stays one draw; when it passes any
+    limit of V23-2 (the W17-5a budget, stream A 0x4000 bytes, the work buffer 0xC000) it is
+    refused with its label, on either format."""
+    fmt = blocks["descriptor"][0]
+    budget = PP.draw_budget(fmt, nv, nidx)
+    if budget > PP.BUDGET[fmt][1]:
+        raise FormatError(f"{label}: budget value {budget} is above {PP.BUDGET[fmt][1]} (W17-5a); {CHANGED_DRAW_HINT}")
+    if len(blocks["a"]) > PS3_PIECE:  # V24-3: a safeguard; with the stored strides the budget is passed first
+        raise FormatError(f"{label}: stream A of {len(blocks['a'])} bytes is above 0x4000 (G1-5); {CHANGED_DRAW_HINT}")
+    if work is None:
+        if fmt == FORMAT_RIGID:
+            work = ps3_work_size(fmt, nv, nidx)
+        else:
+            stored = struct.unpack_from(">I", record.raw, DRAW["work"])[0]
+            work = _align(28 * _align(nv, 8) + _align(2 * nidx, 16) + 16 * ps3_command_space(fmt, nidx) + 336, 128)
+            work = max(work, stored)
+    if work > PS3_WORK_LIMIT:
+        raise FormatError(f"{label}: work buffer {work} is above 0xC000 (W2-10, W13-1); {CHANGED_DRAW_HINT}")
 
 
 def _ps3_draw_words(record: L.Record, blocks: dict, nv: int, nidx: int, label: str, work: int | None = None) -> list:
@@ -1007,17 +1492,211 @@ def _rebuild_octree(tree: L.SnoTree, stored: O.Octree | None) -> None:
     O.set_octree(tree, changed_mesh_octree(mesh, stored))
 
 
+def _match_subs(geo: int, subs, old_subs):
+    """W17-10: the mesh's sub-objects of one geo set against the template's, by ``origin``.
+    Existing sub-objects keep their order; new ones (origin None) come after them. Returns
+    ([(sub-object, template index or None)], removed template indices)."""
+    plan, seen = [], set()
+    last, new_seen = -1, False
+    for sub in subs:
+        origin = getattr(sub, "origin", None)
+        if origin is None:
+            plan.append((sub, None))
+            new_seen = True
+            continue
+        try:
+            g, i = origin
+        except (TypeError, ValueError):
+            raise FormatError(f"{sub.label}: origin {origin!r} is not (geo set, index) (W17-10)") from None
+        if g != geo:
+            raise FormatError(f"{sub.label}: origin {origin!r} is in geo set {g}, not {geo}; a part moved to "
+                              "the other geo set is a new sub-object (origin None) (W17-10)")
+        if isinstance(i, bool) or not isinstance(i, int) or not 0 <= i < len(old_subs):
+            raise FormatError(f"{sub.label}: origin {origin!r} is not one of the {len(old_subs)} template "
+                              f"sub-objects of geo set {geo} (W17-10)")
+        if i in seen:
+            raise FormatError(f"{sub.label}: two sub-objects come from template sub-object {origin}; mark "
+                              "the copy new (origin None) (W17-10)")
+        if i < last or new_seen:
+            raise FormatError(f"{sub.label}: existing sub-objects keep their order and new ones go at the "
+                              f"end of their geo set (W17-10)")
+        seen.add(i)
+        last = i
+        plan.append((sub, i))
+    return plan, [i for i in range(len(old_subs)) if i not in seen]
+
+
+def _stored_word(raw: bytes, order: str, at: int) -> int:
+    return struct.unpack_from(order + "I", raw, at)[0]
+
+
+def _effective_hash(ctx: _Context, sub: SubObject, k, geo: int, template_raws, label: str) -> tuple[int, bool]:
+    """W17-2: the sub-object hash a written sub-object will have, and whether it is new or renamed
+    (and so must not repeat another one of its geo set)."""
+    if k is not None:
+        stored = _stored_word(template_raws[(geo, k)], ctx.order, PP.sub_fields(ctx.build)["hash"])
+        if ctx.build == "ps3" and sub.name is not None and sub.name != ctx.old_lists[geo][k].name:
+            return PP.name_hash(sub.name), True  # a renamed ps3 sub-object (switch stores no name)
+        return stored, False
+    if sub.name is not None:
+        return PP.name_hash(sub.name), True
+    if ctx.build == "ps3" and sub.stored_from is None:
+        raise FormatError(f"{label}: a new ps3 sub-object needs a name (W17-2)")
+    if sub.sub_hash is None:
+        raise FormatError(f"{label}: a new sub-object needs a name or a sub-object hash (W17-2)")
+    return sub.sub_hash & 0xFFFFFFFF, True
+
+
+def _check_names(ctx: _Context, plans, template_raws) -> None:
+    """W17-10: a new or renamed sub-object may not repeat the name (hash, W17-2) of another
+    sub-object of its geo set."""
+    for geo, (plan, _) in enumerate(plans):
+        keys = []
+        for n, (sub, k) in enumerate(plan):
+            label = f"{GEOSET_NAMES[geo]}, sub-object {n}"
+            keys.append((*_effective_hash(ctx, sub, k, geo, template_raws, label), label, sub.name))
+        for n, (key, check, label, name) in enumerate(keys):
+            if check and any(other[0] == key for m, other in enumerate(keys) if m != n):
+                shown = f"name {name!r}" if name is not None else "sub-object hash"
+                raise FormatError(f"{label}: duplicate {shown} (hash 0x{key:08X}) in the {GEOSET_NAMES[geo]} "
+                                  "(W17-10)")
+
+
+def _template_part(ctx: _Context, sub: SubObject, label: str):
+    """W17-10: the template part a new sub-object copies values from: the one the caller names
+    (``template_part``), else the first sub-object with the same material, else the file's first."""
+    old = ctx.old_lists
+    if sub.template_part is not None:
+        try:
+            g, i = sub.template_part
+            return (g, i), old[g][i]
+        except (TypeError, ValueError, IndexError):
+            raise FormatError(f"{label}: template part {sub.template_part!r} is not a template sub-object "
+                              "(W17-10)") from None
+    everything = [(s.geo_set, s.index, s) for s in old[0] + old[1]]
+    if sub.material_hash is not None:
+        for g, i, s in everything:
+            if s.material_hash == sub.material_hash:
+                return (g, i), s
+    if not everything:
+        raise FormatError(f"{label}: the template has no sub-object to copy values from (W17-10)")
+    g, i, s = everything[0]
+    return (g, i), s
+
+
+def _from_zero_record(ctx: _Context, sub: SubObject, template_raws, label: str) -> L.Record:
+    """W17-3: the record of a new sub-object, copied values from its template part."""
+    if sub.has_cloth or sub.cloth is not None or sub.fat_draw is not None:
+        raise FormatError(f"{label}: a new sub-object with cloth or fat vertices is only moved in whole "
+                          "(W17-11, V21-1)")
+    where, part = _template_part(ctx, sub, label)
+    material = sub.material_hash if sub.material_hash is not None else part.material_hash
+    key, _ = _effective_hash(ctx, sub, None, sub.geo_set, template_raws, label)
+    return PP.new_sub_record(ctx.build, template_raws[where], material, key,
+                             sub.name if ctx.build == "ps3" else None)
+
+
+def _donor_record(ctx: _Context, sub: SubObject, label: str):
+    """W17-11: a copy of the stored record a moved sub-object comes from, its parse and pools."""
+    source = sub.stored_from
+    if not isinstance(source, PartSource):
+        raise FormatError(f"{label}: stored_from {source!r} is not a PartSource (W17-11)")
+    tree, parsed, runs, index_pool, vertex_pool, _ = ctx.donor(source.app)
+    value = tree.top.pairs.get(GEO_SUB_OBJECTS[source.geo_set]) if source.geo_set in (0, 1) else None
+    records = value.block.elements if value is not None and value.block else []
+    if not 0 <= source.index < len(records):
+        raise FormatError(f"{label}: the source has no sub-object {source.index} in geo set {source.geo_set}")
+    before = (parsed.sub_objects, parsed.extra_sub_objects)[source.geo_set][source.index]
+    vertices, indices = runs[(source.geo_set, source.index)]
+    return PP.copy_record(records[source.index]), before, _Pools(index_pool, vertex_pool, indices, vertices)
+
+
+def _identity(ctx: _Context, record: L.Record, sub: SubObject, before: SubObject, from_zero: bool) -> bool:
+    """The name, sub-object hash and material hash of a kept or moved sub-object (W17-2, W17-8).
+    Returns True when a word changed."""
+    if from_zero:
+        return False
+    fields, order, raw = PP.sub_fields(ctx.build), ctx.order, record.raw
+    changed = False
+    rename = sub.name is not None and sub.name != before.name and (ctx.build == "ps3" or sub.origin is None)
+    if rename:  # ps3: a renamed sub-object; switch / x360: a moved one (no name is stored, W17-2)
+        if ctx.build == "ps3":
+            raw[fields["name"]:fields["name"] + PP.PS3_NAME_SIZE] = PP.ps3_name_field(sub.name)
+        struct.pack_into(order + "I", raw, fields["hash"], PP.name_hash(sub.name))
+        changed = True
+    elif ctx.build != "ps3" and sub.name is None and sub.origin is None and sub.sub_hash is not None \
+            and sub.sub_hash != _stored_word(raw, order, fields["hash"]):
+        struct.pack_into(order + "I", raw, fields["hash"], sub.sub_hash & 0xFFFFFFFF)
+        changed = True
+    if sub.material_hash is not None and sub.material_hash != _stored_word(raw, order, fields["material"]):
+        _pack(raw, order, "I", fields["material"], sub.material_hash, field="material hash")
+        changed = True
+    return changed
+
+
+def _materials(ctx: _Context, template_entries: list[L.Record]) -> None:
+    """W17-8: a hash newly used by a sub-object gets an entry, copied from its source (the same
+    file or a donor) and appended; the entry of a hash no sub-object uses any more goes. A hash
+    already used in the template, and stored unused or repeated entries, are left as stored."""
+    tree, order = ctx.tree, ctx.order
+    at = PP.sub_fields(ctx.build)["material"]
+    before = {s.material_hash for s in ctx.old_lists[0] + ctx.old_lists[1]}
+    entries = PP.material_entries(tree)
+    have = {PP.entry_hash(e, order) for e in entries}
+    after: set = set()
+    changed = False
+    looks = PP.look_count(tree)
+    for record, sub, label, _ in ctx.written:
+        value = _stored_word(record.raw, order, at)
+        after.add(value)
+        if value in have or value in before:
+            continue
+        source = PP.material_source(sub.material_source)
+        if source is None:
+            raise FormatError(f"{label}: material hash 0x{value:08X} has no table entry and no source for a "
+                              "new entry (W17-8)")
+        if source.app is None:
+            candidates = template_entries
+        else:
+            candidates = PP.material_entries(ctx.donor(source.app)[0])
+        found = next((e for e in candidates if PP.entry_hash(e, order) == source.hash), None)
+        if found is None:
+            where = "the file" if source.app is None else "the donor file"
+            raise FormatError(f"{label}: material source 0x{source.hash:08X} is not in {where}'s table (W17-8)")
+        entries.append(PP.copied_material_entry(found, value, order, looks))
+        have.add(value)
+        ctx.report.add("added", "material", f"material 0x{value:08X}")
+        changed = True
+    gone = (before - after) & have
+    if gone:
+        entries = [e for e in entries if PP.entry_hash(e, order) not in gone]
+        for value in sorted(gone):
+            ctx.report.add("removed", "material", f"material 0x{value:08X}")
+        changed = True
+    if changed:
+        PP.set_material_entries(tree, entries)
+
+
 def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None, derive=False,
-                  keep_skin_bytes: bool = False) -> L.SnoTree:
+                  keep_skin_bytes: bool = False, report: PP.PartsReport | None = None,
+                  _written: list | None = None) -> L.SnoTree:
     """W2-1 to W2-15: the structure tree of ``app``'s source with every mesh block of ``mesh`` (a
     decoded ``.app``, by default ``app`` itself, changed by the caller) encoded again.
     ``derive`` (True, or rule names of ``RULES``) applies the stage-13 rules: W13-1, W13-2 and
     W13-4 derive the values the writer otherwise keeps; W13-3, W13-5 and W13-6 apply to changed
-    meshes; W13-7 drops empty skinning records and skinned draws (else they are refused).
+    meshes; W13-7 drops empty skinning records and skinned draws (else they are refused); W17-14
+    removes a sub-object left without geometry by such a drop.
     ``keep_skin_bytes`` (V21-2, used by the mesh import): a skinning record or ps3 draw whose
     vertex count, positions and indices are unchanged keeps its stored palette or bone ranges
     while every weighted bone is in them, the stored slot bytes of its unchanged vertices, and
-    (switch, x360) the stored compact influence list with only the changed entries replaced."""
+    (switch, x360) the stored compact influence list with only the changed entries replaced.
+
+    W17-10: the mesh's sub-object lists may differ from the template's. ``SubObject.origin`` says
+    which template sub-object each comes from; None marks a new one (built from zero by W17-3
+    from its template part, or copied whole from ``stored_from``, W17-11). Template sub-objects
+    missing from the lists are removed with their pool runs. Within a sub-object, ``Draw.origin``
+    matches ps3 draws, skinning records and the rigid list the same way. ``report`` (a
+    ``app_parts.PartsReport``) receives the added and removed parts."""
     rules = rule_set(derive)
     mesh = app if mesh is None else mesh
     if mesh.build != app.build:
@@ -1029,53 +1708,283 @@ def app_mesh_tree(app: AppearanceFile, mesh: AppearanceFile | None = None, deriv
     stored_octree = O.read_octree(tree)
     old = parse_appearance(source, app.build)
     ctx = _Context(app, tree, old, rules, keep_skin_bytes)
+    if report is not None:
+        ctx.report = report
+    if _written is not None:
+        ctx.written = _written
+    ctx.old_lists = (old.sub_objects, old.extra_sub_objects)
     sub_fn = _ps3_sub if app.build == "ps3" else _switch_sub
     box_at = (PS3_SUB if app.build == "ps3" else SWITCH_SUB)["box"]
-    geo0_records: list[L.Record] = []
-    for geo, (subs, old_subs) in enumerate(((mesh.sub_objects, old.sub_objects),
-                                            (mesh.extra_sub_objects, old.extra_sub_objects))):
+    geo_records, template_raws = [], {}
+    for geo in (0, 1):
         value = tree.top.pairs.get(GEO_SUB_OBJECTS[geo])
-        records = value.block.elements if value is not None and value.block else []
-        if not len(records) == len(subs) == len(old_subs):
-            raise FormatError(f"geo set {geo}: {len(subs)} sub-objects for {len(records)} records (Q376)")
-        for record, sub, before in zip(records, subs, old_subs):
-            moved, triangles = sub_fn(ctx, record, sub, before)
+        records = list(value.block.elements) if value is not None and value.block else []
+        if len(records) != len(ctx.old_lists[geo]):
+            raise FormatError(f"geo set {geo}: {len(records)} records for {len(ctx.old_lists[geo])} sub-objects")
+        geo_records.append(records)
+        template_raws.update(((geo, i), bytes(r.raw)) for i, r in enumerate(records))
+    template_entries = PP.material_entries(tree)
+    plans = [_match_subs(geo, subs, ctx.old_lists[geo])
+             for geo, subs in enumerate((mesh.sub_objects, mesh.extra_sub_objects))]
+    _check_names(ctx, plans, template_raws)
+    geo0_records: list[L.Record] = []
+    for geo, (plan, removed) in enumerate(plans):
+        records = geo_records[geo]
+        for k in removed:
+            ctx.report.add("removed", "sub-object", ctx.old_lists[geo][k].label)
+        out: list[L.Record] = []
+        for sub, k in plan:
+            label = f"{GEOSET_NAMES[geo]}, sub-object {len(out)}"
+            from_zero = False
+            if k is not None:
+                record, before, pools = records[k], ctx.old_lists[geo][k], ctx.template_pools(geo, k)
+            elif sub.stored_from is not None:
+                record, before, pools = _donor_record(ctx, sub, label)
+            else:
+                record = _from_zero_record(ctx, sub, template_raws, label)
+                before = SubObject(-1, None, None, (0.0,) * 3, (0.0,) * 3, None, None, [], geo_set=geo)
+                pools, from_zero = _Pools(), True
+            mark = ctx.mark()
+            _identity(ctx, record, sub, before, from_zero)
+            moved, triangles, keep = sub_fn(ctx, record, sub, before, pools, label=label, from_zero=from_zero,
+                                            new=k is None)
+            if not keep:  # W17-14: no geometry left (or a new part without geometry, not written)
+                ctx.rollback(mark)
+                if k is not None:
+                    ctx.report.add("removed", "sub-object", before.label)
+                else:
+                    ctx.report.add("skipped", "sub-object", label)
+                continue
+            if k is None:
+                ctx.report.add("added", "sub-object", label)
+            out.append(record)
+            draws = [d for d in sub.draws if d.kind != "fat"]
+            origins = [getattr(d, "origin", None) for d in draws]
+            stored_n = len([d for d in before.draws if d.kind != "fat"])
+            in_place = origins == list(range(stored_n)) or all(o is None for o in origins)
+            exact = k is not None and len(draws) == stored_n and in_place
+            ctx.written.append((record, sub, label, exact))
             if geo == 0:
                 ctx.geo0_moved |= moved
                 ctx.geo0_triangles |= triangles
+        if len(out) != len(records) or any(a is not b for a, b in zip(out, records)):
+            tree.top.pairs[GEO_SUB_OBJECTS[geo]] = L.PairValue(L.Block(elements=out) if out else None)
+            _pack(tree.top.raw, ctx.order, "i", PP.GEO_COUNTS[geo], len(out), field=f"geo set {geo} count")
+            ctx.parts_changed = True
+            if geo == 0:
+                ctx.geo0_moved = ctx.geo0_triangles = True
         if geo == 0:
-            geo0_records = records
+            geo0_records = out
+    _materials(ctx, template_entries)
     index_at, vertex_at = POOLS[app.build]
     _set_bytes(tree.top, index_at, bytes(ctx.index_pool))
     _set_bytes(tree.top, vertex_at, bytes(ctx.vertex_pool))
+    if app.build == "ps3" and ctx.parts_changed:
+        PP.share_ps3_blocks(tree)  # W17-6
     _structure(ctx, geo0_records, box_at)
     if ctx.geo0_triangles and "W13-3" in rules:
         _rebuild_octree(tree, stored_octree)
     return tree
 
 
-def write_app_mesh(app: AppearanceFile, mesh: AppearanceFile | None = None, check: bool = True,
-                   derive=False, keep_skin_bytes: bool = False) -> bytes:
-    """Encode ``mesh`` (default: ``app`` as changed by the caller) into ``app``'s ``.app`` and lay
-    it out (W2-1 to W2-15, W11; ``derive``: the W13 rules, ``keep_skin_bytes``: V21-2, see
-    ``app_mesh_tree``). An unchanged
-    mesh gives the source bytes (with ``derive`` too, for a file that follows the rules). With
-    ``check`` the output is read again and must give the same counts (the same index count per
-    sub-object when W13-5 or W13-7 may split or drop records)."""
+def write_app_mesh_report(app: AppearanceFile, mesh: AppearanceFile | None = None, check: bool = True,
+                          derive=False, keep_skin_bytes: bool = False) -> tuple[bytes, PP.PartsReport]:
+    """``write_app_mesh`` with the report of added, removed and skipped parts (W17-10, W17-14)."""
     rules = rule_set(derive)
-    out = L.write_tree(app_mesh_tree(app, mesh, rules, keep_skin_bytes))
+    report = PP.PartsReport()
+    written: list = []
+    out = L.write_tree(app_mesh_tree(app, mesh, rules, keep_skin_bytes, report, written))
     if check:
         again = parse_appearance(out, app.build)
-        mesh = app if mesh is None else mesh
-        for a, b in zip(again.sub_objects + again.extra_sub_objects, mesh.sub_objects + mesh.extra_sub_objects):
-            if rules & {"W13-5", "W13-7"}:
-                same = sum(len(d.indices) for d in a.draws) == sum(len(d.indices) for d in b.draws)
+        found = again.sub_objects + again.extra_sub_objects
+        if len(found) != len(written):
+            raise FormatError(f"the written file reads back with {len(found)} sub-objects for {len(written)}")
+        for a, (_, b, label, exact) in zip(found, written):
+            if rules & {"W13-5", "W13-7"} or not exact:
+                same = sum(len(d.indices) for d in a.draws if d.kind != "fat") ==                     sum(len(d.indices) for d in b.draws if d.kind != "fat")
             else:
                 same = [len(d.positions) for d in a.draws] == [len(d.positions) for d in b.draws] and \
                     [len(d.indices) for d in a.draws] == [len(d.indices) for d in b.draws]
             if not same:
-                raise FormatError(f"{b.label}: the written mesh does not read back with its counts")
-    return out
+                raise FormatError(f"{label}: the written mesh does not read back with its counts")
+    return out, report
+
+
+def write_app_mesh(app: AppearanceFile, mesh: AppearanceFile | None = None, check: bool = True,
+                   derive=False, keep_skin_bytes: bool = False) -> bytes:
+    """Encode ``mesh`` (default: ``app`` as changed by the caller) into ``app``'s ``.app`` and lay
+    it out (W2-1 to W2-15, W11; ``derive``: the W13 rules and W17-14, ``keep_skin_bytes``: V21-2,
+    see ``app_mesh_tree``). An unchanged mesh gives the source bytes (with ``derive`` too, for a
+    file that follows the rules). W17-10: the mesh may add and remove sub-objects, ps3 draws,
+    skinning records and rigid lists (``write_app_mesh_report`` also returns what was added and
+    removed). With ``check`` the output is read again and must give the same counts (the same
+    index count per sub-object when parts may be split, dropped or added)."""
+    return write_app_mesh_report(app, mesh, check, derive, keep_skin_bytes)[0]
+
+
+# --- W17-11: moving a sub-object between files ----------------------------------------------------
+
+def _bone_hashes(app: AppearanceFile) -> list[int]:
+    return [bone.name_hash for bone in app.bones]
+
+
+def transplant(target: AppearanceFile, source: AppearanceFile, geo_set: int, index: int, *,
+               name: str | None = None) -> AppearanceFile:
+    """W17-11: ``target``'s mesh with sub-object (``geo_set``, ``index``) of ``source`` added at the
+    end of the same geo set. Every stored value of the part is kept (its record is copied: geometry,
+    copied fields, compact list, cloth, shapes). Needs the same build and the same skeleton (equal
+    bone name hashes in order, or neither has bones); on ps3 also the same draw format. The source
+    material comes along when the target lacks its hash (W17-8). The name: ``name`` when given, else
+    the source name (ps3) or the stored hash (switch, x360); a taken one gets ``_2``, ``_3``, ...
+    (W17-12; on switch / x360 the base is the exporter's object name). Write the result with
+    ``write_app_mesh(target, mesh, derive=True)``."""
+    if source.build != target.build:
+        raise FormatError(f"a {source.build} sub-object for a {target.build} file (W17-11)")
+    if _bone_hashes(source) != _bone_hashes(target):
+        raise FormatError(f"source sub-object {geo_set}:{index}: the files have different skeletons (bone name "
+                          "hashes); a palette remap is out of scope (W17-11, V23-9)")
+    if geo_set not in (0, 1):
+        raise FormatError(f"geo set {geo_set} (W17-11)")
+    subs = (source.sub_objects, source.extra_sub_objects)[geo_set]
+    if isinstance(index, bool) or not isinstance(index, int) or not 0 <= index < len(subs):
+        raise FormatError(f"the source has no sub-object {index} in geo set {geo_set} (W17-11)")
+    part = subs[index]
+    if target.build == "ps3":
+        formats = {FORMAT_SKINNED if d.skinned else FORMAT_RIGID for d in part.draws if d.kind == "ps3"}
+        if formats and formats != {_file_format(target)}:
+            raise FormatError(f"source sub-object {geo_set}:{index}: the ps3 draw formats differ (W17-11)")
+    moved = copy.deepcopy(part)
+    moved.origin, moved.template_part, moved.material_source = None, None, None
+    moved.stored_from = PartSource(source, geo_set, index)
+    target_subs = list((target.sub_objects, target.extra_sub_objects)[geo_set])
+    if target.build == "ps3":
+        taken = {PP.name_hash(s.name) for s in target_subs if s.name is not None}
+        base = name if name is not None else (part.name or f"subobject_{index}")
+        moved.name = base if name is not None else PP.free_name(base, taken)
+    else:
+        taken = {s.sub_hash for s in target_subs}
+        if name is not None:
+            moved.name = name
+        elif part.sub_hash in taken:
+            base = part.name or f"subobject_{index}"
+            moved.name = PP.free_name(base, taken)
+    if part.material_hash is not None and target.material_data.find(part.material_hash) is None \
+            and source.material_data.find(part.material_hash) is not None:
+        moved.material_source = PP.MaterialSource(part.material_hash, source)
+    moved.index, moved.geo_set = len(target_subs), geo_set
+    lists = [list(target.sub_objects), list(target.extra_sub_objects)]
+    lists[geo_set].append(moved)
+    return dataclasses.replace(target, sub_objects=lists[0], extra_sub_objects=lists[1])
+
+
+# --- Check: every record from zero ----------------------------------------------------------------
+
+def _rebuilt_sub(build: str, order: str, record: L.Record, sub: SubObject, has_bones: bool) -> bytearray:
+    """W17-1, W17-3: a sub-object record from zero. Copied from the stored record: the copied flag
+    bits and fields (W17-3, W17-4), the material hash, the switch / x360 sub-object hash (no name is
+    stored) and the values kept for an unchanged mesh (box, bias: W2-2, W2-4). Derived: the content
+    flag bits, counts, ps3 name hash and the step (W13-2). Every other word is 0."""
+    stored = bytes(record.raw)
+    fields = PP.sub_fields(build)
+    raw = bytearray(len(stored))
+    for name in PP.copied_names(build) + ("material", "box"):
+        at = fields[name]
+        size = 24 if name == "box" else 4
+        raw[at:at + size] = stored[at:at + size]
+    rigid = [d for d in sub.draws if d.kind == "packed" and not d.skinned]
+    skins = [d for d in sub.draws if d.kind == "packed" and d.skinned]
+    ps3_draws = [d for d in sub.draws if d.kind == "ps3"]
+    fat = sub.fat_draw
+    fat_count = len(fat.positions) if fat is not None else _stored_word(stored, order, fields["fat"])
+    fat_indices = len(fat.indices) if fat is not None else _stored_word(stored, order, fields["index"])
+    fixed = _positions(rigid + skins + ps3_draws)
+    if build == "ps3":
+        at = fields["name"]
+        raw[at:at + PP.PS3_NAME_SIZE] = PP.ps3_name_field(sub.name) if sub.name else bytes(PP.PS3_NAME_SIZE)
+        struct.pack_into(order + "I", raw, fields["hash"], PP.name_hash(sub.name or ""))
+        struct.pack_into(order + "i", raw, fields["index"], fat_indices if fat_count else 0)
+        struct.pack_into(order + "i", raw, fields["draw_count"], len(ps3_draws))
+    else:
+        raw[fields["hash"]:fields["hash"] + 4] = stored[fields["hash"]:fields["hash"] + 4]
+        index_count = len(rigid[0].indices) if rigid else (fat_indices if fat_count else 0)
+        struct.pack_into(order + "i", raw, fields["index"], index_count)
+        struct.pack_into(order + "i", raw, fields["packed_count"], len(rigid[0].positions) if rigid else 0)
+    struct.pack_into(order + "I", raw, fields["fat"], fat_count)
+    struct.pack_into(order + "i", raw, fields["shape_count"], PP.shape_count(build, record))
+    if fixed:
+        raw[fields["bias"]:fields["bias"] + 12] = stored[fields["bias"]:fields["bias"] + 12]
+        _, scale = _fixed_point(sub, fixed, False, has_bones, {"W13-2"})
+        struct.pack_into(order + "3f", raw, fields["scale"], *scale)
+    stored_flags = _stored_word(stored, order, 0)
+    skin_value = record.pairs.get(SWITCH_SUB["skins"]) if build != "ps3" else None
+    skin_records = len(skin_value.block.elements) if skin_value is not None and skin_value.block else 0
+    flags = PP.sub_object_flags(
+        build, stored_flags, fat=bool(fat_count), cloth=bool(PP.pair_size(record, fields["cloth"])),
+        draws=len(ps3_draws), skinned_draws=sum(d.skinned for d in ps3_draws), rigid=bool(rigid),
+        skin_records=skin_records, keep_bit8=bool(stored_flags >> PP.BIT_FAT & 1))
+    struct.pack_into(order + "I", raw, 0, flags)
+    return raw
+
+
+def _rebuilt_draw(record: L.Record, draw: Draw, bone_count: int, label: str) -> None:
+    """W17-5: a ps3 draw record from zero around its stored index list and streams: descriptor
+    (W2-9), words (G1-5, W2-10, W13-1), bone ranges (W13-4, with the bones of stored zero-weight
+    slots), vertex-format blocks (G1-6)."""
+    fmt = FORMAT_SKINNED if draw.skinned else FORMAT_RIGID
+    nv, ni = len(draw.positions), len(draw.indices)
+    ranges = (0, 0, 0, 0)
+    if draw.skinned:
+        bones: set = set()
+        for i in range(nv):
+            bones |= _vertex_bones(draw, i)
+        palette = draw.palette or []
+        for weights, slots in zip(draw.weights, draw.local_joints or []):
+            bones.update(palette[s] for w, s in zip(weights, slots) if not w and s < len(palette))
+        ranges = ps3_bone_ranges(bones)
+    byte1 = ps3_command_space(fmt, ni)
+    blocks = {"descriptor": PP.ps3_descriptor(fmt, byte1, nv, ni)}
+    for name in ("indices", "a", "b", "c"):
+        blocks[name] = _block_bytes(record.pairs.get(DRAW[name]))
+    work = ps3_skinned_work_size(nv, ni, byte1, ranges) if draw.skinned else None
+    zero = L.Record(record.name, bytearray(len(record.raw)), record.pairs)
+    words = _ps3_draw_words(zero, blocks, nv, ni, label, work)
+    for name, fmt_words, values in words:
+        _pack(zero.raw, ">", fmt_words, DRAW[name], *values, field=name)
+    struct.pack_into(">4H", zero.raw, PS3_RANGES, *ranges)
+    record.raw[:] = zero.raw
+    record.pairs[DRAW["descriptor"]] = L.PairValue(L.Block(blocks["descriptor"]))
+    record.pairs[0x80] = L.PairValue(L.Block(PS3_FORMAT_BLOCKS[fmt][0]))
+    record.pairs[0x90] = L.PairValue(L.Block(PS3_FORMAT_BLOCKS[fmt][1]))
+
+
+def rebuild_from_zero(app: AppearanceFile) -> bytes:
+    """The "Check" of ``37``: every sub-object record, ps3 draw record and switch / x360 skinning
+    record of ``app``'s source rebuilt from zero bytes by W17-1 to W17-7, copying only the copied
+    fields (and the values W2-2 / W2-4 keep for an unchanged mesh: box and bias); ps3 descriptor and
+    vertex-format blocks shared by W17-6. A file that follows the rules comes back byte for byte.
+    ``38`` V23-1: the box and bias of an existing part are kept as stored (the rebuild that produced
+    the rules kept them; a W2-4 box equals the stored one in only a few sub-objects)."""
+    source = bytes(app.source)
+    tree = L.parse_tree(source, "app", app.build)
+    parsed = parse_appearance(source, app.build)
+    order = build_order(app.build)
+    for geo, subs in enumerate((parsed.sub_objects, parsed.extra_sub_objects)):
+        value = tree.top.pairs.get(GEO_SUB_OBJECTS[geo])
+        records = value.block.elements if value is not None and value.block else []
+        for record, sub in zip(records, subs):
+            if app.build == "ps3":
+                draws_value = record.pairs.get(PS3_SUB["draws"])
+                draw_records = draws_value.block.elements if draws_value is not None and draws_value.block else []
+                for k, (draw_record, draw) in enumerate(zip(draw_records, [d for d in sub.draws if d.kind == "ps3"])):
+                    _rebuilt_draw(draw_record, draw, len(parsed.bones), f"{sub.label}, draw {k}")
+            else:
+                skins = record.pairs.get(SWITCH_SUB["skins"])
+                for skin in skins.block.elements if skins is not None and skins.block else []:
+                    skin.raw[:] = PP.skin_record_words(skin, order)
+            record.raw[:] = _rebuilt_sub(app.build, order, record, sub, bool(parsed.bones))
+    if app.build == "ps3":
+        PP.share_ps3_blocks(tree)
+    return L.write_tree(tree)
 
 
 def index_pool_problems(app: AppearanceFile) -> list[str]:
@@ -1099,4 +2008,7 @@ __all__ = [
     "ps3_bone_ranges", "ps3_command_space", "ps3_skinned_work_size", "ps3_work_size",
     "quantisation_steps", "ranges_palette", "raw_coordinates", "rule_set", "skin_slots",
     "split_skinned_draw", "uv1_words", "write_app_mesh",
+    # stage 17
+    "PartSource", "cut_ps3_draw", "merge_draws", "ps3_draw_fits", "rebuild_from_zero", "transplant",
+    "write_app_mesh_report",
 ]
