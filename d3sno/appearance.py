@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 
 from .binary import ByBuild, ByteView, FormatError, Pair, build_order
 from .cloth import ClothRecord, cloth_problems, read_cloth
-from .material import AppMaterials, read_app_materials, sub_object_texture
+from .material import SLOT_LIGHTMAP, AppMaterials, read_app_materials, sub_object_texture
 from .sno import SnoHeader, parse_header, resolve_build
 from .transform import Transform, quat_normalise, read_transform, transforms_match
 
@@ -1016,7 +1016,7 @@ class _GltfMaterials:
         self.textures: list[dict] = []
         self.materials: list[dict] = []
         self.by_handle: dict[int, int | None] = {}
-        self.by_name: dict[str, int] = {}
+        self.by_name: dict[tuple[str, str | None], int] = {}
 
     def texture(self, handle: int | None) -> int | None:
         if self.resolver is None or handle is None or handle == -1:
@@ -1025,19 +1025,25 @@ class _GltfMaterials:
             self.by_handle[handle] = self._make(handle)
         return self.by_handle[handle]
 
-    def material(self, handle: int | None, draw: int) -> int:
+    def material(self, handle: int | None, draw: int, lightmap: str | None = None) -> int:
+        """``43`` W19-2: ``lightmap`` (the lightmap texture's URI) is named in the material's
+        ``extras.d3sno_export``; materials with the same name and lightmap are shared."""
         texture = self.texture(handle)
         name = f"texture_{handle}_draw_{draw}" if texture is not None else f"d3sno_draw_{draw}"
-        if name not in self.by_name:
+        key = (name, lightmap)
+        if key not in self.by_name:
             material: dict = {"name": name}
             if texture is not None:
                 material["pbrMetallicRoughness"] = {
                     "baseColorTexture": {"index": texture},
                     "metallicFactor": 0.0,
                 }
-            self.by_name[name] = len(self.materials)
+            if lightmap is not None:
+                material["extras"] = {"d3sno_export": {
+                    "lightmap": lightmap, "lightmap_channel": "red", "lightmap_texcoord": 1}}
+            self.by_name[key] = len(self.materials)
             self.materials.append(material)
-        return self.by_name[name]
+        return self.by_name[key]
 
     def _make(self, handle: int) -> int | None:
         target = self.resolver(handle)
@@ -1097,9 +1103,17 @@ def skeleton_nodes(app: AppearanceFile, skinned: bool) -> tuple[list[dict], list
 
 def to_gltf(
     app: AppearanceFile, flip_v: bool = False, lightmap_v_scale: float | None = None,
-    extend=None, texture_resolver=None, look: int = 0, low_poly: bool = True,
+    extend=None, texture_resolver=None, look: int = 0, low_poly: bool = True, lightmap_resolver=None,
 ) -> dict:
     """A glTF 2.0 document with one embedded buffer. Bones are nodes.
+
+    ``43`` W19-1, W19-2: ``lightmap_resolver(handle)`` gives ``(uri, v_scale)`` of a lightmap
+    texture, or None when it is not available. With it, each primitive gets
+    ``extras.d3sno_export.uv2_scale``: ``"lightmap"`` when its sub-object's material has a
+    lightmap slot whose texture resolves (then ``TEXCOORD_1`` by that texture's V scale, 1 when it
+    is 0, named as ``lightmap_v_scale``; the material names the lightmap), ``"open"`` for a
+    lightmap that does not resolve or a varying UV2 with no lightmap slot, ``"none"`` for a UV2
+    that is the same on every vertex. ``lightmap_v_scale`` is then ignored.
 
     ``lightmap_v_scale`` adds UV2 as TEXCOORD_1; pass 0 for a lightmap with no V scale.
     ``extend(buffer, document)`` runs before the buffer is sealed.
@@ -1141,16 +1155,36 @@ def to_gltf(
     names = export_object_names(app)
     for sub in export_sub_objects(app, low_poly):
         handle = sub_object_texture(app, sub, look) if texture_resolver is not None else None
+        lightmap_handle = lightmap = None
+        if lightmap_resolver is not None:
+            lightmap_handle = sub_object_texture(app, sub, look, SLOT_LIGHTMAP)
+            if lightmap_handle == -1:
+                lightmap_handle = None
+            if lightmap_handle is not None:
+                lightmap = lightmap_resolver(lightmap_handle)
         primitives = []
         for k, draw in enumerate(sub.draws):
             if not draw.positions:
                 continue  # skipped, but counted in k (W16-5)
-            primitive = _gltf_primitive(buf, draw, flip_v, lightmap_v_scale)
-            primitive["material"] = materials.material(handle, k)
+            scale, uri, export_info = lightmap_v_scale, None, None
+            if lightmap_resolver is not None:  # ``43`` W19-1, W19-2
+                if lightmap is not None:
+                    uri, stored = lightmap
+                    scale = stored or 1.0
+                    export_info = {"uv2_scale": "lightmap", "lightmap": lightmap_handle, "lightmap_v_scale": scale}
+                elif lightmap_handle is not None:
+                    scale, export_info = None, {"uv2_scale": "open", "lightmap": lightmap_handle}
+                else:
+                    scale = None
+                    export_info = {"uv2_scale": "none" if len(set(draw.uv2_raw)) <= 1 else "open"}
+            primitive = _gltf_primitive(buf, draw, flip_v, scale)
+            primitive["material"] = materials.material(handle, k, uri)
             info: dict = {"draw": k}
             if not draw.indices:
                 info["no_indices"] = True  # V21-4: vertices without triangles
             primitive["extras"] = {"d3sno": info}
+            if export_info is not None:
+                primitive["extras"]["d3sno_export"] = export_info
             primitives.append(primitive)
         if not primitives:
             continue

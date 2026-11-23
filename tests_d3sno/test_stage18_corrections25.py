@@ -43,7 +43,7 @@ def common_roots(doc: dict, skin: dict) -> set[int]:
 class Version(unittest.TestCase):
     def test_version(self):
         self.assertGreaterEqual(tuple(int(x) for x in d3sno.__version__.split(".")), (0, 18, 1))
-        self.assertEqual(d3sno.STAGE, 18)
+        self.assertGreaterEqual(d3sno.STAGE, 18)
 
 
 class OneChannelPerTarget(unittest.TestCase):

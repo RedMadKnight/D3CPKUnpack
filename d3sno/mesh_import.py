@@ -547,6 +547,7 @@ class _Source:
     uv1: list | None = None
     uv2_raw: list | None = None
     uv2_float: list | None = None
+    uv2_v_scale: float | None = None  # ``43`` W19-3: the exporter's ``extras.d3sno_export.lightmap_v_scale``
     colours_1: list | None = None
     colours_2: list | None = None
     influences: list | None = None  # per vertex [(bone or None, weight)] over every JOINTS_n set
@@ -826,6 +827,24 @@ def _same_bone_transform(node: dict, bone) -> bool:
 
 # --- glTF sources --------------------------------------------------------------------------------
 
+def _export_v_scale(primitive: dict) -> float | None:
+    """``43`` W19-3: the V scale the exporter used for ``TEXCOORD_1`` (a finite number), or None."""
+    extras = primitive.get("extras")
+    info = extras.get("d3sno_export") if isinstance(extras, dict) else None
+    value = info.get("lightmap_v_scale") if isinstance(info, dict) else None
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+        return None
+    return float(value)
+
+
+def _uv2_factor(opts, src) -> float:
+    """``34`` with ``43`` W19-3: ``--lightmap-v-scale`` when given, else the exporter's own V scale
+    of the primitive, else 1; a scale of 0 counts as 1."""
+    if opts.lightmap_v_scale is not None:
+        return opts.lightmap_v_scale or 1.0
+    return getattr(src, "uv2_v_scale", None) or 1.0
+
+
 def _gltf_source(doc: GltfDocument, primitive: dict, matrix, joint_map, what: str) -> _Source:
     attributes = primitive["attributes"]
     floats = lambda rows: [tuple(float(c) for c in row) for row in rows]  # noqa: E731
@@ -844,6 +863,7 @@ def _gltf_source(doc: GltfDocument, primitive: dict, matrix, joint_map, what: st
     source.uv1 = floats(doc.accessor(index)) if index is not None else None
     index = _attribute(doc, primitive, "TEXCOORD_1", ("VEC2",), what)
     source.uv2_float = floats(doc.accessor(index)) if index is not None else None
+    source.uv2_v_scale = _export_v_scale(primitive)
     index = _attribute(doc, primitive, "_D3_UV2", ("VEC2",), what)
     if index is not None:
         source.uv2_raw = [tuple(_to_int(c, 0xFFFF, f"{what}: _D3_UV2") for c in row) for row in doc.accessor(index)]
@@ -1197,7 +1217,7 @@ def _make_draw(app: AppearanceFile, sub: SubObject, k: int, src: _Source, opts: 
     if src.uv2_raw is not None:
         uv2 = [tuple(row) for row in src.uv2_raw]
     elif src.uv2_float is not None:
-        factor = opts.lightmap_v_scale or 1.0
+        factor = _uv2_factor(opts, src)
         uv2 = [(round(u * 8192 + 0x8000), round(v / factor * 8192 + 0x8000)) for u, v in src.uv2_float]
     elif same:
         uv2 = list(stored.uv2_raw)
@@ -1380,7 +1400,7 @@ def _new_draw(app: AppearanceFile, src: _Source, opts: _Options, joint_map, temp
     if src.uv2_raw is not None:
         uv2 = [tuple(row) for row in src.uv2_raw]
     elif src.uv2_float is not None:
-        factor = opts.lightmap_v_scale or 1.0
+        factor = _uv2_factor(opts, src)
         uv2 = [(round(u * 8192 + 0x8000), round(v / factor * 8192 + 0x8000)) for u, v in src.uv2_float]
     else:
         uv2 = [(0x8000, 0x8000)] * n

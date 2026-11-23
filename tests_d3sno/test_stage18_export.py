@@ -74,12 +74,13 @@ class Layout(Exported):
         manifest = self.read("manifest.json")
         self.assertEqual(manifest, json.loads(json.dumps(result.manifest)))
         self.assertEqual(manifest["format"], "d3sno-export")
-        self.assertEqual(manifest["format_version"], 1)
+        self.assertEqual(manifest["format_version"], 2)  # ``43`` W19-1
         self.assertEqual(manifest["build"], "switch")
         self.assertEqual(manifest["library_version"], d3sno.__version__)
         self.assertEqual(manifest["coordinates"]["up"], "+z")
         self.assertEqual(manifest["coordinates"]["source"], "stored")
-        self.assertEqual(manifest["options"], {"archives": None, "groups": sorted(E.EXPORT_GROUPS), "all_levels": False})
+        self.assertEqual(manifest["options"], {"archives": None, "groups": sorted(E.EXPORT_GROUPS), "all_levels": False,
+                                               "travel": False})
         entries = manifest["entries"]
         self.assertEqual(entries, sorted(entries, key=lambda e: (e["group"], e["handle"], e["path"])))
         by_path = {e["path"]: e for e in entries}
@@ -319,9 +320,9 @@ class Meshes(Exported):
         doc = glb_json((self.out / "meshes/600.glb").read_bytes())
         extras = doc["extras"]["d3sno_export"]
         self.assertEqual(extras["handle"], 600)
-        self.assertEqual({k: extras[k] for k in ("v_direction", "uv2_scale", "tangents")},
-                         {"v_direction": "open", "uv2_scale": "open", "tangents": "open"})
-        self.assertEqual(extras["primitives"], [{"mesh": 0, "primitive": 0, "material": 0xAAA}])
+        self.assertEqual({k: extras[k] for k in ("v_direction", "tangents")},  # ``43`` W19-1
+                         {"v_direction": "top_left_origin", "tangents": "not_stored"})
+        self.assertEqual(extras["primitives"], [{"mesh": 0, "primitive": 0, "material": 0xAAA, "uv2_scale": "none"}])
         self.assertEqual(doc["images"], [{"uri": "../textures/500.png"}])
         self.assertTrue((self.out / "meshes" / doc["images"][0]["uri"]).resolve().is_file())
 
@@ -364,7 +365,7 @@ class Animations(Exported):
         result = self.export()
         doc = glb_json((self.out / "anims/700.glb").read_bytes())
         extras = doc["extras"]["d3sno_export"]
-        self.assertEqual((extras["appearance"], extras["root_motion"]), (600, "open"))
+        self.assertEqual((extras["appearance"], extras["root_motion"]), (600, "in_place"))  # ``43`` W19-1
         self.assertEqual([a["name"] for a in doc["animations"]], ["Walk", "Run"])
         self.assertEqual([p["animation"] for p in extras["permutations"]], [0, 1])
         lone = [f for f in result.coverage["groups"]["ani"]["files"] if f["handle"] == F.LONE_ANI]
@@ -557,7 +558,8 @@ class Command(Exported):
         self.assertEqual(len(lines), len(E.EXPORT_GROUPS) + 1)
         self.assertTrue(lines[-1].startswith("total: "))
         manifest = self.read("manifest.json")
-        self.assertEqual(manifest["options"], {"archives": ["Common*"], "groups": ["app", "tex"], "all_levels": True})
+        self.assertEqual(manifest["options"], {"archives": ["Common*"], "groups": ["app", "tex"], "all_levels": True,
+                                               "travel": False})
         code, _, _ = self.run_cli("export", str(self.game), "--out", str(self.out), "--skip-existing")
         self.assertEqual(code, 0)
 

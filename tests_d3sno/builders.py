@@ -865,7 +865,7 @@ def _ani_record(perm: dict, order: str) -> bytearray:
     rec.put(0xF0, "12f", *[float(i) for i in range(12)])
     rec.put(0x120, "f", 2.0)
     rec.put(0x12C, "I", len(perm["attachments"]))
-    rec.put(0x148, "3f", 1.0, 0.0, 0.0)
+    rec.put(0x148, "3f", *perm.get("velocity", (1.0, 0.0, 0.0)))  # average velocity (``43`` W19-5)
     rec.put(0x154, "I", 77)
     return rec.b
 

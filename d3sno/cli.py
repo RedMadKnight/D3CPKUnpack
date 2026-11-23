@@ -472,7 +472,7 @@ def cmd_export(args) -> int:
     export = _module("export")
     result = export.export_game(
         args.game_dir, args.out, build=args.build, archives=args.archives, groups=args.groups,
-        all_levels=args.all_levels, skip_existing=args.skip_existing, force=args.force)
+        all_levels=args.all_levels, skip_existing=args.skip_existing, force=args.force, travel=args.travel)
     if result.exit_code == export.EXIT_REFUSED:
         print(f"error: {result.message}", file=sys.stderr)
         return result.exit_code
@@ -487,7 +487,10 @@ EXPORT_NOTE = (
     "Writes meshes/<handle>.glb, anims/<handle>.glb, textures/<handle>.png, data/<group>/<handle>.json, "
     "data/text/<locale>/<handle>.json, manifest.json and coverage.json (W18-2, W18-3). The output is game "
     "content: it stays on this computer and never goes into a repository; an OUT_DIR inside a git working "
-    "tree is refused without --force. Coordinates are as stored (z-up), not converted (W18-9). Exit code 0: "
+    "tree is refused without --force. Coordinates are as stored (right-handed, z up, actors face +x, triangles "
+    "counter-clockwise), not converted (W18-9, W19-1); this holds for the meshes, animations and the scn, wrl and "
+    "mrk records alike, as manifest.json states once (W19-6). Animations are in place; --travel adds a "
+    "d3sno_travel node moved by the average velocity (W19-5). Exit code 0: "
     "every file exported or skipped with a reason in coverage.json; 1: the export stopped; 2: refused."
 )
 
@@ -747,6 +750,8 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--skip-existing", action="store_true",
                      help="keep files whose earlier manifest entry has the same source and hash")
     sub.add_argument("--force", action="store_true", help="export inside a git working tree anyway")
+    sub.add_argument("--travel", action="store_true",
+                     help="add a d3sno_travel node to each animation, moved by its average velocity (W19-5)")
     add_build(sub)
     sub = add("replace", cmd_replace)
     sub.add_argument("archive")

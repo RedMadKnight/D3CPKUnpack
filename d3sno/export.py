@@ -2,7 +2,8 @@
 JSON in a local output directory, with ``manifest.json`` and ``coverage.json`` (W18-1 to W18-10).
 
 Export, don't interpret: every file holds what the library's existing readers and exporters already
-decode. Open questions are written as flags (``"open"``), never guessed. One input gives the same
+decode. Open questions are written as flags (``"open"``), never guessed; ``43`` (stage 19, W19-1
+to W19-7) writes the settled ones as statements. One input gives the same
 output every time: JSON keys sorted, indent 1, a newline at the end, floats as the shortest text
 that reads back to the same float32; only ``created`` in the manifest depends on the time.
 
@@ -37,13 +38,15 @@ from .sno import group_by_extension, group_by_id, parse_header
 from .transform import quat_normalise
 
 __all__ = [
-    "COVERAGE_FORMAT", "EXIT_OK", "EXIT_REFUSED", "EXIT_STOPPED", "EXPORT_GROUPS", "ExportResult",
-    "FORMAT", "FORMAT_VERSION", "REASONS", "dumps", "export_game", "f32_text", "in_git_tree", "plain",
+    "COVERAGE_FORMAT", "COVERAGE_FORMAT_VERSION", "EXIT_OK", "EXIT_REFUSED", "EXIT_STOPPED", "EXPORT_GROUPS", "ExportResult",
+    "FORMAT", "FORMAT_VERSION", "REASONS", "TICKS_PER_SECOND", "TRAVEL_NODE", "dumps", "export_game", "f32_text",
+    "in_git_tree", "plain", "prune_empty",
 ]
 
 FORMAT = "d3sno-export"
 COVERAGE_FORMAT = "d3sno-export-coverage"
-FORMAT_VERSION = 1
+FORMAT_VERSION = 2  # the manifest (``43`` W19-1)
+COVERAGE_FORMAT_VERSION = 1
 EXIT_OK, EXIT_STOPPED, EXIT_REFUSED = 0, 1, 2
 # W18-4 to W18-8, in the order the export runs them (textures before the meshes that name them,
 # meshes before the animations that need them).
@@ -51,6 +54,16 @@ EXPORT_GROUPS = ("tex", "app", "ani", "acr", "mon", "mat", "scn", "wrl", "lvl", 
 REASONS = ("parse_error", "not_decoded", "missing_dependency", "filtered", "unsupported_build",
            "duplicate_differs")
 OPEN = "open"
+# ``43`` W19-1: the settled questions, written as statements
+V_DIRECTION = "top_left_origin"
+TANGENTS = "not_stored"
+ROOT_MOTION = "in_place"
+COORDINATES = {"source": "stored", "up": "+z", "unit": "stored", "handedness": "right", "forward": "+x",
+               "winding": "ccw"}
+TANGENT_NOTE = ("no tangents are stored; a viewer computes them from TEXCOORD_0 (V as stored) and the stored "
+                "normals, e.g. by the MikkTSpace method; vertices of mirrored UV islands get bitangent sign -1")
+TICKS_PER_SECOND = 60
+TRAVEL_NODE = "d3sno_travel"
 _INDEX_NAMES = re.compile(r"^(coretoc|commontoc|act[1-5]toc)\.dat$", re.IGNORECASE)
 _X360_LOCALE = re.compile(r"^([a-z]{2}[A-Z]{2})_")
 _TAG_TYPES = {0: "int", 1: "float", 2: "sno", 3: "balance", 4: "formula", 5: "actor_group",
@@ -470,8 +483,9 @@ def _groups(groups) -> list[str]:
 
 
 class _Run:
-    def __init__(self, game: Path, out: Path, archives, groups, all_levels, skip_existing, build):
+    def __init__(self, game: Path, out: Path, archives, groups, all_levels, skip_existing, build, travel=False):
         self.game, self.out = game, out
+        self.travel = bool(travel)
         self.patterns = list(archives) if archives else None
         self.groups = groups
         self.all_levels = all_levels
@@ -585,6 +599,11 @@ class _Run:
         except (OSError, ValueError):
             return
         if not isinstance(old, dict) or old.get("format") != FORMAT:
+            return
+        # ``43``: files of another manifest version, or of another ``--travel``, are written again
+        options = old.get("options")
+        if old.get("format_version") != FORMAT_VERSION or not isinstance(options, dict) \
+                or bool(options.get("travel", False)) != self.travel:
             return
         for entry in old.get("entries", []):
             if isinstance(entry, dict) and isinstance(entry.get("path"), str):
@@ -740,6 +759,7 @@ class _Run:
 
     def run(self) -> None:
         self.tex_handles = set()
+        self.tex_scales: dict[int, float] = {}
         for item in self.items_of("tex"):
             self.export_item(item, self.job_texture)
         for item in self.items_of("app"):
@@ -772,6 +792,7 @@ class _Run:
 
     def job_texture(self, item: _Item):
         tex = texture.parse_texture(item.data, item.build)
+        self.tex_scales[item.handle] = tex.lightmap_v_scale  # ``43`` W19-2
         if item.build == "x360":
             from . import x360_texture
             decode = x360_texture.decode_image
@@ -795,13 +816,23 @@ class _Run:
 
     def job_mesh(self, item: _Item):
         app = appearance.parse_appearance(item.data, item.build)
+        # W18-4 diffuse textures and ``43`` W19-2 lightmaps of the sub-objects that are written
         wanted = sorted({h for sub in appearance.export_sub_objects(app, True)
-                         for h in [material.sub_object_texture(app, sub, 0)] if h is not None and h != -1})
-        self.emit(item, [(f"meshes/{item.handle}.glb", lambda: _mesh_glb(app, item.handle), {})])
+                         for h in [material.sub_object_texture(app, sub, 0)]
+                         + ([material.sub_object_texture(app, sub, 0, material.SLOT_LIGHTMAP)]
+                            if any(d.positions for d in sub.draws) else [])
+                         if h is not None and h != -1})
+        self.emit(item, [(f"meshes/{item.handle}.glb", lambda: _mesh_glb(app, item.handle, self.lightmap), {})])
         missing = [h for h in wanted if h not in self.tex_handles]
         if missing:
             self.note(item, "missing_dependency", True, None, needs=[_link(44, h) for h in missing])
         return True
+
+    def lightmap(self, handle: int):
+        """``43`` W19-2: (URI, V scale) of an exported lightmap texture, else None."""
+        if handle not in self.tex_handles:
+            return None
+        return _texture_uri(handle), self.tex_scales.get(handle, 0.0)
 
     def link_animations(self) -> None:
         """W18-5, W18-6: animation handle -> the first exported appearance (by handle) whose
@@ -876,7 +907,7 @@ class _Run:
             return None
         source = self.app_items[app_handle]
         app = appearance.parse_appearance(source.data, source.build)
-        self.emit(item, [(f"anims/{item.handle}.glb", lambda: _animation_glb(app, ani, item.handle, app_handle), {})])
+        self.emit(item, [(f"anims/{item.handle}.glb", lambda: _animation_glb(app, ani, item.handle, app_handle, self.travel), {})])
         return True
 
     def job_scene(self, item: _Item):
@@ -922,10 +953,11 @@ class _Run:
     def manifest(self, created: str) -> dict:
         entries = sorted(self.entries, key=lambda e: (e["group"], -1 if e["handle"] is None else e["handle"], e["path"]))
         return {
-            "build": self.build, "coordinates": {"source": "stored", "up": "+z", "unit": "stored", "handedness": OPEN},
+            "build": self.build, "coordinates": dict(COORDINATES),  # ``43`` W19-1
             "created": created, "entries": entries, "format": FORMAT, "format_version": FORMAT_VERSION,
             "library_version": __version__,
-            "options": {"archives": self.patterns, "groups": list(self.groups), "all_levels": bool(self.all_levels)},
+            "options": {"archives": self.patterns, "groups": list(self.groups), "all_levels": bool(self.all_levels),
+                        "travel": self.travel},
         }
 
     def coverage_dict(self, stopped: dict | None) -> dict:
@@ -937,7 +969,7 @@ class _Run:
         totals = {k: sum(c[k] for c in self.coverage.values()) for k in ("found", "unique", "exported", "skipped")}
         return {"archives": [{"archive": stem, "build": cpk.header.build, "files": len(cpk.files)}
                              for stem, cpk in self.archives],
-                "format": COVERAGE_FORMAT, "format_version": FORMAT_VERSION, "groups": groups,
+                "format": COVERAGE_FORMAT, "format_version": COVERAGE_FORMAT_VERSION, "groups": groups,
                 "reasons": list(REASONS), "stopped": stopped, "totals": totals, "unread": self.unread}
 
     def summary(self) -> list[str]:
@@ -971,34 +1003,51 @@ def _texture_uri(handle: int) -> str:
 
 
 def _export_extras(document: dict, handle: int, app: appearance.AppearanceFile, extra: dict) -> None:
+    """``43`` W19-1, W19-4: ``uv2_scale`` per primitive (from the primitive's own extras), the V
+    direction and tangents as statements."""
     primitives = []
     for m, mesh in enumerate(document.get("meshes", [])):
         info = mesh.get("extras", {}).get("d3sno", {})
-        for p in range(len(mesh["primitives"])):
-            primitives.append({"mesh": m, "primitive": p, "material": info.get("material")})
+        for p, primitive in enumerate(mesh["primitives"]):
+            own = primitive.get("extras", {}).get("d3sno_export", {})
+            primitives.append({"mesh": m, "primitive": p, "material": info.get("material"),
+                               "uv2_scale": own.get("uv2_scale", OPEN)})
     document.setdefault("extras", {})["d3sno_export"] = {
-        "handle": handle, "primitives": primitives, "v_direction": OPEN, "uv2_scale": OPEN, "tangents": OPEN, **extra}
+        "handle": handle, "primitives": primitives, "v_direction": V_DIRECTION, "tangents": TANGENTS,
+        "tangent_note": TANGENT_NOTE, **extra}
 
 
-def _mesh_glb(app, handle: int) -> bytes:
-    """W18-4: ``appearance.to_gltf`` with default options, diffuse textures by URI, packed as .glb."""
-    document = appearance.to_gltf(app, texture_resolver=_texture_uri)
+def _no_lightmap(handle: int):
+    return None
+
+
+def _mesh_glb(app, handle: int, lightmap=None) -> bytes:
+    """W18-4: ``appearance.to_gltf`` with default options, diffuse textures by URI, packed as .glb.
+    ``43`` W19-2: ``lightmap(handle)`` gives (URI, V scale) of an exported lightmap, else None."""
+    document = appearance.to_gltf(app, texture_resolver=_texture_uri, lightmap_resolver=lightmap or _no_lightmap)
     _export_extras(document, handle, app, {})
     return gltf_to_glb(prune_empty(document))
 
 
-def _animation_glb(app, ani, handle: int, app_handle: int) -> bytes:
+def _animation_glb(app, ani, handle: int, app_handle: int, travel: bool = False) -> bytes:
     """W18-5 with ``41`` V26-1, V26-3: the joint nodes of the linked mesh file (names, order, the
     V26-2 root node) and every permutation that holds data as one glTF animation each, sampled as
-    ``animation.to_gltf_animated`` samples one; no mesh, skin or images. Root motion stays in the
-    root joint. Each (node, path) has one channel; the tracks left out are listed."""
+    ``animation.to_gltf_animated`` samples one; no mesh, skin or images. Bones as stored: the
+    animations are in place (``43`` W19-5), each permutation's average velocity is in the extras.
+    Each (node, path) has one channel; the tracks left out are listed.
+
+    ``travel`` (W19-5, off by default): one added node ``d3sno_travel`` above the scene's root
+    nodes, whose translation moves by ``average_velocity * 60 * t``."""
     by_hash = animation._first_bone_by_hash(app.bones)
     listed, dropped = [], []
 
     def extend(buf, document: dict) -> None:
-        out = []
+        out, moving = [], []
         for index_, perm in enumerate(ani.permutations):
-            entry = {"index": index_, "name": perm.name, "animation": None}
+            entry = {"index": index_, "name": perm.name, "animation": None,
+                     "average_velocity": list(perm.average_velocity)}
+            if any(any(c != 0 for c in row) for row in perm.nonlinear_offsets):
+                entry["nonlinear_offsets"] = [list(row) for row in perm.nonlinear_offsets]
             listed.append(entry)
             if not perm.has_data or not perm.fps > 0:
                 continue
@@ -1009,14 +1058,35 @@ def _animation_glb(app, ani, handle: int, app_handle: int) -> bytes:
             if anim["channels"]:
                 entry["animation"] = len(out)
                 out.append(anim)
+                moving.append(perm)
+        if travel:
+            _travel_node(buf, document, out, moving)
         if out:
             document["animations"] = out
 
     document = appearance.to_gltf_skeleton(app, extend=extend)
     document.setdefault("extras", {})["d3sno_export"] = {
-        "handle": handle, "appearance": app_handle, "mesh": f"meshes/{app_handle}.glb", "root_motion": OPEN,
-        "permutations": listed, "dropped_tracks": dropped}
+        "handle": handle, "appearance": app_handle, "mesh": f"meshes/{app_handle}.glb", "root_motion": ROOT_MOTION,
+        "ticks_per_second": TICKS_PER_SECOND, "permutations": listed, "dropped_tracks": dropped,
+        **({"travel": True} if travel else {})}
     return gltf_to_glb(prune_empty(document))
+
+
+def _travel_node(buf, document: dict, animations: list, perms: list) -> None:
+    """``43`` W19-5: the ``d3sno_travel`` node (no transform, ``extras.d3sno_export.added``) as the
+    parent of the scene's root nodes, and per animation one linear translation channel from 0 at
+    time 0 to ``average_velocity * 60 * T`` at the animation's last key time T."""
+    nodes = document.setdefault("nodes", [])
+    scene = document["scenes"][0]
+    travel = len(nodes)
+    nodes.append({"name": TRAVEL_NODE, "children": list(scene.get("nodes", [])),
+                  "extras": {"d3sno_export": {"added": True}}})
+    scene["nodes"] = [travel]
+    for anim, perm in zip(animations, perms):
+        end = max((buf.accessors[s["input"]].get("max", [0.0])[0] for s in anim["samplers"]), default=0.0)
+        times = [0.0, end] if end > 0 else [0.0]
+        values = [tuple(c * TICKS_PER_SECOND * t for c in perm.average_velocity) for t in times]
+        animation._add_channel(buf, anim, travel, "translation", times, values, "VEC3")
 
 
 def _write(target: Path, blob: bytes) -> None:
@@ -1036,8 +1106,9 @@ def _write(target: Path, blob: bytes) -> None:
 
 
 def export_game(game_dir, out_dir, *, build=None, archives=None, groups=None, all_levels=False,
-                skip_existing=False, force=False, created: str | None = None) -> ExportResult:
-    """W18-10: export the archives of ``game_dir`` into ``out_dir`` (W18-1 to W18-9)."""
+                skip_existing=False, force=False, created: str | None = None, travel=False) -> ExportResult:
+    """W18-10: export the archives of ``game_dir`` into ``out_dir`` (W18-1 to W18-9, ``43`` W19-1
+    to W19-5; ``travel`` adds the W19-5 travel node to every animation file)."""
     game = Path(os.path.abspath(game_dir))
     out = Path(os.path.abspath(out_dir))
     run = None
@@ -1055,7 +1126,7 @@ def export_game(game_dir, out_dir, *, build=None, archives=None, groups=None, al
         if build is not None and build not in ("ps3", "switch", "x360"):
             raise ExportRefused(f"--build {build!r}: give ps3, switch or x360")
         chosen = _groups(groups)
-        run = _Run(game, out, archives, chosen, all_levels, skip_existing, build)
+        run = _Run(game, out, archives, chosen, all_levels, skip_existing, build, travel)
         run.open_archives()
         run.read_indexes()
         run.list_files()
