@@ -1071,6 +1071,30 @@ def _bone_node(bone: Bone) -> dict:
     }
 
 
+SKIN_ROOT_NAME = "d3sno_skin_root"
+
+
+def skeleton_nodes(app: AppearanceFile, skinned: bool) -> tuple[list[dict], list[int], int | None]:
+    """The bone nodes (node i is bone i), the scene's root nodes and the added skin root.
+
+    ``41`` V26-2: when a skin's joints have more than one root bone, one node without a transform
+    (``d3sno_skin_root``, ``extras.d3sno_export.added``, not a joint) is added right after the
+    bones, above the root bones; it is the skin's ``skeleton``. One root: no node is added."""
+    nodes: list[dict] = []
+    roots: list[int] = []
+    for bone in app.bones:
+        if bone.parent >= 0:
+            nodes[bone.parent].setdefault("children", []).append(bone.index)
+        else:
+            roots.append(bone.index)
+        nodes.append(_bone_node(bone))
+    if not skinned or len(roots) < 2:
+        return nodes, roots, None
+    added = len(nodes)
+    nodes.append({"name": SKIN_ROOT_NAME, "children": roots, "extras": {"d3sno_export": {"added": True}}})
+    return nodes, [added], added
+
+
 def to_gltf(
     app: AppearanceFile, flip_v: bool = False, lightmap_v_scale: float | None = None,
     extend=None, texture_resolver=None, look: int = 0, low_poly: bool = True,
@@ -1093,16 +1117,8 @@ def to_gltf(
     """
     buf = _GltfBuffer()
     materials = _GltfMaterials(buf, texture_resolver)
-    nodes: list[dict] = []
-    roots: list[int] = []
-    for bone in app.bones:
-        if bone.parent >= 0:
-            nodes[bone.parent].setdefault("children", []).append(bone.index)
-        else:
-            roots.append(bone.index)
-        nodes.append(_bone_node(bone))
-
     skinned = any(d.joints is not None for sub in export_sub_objects(app, low_poly) for d in sub.draws)
+    nodes, roots, skin_root = skeleton_nodes(app, skinned)
     skins = []
     if skinned:
         matrices = bytearray()
@@ -1114,6 +1130,8 @@ def to_gltf(
             "joints": list(range(len(app.bones))),
             "inverseBindMatrices": buf.add(bytes(matrices), _FLOAT, "MAT4", len(app.bones)),
         }
+        if skin_root is not None:
+            skin["skeleton"] = skin_root  # ``41`` V26-2
         extras: dict = {"bind_from_rest_inverse": True} if app.build == "ps3" else {}
         extras["d3sno"] = {"bones": len(app.bones)}  # W16-5
         skin["extras"] = extras
@@ -1169,6 +1187,26 @@ def to_gltf(
             "byteLength": len(buf.blob),
             "uri": "data:application/octet-stream;base64," + encoded,
         }]
+        document["bufferViews"] = buf.views
+        document["accessors"] = buf.accessors
+    return document
+
+
+def to_gltf_skeleton(app: AppearanceFile, extend=None, low_poly: bool = True) -> dict:
+    """``41`` V26-3: the joint nodes of ``to_gltf`` only (same names, order and V26-2 root node),
+    no mesh, skin or images. ``extend(buffer, document)`` runs before the buffer is sealed."""
+    buf = _GltfBuffer()
+    skinned = any(d.joints is not None for sub in export_sub_objects(app, low_poly) for d in sub.draws)
+    nodes, roots, _ = skeleton_nodes(app, skinned)
+    document: dict = {"asset": {"version": "2.0", "generator": "d3sno"}, "scene": 0, "scenes": [{"nodes": roots}]}
+    if nodes:
+        document["nodes"] = nodes
+    if extend is not None:
+        extend(buf, document)
+    if buf.blob:
+        encoded = base64.b64encode(bytes(buf.blob)).decode("ascii")
+        document["buffers"] = [{"byteLength": len(buf.blob),
+                                "uri": "data:application/octet-stream;base64," + encoded}]
         document["bufferViews"] = buf.views
         document["accessors"] = buf.accessors
     return document

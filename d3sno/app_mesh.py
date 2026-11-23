@@ -953,6 +953,22 @@ def _cloth_parts_unchanged(label: str, parts, origins) -> None:
                               "changed; the sub-object is only removed whole or kept unchanged (V21-1, V23-5)")
 
 
+def _fat_list_matches(label: str, sub: SubObject, old: SubObject) -> None:
+    """``40`` V25-1: the fat draw of a cloth or fat sub-object is written from ``fat_draw``; a fat
+    draw in the list of draws must be that draw (or hold the same values), and a fat draw the stored
+    list held may not be dropped from the list alone. A mismatch is refused with the V24-1 label
+    instead of being ignored."""
+    listed = [d for d in sub.draws if d.kind == "fat"]
+    stored = [d for d in old.draws if d.kind == "fat"]
+    fat = sub.fat_draw
+    bad = len(listed) > 1 or len(listed) < len(stored) or any(
+        fat is None or (d is not fat and not _same_draw(d, fat)) for d in listed)
+    if bad:
+        raise FormatError(f"{label}, fat vertices: the fat draw in the list of draws differs from the fat-draw "
+                          "field; change neither, the sub-object is only removed whole or kept unchanged "
+                          "(V21-1, V23-5, V25-1)")
+
+
 def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject, pools: _Pools,
                 label: str | None = None, from_zero: bool = False, new: bool = False):
     """One switch / x360 sub-object (W2-1 to W2-8, W13-5 to W13-7, V21-2; W17-1, W17-3, W17-7,
@@ -986,6 +1002,7 @@ def _switch_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject,
         raise FormatError(f"{label}: a cloth sub-object (cloth record or fat vertices) is only removed whole "
                           "or kept unchanged (V21-1, W17-10)")
     if _cloth_part(old) and not from_zero:  # ``38`` V23-5: no change to its parts either
+        _fat_list_matches(label, sub, old)  # ``40`` V25-1
         _cloth_parts_unchanged(label, [(f"{label}, rigid list", d, old_rigid[k]) for d, k in rigid_pairs]
                                + [(f"{label}, skinning record {k}", d, old_skins[k]) for d, k in skin_pairs]
                                + [(f"{label}, fat vertices", sub.fat_draw, old.fat_draw)],  # V24-1
@@ -1268,6 +1285,7 @@ def _ps3_sub(ctx: _Context, record: L.Record, sub: SubObject, old: SubObject, po
     if from_zero and fat is not None:
         raise FormatError(f"{label}: a new sub-object with fat vertices is only moved in whole (W17-11, V21-1)")
     if _cloth_part(old) and not from_zero:  # ``38`` V23-5
+        _fat_list_matches(label, sub, old)  # ``40`` V25-1
         _cloth_parts_unchanged(label, [(f"{label}, draw {k}", d, old_draws[k]) for d, k in pairs]
                                + [(f"{label}, fat vertices", fat, old_fat)],  # V24-1
                                [k for _, k in pairs])

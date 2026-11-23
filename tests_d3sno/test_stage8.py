@@ -97,6 +97,7 @@ class Build(unittest.TestCase):
         self.assertEqual(sno.parse_header(header(1)).build, "ps3")
 
     def test_tables_ship_as_package_data(self):
+        B.need_layout_tables()  # ``42`` V27-3: the layout tables hidden, as the check of V27-3 runs
         for name in ("gam_tables", "gam_pairs", "struct_fields", "struct_diff_list", "typed_all",
                      "layouts", "cov_layouts", "byte_order", "sno_versions", "names", "attributes"):
             self.assertTrue((DATA / f"x360_{name}.tsv").is_file(), name)

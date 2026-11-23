@@ -1545,14 +1545,63 @@ def build_snd(build: str, rows: list, count=None) -> bytes:
 import csv as _csv
 import os as _os
 
-_LAYOUT_PATH = _os.path.join(_os.path.dirname(__file__), "..", "d3sno", "data", "layouts.tsv")
+import unittest as _unittest
+
+import d3sno as _d3sno
+
+# ``41`` V26-8: the record tables come from the package data (``d3sno/data``), where they are shipped.
+LAYOUT_TABLES = tuple(_os.path.join(_os.path.dirname(_d3sno.__file__), "data", name)
+                      for name in ("layouts.tsv", "x360_layouts.tsv"))
 _TABLE_BUILD = {"nx": "switch", "ps3": "ps3", "x360": "x360"}
+MISSING_LAYOUT_TABLES = tuple(p for p in LAYOUT_TABLES if not _os.path.isfile(p))
 
 
-def _layout_rows():
+def layout_tables_message(missing=MISSING_LAYOUT_TABLES) -> str:
+    return f"record layouts need {', '.join(missing)}, which is not there (V26-8)"
+
+
+def need_layout_tables() -> None:
+    """``42`` V27-3: skip the running test, with the V26-8 message, when a layout table is missing."""
+    if MISSING_LAYOUT_TABLES:
+        raise _unittest.SkipTest(layout_tables_message(MISSING_LAYOUT_TABLES))
+
+
+def _skip_record_layouts():
+    """V27-3: stands in for ``records.layouts`` while a table is missing, so every test that reaches
+    the library's layout loader, directly or through another call, is skipped instead of failing."""
+    need_layout_tables()
+
+
+if MISSING_LAYOUT_TABLES:
+    from d3sno import records as _records
+
+    _skip_record_layouts.cache_clear = lambda: None
+    _records.layouts = _skip_record_layouts
+
+
+class _Layouts(dict):
+    """Record layouts by (build, record). With a table missing, a test that needs one is skipped
+    with a message that names the file (V26-8)."""
+
+    missing: tuple = ()
+
+    def __missing__(self, key):
+        if self.missing:
+            raise _unittest.SkipTest(layout_tables_message(self.missing))
+        raise KeyError(key)
+
+
+def _layout_tables(paths=LAYOUT_TABLES) -> "_Layouts":
+    missing = tuple(p for p in paths if not _os.path.isfile(p))
+    layouts = _Layouts() if missing else _Layouts(_layout_rows(paths))
+    layouts.missing = missing
+    return layouts
+
+
+def _layout_rows(paths=LAYOUT_TABLES):
     sizes, rows = {}, {}
     table_rows = []
-    for path in (_LAYOUT_PATH, _LAYOUT_PATH.replace("layouts.tsv", "x360_layouts.tsv")):
+    for path in paths:
         with open(path, encoding="utf-8", newline="") as handle:
             table_rows += list(_csv.DictReader(handle, delimiter="\t"))
     for row in table_rows:
@@ -1581,7 +1630,7 @@ def _layout_rows():
     return result
 
 
-RECORD_LAYOUTS = _layout_rows()
+RECORD_LAYOUTS = _layout_tables()
 
 
 def _pad(img: "Image", alignment: int) -> None:

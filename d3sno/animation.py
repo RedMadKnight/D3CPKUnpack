@@ -648,6 +648,23 @@ def _track_channels(buf, animation: dict, node: int, curves: DecodedPermutation,
     )
 
 
+def _permutation_channels(buf, animation: dict, perm, curves: DecodedPermutation, by_hash: dict) -> list[dict]:
+    """``41`` V26-1: each (node, path) is the target of one channel, from the first track that names
+    the node; the tracks left out are returned as ``{"track", "bone_hash"}``."""
+    used: set[int] = set()
+    dropped = []
+    for track, name_hash in enumerate(perm.track_hashes):
+        node = by_hash.get(name_hash)
+        if node is None:
+            continue
+        if node in used:
+            dropped.append({"track": track, "bone_hash": name_hash})
+            continue
+        used.add(node)
+        _track_channels(buf, animation, node, curves, track, perm.fps)
+    return dropped
+
+
 def to_gltf_animated(
     app: AppearanceFile, ani: AniFile, permutation: int = 0, flip_v: bool = False,
     texture_resolver=None, look: int = 0,
@@ -655,7 +672,8 @@ def to_gltf_animated(
     """The appearance plus one permutation as a glTF animation.
 
     glTF interpolates rotations spherically, where the game lerps and normalises, so
-    in-between frames differ slightly from ``pose_at``.
+    in-between frames differ slightly from ``pose_at``. V26-1: a track whose bone an earlier track
+    already animates is left out and listed in ``extras.d3sno_export.dropped_tracks``.
     """
     if not 0 <= permutation < len(ani.permutations):
         raise FormatError(f"no permutation {permutation}: the file has {len(ani.permutations)}")
@@ -667,12 +685,11 @@ def to_gltf_animated(
 
     def extend(buf, document: dict) -> None:
         animation: dict = {"name": perm.name, "samplers": [], "channels": []}
-        for track, name_hash in enumerate(perm.track_hashes):
-            node = by_hash.get(name_hash)
-            if node is not None:
-                _track_channels(buf, animation, node, curves, track, perm.fps)
+        dropped = _permutation_channels(buf, animation, perm, curves, by_hash)
         if animation["channels"]:
             document["animations"] = [animation]
+        if dropped:  # V26-1
+            document.setdefault("extras", {}).setdefault("d3sno_export", {})["dropped_tracks"] = dropped
 
     return to_gltf(app, flip_v, extend=extend, texture_resolver=texture_resolver, look=look)
 

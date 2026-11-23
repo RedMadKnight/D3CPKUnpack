@@ -145,11 +145,16 @@ python3 -m d3sno mesh-transplant Barbarian_Male.app Barbarian_Male_B.app --sub-o
 python3 -m d3sno replace Common.cpk 'Appearance\Barbarian_Male.app' Barbarian_new.app -o Common_mod.cpk
 python3 -m d3sno add Act1.cpk 'Appearance\My_Prop.app' my_prop.app -o Act1_mod.cpk \
     --toc CoreTOC.dat --prefetch Prefetch.dat --index-out ./index_mod
+
+# export your own copy of the game to glTF, PNG and JSON for other programs
+# (the output is game content: keep it on your computer, never in a repository)
+python3 -m d3sno export path/to/game --out ~/d3_export --archives 'Act1*' 'Common*'
 ```
 
 `d3sno` has these subcommands: `info`, `verify`, `list`, `extract`, `toc`,
 `prefetch`, `power`, `mesh`, `texture`, `anim`, `strings`, `balance`, `level`,
-`collision`, `texture-import`, `mesh-import`, `mesh-transplant`, `replace` and `add`. Its writers are used from Python (`d3sno.write`,
+`collision`, `texture-import`, `mesh-import`, `mesh-transplant`, `replace`, `add`
+and `export`. Its writers are used from Python (`d3sno.write`,
 `d3sno.index_write`, `d3sno.texture_write`, `d3sno.collision_write`,
 `d3sno.derived`, `d3sno.formula_write`, `d3sno.lua_write`, `d3sno.anim_write`,
 `d3sno.sound_write`, `d3sno.material_write`, `d3sno.shader`, `d3sno.ui_write`
@@ -254,7 +259,11 @@ animation, sound, materials, shaders, UI and fonts. Stage 16 added modding
 tools: texture import from PNG, mesh import from glTF and OBJ, and adding or
 replacing files in archives from the command line. Stage 17 added new mesh
 parts: sub-objects, draws, skinning records and material entries can be added,
-removed and moved between meshes. Nothing has been tested in the game (§21.3).
+removed and moved between meshes. Stage 18 added `export`: the user's own copy of
+the game is written to glTF 2.0 (meshes, skeletons, animation), PNG (textures)
+and JSON (records, scenes, worlds, markers, navigation, collision, text), with a
+manifest and a coverage report, so that a viewer or other program needs no
+knowledge of the console formats. Nothing has been tested in the game (§21.3).
 
 ---
 
@@ -1541,7 +1550,7 @@ this document:
 | `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Run on `Common.cpk`: all 28,394 files extracted |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
 | `lua51.py` / `luadec.py` / `relua.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompilers to pseudo-Lua and to compilable source, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 4,755 chunks of the corpus (§14.2) |
-| `d3sno/` | Library and command line for three builds (Switch, PS3, Xbox 360): archives, index files, powers and formulas, meshes with OBJ and glTF export, animation, navigation, textures to PNG (Xbox 360 tiled textures included), text, balance tables, worlds, collision, materials, sound, gameplay records (actors, monsters, quests, conversations, scenes, recipes), UI and fonts for all three builds, shaders, FSB5 headers and sample names, names for tags, enum values and flag bits, structure checks, and writers for `.stl`, `.pow`, `.scr`, `.tex`, `.gam`, a generic writer for every other SNO type, a mesh-level `.app` writer with an octree builder, `.can` and `.nav` writers, an FSB5 writer, writers for CoreTOC, Prefetch, manifests and sprite tables with adding new files, a `.tex` encoder for all three builds, a collision mesh builder, and derivation of scene navigation, marker lists, list counts, actor bounds and sound-bank rows; Xbox 360 archive writer; content creation: a formula compiler and decompiler, a Lua chunk writer with porting between builds, animation curve encoding, FSB5 banks from Ogg Vorbis, new materials, shader program replacement, UI and font writers; modding tools: a PNG reader, texture import onto an existing `.tex`, mesh import from glTF / GLB / OBJ onto an existing `.app`, and `replace` / `add` commands that update the index files; mesh parts: adding, removing and moving sub-objects, draws, skinning records and material entries | `*.cpk` and files inside them | Every file of all three builds parses in strict mode; writers are byte-identical on every file (`.gam` 54 of 54 Switch, 41 of 41 PS3, all Xbox 360); every tag-map record is named; all 24 Xbox 360 archives rebuild byte for byte; the generic writer rebuilds every other SNO file of all three builds, PS3 `globals.glo` included; the `.app` writer rebuilds all 26,292 meshes with every count, size, quantisation step and PS3 skinning value re-derived; every index file and every texture payload rebuilds byte for byte, and every collision mesh rebuilds from its triangles; every formula with text compiles to its stored bytecode except two per build, every `.ani` (15,824 Switch) and every Switch and Xbox 360 UI dialog (397 and 334) is rebuilt from its decoded form, and every material is rebuilt from its fields; every texture exported to PNG and every mesh exported to glTF or OBJ imports back to the identical file; every mesh rebuilt from zero by the part rules comes back byte for byte |
+| `d3sno/` | Library and command line for three builds (Switch, PS3, Xbox 360): archives, index files, powers and formulas, meshes with OBJ and glTF export, animation, navigation, textures to PNG (Xbox 360 tiled textures included), text, balance tables, worlds, collision, materials, sound, gameplay records (actors, monsters, quests, conversations, scenes, recipes), UI and fonts for all three builds, shaders, FSB5 headers and sample names, names for tags, enum values and flag bits, structure checks, and writers for `.stl`, `.pow`, `.scr`, `.tex`, `.gam`, a generic writer for every other SNO type, a mesh-level `.app` writer with an octree builder, `.can` and `.nav` writers, an FSB5 writer, writers for CoreTOC, Prefetch, manifests and sprite tables with adding new files, a `.tex` encoder for all three builds, a collision mesh builder, and derivation of scene navigation, marker lists, list counts, actor bounds and sound-bank rows; Xbox 360 archive writer; content creation: a formula compiler and decompiler, a Lua chunk writer with porting between builds, animation curve encoding, FSB5 banks from Ogg Vorbis, new materials, shader program replacement, UI and font writers; modding tools: a PNG reader, texture import onto an existing `.tex`, mesh import from glTF / GLB / OBJ onto an existing `.app`, and `replace` / `add` commands that update the index files; mesh parts: adding, removing and moving sub-objects, draws, skinning records and material entries; `export` of a whole game copy to glTF, PNG and JSON with a manifest and coverage report | `*.cpk` and files inside them | Every file of all three builds parses in strict mode; writers are byte-identical on every file (`.gam` 54 of 54 Switch, 41 of 41 PS3, all Xbox 360); every tag-map record is named; all 24 Xbox 360 archives rebuild byte for byte; the generic writer rebuilds every other SNO file of all three builds, PS3 `globals.glo` included; the `.app` writer rebuilds all 26,292 meshes with every count, size, quantisation step and PS3 skinning value re-derived; every index file and every texture payload rebuilds byte for byte, and every collision mesh rebuilds from its triangles; every formula with text compiles to its stored bytecode except two per build, every `.ani` (15,824 Switch) and every Switch and Xbox 360 UI dialog (397 and 334) is rebuilt from its decoded form, and every material is rebuilt from its fields; every texture exported to PNG and every mesh exported to glTF or OBJ imports back to the identical file; every mesh rebuilt from zero by the part rules comes back byte for byte; `export` of every non-cutscene archive of each build ends without error, every exported mesh imports back byte for byte, every `.glb` passes the Khronos glTF validator (the only errors are missing texture files that the coverage report names), and two runs give identical output (in full on PS3, in part on Switch and Xbox 360) |
 | `coretoc_parser.py` | Global asset index parser, both forms | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser, both byte orders | `Prefetch.dat` + `CoreTOC.dat` | Every byte accounted for on both builds |
 
@@ -1694,6 +1703,12 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   derived, laid out or copied by stated rules: a mesh rebuilt from zero by them
   comes back byte for byte on every file of the three builds. New PS3 geometry is
   cut into draws within the size limits.
+- **Export** — `export` writes the user's own game copy as glTF 2.0, PNG and JSON
+  with a manifest (one entry per file, each SNO link resolvable) and a coverage
+  report (every skipped file with a reason). Coordinates stay as stored (z up).
+  Output is deterministic. Where a format question is open, the file says so in a
+  flag instead of guessing. The output is game content and stays on the user's
+  computer.
 
 ### 21.2 Open
 

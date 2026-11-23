@@ -467,6 +467,31 @@ def cmd_mesh_import(args) -> int:
     return 0
 
 
+def cmd_export(args) -> int:
+    """W18-1: the user's archives as glTF, PNG and JSON in OUT_DIR, with a manifest and coverage."""
+    export = _module("export")
+    result = export.export_game(
+        args.game_dir, args.out, build=args.build, archives=args.archives, groups=args.groups,
+        all_levels=args.all_levels, skip_existing=args.skip_existing, force=args.force)
+    if result.exit_code == export.EXIT_REFUSED:
+        print(f"error: {result.message}", file=sys.stderr)
+        return result.exit_code
+    for line in result.summary:
+        _print(line)
+    if result.message:
+        print(f"error: {result.message}", file=sys.stderr)
+    return result.exit_code
+
+
+EXPORT_NOTE = (
+    "Writes meshes/<handle>.glb, anims/<handle>.glb, textures/<handle>.png, data/<group>/<handle>.json, "
+    "data/text/<locale>/<handle>.json, manifest.json and coverage.json (W18-2, W18-3). The output is game "
+    "content: it stays on this computer and never goes into a repository; an OUT_DIR inside a git working "
+    "tree is refused without --force. Coordinates are as stored (z-up), not converted (W18-9). Exit code 0: "
+    "every file exported or skipped with a reason in coverage.json; 1: the export stopped; 2: refused."
+)
+
+
 def sub_object_place(text: str) -> tuple[int, int]:
     """``--sub-object G:I``: geo set G (0 or 1) and sub-object index I."""
     match = re.fullmatch(r"([01]):(\d+)", text.strip())
@@ -598,7 +623,7 @@ MESH_TRANSPLANT_NOTE = (
     "lacks it; a taken name gets _2, _3, ... (W17-11, W17-12). The output may not be an input."
 )
 
-_WRITE_COMMANDS = ("texture-import", "mesh-import", "mesh-transplant", "replace", "add")
+_WRITE_COMMANDS = ("export", "texture-import", "mesh-import", "mesh-transplant", "replace", "add")
 
 
 def make_parser() -> argparse.ArgumentParser:
@@ -711,6 +736,17 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--sub-object", required=True, metavar="G:I", help="geo set and index in SOURCE")
     sub.add_argument("-o", "--output", required=True)
     sub.add_argument("--name", help="the new sub-object's name (W17-2)")
+    add_build(sub)
+    sub = add("export", cmd_export)
+    sub.epilog = EXPORT_NOTE
+    sub.add_argument("game_dir", metavar="GAME_DIR", help="the folder of the .cpk archives and index files")
+    sub.add_argument("--out", required=True, metavar="OUT_DIR")
+    sub.add_argument("--archives", nargs="+", metavar="PATTERN", help="archive base names, e.g. Act1* Common*")
+    sub.add_argument("--groups", help="comma-separated SNO groups, e.g. app,tex,ani")
+    sub.add_argument("--all-levels", action="store_true", help="also the texture levels after level 0")
+    sub.add_argument("--skip-existing", action="store_true",
+                     help="keep files whose earlier manifest entry has the same source and hash")
+    sub.add_argument("--force", action="store_true", help="export inside a git working tree anyway")
     add_build(sub)
     sub = add("replace", cmd_replace)
     sub.add_argument("archive")
