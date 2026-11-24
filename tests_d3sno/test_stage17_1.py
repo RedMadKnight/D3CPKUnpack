@@ -3,6 +3,7 @@ V23-5 cloth and fat sub-objects are kept unchanged or removed whole (and drops a
 writer), V23-6 an editor copy of a cloth or fat mesh is refused, V23-7 the warning for a material
 hash not in the table, V23-9 labels. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import copy
 import tempfile
 import unittest

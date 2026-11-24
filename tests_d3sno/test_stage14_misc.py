@@ -1,6 +1,7 @@
 """Stage 14: ``28_derived_values.md`` W14-18 to W14-23 (marker-set special list, world cluster
 counter, count fields, actor bounds, sound-bank rows, font kerning order), synthetic files only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

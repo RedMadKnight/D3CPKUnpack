@@ -1,5 +1,6 @@
 """Stage 6, part A: tag and enum names, versions, header words, index and script checks."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

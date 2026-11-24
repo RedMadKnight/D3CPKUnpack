@@ -1,6 +1,7 @@
 """Stage 13.2: ``27_corrections16.md`` V15-5 (octree maxima are not a validity condition),
 synthetic files only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

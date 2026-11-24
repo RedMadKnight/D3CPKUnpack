@@ -1,6 +1,7 @@
 """Stage 15.1, animation (31_corrections18.md V18-3): shared per-permutation blocks in a switch
 ``.ani``. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import copy
 import math
 import unittest

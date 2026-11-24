@@ -1,5 +1,6 @@
 """Stage 15, formulas (W15-A1 to A7): ``d3sno.formula_write``. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import random
 import struct
 import unittest

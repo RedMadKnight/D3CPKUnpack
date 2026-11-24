@@ -2,6 +2,7 @@
 goes to a temporary folder outside any git working tree. Shader names of the library tests are our own,
 in a test table; tests that read the shipped tables are skipped when one is missing (V26-8)."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import json
 import unittest
 from types import SimpleNamespace
@@ -115,10 +116,11 @@ class Entries(unittest.TestCase):
         self.assertEqual(glow["texture"], "../textures/540.png")
 
     def test_layer_coordinate(self):
-        """X3 with the layer ``TEXCOORD_1``: a ``lightmap_v_scale`` 1 row names nothing."""
+        """X3 with the layer ``TEXCOORD_1``; ``47`` Y6: a ``lightmap_v_scale`` 1 row names it (``texcoord`` 1,
+        ``v_scale``, no ``v_divide``; before Y6 ``texcoord`` was null)."""
         (glow,) = layers(self.doc, self.prims[4])
         self.assertEqual(glow, {"shader": "t_glow", "pass": 1, "stage": 0, "slot_type": 6, "slot_name": "glow", "divisor": 8192,
-                                "texture": "../textures/542.png", "texcoord": None, "v_scale": "lightmap"})
+                                "texture": "../textures/542.png", "texcoord": 1, "v_scale": "lightmap"})
         self.assertIn("TEXCOORD_1", self.prims[4]["attributes"])
 
     def test_also_base_color(self):
@@ -139,7 +141,7 @@ class Entries(unittest.TestCase):
             return U.Uv2Row("x", 0, 0, 12, divisor, scale)
 
         cases = [(row(8192, 0), "layer", (1, None)), (row(8192, 0), "lightmap", (1, S)),
-                 (row(8192, 1), "lightmap", (1, None)), (row(8192, 1), "layer", (None, None)),
+                 (row(8192, 1), "lightmap", (1, None)), (row(8192, 1), "layer", (1, None)),  # Y6
                  (row(512, 0), "layer", (None, None)), (row(512, 0), "lightmap", (None, None)),
                  (row(8192, 0), None, (None, None)), (row(8192, 1), None, (None, None))]
         for item, written, want in cases:

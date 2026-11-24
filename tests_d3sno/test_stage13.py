@@ -5,6 +5,7 @@ follows the W13 rules is made by writing a builder file once with ``derive=True`
 are worked out from the description by hand.
 """
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 from unittest import mock

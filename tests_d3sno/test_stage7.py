@@ -1,5 +1,6 @@
 """Stage 7 (``16_corrections6.md``): names, paths, packing, geometry enums, DSP, sub-object rules."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

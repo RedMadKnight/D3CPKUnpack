@@ -6,6 +6,7 @@ spare index-pool tail, W2-12); the ps3 globals file is laid out by hand from W3-
 files come from the builders and from the rules.
 """
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import math
 import struct
 import unittest

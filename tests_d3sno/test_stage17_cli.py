@@ -2,6 +2,7 @@
 with the added and removed parts printed (W17-14), and the new ``mesh-transplant`` command (W17-11).
 Synthetic files only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import json
 import struct
 import tempfile

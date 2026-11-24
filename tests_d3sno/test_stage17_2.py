@@ -2,6 +2,7 @@
 counts as a part, V24-2 the palette refusal names its draw, V24-4 the limit checks of a changed
 ps3 draw in the order of V23-2. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import copy
 import unittest
 

@@ -3,6 +3,7 @@
 Synthetic data only: every file is built here from the described layout, read with the existing
 parsers, written again and compared byte for byte."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

@@ -1,6 +1,7 @@
 """Corrections 21 (``35``): V21-6 x360 pack from the archive name, V21-7 the x360 path of the
 ``texture`` subcommand. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import tempfile
 import unittest
 from pathlib import Path

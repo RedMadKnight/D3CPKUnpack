@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import zlib
 from dataclasses import dataclass, field

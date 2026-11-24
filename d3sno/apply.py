@@ -7,6 +7,10 @@ byte.
 The output is game content, as in ``40``: it is made on the user's computer only and must never be put
 into a repository, a test fixture or a release; an output folder inside a git working tree is refused
 unless ``force`` is given.
+
+``47`` Y1: archives are written one at a time, each streamed into its file as it is built (files that
+are not replaced are read from the memory-mapped source in pieces); ``--copy-unchanged`` copies in
+chunks. The report names each written archive with its size and SHA-256 (``archives``).
 """
 
 from __future__ import annotations
@@ -388,20 +392,48 @@ class _Apply:
             self.row(entry, "applied" if found.targets else "no_effect", archives=archives,
                      warnings=list(found.warnings))
 
-    # --- W21-6 ---------------------------------------------------------------------------------
-    def archives(self) -> dict[str, bytes]:
-        """Output path (relative to the game folder) -> the new archive."""
-        from . import index_write
+    # --- W21-6, Y1 ------------------------------------------------------------------------------
+    def archive_jobs(self) -> list:
+        """(output path relative to the game folder, source archive, replacements), by path."""
+        jobs = [(_rel(self.run.archive_paths[stem], self.game), self.run.all_archives[stem], self.replacements[stem])
+                for stem in self.replacements]
+        return sorted(jobs, key=lambda job: job[0].lower())
 
-        written = {}
-        for stem in sorted(self.replacements, key=str.lower):
-            cpk = self.run.all_archives[stem]
-            path = self.run.archive_paths[stem]
-            written[_rel(path, self.game)] = index_write.replace_files(cpk, self.replacements[stem])
+    def write_archives(self) -> dict[str, dict]:
+        """Y1: each changed archive streamed into its output file (a temporary name, renamed when
+        every archive is complete; the dry run only counts and hashes). Returns path -> size and
+        SHA-256. On a fault no archive is left."""
+        from . import index_write
+        from .archive import part_name
+
+        written: dict[str, dict] = {}
+        parts: list[tuple[str, Path]] = []
+        try:
+            for rel, cpk, replacements in self.archive_jobs():
+                if self.dry_run:
+                    done = index_write.write_changed(cpk, None, replacements)
+                else:
+                    target = self.out.joinpath(*PurePosixPath(rel).parts)
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    temporary = part_name(target)
+                    parts.append((temporary, target))
+                    with open(temporary, "wb") as handle:
+                        done = index_write.write_changed(cpk, handle, replacements)
+                written[rel] = {"sha256": done.sha256, "size": done.size}
+            for temporary, target in parts:
+                os.replace(temporary, target)
+        except BaseException:
+            for temporary, _ in parts:
+                try:
+                    os.unlink(temporary)
+                except OSError:
+                    pass
+            raise
         return written
 
-    def report(self, written: list, copied: list, stopped) -> dict:
+    def report(self, written: list, copied: list, stopped, archives: dict | None = None) -> dict:
         return {
+            "archives": archives or {},
             "archives_written": written, "build": self.run.build, "changed": sorted(self.rows, key=lambda r: str(r["path"])),
             "copied": copied, "counts": dict(self.counts), "dry_run": bool(self.dry_run), "format": REPORT_FORMAT,
             "format_version": REPORT_FORMAT_VERSION, "index_files_written": [], "library_version": __version__,
@@ -409,6 +441,24 @@ class _Apply:
                 "copy_unchanged": bool(self.copy_unchanged), "mesh": dict(self.mesh), "only": list(self.only)},
             "stopped": stopped, "unmanaged": self.unmanaged,
         }
+
+
+def _copy_file(source: Path, target: Path) -> None:
+    """Y1: a byte-for-byte copy in chunks of at most ``archive.COPY_CHUNK`` bytes, under a temporary
+    name renamed when complete."""
+    from . import archive
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+
+    def produce(out):
+        with open(source, "rb") as handle:
+            while True:
+                chunk = handle.read(archive.COPY_CHUNK)
+                if not chunk:
+                    break
+                out.write(chunk)
+
+    archive.stream_to(target, produce)
 
 
 def _refuse_paths(game: Path, root: Path, out: Path, force: bool) -> None:
@@ -465,9 +515,10 @@ def apply_export(game_dir, export_dir, out_dir, *, build=None, dry_run=False, co
     written: list[str] = []
     copied: list[str] = []
     try:
+        out.mkdir(parents=True, exist_ok=True)
         try:
             job.apply(changed)
-            archives = job.archives()
+            archives = job.write_archives()
         except Exception as exc:  # an importer or writer fault: stop (exit code 1)
             stopped = {"error": f"{type(exc).__name__}: {exc}"}
             archives = {}
@@ -475,13 +526,10 @@ def apply_export(game_dir, export_dir, out_dir, *, build=None, dry_run=False, co
         if job.copy_unchanged and stopped is None:
             copied = sorted((_rel(p, game) for p in game.rglob("*") if p.is_file() and _rel(p, game) not in archives),
                             key=str.lower)
-        out.mkdir(parents=True, exist_ok=True)
         if not dry_run and stopped is None:
-            for rel, data in archives.items():
-                export._write(out.joinpath(*PurePosixPath(rel).parts), data)
             for rel in copied:
-                export._write(out.joinpath(*PurePosixPath(rel).parts), game.joinpath(*PurePosixPath(rel).parts).read_bytes())
-        report = job.report(written, copied, stopped)
+                _copy_file(game.joinpath(*PurePosixPath(rel).parts), out.joinpath(*PurePosixPath(rel).parts))
+        report = job.report(written, copied, stopped, archives)
         export._write(out / REPORT_NAME, export.dumps(report))
     finally:
         job.run.close()

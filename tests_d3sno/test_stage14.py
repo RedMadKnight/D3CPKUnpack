@@ -1,6 +1,7 @@
 """Stage 14 marker: ``28_derived_values.md`` (W14-1 to W14-23). The rules are tested in
 test_stage14_index, _texture, _collision, _navigation and _misc."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import unittest
 
 import d3sno

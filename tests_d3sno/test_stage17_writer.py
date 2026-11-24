@@ -2,6 +2,7 @@
 writer with added and removed parts (W17-10, W17-14), moving a sub-object between files (W17-11) and
 the rebuild of every record from zero (the "Check"). Synthetic files only (``builders``)."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import copy
 import dataclasses
 import struct

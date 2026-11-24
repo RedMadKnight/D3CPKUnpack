@@ -1,6 +1,7 @@
 """Stage 15, sound: ``30_create_content.md`` W15-B4 to W15-B7 (FSB5 writer, sound-bank rows, switch
 ``.ogg`` samples, mode-16 frame layout), synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

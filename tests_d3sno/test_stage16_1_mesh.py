@@ -1,6 +1,7 @@
 """Stage 16.1 mesh half: Corrections 21 (``35_corrections21.md``) V21-1 to V21-5 for the mesh
 exporter, the mesh import and the mesh writer. Synthetic files only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import copy
 import struct
 import unittest

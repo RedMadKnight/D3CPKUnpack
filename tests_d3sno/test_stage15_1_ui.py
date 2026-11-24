@@ -1,6 +1,7 @@
 """Stage 15.1 (corrections 18), UI area: V18-2 shared texts in switch-form dialogs, V18-4 control
 ordinals, V18-5 glyph order. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

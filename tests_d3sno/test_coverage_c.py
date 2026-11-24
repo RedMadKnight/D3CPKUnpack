@@ -1,5 +1,6 @@
 """Stage 6, part C: record enums and flags, display times, objectives, presentation, achu, FSB5."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

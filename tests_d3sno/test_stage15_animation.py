@@ -1,5 +1,6 @@
 """Stage 15, animation (30_create_content.md W15-B1, B2, B3, B3a). Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import math
 import struct
 import unittest

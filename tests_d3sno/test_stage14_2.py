@@ -1,5 +1,6 @@
 """Corrections 17, V16-10: duplicated triangles in collision meshes (synthetic data only)."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import unittest
 
 import d3sno

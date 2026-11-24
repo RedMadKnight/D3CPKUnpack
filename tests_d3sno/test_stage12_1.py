@@ -5,6 +5,7 @@ its work buffer (0xC000) checked before its 16-bit index-pair pieces, so a mesh 
 the format raises FormatError naming the field, never ``struct.error``. Synthetic data only.
 """
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

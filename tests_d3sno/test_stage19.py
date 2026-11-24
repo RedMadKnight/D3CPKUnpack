@@ -1,6 +1,7 @@
 """Stage 19 (``43_settled_questions.md``): W19-1 to W19-5. Synthetic data only; every export goes to a
 temporary folder outside any git working tree."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import dataclasses
 import io
 import json

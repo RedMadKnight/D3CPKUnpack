@@ -1,6 +1,7 @@
 """Stage 14: ``28_derived_values.md`` W14-16 (scene navigation derived sections) and the safe
 replacement of W14-17 (cells and heights from a changed grid). Synthetic scenes only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

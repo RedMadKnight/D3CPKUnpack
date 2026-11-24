@@ -2,6 +2,7 @@
 temporary folder outside any git working tree. Shader names of the library tests are our own, in a test
 table; the export tests use names from the shipped tables and are skipped when a table is missing."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import json
 import math
 import tempfile

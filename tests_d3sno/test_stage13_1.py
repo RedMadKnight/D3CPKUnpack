@@ -1,5 +1,6 @@
 """Stage 13.1: ``27_corrections16.md`` (V15-1 to V15-4), synthetic files only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

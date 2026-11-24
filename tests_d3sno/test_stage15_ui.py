@@ -1,6 +1,7 @@
 """Stage 15, W15-B8 to W15-B11: switch-form UI dialogs and fonts, UI keys, font images and font
 derived values. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

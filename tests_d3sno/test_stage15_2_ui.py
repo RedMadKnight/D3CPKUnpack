@@ -1,6 +1,7 @@
 """Stage 15.2 (corrections 19), UI area: V19-1 shared lists in switch-form dialogs. Synthetic data
 only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

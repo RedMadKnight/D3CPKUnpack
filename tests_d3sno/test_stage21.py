@@ -2,6 +2,7 @@
 test builders only; every game, export and output folder is a temporary folder outside any git working
 tree (one test makes a ``.git`` folder of its own inside its temporary folder, to test the refusal)."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import hashlib
 import json
 import shutil

@@ -4,6 +4,7 @@ There are no game files here: the ``.app`` files are the test builders' files la
 the sound files are built by hand from S11, V11 and V12.
 """
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

@@ -1,6 +1,7 @@
 """Stage 16, textures: ``34_modding_tools.md`` W16-1 (PNG reader) and W16-2 to W16-4 (texture
 import onto a template). Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import random
 import struct
 import unittest

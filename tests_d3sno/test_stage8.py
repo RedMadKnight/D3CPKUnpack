@@ -3,6 +3,7 @@
 There are no x360 files here: every x360 file is synthetic, built from the layouts.
 """
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

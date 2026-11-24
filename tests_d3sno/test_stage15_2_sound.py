@@ -1,5 +1,6 @@
 """Corrections 19, V19-2: the tolerated last seek entry (synthetic data only)."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import unittest
 
 import d3sno

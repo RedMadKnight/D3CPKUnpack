@@ -1,6 +1,7 @@
 """Corrections 22 (``36``): V22-2 removing the last triangle of a skinning record, V22-4 the
 ASCII locale of the x360 pack rule. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import unittest
 
 import d3sno

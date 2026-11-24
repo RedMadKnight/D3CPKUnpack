@@ -5,6 +5,7 @@ The ``texture-import`` and ``mesh-import`` wiring is tested with stand-in module
 ``png``, ``texture_import`` and ``mesh_import`` modules are written by other agents); the
 round-trip tests at the end use the real modules."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import contextlib
 import importlib.util
 import io

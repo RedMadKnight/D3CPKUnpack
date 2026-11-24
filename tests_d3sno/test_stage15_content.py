@@ -1,6 +1,7 @@
 """Stage 15, content: Lua chunks, script embedding, materials, shaders (``30`` W15-A8..A14).
 Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

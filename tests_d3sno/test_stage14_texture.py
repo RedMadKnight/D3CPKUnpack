@@ -1,5 +1,6 @@
 """Stage 14, textures: ``28_derived_values.md`` W14-7 to W14-11 (the encoder), synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import random
 import struct
 import unittest

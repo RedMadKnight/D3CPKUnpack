@@ -2,6 +2,7 @@
 template ``.app`` (W16-6 to W16-11). Synthetic files only: the test builders' files, made to follow
 the W13 rules by writing them once with ``derive=True``."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import base64
 import copy
 import json

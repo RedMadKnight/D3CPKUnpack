@@ -1,6 +1,7 @@
 """Stage 18 (``40_export.md``): the ``export`` command and ``d3sno.export`` (W18-1 to W18-10), plus
 V25-1. Synthetic data only; every output goes to a temporary folder outside any git working tree."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import copy
 import hashlib
 import io

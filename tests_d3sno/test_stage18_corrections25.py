@@ -1,6 +1,7 @@
 """Corrections 25 (``41_corrections25.md``): V26-1 to V26-5 and V26-8. Synthetic data only; every
 export goes to a temporary folder outside any git working tree."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import json
 import os
 import struct

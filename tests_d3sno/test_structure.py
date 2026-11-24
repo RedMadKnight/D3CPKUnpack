@@ -1,5 +1,6 @@
 """Stage 6, part B: table-driven layouts, packed words and the R3/R4 checks."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

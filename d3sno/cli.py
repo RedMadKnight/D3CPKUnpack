@@ -22,6 +22,30 @@ def _read(path: str) -> bytes:
     return Path(path).read_bytes()
 
 
+class _MappedArchive:
+    """``47`` Y1: an archive file parsed from a read-only memory map (not read into memory), for the
+    commands that write a changed archive; closed when the ``with`` block ends."""
+
+    def __init__(self, path) -> None:
+        self.path = path
+
+    def __enter__(self):
+        import mmap
+
+        self.handle = open(self.path, "rb")
+        try:
+            self.view = mmap.mmap(self.handle.fileno(), 0, access=mmap.ACCESS_READ)
+        except ValueError:  # an empty file cannot be mapped
+            self.view = None
+            return archive.read_archive(self.handle.read(), strict=False)
+        return archive.read_archive(self.view, strict=False)
+
+    def __exit__(self, *exc) -> None:
+        if self.view is not None:
+            self.view.close()
+        self.handle.close()
+
+
 def _print(text: str = "") -> None:
     """Print one line of output, replacing what the console cannot show."""
     stream = sys.stdout
@@ -560,9 +584,8 @@ def cmd_replace(args) -> int:
         if args.add_new:
             raise ValueError("--add-new goes with --from-dir")
         refuse_overwrite([args.output], [args.archive, args.file])
-        cpk = archive.read_archive(_read(args.archive), strict=False)
-        out = index_write.replace_file(cpk, args.name, _read(args.file))
-        Path(args.output).write_bytes(out)
+        with _MappedArchive(args.archive) as cpk:  # Y1: streamed, nothing of the archive kept
+            index_write.write_changed(cpk, args.output, {args.name: _read(args.file)})
         _print("replaced 1, added 0")
         return 0
     if args.name is not None or args.file is not None:
@@ -572,7 +595,13 @@ def cmd_replace(args) -> int:
         raise ValueError(f"{root} is not a folder")
     files = sorted(p for p in root.rglob("*") if p.is_file())
     refuse_overwrite([args.output], [args.archive, *files])
-    cpk = archive.read_archive(_read(args.archive), strict=False)
+    with _MappedArchive(args.archive) as cpk:
+        return _replace_from_dir(args, cpk, root, files)
+
+
+def _replace_from_dir(args, cpk, root: Path, files) -> int:
+    from . import index_write
+
     replace: dict[str, bytes] = {}
     add: dict[str, bytes] = {}
     unknown = []
@@ -595,8 +624,7 @@ def cmd_replace(args) -> int:
                           + ", ".join(unknown[:10]))
     if not replace and not add:
         raise ValueError(f"{root} holds no file")
-    out = index_write.replace_files(cpk, replace, add)
-    Path(args.output).write_bytes(out)
+    index_write.write_changed(cpk, args.output, replace, add)  # Y1: streamed
     _print(f"replaced {len(replace)}, added {len(add)}")
     return 0
 
@@ -617,15 +645,14 @@ def cmd_add(args) -> int:
             raise ValueError("--toc and --prefetch need --index-out")
         refuse_overwrite([Path(args.index_out) / n for n in names], inputs)
         refuse_overwrite([args.output], [Path(args.index_out) / n for n in names])
-    cpk = archive.read_archive(_read(args.archive), strict=False)
-    pack = args.pack
-    if cpk.header.build == "x360" and pack is None and tocs:
-        pack = index_write.x360_pack(Path(args.archive).name, [Path(t).name for t in tocs])
-    toc_map = {Path(t).name: _read(t) for t in tocs}
-    prefetch = {Path(args.prefetch).name: _read(args.prefetch)} if args.prefetch else None
-    result = index_write.add_sno_file(cpk, args.name, _read(args.file), toc_map, prefetch,
-                                      args.depends or (), pack=pack)
-    Path(args.output).write_bytes(result.archive)
+    with _MappedArchive(args.archive) as cpk:
+        pack = args.pack
+        if cpk.header.build == "x360" and pack is None and tocs:
+            pack = index_write.x360_pack(Path(args.archive).name, [Path(t).name for t in tocs])
+        toc_map = {Path(t).name: _read(t) for t in tocs}
+        prefetch = {Path(args.prefetch).name: _read(args.prefetch)} if args.prefetch else None
+        result = index_write.add_sno_file(cpk, args.name, _read(args.file), toc_map, prefetch,
+                                          args.depends or (), pack=pack, out=args.output)  # Y1: streamed
     if result.index_files:
         target = Path(args.index_out)
         target.mkdir(parents=True, exist_ok=True)

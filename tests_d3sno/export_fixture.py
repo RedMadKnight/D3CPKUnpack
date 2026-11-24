@@ -1,6 +1,7 @@
 """Synthetic game folders for the stage-18 export tests (``40_export.md``). Nothing here comes from
 game files: every input is built by the test builders, in a temporary folder outside any git tree."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import tempfile
 from pathlib import Path
@@ -144,10 +145,11 @@ def ps3_files() -> dict[str, dict[str, bytes]]:
     }}
 
 
-def write_game(root: Path, files: dict[str, dict[str, bytes]], version=7, order="<") -> Path:
+def write_game(root: Path, files: dict[str, dict[str, bytes]], version=7, order="<", **options) -> Path:
+    """``options`` go to ``archive.write_archive`` (``47`` tests: ``level`` 1 for large archives)."""
     root.mkdir(parents=True, exist_ok=True)
     for stem, content in files.items():
-        (root / f"{stem}.cpk").write_bytes(A.write_archive(content, version=version, order=order))
+        (root / f"{stem}.cpk").write_bytes(A.write_archive(content, version=version, order=order, **options))
     return root
 
 

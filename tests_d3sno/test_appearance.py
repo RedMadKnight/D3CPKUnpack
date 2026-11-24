@@ -1,3 +1,4 @@
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import base64
 import json
 import struct

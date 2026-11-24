@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 import bisect
+import hashlib
+import io
+import os
 import struct
+import tempfile
 import zlib
 from collections import OrderedDict
 from dataclasses import dataclass, field
@@ -25,6 +29,8 @@ _BIT_14 = 0x4000
 CIPHER_SEED = 0x873AE8E53C11D761
 _MASK64 = 0xFFFFFFFFFFFFFFFF
 _MIN_SLOT_ROOM = 64
+COPY_CHUNK = 16 * 1024 * 1024  # ``47`` Y1: at most this many bytes per read when copying
+VIEW_WINDOW = 1024 * 1024  # Y1: bytes of a source stream read ahead for the packer
 
 # Archive priorities on switch, for callers that overlay archives.
 SWITCH_PRIORITIES = {
@@ -653,6 +659,197 @@ def _check_copies(archive: CpkArchive, check: CheckResult) -> None:
                 )
 
 
+# --- Y1: streaming output -------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Written:
+    """``47`` Y1: what a streaming writer wrote: its size and SHA-256."""
+
+    size: int
+    sha256: str
+
+
+class Output:
+    """Y1: a binary sink that counts and hashes what passes through. ``handle`` None keeps nothing
+    (the dry run). ``spool_dir``: where a writer puts its temporary region file (None: the system
+    temporary folder); ``memory``: the writer keeps its region in memory (the byte-returning calls)."""
+
+    def __init__(self, handle=None, spool_dir=None, memory: bool = False) -> None:
+        self.handle = handle
+        self.spool_dir = spool_dir
+        self.memory = memory
+        self.size = 0
+        self._sha = hashlib.sha256()
+
+    def write(self, data) -> int:
+        if self.handle is not None:
+            self.handle.write(data)
+        self.size += len(data)
+        self._sha.update(data)
+        return len(data)
+
+    def result(self) -> Written:
+        return Written(self.size, self._sha.hexdigest())
+
+
+def as_output(out) -> Output:
+    """A file object (or None) as an ``Output``; an ``Output`` as it is."""
+    if isinstance(out, Output):
+        return out
+    return Output(out, memory=isinstance(out, io.BytesIO))
+
+
+def part_name(target) -> str:
+    """The temporary name a file is written under before it is renamed (as the export, W18-2)."""
+    folder, name = os.path.split(os.fspath(target))
+    return os.path.join(folder, f".{name}.{os.getpid()}.part")
+
+
+def stream_to(target, produce) -> Written:
+    """Y1: run ``produce(output)``. ``target``: None (count and hash only), a binary file object, or
+    a path (written under a temporary name in its folder and renamed when complete)."""
+    if target is None or hasattr(target, "write"):
+        out = as_output(target)
+        produce(out)
+        return out.result()
+    temporary = part_name(target)
+    try:
+        with open(temporary, "wb") as handle:
+            out = Output(handle, spool_dir=os.path.dirname(os.path.abspath(temporary)))
+            produce(out)
+        os.replace(temporary, target)
+    except BaseException:
+        try:
+            os.unlink(temporary)
+        except OSError:
+            pass
+        raise
+    return out.result()
+
+
+def _spool(out: Output):
+    """The temporary file a writer lays out the sector region in (Y1: the tables before it need
+    the region's slot count and checksum)."""
+    if out.memory:
+        return io.BytesIO()
+    return tempfile.TemporaryFile(dir=out.spool_dir)
+
+
+class _Region:
+    """The sector region as it is written: its length and CRC-32, the bytes into the spool."""
+
+    def __init__(self, spool) -> None:
+        self.spool = spool
+        self.size = 0
+        self.crc = 0
+
+    def write(self, data) -> None:
+        if data:
+            self.spool.write(data)
+            self.size += len(data)
+            self.crc = zlib.crc32(data, self.crc)
+
+    def copy_to(self, out: Output) -> None:
+        self.spool.seek(0)
+        while True:
+            chunk = self.spool.read(min(COPY_CHUNK, 4 * VIEW_WINDOW))
+            if not chunk:
+                break
+            out.write(chunk)
+
+
+class Span:
+    """Y1: ``size`` bytes at ``offset`` of a source archive's stream, read only when needed (in
+    pieces); it stands for the bytes ``read_stream(offset, size)`` gives."""
+
+    __slots__ = ("archive", "offset", "size")
+
+    def __init__(self, archive: "CpkArchive", offset: int, size: int) -> None:
+        if offset < 0 or size < 0 or offset + size > archive.header.stream_size:
+            raise FormatError(f"stream range 0x{offset:X}+0x{size:X} outside stream", offset)
+        self.archive, self.offset, self.size = archive, offset, size
+
+    def __len__(self) -> int:
+        return self.size
+
+    def read(self, start: int, stop: int) -> bytes:
+        stop = min(stop, self.size)
+        if stop <= start:
+            return b""
+        return self.archive.read_stream(self.offset + start, stop - start)
+
+
+def file_span(archive: "CpkArchive", entry: CpkFile, copy: int = 0) -> Span:
+    """Y1: copy ``copy`` of ``entry`` as a span (the checks of ``read_file``)."""
+    if not 0 <= copy < entry.count:
+        raise FormatError(f"file has no copy {copy}")
+    index = entry.first + copy
+    if index >= len(archive.locations):
+        raise FormatError(f"location {index} past the location table")
+    return Span(archive, archive.locations[index], entry.size)
+
+
+class StreamView:
+    """Y1: the concatenation of byte strings and spans, sliced on demand through a window of
+    ``VIEW_WINDOW`` bytes (more only when one slice asks for more)."""
+
+    def __init__(self, items) -> None:
+        self.items = list(items)
+        self.starts = []
+        total = 0
+        for item in self.items:
+            self.starts.append(total)
+            total += len(item)
+        self.size = total
+        self._at = 0
+        self._buffer = b""
+
+    def __len__(self) -> int:
+        return self.size
+
+    def __getitem__(self, key) -> bytes:
+        if not isinstance(key, slice):
+            raise TypeError("a stream view takes slices only")
+        start, stop, step = key.indices(self.size)
+        if step != 1:
+            raise ValueError("a stream view takes contiguous slices only")
+        if stop <= start:
+            return b""
+        if len(self.items) == 1 and not isinstance(self.items[0], Span):
+            return bytes(self.items[0][start:stop])
+        if not (self._at <= start and stop <= self._at + len(self._buffer)):
+            self._buffer = b""
+            self._buffer = self.read(start, max(stop, min(start + VIEW_WINDOW, self.size)))
+            self._at = start
+        return self._buffer[start - self._at:stop - self._at]
+
+    def release(self) -> None:
+        """Drop the window."""
+        self._buffer = b""
+        self._at = 0
+
+    def read(self, start: int, stop: int) -> bytes:
+        """The bytes from ``start`` to ``stop``, not kept."""
+        parts = []
+        k = max(bisect.bisect_right(self.starts, start) - 1, 0)
+        while start < stop and k < len(self.items):
+            item, first = self.items[k], self.starts[k]
+            low, high = start - first, min(stop - first, len(item))
+            if high > low:
+                parts.append(item.read(low, high) if isinstance(item, Span) else bytes(item[low:high]))
+                start = first + high
+            k += 1
+        return b"".join(parts)
+
+    def copy_to(self, sink) -> None:
+        """Every byte into ``sink.write``, at most ``COPY_CHUNK`` bytes at a time."""
+        at = 0
+        while at < self.size:
+            stop = min(at + COPY_CHUNK, self.size)
+            sink.write(self.read(at, stop))
+            at = stop
+
+
 # --- Writing ------------------------------------------------------------------------------
 
 @dataclass
@@ -693,8 +890,19 @@ def _pack_stream(
     With ``run_past_slot`` a slot's last packet is cut at the slot end, and declares what the
     cut stream gives. The next slot goes on from there. Otherwise every packet is complete.
     """
+    region = io.BytesIO()
+    offsets = _pack_stream_into(stream, region, comp_sector, order, empty_first, encrypt, level,
+                                run_past_slot, max_packet)
+    return offsets, region.getvalue()
+
+
+def _pack_stream_into(
+    stream, sink, comp_sector: int, order: str, empty_first: bool, encrypt,
+    level: int = ZLIB_LEVEL, run_past_slot: bool = True, max_packet: int = MAX_PACKET_PLAIN,
+) -> list[int]:
+    """Y1: ``_pack_stream`` slot by slot into ``sink.write``; ``stream`` is bytes or a
+    ``StreamView``. Returns the sector offsets."""
     offsets: list[int] = []
-    slots: list[bytes] = []
     slot = bytearray()
     open_slot = False
     pos = 0
@@ -725,7 +933,7 @@ def _pack_stream(
                     break
                 size = max(1, min(size - 1, int(size * room / len(stored) * 0.95)))
         if stored is None:
-            slots.append(bytes(slot).ljust(comp_sector, b"\0"))
+            sink.write(bytes(slot).ljust(comp_sector, b"\0"))
             slot = bytearray()
             open_slot = False
             continue
@@ -737,8 +945,8 @@ def _pack_stream(
         pos += size
         number += 1
     if open_slot:
-        slots.append(bytes(slot).ljust(comp_sector, b"\0"))
-    return offsets, b"".join(slots)
+        sink.write(bytes(slot).ljust(comp_sector, b"\0"))
+    return offsets
 
 
 def write_archive(
@@ -759,6 +967,39 @@ def write_archive(
     max_packet: int = MAX_PACKET_PLAIN,
 ) -> bytes:
     """Build an archive. ``encrypt(n)`` picks data packets to encrypt, for tests and parity."""
+    buffer = io.BytesIO()
+    write_archive_to(
+        buffer, files, version=version, order=order, flags=flags, read_sector=read_sector,
+        comp_sector=comp_sector, empty_first_packet=empty_first_packet, widths=widths,
+        name_order=name_order, encrypt=encrypt, word_3c=word_3c, level=level,
+        run_past_slot=run_past_slot, max_packet=max_packet,
+    )
+    return buffer.getvalue()
+
+
+def write_archive_to(
+    out,
+    files: Iterable[InputFile] | Mapping[str, bytes],
+    *,
+    version: int = 7,
+    order: str | None = None,
+    flags: int = 2,
+    read_sector: int | None = None,
+    comp_sector: int | None = None,
+    empty_first_packet: bool | None = None,
+    widths: Widths | None = None,
+    name_order: Sequence[str] | None = None,
+    encrypt=None,
+    word_3c: int | None = None,
+    level: int = ZLIB_LEVEL,
+    run_past_slot: bool = True,
+    max_packet: int = MAX_PACKET_PLAIN,
+) -> Written:
+    """``47`` Y1: ``write_archive`` into ``out`` (a binary file object or an ``Output``). A copy may
+    be a ``Span`` of a source archive; it is read in pieces while the region is packed. The region
+    goes to a temporary file first (the tables before it need its slot count and checksum), then
+    header, tables and region are written in order."""
+    out = as_output(out)
     if version not in (6, 7):
         raise FormatError(f"cannot write CPK version {version}")
     if flags not in (0, 2, 10):
@@ -809,26 +1050,39 @@ def write_archive(
             locations.append(cursor)
             stream_parts.append(copy)
             cursor += size
-    stream = b"".join(stream_parts)
+    stream = StreamView(stream_parts)
     entries.sort(key=lambda e: e.hash)
 
-    sector_offsets: list[int] = []
-    if flags & FLAG_COMPRESSED:
-        sector_offsets, region = _pack_stream(
-            stream, comp_sector, order, empty_first_packet, encrypt, level, run_past_slot,
-            max_packet,
-        )
-    else:
-        region = stream.ljust(_ceil_div(len(stream), comp_sector) * comp_sector, b"\0")
-    comp_count = len(region) // comp_sector
-    decomp_count = _ceil_div(len(stream), comp_sector)
+    with _spool(out) as spool:
+        region = _Region(spool)
+        sector_offsets: list[int] = []
+        if flags & FLAG_COMPRESSED:
+            sector_offsets = _pack_stream_into(
+                stream, region, comp_sector, order, empty_first_packet, encrypt, level, run_past_slot,
+                max_packet,
+            )
+        else:
+            stream.copy_to(region)
+            region.write(bytes(_ceil_div(len(stream), comp_sector) * comp_sector - len(stream)))
+        stream.release()
+        _write_tables(out, region, version, order, flags, read_sector, comp_sector, widths, word_3c,
+                      entries, locations, len(stream), sector_offsets, name_order, inputs)
+        region.copy_to(out)
+    return out.result()
+
+
+def _write_tables(out, region, version, order, flags, read_sector, comp_sector, widths, word_3c,
+                  entries, locations, stream_size, sector_offsets, name_order, inputs) -> None:
+    """The header and tables of ``write_archive``, from the laid-out region."""
+    comp_count = region.size // comp_sector
+    decomp_count = _ceil_div(stream_size, comp_sector)
     index_bits = comp_count.bit_length()
 
     w = widths or Widths()
     size_bits = max(w.size, max((e.size for e in entries), default=0).bit_length(), 1)
     copies_bits = max(w.copies, max((e.count for e in entries), default=0).bit_length(), 1)
     first_bits = max(w.first, max((e.first for e in entries), default=0).bit_length(), 1)
-    location_bits = max(w.location, len(stream).bit_length(), 1)
+    location_bits = max(w.location, stream_size.bit_length(), 1)
 
     bits = BitWriter()
     for entry in entries:
@@ -870,23 +1124,24 @@ def write_archive(
         header_sector = _ceil_div(tables_end, read_sector)
         start = header_sector * read_sector
 
-    crc = zlib.crc32(region, 0) & 0xFFFFFFFF
+    crc = region.crc & 0xFFFFFFFF
     header = struct.pack(
         order + "IIQ12I",
-        CPK_MAGIC, version, len(stream), flags, len(entries), len(locations), header_sector,
+        CPK_MAGIC, version, stream_size, flags, len(entries), len(locations), header_sector,
         size_bits, copies_bits, first_bits, location_bits, location_bits, index_bits, crc,
         read_sector if version == 7 else (word_3c or 0),
     )
     if version == 7:
         header += struct.pack(order + "II", comp_sector, 0)
-    return header + bytes(tables).ljust(start - header_size, b"\0") + region
+    out.write(header + bytes(tables).ljust(start - header_size, b"\0"))
 
 
 @dataclass
 class RebuildResult:
-    data: bytes
+    data: bytes | None
     encrypted_packets_dropped: int = 0
     notes: list[str] = field(default_factory=list)
+    written: Written | None = None  # Y1: size and SHA-256 of what was written
 
 
 def rebuild(
@@ -899,6 +1154,26 @@ def rebuild(
     run_past_slot: bool = True,
 ) -> RebuildResult:
     """Rewrite an archive with the source's format. A replacement updates every copy."""
+    buffer = io.BytesIO()
+    result = rebuild_to(buffer, source, replace, remove, add, single_copy, level, run_past_slot)
+    result.data = buffer.getvalue()
+    return result
+
+
+def rebuild_to(
+    out,
+    source: bytes | CpkArchive,
+    replace: Mapping[str, bytes] | None = None,
+    remove: Iterable[str] = (),
+    add: Mapping[str, bytes] | None = None,
+    single_copy: bool = False,
+    level: int = ZLIB_LEVEL,
+    run_past_slot: bool = True,
+) -> RebuildResult:
+    """``47`` Y1: ``rebuild`` into ``out`` (a binary file object or an ``Output``). A file that is
+    not replaced is read from the source in pieces while the new region is packed (ps3 and switch
+    packets hold bytes of several files, so the stream is packed again as ``rebuild`` does);
+    nothing of the archive is kept. ``data`` of the result is None."""
     archive = source if isinstance(source, CpkArchive) else read_archive(source)
     h = archive.header
     replacements = {name_hash(name): data for name, data in (replace or {}).items()}
@@ -917,7 +1192,7 @@ def rebuild(
         if entry.hash in replacements:
             copies = [replacements[entry.hash]] * count
         else:
-            copies = [archive.read_file(entry, copy) for copy in range(count)]
+            copies = [file_span(archive, entry, copy) for copy in range(count)]
         inputs.append(InputFile(entry.name, copies))
     names = [n for n in archive.names if name_hash(n) not in removals]
     for name, content in (add or {}).items():
@@ -932,7 +1207,8 @@ def rebuild(
             encrypted += sum(p.encrypted for p in packets)
             if slot == 0 and packets and packets[0].declared == 0:
                 empty_first = True
-    data = write_archive(
+    written = write_archive_to(
+        out,
         inputs,
         version=h.version,
         order=h.order,
@@ -946,7 +1222,8 @@ def rebuild(
         level=level,
         run_past_slot=run_past_slot,
     )
-    result = RebuildResult(data, encrypted)
+    archive._cache.clear()
+    result = RebuildResult(None, encrypted, written=written)
     if encrypted:
         result.notes.append(f"{encrypted} encrypted packets were written unencrypted")
     return result

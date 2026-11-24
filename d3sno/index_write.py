@@ -477,22 +477,35 @@ def _read(archive):
     return archive if isinstance(archive, CpkArchive) else read_archive(archive)
 
 
-def _x360_write(cpk, replace: Mapping[str, bytes], add: Mapping[str, bytes]) -> bytes:
+def _x360_write(cpk, out, replace: Mapping[str, bytes], add: Mapping[str, bytes]):
     from .archive import name_hash
-    from .x360_archive import Piece, source_pieces, write_x360_archive
+    from .x360_archive import Piece, source_pieces, write_x360_archive_to
 
     h = cpk.header
-    pieces = source_pieces(cpk)
+    pieces = source_pieces(cpk, lazy=True)  # Y1: a piece that is not replaced is read while written
     wanted = {name_hash(n): d for n, d in replace.items()}
     pieces = [Piece(p.name, p.copy, wanted.get(name_hash(p.name), p.data)) for p in pieces]
     pieces += [Piece(name, 0, data) for name, data in add.items()]
-    return write_x360_archive(pieces, flags=h.flags, read_sector=h.read_sector,
-                              comp_sector=h.comp_sector).data
+    written = write_x360_archive_to(out, pieces, flags=h.flags, read_sector=h.read_sector,
+                                    comp_sector=h.comp_sector, keep_plans=False).written
+    cpk._cache.clear()
+    return written
 
 
 def _change(archive, replace: Mapping[str, bytes], add: Mapping[str, bytes]) -> bytes:
-    from .archive import name_hash, rebuild
+    import io
 
+    buffer = io.BytesIO()
+    _change_to(archive, buffer, replace, add)
+    return buffer.getvalue()
+
+
+def _change_to(archive, out, replace: Mapping[str, bytes], add: Mapping[str, bytes]):
+    """``47`` Y1: the changed archive into ``out`` (a binary file object or ``archive.Output``);
+    returns its ``archive.Written`` (size and SHA-256)."""
+    from .archive import as_output, name_hash, rebuild_to
+
+    out = as_output(out)
     cpk = _read(archive)
     for name in add:
         if cpk.find(name) is not None:
@@ -503,8 +516,8 @@ def _change(archive, replace: Mapping[str, bytes], add: Mapping[str, bytes]) -> 
     if len({name_hash(n) for n in add}) != len(add):
         raise FormatError("two added names share a hash")
     if cpk.header.version == 7 and cpk.header.order == ">":
-        return _x360_write(cpk, replace, add)
-    return rebuild(cpk, replace=dict(replace), add=dict(add)).data
+        return _x360_write(cpk, out, replace, add)
+    return rebuild_to(out, cpk, replace=dict(replace), add=dict(add)).written
 
 
 def add_file(archive, name: str, data: bytes) -> bytes:
@@ -524,6 +537,19 @@ def replace_files(archive, replace: Mapping[str, bytes], add: Mapping[str, bytes
     replaced name must be in the archive, every added one must not)."""
     return _change(archive, {n: bytes(d) for n, d in replace.items()},
                    {n: bytes(d) for n, d in (add or {}).items()})
+
+
+def write_changed(archive, target, replace: Mapping[str, bytes], add: Mapping[str, bytes] | None = None):
+    """``47`` Y1: what ``replace_files`` returns, streamed to ``target``: a path (written under a
+    temporary name and renamed when complete), a binary file object, or None (only counted and
+    hashed: the dry run). Files that are not replaced are read from the source archive in pieces
+    and nothing of the new archive is kept; give a memory-mapped source (``read_archive`` of an
+    ``mmap``) to keep the source out of memory too. Returns ``archive.Written`` (size, SHA-256)."""
+    from .archive import stream_to
+
+    replace = {n: bytes(d) for n, d in replace.items()}
+    add = {n: bytes(d) for n, d in (add or {}).items()}
+    return stream_to(target, lambda out: _change_to(archive, out, replace, add))
 
 
 # --- W16-12 / W16-13: add_sno_file ------------------------------------------------------------
@@ -656,7 +682,7 @@ def _resolve_dependency(dep, named: Mapping[str, CoreToc]) -> tuple[int, int]:
 
 
 def add_sno_file(archive, name: str, data: bytes, tocs, prefetch=None, depends=(), *,
-                 pack: str | None = None) -> AddedFile:
+                 pack: str | None = None, out=None) -> AddedFile:
     """W16-12 / W16-13: add ``name`` to the archive and give an SNO file its identity (W14-1).
 
     - ``tocs``: one CoreToc (parsed, bytes or an entry list), or ``{file name: toc}``; on x360
@@ -672,7 +698,10 @@ def add_sno_file(archive, name: str, data: bytes, tocs, prefetch=None, depends=(
     - Refused: a name already in the archive, an SNO name (group, name) already in a TOC.
 
     Returns ``AddedFile(archive, index_files)`` (unpacks as a pair); index file names are the
-    keys of ``tocs`` / ``prefetch`` (default ``CoreTOC.dat`` / ``Prefetch.dat``)."""
+    keys of ``tocs`` / ``prefetch`` (default ``CoreTOC.dat`` / ``Prefetch.dat``).
+
+    ``47`` Y1: with ``out`` (a path or a binary file object) the archive is streamed there as
+    ``write_changed`` does, and ``archive`` of the result is its ``archive.Written``."""
     from .index import parse_prefetch
 
     cpk = _read(archive)
@@ -687,7 +716,7 @@ def add_sno_file(archive, name: str, data: bytes, tocs, prefetch=None, depends=(
     if group is None:
         if depends:
             raise ValueError(f"{name!r} is no SNO file with a CoreTOC entry: it takes no dependencies")
-        return AddedFile(add_file(cpk, name, data), {}, None)
+        return AddedFile(_added(cpk, name, data, out), {}, None)
     if folder.lower() != group.name.lower():
         raise FormatError(f"{name!r}: .{ext} files belong in {group.name}\\")
     named = _named_tocs(tocs, build)
@@ -738,4 +767,8 @@ def add_sno_file(archive, name: str, data: bytes, tocs, prefetch=None, depends=(
         deps = [_resolve_dependency(d, named) for d in depends]
         add_prefetch_parent(pf, group.id, handle, deps, build)
         index_files[pf_name] = write_prefetch(pf, build)
-    return AddedFile(add_file(cpk, name, stamped), index_files, ident)
+    return AddedFile(_added(cpk, name, stamped, out), index_files, ident)
+
+
+def _added(cpk, name: str, data: bytes, out):
+    return add_file(cpk, name, data) if out is None else write_changed(cpk, out, {}, {name: data})

@@ -4,6 +4,7 @@ There are no game files here. Sound files are built by hand from the rules of S1
 ``.app`` files are the test builders' files laid out by W11.
 """
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import csv
 import struct
 import unittest

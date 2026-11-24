@@ -1,4 +1,5 @@
-"""``44`` W20-1 to W20-3, ``45`` X1 to X6: what a primitive's second texture coordinate (UV2) feeds.
+"""``44`` W20-1 to W20-3, ``45`` X1 to X6, ``47`` Y6 to Y8: what a primitive's second texture coordinate
+(UV2) feeds.
 
 Package tables (``d3sno/data``) say which shader passes feed UV2 to which texture stage:
 ``shader_uv2.tsv`` (one row per build, pass and stage that UV2 feeds; ``build`` ``ps3`` serves ps3
@@ -30,6 +31,9 @@ KNOWN_TABLES = {"ps3": KNOWN_TABLE, "x360": KNOWN_TABLE_X360}
 DATA_DIR = Path(__file__).parent / "data"
 DIVISOR_LAYER = 8192
 DIVISOR_ODD = 512
+# ``47`` Y7: a slot type with no name in ``10`` on which no material block has a texture: its entries
+# name no slot and no texture (and nothing for ``missing_dependency``)
+SLOTS_WITHOUT_TEXTURE = frozenset({39})
 # W20-2, in the order the cases are tried
 USES = ("lightmap", "layer", "open", "lightmap_without_texture", "unused", "unknown")
 # W20-2: ``uv2_scale`` of each ``uv2_use`` (the lightmap case: ``"open"`` when the texture is missing)
@@ -174,8 +178,9 @@ def uv2_use(rows: Uv2Rows, has_lightmap: bool) -> str:
 
 
 def slot_name(slot_type: int | None) -> str | None:
-    """W20-3: the slot name of ``10``; a slot type it does not name is ``layer_<n>``; no slot type: None."""
-    if slot_type is None:
+    """W20-3: the slot name of ``10``; a slot type it does not name is ``layer_<n>``; no slot type, or
+    one of ``SLOTS_WITHOUT_TEXTURE`` (Y7): None."""
+    if slot_type is None or slot_type in SLOTS_WITHOUT_TEXTURE:
         return None
     return SLOT_NAMES.get(slot_type) or f"layer_{slot_type}"
 
@@ -194,15 +199,15 @@ def entry_texcoord(row: Uv2Row, written: str | None, v_divide: float | None):
     (``"layer"``, ``"lightmap"`` or None); ``v_divide``: S of the lightmap coordinate."""
     if written is None or row.divisor != DIVISOR_LAYER:
         return None, None
-    if row.lightmap_v_scale:  # samples through the lightmap coordinate, V scale included
-        return (1, None) if written == "lightmap" else (None, None)
+    if row.lightmap_v_scale:  # Y6: ``TEXCOORD_1`` as written (V scaled by the lightmap scale in the game)
+        return 1, None
     if written == "lightmap":
         return 1, v_divide
     return 1, None
 
 
 def _texture(block, slot_type):
-    if block is None or slot_type is None:
+    if block is None or slot_type is None or slot_type in SLOTS_WITHOUT_TEXTURE:
         return None
     handle = block.texture(slot_type)
     return handle if handle is not None and handle != -1 else None

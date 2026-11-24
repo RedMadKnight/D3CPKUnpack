@@ -1,6 +1,7 @@
 """Corrections 26 (``42_corrections26.md``): V27-1 to V27-3. Synthetic data only; every export goes to a
 temporary folder outside any git working tree."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import hashlib
 import unittest
 

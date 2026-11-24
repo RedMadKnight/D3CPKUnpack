@@ -5,6 +5,7 @@ There are no game files here. The W11 files are laid out by hand in each test, f
 not by the writer under test.
 """
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 from unittest import mock

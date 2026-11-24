@@ -6,6 +6,7 @@ primitives from glTF and OBJ (editor copies, naming, material choice, template p
 Every written result goes through ``Checked.check``: strict parse, structure checks, W17-1 flags,
 rebuild from zero and an unchanged ``write_app_mesh(result, derive=True)``."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import copy
 import struct
 import unittest

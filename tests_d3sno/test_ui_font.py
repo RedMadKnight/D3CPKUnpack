@@ -1,5 +1,6 @@
 """Stage 7, T5 and T6: PS3 ``.ui`` and font files read from the layout table."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

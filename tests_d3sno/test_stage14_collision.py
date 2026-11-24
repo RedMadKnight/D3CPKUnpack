@@ -1,5 +1,6 @@
 """Stage 14: ``28_derived_values.md`` W14-12 to W14-15 (collision meshes), synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import math
 import struct
 import unittest

@@ -1,6 +1,7 @@
 """Corrections 20 (`33`): V20-1 string lists shared across fields, V20-2 tolerated last seek
 entry. Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import unittest
 
 import d3sno

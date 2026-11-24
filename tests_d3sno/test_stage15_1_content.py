@@ -1,6 +1,7 @@
 """Stage 15.1, content: ``31_corrections18.md`` V18-1, V18-6, V18-7, V18-8, V18-9.
 Synthetic data only."""
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import struct
 import unittest
 

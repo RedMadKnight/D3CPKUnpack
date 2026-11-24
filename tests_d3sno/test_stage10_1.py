@@ -4,6 +4,7 @@ writer speed note).
 There are no game files here: every file is synthetic, built from the rules.
 """
 
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import random
 import unittest
 import zlib

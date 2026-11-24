@@ -1,3 +1,4 @@
+import _libpath  # noqa: F401  (python -I: the library folder on sys.path)
 import math
 import struct
 import unittest
