@@ -83,7 +83,7 @@ def primitives(doc: dict) -> list[dict]:
 class Version(unittest.TestCase):
     def test_version(self):
         self.assertGreaterEqual(tuple(int(x) for x in d3sno.__version__.split(".")), (0, 19, 0))
-        self.assertEqual(d3sno.STAGE, 19)
+        self.assertGreaterEqual(d3sno.STAGE, 19)
 
 
 class Flags(unittest.TestCase):
@@ -108,9 +108,10 @@ class Flags(unittest.TestCase):
 
     def test_manifest(self):
         manifest = json.loads((self.out / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["format_version"], 2)
+        self.assertEqual(manifest["format_version"], 4)  # ``44`` W20-5, ``46`` W21-1
         self.assertEqual(manifest["coordinates"], {"source": "stored", "up": "+z", "unit": "stored",
-                                                   "handedness": "right", "forward": "+x", "winding": "ccw"})
+                                                   "handedness": "right", "forward": "+x", "winding": "ccw",
+                                                   "rotation": "active_xyzw"})
         self.assertIs(manifest["options"]["travel"], False)
         coverage = json.loads((self.out / "coverage.json").read_text(encoding="utf-8"))
         self.assertEqual(coverage["format_version"], 1)
@@ -143,8 +144,8 @@ class LightmapUv2(unittest.TestCase):
         self.assertEqual([p["uv2_scale"] for p in doc["extras"]["d3sno_export"]["primitives"]],
                          ["lightmap", "open", "none"])
         first = prims[0]
-        self.assertEqual(first["extras"]["d3sno_export"], {"uv2_scale": "lightmap", "lightmap": LIGHT,
-                                                           "lightmap_v_scale": 1.25})
+        self.assertEqual(first["extras"]["d3sno_export"], {"uv2_scale": "lightmap", "uv2_use": "lightmap",
+                                                           "lightmap": LIGHT, "lightmap_v_scale": 1.25})
         rows = accessor(glb, first["attributes"]["TEXCOORD_1"])
         want = [((u - 0x8000) / 8192, (v - 0x8000) / 8192 * 1.25) for u, v in RAW_UV2[0]]
         for got, (u, v) in zip(rows, want):
@@ -190,7 +191,8 @@ class LightmapUv2(unittest.TestCase):
         prims = primitives(doc)
         self.assertNotIn("TEXCOORD_1", prims[0]["attributes"])
         self.assertIn("_D3_UV2", prims[0]["attributes"])
-        self.assertEqual(prims[0]["extras"]["d3sno_export"], {"uv2_scale": "open", "lightmap": LIGHT})
+        self.assertEqual(prims[0]["extras"]["d3sno_export"], {"uv2_scale": "open", "uv2_use": "lightmap",
+                                                              "lightmap": LIGHT})
         self.assertNotIn("extras", doc["materials"][prims[0]["material"]])
         (note,) = [f for f in result.coverage["groups"]["app"]["files"] if f["handle"] == F.PLAIN_APP]
         self.assertEqual(note["reason"], "missing_dependency")

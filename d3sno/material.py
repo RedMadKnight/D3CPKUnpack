@@ -163,9 +163,15 @@ def read_app_materials(view: ByteView, build: str) -> AppMaterials:
     return result
 
 
-def sub_object_texture(app, sub, look: int = 0, slot_type: int = SLOT_DIFFUSE) -> int | None:
-    """The texture handle of a sub-object for one look, or None."""
+def sub_object_block(app, sub, look: int = 0) -> MaterialBlock | None:
+    """The material block of a sub-object for one look, or None."""
     material = app.material_data.find(sub.material_hash)
     if material is None or not 0 <= look < len(material.per_look):
         return None
-    return material.per_look[look][0].texture(slot_type)
+    return material.per_look[look][0]
+
+
+def sub_object_texture(app, sub, look: int = 0, slot_type: int = SLOT_DIFFUSE) -> int | None:
+    """The texture handle of a sub-object for one look, or None."""
+    block = sub_object_block(app, sub, look)
+    return None if block is None else block.texture(slot_type)

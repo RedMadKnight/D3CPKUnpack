@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 
 from .binary import ByBuild, ByteView, FormatError, Pair, build_order
 from .cloth import ClothRecord, cloth_problems, read_cloth
-from .material import SLOT_LIGHTMAP, AppMaterials, read_app_materials, sub_object_texture
+from .material import SLOT_LIGHTMAP, AppMaterials, read_app_materials, sub_object_block, sub_object_texture
 from .sno import SnoHeader, parse_header, resolve_build
 from .transform import Transform, quat_normalise, read_transform, transforms_match
 
@@ -1016,7 +1016,7 @@ class _GltfMaterials:
         self.textures: list[dict] = []
         self.materials: list[dict] = []
         self.by_handle: dict[int, int | None] = {}
-        self.by_name: dict[tuple[str, str | None], int] = {}
+        self.by_name: dict[tuple[str, str], int] = {}
 
     def texture(self, handle: int | None) -> int | None:
         if self.resolver is None or handle is None or handle == -1:
@@ -1025,12 +1025,18 @@ class _GltfMaterials:
             self.by_handle[handle] = self._make(handle)
         return self.by_handle[handle]
 
-    def material(self, handle: int | None, draw: int, lightmap: str | None = None) -> int:
+    def material(self, handle: int | None, draw: int, lightmap: str | None = None, layers=None) -> int:
         """``43`` W19-2: ``lightmap`` (the lightmap texture's URI) is named in the material's
-        ``extras.d3sno_export``; materials with the same name and lightmap are shared."""
+        ``extras.d3sno_export``. ``44`` W20-3: so are the ``layers`` (``uv2_layers``, left out when
+        there is none). Materials with the same name and the same extras are shared."""
         texture = self.texture(handle)
         name = f"texture_{handle}_draw_{draw}" if texture is not None else f"d3sno_draw_{draw}"
-        key = (name, lightmap)
+        export: dict = {}
+        if lightmap is not None:
+            export.update({"lightmap": lightmap, "lightmap_channel": "red", "lightmap_texcoord": 1})
+        if layers:
+            export["uv2_layers"] = layers
+        key = (name, json.dumps(export, sort_keys=True))
         if key not in self.by_name:
             material: dict = {"name": name}
             if texture is not None:
@@ -1038,9 +1044,8 @@ class _GltfMaterials:
                     "baseColorTexture": {"index": texture},
                     "metallicFactor": 0.0,
                 }
-            if lightmap is not None:
-                material["extras"] = {"d3sno_export": {
-                    "lightmap": lightmap, "lightmap_channel": "red", "lightmap_texcoord": 1}}
+            if export:
+                material["extras"] = {"d3sno_export": export}
             self.by_name[key] = len(self.materials)
             self.materials.append(material)
         return self.by_name[key]
@@ -1101,11 +1106,54 @@ def skeleton_nodes(app: AppearanceFile, skinned: bool) -> tuple[list[dict], list
     return nodes, [added], added
 
 
+def _layer_uri(texture_resolver, handle: int) -> str:
+    """W20-3: a layer texture's URI: what ``texture_resolver`` names, else ``<handle>.png``."""
+    found = texture_resolver(handle) if texture_resolver is not None else None
+    return found if isinstance(found, str) else f"{handle}.png"
+
+
+def _uv2_choice(draw: Draw, lightmap_handle, lightmap, rows, block, texture_resolver):
+    """``43`` W19-2, ``44`` W20-2, W20-3 and ``45`` X1 to X3 for one primitive: (V scale for ``TEXCOORD_1`` or
+    None, lightmap URI or None, the primitive's ``extras.d3sno_export``, the material's
+    ``uv2_layers`` or None)."""
+    from . import uv2_use
+
+    rows = rows if rows is not None else uv2_use.Uv2Rows()
+
+    def to_uri(handle: int) -> str:
+        return _layer_uri(texture_resolver, handle)
+
+    varying = len(set(draw.uv2_raw)) > 1
+    if lightmap is not None:  # the lightmap texture is exported
+        lightmap_uri, stored = lightmap
+        scale = stored or 1.0
+        info = {"uv2_scale": "lightmap", "uv2_use": "lightmap", "lightmap": lightmap_handle,
+                "lightmap_v_scale": scale}
+        layers = uv2_use.layer_entries(rows, block, to_uri, "lightmap", scale)
+        return scale, lightmap_uri, info, layers or None
+    if lightmap_handle is not None:  # W19-2: the lightmap texture is missing
+        info = {"uv2_scale": "open", "uv2_use": "lightmap", "lightmap": lightmap_handle}
+        return None, None, info, uv2_use.layer_entries(rows, block, to_uri, None) or None
+    if not varying:  # W19-1 ``"none"``: W20-2 does not apply
+        return None, None, {"uv2_scale": "none"}, uv2_use.layer_entries(rows, block, to_uri, None) or None
+    use = uv2_use.uv2_use(rows, False)
+    info = {"uv2_scale": uv2_use.UV2_SCALE[use], "uv2_use": use}
+    scale = 1.0 if use == "layer" else None
+    return scale, None, info, uv2_use.layer_entries(rows, block, to_uri, "layer" if use == "layer" else None) or None
+
+
 def to_gltf(
     app: AppearanceFile, flip_v: bool = False, lightmap_v_scale: float | None = None,
     extend=None, texture_resolver=None, look: int = 0, low_poly: bool = True, lightmap_resolver=None,
+    uv2_rows=None,
 ) -> dict:
     """A glTF 2.0 document with one embedded buffer. Bones are nodes.
+
+    ``44`` W20-1 to W20-3 (with ``lightmap_resolver`` only): ``uv2_rows(block)`` gives the
+    ``uv2_use.Uv2Rows`` of a sub-object's material block (None: no material). Each primitive with a
+    varying UV2 (or a lightmap slot) then gets ``uv2_use``; a ``"layer"`` primitive gets
+    ``TEXCOORD_1`` without V scale, and the material ``uv2_layers``. Without ``uv2_rows`` every such
+    primitive is ``"unknown"``.
 
     ``43`` W19-1, W19-2: ``lightmap_resolver(handle)`` gives ``(uri, v_scale)`` of a lightmap
     texture, or None when it is not available. With it, each primitive gets
@@ -1162,23 +1210,20 @@ def to_gltf(
                 lightmap_handle = None
             if lightmap_handle is not None:
                 lightmap = lightmap_resolver(lightmap_handle)
+        block = rows = None
+        if lightmap_resolver is not None and uv2_rows is not None:  # ``44`` W20-1
+            block = sub_object_block(app, sub, look)
+            rows = uv2_rows(block)
         primitives = []
         for k, draw in enumerate(sub.draws):
             if not draw.positions:
                 continue  # skipped, but counted in k (W16-5)
-            scale, uri, export_info = lightmap_v_scale, None, None
-            if lightmap_resolver is not None:  # ``43`` W19-1, W19-2
-                if lightmap is not None:
-                    uri, stored = lightmap
-                    scale = stored or 1.0
-                    export_info = {"uv2_scale": "lightmap", "lightmap": lightmap_handle, "lightmap_v_scale": scale}
-                elif lightmap_handle is not None:
-                    scale, export_info = None, {"uv2_scale": "open", "lightmap": lightmap_handle}
-                else:
-                    scale = None
-                    export_info = {"uv2_scale": "none" if len(set(draw.uv2_raw)) <= 1 else "open"}
+            scale, uri, export_info, layers = lightmap_v_scale, None, None, None
+            if lightmap_resolver is not None:  # ``43`` W19-1, W19-2, ``44`` W20-2
+                scale, uri, export_info, layers = _uv2_choice(
+                    draw, lightmap_handle, lightmap, rows, block, texture_resolver)
             primitive = _gltf_primitive(buf, draw, flip_v, scale)
-            primitive["material"] = materials.material(handle, k, uri)
+            primitive["material"] = materials.material(handle, k, uri, layers)
             info: dict = {"draw": k}
             if not draw.indices:
                 info["no_indices"] = True  # V21-4: vertices without triangles

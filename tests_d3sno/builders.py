@@ -1426,11 +1426,11 @@ def build_phm(build: str, meshes: list, count=None) -> bytes:
 SWITCH_COLOURS = [float(i) for i in range(16)]
 
 
-def material_block(img: Image, build: str, textures=()) -> bytes:
+def material_block(img: Image, build: str, textures=(), shader_map=77) -> bytes:
     """A material block. ``textures`` holds (slot type, handle)."""
     order = order_of(build)
     block = Image(72 if build == "ps3" else 104, order)
-    block.put(0, "i", 77)
+    block.put(0, "i", shader_map)
     if build == "switch":
         block.put(0x04, "16f", *SWITCH_COLOURS)
         block.put(0x44, "fI", 2.5, 8)
@@ -1471,8 +1471,9 @@ def build_mat(build: str, textures=(), tags=b"", list_size=None) -> bytes:
     return img.done()
 
 
-def add_app_materials(data: bytes, build: str, looks, materials) -> bytes:
-    """Add looks and materials to an ``.app``. ``materials`` holds (hash, per-look textures)."""
+def add_app_materials(data: bytes, build: str, looks, materials, shader_maps=None) -> bytes:
+    """Add looks and materials to an ``.app``. ``materials`` holds (hash, per-look textures);
+    ``shader_maps`` (material hash -> shader map handle) sets the blocks' shader maps (default 77)."""
     order = order_of(build)
     img = Image(0, order)
     img.b = bytearray(data)
@@ -1487,7 +1488,7 @@ def add_app_materials(data: bytes, build: str, looks, materials) -> bytes:
         rows = bytearray()
         for number, textures in enumerate(per_look):
             row = Image(look_size, order)
-            row.raw(0x18, material_block(img, build, textures))
+            row.raw(0x18, material_block(img, build, textures, (shader_maps or {}).get(material_hash, 77)))
             row.put(handle_at, "i", 900 + number)
             rows += row.done()
         record = Image(record_size, order)

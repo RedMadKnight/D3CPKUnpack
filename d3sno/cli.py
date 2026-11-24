@@ -483,13 +483,43 @@ def cmd_export(args) -> int:
     return result.exit_code
 
 
+def cmd_apply(args) -> int:
+    """``46`` W21-8: apply an edited export folder to the game folder, writing new archives into OUT_DIR."""
+    apply = _module("apply")
+    mesh = {"flip_v": args.flip_v, "lightmap_v_scale": args.lightmap_v_scale, "missing": args.missing,
+            "skin": args.skin, "low_poly": not args.skip_low_poly}
+    result = apply.apply_export(args.game_dir, args.export_dir, args.out, build=args.build, dry_run=args.dry_run,
+                                copy_unchanged=args.copy_unchanged, only=args.only, mesh_options=mesh,
+                                force=args.force)
+    if result.exit_code == apply.EXIT_REFUSED:
+        print(f"error: {result.message}", file=sys.stderr)
+        return result.exit_code
+    for line in result.summary:
+        _print(line)
+    if result.message:
+        print(f"error: {result.message}", file=sys.stderr)
+    return result.exit_code
+
+
+APPLY_NOTE = (
+    "Compares each file of EXPORT_DIR with the output_hash of its manifest entry (W21-1, W21-2), imports each "
+    "changed mesh (meshes/<h>.glb), texture (all textures/<h>*.png of the handle) and string table "
+    "(data/text/<locale>/<h>.json) onto its stored template in GAME_DIR, and writes every archive that holds a "
+    "change into OUT_DIR, with apply_report.json (W21-3 to W21-7). Unchanged files stay byte for byte; missing "
+    "files are no deletion; files without a manifest entry and other kinds of file are reported, not applied. "
+    "The output is game content: an OUT_DIR inside a git working tree is refused without --force. Exit code 0: "
+    "every changed file applied or reported with a reason; 1: stopped; 2: refused."
+)
+
+
 EXPORT_NOTE = (
     "Writes meshes/<handle>.glb, anims/<handle>.glb, textures/<handle>.png, data/<group>/<handle>.json, "
     "data/text/<locale>/<handle>.json, manifest.json and coverage.json (W18-2, W18-3). The output is game "
     "content: it stays on this computer and never goes into a repository; an OUT_DIR inside a git working "
     "tree is refused without --force. Coordinates are as stored (right-handed, z up, actors face +x, triangles "
     "counter-clockwise), not converted (W18-9, W19-1); this holds for the meshes, animations and the scn, wrl and "
-    "mrk records alike, as manifest.json states once (W19-6). Animations are in place; --travel adds a "
+    "mrk records alike, as manifest.json states once (W19-6). Quaternions are [x, y, z, w] as stored and "
+    "rotate as v' = q v q* (Hamilton product, the glTF reading; W20-4). Animations are in place; --travel adds a "
     "d3sno_travel node moved by the average velocity (W19-5). Exit code 0: "
     "every file exported or skipped with a reason in coverage.json; 1: the export stopped; 2: refused."
 )
@@ -626,7 +656,7 @@ MESH_TRANSPLANT_NOTE = (
     "lacks it; a taken name gets _2, _3, ... (W17-11, W17-12). The output may not be an input."
 )
 
-_WRITE_COMMANDS = ("export", "texture-import", "mesh-import", "mesh-transplant", "replace", "add")
+_WRITE_COMMANDS = ("export", "apply", "texture-import", "mesh-import", "mesh-transplant", "replace", "add")
 
 
 def make_parser() -> argparse.ArgumentParser:
@@ -752,6 +782,22 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--force", action="store_true", help="export inside a git working tree anyway")
     sub.add_argument("--travel", action="store_true",
                      help="add a d3sno_travel node to each animation, moved by its average velocity (W19-5)")
+    add_build(sub)
+    sub = add("apply", cmd_apply)
+    sub.epilog = APPLY_NOTE
+    sub.add_argument("game_dir", metavar="GAME_DIR", help="the game folder that was exported")
+    sub.add_argument("export_dir", metavar="EXPORT_DIR", help="the edited export folder")
+    sub.add_argument("--out", required=True, metavar="OUT_DIR")
+    sub.add_argument("--dry-run", action="store_true", help="import in memory, write only apply_report.json")
+    sub.add_argument("--copy-unchanged", action="store_true",
+                     help="also copy every other file of GAME_DIR, so that OUT_DIR is a complete game folder")
+    sub.add_argument("--only", help="comma-separated kinds: meshes,textures,text")
+    sub.add_argument("--flip-v", action="store_true")
+    sub.add_argument("--lightmap-v-scale", type=float)
+    sub.add_argument("--missing", choices=("keep", "empty"), default="keep")
+    sub.add_argument("--skin", choices=("refuse", "nearest"), default="refuse")
+    sub.add_argument("--skip-low-poly", action="store_true")
+    sub.add_argument("--force", action="store_true", help="write inside a git working tree anyway")
     add_build(sub)
     sub = add("replace", cmd_replace)
     sub.add_argument("archive")

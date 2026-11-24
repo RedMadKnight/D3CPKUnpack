@@ -74,7 +74,7 @@ class Layout(Exported):
         manifest = self.read("manifest.json")
         self.assertEqual(manifest, json.loads(json.dumps(result.manifest)))
         self.assertEqual(manifest["format"], "d3sno-export")
-        self.assertEqual(manifest["format_version"], 2)  # ``43`` W19-1
+        self.assertEqual(manifest["format_version"], 4)  # ``43`` W19-1, ``44`` W20-5, ``46`` W21-1
         self.assertEqual(manifest["build"], "switch")
         self.assertEqual(manifest["library_version"], d3sno.__version__)
         self.assertEqual(manifest["coordinates"]["up"], "+z")

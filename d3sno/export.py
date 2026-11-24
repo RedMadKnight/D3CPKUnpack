@@ -28,8 +28,8 @@ from pathlib import Path
 
 from . import __version__
 from . import (
-    animation, anims, appearance, archive, collision, index, material, navigation, records, text,
-    texture, world,
+    animation, anims, appearance, archive, collision, index, material, navigation, records, shader, text,
+    texture, uv2_use, world,
 )
 from .binary import FormatError
 from .mesh_import import gltf_to_glb
@@ -39,13 +39,13 @@ from .transform import quat_normalise
 
 __all__ = [
     "COVERAGE_FORMAT", "COVERAGE_FORMAT_VERSION", "EXIT_OK", "EXIT_REFUSED", "EXIT_STOPPED", "EXPORT_GROUPS", "ExportResult",
-    "FORMAT", "FORMAT_VERSION", "REASONS", "TICKS_PER_SECOND", "TRAVEL_NODE", "dumps", "export_game", "f32_text",
+    "FORMAT", "FORMAT_VERSION", "REASONS", "ROTATION", "TICKS_PER_SECOND", "TRAVEL_NODE", "dumps", "export_game", "f32_text",
     "in_git_tree", "plain", "prune_empty",
 ]
 
 FORMAT = "d3sno-export"
 COVERAGE_FORMAT = "d3sno-export-coverage"
-FORMAT_VERSION = 2  # the manifest (``43`` W19-1)
+FORMAT_VERSION = 4  # the manifest (``43`` W19-1, ``44`` W20-5, ``46`` W21-1)
 COVERAGE_FORMAT_VERSION = 1
 EXIT_OK, EXIT_STOPPED, EXIT_REFUSED = 0, 1, 2
 # W18-4 to W18-8, in the order the export runs them (textures before the meshes that name them,
@@ -58,12 +58,17 @@ OPEN = "open"
 V_DIRECTION = "top_left_origin"
 TANGENTS = "not_stored"
 ROOT_MOTION = "in_place"
+# ``44`` W20-4: every stored quaternion [x, y, z, w] rotates as v' = q v q* (Hamilton product, active
+# rotation, the glTF reading); a parent applies to a child as q_parent * q_child
+ROTATION = "active_xyzw"
 COORDINATES = {"source": "stored", "up": "+z", "unit": "stored", "handedness": "right", "forward": "+x",
-               "winding": "ccw"}
+               "winding": "ccw", "rotation": ROTATION}
+WORLD_ROTATION_NOTE = "world_rotation_untested"
 TANGENT_NOTE = ("no tangents are stored; a viewer computes them from TEXCOORD_0 (V as stored) and the stored "
                 "normals, e.g. by the MikkTSpace method; vertices of mirrored UV islands get bitangent sign -1")
 TICKS_PER_SECOND = 60
 TRAVEL_NODE = "d3sno_travel"
+_READ_ONLY = ("ans", "shm")  # read for other groups, never exported (``44`` W20-1: shader maps)
 _INDEX_NAMES = re.compile(r"^(coretoc|commontoc|act[1-5]toc)\.dat$", re.IGNORECASE)
 _X360_LOCALE = re.compile(r"^([a-z]{2}[A-Z]{2})_")
 _TAG_TYPES = {0: "int", 1: "float", 2: "sno", 3: "balance", 4: "formula", 5: "actor_group",
@@ -314,9 +319,17 @@ def _marker_set_json(data: bytes, build: str) -> dict:
 
 
 def _entry_json(entry: world.SceneEntry) -> dict:
-    return {"scene": _link(entry.group, entry.handle), "position": plain(entry.position),
-            "rotation": _rotation(entry.rotation), "level_areas": list(entry.level_areas),
-            "cluster_id": entry.cluster_id}
+    out = {"scene": _link(entry.group, entry.handle), "position": plain(entry.position),
+           "rotation": _rotation(entry.rotation), "level_areas": list(entry.level_areas),
+           "cluster_id": entry.cluster_id}
+    if not _identity(entry.rotation):  # ``44`` W20-4: no shipped file has one
+        out["note"] = WORLD_ROTATION_NOTE
+    return out
+
+
+def _identity(q) -> bool:
+    """A rotation of none: x, y and z zero (any w; a zero quaternion is read as the identity)."""
+    return q[0] == 0 and q[1] == 0 and q[2] == 0
 
 
 def _world_json(data: bytes, build: str, scenes, sets) -> tuple[dict, list]:
@@ -499,10 +512,12 @@ class _Run:
         self.archives: list[tuple[str, archive.CpkArchive]] = []
         self.names: dict[tuple[int, int], str] = {}
         self.name_handles: dict[tuple[int, str], int] = {}
-        self.items: dict[str, dict[tuple, _Item]] = {g: {} for g in (*EXPORT_GROUPS, "ans")}
+        self.items: dict[str, dict[tuple, _Item]] = {g: {} for g in (*EXPORT_GROUPS, *_READ_ONLY)}
         self.exported: dict[str, set] = {g: set() for g in EXPORT_GROUPS}
         self.old: dict[str, dict] = {}
         self.build = None
+        self.memory: dict[str, bytes] | None = None  # ``46`` W21-2: an export in memory
+        self.archive_paths: dict[str, Path] = {}  # archive base name -> its file (``46`` W21-6)
 
     # --- setup -----------------------------------------------------------------------------
     def close(self) -> None:
@@ -527,6 +542,7 @@ class _Run:
                 continue
             self.handles.append(held)
             recognised[stem] = cpk
+            self.archive_paths[stem] = path
         if not recognised:
             raise ExportRefused(f"{self.game.name or self.game}: no recognised archive")
         builds = sorted({cpk.header.build for cpk in recognised.values()})
@@ -571,7 +587,7 @@ class _Run:
                 self.name_handles.setdefault((key[0], e.name.lower()), key[1])
 
     def list_files(self) -> None:
-        wanted = set(EXPORT_GROUPS) | {"ans"}
+        wanted = set(EXPORT_GROUPS) | set(_READ_ONLY)
         for stem, cpk in self.archives:
             for entry in cpk.files:
                 if entry.name is None:
@@ -693,7 +709,9 @@ class _Run:
     def emit(self, item: _Item, outputs: list) -> None:
         """``outputs``: (path, producer, extra entry fields). Every producer runs before any file
         is written, so a failed file leaves no output; ``skip_existing`` keeps a file whose earlier
-        manifest entry has the same source archive and hash."""
+        manifest entry has the same source archive and hash and an ``output_hash`` (``46`` W21-1:
+        the SHA-256 of the file as written, kept from that entry). ``memory``: nothing is written,
+        the files are kept in ``self.memory`` by path (``46`` W21-2)."""
         source = {"archive": item.copy.archive, "hash": item.hash}
         group = group_by_extension(item.ext)
         name = self.names.get((group.id, item.handle & 0xFFFFFFFF)) if item.handle is not None else None
@@ -703,13 +721,21 @@ class _Run:
                      "locale": self.row_locale(item, item.copy)}  # V27-2
             entry.update(extra)
             entries.append(entry)
-        keep = self.skip_existing and all(
-            self.old.get(path, {}).get("source") == source and (self.out / path).is_file()
-            for path, _, _ in outputs)
-        if not keep:
+        keep = self.memory is None and self.skip_existing and all(
+            self.old.get(path, {}).get("source") == source and isinstance(self.old[path].get("output_hash"), str)
+            and (self.out / path).is_file() for path, _, _ in outputs)
+        if keep:
+            for entry in entries:
+                entry["output_hash"] = self.old[entry["path"]]["output_hash"]
+        else:
             blobs = [(path, producer()) for path, producer, _ in outputs]
+            for entry, (path, blob) in zip(entries, blobs):
+                entry["output_hash"] = hashlib.sha256(blob).hexdigest()
             for path, blob in blobs:
-                _write(self.out / path, blob)
+                if self.memory is not None:
+                    self.memory[path] = blob
+                else:
+                    _write(self.out / path, blob)
         self.entries.extend(entries)
 
     def export_item(self, item: _Item, job) -> None:
@@ -822,11 +848,45 @@ class _Run:
                          + ([material.sub_object_texture(app, sub, 0, material.SLOT_LIGHTMAP)]
                             if any(d.positions for d in sub.draws) else [])
                          if h is not None and h != -1})
-        self.emit(item, [(f"meshes/{item.handle}.glb", lambda: _mesh_glb(app, item.handle, self.lightmap), {})])
+        # ``44`` W20-3: the layer textures that the materials name
+        wanted = sorted(set(wanted) | {h for sub in appearance.export_sub_objects(app, True)
+                                       if any(d.positions for d in sub.draws)
+                                       for h in self.layer_textures(app, sub)})
+        self.emit(item, [(f"meshes/{item.handle}.glb",
+                          lambda: _mesh_glb(app, item.handle, self.lightmap, self.uv2_rows), {})])
         missing = [h for h in wanted if h not in self.tex_handles]
         if missing:
             self.note(item, "missing_dependency", True, None, needs=[_link(44, h) for h in missing])
         return True
+
+    def shader_names(self, shader_map: int):
+        """``44`` W20-1: the shader names of every use of a shader map (None for a shader without a
+        name in the index), or None when the handle is -1 or the shader map does not resolve."""
+        if not hasattr(self, "_shader_maps"):
+            self._shader_maps = self.by_handle("shm")
+            self._shader_names: dict[int, tuple | None] = {}
+        if shader_map == -1 or shader_map not in self._shader_maps:
+            return None
+        if shader_map not in self._shader_names:
+            item = self._shader_maps[shader_map]
+            try:
+                links = shader.shader_map_links(shader.read_shader_map(item.data, item.build))
+            except (FormatError, struct.error, ValueError):
+                self._shader_names[shader_map] = None
+            else:
+                self._shader_names[shader_map] = tuple(
+                    self.names.get((shader.GROUP_SHADERS, h & 0xFFFFFFFF))
+                    for _, h in sorted(links.items()) if h != -1)
+        return self._shader_names[shader_map]
+
+    def uv2_rows(self, block):
+        """``44`` W20-1: the table rows of a material block's shaders, those of the archives' build (``45`` X6)."""
+        names = None if block is None else self.shader_names(block.shader_map)
+        return uv2_use.rows_for(names, uv2_use.tables(), self.build)
+
+    def layer_textures(self, app, sub) -> list[int]:
+        block = material.sub_object_block(app, sub, 0)
+        return uv2_use.layer_texture_handles(self.uv2_rows(block), block)
 
     def lightmap(self, handle: int):
         """``43`` W19-2: (URI, V scale) of an exported lightmap texture, else None."""
@@ -1010,21 +1070,30 @@ def _export_extras(document: dict, handle: int, app: appearance.AppearanceFile, 
         info = mesh.get("extras", {}).get("d3sno", {})
         for p, primitive in enumerate(mesh["primitives"]):
             own = primitive.get("extras", {}).get("d3sno_export", {})
-            primitives.append({"mesh": m, "primitive": p, "material": info.get("material"),
-                               "uv2_scale": own.get("uv2_scale", OPEN)})
+            entry = {"mesh": m, "primitive": p, "material": info.get("material"),
+                     "uv2_scale": own.get("uv2_scale", OPEN)}
+            if "uv2_use" in own:  # ``44`` W20-2
+                entry["uv2_use"] = own["uv2_use"]
+            primitives.append(entry)
     document.setdefault("extras", {})["d3sno_export"] = {
         "handle": handle, "primitives": primitives, "v_direction": V_DIRECTION, "tangents": TANGENTS,
-        "tangent_note": TANGENT_NOTE, **extra}
+        "tangent_note": TANGENT_NOTE, "rotation": ROTATION, **extra}
 
 
 def _no_lightmap(handle: int):
     return None
 
 
-def _mesh_glb(app, handle: int, lightmap=None) -> bytes:
+def _no_rows(block):
+    return uv2_use.rows_for(None, None)
+
+
+def _mesh_glb(app, handle: int, lightmap=None, uv2_rows=None) -> bytes:
     """W18-4: ``appearance.to_gltf`` with default options, diffuse textures by URI, packed as .glb.
-    ``43`` W19-2: ``lightmap(handle)`` gives (URI, V scale) of an exported lightmap, else None."""
-    document = appearance.to_gltf(app, texture_resolver=_texture_uri, lightmap_resolver=lightmap or _no_lightmap)
+    ``43`` W19-2: ``lightmap(handle)`` gives (URI, V scale) of an exported lightmap, else None.
+    ``44`` W20-1: ``uv2_rows(block)`` gives the table rows of a material block's shaders."""
+    document = appearance.to_gltf(app, texture_resolver=_texture_uri, lightmap_resolver=lightmap or _no_lightmap,
+                                  uv2_rows=uv2_rows or _no_rows)
     _export_extras(document, handle, app, {})
     return gltf_to_glb(prune_empty(document))
 
@@ -1067,7 +1136,7 @@ def _animation_glb(app, ani, handle: int, app_handle: int, travel: bool = False)
     document = appearance.to_gltf_skeleton(app, extend=extend)
     document.setdefault("extras", {})["d3sno_export"] = {
         "handle": handle, "appearance": app_handle, "mesh": f"meshes/{app_handle}.glb", "root_motion": ROOT_MOTION,
-        "ticks_per_second": TICKS_PER_SECOND, "permutations": listed, "dropped_tracks": dropped,
+        "rotation": ROTATION, "ticks_per_second": TICKS_PER_SECOND, "permutations": listed, "dropped_tracks": dropped,
         **({"travel": True} if travel else {})}
     return gltf_to_glb(prune_empty(document))
 
