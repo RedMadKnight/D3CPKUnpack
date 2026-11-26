@@ -13,3 +13,6 @@ prefetch_out/
 
 # game data must never be committed
 *.cpk
+
+# test_assets build output (generate.py build test_assets/out)
+test_assets/out/
