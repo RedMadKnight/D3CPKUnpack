@@ -185,7 +185,11 @@ class TagMapPlacement(unittest.TestCase):
                         first = J.import_json("mrk", data, build, document).data
                         blocks = map_blocks(first, build)
                         if kind != "none":
-                            self.assertEqual(len(set(blocks)), 5, blocks)  # the copy's map is its own too
+                            # ``54`` AE1: ps3 gives the copy a map of its own; switch and x360 point it at an
+                            # earlier equal map (the copy is never the first marker: the list pairing keeps
+                            # the template's own first row there)
+                            pooled = build != "ps3"
+                            self.assertEqual(len(set(blocks)), 4 if pooled else 5, blocks)
                         self.assertEqual(J.import_json("mrk", first, build, original).data, data)
 
     def test_moved_copy_with_a_changed_leaf(self):
@@ -199,7 +203,7 @@ class TagMapPlacement(unittest.TestCase):
             new["position"] = [8.0, 8.0, 8.0]
             document["markers"].append(new)
             first = J.import_json("mrk", data, build, document).data
-            self.assertEqual(len(set(map_blocks(first, build))), 5)
+            self.assertEqual(len(set(map_blocks(first, build))), 5 if build == "ps3" else 4)  # ``54`` AE1
             self.assertEqual(J.import_json("mrk", first, build, original).data, data)
 
     def test_shared_maps_stay_shared(self):

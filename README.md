@@ -302,11 +302,13 @@ and compresses archives on several threads (`--jobs`). Stage 22 extends
 `apply` to the JSON records, worlds, navigation and collision of the export and
 to its animations: each edited value is written back into its stored field, and
 a value the export computes rather than reads must agree with the value the
-edited JSON gives, or it is refused with a reason. Versions 0.22.1 to 0.22.4
+edited JSON gives, or it is refused with a reason. Versions 0.22.1 to 0.22.5
 make an edit reversible: applying the original JSON again restores the stored
 bytes of every actor, material, monster, level, world, scene, marker set,
 collision mesh and animation. The export keeps the stored form of collision
-vertices for this. They also add the segmented archive layout (`--segment`). Nothing has been tested in the game (§21.3).
+vertices for this. Tag maps of markers are laid out as each build stores them:
+PS3 gives every marker its own, Switch and Xbox 360 share one among markers with
+equal tags. They also add the segmented archive layout (`--segment`). Nothing has been tested in the game (§21.3).
 
 ---
 
@@ -1817,11 +1819,8 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   shader; the shader pass keys are not derived.
 - **Record import limits** — `apply` writes no new record files and deletes
   none; groups that the export writes only as an unnamed tree are not imported;
-  navigation geometry and the number of navigation cells cannot change. On
-  Switch and Xbox 360 the game's marker sets share one tag map among markers
-  with equal tags; a marker added by `apply` may get a tag map of its own
-  instead, which is valid but not laid out as the game's files are. With the
-  default archive layout, `--jobs` saves no time. Whether
+  navigation geometry and the number of navigation cells cannot change. With
+  the default archive layout, `--jobs` saves no time. Whether
   the game accepts edited records, and which of a file's differing repeated
   copies it reads, is not known.
 - **Mesh import limits** — cloth parts can only be kept or removed whole; a

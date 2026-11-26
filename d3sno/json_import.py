@@ -1155,16 +1155,28 @@ def _share_copy(record: L.Record, patch: "TreePatch | None" = None) -> L.Record:
     """``51`` AB4, ``53`` AD2: a new list element as a copy of its base record. A block the template shares
     between rows (W11-6) is shared by the copy too, until a value in it changes (``_Redirect`` copies that
     block first); a block of the base's own is copied, so the copy's equal block is never pooled with it."""
-    def placed(value):
-        # ``53`` AD2: a block the template shares between rows stays shared (W11-6); a block of its own in the
-        # template is a block of its own in the copy too (never pooled with the base's equal block)
+    tag_maps = set()
+    if patch is not None and patch.tree.ext == "mrk":
+        tag_maps = {s.offset for s in L.pair_slots(patch.tree.build, patch.tree.ext, record.name)
+                    if s.field.kind == "tagmap"}
+
+    def placed(slot, value):
         if value is None:
             return None
-        if value.block is not None and (patch is None or patch.refs.get(id(value.block), 0) > 1):
+        shared = value.block is not None and (patch is None or patch.refs.get(id(value.block), 0) > 1)
+        if slot in tag_maps and value.block is not None and not shared:
+            # ``54`` AE1: a new row's tag map follows the build (``sno_layout.MAPS_POOLED``): its own block on
+            # ps3, the first equal map's block on switch and x360 (a map the template shares stays shared)
+            block = copy.deepcopy(value.block)
+            block.fresh = True
+            return L.PairValue(block, value.size, value.stored)
+        # ``53`` AD2: a block the template shares between rows stays shared (W11-6); a block of its own in the
+        # template is a block of its own in the copy too (never pooled with the base's equal block)
+        if shared:
             return L.PairValue(value.block, value.size, value.stored, shared=True)
         return L.PairValue(copy.deepcopy(value.block), value.size, value.stored)
 
-    pairs = {slot: placed(value) for slot, value in record.pairs.items()}
+    pairs = {slot: placed(slot, value) for slot, value in record.pairs.items()}
     return L.Record(record.name, bytearray(record.raw), pairs, dict(record.parsed))
 
 

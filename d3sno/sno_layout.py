@@ -45,6 +45,9 @@ CODE_ALIGN = 4
 # W11-4 does not give an alignment for fields that are empty in every file ("none (always
 # empty)"); a non-empty block there is placed with this one and noted (Q347).
 ALWAYS_EMPTY_ALIGN = {"switch": 8, "x360": 8, "ps3": 4}
+# ``54`` AE1: the builds whose marker sets point equal tag maps at one block (the first marker holding them);
+# ps3 gives every marker a block of its own. Applies to new and changed maps; the template's keep their place.
+MAPS_POOLED = frozenset({"switch", "x360"})
 RESIDUE: frozenset = frozenset()  # W11-8; ps3 .glo is described by W3-6 to W3-8 (stage 12)
 
 
@@ -176,6 +179,9 @@ class Block:
     elements: list["Record"] | None = None
     extra: bytes = b""
     source: int | None = None  # body offset in the parsed file
+    # ``54`` AE1: written anew (a copy for a new row, or changed): laid out by the build, as a block with no
+    # source, not as the template placed it
+    fresh: bool = False
 
     def size(self) -> int:
         if self.elements is None:
@@ -305,6 +311,7 @@ class _Writer(_Walk):
         self.order = build_order(tree.build)
         self.out = bytearray(tree.header) + tree.top.raw
         self.placed: dict[int, int] = {}  # id(block) -> body offset
+        self.maps: dict[bytes, int] = {}  # ``54`` AE1: a marker tag map's bytes -> the first block holding them
 
     def _align(self, alignment: int) -> None:
         out = self.out
@@ -327,7 +334,16 @@ class _Writer(_Walk):
             else:
                 self._pair(at, 0, 0)
             return
-        if id(block) in self.placed:
+        tag_map = self.ext == "mrk" and f.kind == "tagmap" and block.elements is None
+        new = tag_map and (block.source is None or block.fresh)
+        if new and self.build in MAPS_POOLED:
+            # ``54`` AE1: switch and x360 point a new map at the first block of equal bytes in the set
+            offset = self.maps.get(bytes(block.data))
+            if offset is not None:
+                self.placed[id(block)] = offset
+                self._pair(at, offset, value.pair_size())
+                return
+        if id(block) in self.placed and not (new and self.build not in MAPS_POOLED):
             self._pair(at, self.placed[id(block)], value.pair_size())
             return
         alignment = f.alignment if f.alignment is not None else ALWAYS_EMPTY_ALIGN[self.build]
@@ -336,6 +352,8 @@ class _Writer(_Walk):
         self.placed[id(block)] = start - BODY
         self._pair(at, start - BODY, value.pair_size())
         if block.elements is None:
+            if tag_map:
+                self.maps.setdefault(bytes(block.data), start - BODY)
             self.out += block.data
             return
         for element in block.elements:
