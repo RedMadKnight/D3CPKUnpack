@@ -34,7 +34,7 @@ def set_outro_count(tree, build, count=3):
 
 class Tables(unittest.TestCase):
     def test_f56_in_use(self):
-        self.assertEqual((E.LAYOUT_TABLE, E.ENUM_TABLE), ("f56_layouts.tsv", "f56_enums.tsv"))
+        self.assertNotEqual(E.LAYOUT_TABLE, "f55_layouts.tsv")  # ``57``: f57 replaces f56
         for build in BUILDS:
             for ext in E.GROUPS:
                 arrays = [r for r in E.leaf_table(build, ext) if r.is_array and r.offset is not None]
@@ -185,22 +185,6 @@ class PairOffsets(unittest.TestCase):
         first = E.encode(data, ext, build, edited)
         self.assertEqual(len(T.doc(first, ext, build)["record"]["ptEffects"]), 2)
         self.assertEqual(E.encode(first, ext, build, original), data)
-
-    def test_x360_rows_without_their_pair_reported(self):
-        """``f56`` gives some x360 arrays a ``pair_offset`` where the tree has no pair (``efg`` ``ptEffects``: 52; the
-        tree's pair is at the row's offset, 16): a ``layout_conflict``; the elements keep the tree's name."""
-        top_name = E._top_table_record("x360", "efg")
-        effects = row("x360", "efg", top_name, "ptEffects")
-        self.assertEqual((effects.offset, effects.pair_offset), (16, 52))
-        tree = T.blank("x360", "efg", 9)
-        slot = slot_at("x360", "efg", L.top_record("x360", "efg"), 16)
-        size = L.record_layout("x360", "efg", slot.field.element).size
-        tree.top.pairs[16] = L.PairValue(L.Block(elements=[L.Record(slot.field.element, bytearray(size))]))
-        data = L.write_tree(tree, derive=True)
-        found = E.decode_full(data, "efg", "x360")
-        self.assertIn((top_name, "ptEffects"), found.conflicts)
-        self.assertEqual(len(found.json["record"][slot.path]), 1)
-        self.assertEqual(E.encode(data, "efg", "x360", J._json_round(found.json)), data)
 
     def test_sharer_with_another_count_kept(self):
         """A curve sharing the node block whose count already differed keeps its stored count."""

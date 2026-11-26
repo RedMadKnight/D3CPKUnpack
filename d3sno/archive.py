@@ -129,6 +129,9 @@ class Workers:
         self._lock = threading.Lock()
         self.per_thread: dict[str, list] = {}  # ``52`` AC5: thread name -> [pieces done, seconds busy]
         self.files_ahead = self.files_self = 0  # ``53`` AD3: source files read ahead / by the packer itself
+        # ``57`` AG3: work cancelled before it ran (dropped, or still queued at ``close``): after ``close`` the
+        # pieces done by the workers plus these equal the pieces submitted
+        self.cancelled = 0
 
     def __bool__(self) -> bool:
         return self.pool is not None
@@ -174,19 +177,23 @@ class Workers:
         """``51`` AB7: work submitted, taken, dropped and refused (no room in flight), and the seconds
         the packer waited for work it took; ``52`` AC5: per worker thread (by start order) the pieces of
         work it did and the seconds it was busy; ``53`` AD3: the source files read ahead by the workers and
-        those the packer read itself."""
+        those the packer read itself; ``57`` AG3: the work cancelled before it ran. After ``close`` the counts
+        are final: every worker has finished, and ``submitted`` = the ``done`` of every worker + ``cancelled``."""
         with self._lock:
             threads = [{"done": row[0], "busy_seconds": round(row[1], 3)}
                        for _, row in sorted(self.per_thread.items(), key=lambda kv: _thread_order(kv[0]))]
         return {"jobs": self.jobs, "submitted": self.submitted, "taken": self.taken, "dropped": self.drop_count,
                 "no_room": self.refused, "waited_seconds": round(self.waited, 3), "per_worker": threads,
-                "files_read_ahead": self.files_ahead, "files_read_by_packer": self.files_self}
+                "files_read_ahead": self.files_ahead, "files_read_by_packer": self.files_self,
+                "cancelled": self.cancelled}
 
     def drop(self, future) -> None:
         """Work whose result is not needed."""
         self.flight.discard(future)
         self.drop_count += 1
-        if not future.cancel():
+        if future.cancel():
+            self.cancelled += 1
+        else:
             if future.done():
                 future.result()  # raises the worker's exception
             else:
@@ -213,6 +220,7 @@ class Workers:
         self.pool.shutdown(wait=True, cancel_futures=True)
         left = [*self.flight, *self.dropped]
         self.flight, self.dropped = set(), []
+        self.cancelled += sum(1 for future in left if future.cancelled())  # ``57`` AG3
         if not raising:
             for future in left:
                 if not future.cancelled() and future.exception() is not None:

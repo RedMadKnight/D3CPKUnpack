@@ -313,7 +313,8 @@ exports and imports the 31 remaining SNO types (particles, effect groups, lights
 sound, AI, camera, physics and others) as named JSON, with curves, enums, flag
 bits, links and units; version 0.23.1 lays an edited file of these types out as
 written from scratch, so writing the original JSON back restores its stored
-bytes. Nothing has been tested in the game (§21.3).
+bytes, and version 0.23.2 corrects the Xbox 360 layouts of five of them and
+names the record header. Nothing has been tested in the game (§21.3).
 
 ---
 
@@ -1848,9 +1849,8 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   moved parts is not known.
 - **Remaining SNO types (stage 23)** — PS3 holds an older revision of these
   formats: about 200,000 PS3 values (mostly acts, control schemes, AI states and
-  light and shake curves) have no known place and stay raw words. The Xbox 360
-  rows of five records are being corrected (observer, particle tail, weather,
-  encounter spawn options, acts). How the game evaluates a curve (distribution
+  light and shake curves) have no known place and stay raw words. How the game
+  evaluates a curve (distribution
   and scalar functions) is named, not modelled. New files of these types cannot
   be created yet.
 - **Fonts** — the Xbox 360 font texture tiling is not decoded in every case.

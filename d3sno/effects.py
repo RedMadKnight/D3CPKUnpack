@@ -30,9 +30,10 @@ from .sno import group_by_id, parse_header
 __all__ = ["GROUPS", "Leaf", "Decoded", "leaf_table", "decode", "decode_full", "encode", "encode_result",
            "schema", "enum_names", "FINDINGS"]
 
-# ``56``: the corrected tables replace ``f55_*`` (which stay in the package data, unused)
-LAYOUT_TABLE = "f56_layouts.tsv"
-ENUM_TABLE = "f56_enums.tsv"
+# ``57``: the corrected tables replace ``f56_*`` and ``f55_*`` (which stay in the package data, unused)
+LAYOUT_TABLE = "f57_layouts.tsv"
+ENUM_TABLE = "f57_enums.tsv"
+OWN_HANDLE = "tHeader.snoHandle"  # ``57`` AG2: the top record's own handle, not changed by the import
 GROUPS = ("prt", "efg", "lit", "mus", "ams", "aib", "ais", "adv", "qsr", "xpl", "dfn", "wth", "trl", "rop", "clt",
           "shk", "srf", "obs", "phy", "rev", "tut", "bos", "aco", "act", "enc", "an2", "scg", "flg", "ctr", "ant",
           "vib")
@@ -630,6 +631,9 @@ def _same(a, b) -> bool:
 
 def _write_named(enc: _Enc, record: L.Record, named: _Named, old, new, path: tuple) -> None:
     from .json_import import Change, Place, _enum_value, _flags_value, _pack
+
+    if path == ("record", OWN_HANDLE) and record is enc.tree.top:
+        raise _refused(path, "field_fixed", "the file's own handle is not changed by the import (as the header)")
 
     enc.rows.append({"path": _path_text(path), "old": old, "new": new})
     if named.code == "text":

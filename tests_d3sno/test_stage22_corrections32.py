@@ -485,7 +485,9 @@ class Jobs(unittest.TestCase):
             workers.close()
         stats = workers.stats()
         self.assertEqual((stats["dropped"], stats["no_room"]), (2, 1))
-        self.assertEqual(sum(row["done"] for row in stats["per_worker"]), 5)
+        # ``57`` AG3: the last piece may still be queued at ``close`` and be cancelled (Python 3.10)
+        self.assertEqual(sum(row["done"] for row in stats["per_worker"]) + stats["cancelled"], 5)
+        self.assertEqual(stats["submitted"], 5)
         self.assertLessEqual(len(stats["per_worker"]), 2)
 
     def test_profile_per_worker(self):

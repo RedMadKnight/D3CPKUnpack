@@ -505,7 +505,8 @@ class Segments(unittest.TestCase):
             written = IW.write_changed(source, None, {"Base\\f03.dat": b"x"}, jobs=3, segment=True)
         stats = written.workers
         self.assertEqual(set(stats), {"jobs", "submitted", "taken", "dropped", "no_room", "waited_seconds",
-                                      "per_worker", "files_read_ahead", "files_read_by_packer"})  # ``52`` AC5, ``53`` AD3
+                                      "per_worker", "files_read_ahead", "files_read_by_packer",
+                                      "cancelled"})  # ``52`` AC5, ``53`` AD3, ``57`` AG3
         self.assertEqual(stats["jobs"], 3)
         self.assertGreater(stats["submitted"], 0)
         self.assertEqual(IW.write_changed(source, None, {"Base\\f03.dat": b"x"}, jobs=1).workers["submitted"], 0)
