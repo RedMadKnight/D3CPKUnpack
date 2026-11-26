@@ -24,7 +24,7 @@ d3cpk-extractor = "d3cpk_extractor:main"
 
 [tool.setuptools]
 packages = ["d3sno"]
-package-data = { d3sno = ["data/*.tsv"] }
+package-data = { d3sno = ["data/*.tsv", "data/*.txt"] }
 py-modules = [
     "coretoc_parser",
     "cpk_tool",

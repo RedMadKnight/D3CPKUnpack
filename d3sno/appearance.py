@@ -939,6 +939,27 @@ _USHORT = 5123
 _UBYTE = 5121
 _ARRAY = 34962
 _REPEAT = 10497
+_CLAMP = 33071
+# ``48`` Z3: a shader stage's address mode (U or V) -> glTF wrap mode (1 clamp, 2 wrap)
+WRAP_MODES = {1: _CLAMP, 2: _REPEAT}
+_DEFAULT_SAMPLER = {"wrapS": _REPEAT, "wrapT": _REPEAT}  # a texture bound without a shader stage
+
+
+def sampler_for(modes) -> tuple[dict, list | None]:
+    """``48`` Z3: (glTF sampler, ``address_modes`` extras or None) of a texture bound through the
+    stages ``modes``: (shader, pass, stage, U mode, V mode) in pass order. The first stage decides;
+    a mode other than 1 or 2 gives no ``wrapS`` / ``wrapT`` and the stage is listed, and so is every
+    later stage whose modes differ from the first. No stage: wrap on both axes, as before ``48``."""
+    if not modes:
+        return dict(_DEFAULT_SAMPLER), None
+    first = modes[0]
+    sampler = {key: WRAP_MODES[value] for key, value in (("wrapS", first[3]), ("wrapT", first[4]))
+               if value in WRAP_MODES}
+    listed = [first] if any(value not in WRAP_MODES for value in first[3:5]) else []
+    listed += [m for m in modes[1:] if tuple(m[3:5]) != tuple(first[3:5])]
+    extras = [{"shader": m[0], "pass": m[1], "stage": m[2], "address_modes": [m[3], m[4]],
+               "used": m is first} for m in listed]
+    return sampler, extras or None
 _ELEMENTS = 34963
 
 
@@ -1015,28 +1036,56 @@ class _GltfMaterials:
         self.images: list[dict] = []
         self.textures: list[dict] = []
         self.materials: list[dict] = []
-        self.by_handle: dict[int, int | None] = {}
-        self.by_name: dict[tuple[str, str], int] = {}
+        self.samplers: list[dict] = []
+        self.by_handle: dict[int, int | None] = {}  # texture handle -> image (None: not resolved)
+        self.by_texture: dict[tuple[int, int], int] = {}  # (image, sampler) -> texture
+        self.by_sampler: dict[str, int] = {}
+        self.by_name: dict[tuple, int] = {}
+        self.extensions: set[str] = set()
 
-    def texture(self, handle: int | None) -> int | None:
+    def sampler(self, settings: dict) -> int:
+        """``48`` Z3: samplers with equal settings are shared."""
+        key = json.dumps(settings, sort_keys=True)
+        if key not in self.by_sampler:
+            self.by_sampler[key] = len(self.samplers)
+            self.samplers.append(settings)
+        return self.by_sampler[key]
+
+    def texture(self, handle: int | None, settings: dict | None = None) -> int | None:
         if self.resolver is None or handle is None or handle == -1:
             return None
         if handle not in self.by_handle:
             self.by_handle[handle] = self._make(handle)
-        return self.by_handle[handle]
+        image = self.by_handle[handle]
+        if image is None:
+            return None
+        key = (image, self.sampler(dict(_DEFAULT_SAMPLER) if settings is None else settings))
+        if key not in self.by_texture:
+            self.by_texture[key] = len(self.textures)
+            self.textures.append({"source": key[0], "sampler": key[1]})
+        return self.by_texture[key]
 
-    def material(self, handle: int | None, draw: int, lightmap: str | None = None, layers=None) -> int:
+    def material(self, handle: int | None, draw: int, lightmap: str | None = None, layers=None,
+                 modes=None) -> int:
         """``43`` W19-2: ``lightmap`` (the lightmap texture's URI) is named in the material's
         ``extras.d3sno_export``. ``44`` W20-3: so are the ``layers`` (``uv2_layers``, left out when
-        there is none). Materials with the same name and the same extras are shared."""
-        texture = self.texture(handle)
+        there is none). ``48`` Z3: ``modes`` are the stages that bind the base colour slot (see
+        ``sampler_for``). Materials with the same name and the same extras are shared."""
+        from . import uv2_use
+
+        settings, listed = sampler_for(modes)
+        texture = self.texture(handle, settings)
         name = f"texture_{handle}_draw_{draw}" if texture is not None else f"d3sno_draw_{draw}"
         export: dict = {}
         if lightmap is not None:
             export.update({"lightmap": lightmap, "lightmap_channel": "red", "lightmap_texcoord": 1})
         if layers:
             export["uv2_layers"] = layers
-        key = (name, json.dumps(export, sort_keys=True))
+            if uv2_use.has_odd_entry(layers):  # ``48`` Z2
+                self.extensions.add(uv2_use.TEXTURE_TRANSFORM)
+        if listed and texture is not None:
+            export["address_modes"] = listed
+        key = (name, texture, json.dumps(export, sort_keys=True))  # Z3: one texture per sampler
         if key not in self.by_name:
             material: dict = {"name": name}
             if texture is not None:
@@ -1059,8 +1108,7 @@ class _GltfMaterials:
         else:
             image = {"bufferView": self.buf.add_view(bytes(target)), "mimeType": "image/png"}
         self.images.append(image)
-        self.textures.append({"source": len(self.images) - 1, "sampler": 0})
-        return len(self.textures) - 1
+        return len(self.images) - 1
 
     def write(self, document: dict) -> None:
         if self.materials:
@@ -1068,7 +1116,9 @@ class _GltfMaterials:
         if self.textures:
             document["textures"] = self.textures
             document["images"] = self.images
-            document["samplers"] = [{"wrapS": _REPEAT, "wrapT": _REPEAT}]
+            document["samplers"] = self.samplers
+        if self.extensions:  # ``48`` Z2: used, never required
+            document["extensionsUsed"] = sorted(self.extensions)
 
 
 def _bone_node(bone: Bone) -> dict:
@@ -1131,11 +1181,15 @@ def _uv2_choice(draw: Draw, lightmap_handle, lightmap, rows, block, texture_reso
                 "lightmap_v_scale": scale}
         layers = uv2_use.layer_entries(rows, block, to_uri, "lightmap", scale)
         return scale, lightmap_uri, info, layers or None
+    # ``48`` Z2: an entry from a divisor-512 row gives the primitive the layer ``TEXCOORD_1`` when no
+    # other rule gives it one
+    odd = 1.0 if rows.odd else None
+    written = "layer" if rows.odd else None
     if lightmap_handle is not None:  # W19-2: the lightmap texture is missing
         info = {"uv2_scale": "open", "uv2_use": "lightmap", "lightmap": lightmap_handle}
-        return None, None, info, uv2_use.layer_entries(rows, block, to_uri, None) or None
+        return odd, None, info, uv2_use.layer_entries(rows, block, to_uri, written) or None
     if not varying:  # W19-1 ``"none"``: W20-2 does not apply
-        return None, None, {"uv2_scale": "none"}, uv2_use.layer_entries(rows, block, to_uri, None) or None
+        return odd, None, {"uv2_scale": "none"}, uv2_use.layer_entries(rows, block, to_uri, written) or None
     use = uv2_use.uv2_use(rows, False)
     info = {"uv2_scale": uv2_use.UV2_SCALE[use], "uv2_use": use}
     scale = 1.0 if use == "layer" else None
@@ -1145,7 +1199,7 @@ def _uv2_choice(draw: Draw, lightmap_handle, lightmap, rows, block, texture_reso
 def to_gltf(
     app: AppearanceFile, flip_v: bool = False, lightmap_v_scale: float | None = None,
     extend=None, texture_resolver=None, look: int = 0, low_poly: bool = True, lightmap_resolver=None,
-    uv2_rows=None,
+    uv2_rows=None, stage_modes=None,
 ) -> dict:
     """A glTF 2.0 document with one embedded buffer. Bones are nodes.
 
@@ -1154,6 +1208,10 @@ def to_gltf(
     varying UV2 (or a lightmap slot) then gets ``uv2_use``; a ``"layer"`` primitive gets
     ``TEXCOORD_1`` without V scale, and the material ``uv2_layers``. Without ``uv2_rows`` every such
     primitive is ``"unknown"``.
+
+    ``48`` Z3: ``stage_modes(block)`` gives the shader stages that bind a material block's base colour
+    slot, (shader, pass, stage, U mode, V mode) in pass order; the base colour texture's sampler
+    follows the first (``sampler_for``). Without it, or with no such stage, the sampler wraps.
 
     ``43`` W19-1, W19-2: ``lightmap_resolver(handle)`` gives ``(uri, v_scale)`` of a lightmap
     texture, or None when it is not available. With it, each primitive gets
@@ -1210,10 +1268,12 @@ def to_gltf(
                 lightmap_handle = None
             if lightmap_handle is not None:
                 lightmap = lightmap_resolver(lightmap_handle)
-        block = rows = None
+        block = rows = modes = None
         if lightmap_resolver is not None and uv2_rows is not None:  # ``44`` W20-1
             block = sub_object_block(app, sub, look)
             rows = uv2_rows(block)
+        if stage_modes is not None and handle is not None:  # ``48`` Z3
+            modes = stage_modes(sub_object_block(app, sub, look))
         primitives = []
         for k, draw in enumerate(sub.draws):
             if not draw.positions:
@@ -1223,7 +1283,7 @@ def to_gltf(
                 scale, uri, export_info, layers = _uv2_choice(
                     draw, lightmap_handle, lightmap, rows, block, texture_resolver)
             primitive = _gltf_primitive(buf, draw, flip_v, scale)
-            primitive["material"] = materials.material(handle, k, uri, layers)
+            primitive["material"] = materials.material(handle, k, uri, layers, modes)
             info: dict = {"draw": k}
             if not draw.indices:
                 info["no_indices"] = True  # V21-4: vertices without triangles

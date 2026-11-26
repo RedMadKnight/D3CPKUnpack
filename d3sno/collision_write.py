@@ -370,10 +370,12 @@ def tree_nodes(nodes: list[_Node], tri_vertices, rows, scale, build: str) -> lis
 
 
 def build_collision_mesh(positions, triangles, materials=0, flags=0, build: str = "switch", *,
-                         mesh_flags: int = 0, mesh_material: int = 0) -> CollisionMesh:
+                         mesh_flags: int = 0, mesh_material: int = 0, bounds=None, rows=None) -> CollisionMesh:
     """W14-12 to W14-15: a collision mesh from positions and triangles (vertex index triples).
     ``materials`` and ``flags`` are per triangle (a sequence) or one value for all. The table
-    order is the leaf order; ``mesh.triangles`` are the used entries in that order."""
+    order is the leaf order; ``mesh.triangles`` are the used entries in that order. ``52`` AC1:
+    ``bounds`` (centre, half extent, box scale) and the stored vertex ``rows`` relative to that
+    centre, when given, are used instead of the W14-12 ones."""
     form = form_of(build)
     positions = [tuple(float(c) for c in p[:3]) for p in positions]
     tris = [tuple(int(v) for v in t) for t in triangles]
@@ -388,7 +390,13 @@ def build_collision_mesh(positions, triangles, materials=0, flags=0, build: str 
     limit = 1 << (30 if form == "ps3" else 26)
     if count + 3 >= limit:
         raise FormatError(f"{count} triangles do not fit the node word")
-    centre, rows, half, scale = mesh_bounds(positions, build)
+    if bounds is None:
+        centre, rows, half, scale = mesh_bounds(positions, build)
+    else:
+        centre, half, scale = (tuple(v) for v in bounds)
+        if rows is None:
+            rows = [(f32(p[0] - centre[0]), f32(p[1] - centre[1]), f32(p[2] - centre[2]), 0.0) for p in positions]
+        rows = [tuple(r) for r in rows]
     built, order = build_tree(rows, tris)
     neighbours = triangle_neighbours(tris)
     table = [Triangle(tris[t], neighbours[t], materials[t], flags[t]) for t in order]

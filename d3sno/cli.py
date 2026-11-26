@@ -507,6 +507,41 @@ def cmd_export(args) -> int:
     return result.exit_code
 
 
+def _jobs(text: str) -> int:
+    value = int(text)
+    if value < 1:
+        raise ValueError(f"--jobs {value}: give at least 1")
+    return value
+
+
+def _jobs_option(sub) -> None:
+    """``48`` Z4: ``--jobs N`` of ``apply``, ``replace`` and ``add``."""
+    from .archive import default_jobs
+
+    sub.add_argument("--jobs", type=_jobs, default=default_jobs(), metavar="N",
+                     help="worker threads (default: the number of processors; 1: one thread): they read and "
+                          "inflate the source, and with --segment pack the segments; the archive is the same "
+                          "for any number")
+    sub.add_argument("--segment", action="store_true",
+                     help="the segmented layout (51 AB7): the stream in segments of 8 MiB, each starting a new "
+                          "slot, packed in parallel. Off by default: whether the game reads a slot ended early "
+                          "by a stored size of 0 is not known")
+    sub.add_argument("--profile", action="store_true",
+                     help="print the use of the worker threads (work submitted, taken, dropped; the time "
+                          "the packer waited)")
+
+
+def _profile_lines(written) -> list[str]:
+    """``51`` AB7: the layout and the ``--profile`` statistics of one written archive."""
+    lines = [f"layout: {getattr(written, 'layout', 'default')}"]
+    stats = getattr(written, "workers", None)
+    if stats:
+        from .archive import workers_text
+
+        lines.append("workers: " + workers_text(stats))
+    return lines
+
+
 def cmd_apply(args) -> int:
     """``46`` W21-8: apply an edited export folder to the game folder, writing new archives into OUT_DIR."""
     apply = _module("apply")
@@ -514,7 +549,7 @@ def cmd_apply(args) -> int:
             "skin": args.skin, "low_poly": not args.skip_low_poly}
     result = apply.apply_export(args.game_dir, args.export_dir, args.out, build=args.build, dry_run=args.dry_run,
                                 copy_unchanged=args.copy_unchanged, only=args.only, mesh_options=mesh,
-                                force=args.force)
+                                force=args.force, jobs=args.jobs, segment=args.segment, profile=args.profile)
     if result.exit_code == apply.EXIT_REFUSED:
         print(f"error: {result.message}", file=sys.stderr)
         return result.exit_code
@@ -585,8 +620,10 @@ def cmd_replace(args) -> int:
             raise ValueError("--add-new goes with --from-dir")
         refuse_overwrite([args.output], [args.archive, args.file])
         with _MappedArchive(args.archive) as cpk:  # Y1: streamed, nothing of the archive kept
-            index_write.write_changed(cpk, args.output, {args.name: _read(args.file)})
+            written = index_write.write_changed(cpk, args.output, {args.name: _read(args.file)}, jobs=args.jobs,
+                                                segment=args.segment)
         _print("replaced 1, added 0")
+        _report_written(args, written)
         return 0
     if args.name is not None or args.file is not None:
         raise ValueError("pass NAME FILE or --from-dir, not both")
@@ -624,9 +661,18 @@ def _replace_from_dir(args, cpk, root: Path, files) -> int:
                           + ", ".join(unknown[:10]))
     if not replace and not add:
         raise ValueError(f"{root} holds no file")
-    index_write.write_changed(cpk, args.output, replace, add)  # Y1: streamed
+    written = index_write.write_changed(cpk, args.output, replace, add, jobs=args.jobs,
+                                        segment=args.segment)  # Y1: streamed
     _print(f"replaced {len(replace)}, added {len(add)}")
+    _report_written(args, written)
     return 0
+
+
+def _report_written(args, written) -> None:
+    """``51`` AB7: the layout used; with ``--profile`` the use of the workers."""
+    lines = _profile_lines(written)
+    for line in lines if args.profile else lines[:1]:
+        _print(line)
 
 
 def cmd_add(args) -> int:
@@ -652,7 +698,8 @@ def cmd_add(args) -> int:
         toc_map = {Path(t).name: _read(t) for t in tocs}
         prefetch = {Path(args.prefetch).name: _read(args.prefetch)} if args.prefetch else None
         result = index_write.add_sno_file(cpk, args.name, _read(args.file), toc_map, prefetch,
-                                          args.depends or (), pack=pack, out=args.output)  # Y1: streamed
+                                          args.depends or (), pack=pack, out=args.output,
+                                          jobs=args.jobs, segment=args.segment)  # Y1: streamed; Z4, AB7
     if result.index_files:
         target = Path(args.index_out)
         target.mkdir(parents=True, exist_ok=True)
@@ -664,6 +711,7 @@ def cmd_add(args) -> int:
         _print(f"added {args.name}: group {ident.group}, handle {ident.handle}")
     else:
         _print(f"added {args.name} (no CoreTOC entry)")
+    _report_written(args, result.archive)
     return 0
 
 
@@ -818,13 +866,14 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--dry-run", action="store_true", help="import in memory, write only apply_report.json")
     sub.add_argument("--copy-unchanged", action="store_true",
                      help="also copy every other file of GAME_DIR, so that OUT_DIR is a complete game folder")
-    sub.add_argument("--only", help="comma-separated kinds: meshes,textures,text")
+    sub.add_argument("--only", help="comma-separated kinds: meshes,textures,text,records,world,collision,anims")
     sub.add_argument("--flip-v", action="store_true")
     sub.add_argument("--lightmap-v-scale", type=float)
     sub.add_argument("--missing", choices=("keep", "empty"), default="keep")
     sub.add_argument("--skin", choices=("refuse", "nearest"), default="refuse")
     sub.add_argument("--skip-low-poly", action="store_true")
     sub.add_argument("--force", action="store_true", help="write inside a git working tree anyway")
+    _jobs_option(sub)
     add_build(sub)
     sub = add("replace", cmd_replace)
     sub.add_argument("archive")
@@ -833,6 +882,7 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--from-dir", help="a folder laid out as extract writes it")
     sub.add_argument("--add-new", action="store_true", help="with --from-dir: add unknown files")
     sub.add_argument("-o", "--output", required=True)
+    _jobs_option(sub)
     sub = add("add", cmd_add)
     sub.add_argument("archive")
     sub.add_argument("name")
@@ -842,6 +892,7 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--prefetch")
     sub.add_argument("--depends", nargs="+", help="SNO names (Group\\name.ext) of the dependencies")
     sub.add_argument("--index-out", help="folder for the written index files")
+    _jobs_option(sub)
     sub.add_argument("--pack", help="x360: the pack (Common, Act1 .. Act5) when the archive name "
                                     "does not tell")
     return parser

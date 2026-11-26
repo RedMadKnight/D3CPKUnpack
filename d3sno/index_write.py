@@ -477,8 +477,8 @@ def _read(archive):
     return archive if isinstance(archive, CpkArchive) else read_archive(archive)
 
 
-def _x360_write(cpk, out, replace: Mapping[str, bytes], add: Mapping[str, bytes]):
-    from .archive import name_hash
+def _x360_write(cpk, out, replace: Mapping[str, bytes], add: Mapping[str, bytes], jobs=1, segment=False):
+    from .archive import as_workers, name_hash, reading_ahead
     from .x360_archive import Piece, source_pieces, write_x360_archive_to
 
     h = cpk.header
@@ -486,8 +486,12 @@ def _x360_write(cpk, out, replace: Mapping[str, bytes], add: Mapping[str, bytes]
     wanted = {name_hash(n): d for n, d in replace.items()}
     pieces = [Piece(p.name, p.copy, wanted.get(name_hash(p.name), p.data)) for p in pieces]
     pieces += [Piece(name, 0, data) for name, data in add.items()]
-    written = write_x360_archive_to(out, pieces, flags=h.flags, read_sector=h.read_sector,
-                                    comp_sector=h.comp_sector, keep_plans=False).written
+    # ``48`` Z4: piece starts compressed ahead; ``51`` AB7: the source read and inflated ahead, and with
+    # ``segment`` the segments packed by the workers
+    with as_workers(jobs) as workers, reading_ahead(cpk, workers if not segment else as_workers(1)):
+        written = write_x360_archive_to(out, pieces, flags=h.flags, read_sector=h.read_sector,
+                                        comp_sector=h.comp_sector, keep_plans=False, jobs=workers,
+                                        segment=segment).written
     cpk._cache.clear()
     return written
 
@@ -500,9 +504,9 @@ def _change(archive, replace: Mapping[str, bytes], add: Mapping[str, bytes]) -> 
     return buffer.getvalue()
 
 
-def _change_to(archive, out, replace: Mapping[str, bytes], add: Mapping[str, bytes]):
+def _change_to(archive, out, replace: Mapping[str, bytes], add: Mapping[str, bytes], jobs=1, segment=False):
     """``47`` Y1: the changed archive into ``out`` (a binary file object or ``archive.Output``);
-    returns its ``archive.Written`` (size and SHA-256)."""
+    returns its ``archive.Written`` (size and SHA-256). ``48`` Z4: with ``jobs`` workers."""
     from .archive import as_output, name_hash, rebuild_to
 
     out = as_output(out)
@@ -516,8 +520,8 @@ def _change_to(archive, out, replace: Mapping[str, bytes], add: Mapping[str, byt
     if len({name_hash(n) for n in add}) != len(add):
         raise FormatError("two added names share a hash")
     if cpk.header.version == 7 and cpk.header.order == ">":
-        return _x360_write(cpk, out, replace, add)
-    return rebuild_to(out, cpk, replace=dict(replace), add=dict(add)).written
+        return _x360_write(cpk, out, replace, add, jobs, segment)
+    return rebuild_to(out, cpk, replace=dict(replace), add=dict(add), jobs=jobs, segment=segment).written
 
 
 def add_file(archive, name: str, data: bytes) -> bytes:
@@ -539,17 +543,33 @@ def replace_files(archive, replace: Mapping[str, bytes], add: Mapping[str, bytes
                    {n: bytes(d) for n, d in (add or {}).items()})
 
 
-def write_changed(archive, target, replace: Mapping[str, bytes], add: Mapping[str, bytes] | None = None):
+def write_changed(archive, target, replace: Mapping[str, bytes], add: Mapping[str, bytes] | None = None,
+                  jobs: int | None = 1, segment: bool = False):
     """``47`` Y1: what ``replace_files`` returns, streamed to ``target``: a path (written under a
     temporary name and renamed when complete), a binary file object, or None (only counted and
     hashed: the dry run). Files that are not replaced are read from the source archive in pieces
     and nothing of the new archive is kept; give a memory-mapped source (``read_archive`` of an
-    ``mmap``) to keep the source out of memory too. Returns ``archive.Written`` (size, SHA-256)."""
-    from .archive import stream_to
+    ``mmap``) to keep the source out of memory too. Returns ``archive.Written`` (size, SHA-256).
+    ``48`` Z4: ``jobs`` worker threads (None: the number of processors); the bytes are the same for
+    any number, and 1 is the single-thread path. ``51`` AB7: ``segment`` gives the segmented layout (off by
+    default); the result names the layout and the use of the workers (``workers``, for ``--profile``)."""
+    import dataclasses
+
+    from .archive import Workers, stream_to
 
     replace = {n: bytes(d) for n, d in replace.items()}
     add = {n: bytes(d) for n, d in (add or {}).items()}
-    return stream_to(target, lambda out: _change_to(archive, out, replace, add))
+    if jobs is None:
+        from .archive import default_jobs
+
+        jobs = default_jobs()
+    workers = Workers(jobs)
+    layout = []
+    try:
+        written = stream_to(target, lambda out: layout.append(_change_to(archive, out, replace, add, workers, segment)))
+    finally:
+        workers.close(raising=True)
+    return dataclasses.replace(written, layout=layout[0].layout if layout else "default", workers=workers.stats())
 
 
 # --- W16-12 / W16-13: add_sno_file ------------------------------------------------------------
@@ -682,7 +702,7 @@ def _resolve_dependency(dep, named: Mapping[str, CoreToc]) -> tuple[int, int]:
 
 
 def add_sno_file(archive, name: str, data: bytes, tocs, prefetch=None, depends=(), *,
-                 pack: str | None = None, out=None) -> AddedFile:
+                 pack: str | None = None, out=None, jobs: int | None = 1, segment: bool = False) -> AddedFile:
     """W16-12 / W16-13: add ``name`` to the archive and give an SNO file its identity (W14-1).
 
     - ``tocs``: one CoreToc (parsed, bytes or an entry list), or ``{file name: toc}``; on x360
@@ -767,8 +787,16 @@ def add_sno_file(archive, name: str, data: bytes, tocs, prefetch=None, depends=(
         deps = [_resolve_dependency(d, named) for d in depends]
         add_prefetch_parent(pf, group.id, handle, deps, build)
         index_files[pf_name] = write_prefetch(pf, build)
-    return AddedFile(_added(cpk, name, stamped, out), index_files, ident)
+    return AddedFile(_added(cpk, name, stamped, out, jobs, segment), index_files, ident)
 
 
-def _added(cpk, name: str, data: bytes, out):
-    return add_file(cpk, name, data) if out is None else write_changed(cpk, out, {}, {name: data})
+def _added(cpk, name: str, data: bytes, out, jobs=1, segment=False):
+    if out is None and not segment:
+        return add_file(cpk, name, data)
+    if out is None:
+        import io
+
+        buffer = io.BytesIO()
+        write_changed(cpk, buffer, {}, {name: data}, jobs, segment)
+        return buffer.getvalue()
+    return write_changed(cpk, out, {}, {name: data}, jobs, segment)

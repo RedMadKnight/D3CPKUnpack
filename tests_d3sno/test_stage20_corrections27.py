@@ -109,9 +109,9 @@ class Entries(unittest.TestCase):
 
     def test_lightmap_coordinate(self):
         """X3 with the lightmap ``TEXCOORD_1``: a ``lightmap_v_scale`` 0 row is v divided by S, a 1 row
-        names it as it is, a 512 row names nothing."""
+        names it as it is; ``48`` Z2: a 512 row reads it as a ``lightmap_v_scale`` 0 row does (before: nothing)."""
         got = {e["shader"]: (e["texcoord"], e.get("v_divide"), e.get("v_scale")) for e in layers(self.doc, self.prims[0])}
-        self.assertEqual(got, {"t_glow": (1, None, "lightmap"), "t_layer": (1, S, None), "t_odd": (None, None, None)})
+        self.assertEqual(got, {"t_glow": (1, None, "lightmap"), "t_layer": (1, S, None), "t_odd": (1, S, None)})
         glow = [e for e in layers(self.doc, self.prims[0]) if e["shader"] == "t_glow"][0]
         self.assertEqual(glow["texture"], "../textures/540.png")
 
@@ -142,7 +142,7 @@ class Entries(unittest.TestCase):
 
         cases = [(row(8192, 0), "layer", (1, None)), (row(8192, 0), "lightmap", (1, S)),
                  (row(8192, 1), "lightmap", (1, None)), (row(8192, 1), "layer", (1, None)),  # Y6
-                 (row(512, 0), "layer", (None, None)), (row(512, 0), "lightmap", (None, None)),
+                 (row(512, 0), "layer", (1, None)), (row(512, 0), "lightmap", (1, S)),  # ``48`` Z2
                  (row(8192, 0), None, (None, None)), (row(8192, 1), None, (None, None))]
         for item, written, want in cases:
             self.assertEqual(U.entry_texcoord(item, written, S), want, (item, written))
@@ -202,11 +202,16 @@ class PerBuild(unittest.TestCase):
         self.assertNotEqual(ps3, x360)
         self.assertEqual([e["divisor"] for e in ps3], [8192])
         self.assertEqual([e["divisor"] for e in x360], [512])
-        self.assertEqual((self.use(("t_both",), "ps3"), self.use(("t_both",), "x360")), ("layer", "open"))
+        # ``48`` Z2: a divisor-512 row is ``"layer"`` (before: ``"open"``)
+        self.assertEqual((self.use(("t_both",), "ps3"), self.use(("t_both",), "x360")), ("layer", "layer"))
 
-    def test_switch_uses_ps3_rows(self):
-        self.assertEqual(U.rows_for(("t_both",), self.table, "switch"), U.rows_for(("t_both",), self.table, "ps3"))
-        self.assertEqual(U.table_build("switch"), "ps3")
+    def test_switch_uses_own_rows(self):
+        """``48`` Z1 (before: switch used the ``ps3`` rows): the test table repeats each ps3 row as a switch row."""
+        switch = U.rows_for(("t_layer",), self.table, "switch")
+        self.assertEqual([r.build for r in switch.rows], ["switch"])
+        self.assertEqual([r.key for r in switch.rows], [r.key for r in U.rows_for(("t_layer",), self.table, "ps3").rows])
+        self.assertEqual(self.use(("t_both",), "switch"), "unused")  # a ps3-only row does not serve switch
+        self.assertEqual(U.table_build("switch"), "switch")
 
     def test_x360_only_shader(self):
         self.assertEqual(self.use(("t_xonly",), "x360"), "unused")
@@ -220,10 +225,10 @@ class PerBuild(unittest.TestCase):
     def test_row_without_slot_type(self):
         """Q894: kept as an odd row with ``slot_type`` and ``slot_name`` null and no texture."""
         rows = U.rows_for(("t_blank",), self.table, "x360")
-        self.assertEqual(self.use(("t_blank",), "x360"), "open")
+        self.assertEqual(self.use(("t_blank",), "x360"), "layer")  # ``48`` Z2 (before: ``"open"``)
         (entry,) = U.layer_entries(rows, SimpleNamespace(texture=lambda slot: 5), str, "layer")
         self.assertEqual((entry["slot_type"], entry["slot_name"], entry["texture"], entry["texcoord"]),
-                         (None, None, None, None))
+                         (None, None, None, 1))  # Z2: ``texcoord`` 1 (before: null)
         self.assertEqual(U.layer_texture_handles(rows, SimpleNamespace(texture=lambda slot: 5)), [])
 
     def test_export_uses_archive_build(self):
@@ -237,9 +242,12 @@ class PerBuild(unittest.TestCase):
         need_uv2_tables()
         table = U.load_tables()
         name = "assaultBeast_deathTransition"
-        self.assertEqual(U.uv2_use(U.rows_for((name,), table, "ps3"), False), "open")
-        self.assertEqual(U.uv2_use(U.rows_for((name,), table, "switch"), False), "open")
+        # ``48`` Z1, Z2: ``"layer"`` on every build now (before: ps3 and switch ``"open"``); the rows still differ
+        self.assertEqual(U.uv2_use(U.rows_for((name,), table, "ps3"), False), "layer")
+        self.assertEqual(U.uv2_use(U.rows_for((name,), table, "switch"), False), "layer")
         self.assertEqual(U.uv2_use(U.rows_for((name,), table, "x360"), False), "layer")
+        self.assertTrue(U.rows_for((name,), table, "ps3").odd)
+        self.assertFalse(U.rows_for((name,), table, "x360").odd)
         self.assertEqual(len(U.rows_for(("actor_hydra",), table, "ps3").rows), 5)
         self.assertEqual(len(U.rows_for(("actor_hydra",), table, "x360").rows), 9)
         glow = U.rows_for(("prop_transparent_glow_ice",), table, "ps3")  # lightmap_v_scale 1 on slot 6
@@ -258,7 +266,7 @@ class MissingX360List(unittest.TestCase):
                                                skip=(U.KNOWN_TABLE_X360,)))
 
     def test_library(self):
-        self.assertEqual(set(self.table.known), {"ps3"})
+        self.assertEqual(set(self.table.known), {"ps3", "switch"})
         for names in (("t_xonly",), ("t_layer",), ("t_both",), ("t_plain",)):
             self.assertEqual(U.uv2_use(U.rows_for(names, self.table, "x360"), False), "unknown", names)
         self.assertEqual(U.uv2_use(U.rows_for(("t_layer",), self.table, "switch"), False), "layer")

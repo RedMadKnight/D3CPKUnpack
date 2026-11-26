@@ -128,7 +128,8 @@ python3 d3cutscene_tool.py extract enUS_Cutscene.cpk --out ./hero --flat \
   --iname Hero_Create --validate
 
 # d3sno: files inside the archives (--build ps3|switch|x360 where the
-# build cannot be detected from the bytes)
+# build cannot be detected from the bytes; Xbox 360 textures also need
+# --x360-pixels to be written as PNG)
 python3 -m d3sno info Common.cpk
 python3 -m d3sno mesh Barbarian_Male.app -o barbarian.gltf --format gltf
 python3 -m d3sno texture Icon.tex -o icon.png
@@ -150,9 +151,15 @@ python3 -m d3sno add Act1.cpk 'Appearance\My_Prop.app' my_prop.app -o Act1_mod.c
 # (the output is game content: keep it on your computer, never in a repository)
 python3 -m d3sno export path/to/game --out ~/d3_export --archives 'Act1*' 'Common*'
 
-# after editing meshes (.glb), textures (.png) or text (.json) in that export,
+# after editing meshes (.glb), textures (.png), text, records, worlds,
+# navigation, collision (.json) or animations (.glb) in that export,
 # write new archives with only the changed files
 python3 -m d3sno apply path/to/game ~/d3_export --out ~/d3_mod
+# replace, add and apply read ahead on all processors (--jobs; 1 uses one
+# thread); --segment packs the archive in parallel segments, several times
+# faster, in a layout not yet tested in the game. The written archive does
+# not depend on --jobs; --profile prints the use of the threads
+python3 -m d3sno apply path/to/game ~/d3_export --out ~/d3_mod --segment --jobs 12
 ```
 
 `d3sno` has these subcommands: `info`, `verify`, `list`, `extract`, `toc`,
@@ -164,7 +171,7 @@ python3 -m d3sno apply path/to/game ~/d3_export --out ~/d3_mod
 `d3sno.sound_write`, `d3sno.material_write`, `d3sno.shader`, `d3sno.ui_write`
 and others).
 
-`replace` patches same-size replacements in-place and falls back to a full
+`cpk_tool.py replace` patches same-size replacements in-place and falls back to a full
 rebuild via the extension layer when the new data no longer fits in its sector
 slots. A replacement of a different size needs `--resize`, which always
 rebuilds. Write commands produce a new file: `--out` cannot be the source
@@ -174,6 +181,19 @@ An in-place `replace` updates every stored copy of a file (§3.5). A full
 rebuild writes each file once, in plain chunks, so the output differs from the
 source even where the content is identical; rebuilding a 600 MB archive takes
 one to three minutes.
+
+`d3sno` `replace`, `add` and `apply` always write a new archive. They stream it
+from the source archive, so memory stays near 60–120 MB whatever the archive
+size: one edit in the 2.56 GB Switch `Common.cpk` was written with 118 MB.
+With the default layout, the archive is packed in one stream, so extra threads
+(`--jobs`) only read and inflate the source ahead: they cost up to 1.5 times
+the memory and save no time. `--segment` cuts the stream into segments of
+8 MiB, each starting a new sector slot, and packs them in parallel: with 12
+threads the largest archive of each build is written in 10 to 38 % of the
+one-thread time (Switch `Common.cpk`: 42 s instead of 332 s, 456 MB), and
+the archive grows by 0.1 to 0.3 %. Whether the game reads that layout is not
+known, so it is off by default. In both layouts the written bytes do not depend
+on the number of threads.
 
 `extract` and `read()` memory-map the archive and inflate only the sectors a
 file overlaps, located with a binary search of `cs2do`. A chunk that will not
@@ -274,7 +294,19 @@ handedness (right-handed, z up). Stage 20 named the texture each second-layer
 shader samples with the second UV set, per build, and fixed the quaternion
 convention (as glTF). Stage 21 added `apply`: an edited export folder (meshes,
 textures, text) is written back into new archives, and everything unchanged stays
-byte for byte. Nothing has been tested in the game (§21.3).
+byte for byte. Version 0.21.1 writes archives by streaming, so memory no longer
+grows with the archive. Version 0.21.2 gives the Switch build its own shader
+table, writes the passes that read the second UV set at 1/512 with a ×16
+`KHR_texture_transform`, takes glTF sampler wrap modes from the shader stages,
+and compresses archives on several threads (`--jobs`). Stage 22 extends
+`apply` to the JSON records, worlds, navigation and collision of the export and
+to its animations: each edited value is written back into its stored field, and
+a value the export computes rather than reads must agree with the value the
+edited JSON gives, or it is refused with a reason. Versions 0.22.1 to 0.22.4
+make an edit reversible: applying the original JSON again restores the stored
+bytes of every actor, material, monster, level, world, scene, marker set,
+collision mesh and animation. The export keeps the stored form of collision
+vertices for this. They also add the segmented archive layout (`--segment`). Nothing has been tested in the game (§21.3).
 
 ---
 
@@ -360,7 +392,7 @@ entries; the game treats any record containing them as unresolved.
 | Field | Value | Notes |
 |---|---|---|
 | Magic | `0xA1B2C3D4` | First 4 bytes of the file, in the archive's byte order |
-| Format version | 6 (BE) or 7 (LE on observed builds) | `uint32` right after the magic, at `0x04` |
+| Format version | 6 (BE) or 7 (LE on build B; BE on the Xbox 360 build) | `uint32` right after the magic, at `0x04` |
 
 ### 3.2 General archive layout
 
@@ -417,7 +449,7 @@ starts on a byte boundary; unused bits in its last byte are padding.
 
 | Parameter | Value |
 |---|---|
-| Endianness (word-level) | big-endian (v6) / little-endian (v7) |
+| Endianness (word-level) | big-endian (v6) / little-endian (v7, build B) / big-endian (v7, Xbox 360) |
 | Magic bytes on disk | `A1 B2 C3 D4` (BE) / `D4 C3 B2 A1` (LE) |
 | `read_sector` (read unit size) | `0x10000` |
 | `comp_sector` (compressed sector size) | `0x4000` |
@@ -436,7 +468,7 @@ fields:
 | Off. | Size | Field | Meaning / value |
 |---:|---:|---|---|
 | `0x00` | 4 | `magic` | `0xA1B2C3D4` (byte order on disk reveals endianness) |
-| `0x04` | 4 | `version` | `6` (v6, BE) or `7` (v7, LE on observed builds) |
+| `0x04` | 4 | `version` | `6` (v6, BE) or `7` (v7: LE on build B, BE on Xbox 360) |
 | `0x08` | 8 | `decomp_fs` | total bytes in the decompressed global stream |
 | `0x10` | 4 | `fmt_const` | layout discriminator. `2` = legacy layout (RoS, Act\*.cpk, CoreCommon.cpk). `10` = new layout introduced with **Patch 2.6.7** (May 2019). `0` = raw cutscene archive (plain Ogg payload, no zlib sectors). All 23 archives of build B use `2`, cutscenes included. See §3.3.1.1 |
 | `0x14` | 4 | `file_count` | number of `SortedFileInfo` entries |
@@ -1282,6 +1314,8 @@ fields are decoded.
 | +0x24 | vertex count | |
 | +0x2C / +0x30 | stream A offset / size | May be padded to 16 bytes |
 | +0x54 / +0x58 | stream B offset / size | Size 0 when rigid |
+| +0x60 | bone range starts | Two uint16: byte offsets, 48 per bone |
+| +0x64 | bone range sizes | Two uint16, 0 for an unused range. The draw's bone palette is range 1 then range 2 |
 | +0x6C / +0x70 | stream C offset / size | |
 
 ### 13.4 Vertex and index widths
@@ -1299,7 +1333,7 @@ only in files with bones. Stream sizes match these strides in all 126,953 draws.
 | C | +3 | uint8 | always 0 |
 | C | +4, +8 | uint8 × 4, twice | colour-like values, meaning unknown |
 | C | +12 | uint16 **LE** × 2 | UV1 |
-| C | +16 | uint16 **LE** × 2 | UV2, scale unknown |
+| C | +16 | uint16 **LE** × 2 | UV2 |
 
 **Skinned, format 0x83: stream A 10 bytes, stream B 8 bytes, stream C 16 bytes**
 
@@ -1311,7 +1345,7 @@ only in files with bones. Stream sizes match these strides in all 126,953 draws.
 | B | +0 to +7 | (uint8, uint8) × 4 | (bone weight, bone index) pairs |
 | C | +0, +4 | uint8 × 4, twice | colour-like values, meaning unknown |
 | C | +8 | uint16 **LE** × 2 | UV1 |
-| C | +12 | uint16 **LE** × 2 | UV2, scale unknown |
+| C | +12 | uint16 **LE** × 2 | UV2 |
 
 Decoding:
 
@@ -1319,16 +1353,23 @@ Decoding:
   fit the bounds tightly only with it, in all 17,030 sub-objects tested.
 - **Normal** is `(byte − 128) / 128`, axes X, Y, Z. Triangles are counter-clockwise
   around it in index order.
-- **UV1** is `(raw − 0x8000) / 512`. The evidence is strong, but no decoded UV has
-  been checked against a texture.
+- **UV1** is `(raw − 0x8000) / 512`, V as stored: V = 0 is the texture's top
+  row, as in glTF (checked against textures on PS3 and Switch; on Xbox 360 the
+  UV bytes equal Switch's).
+- **UV2** of a lightmapped draw is `(raw − 0x8000) / 8192`, with V then
+  multiplied by the lightmap texture's V scale (1 when it is 0). Where a shader
+  reads UV2 for another texture layer, it is `(raw − 0x8000) / 8192` with no V
+  scale, followed by the layer's texture matrix. A few shader passes decode UV2
+  at 1/512 instead; the vertex data fits 1/8192, and what the game shows there
+  is not known.
 - **Bone weights** sum to 255 in descending order. At most three were non-zero
-  across the 227,439 records checked. Indices stay below the bone count and are
-  spatially coherent, but they have not been matched to skeleton positions.
+  across the 227,439 records checked. Through the draw's palette they name
+  skeleton bones, which is how the glTF skin is bound.
 - **Tangents** are not stored: every byte has another field.
 - **Bones:** word 0 of a bone record is its name hash, and the parent index follows at
   +4: -1 or an earlier bone, in 250 of 250 files. Model-space translation is at +0x40.
-  Skinned bone indices are **local to the draw**, not skeleton indices. Where build A
-  keeps the map to the skeleton has not been found.
+  Skinned bone indices are **local to the draw**: index i is entry i of the
+  draw's palette, the bones of its two bone ranges (+0x60 / +0x64) in order.
 
 ### 13.5 Build B
 
@@ -1561,7 +1602,7 @@ this document:
 | `d3cpk_extractor.py` | Whole-archive extraction with a text report and dumps of chunks that fail to inflate; built on `cpklib.py` (`d3cpk_extractor_v7.py` is the same tool) | `*.cpk` → directory tree | Run on `Common.cpk`: all 28,394 files extracted |
 | `d3cutscene.py` / `d3cutscene_tool.py` | Reader and command-line front-end for raw cutscene archives (`fmt_const = 0`): info / list / validate / extract | `*_Cutscene.cpk` → `.ogv` | Contributed; not re-verified here against shipped data |
 | `lua51.py` / `luadec.py` / `relua.py` / `lua_tool.py` | Lua 5.1 chunk reader and disassembler, decompilers to pseudo-Lua and to compilable source, and command-line front-end | `*.cpk` → `.lua` / `.lst` / `.luac` | Run on all 4,755 chunks of the corpus (§14.2) |
-| `d3sno/` | Library and command line for three builds (Switch, PS3, Xbox 360): archives, index files, powers and formulas, meshes with OBJ and glTF export, animation, navigation, textures to PNG (Xbox 360 tiled textures included), text, balance tables, worlds, collision, materials, sound, gameplay records (actors, monsters, quests, conversations, scenes, recipes), UI and fonts for all three builds, shaders, FSB5 headers and sample names, names for tags, enum values and flag bits, structure checks, and writers for `.stl`, `.pow`, `.scr`, `.tex`, `.gam`, a generic writer for every other SNO type, a mesh-level `.app` writer with an octree builder, `.can` and `.nav` writers, an FSB5 writer, writers for CoreTOC, Prefetch, manifests and sprite tables with adding new files, a `.tex` encoder for all three builds, a collision mesh builder, and derivation of scene navigation, marker lists, list counts, actor bounds and sound-bank rows; Xbox 360 archive writer; content creation: a formula compiler and decompiler, a Lua chunk writer with porting between builds, animation curve encoding, FSB5 banks from Ogg Vorbis, new materials, shader program replacement, UI and font writers; modding tools: a PNG reader, texture import onto an existing `.tex`, mesh import from glTF / GLB / OBJ onto an existing `.app`, and `replace` / `add` commands that update the index files; mesh parts: adding, removing and moving sub-objects, draws, skinning records and material entries; `export` of a whole game copy to glTF, PNG and JSON with a manifest and coverage report, lightmap and second-layer UVs and animation velocity; `apply` of an edited export back into archives | `*.cpk` and files inside them | Every file of all three builds parses in strict mode; writers are byte-identical on every file (`.gam` 54 of 54 Switch, 41 of 41 PS3, all Xbox 360); every tag-map record is named; all 24 Xbox 360 archives rebuild byte for byte; the generic writer rebuilds every other SNO file of all three builds, PS3 `globals.glo` included; the `.app` writer rebuilds all 26,292 meshes with every count, size, quantisation step and PS3 skinning value re-derived; every index file and every texture payload rebuilds byte for byte, and every collision mesh rebuilds from its triangles; every formula with text compiles to its stored bytecode except two per build, every `.ani` (15,824 Switch) and every Switch and Xbox 360 UI dialog (397 and 334) is rebuilt from its decoded form, and every material is rebuilt from its fields; every texture exported to PNG and every mesh exported to glTF or OBJ imports back to the identical file; every mesh rebuilt from zero by the part rules comes back byte for byte; `export` of every non-cutscene archive of each build ends without error, every exported mesh imports back byte for byte, every `.glb` passes the Khronos glTF validator (the only errors are missing texture files that the coverage report names), and two runs give identical output on all three builds; `apply` of an unedited export writes nothing, and edited textures, meshes and text come back in a new export with every other file unchanged |
+| `d3sno/` | Library and command line for three builds (Switch, PS3, Xbox 360): archives, index files, powers and formulas, meshes with OBJ and glTF export, animation, navigation, textures to PNG (Xbox 360 tiled textures included), text, balance tables, worlds, collision, materials, sound, gameplay records (actors, monsters, quests, conversations, scenes, recipes), UI and fonts for all three builds, shaders, FSB5 headers and sample names, names for tags, enum values and flag bits, structure checks, and writers for `.stl`, `.pow`, `.scr`, `.tex`, `.gam`, a generic writer for every other SNO type, a mesh-level `.app` writer with an octree builder, `.can` and `.nav` writers, an FSB5 writer, writers for CoreTOC, Prefetch, manifests and sprite tables with adding new files, a `.tex` encoder for all three builds, a collision mesh builder, and derivation of scene navigation, marker lists, list counts, actor bounds and sound-bank rows; Xbox 360 archive writer; content creation: a formula compiler and decompiler, a Lua chunk writer with porting between builds, animation curve encoding, FSB5 banks from Ogg Vorbis, new materials, shader program replacement, UI and font writers; modding tools: a PNG reader, texture import onto an existing `.tex`, mesh import from glTF / GLB / OBJ onto an existing `.app`, and `replace` / `add` commands that update the index files; mesh parts: adding, removing and moving sub-objects, draws, skinning records and material entries; `export` of a whole game copy to glTF, PNG and JSON with a manifest and coverage report, lightmap and second-layer UVs and animation velocity; `apply` of an edited export back into archives (meshes, textures, text, records, worlds, navigation, collision and animations); archive writing by streaming from the source, with memory independent of the archive size; second-UV shader tables for all three builds, a ×16 `KHR_texture_transform` on passes that decode UV2 at 1/512, glTF sampler wrap modes from the shader stages, reading ahead on several threads (`--jobs`), and a segmented archive layout packed in parallel (`--segment`) | `*.cpk` and files inside them | Every file of all three builds parses in strict mode; writers are byte-identical on every file (`.gam` 54 of 54 Switch, 41 of 41 PS3, all Xbox 360); every tag-map record is named; all 24 Xbox 360 archives rebuild byte for byte; the generic writer rebuilds every other SNO file of all three builds, PS3 `globals.glo` included; the `.app` writer rebuilds all 26,292 meshes with every count, size, quantisation step and PS3 skinning value re-derived; every index file and every texture payload rebuilds byte for byte, and every collision mesh rebuilds from its triangles; every formula with text compiles to its stored bytecode except two per build, every `.ani` (15,824 Switch) and every Switch and Xbox 360 UI dialog (397 and 334) is rebuilt from its decoded form, and every material is rebuilt from its fields; every texture exported to PNG and every mesh exported to glTF or OBJ imports back to the identical file; every mesh rebuilt from zero by the part rules comes back byte for byte; `export` of every non-cutscene archive of each build ends without error, every exported mesh imports back byte for byte, on a whole-game export of each build the Khronos glTF validator reports no error and no warning, and two runs give identical output on all three builds; `apply` of an unedited export writes nothing, and edited textures, meshes and text come back in a new export with every other file unchanged; streamed archive writing gives the same bytes as before on the largest archive of each build, which `verify` accepts, with at most 118 MB of memory above the parsed source; on the act 1 and common archives of each build, an automated edit of every record, world, scene, marker set and collision file (12,547 PS3, 48,298 Switch, 22,943 Xbox 360) is applied with no refusal, every written archive verifies, and every file not edited comes back unchanged; putting the original JSON back is applied with no refusal and restores every actor, material, monster, level, world, scene, marker set and collision mesh byte for byte; every unedited animation (6,815 PS3, 13,197 Switch, 9,532 Xbox 360) re-encodes to its stored bytes; the segmented layout gives the same bytes for 1 and 12 threads, reads back exactly and verifies on the largest archive of each build |
 | `coretoc_parser.py` | Global asset index parser, both forms | `CoreTOC.dat` | All observed groups identified |
 | `prefetch_parser.py` | Preload dependency graph parser, both byte orders | `Prefetch.dat` + `CoreTOC.dat` | Every byte accounted for on both builds |
 
@@ -1609,7 +1650,7 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 | `.app` build B vertex | 28 bytes rigid, 36 bytes skinned | §13.5 |
 | `.app` index width | 16 bits | §13.4 |
 | CPK magic | `0xA1B2C3D4` | Empirical |
-| CPK format version | 6 (BE) / 7 (LE) | Empirical |
+| CPK format version | 6 (BE) / 7 (LE on build B, BE on Xbox 360) | Empirical |
 | CPK cipher initial state | `0x873AE8E53C11D761` | Recovered by known-plaintext attack against zlib prefixes (see §3.4) |
 | CPK encryption flag | bit `0x8000` in `zsize_raw` | Empirical + cipher verification |
 | CPK `read_sector` (read unit size) | `0x10000` | Header (implicit on v6, explicit on v7 at offset `0x3C`) |
@@ -1717,16 +1758,40 @@ All format-level sizes, constants, and algorithmic parameters in one place:
 - **Export** — `export` writes the user's own game copy as glTF 2.0, PNG and JSON
   with a manifest (one entry per file, each SNO link resolvable) and a coverage
   report (every skipped file with a reason). Coordinates stay as stored:
-  right-handed, z up, actors facing +x. Lightmapped meshes get a second UV set,
-  animations carry their average velocity (`--travel` adds an optional travel node).
-  Output is deterministic. Where a format question is still open, the file says so
-  in a flag instead of guessing. Second-layer textures read through the second UV
-  set are named per material. The output is game content and stays on the user's
-  computer.
+  right-handed, z up, actors facing +x, and quaternions `[x, y, z, w]` rotate as
+  `v' = q v q*`, the glTF reading. Lightmapped meshes get a second UV set. Where
+  a shader reads the second UV set for another texture layer, that layer's
+  texture is named per material, from a shader table per build (PS3, Switch and
+  Xbox 360). Passes that decode the second UV set at 1/512 get a ×16
+  `KHR_texture_transform` on that texture, so a viewer that ignores the
+  extension shows the 1/8192 reading. Sampler wrap modes (clamp or repeat) come
+  from the shader stages. Animations carry their average velocity (`--travel`
+  adds an optional travel node). Output is deterministic. Where a format question
+  is still open, the file says so in a flag instead of guessing. The output is
+  game content and stays on the user's computer.
 - **Apply** — `apply` compares an edited export folder with the hashes in its
   manifest, imports each changed mesh, texture and text table onto its original
   file, and writes only the archives that changed (`--copy-unchanged` for a whole
-  game folder), with a report. Animations, records and world data are not applied.
+  game folder), with a report. Archives are written one at a time by streaming,
+  so memory does not grow with their size; one edit in the largest archive of
+  each build applies and verifies. Threads (`--jobs`) read ahead, and with
+  `--segment` pack the archive in parallel, with the same output for any number
+  of threads. Records, worlds, navigation and collision
+  (JSON) and animations (glTF) are applied too: the edited file is compared with
+  the template's own export, leaf by leaf, and only the values that differ are
+  written, each in its stored type. Markers and scene entries can be added or
+  removed; navigation cells keep their geometry; a collision mesh keeps its
+  triangle order, bounds and tree boxes while they still enclose the edit, and is
+  refitted otherwise (with a warning); an animation curve is re-encoded in its
+  stored codec. A value the export derives (enum names, bounds, a world's layout,
+  a scene neighbour's border) must agree with the value the edited JSON gives;
+  otherwise it is refused, and one faulty entry is refused without stopping the
+  others. Rows of an edited list are paired with the stored rows by position,
+  and unchanged rows are copied as stored. A file stored several times in one
+  archive is replaced in every copy. On the act 1 and common archives of each
+  build, an automated edit of every record, world, scene, marker set and
+  collision file and then the original JSON are both applied with no refusal,
+  and the second restores the stored bytes of every file.
 
 ### 21.2 Open
 
@@ -1736,16 +1801,29 @@ All format-level sizes, constants, and algorithmic parameters in one place:
   input of the hash, and the exact zeroing rule at sector edges on build A.
 - **Why files are repeated** inside an archive (§3.5) — the load unit behind the
   copies, and whether the game accepts a rebuilt archive that stores each file
-  once.
-- **`.app` details** (§13) — the colour-like values, the scale of UV2, the V
-  direction and the source of tangents if any; the root of the
-  octree, the order of the Switch compact lists, and the tail and zero-weight
-  slots of the bone palette.
+  once, or the segmented layout (`--segment`).
+- **`.app` details** (§13) — the colour-like values; what the game shows on the
+  few shader passes that decode UV2 at 1/512; the root of the octree, the order
+  of the Switch compact lists, and the tail and zero-weight slots of the bone
+  palette.
 - **Values not yet derived** — how scenes are cut into navigation cells, marker
-  bounds, the Prefetch dependency list of a new file, and root motion.
+  bounds, and the Prefetch dependency list of a new file.
+- **Second UV set** — a few Switch flow-effect shaders mix UV2 with a texture
+  read; their primitives (28 in the whole game) are exported as unknown. No
+  shipped world rotates a scene, so placing markers in a rotated scene is
+  untested.
 - **Sound** — the Switch frame codec (FSB5 mode 16) is not decoded.
 - **Shaders** — GPU programs cannot be compiled, only copied from another
   shader; the shader pass keys are not derived.
+- **Record import limits** — `apply` writes no new record files and deletes
+  none; groups that the export writes only as an unnamed tree are not imported;
+  navigation geometry and the number of navigation cells cannot change. On
+  Switch and Xbox 360 the game's marker sets share one tag map among markers
+  with equal tags; a marker added by `apply` may get a tag map of its own
+  instead, which is valid but not laid out as the game's files are. With the
+  default archive layout, `--jobs` saves no time. Whether
+  the game accepts edited records, and which of a file's differing repeated
+  copies it reads, is not known.
 - **Mesh import limits** — cloth parts can only be kept or removed whole; a
   changed PS3 draw over the size limits is refused (import the geometry as a new
   mesh instead); the import creates no material entries (use the library); a

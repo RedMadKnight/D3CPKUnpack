@@ -2,7 +2,8 @@
 has edited (stage 18, ``40``), finds what changed (W21-1, W21-2), imports each changed mesh, texture and
 string table onto its template (W21-3 to W21-5, through the importers of ``34`` and the ``.stl`` helpers
 of ``12``), and writes new archives (W21-6) with a report (W21-7). What did not change is kept byte for
-byte.
+byte. Stage 22 (``49``): the JSON records, world, collision and animation files too (W22-1 to W22-12,
+``json_import`` and ``anim_import``).
 
 The output is game content, as in ``40``: it is made on the user's computer only and must never be put
 into a repository, a test fixture or a release; an output folder inside a git working tree is refused
@@ -35,10 +36,14 @@ EXIT_OK, EXIT_STOPPED, EXIT_REFUSED = export.EXIT_OK, export.EXIT_STOPPED, expor
 REPORT_NAME = "apply_report.json"
 REPORT_FORMAT = "d3sno-apply-report"
 REPORT_FORMAT_VERSION = 1
-KINDS = ("meshes", "textures", "text")  # W21-4, the values of ``--only``
+KINDS = ("meshes", "textures", "text", "records", "world", "collision", "anims")  # W21-4, W22-11: ``--only``
+# W22-11: the JSON groups of each kind (records are applied after meshes and textures)
+JSON_KINDS = {"acr": "records", "mon": "records", "mat": "records", "lvl": "records", "scn": "world",
+              "wrl": "world", "mrk": "world", "phm": "collision"}
 NEVER_APPLIED = ("manifest.json", "coverage.json")  # W21-2
 # results of a changed entry (W21-7)
 RESULTS = ("applied", "no_effect", "not_importable", "filtered", "refused")
+FIELDS_LISTED = 200  # W22-11
 MESH_OPTIONS = {"flip_v": False, "lightmap_v_scale": None, "missing": "keep", "skin": "refuse", "low_poly": True}
 
 
@@ -63,6 +68,10 @@ def kind_of(entry: dict) -> str | None:
         return "textures"
     if group == "stl" and path.startswith("data/text/") and path.endswith(".json"):
         return "text"
+    if group in JSON_KINDS and path == f"data/{group}/{entry.get('handle')}.json":  # W22-11
+        return JSON_KINDS[group]
+    if group == "ani" and path.startswith("anims/") and path.endswith(".glb"):
+        return "anims"
     return None
 
 
@@ -116,12 +125,24 @@ def _rel(path: Path, root: Path) -> str:
     return path.relative_to(root).as_posix()
 
 
-class _Refusal(Exception):
-    """One entry is refused (W21-3, W21-4); the others go on."""
+def _refused_rows(rows: list) -> dict:
+    """``51`` AB6: at most ``FIELDS_LISTED`` refused paths: the first row (the one the entry's reason and
+    message come from), then the others in path order; with the total and the count of each reason."""
+    rows = list(rows)
+    by_reason: dict[str, int] = {}
+    for row in rows:
+        by_reason[row.get("reason")] = by_reason.get(row.get("reason"), 0) + 1
+    listed = rows[:1] + sorted(rows[1:], key=lambda r: str(r.get("path")))
+    return {"refused_fields": listed[:FIELDS_LISTED], "refused_fields_total": len(rows),
+            "refused_by_reason": dict(sorted(by_reason.items()))}
 
-    def __init__(self, reason: str, message: str | None = None):
+
+class _Refusal(Exception):
+    """One entry is refused (W21-3, W21-4); the others go on. ``fields``: W22-11, every refused path."""
+
+    def __init__(self, reason: str, message: str | None = None, fields=None):
         super().__init__(message or reason)
-        self.reason, self.message = reason, message
+        self.reason, self.message, self.fields = reason, message, fields
 
 
 @dataclass
@@ -130,12 +151,16 @@ class _Change:
     data: bytes
     targets: list  # (archive base name, archive entry name)
     warnings: list
+    fields: list | None = None  # W22-11: the changed paths with old and new values
+    also: list = field(default_factory=list)  # W22-8, W22-10: other files written for this entry
 
 
 class _Apply:
     def __init__(self, game: Path, root: Path, out: Path, manifest: dict, build, dry_run, copy_unchanged, only,
-                 mesh):
+                 mesh, jobs=None, segment=False, profile=False):
         self.game, self.root, self.out = game, root, out
+        self.jobs = jobs  # ``48`` Z4: workers per archive written (None: the number of processors)
+        self.segment, self.profile = bool(segment), bool(profile)  # ``51`` AB7
         self.manifest, self.given_build = manifest, build
         self.dry_run, self.copy_unchanged, self.only, self.mesh = dry_run, copy_unchanged, only, mesh
         options = manifest.get("options") if isinstance(manifest.get("options"), dict) else {}
@@ -154,6 +179,10 @@ class _Apply:
         self.unmanaged: list[str] = []
         self.replacements: dict[str, dict[str, bytes]] = {}  # archive base name -> entry name -> bytes
         self.templates: dict[tuple, _Change | _Refusal] = {}
+        # ``51`` AB3, ``52`` AC6: (group, handle) -> the parsed scene info or marker set of this run's new bytes,
+        # only for the scenes and marker sets the run's worlds refer to (``layout_refs``)
+        self.layout_parts: dict[tuple, object] = {}
+        self.layout_refs: set[tuple] = set()
 
     # --- W21-2 ---------------------------------------------------------------------------------
     def open(self) -> None:
@@ -250,21 +279,26 @@ class _Apply:
                                            "that was exported")
 
     def targets(self, item, entry: dict, template: bytes):
-        """W21-5: every copy (archive entry) of the exported variant whose stored bytes equal the
-        template; the others named by a warning."""
+        """W21-5 with ``50`` AA3: every archive entry of the exported variant that holds the template. The
+        repeated copies of one entry are one file: if any of them equals the template the entry is a target
+        (the writer replaces all its copies, W14-6), with the warning ``repeated_copies_differed`` when not all
+        of them did. An entry none of whose copies equals the template is not changed
+        (``copy_differs_not_changed``)."""
         locale = entry.get("locale")
         targets, warnings = [], []
         for copy in sorted(item.copies, key=lambda c: (c.archive.lower(), c.entry.name or "")):
             if item.ext != "stl" and copy.locale != locale:
                 continue  # another locale variant (V27-2): not changed
-            same = True
+            equal = []
             for index in range(max(copy.entry.count, 1)):
                 try:
-                    same = same and copy.cpk.read_file(copy.entry, index) == template
+                    equal.append(copy.cpk.read_file(copy.entry, index) == template)
                 except FormatError:
-                    same = False
-            if same:
+                    equal.append(False)
+            if any(equal):
                 targets.append((copy.archive, copy.entry.name))
+                if not all(equal):
+                    warnings.append(f"repeated_copies_differed: archive {copy.archive}")
             else:
                 warnings.append(f"copy_differs_not_changed: archive {copy.archive}")
         return targets, warnings
@@ -332,6 +366,105 @@ class _Apply:
                 write.add_entry(table, label, wanted[label])
         return write.write_stl(table), list(table.warnings)
 
+    # --- W22 -------------------------------------------------------------------------------------
+    def known(self, group_id: int, handle: int) -> bool:
+        """W22-3: a handle that the game folder's index names."""
+        return (group_id, handle & 0xFFFFFFFF) in self.run.names
+
+    def companion_copies(self, item, folder_ext: str):
+        """(archive base name, entry name, bytes) of the ``.nav`` / ``.can`` beside each copy of ``item``."""
+        name = item.name.rpartition(".")[0] + f"\\0000.{folder_ext}"
+        found = []
+        for copy in item.copies:
+            entry = copy.cpk.find(name)
+            if entry is None:
+                continue
+            try:
+                found.append((copy.archive, entry.name or name, copy.cpk.read_file(entry)))
+            except FormatError:
+                continue
+        return found
+
+    def scenes_and_sets(self, after: bool = False):
+        """The scene and marker set lookups of a world's layout: the stored files, or (``after``, ``51``
+        AB3) the new bytes of each scene and marker set this run writes and the stored bytes otherwise."""
+        from . import world
+
+        def lookup(ext, parse):
+            items = self.run.by_handle(ext)
+            cache = {}
+
+            def get(handle):
+                if handle not in cache:
+                    found = items.get(handle)
+                    held = self.layout_parts.get((ext, handle)) if after else None
+                    try:
+                        if held is not None:
+                            cache[handle] = held
+                        elif found is None:
+                            cache[handle] = None
+                        else:
+                            cache[handle] = parse(found.data, found.build)
+                    except FormatError:
+                        cache[handle] = None
+                return cache[handle]
+            return get
+
+        return lookup("scn", world.parse_scene_info), lookup("mrk", world.parse_marker_set)
+
+    def import_json(self, item, template: bytes, entry: dict, target: Path):
+        from . import json_import, sno_layout
+
+        ext = entry.get("group")
+        build = self.run.build
+        if ext not in sno_layout.covered_types(item.build or build):
+            raise _Refusal("not_importable", f"no tree layout for {item.build} .{ext} (W22-6)")
+        try:
+            edited = json.loads(target.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, ValueError) as exc:
+            raise _Refusal("bad_json", str(exc)) from None
+        nav = self.run.companion(item, "nav") if ext == "scn" and item.build in ("ps3", "x360") else None
+        scenes, sets = self.scenes_and_sets() if ext == "wrl" else (None, None)
+        after = self.scenes_and_sets(after=True) if ext == "wrl" else None
+        try:
+            result = json_import.import_json(ext, template, item.build, edited, nav=nav, scenes=scenes, sets=sets,
+                                             known=self.known, after=after)
+        except json_import.Refused as refused:
+            rows = [r.as_row() for r in getattr(refused, "refusals", [refused])]
+            raise _Refusal(refused.reason, refused.message, rows) from None
+        also = []
+        if result.nav is not None and nav is not None and result.nav != nav:
+            also = [(stem, name, result.nav) for stem, name, data in self.companion_copies(item, "nav") if data == nav]
+            if not also:  # ``50`` AA4
+                raise _Refusal("no_copy_matches", "the scene's .nav changes, but no stored copy equals its template")
+        return result.data, list(result.warnings), result.changes, also
+
+    def import_anim(self, item, template: bytes, entry: dict, target: Path):
+        from . import anim_import, json_import
+
+        if not hasattr(self, "_ani_app"):
+            self.run.exported["app"] = {(e.get("handle"), None) for e in self.manifest.get("entries", [])
+                                        if isinstance(e, dict) and e.get("group") == "app"}
+            self.run.link_animations()
+            self._ani_app = dict(self.run.ani_app)
+        app_handle = self._ani_app.get(item.handle)
+        if app_handle is None:
+            raise _Refusal("not_importable", "no exported appearance links this animation (W18-5)")
+        app = self.run.app_items[app_handle]
+        can = self.run.companion(item, "can") if item.build in ("ps3", "x360") else None
+        try:
+            result = anim_import.import_animation(template, item.build, app.data, app.build, target.read_bytes(),
+                                                  item.handle, app_handle, can, self.run.travel)
+        except json_import.Refused as refused:
+            rows = [r.as_row() for r in getattr(refused, "refusals", [refused])]
+            raise _Refusal(refused.reason, refused.message, rows) from None
+        also = []
+        if result.nav is not None and can is not None and result.nav != can:
+            also = [(stem, name, result.nav) for stem, name, data in self.companion_copies(item, "can") if data == can]
+            if not also:  # ``50`` AA4
+                raise _Refusal("no_copy_matches", "the animation's .can changes, but no stored copy equals its template")
+        return result.data, list(result.warnings), result.changes, also
+
     def change(self, entry: dict, target: Path, kind: str) -> _Change:
         key = (entry.get("group"), entry.get("handle"), entry.get("locale"), json.dumps(entry.get("source"), sort_keys=True))
         if kind == "textures" and key in self.templates:  # every image of a handle at once
@@ -341,17 +474,25 @@ class _Apply:
             return found
         try:
             item, template = self.template(entry)
+            fields, also = None, []
             try:
                 if kind == "meshes":
                     data, warnings = self.import_mesh(template, target)
                 elif kind == "textures":
                     data, warnings = self.import_texture(template, entry)
-                else:
+                elif kind == "text":
                     data, warnings = self.import_text(template, target)
-            except (FormatError, ValueError, struct.error, KeyError) as exc:
+                elif kind == "anims":
+                    data, warnings, fields, also = self.import_anim(item, template, entry, target)
+                else:
+                    data, warnings, fields, also = self.import_json(item, template, entry, target)
+            except (FormatError, ValueError, struct.error, KeyError) as exc:  # any other error: ``apply`` (AA1)
                 raise _Refusal("import_failed", f"{type(exc).__name__}: {exc}") from None
             targets, copy_warnings = self.targets(item, entry, template)
-            found = _Change(data, targets if data != template else [], [*warnings, *copy_warnings])
+            if data != template and not targets:  # ``50`` AA4: a new file that no copy can take
+                raise _Refusal("no_copy_matches", "the import gives a new file, but every stored copy differs from "
+                                                  "the template: " + "; ".join(copy_warnings))
+            found = _Change(data, targets if data != template else [], [*warnings, *copy_warnings], fields, also)
         except _Refusal as refusal:
             if kind == "textures":
                 self.templates[key] = refusal
@@ -361,7 +502,65 @@ class _Apply:
         if data != template:
             for stem, name in targets:
                 self.replacements.setdefault(stem, {})[name] = data
+            self.hold_for_layout(entry, item, data)  # ``51`` AB3, ``52`` AC6
+        for stem, name, data_also in found.also:  # W22-8, W22-10: the .nav / .can of the entry
+            self.replacements.setdefault(stem, {})[name] = data_also
         return found
+
+    def layout_references(self, changed) -> None:
+        """``52`` AC6: before anything is written, the scenes and marker sets the run's worlds refer to: the
+        scenes of each world's scene entries and its marker sets (stored and edited), and the marker sets of
+        those scenes (stored)."""
+        from . import world
+
+        scenes, _ = self.scenes_and_sets()
+        refs: set[tuple] = set()
+        for entry, target in changed:
+            if entry.get("group") != "wrl" or kind_of(entry) not in self.only:
+                continue
+            try:
+                _, template = self.template(entry)
+                wrl = world.parse_world(template, self.run.build)
+                refs |= {("scn", e.handle) for e in wrl.scene_entries} | {("mrk", h) for h in wrl.marker_sets}
+            except (_Refusal, FormatError):
+                pass
+            try:
+                edited = json.loads(Path(target).read_text(encoding="utf-8"))
+            except (OSError, UnicodeDecodeError, ValueError):
+                edited = None
+            if isinstance(edited, dict):
+                for row in edited.get("scene_entries") or []:
+                    link = row.get("scene") if isinstance(row, dict) else None
+                    if isinstance(link, dict) and isinstance(link.get("handle"), int):
+                        refs.add(("scn", link["handle"]))
+                for link in edited.get("marker_sets") or []:
+                    if isinstance(link, dict) and isinstance(link.get("handle"), int):
+                        refs.add(("mrk", link["handle"]))
+        for ext, handle in sorted(refs):
+            if ext == "scn":
+                info = scenes(handle)
+                if info is not None:
+                    refs |= {("mrk", h) for h in info.marker_sets}
+        self.layout_refs = refs
+
+    def hold_for_layout(self, entry: dict, item, data: bytes) -> None:
+        """``52`` AC6: of a scene or marker set the run writes, only what a world's layout needs (its parsed
+        scene info or marker set, not its bytes), and only when a world of the run refers to it. A held scene
+        adds its marker sets to the references."""
+        from . import world
+
+        key = (entry.get("group"), entry.get("handle"))
+        if key not in self.layout_refs:
+            return
+        try:
+            if key[0] == "scn":
+                info = world.parse_scene_info(data, item.build)
+                self.layout_refs |= {("mrk", h) for h in info.marker_sets}
+                self.layout_parts[key] = info
+            elif key[0] == "mrk":
+                self.layout_parts[key] = world.parse_marker_set(data, item.build)
+        except FormatError:
+            self.layout_parts.pop(key, None)
 
     def row(self, entry: dict, result: str, **extra) -> None:
         if result in ("applied", "no_effect", "not_importable", "refused", "filtered"):
@@ -372,6 +571,12 @@ class _Apply:
         self.rows.append(row)
 
     def apply(self, changed) -> None:
+        # W22-11: records after meshes and textures (every entry is a file of its own; the report keeps the
+        # order); ``51`` AB3: worlds last, after every other entry of the run
+        changed = sorted(changed, key=lambda pair: (pair[0].get("group") == "wrl",
+                                                    KINDS.index(kind_of(pair[0])) if kind_of(pair[0]) in KINDS
+                                                    else len(KINDS), str(pair[0].get("path"))))
+        self.layout_references(changed)  # ``52`` AC6
         for entry, target in changed:
             kind = kind_of(entry)
             if kind is None:
@@ -381,16 +586,31 @@ class _Apply:
                 self.row(entry, "filtered", reason="filtered", message=f"--only leaves out {kind}")
                 continue
             try:
-                found = self.change(entry, target, kind)
+                try:
+                    found = self.change(entry, target, kind)
+                except _Refusal:
+                    raise
+                except Exception as exc:  # ``50`` AA1: a fault in one entry refuses that entry only
+                    raise _Refusal("import_failed", f"{type(exc).__name__}: {exc}") from None
             except _Refusal as refusal:
                 extra = {"reason": refusal.reason}
                 if refusal.message:
                     extra["message"] = refusal.message
+                if refusal.fields is not None:  # W22-11, ``51`` AB6: the refused paths, bounded
+                    extra.update(_refused_rows(refusal.fields))
                 self.row(entry, "refused", **extra)
                 continue
-            archives = sorted({stem for stem, _ in found.targets}, key=str.lower)
-            self.row(entry, "applied" if found.targets else "no_effect", archives=archives,
-                     warnings=list(found.warnings))
+            archives = sorted({stem for stem, _ in found.targets} | {stem for stem, _, _ in found.also}, key=str.lower)
+            extra = {}
+            if found.fields is not None:  # W22-11, ``51`` AB6
+                fields = sorted(found.fields, key=lambda r: str(r.get("path")))
+                extra = {"fields_changed": len(fields), "fields": fields[:FIELDS_LISTED]}
+                if len(fields) > FIELDS_LISTED:
+                    extra["fields_total"] = len(fields)
+            if found.also:
+                extra["also_written"] = sorted({name for _, name, _ in found.also})
+            self.row(entry, "applied" if found.targets or found.also else "no_effect", archives=archives,
+                     warnings=list(found.warnings), **extra)
 
     # --- W21-6, Y1 ------------------------------------------------------------------------------
     def archive_jobs(self) -> list:
@@ -411,15 +631,19 @@ class _Apply:
         try:
             for rel, cpk, replacements in self.archive_jobs():
                 if self.dry_run:
-                    done = index_write.write_changed(cpk, None, replacements)
+                    done = index_write.write_changed(cpk, None, replacements, jobs=self.jobs, segment=self.segment)
                 else:
                     target = self.out.joinpath(*PurePosixPath(rel).parts)
                     target.parent.mkdir(parents=True, exist_ok=True)
                     temporary = part_name(target)
                     parts.append((temporary, target))
                     with open(temporary, "wb") as handle:
-                        done = index_write.write_changed(cpk, handle, replacements)
-                written[rel] = {"sha256": done.sha256, "size": done.size}
+                        done = index_write.write_changed(cpk, handle, replacements, jobs=self.jobs,
+                                                         segment=self.segment)
+                written[rel] = {"layout": done.layout, "sha256": done.sha256, "size": done.size}  # ``51`` AB7
+                replacements.clear()  # ``52`` AC6: the entries of this archive are let go once it is written
+                if self.profile and done.workers is not None:
+                    written[rel]["workers"] = done.workers
             for temporary, target in parts:
                 os.replace(temporary, target)
         except BaseException:
@@ -438,9 +662,48 @@ class _Apply:
             "copied": copied, "counts": dict(self.counts), "dry_run": bool(self.dry_run), "format": REPORT_FORMAT,
             "format_version": REPORT_FORMAT_VERSION, "index_files_written": [], "library_version": __version__,
             "missing": self.missing, "options": {
-                "copy_unchanged": bool(self.copy_unchanged), "mesh": dict(self.mesh), "only": list(self.only)},
+                "copy_unchanged": bool(self.copy_unchanged), "mesh": dict(self.mesh), "only": list(self.only),
+                "segment": self.segment},
             "stopped": stopped, "unmanaged": self.unmanaged,
+            **({"profile": self.profile_stats()} if self.profile else {}),
         }
+
+    def profile_stats(self) -> dict:
+        """``52`` AC6: the scenes and marker sets held for the worlds' layouts and the peak memory of the
+        process (``--profile``)."""
+        return {"layout_held": len(self.layout_parts), "layout_referenced": len(self.layout_refs),
+                "peak_memory_bytes": peak_memory()}
+
+
+def peak_memory() -> int | None:
+    """``52`` AC6: the peak memory of this process in bytes (the peak working set on Windows, the maximum
+    resident set elsewhere), or None where it cannot be read."""
+    try:
+        if os.name == "nt":
+            import ctypes
+            from ctypes import wintypes
+
+            class Counters(ctypes.Structure):
+                _fields_ = [("cb", wintypes.DWORD), ("PageFaultCount", wintypes.DWORD),
+                            ("PeakWorkingSetSize", ctypes.c_size_t), ("WorkingSetSize", ctypes.c_size_t),
+                            ("QuotaPeakPagedPoolUsage", ctypes.c_size_t), ("QuotaPagedPoolUsage", ctypes.c_size_t),
+                            ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t),
+                            ("QuotaNonPagedPoolUsage", ctypes.c_size_t), ("PagefileUsage", ctypes.c_size_t),
+                            ("PeakPagefileUsage", ctypes.c_size_t)]
+
+            counters = Counters()
+            counters.cb = ctypes.sizeof(Counters)
+            process = ctypes.windll.kernel32.GetCurrentProcess()
+            if not ctypes.windll.psapi.GetProcessMemoryInfo(process, ctypes.byref(counters), counters.cb):
+                return None
+            return int(counters.PeakWorkingSetSize)
+        import resource
+        import sys
+
+        peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        return int(peak if sys.platform == "darwin" else peak * 1024)
+    except Exception:  # no way to read it here
+        return None
 
 
 def _copy_file(source: Path, target: Path) -> None:
@@ -492,10 +755,13 @@ def _read_manifest(root: Path) -> dict:
 
 
 def apply_export(game_dir, export_dir, out_dir, *, build=None, dry_run=False, copy_unchanged=False, only=None,
-                 mesh_options=None, force=False) -> ApplyResult:
+                 mesh_options=None, force=False, jobs=None, segment=False, profile=False) -> ApplyResult:
     """W21-8: apply the changes of ``export_dir`` (an edited export of ``game_dir``) and write the
     changed archives and ``apply_report.json`` into ``out_dir``. Refusals give exit code 2 and no
-    report; a stop (an unexpected fault) exit code 1 with the report."""
+    report; a stop (an unexpected fault) exit code 1 with the report. ``48`` Z4: ``jobs`` worker
+    threads write each archive (None: the number of processors; 1: one thread); the archives are the
+    same for any number. ``51`` AB7: ``segment`` writes the segmented layout; ``profile`` puts the use of
+    the workers into the report (``archives``)."""
     game, root, out = (Path(os.path.abspath(p)) for p in (game_dir, export_dir, out_dir))
     job = None
     try:
@@ -503,8 +769,10 @@ def apply_export(game_dir, export_dir, out_dir, *, build=None, dry_run=False, co
             raise ApplyRefused(f"--build {build!r}: give ps3, switch or x360")
         _refuse_paths(game, root, out, force)
         manifest = _read_manifest(root)
+        if jobs is not None and (isinstance(jobs, bool) or not isinstance(jobs, int) or jobs < 1):
+            raise ApplyRefused(f"--jobs {jobs!r}: give a number of at least 1")
         job = _Apply(game, root, out, manifest, build, dry_run, copy_unchanged, _only(only),
-                     _mesh_options(mesh_options))
+                     _mesh_options(mesh_options), jobs, segment, profile)
         job.open()
         changed = job.classify()
     except ApplyRefused as exc:
@@ -536,5 +804,16 @@ def apply_export(game_dir, export_dir, out_dir, *, build=None, dry_run=False, co
     counts = report["counts"]
     summary = [f"{k}: {counts[k]}" for k in sorted(counts)] + [f"archives written: {len(written)}"
                                                                + (" (dry run, none written)" if dry_run else "")]
+    summary.append(f"layout: {'segmented' if segment else 'default'}")  # ``51`` AB7
+    if profile:
+        from .archive import workers_text
+
+        for rel in written:
+            stats = report["archives"].get(rel, {}).get("workers")
+            if stats:
+                summary.append(f"{rel} workers: " + workers_text(stats))
+        held = report.get("profile") or {}  # ``52`` AC6
+        summary.append(f"layout held: {held.get('layout_held')} of {held.get('layout_referenced')} referenced; "
+                       f"peak memory: {held.get('peak_memory_bytes')} bytes")
     code = EXIT_STOPPED if stopped else EXIT_OK
     return ApplyResult(report, code, None if not stopped else f"apply stopped: {stopped['error']}", summary)

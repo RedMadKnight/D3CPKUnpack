@@ -55,7 +55,7 @@ from typing import Callable, Iterable, Sequence
 
 from .archive import (
     CPK_MAGIC, FLAG_COMPACT, FLAG_COMPRESSED, CpkArchive, StreamView, Written, _Region, _spool,
-    as_output, decrypt_packet, encrypt_packet, file_span, name_hash, read_archive,
+    as_output, as_workers, decrypt_packet, encrypt_packet, file_span, name_hash, read_archive,
 )
 from .binary import BitWriter, FormatError
 
@@ -112,6 +112,39 @@ def stream_head(data, start: int, limit: int,
             return bytes(out), False
     out += packer.flush()
     return bytes(out), True
+
+
+# ``48`` Z4: input compressed ahead from a piece's start, in comp sectors (a piece whose stream start
+# does not pass the largest room within it is compressed by the packer)
+AHEAD_INPUT_SECTORS = 16
+
+
+def _head_ahead(data: bytes, whole: bool, limit: int) -> tuple[bytes, list[int], bool]:
+    """Z4, in a worker: ``stream_head`` of ``data`` from 0 for every limit up to ``limit`` at once:
+    the output, its length after each fed chunk, and whether the stream is complete (``whole``:
+    ``data`` is the whole piece)."""
+    packer = deflate9_object()
+    out = bytearray()
+    lengths = []
+    for at in range(0, len(data), FEED_CHUNK):
+        out += packer.compress(data[at:at + FEED_CHUNK])
+        lengths.append(len(out))
+        if len(out) > limit:
+            return bytes(out), lengths, False
+    if not whole:
+        return bytes(out), lengths, False
+    out += packer.flush()
+    return bytes(out), lengths, True
+
+
+def _answer_head(found, room: int):
+    """Z4: what ``stream_head(data, 0, room)`` gives, from ``_head_ahead``; None when the input
+    compressed ahead ends before the stream passes ``room``."""
+    out, lengths, complete = found
+    for length in lengths:
+        if length > room:
+            return out[:length], False
+    return (out, True) if complete else None
 
 
 def declared_for_cut(stored: bytes) -> int:
@@ -200,10 +233,49 @@ def _packets(pieces: Sequence[Piece], levels: Sequence[int], comp_sector: int,
              compress: Callable[[bytes], bytes],
              compressor: Callable[[], object] | None = None,
              emit: Callable[[bytes], None] | None = None, keep_plans: bool = True,
+             workers=None,
              ) -> _Packed:
     """A3 to A6, A9: the packets of every piece, slot by slot. Y1: each closed slot but the last
     goes, padded, to ``emit`` as soon as the next one opens; the last is returned unpadded.
-    ``keep_plans`` False keeps no packet plan (their stored bytes would grow with the archive)."""
+    ``keep_plans`` False keeps no packet plan (their stored bytes would grow with the archive).
+    ``48`` Z4: with ``workers`` (and the default compressor) the start of each following level-9
+    piece is compressed ahead, for any room; the bytes do not depend on it."""
+    ahead: dict = {}
+    # ``52`` AC5: nothing is compressed ahead of the packer (the workers only read and inflate the source
+    # ahead); the piece starts are compressed where they are packed
+    workers = None
+    try:
+        return _packets_in(pieces, levels, comp_sector, encrypted, source, compress, compressor, emit,
+                           keep_plans, workers, ahead)
+    finally:
+        for future in ahead.values():
+            workers.drop(future)
+
+
+def _plan_ahead(pieces, levels, comp_sector, number, workers, ahead) -> None:
+    """Z4: submit the starts of the pieces after ``number`` while there is room in flight."""
+    from . import archive as _archive
+
+    for stale in [k for k in ahead if not isinstance(k, int) or k <= number]:
+        workers.drop(ahead.pop(stale))
+    limit = AHEAD_INPUT_SECTORS * comp_sector
+    for following in range(number + 1, len(pieces)):
+        if len(ahead) >= workers.limit:
+            break
+        key = _archive._ahead_key(following)
+        data = pieces[following].data
+        if key in ahead or levels[following] == 0 or not len(data):
+            continue
+        size = min(len(data), limit)
+        prefix = data.read(0, size) if isinstance(data, StreamView) else bytes(data[:size])
+        future = workers.submit(_head_ahead, prefix, size == len(data), comp_sector)
+        if future is None:
+            break
+        ahead[key] = future
+
+
+def _packets_in(pieces, levels, comp_sector, encrypted, source, compress, compressor, emit, keep_plans,
+                workers, ahead) -> _Packed:
     plans: list[PacketPlan] = []
     offsets: list[int] = []
     slot: bytearray | None = None
@@ -215,6 +287,11 @@ def _packets(pieces: Sequence[Piece], levels: Sequence[int], comp_sector: int,
     for number, piece in enumerate(pieces):
         data, level = piece.data, levels[number]
         position = 0
+        head = None  # Z4: this piece's start, compressed ahead
+        if workers is not None:
+            future = ahead.pop(number, None)
+            head = workers.take(future) if future is not None else None
+            _plan_ahead(pieces, levels, comp_sector, number, workers, ahead)
         while position < len(data):
             if not slot_open:
                 offsets.append(stream_pos)
@@ -235,7 +312,10 @@ def _packets(pieces: Sequence[Piece], levels: Sequence[int], comp_sector: int,
                     stored, cut = stream[:room], True
                     declared = min(room - 7, left) if room >= 7 else 0
             else:
-                if compressor is not None:
+                answer = _answer_head(head, room) if head is not None and position == 0 else None
+                if answer is not None:
+                    stream, complete = answer
+                elif compressor is not None:
                     stream, complete = stream_head(data, position, room, compressor)
                 else:
                     stream, complete = compress(data[position:]), True
@@ -320,10 +400,14 @@ def write_x360_archive_to(
     compress: Callable[[bytes], bytes] = deflate9,
     compressor: Callable[[], object] | None = None,
     keep_plans: bool = True,
+    jobs=1,
+    segment: bool = False,
 ) -> X360WriteResult:
     """``47`` Y1: ``write_x360_archive`` into ``out`` (a binary file object or an ``Output``);
     ``data`` of the result is None. The region is laid out in a temporary file (the tables before
-    it need its slot count and checksum), then header, tables and region are written in order."""
+    it need its slot count and checksum), then header, tables and region are written in order.
+    ``48`` Z4: ``jobs`` workers (or an ``archive.Workers``) compress piece starts ahead; the bytes are
+    the same for any number. ``51`` AB7: ``segment`` gives the segmented layout (``_segments``)."""
     out = as_output(out)
     if flags not in (0, 2, 10):
         raise FormatError(f"cannot write flags {flags}")
@@ -360,19 +444,106 @@ def write_x360_archive_to(
         entries.append((hashes[name], sizes[name], len(by_name[name]), len(locations)))
         locations.extend(sorted(locations_of[n] for n in by_name[name]))
 
-    with _spool(out) as spool:
+    with _spool(out) as spool, as_workers(jobs) as workers:
         region = _Region(spool)
-        packed = _region(region, pieces, flags, comp_sector, levels, frozenset(encrypted), source,
-                         compress, compressor, keep_plans)
+        if segment and flags & FLAG_COMPRESSED:
+            packed = _segments(region, pieces, flags, comp_sector, levels, frozenset(encrypted), source,
+                               compress, compressor, workers)
+        else:
+            packed = _region(region, pieces, flags, comp_sector, levels, frozenset(encrypted), source,
+                             compress, compressor, keep_plans, workers)
         _x360_tables(out, region, packed.offsets, flags, read_sector, comp_sector, by_name, sizes,
                      files, entries, locations, stream_size)
         region.copy_to(out)
-    result = X360WriteResult(None, packed.plans, packed.kept, packed.notes, out.result())
-    return result
+    found = out.result()
+    written = Written(found.size, found.sha256, "segmented" if segment and flags & FLAG_COMPRESSED else "default")
+    return X360WriteResult(None, packed.plans, packed.kept, packed.notes, written)
+
+
+def _pack_x360_segment(pieces, levels, comp_sector, compress, compressor):
+    """``51`` AB7: the packets of one segment's pieces as a stream of their own: (offsets from the
+    segment's start, the closed slots, the last slot unpadded, whether its last packet is encrypted)."""
+    closed: list[bytes] = []
+    packed = _packets_in(pieces, levels, comp_sector, frozenset(), None, compress, compressor, closed.append,
+                         False, None, {})
+    last = bytes(packed.last_slot) if packed.last_slot is not None else None
+    return packed.offsets, b"".join(closed), last, packed.last_encrypted
+
+
+def _segments(region, pieces, flags, comp_sector, levels, encrypted, source, compress, compressor,
+              workers) -> _Packed:
+    """``51`` AB7, the segmented layout of x360: the pieces are grouped into segments, a new one starting at
+    the first piece that begins ``SEGMENT_SIZE`` plain bytes or more after its segment's start, so each
+    segment starts a new piece and a new slot (the slot before it ends early, padded with zeros: a
+    stored size of 0). Each segment is packed as A3 to A6 pack a stream, by the workers, at most
+    ``2 × jobs`` in flight, and written in order. The bytes depend on the layout only."""
+    from collections import deque
+
+    from . import archive as _archive
+
+    if encrypted or source is not None:
+        raise FormatError("the segmented layout writes no encrypted or kept source packets")
+    groups: list[list[int]] = []
+    start = position = 0
+    for number, piece in enumerate(pieces):
+        if not groups or position - start >= _archive.SEGMENT_SIZE:
+            groups.append([])
+            start = position
+        groups[-1].append(number)
+        position += len(piece.data)
+    limit = workers.limit if workers else 1
+    queue: deque = deque()
+    offsets: list[int] = []
+    last_slot, last_encrypted = None, False
+    following = 0
+    stream_at = 0
+    starts = []
+    for group in groups:
+        starts.append(stream_at)
+        stream_at += sum(len(pieces[n].data) for n in group)
+    while following < len(groups) or queue:
+        while following < len(groups) and len(queue) < limit:
+            numbers = groups[following]
+            chunk = []
+            for n in numbers:  # read here: a source view is not read by two threads
+                data = pieces[n].data
+                if isinstance(data, StreamView):
+                    plain = data.read(0, len(data))
+                    data.release()
+                    data = plain
+                chunk.append(Piece(pieces[n].name, pieces[n].copy, bytes(data)))
+            chunk_levels = [levels[n] for n in numbers]
+            future = workers.submit(_pack_x360_segment, chunk, chunk_levels, comp_sector, compress,
+                                    compressor) if workers else None
+            queue.append((following, future, None if future is not None else (chunk, chunk_levels)))
+            following += 1
+        index, future, held = queue.popleft()
+        if future is not None:
+            found, closed, last, encrypted_end = workers.take(future)
+        else:
+            found, closed, last, encrypted_end = _pack_x360_segment(*held, comp_sector, compress, compressor)
+        if last_slot is not None:  # the slot before this segment ends early
+            region.write(last_slot.ljust(comp_sector, ZERO))
+        offsets.extend(starts[index] + at for at in found)
+        region.write(closed)
+        if last is not None:
+            last_slot, last_encrypted = last, encrypted_end
+    packed = _Packed([], offsets, None if last_slot is None else bytearray(last_slot), 0, last_encrypted)
+    tail = bytes(last_slot) if last_slot is not None else b""
+    if flags & FLAG_COMPACT:  # A7, flag 10
+        end = struct.pack(ORDER + "HHH", 0, 0, 0x8000 if last_encrypted else 0)
+        if comp_sector - len(tail) >= len(end):
+            region.write(tail + end)
+        else:
+            region.write(tail.ljust(comp_sector, ZERO))
+            packed.notes.append("no room for the end header in the last slot; the slot is padded")
+    elif last_slot is not None:
+        region.write(tail.ljust(comp_sector, ZERO))
+    return packed
 
 
 def _region(region, pieces, flags, comp_sector, levels, encrypted, source, compress, compressor,
-            keep_plans) -> _Packed:
+            keep_plans, workers=None) -> _Packed:
     """A3 to A7: the sector region into ``region``."""
     if not flags & FLAG_COMPRESSED:
         for piece in pieces:  # A7, flag 0
@@ -383,7 +554,7 @@ def _region(region, pieces, flags, comp_sector, levels, encrypted, source, compr
                 region.write(bytes(piece.data))
         return _Packed([], [], None)
     packed = _packets(pieces, levels, comp_sector, encrypted, source, compress, compressor,
-                      emit=region.write, keep_plans=keep_plans)
+                      emit=region.write, keep_plans=keep_plans, workers=workers)
     last_slot = bytes(packed.last_slot) if packed.last_slot is not None else b""
     if flags & FLAG_COMPACT:  # A7, flag 10: an empty header ends the file inside the slot
         end = struct.pack(ORDER + "HHH", 0, 0, 0x8000 if packed.last_encrypted else 0)

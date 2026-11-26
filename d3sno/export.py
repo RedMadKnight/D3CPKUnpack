@@ -68,7 +68,8 @@ TANGENT_NOTE = ("no tangents are stored; a viewer computes them from TEXCOORD_0 
                 "normals, e.g. by the MikkTSpace method; vertices of mirrored UV islands get bitangent sign -1")
 TICKS_PER_SECOND = 60
 TRAVEL_NODE = "d3sno_travel"
-_READ_ONLY = ("ans", "shm")  # read for other groups, never exported (``44`` W20-1: shader maps)
+_READ_ONLY = ("ans", "shm", "shd")  # read for other groups, never exported (``44`` W20-1: shader maps;
+# ``48`` Z3: shaders, for the address modes of their stages)
 _INDEX_NAMES = re.compile(r"^(coretoc|commontoc|act[1-5]toc)\.dat$", re.IGNORECASE)
 _X360_LOCALE = re.compile(r"^([a-z]{2}[A-Z]{2})_")
 _TAG_TYPES = {0: "int", 1: "float", 2: "sno", 3: "balance", 4: "formula", 5: "actor_group",
@@ -370,8 +371,24 @@ def _world_json(data: bytes, build: str, scenes, sets) -> tuple[dict, list]:
     }, missing
 
 
+def _tree_boxes(mesh, build: str) -> list:
+    """``52`` AC1: the stored box of every tree node, in node order and stored quantised form (derived,
+    W18-8): switch form ``[lower x, y, z, upper x, y, z]``; ps3 ``[a, b]`` (the split words) of an inner
+    node and null for a leaf (its words are the leaf range)."""
+    if build == "ps3":
+        return [None if node.is_leaf else [node.a, node.b] for node in mesh.nodes]
+    return [[*node.lower, *node.upper] for node in mesh.nodes]
+
+
+def _stored_vertices(mesh) -> list:
+    """``53`` AD1: the stored form of every vertex (derived, W18-8): per vertex its three stored float32
+    values (relative to the mesh centre) as the 8 hexadecimal digits of their 32 bits, bit-exact."""
+    return [[struct.pack(">f", v).hex().upper() for v in row[:3]] for row in (mesh.vertices or [])]
+
+
 def _collision_json(data: bytes, build: str) -> dict:
-    """Per mesh: vertices, triangles, flags and bounds. The tree is not exported (W18-8)."""
+    """Per mesh: vertices, triangles, flags, bounds and (``52`` AC1) the tree boxes; the tree's shape is
+    not exported (W18-8)."""
     phm = collision.parse_collision(data, build)
     meshes = [{
         "vertices": plain(mesh.positions),
@@ -380,6 +397,8 @@ def _collision_json(data: bytes, build: str) -> dict:
         "flags": mesh.flags, "material": mesh.material, "triangle_count": mesh.triangle_count,
         "bounds": {"centre": plain(mesh.centre), "half_extent": plain(mesh.half_extent)},
         "box_scale": plain(mesh.box_scale),
+        "tree": {"boxes": _tree_boxes(mesh, phm.build)},
+        "stored_vertices": _stored_vertices(mesh),
     } for mesh in phm.meshes]
     return {"header": _header(phm.header), "build": phm.build, "flags": phm.flags, "meshes": meshes,
             "warnings": phm.warnings}
@@ -853,7 +872,7 @@ class _Run:
                                        if any(d.positions for d in sub.draws)
                                        for h in self.layer_textures(app, sub)})
         self.emit(item, [(f"meshes/{item.handle}.glb",
-                          lambda: _mesh_glb(app, item.handle, self.lightmap, self.uv2_rows), {})])
+                          lambda: _mesh_glb(app, item.handle, self.lightmap, self.uv2_rows, self.stage_modes), {})])
         missing = [h for h in wanted if h not in self.tex_handles]
         if missing:
             self.note(item, "missing_dependency", True, None, needs=[_link(44, h) for h in missing])
@@ -878,6 +897,40 @@ class _Run:
                     self.names.get((shader.GROUP_SHADERS, h & 0xFFFFFFFF))
                     for _, h in sorted(links.items()) if h != -1)
         return self._shader_names[shader_map]
+
+    def stage_modes(self, block) -> list[tuple]:
+        """``48`` Z3: the stages of a material block's shaders that bind the base colour slot, as
+        (shader name, pass, stage, U mode, V mode), in shader-map order and then pass order. A shader that
+        is not in the archives, or does not read, adds nothing."""
+        if block is None or block.shader_map == -1:
+            return []
+        if not hasattr(self, "_stage_modes"):
+            self._shaders = self.by_handle("shd")
+            self._stage_modes: dict[int, list] = {}
+        if block.shader_map not in self._stage_modes:
+            if not hasattr(self, "_shader_maps"):
+                self.shader_names(-1)
+            found: list[tuple] = []
+            item = self._shader_maps.get(block.shader_map)
+            try:
+                links = shader.shader_map_links(shader.read_shader_map(item.data, item.build)) if item else {}
+            except (FormatError, struct.error, ValueError):
+                links = {}
+            for _, handle in sorted(links.items()):
+                source = self._shaders.get(handle) if handle != -1 else None
+                if source is None:
+                    continue
+                try:
+                    parsed = shader.read_shader(source.data, source.build)
+                except (FormatError, struct.error, ValueError):
+                    continue
+                name = self.names.get((shader.GROUP_SHADERS, handle & 0xFFFFFFFF))
+                for shader_pass in parsed.passes:
+                    for k, stage in enumerate(shader_pass.stages):
+                        if stage.slot_type == material.SLOT_DIFFUSE:
+                            found.append((name, shader_pass.index, k, *stage.address_modes[:2]))
+            self._stage_modes[block.shader_map] = found
+        return self._stage_modes[block.shader_map]
 
     def uv2_rows(self, block):
         """``44`` W20-1: the table rows of a material block's shaders, those of the archives' build (``45`` X6)."""
@@ -1088,12 +1141,13 @@ def _no_rows(block):
     return uv2_use.rows_for(None, None)
 
 
-def _mesh_glb(app, handle: int, lightmap=None, uv2_rows=None) -> bytes:
+def _mesh_glb(app, handle: int, lightmap=None, uv2_rows=None, stage_modes=None) -> bytes:
     """W18-4: ``appearance.to_gltf`` with default options, diffuse textures by URI, packed as .glb.
     ``43`` W19-2: ``lightmap(handle)`` gives (URI, V scale) of an exported lightmap, else None.
-    ``44`` W20-1: ``uv2_rows(block)`` gives the table rows of a material block's shaders."""
+    ``44`` W20-1: ``uv2_rows(block)`` gives the table rows of a material block's shaders.
+    ``48`` Z3: ``stage_modes(block)`` the stages that bind its base colour slot."""
     document = appearance.to_gltf(app, texture_resolver=_texture_uri, lightmap_resolver=lightmap or _no_lightmap,
-                                  uv2_rows=uv2_rows or _no_rows)
+                                  uv2_rows=uv2_rows or _no_rows, stage_modes=stage_modes)
     _export_extras(document, handle, app, {})
     return gltf_to_glb(prune_empty(document))
 

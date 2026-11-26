@@ -202,7 +202,7 @@ class Games(unittest.TestCase):
             changes = changed_names(source, written)
             self.assertTrue(changes)
             self.assertEqual(IW.replace_files(source, changes), written)
-            self.assertEqual(result.report["archives"][rel], {"sha256": sha(written), "size": len(written)})
+            self.assertEqual(result.report["archives"][rel], {"layout": "default", "sha256": sha(written), "size": len(written)})
         return result.report
 
     def test_switch(self):
@@ -384,7 +384,7 @@ class ApplyMemory(unittest.TestCase):
         self.assertEqual(result.report["archives_written"], ["Act1.cpk", "Common.cpk"])
         for rel, info in result.report["archives"].items():
             data = (root / "out" / rel).read_bytes()
-            self.assertEqual(info, {"sha256": sha(data), "size": len(data)})
+            self.assertEqual(info, {"layout": "default", "sha256": sha(data), "size": len(data)})
             self.assertTrue(A.verify_archive(data).ok)
         replaced = len(S.stored(root / "out", "Common", F.name_of("tex", "Stone"))[0])
         return peak, writing[0], replaced
@@ -445,7 +445,7 @@ class Report(unittest.TestCase):
         self.assertEqual(sorted(report["archives"]), report["archives_written"])
         for rel, info in report["archives"].items():
             data = (out / rel).read_bytes()
-            self.assertEqual(info, {"sha256": sha(data), "size": len(data)})
+            self.assertEqual(info, {"layout": "default", "sha256": sha(data), "size": len(data)})
         dry, dry_out = setup.ok("dry", dry_run=True)
         self.assertEqual(dry["archives"], report["archives"])
         self.assertEqual([p.name for p in dry_out.rglob("*")], [AP.REPORT_NAME])
@@ -576,15 +576,15 @@ class Uv2(unittest.TestCase):
         self.assertEqual((entry["slot_type"], entry["slot_name"], entry["texture"]), (None, None, None))
         self.assertEqual(U.layer_texture_handles(layer, Block({None: 5})), [])
         odd = rows((None, 512, 0))
-        self.assertEqual(U.uv2_use(odd, False), "open")
+        self.assertEqual(U.uv2_use(odd, False), "layer")  # ``48`` Z2 (before: ``"open"``)
         (entry,) = U.layer_entries(odd, None, uri, None)
         self.assertEqual((entry["slot_type"], entry["slot_name"], entry["texture"], entry["divisor"]), (None, None, None, 512))
 
 
 class Version(unittest.TestCase):
     def test_version(self):
-        self.assertEqual(d3sno.__version__, "0.21.1")
-        self.assertEqual(d3sno.STAGE, 21)
+        self.assertGreaterEqual(tuple(int(x) for x in d3sno.__version__.split(".")), (0, 21, 1))
+        self.assertGreaterEqual(d3sno.STAGE, 21)
 
 
 if __name__ == "__main__":

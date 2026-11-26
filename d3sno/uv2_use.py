@@ -1,10 +1,11 @@
-"""``44`` W20-1 to W20-3, ``45`` X1 to X6, ``47`` Y6 to Y8: what a primitive's second texture coordinate
-(UV2) feeds.
+"""``44`` W20-1 to W20-3, ``45`` X1 to X6, ``47`` Y6 to Y8, ``48`` Z1 and Z2: what a primitive's second
+texture coordinate (UV2) feeds.
 
 Package tables (``d3sno/data``) say which shader passes feed UV2 to which texture stage:
-``shader_uv2.tsv`` (one row per build, pass and stage that UV2 feeds; ``build`` ``ps3`` serves ps3
-and switch, ``x360`` serves x360), ``shader_known.txt`` (every ps3 and switch shader the table was
-derived from) and ``shader_known_x360.txt`` (every x360 shader). Shader names compare without case.
+``shader_uv2.tsv`` (one row per build, pass and stage that UV2 feeds; each build looks up only the rows
+of its own ``build`` value, ``ps3``, ``switch`` or ``x360``, Z1), ``shader_known.txt`` (every ps3 shader
+the table was derived from), ``shader_known_switch.txt`` (every switch shader, Z1) and
+``shader_known_x360.txt`` (every x360 shader). Shader names compare without case.
 A shader that is not in its build's list is unknown: nothing is concluded about its UV2. When the
 row table or a build's list is missing, that build uses no table and every shader is unknown.
 """
@@ -19,18 +20,23 @@ from pathlib import Path
 from .material import SLOT_DIFFUSE, SLOT_LIGHTMAP, SLOT_NAMES
 
 __all__ = [
-    "KNOWN_TABLE", "KNOWN_TABLES", "KNOWN_TABLE_X360", "ROW_TABLE", "TABLE_BUILDS", "USES", "Uv2Row", "Uv2Rows", "Uv2Tables",
+    "KNOWN_TABLE", "KNOWN_TABLES", "KNOWN_TABLE_SWITCH", "KNOWN_TABLE_X360", "ROW_TABLE", "TABLE_BUILDS", "USES", "Uv2Row", "Uv2Rows", "Uv2Tables",
     "layer_entries", "layer_rows", "load_tables", "rows_for", "slot_name", "table_build", "tables", "uv2_use",
 ]
 
 ROW_TABLE = "shader_uv2.tsv"
 KNOWN_TABLE = "shader_known.txt"
 KNOWN_TABLE_X360 = "shader_known_x360.txt"
-TABLE_BUILDS = ("ps3", "x360")  # X6: the values of the ``build`` column
-KNOWN_TABLES = {"ps3": KNOWN_TABLE, "x360": KNOWN_TABLE_X360}
+KNOWN_TABLE_SWITCH = "shader_known_switch.txt"  # ``48`` Z1
+TABLE_BUILDS = ("ps3", "switch", "x360")  # X6, Z1: the values of the ``build`` column
+KNOWN_TABLES = {"ps3": KNOWN_TABLE, "switch": KNOWN_TABLE_SWITCH, "x360": KNOWN_TABLE_X360}
 DATA_DIR = Path(__file__).parent / "data"
 DIVISOR_LAYER = 8192
 DIVISOR_ODD = 512
+# ``48`` Z2: the scale of a divisor-512 entry against the /8192 ``TEXCOORD_1`` (``shader_scale``, and the
+# ``KHR_texture_transform`` scale of its texture binding)
+SHADER_SCALE_ODD = 16
+TEXTURE_TRANSFORM = "KHR_texture_transform"
 # ``47`` Y7: a slot type with no name in ``10`` on which no material block has a texture: its entries
 # name no slot and no texture (and nothing for ``missing_dependency``)
 SLOTS_WITHOUT_TEXTURE = frozenset({39})
@@ -42,8 +48,8 @@ UV2_SCALE = {"lightmap": "lightmap", "layer": "layer", "open": "open", "lightmap
 
 
 def table_build(build: str | None) -> str:
-    """X6: the table rows a build uses (switch and ps3 use ``ps3``)."""
-    return "x360" if build == "x360" else "ps3"
+    """X6, ``48`` Z1: the table rows a build uses (its own; no build: ``ps3``)."""
+    return build if build in ("switch", "x360") else "ps3"
 
 
 @dataclass(frozen=True)
@@ -166,10 +172,8 @@ def uv2_use(rows: Uv2Rows, has_lightmap: bool) -> str:
     """W20-2: the first case that applies."""
     if has_lightmap:
         return "lightmap"
-    if rows.layer:
+    if rows.layer or rows.odd:  # ``48`` Z2: divisor-512 rows are ``"layer"`` as well
         return "layer"
-    if rows.odd:
-        return "open"
     if rows.lightmap:
         return "lightmap_without_texture"
     if rows.all_known and not rows.rows:
@@ -196,8 +200,9 @@ def layer_rows(rows: Uv2Rows) -> list[Uv2Row]:
 
 def entry_texcoord(row: Uv2Row, written: str | None, v_divide: float | None):
     """X3: (``texcoord``, ``v_divide``) of an entry. ``written``: the ``TEXCOORD_1`` the primitive has
-    (``"layer"``, ``"lightmap"`` or None); ``v_divide``: S of the lightmap coordinate."""
-    if written is None or row.divisor != DIVISOR_LAYER:
+    (``"layer"``, ``"lightmap"`` or None); ``v_divide``: S of the lightmap coordinate. ``48`` Z2: a
+    divisor-512 row reads ``TEXCOORD_1`` as a divisor-8192 row does (its ×16 is in the entry)."""
+    if written is None or row.divisor not in (DIVISOR_LAYER, DIVISOR_ODD):
         return None, None
     if row.lightmap_v_scale:  # Y6: ``TEXCOORD_1`` as written (V scaled by the lightmap scale in the game)
         return 1, None
@@ -230,8 +235,25 @@ def layer_entries(rows: Uv2Rows, block, texture_uri, written: str | None, v_divi
             entry["v_scale"] = "lightmap"
         if row.slot_type == SLOT_DIFFUSE:  # X3
             entry["also_base_color"] = True
+        if row.divisor == DIVISOR_ODD:  # ``48`` Z2
+            entry["shader_scale"] = SHADER_SCALE_ODD
+            entry["in_game"] = "open"
+            if texcoord is not None:
+                entry["texture_info"] = odd_texture_info()
         out.append(entry)
     return out
+
+
+def odd_texture_info() -> dict:
+    """``48`` Z2: the glTF textureInfo of a divisor-512 slot, without ``index`` (the slot has no glTF
+    texture of its own): ``texCoord`` 1 and ``KHR_texture_transform`` ×16."""
+    return {"texCoord": 1, "extensions": {TEXTURE_TRANSFORM: {
+        "offset": [0.0, 0.0], "rotation": 0.0, "scale": [float(SHADER_SCALE_ODD)] * 2}}}
+
+
+def has_odd_entry(layers) -> bool:
+    """``48`` Z2: whether a material's ``uv2_layers`` hold a divisor-512 entry that reads ``TEXCOORD_1``."""
+    return any("texture_info" in entry for entry in layers or ())
 
 
 def layer_texture_handles(rows: Uv2Rows, block) -> list[int]:

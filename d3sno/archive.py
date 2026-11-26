@@ -8,8 +8,11 @@ import io
 import os
 import struct
 import tempfile
+import threading
+import time
 import zlib
-from collections import OrderedDict
+from collections import OrderedDict, deque
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Iterable, Mapping, Sequence
 
@@ -31,6 +34,10 @@ _MASK64 = 0xFFFFFFFFFFFFFFFF
 _MIN_SLOT_ROOM = 64
 COPY_CHUNK = 16 * 1024 * 1024  # ``47`` Y1: at most this many bytes per read when copying
 VIEW_WINDOW = 1024 * 1024  # Y1: bytes of a source stream read ahead for the packer
+FEED_CHUNK = 0x1000  # ``48`` Z4: input fed to an incremental compressor per step
+SEGMENT_SIZE = 8 * 1024 * 1024  # ``51`` AB7: plain bytes of a segment of the segmented layout
+LAYOUTS = ("default", "segmented")  # ``51`` AB7
+_SEED_BYTES = CIPHER_SEED.to_bytes(8, "little")
 
 # Archive priorities on switch, for callers that overlay archives.
 SWITCH_PRIORITIES = {
@@ -66,22 +73,280 @@ def name_hash(name: str) -> int:
 
 
 def decrypt_packet(stored: bytes) -> bytes:
-    state = CIPHER_SEED
-    out = bytearray(len(stored))
-    for i, c in enumerate(stored):
-        out[i] = c ^ (state & 0xFF)
-        state = ((c << 56) | (state >> 8)) & _MASK64
-    return bytes(out)
+    """The packet cipher: byte i is XORed with the low byte of a 64-bit state that starts at
+    ``CIPHER_SEED`` and shifts each stored byte in from the top. So the key byte is byte i of the
+    seed for i < 8 and stored byte i - 8 after (``48`` Z4: computed on whole integers, not byte by
+    byte; the result is the same)."""
+    n = len(stored)
+    if not n:
+        return b""
+    stored = bytes(stored)
+    key = (_SEED_BYTES + stored[:-8])[:n]
+    return (int.from_bytes(stored, "little") ^ int.from_bytes(key, "little")).to_bytes(n, "little")
 
 
 def encrypt_packet(plain: bytes) -> bytes:
-    state = CIPHER_SEED
-    out = bytearray(len(plain))
-    for i, p in enumerate(plain):
-        c = p ^ (state & 0xFF)
-        out[i] = c
-        state = ((c << 56) | (state >> 8)) & _MASK64
-    return bytes(out)
+    """The inverse of ``decrypt_packet``: stored byte i is plain byte i XOR stored byte i - 8 (the
+    seed byte for i < 8), so it is the XOR of every eighth plain byte up to i and of one seed byte
+    (``48`` Z4: a prefix XOR in strides of 64 bits)."""
+    n = len(plain)
+    if not n:
+        return b""
+    value = int.from_bytes(bytes(plain), "little")
+    shift = 64
+    while shift < 8 * n:
+        value ^= value << shift
+        shift *= 2
+    value &= (1 << (8 * n)) - 1
+    seed = int.from_bytes((_SEED_BYTES * (n // 8 + 1))[:n], "little")
+    return (value ^ seed).to_bytes(n, "little")
+
+
+# --- Z4: worker threads -----------------------------------------------------------------------
+
+def default_jobs() -> int:
+    """``48`` Z4: the default number of workers, the number of processors."""
+    return os.cpu_count() or 1
+
+
+class Workers:
+    """``48`` Z4: a pool of ``jobs`` threads for compression and inflation (zlib releases the
+    interpreter lock while it works). At most ``2 × jobs`` pieces of work are in flight: submitted
+    and not yet taken or dropped. ``jobs`` 1 has no pool (the single-thread path). Use it as a
+    context manager: leaving it cancels what has not started and waits for the rest; an exception
+    raised in a worker is raised again by ``take``, ``drop`` (when the work has finished) or on
+    leaving (when nothing else is being raised)."""
+
+    def __init__(self, jobs: int | None = 1) -> None:
+        self.jobs = max(1, int(jobs or 1))
+        self.limit = 2 * self.jobs
+        self.pool = ThreadPoolExecutor(self.jobs, thread_name_prefix="d3sno") if self.jobs > 1 else None
+        self.flight: set = set()
+        self.dropped: list = []
+        # ``51`` AB7: the use of the workers (``--profile``)
+        self.submitted = self.taken = self.drop_count = self.refused = 0
+        self.waited = 0.0
+        self._lock = threading.Lock()
+        self.per_thread: dict[str, list] = {}  # ``52`` AC5: thread name -> [pieces done, seconds busy]
+        self.files_ahead = self.files_self = 0  # ``53`` AD3: source files read ahead / by the packer itself
+
+    def __bool__(self) -> bool:
+        return self.pool is not None
+
+    def submit(self, fn, *args):
+        """The future of ``fn(*args)``, or None when there is no pool or ``2 × jobs`` are in flight. ``52``
+        AC5: dropped work that is still running counts as in flight (its memory is held until it ends)."""
+        if self.pool is None:
+            return None
+        self._prune()
+        if len(self.flight) + len(self.dropped) >= self.limit:
+            self.refused += 1
+            return None
+        future = self.pool.submit(self._timed, fn, args)
+        self.flight.add(future)
+        self.submitted += 1
+        return future
+
+    def take(self, future):
+        """The result of submitted work (waits for it; the wait is counted)."""
+        self.flight.discard(future)
+        self.taken += 1
+        if future.done():
+            return future.result()
+        started = time.perf_counter()
+        try:
+            return future.result()
+        finally:
+            self.waited += time.perf_counter() - started
+
+    def _timed(self, fn, args):
+        started = time.perf_counter()
+        try:
+            return fn(*args)
+        finally:
+            name = threading.current_thread().name
+            with self._lock:
+                row = self.per_thread.setdefault(name, [0, 0.0])
+                row[0] += 1
+                row[1] += time.perf_counter() - started
+
+    def stats(self) -> dict:
+        """``51`` AB7: work submitted, taken, dropped and refused (no room in flight), and the seconds
+        the packer waited for work it took; ``52`` AC5: per worker thread (by start order) the pieces of
+        work it did and the seconds it was busy; ``53`` AD3: the source files read ahead by the workers and
+        those the packer read itself."""
+        with self._lock:
+            threads = [{"done": row[0], "busy_seconds": round(row[1], 3)}
+                       for _, row in sorted(self.per_thread.items(), key=lambda kv: _thread_order(kv[0]))]
+        return {"jobs": self.jobs, "submitted": self.submitted, "taken": self.taken, "dropped": self.drop_count,
+                "no_room": self.refused, "waited_seconds": round(self.waited, 3), "per_worker": threads,
+                "files_read_ahead": self.files_ahead, "files_read_by_packer": self.files_self}
+
+    def drop(self, future) -> None:
+        """Work whose result is not needed."""
+        self.flight.discard(future)
+        self.drop_count += 1
+        if not future.cancel():
+            if future.done():
+                future.result()  # raises the worker's exception
+            else:
+                self.dropped.append(future)
+        self._prune()
+
+    def _prune(self) -> None:
+        """``52`` AC5: dropped work that has ended is let go (with its result: no memory is held for it);
+        its exception is raised."""
+        if not self.dropped:
+            return
+        running = []
+        for future in self.dropped:
+            if not future.done():
+                running.append(future)
+            elif not future.cancelled() and future.exception() is not None:
+                self.dropped = [f for f in self.dropped if f is not future]
+                raise future.exception()
+        self.dropped = running
+
+    def close(self, raising: bool = False) -> None:
+        if self.pool is None:
+            return
+        self.pool.shutdown(wait=True, cancel_futures=True)
+        left = [*self.flight, *self.dropped]
+        self.flight, self.dropped = set(), []
+        if not raising:
+            for future in left:
+                if not future.cancelled() and future.exception() is not None:
+                    raise future.exception()
+
+    def __enter__(self) -> "Workers":
+        return self
+
+    def __exit__(self, kind, value, trace) -> None:
+        self.close(raising=kind is not None)
+
+
+def _thread_order(name: str):
+    """Worker threads by start order (``d3sno_0``, ``d3sno_1``, ...)."""
+    tail = name.rsplit("_", 1)[-1]
+    return (0, int(tail), name) if tail.isdigit() else (1, 0, name)
+
+
+def workers_text(stats: dict) -> str:
+    """``51`` AB7, ``52`` AC5: the ``--profile`` statistics of the workers on one line (per worker: pieces
+    of work done and seconds busy)."""
+    parts = [f"{k} {v}" for k, v in stats.items() if k != "per_worker"]
+    for i, row in enumerate(stats.get("per_worker") or []):
+        parts.append(f"worker {i} done {row.get('done')} busy {row.get('busy_seconds')} s")
+    return ", ".join(parts)
+
+
+def as_workers(jobs) -> Workers:
+    """A ``Workers`` as it is; a number of jobs (None: 1) as a new one."""
+    return jobs if isinstance(jobs, Workers) else Workers(jobs)
+
+
+SECTOR_BATCH = 8  # ``48`` Z4: source sectors inflated by one piece of work
+# ``53`` AD3: a source file of fewer plain bytes is read and inflated by the packer itself, never ahead
+AHEAD_MIN_FILE = 256 * 1024
+
+
+class _SectorsAhead:
+    """``48`` Z4: source sectors inflated (and decrypted) by the workers ahead of the reader, in
+    batches of ``SECTOR_BATCH`` slots (one piece of work each: fewer hand-overs between threads). The
+    reader asks for slot ``k``; the batches after its batch are submitted while there is room in flight."""
+
+    def __init__(self, archive: "CpkArchive", workers: Workers) -> None:
+        self.archive = archive
+        self.workers = workers
+        self.futures: dict[int, object] = {}  # batch -> future of its SectorData list
+        self.done: dict[int, SectorData] = {}  # slots of the last batch taken
+        self.count = len(archive.sector_offsets)
+        # ``53`` AD3: the source file being read (its stream offset) and the last slot work ahead may reach
+        # (None: no file named, every slot, as the counting pass; -1: a small file, no work ahead)
+        self.current: int | None = None
+        self.until: int | None = None
+        self.seen: set[int] = set()
+        self.files_ahead = self.files_self = 0
+
+    def file(self, offset: int, size: int) -> None:
+        """``53`` AD3: the packer reads the source file at stream ``offset`` of ``size`` plain bytes: a large
+        one is inflated ahead by the workers (its own sectors only), a small one by the packer itself."""
+        if offset == self.current:
+            return
+        self.current = offset
+        large = size >= AHEAD_MIN_FILE
+        if offset not in self.seen:
+            self.seen.add(offset)
+            if large:
+                self.files_ahead += 1
+            else:
+                self.files_self += 1
+        if not large:
+            self.until = -1
+            return
+        offsets = self.archive.sector_offsets
+        self.until = bisect.bisect_right(offsets, offset + size - 1) - 1
+
+    def _batch(self, batch: int) -> list:
+        decode = self.archive._decode_sector
+        return [decode(s) for s in range(batch * SECTOR_BATCH, min((batch + 1) * SECTOR_BATCH, self.count))]
+
+    def take(self, slot: int):
+        if slot in self.done:
+            return self.done.pop(slot)
+        batch = slot // SECTOR_BATCH
+        future = self.futures.pop(batch, None)
+        if future is None:
+            return None
+        self.done = dict(enumerate(self.workers.take(future), batch * SECTOR_BATCH))
+        return self.done.pop(slot, None)
+
+    def plan(self, slot: int) -> None:
+        batch = slot // SECTOR_BATCH
+        for stale in [b for b in self.futures if b <= batch]:
+            self.workers.drop(self.futures.pop(stale))
+        if self.until is not None and self.until < 0:
+            return  # ``53`` AD3: a small file: the packer reads it itself
+        last = (self.count - 1) // SECTOR_BATCH
+        if self.until is not None:
+            last = min(last, self.until // SECTOR_BATCH)
+        for following in range(batch + 1, min(batch + 1 + self.workers.limit, last + 1)):
+            if following in self.futures:
+                continue
+            future = self.workers.submit(self._batch, following)
+            if future is None:
+                break
+            self.futures[following] = future
+
+    def close(self) -> None:
+        for future in self.futures.values():
+            self.workers.drop(future)
+        self.futures.clear()
+        self.done.clear()
+
+
+class reading_ahead:
+    """``48`` Z4: while in this block, ``archive`` inflates its sectors ahead in ``workers``."""
+
+    def __init__(self, archive: "CpkArchive", workers: Workers) -> None:
+        self.archive, self.workers = archive, workers
+
+    def __enter__(self):
+        if self.workers and self.archive.header.compressed:
+            self.archive._ahead = _SectorsAhead(self.archive, self.workers)
+        return self
+
+    def __exit__(self, kind, value, trace) -> None:
+        ahead = self.archive._ahead
+        self.archive._ahead = None
+        if ahead is not None:
+            self.workers.files_ahead += ahead.files_ahead  # ``53`` AD3
+            self.workers.files_self += ahead.files_self
+            try:
+                ahead.close()
+            except Exception:
+                if kind is None:
+                    raise
 
 
 def _ceil_div(a: int, b: int) -> int:
@@ -250,6 +515,7 @@ class CpkArchive:
     tables_end: int
     by_hash: dict[int, CpkFile] = field(default_factory=dict)
     _cache: OrderedDict = field(default_factory=OrderedDict, repr=False)
+    _ahead: object = field(default=None, repr=False, compare=False)  # Z4: a ``_SectorsAhead``
 
     def find(self, name: str | int) -> CpkFile | None:
         return self.by_hash.get(name if isinstance(name, int) else name_hash(name))
@@ -315,7 +581,12 @@ class CpkArchive:
         if cached is not None:
             self._cache.move_to_end(slot)
             return cached
-        result = self._decode_sector(slot)
+        ahead = self._ahead
+        result = ahead.take(slot) if ahead is not None else None
+        if ahead is not None:
+            ahead.plan(slot)
+        if result is None:
+            result = self._decode_sector(slot)
         self._cache[slot] = result
         if len(self._cache) > 8:
             self._cache.popitem(last=False)
@@ -663,10 +934,13 @@ def _check_copies(archive: CpkArchive, check: CheckResult) -> None:
 
 @dataclass(frozen=True)
 class Written:
-    """``47`` Y1: what a streaming writer wrote: its size and SHA-256."""
+    """``47`` Y1: what a streaming writer wrote: its size and SHA-256. ``51`` AB7: the layout used and,
+    when known, the use of the workers (not compared)."""
 
     size: int
     sha256: str
+    layout: str = "default"
+    workers: dict | None = field(default=None, compare=False)
 
 
 class Output:
@@ -776,6 +1050,9 @@ class Span:
         stop = min(stop, self.size)
         if stop <= start:
             return b""
+        ahead = self.archive._ahead
+        if ahead is not None:  # ``53`` AD3
+            ahead.file(self.offset, self.size)
         return self.archive.read_stream(self.offset + start, stop - start)
 
 
@@ -896,12 +1173,39 @@ def _pack_stream(
     return offsets, region.getvalue()
 
 
+def deflate_head(data, room: int, level: int = ZLIB_LEVEL) -> tuple[bytes, bool]:
+    """``48`` Z4: the level-``level`` stream of ``data``, or only its start once it passes ``room``
+    bytes (at a ``FEED_CHUNK`` boundary of the input). Returns (bytes, complete). An incremental
+    compressor fed in chunks gives the bytes of ``zlib.compress`` (the tests check this), so the
+    start is a prefix of the whole stream: a packet cut to ``room`` keeps the same bytes."""
+    view = memoryview(data)
+    packer = zlib.compressobj(level)
+    out = bytearray()
+    for at in range(0, len(view), FEED_CHUNK):
+        out += packer.compress(view[at:at + FEED_CHUNK])
+        if len(out) > room:
+            return bytes(out), False
+    out += packer.flush()
+    return bytes(out), True
+
+
+def _ahead_key(position):
+    """``48`` Z4: the key work done ahead is kept under (the x360 piece starts; the tests replace it to
+    force misses)."""
+    return position
+
+
 def _pack_stream_into(
     stream, sink, comp_sector: int, order: str, empty_first: bool, encrypt,
     level: int = ZLIB_LEVEL, run_past_slot: bool = True, max_packet: int = MAX_PACKET_PLAIN,
+    workers: Workers | None = None,
 ) -> list[int]:
     """Y1: ``_pack_stream`` slot by slot into ``sink.write``; ``stream`` is bytes or a
-    ``StreamView``. Returns the sector offsets."""
+    ``StreamView``. Returns the sector offsets.
+
+    ``48`` Z4: with ``run_past_slot`` a packet is compressed only until it passes the room of its
+    slot (``deflate_head``). ``51`` AB7: the layout is serial by nature (each packet starts where the cut
+    of the one before fell), so no packet is compressed ahead: ``workers`` is not used here."""
     offsets: list[int] = []
     slot = bytearray()
     open_slot = False
@@ -918,7 +1222,13 @@ def _pack_stream_into(
         room = comp_sector - len(slot) - 6
         size = min(max_packet, len(stream) - pos)
         stored = None
-        if room >= _MIN_SLOT_ROOM:
+        if room >= _MIN_SLOT_ROOM and run_past_slot:  # Z4: no compression past the cut
+            stored, complete = deflate_head(stream[pos:pos + size], room, level)
+            if not complete or len(stored) > room:
+                stored, size = _cut_to_room(stored, room)
+                if size == 0:
+                    stored = None
+        elif room >= _MIN_SLOT_ROOM:
             while True:
                 stored = zlib.compress(stream[pos:pos + size], level)
                 if len(stored) <= room:
@@ -946,6 +1256,55 @@ def _pack_stream_into(
         number += 1
     if open_slot:
         sink.write(bytes(slot).ljust(comp_sector, b"\0"))
+    return offsets
+
+
+def _pack_segment(index: int, data: bytes, comp_sector: int, order: str, empty_first: bool, level: int,
+                  run_past_slot: bool, max_packet: int) -> tuple[list[int], bytes]:
+    """``51`` AB7: one segment packed as a stream of its own (its offsets from its start, its slots)."""
+    buffer = io.BytesIO()
+    offsets = _pack_stream_into(data, buffer, comp_sector, order, empty_first and index == 0, None, level,
+                                run_past_slot, max_packet)
+    return offsets, buffer.getvalue()
+
+
+def _pack_segments(stream, sink, comp_sector, order, empty_first, encrypt, level, run_past_slot, max_packet,
+                   workers: Workers | None) -> list[int]:
+    """``51`` AB7, the segmented layout: the plain stream is cut into segments of ``SEGMENT_SIZE`` bytes
+    (plus the rest); each starts in a new slot and is packed as ``_pack_stream_into`` packs a stream, so
+    the slot before a segment ends early (with zeros: a stored size of 0, or fewer than 7 bytes of room).
+    The segments are packed by the workers and written in order, at most ``2 × jobs`` in flight (read by
+    this thread). The bytes depend on the layout only, never on the workers."""
+    if encrypt is not None:
+        raise FormatError("the segmented layout writes no encrypted packets")
+    total = len(stream)
+    if not total:
+        return _pack_stream_into(stream, sink, comp_sector, order, empty_first, None, level, run_past_slot,
+                                 max_packet)
+    size = SEGMENT_SIZE
+    bounds = [(start, min(start + size, total)) for start in range(0, total, size)]
+    limit = workers.limit if workers else 1
+    queue: deque = deque()
+    offsets: list[int] = []
+    following = 0
+    while following < len(bounds) or queue:
+        while following < len(bounds) and len(queue) < limit:
+            start, stop = bounds[following]
+            data = stream.read(start, stop) if isinstance(stream, StreamView) else bytes(stream[start:stop])
+            future = workers.submit(_pack_segment, following, data, comp_sector, order, empty_first, level,
+                                    run_past_slot, max_packet) if workers else None
+            queue.append((following, start, future, None if future is not None else data))
+            following += 1
+        index, start, future, data = queue.popleft()
+        if future is not None:
+            found, region = workers.take(future)
+        else:
+            found, region = _pack_segment(index, data, comp_sector, order, empty_first, level, run_past_slot,
+                                          max_packet)
+        offsets.extend(start + at for at in found)
+        sink.write(region)
+    if isinstance(stream, StreamView):
+        stream.release()
     return offsets
 
 
@@ -994,11 +1353,15 @@ def write_archive_to(
     level: int = ZLIB_LEVEL,
     run_past_slot: bool = True,
     max_packet: int = MAX_PACKET_PLAIN,
+    jobs: "int | Workers | None" = 1,
+    segment: bool = False,
 ) -> Written:
     """``47`` Y1: ``write_archive`` into ``out`` (a binary file object or an ``Output``). A copy may
     be a ``Span`` of a source archive; it is read in pieces while the region is packed. The region
     goes to a temporary file first (the tables before it need its slot count and checksum), then
-    header, tables and region are written in order."""
+    header, tables and region are written in order. ``51`` AB7: ``segment`` gives the segmented layout,
+    whose segments ``jobs`` workers (or a ``Workers``) pack in parallel; the bytes are the same for any
+    number of workers."""
     out = as_output(out)
     if version not in (6, 7):
         raise FormatError(f"cannot write CPK version {version}")
@@ -1053,13 +1416,16 @@ def write_archive_to(
     stream = StreamView(stream_parts)
     entries.sort(key=lambda e: e.hash)
 
-    with _spool(out) as spool:
+    with _spool(out) as spool, (jobs if isinstance(jobs, Workers) else Workers(jobs)) as workers:
         region = _Region(spool)
         sector_offsets: list[int] = []
-        if flags & FLAG_COMPRESSED:
+        if flags & FLAG_COMPRESSED and segment:
+            sector_offsets = _pack_segments(stream, region, comp_sector, order, empty_first_packet, encrypt, level,
+                                            run_past_slot, max_packet, workers)
+        elif flags & FLAG_COMPRESSED:
             sector_offsets = _pack_stream_into(
                 stream, region, comp_sector, order, empty_first_packet, encrypt, level, run_past_slot,
-                max_packet,
+                max_packet, workers,
             )
         else:
             stream.copy_to(region)
@@ -1068,7 +1434,8 @@ def write_archive_to(
         _write_tables(out, region, version, order, flags, read_sector, comp_sector, widths, word_3c,
                       entries, locations, len(stream), sector_offsets, name_order, inputs)
         region.copy_to(out)
-    return out.result()
+    found = out.result()
+    return Written(found.size, found.sha256, "segmented" if segment else "default")
 
 
 def _write_tables(out, region, version, order, flags, read_sector, comp_sector, widths, word_3c,
@@ -1169,11 +1536,15 @@ def rebuild_to(
     single_copy: bool = False,
     level: int = ZLIB_LEVEL,
     run_past_slot: bool = True,
+    jobs: "int | Workers | None" = 1,
+    segment: bool = False,
 ) -> RebuildResult:
     """``47`` Y1: ``rebuild`` into ``out`` (a binary file object or an ``Output``). A file that is
     not replaced is read from the source in pieces while the new region is packed (ps3 and switch
     packets hold bytes of several files, so the stream is packed again as ``rebuild`` does);
-    nothing of the archive is kept. ``data`` of the result is None."""
+    nothing of the archive is kept. ``data`` of the result is None. ``48`` Z4, ``51`` AB7: ``jobs``
+    workers read and inflate source sectors ahead; with ``segment`` (the segmented layout) they also pack
+    the segments. The bytes are the same for any number."""
     archive = source if isinstance(source, CpkArchive) else read_archive(source)
     h = archive.header
     replacements = {name_hash(name): data for name, data in (replace or {}).items()}
@@ -1199,29 +1570,43 @@ def rebuild_to(
         inputs.append(InputFile(name, [content]))
         names.append(name)
 
+    with as_workers(jobs) as workers:
+        return _rebuild_inputs(out, archive, inputs, names, level, run_past_slot, workers, segment)
+
+
+def _rebuild_inputs(out, archive, inputs, names, level, run_past_slot, workers, segment=False) -> RebuildResult:
+    h = archive.header
     encrypted = 0
     empty_first = h.version == 6
     if h.compressed:
-        for slot in range(len(archive.sector_offsets)):
-            packets = archive.sector(slot).packets
-            encrypted += sum(p.encrypted for p in packets)
-            if slot == 0 and packets and packets[0].declared == 0:
-                empty_first = True
-    written = write_archive_to(
-        out,
-        inputs,
-        version=h.version,
-        order=h.order,
-        flags=h.flags,
-        read_sector=h.read_sector,
-        comp_sector=h.comp_sector,
-        empty_first_packet=empty_first,
-        widths=Widths(h.size_bits, h.copies_bits, h.first_location_bits, h.location_bits),
-        name_order=names,
-        word_3c=h.word_3c,
-        level=level,
-        run_past_slot=run_past_slot,
-    )
+        # ``48`` Z4: this pass only counts, so its sectors are inflated ahead by the workers
+        with reading_ahead(archive, workers):
+            for slot in range(len(archive.sector_offsets)):
+                packets = archive.sector(slot).packets
+                encrypted += sum(p.encrypted for p in packets)
+                if slot == 0 and packets and packets[0].declared == 0:
+                    empty_first = True
+        archive._cache.clear()
+    # ``51`` AB7: while packing too, the source is read and inflated ahead by the workers (default layout;
+    # with ``segment`` the workers pack the segments, and the source work would take their room in flight)
+    with reading_ahead(archive, workers if not segment else Workers(1)):
+        written = write_archive_to(
+            out,
+            inputs,
+            version=h.version,
+            order=h.order,
+            flags=h.flags,
+            read_sector=h.read_sector,
+            comp_sector=h.comp_sector,
+            empty_first_packet=empty_first,
+            widths=Widths(h.size_bits, h.copies_bits, h.first_location_bits, h.location_bits),
+            name_order=names,
+            word_3c=h.word_3c,
+            level=level,
+            run_past_slot=run_past_slot,
+            jobs=workers,
+            segment=segment,
+        )
     archive._cache.clear()
     result = RebuildResult(None, encrypted, written=written)
     if encrypted:

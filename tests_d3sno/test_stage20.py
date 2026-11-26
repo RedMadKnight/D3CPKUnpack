@@ -29,7 +29,8 @@ from test_stage15_content import shader_map
 from test_stage18_export import glb_json
 from test_stage19 import LIGHT, accessor, export, lightmap_texture, primitives
 
-TABLE_PATHS = tuple(U.DATA_DIR / name for name in (U.ROW_TABLE, U.KNOWN_TABLE, U.KNOWN_TABLE_X360))
+TABLE_PATHS = tuple(U.DATA_DIR / name for name in (U.ROW_TABLE, U.KNOWN_TABLE, U.KNOWN_TABLE_X360,
+                                                    U.KNOWN_TABLE_SWITCH))  # ``48`` Z1: the switch list too
 MISSING_TABLES = tuple(str(p) for p in TABLE_PATHS if not p.is_file())
 
 
@@ -84,22 +85,26 @@ TEST_MAPS = {1: ("t_layer",), 2: ("T_LAYER", "t_plain"), 3: ("t_odd",), 4: ("t_l
 LIBRARY_TEXTURES = [[(2, LIGHT)], [(19, LAYER_TEX)], [], [], [], []]
 
 
-def make_tables(case, rows=TEST_ROWS, known=TEST_KNOWN, skip=(), known_x360=None):
-    """A table folder of our own in the layout of ``45`` X6: a row of six values is a ``ps3`` row,
-    a row of seven starts with its build. ``known_x360`` (default: ``known``) is the x360 list."""
+def make_tables(case, rows=TEST_ROWS, known=TEST_KNOWN, skip=(), known_x360=None, known_switch=None):
+    """A table folder of our own in the layout of ``45`` X6: a row of six values is a ``ps3`` row and,
+    as before ``48`` Z1 gave switch its own rows, also a ``switch`` row; a row of seven starts with its
+    build. ``known_x360`` and ``known_switch`` (default: ``known``) are the x360 and switch lists."""
     holder = tempfile.TemporaryDirectory(prefix="d3sno_uv2_")
     case.addCleanup(holder.cleanup)
     folder = Path(holder.name)
     if U.ROW_TABLE not in skip:
         lines = ["build\tshader\tpass\tstage\tslot_type\tdivisor\tlightmap_v_scale"]
-        lines += ["\t".join("" if v is None else str(v) for v in (row if len(row) == 7 else ("ps3", *row)))
-                  for row in rows]
+        full = [r for row in rows for r in ([row] if len(row) == 7 else [("ps3", *row), ("switch", *row)])]
+        lines += ["\t".join("" if v is None else str(v) for v in row) for row in full]
         (folder / U.ROW_TABLE).write_text("\n".join(lines) + "\n", encoding="utf-8")
     if U.KNOWN_TABLE not in skip:
         (folder / U.KNOWN_TABLE).write_text("\n".join(known) + "\n", encoding="utf-8")
     if U.KNOWN_TABLE_X360 not in skip:
         listed = known if known_x360 is None else known_x360
         (folder / U.KNOWN_TABLE_X360).write_text("\n".join(listed) + "\n", encoding="utf-8")
+    if U.KNOWN_TABLE_SWITCH not in skip:
+        listed = known if known_switch is None else known_switch
+        (folder / U.KNOWN_TABLE_SWITCH).write_text("\n".join(listed) + "\n", encoding="utf-8")
     return folder
 
 
@@ -145,8 +150,9 @@ class Tables(unittest.TestCase):
 
     def test_missing_table_gives_none(self):
         self.assertIsNone(U.load_tables(make_tables(self, skip=(U.ROW_TABLE,))))
-        self.assertIsNone(U.load_tables(make_tables(self, skip=(U.KNOWN_TABLE, U.KNOWN_TABLE_X360))))
-        for missing, build in ((U.KNOWN_TABLE, "switch"), (U.KNOWN_TABLE_X360, "x360")):  # X6: per build
+        self.assertIsNone(U.load_tables(make_tables(self, skip=(U.KNOWN_TABLE, U.KNOWN_TABLE_X360, U.KNOWN_TABLE_SWITCH))))
+        for missing, build in ((U.KNOWN_TABLE, "ps3"), (U.KNOWN_TABLE_SWITCH, "switch"),  # X6, ``48`` Z1: per build
+                               (U.KNOWN_TABLE_X360, "x360")):
             self.assertIsNone(U.load_tables(make_tables(self, skip=(missing,))).for_build(build))
         self.assertIsNotNone(U.load_tables(make_tables(self)))
 
@@ -162,10 +168,11 @@ class Uv2UseLibrary(unittest.TestCase):
 
     def test_six_cases(self):
         uses = [p["extras"]["d3sno_export"]["uv2_use"] for p in self.prims]
-        self.assertEqual(uses, ["lightmap", "layer", "open", "lightmap_without_texture", "unused", "unknown"])
+        # ``48`` Z2: the divisor-512 primitive (before: ``"open"``) is ``"layer"``, with the layer ``TEXCOORD_1``
+        self.assertEqual(uses, ["lightmap", "layer", "layer", "lightmap_without_texture", "unused", "unknown"])
         scales = [p["extras"]["d3sno_export"]["uv2_scale"] for p in self.prims]
-        self.assertEqual(scales, ["lightmap", "layer", "open", "open", "unused", "open"])
-        self.assertEqual([("TEXCOORD_1" in p["attributes"]) for p in self.prims], [True, True] + [False] * 4)
+        self.assertEqual(scales, ["lightmap", "layer", "layer", "open", "unused", "open"])
+        self.assertEqual([("TEXCOORD_1" in p["attributes"]) for p in self.prims], [True] * 3 + [False] * 3)
         for p in self.prims:
             self.assertIn("_D3_UV2", p["attributes"])
 
@@ -178,11 +185,11 @@ class Uv2UseLibrary(unittest.TestCase):
         self.assertEqual(U.uv2_use(U.rows_for(("Shaders\\T_Plain.shd",), self.table), False), "unused")
 
     def test_case_order(self):
-        """Layer rows win over odd rows; odd rows over lightmap rows; rows over an unknown shader."""
+        """Layer rows win over lightmap rows, and so do odd rows (``48`` Z2); rows over an unknown shader."""
         rows = U.rows_for(("t_layer", "t_odd", "t_light"), self.table)
         self.assertEqual(U.uv2_use(rows, False), "layer")
         self.assertEqual(U.uv2_use(rows, True), "lightmap")
-        self.assertEqual(U.uv2_use(U.rows_for(("t_odd", "t_light"), self.table), False), "open")
+        self.assertEqual(U.uv2_use(U.rows_for(("t_odd", "t_light"), self.table), False), "layer")
         self.assertEqual(U.uv2_use(U.rows_for(("t_light", "mystery"), self.table), False),
                          "lightmap_without_texture")
 
@@ -215,7 +222,8 @@ class Uv2UseLibrary(unittest.TestCase):
         self.assertNotIn("lightmap", extras)
         odd = self.doc["materials"][self.prims[2]["material"]]["extras"]["d3sno_export"]["uv2_layers"]
         self.assertEqual(odd, [{"shader": "t_odd", "pass": 0, "stage": 2, "slot_type": 12, "slot_name": "layer_12",
-                                "divisor": 512, "texture": None, "texcoord": None}])
+                                "divisor": 512, "texture": None, "texcoord": 1, "shader_scale": 16, "in_game": "open",
+                                "texture_info": U.odd_texture_info()}])  # ``48`` Z2
         for p in self.prims[3:]:  # no layer or odd row: no ``uv2_layers`` (V27-1), no extras at all
             self.assertNotIn("extras", self.doc["materials"][p["material"]])
         for material in self.doc["materials"]:  # layer textures are not bound to glTF core inputs

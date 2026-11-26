@@ -351,10 +351,11 @@ class Reasons(unittest.TestCase):
         anim.write_bytes(anim.read_bytes() + b"    ")
         report, _ = s.ok()
         rows = changed_rows(report)
+        # ``49`` W22: records and animations are importable now; these two edits are refused as bad JSON / glTF
         self.assertEqual({p: (r["result"], r["reason"]) for p, r in rows.items()},
-                         {f"data/acr/{F.ACR}.json": ("not_importable", "not_importable"),
-                          f"anims/{F.ANI}.glb": ("not_importable", "not_importable")})
-        self.assertEqual(report["counts"]["not_importable"], 2)
+                         {f"data/acr/{F.ACR}.json": ("refused", "bad_json"),
+                          f"anims/{F.ANI}.glb": ("refused", "bad_json")})
+        self.assertEqual(report["counts"]["refused"], 2)
 
     def test_missing_and_unmanaged(self):
         s = Setup(self, skip=(TEX_PATH,))
@@ -475,7 +476,7 @@ class Refusals(unittest.TestCase):
 
     def test_options(self):
         s = Setup(self)
-        self.assertRefused(AP.apply_export(s.game, s.edit, s.root / "out", only="anims"), "--only")
+        self.assertRefused(AP.apply_export(s.game, s.edit, s.root / "out", only="sounds"), "--only")
         self.assertRefused(AP.apply_export(s.game, s.edit, s.root / "out", mesh_options={"missing": "remove"}),
                            "--missing")
         self.assertFalse((s.root / "out").exists())
