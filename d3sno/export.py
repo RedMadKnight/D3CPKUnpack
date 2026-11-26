@@ -28,7 +28,7 @@ from pathlib import Path
 
 from . import __version__
 from . import (
-    animation, anims, appearance, archive, collision, index, material, navigation, records, shader, text,
+    animation, anims, appearance, archive, collision, effects, index, material, navigation, records, shader, text,
     texture, uv2_use, world,
 )
 from .binary import FormatError
@@ -50,9 +50,10 @@ COVERAGE_FORMAT_VERSION = 1
 EXIT_OK, EXIT_STOPPED, EXIT_REFUSED = 0, 1, 2
 # W18-4 to W18-8, in the order the export runs them (textures before the meshes that name them,
 # meshes before the animations that need them).
-EXPORT_GROUPS = ("tex", "app", "ani", "acr", "mon", "mat", "scn", "wrl", "lvl", "mrk", "phm", "stl")
+# ``55`` W23-7: the 31 effect groups follow, part of the default selection
+EXPORT_GROUPS = ("tex", "app", "ani", "acr", "mon", "mat", "scn", "wrl", "lvl", "mrk", "phm", "stl") + effects.GROUPS
 REASONS = ("parse_error", "not_decoded", "missing_dependency", "filtered", "unsupported_build",
-           "duplicate_differs")
+           "duplicate_differs") + effects.FINDINGS  # ``55`` W23-2 to W23-5: findings on exported files
 OPEN = "open"
 # ``43`` W19-1: the settled questions, written as statements
 V_DIRECTION = "top_left_origin"
@@ -527,6 +528,8 @@ class _Run:
         self.entries: list[dict] = []
         self.coverage: dict[str, dict] = {g: {"found": 0, "unique": 0, "exported": 0, "skipped": 0, "files": []}
                                           for g in EXPORT_GROUPS}
+        for g in effects.GROUPS:  # ``55`` W23-6: named leaves and unnamed words per build; W23-2 conflicts
+            self.coverage[g].update({"leaves": {}, "layout_conflicts": []})
         self.unread: list[dict] = []
         self.archives: list[tuple[str, archive.CpkArchive]] = []
         self.names: dict[tuple[int, int], str] = {}
@@ -827,6 +830,9 @@ class _Run:
                 self.export_item(item, self.json_job(json_jobs[ext]))
         for item in self.items_of("stl"):
             self.export_item(item, self.job_strings)
+        for ext in effects.GROUPS:  # ``55`` W23-7
+            for item in self.items_of(ext):
+                self.export_item(item, self.job_effect)
 
     def json_job(self, make):
         def job(item: _Item):
@@ -1062,6 +1068,30 @@ class _Run:
         self.emit(item, [(f"data/text/{locale}/{item.handle}.json", lambda: dumps(document), {"locale": locale})])
         return True
 
+    def job_effect(self, item: _Item):
+        """``55`` W23-7: one file of an effect group, with its coverage (W23-2 to W23-6)."""
+        found = effects.decode_full(item.data, item.ext, item.build)
+        document = found.json
+        self.emit(item, [(f"data/{item.ext}/{item.handle}.json", lambda: dumps(document), {})])
+        cov = self.coverage[item.ext]
+        counts = cov["leaves"].setdefault(item.build, {"named": 0, "unnamed": 0, "open": 0})
+        counts["named"] += found.named
+        counts["unnamed"] += found.unnamed
+        counts["open"] += found.open
+        for record, leaf in found.conflicts:
+            row = {"build": item.build, "record": record, "leaf": leaf}
+            if row not in cov["layout_conflicts"]:
+                cov["layout_conflicts"].append(row)
+        for path in found.counts_differ:
+            self.note(item, "curve_count_differs", True, None, path=_path_text(path))
+        if self.names:  # W23-5: a handle the game folder's index does not hold
+            for path, group, handle in found.links:
+                if (group & 0xFFFFFFFF, handle & 0xFFFFFFFF) not in self.names:
+                    self.note(item, "link_unresolved", True, None, path=_path_text(path),
+                              link={"group": (group_by_id(group).extension if group_by_id(group) else str(group)),
+                                    "handle": handle})
+        return True
+
     # --- results -----------------------------------------------------------------------------
     def manifest(self, created: str) -> dict:
         entries = sorted(self.entries, key=lambda e: (e["group"], -1 if e["handle"] is None else e["handle"], e["path"]))
@@ -1071,6 +1101,8 @@ class _Run:
             "library_version": __version__,
             "options": {"archives": self.patterns, "groups": list(self.groups), "all_levels": bool(self.all_levels),
                         "travel": self.travel},
+            # ``55`` W23-7: the layout table of each selected effect group, per build
+            "schemas": {ext: effects.schema(ext) for ext in effects.GROUPS if ext in self.groups},
         }
 
     def coverage_dict(self, stopped: dict | None) -> dict:
@@ -1094,6 +1126,13 @@ class _Run:
         lines.append(f"total: found {t['found']}, exported {t['exported']}, skipped {t['skipped']}, "
                      f"files written {len(self.entries)}")
         return lines
+
+
+def _path_text(path) -> str:
+    out = ""
+    for part in path:
+        out += f"[{part}]" if isinstance(part, int) else ("." if out else "") + str(part)
+    return out
 
 
 def prune_empty(value):

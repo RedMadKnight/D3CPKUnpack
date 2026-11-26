@@ -27,7 +27,7 @@ import math
 import struct
 from dataclasses import dataclass, field
 
-from . import collision, collision_write, enums, export, material, navigation, records, world
+from . import collision, collision_write, effects, enums, export, material, navigation, records, world
 from . import sno_layout as L
 from .binary import ByteView, FormatError, build_order
 from .power import TAG_FLOAT
@@ -39,7 +39,7 @@ __all__ = [
     "import_json", "path_text", "places", "template_json",
 ]
 
-GROUPS = ("acr", "mon", "mat", "lvl", "scn", "wrl", "mrk", "phm")
+GROUPS = ("acr", "mon", "mat", "lvl", "scn", "wrl", "mrk", "phm") + effects.GROUPS  # ``55`` W23-8
 # W22-3 to W22-10, W22-11: the reasons of a refused leaf or entry
 REASONS = ("import_failed", "value_out_of_range", "unknown_name", "conflicting_values", "wrong_group", "list_length_fixed",
            "derived_field", "navigation_geometry", "skeleton_mismatch", "duration_changed",
@@ -704,6 +704,8 @@ def template_json(ext: str, data: bytes, build: str, nav: bytes | None = None, s
         return export.plain(export._scene_json(data, build, nav)[0])
     if ext == "wrl":
         return export.plain(export._world_json(data, build, scenes or (lambda h: None), sets or (lambda h: None))[0])
+    if ext in effects.GROUPS:  # ``55`` W23-7
+        return export.plain(effects.decode(data, ext, build))
     raise FormatError(f"no JSON export for .{ext}")
 
 
@@ -1281,6 +1283,9 @@ def import_json(ext: str, template: bytes, build: str, edited: dict, *, nav: byt
     not compared; a diagnostic row new in the export of the written file is an ``export_warning``."""
     if ext == "phm":
         return import_collision(template, build, edited)
+    if ext in effects.GROUPS:  # ``55`` W23-8
+        data, rows, warnings = effects.encode_result(template, ext, build, edited, known)
+        return ImportResult(data, rows, warnings, None)
     order = build_order(build)
     old = _json_round(template_json(ext, template, build, nav, scenes, sets))
     found = places(ext, template, build, nav)

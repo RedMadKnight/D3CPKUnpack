@@ -26,6 +26,7 @@ from pathlib import Path, PurePosixPath
 from . import __version__
 from . import appearance, export, texture
 from .binary import FormatError
+from .effects import GROUPS as EFFECT_GROUPS
 
 __all__ = [
     "ApplyResult", "EXIT_OK", "EXIT_REFUSED", "EXIT_STOPPED", "KINDS", "REPORT_FORMAT", "REPORT_FORMAT_VERSION",
@@ -39,7 +40,8 @@ REPORT_FORMAT_VERSION = 1
 KINDS = ("meshes", "textures", "text", "records", "world", "collision", "anims")  # W21-4, W22-11: ``--only``
 # W22-11: the JSON groups of each kind (records are applied after meshes and textures)
 JSON_KINDS = {"acr": "records", "mon": "records", "mat": "records", "lvl": "records", "scn": "world",
-              "wrl": "world", "mrk": "world", "phm": "collision"}
+              "wrl": "world", "mrk": "world", "phm": "collision",
+              **{ext: "records" for ext in EFFECT_GROUPS}}  # ``55`` W23-8: the effect groups are records
 NEVER_APPLIED = ("manifest.json", "coverage.json")  # W21-2
 # results of a changed entry (W21-7)
 RESULTS = ("applied", "no_effect", "not_importable", "filtered", "refused")

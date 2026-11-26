@@ -574,7 +574,7 @@ class Version(unittest.TestCase):
     def test_version(self):
         major, minor, patch = (int(p) for p in d3sno.__version__.split("."))
         self.assertGreaterEqual((major, minor, patch), (0, 22, 3))
-        self.assertEqual(d3sno.STAGE, 22)
+        self.assertGreaterEqual(d3sno.STAGE, 22)
 
 
 if __name__ == "__main__":

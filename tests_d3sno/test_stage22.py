@@ -114,7 +114,7 @@ class Unedited(unittest.TestCase):
     import (not short-cut by a hash)."""
 
     def test_each_group(self):
-        for ext in J.GROUPS:
+        for ext in sorted(BY_EXT):  # the effect groups (``55``) have their own tests
             with self.subTest(ext):
                 data = template(ext)
                 result = J.import_json(ext, data, BUILD, exported(ext, data))
