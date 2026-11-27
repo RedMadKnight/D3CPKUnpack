@@ -554,7 +554,7 @@ class Export(unittest.TestCase):
 class Version(unittest.TestCase):
     def test_version(self):
         self.assertGreaterEqual(tuple(int(p) for p in d3sno.__version__.split(".")), (0, 23, 0))
-        self.assertEqual(d3sno.STAGE, 23)
+        self.assertGreaterEqual(d3sno.STAGE, 23)
 
 
 if __name__ == "__main__":

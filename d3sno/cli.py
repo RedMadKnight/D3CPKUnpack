@@ -507,6 +507,68 @@ def cmd_export(args) -> int:
     return result.exit_code
 
 
+def cmd_links(args) -> int:
+    """``58`` W24-8: the graph of links of GAME_DIR: the summary line, one query, or the whole index."""
+    import json
+
+    from . import links
+    from .export import dumps, in_git_tree
+
+    if args.out is not None and in_git_tree(args.out) is not None and not args.force:
+        print("error: the output file is inside a git working tree; game content is never put into a repository "
+              "(pass --force to write there anyway)", file=sys.stderr)
+        return 2
+    try:
+        index = links.build_index(args.game_dir, build=args.build, archives=args.archives)
+    except links.LinkRefused as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    _print(index.summary())
+    queries = [(name, getattr(args, name)) for name in ("uses", "used_by", "needs", "needed_by")
+               if getattr(args, name) is not None]
+    for name, wanted in queries:
+        try:
+            node = _link_node(index, wanted)
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
+        if node is None:
+            print(f"error: no node {wanted!r}", file=sys.stderr)
+            return 2
+        _print(f"{name.replace('_', '-')} {_node_text(index, node)}:")
+        if name in ("uses", "used_by"):
+            for edge in getattr(index, name)(node):
+                other = edge.target if name == "uses" else edge.source
+                _print(f"  {edge.kind:5} {edge.path}  {_node_text(index, other)}")
+        else:
+            for reach in getattr(index, name)(node, depth=args.depth):
+                edge = reach.via[-1]
+                _print(f"  {reach.depth:3} {_node_text(index, reach.node)}  ({edge.kind} {edge.path})")
+    if args.unresolved:
+        for edge in index.unresolved():
+            _print(f"unresolved {_node_text(index, edge.source)} {edge.path} -> {links.node_id(edge.target)}")
+    if args.out is not None:
+        Path(args.out).write_bytes(dumps(index.to_json()))
+    return 0
+
+
+def _link_node(index, text: str):
+    """NAME: a node id (``sno:acr:123``), ``ext:name``, a CoreTOC name or a handle."""
+    from .sno import group_by_extension
+
+    head, sep, rest = text.partition(":")
+    if sep and head not in ("sno", "gbid") and group_by_extension(head) is not None:
+        return index.find(rest, head)
+    return index.find(text)
+
+
+def _node_text(index, node) -> str:
+    from .links import node_id
+
+    name = index.nodes[node].name if node in index.nodes else None
+    return node_id(node) + (f" {name}" if name else "") + ("" if index.is_resolved(node) else " (unresolved)")
+
+
 def _jobs(text: str) -> int:
     value = int(text)
     if value < 1:
@@ -731,7 +793,12 @@ MESH_TRANSPLANT_NOTE = (
     "lacks it; a taken name gets _2, _3, ... (W17-11, W17-12). The output may not be an input."
 )
 
-_WRITE_COMMANDS = ("export", "apply", "texture-import", "mesh-import", "mesh-transplant", "replace", "add")
+LINKS_NOTE = (
+    "The output names the user's game files: a FILE.json inside a git working tree is refused without --force. "
+    "NAME is a CoreTOC name, a handle, EXT:NAME (e.g. acr:Wizard_Male) or a node id (sno:acr:123, gbid:2:-5)."
+)
+
+_WRITE_COMMANDS = ("export", "apply", "links", "texture-import", "mesh-import", "mesh-transplant", "replace", "add")
 
 
 def make_parser() -> argparse.ArgumentParser:
@@ -857,6 +924,19 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--force", action="store_true", help="export inside a git working tree anyway")
     sub.add_argument("--travel", action="store_true",
                      help="add a d3sno_travel node to each animation, moved by its average velocity (W19-5)")
+    add_build(sub)
+    sub = add("links", cmd_links)
+    sub.epilog = LINKS_NOTE
+    sub.add_argument("game_dir", metavar="GAME_DIR", help="the folder of the .cpk archives and index files")
+    sub.add_argument("--out", metavar="FILE.json", help="write the whole index")
+    sub.add_argument("--uses", metavar="NAME", help="the links out of NAME (one level)")
+    sub.add_argument("--used-by", metavar="NAME", help="the links into NAME (one level)")
+    sub.add_argument("--needs", metavar="NAME", help="every file NAME needs")
+    sub.add_argument("--needed-by", metavar="NAME", help="every file that needs NAME")
+    sub.add_argument("--depth", type=int, metavar="N", help="--needs / --needed-by: at most N levels")
+    sub.add_argument("--unresolved", action="store_true", help="list the links whose target does not resolve")
+    sub.add_argument("--archives", nargs="+", metavar="PATTERN", help="archive base names, e.g. Act1* Common*")
+    sub.add_argument("--force", action="store_true", help="write inside a git working tree anyway")
     add_build(sub)
     sub = add("apply", cmd_apply)
     sub.epilog = APPLY_NOTE

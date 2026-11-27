@@ -1432,7 +1432,7 @@ def material_block(img: Image, build: str, textures=(), shader_map=77) -> bytes:
     order = order_of(build)
     block = Image(72 if build == "ps3" else 104, order)
     block.put(0, "i", shader_map)
-    if build == "switch":
+    if build in ("switch", "x360"):  # x360 has the Switch block (``59`` tests: was the PS3 one)
         block.put(0x04, "16f", *SWITCH_COLOURS)
         block.put(0x44, "fI", 2.5, 8)
         width, animation_at, handle_at, list_at = 32, 0x08, 0x18, 0x4C

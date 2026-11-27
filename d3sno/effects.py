@@ -30,9 +30,10 @@ from .sno import group_by_id, parse_header
 __all__ = ["GROUPS", "Leaf", "Decoded", "leaf_table", "decode", "decode_full", "encode", "encode_result",
            "schema", "enum_names", "FINDINGS"]
 
-# ``57``: the corrected tables replace ``f56_*`` and ``f55_*`` (which stay in the package data, unused)
-LAYOUT_TABLE = "f57_layouts.tsv"
-ENUM_TABLE = "f57_enums.tsv"
+# ``57``: the corrected tables replace ``f56_*`` and ``f55_*``; ``58``: ``f58_*`` (59 types) replace ``f57_*``
+# (the older tables stay in the package data, unused)
+LAYOUT_TABLE = "f58_layouts.tsv"
+ENUM_TABLE = "f58_enums.tsv"
 OWN_HANDLE = "tHeader.snoHandle"  # ``57`` AG2: the top record's own handle, not changed by the import
 GROUPS = ("prt", "efg", "lit", "mus", "ams", "aib", "ais", "adv", "qsr", "xpl", "dfn", "wth", "trl", "rop", "clt",
           "shk", "srf", "obs", "phy", "rev", "tut", "bos", "aco", "act", "enc", "an2", "scg", "flg", "ctr", "ant",
@@ -224,8 +225,9 @@ def _named(leaf: Leaf, name: str | None = None, offset: int | None = None) -> _N
     if not enum and part in HEADER_ENUMS:
         enum = HEADER_ENUMS[part]
     code = _code(leaf.type, leaf.size, leaf.name) if leaf.type else HEADER_CODES.get(part, "i")
-    return _Named(name, leaf.offset if offset is None else offset, leaf.size, code, enum, leaf.flags, leaf.group,
-                  leaf)
+    # ``58`` W24-1: a ``GBID`` row's ``sno_group`` is a balance type, not an SNO group: no link form here
+    group = None if leaf.type == "GBID" else leaf.group
+    return _Named(name, leaf.offset if offset is None else offset, leaf.size, code, enum, leaf.flags, group, leaf)
 
 
 def _same_element(row: Leaf, slot: L.PairSlot) -> bool:
@@ -570,11 +572,11 @@ def schema(ext: str) -> dict:
     for build in ("ps3", "switch", "x360"):
         rows = []
         for leaf in leaf_table(build, ext):
-            group = group_by_id(leaf.group) if leaf.group is not None else None
+            group = group_by_id(leaf.group) if leaf.group is not None and leaf.type != "GBID" else None
             rows.append({"record": leaf.record, "leaf": leaf.name, "type": leaf.type, "unit": leaf.unit or None,
                          "enum": leaf.enum or None, "flags": leaf.flags or None,
                          "link_group": (group.extension if group else str(leaf.group)) if leaf.group is not None
-                         else None, "offset": leaf.offset, "status": leaf.status})
+                         and leaf.type != "GBID" else None, "offset": leaf.offset, "status": leaf.status})
         out[build] = rows
     return out
 
