@@ -36,8 +36,9 @@ __all__ = ["GROUPS", "Leaf", "Decoded", "leaf_table", "decode", "decode_full", "
            "NewFile", "ALWAYS_SHARED"]
 
 # ``57``: the corrected tables replace ``f56_*`` and ``f55_*``; ``58``: ``f58_*`` (59 types) replace ``f57_*``;
-# ``61`` AI3: ``f61_layouts.tsv`` replaces ``f58_layouts.tsv`` (the enums stay). The older tables stay, unused.
-LAYOUT_TABLE = "f61_layouts.tsv"
+# ``61`` AI3: ``f61_layouts.tsv`` replaces ``f58_layouts.tsv`` (the enums stay); ``62`` AJ2: ``f62_layouts.tsv``
+# (the PS3 material texture entry) replaces ``f61_layouts.tsv``. The older tables stay, unused.
+LAYOUT_TABLE = "f62_layouts.tsv"
 ENUM_TABLE = "f58_enums.tsv"
 OWN_HANDLE = "tHeader.snoHandle"  # ``57`` AG2: the top record's own handle, not changed by the import
 GROUPS = ("prt", "efg", "lit", "mus", "ams", "aib", "ais", "adv", "qsr", "xpl", "dfn", "wth", "trl", "rop", "clt",
@@ -731,8 +732,8 @@ def _write_named(enc: _Enc, record: L.Record, named: _Named, old, new, path: tup
         enc.checks.append((path, new))
     else:
         value = new
-        if enc.creating and named.code == "f" and new in NON_FINITE:  # ``60``: as the export writes them
-            value = float(new)
+        # ``60``, ``62`` AJ1: a non-finite float as the export writes it (``"nan:XXXXXXXX"`` keeps its bits);
+        # ``json_import._pack`` reads the text
         enc.checks.append((path, new))
     _put(record, named, _pack(named.code, value, path, enc.order), path)
 
@@ -799,8 +800,57 @@ def _guard(enc: _Enc, fn, *args) -> None:
         enc.refusals.append(_failed(args[-1] if args and isinstance(args[-1], tuple) else (), exc))
 
 
+OLD_TABLE = "f61_layouts.tsv"  # ``62`` AJ2: the table of 0.25.1
+
+
+@lru_cache(maxsize=None)
+def _newly_named() -> frozenset:
+    """``62`` AJ2: the placed leaves of the table in use that ``OLD_TABLE`` does not place, as
+    ``(build, ext, record, leaf, offset)``: their words were unnamed words in a JSON written by 0.25.1."""
+    def placed(rows):
+        return {(b, e, leaf.record, leaf.name, leaf.offset) for (b, e), leaves in rows.items() for leaf in leaves
+                if leaf.offset is not None}
+
+    return frozenset(placed(_rows()) - placed(load_layouts(DATA / OLD_TABLE)))
+
+
+def _old_words(build: str, ext: str, table: str | None, view: _View, new, order: str):
+    """``62`` AJ2: a JSON written by 0.25.1 gives a leaf that ``f62`` names newly as an unnamed word. A 4-byte
+    word at the offset of such a leaf, in a record whose JSON does not give the leaf's name, is read as that leaf,
+    as the export would write it. Every other unnamed word is checked as before (an unnamed word over any other
+    named leaf is still refused)."""
+    from .json_import import _json_round
+
+    if not isinstance(new, dict) or not isinstance(new.get(UNNAMED), dict):
+        return new
+    words, moved = new[UNNAMED], None
+    for named in view.plain:
+        key = _word_key(named.offset)
+        if named.name in new or key not in words or named.size != 4 or named.code == "text":
+            continue
+        if (build, ext, table, named.name, named.offset) not in _newly_named():
+            continue
+        value = words[key]
+        if isinstance(value, bool) or not isinstance(value, int) or not 0 <= value < 1 << 32:
+            continue
+        if moved is None:
+            moved = dict(new)
+            moved[UNNAMED] = dict(words)
+        raw = bytearray(view.size)
+        raw[named.offset:named.offset + 4] = value.to_bytes(4, "big" if order == ">" else "little")
+        moved[named.name] = _json_round(_value(_Ctx(build, ext, order), raw, named, ()))
+        del moved[UNNAMED][key]
+    if moved is None:
+        return new
+    if not moved[UNNAMED]:
+        del moved[UNNAMED]
+    return moved
+
+
 def _encode_record(enc: _Enc, record: L.Record, table: str | None, old: dict, new, path: tuple,
                    node: bool = False) -> None:
+    if not node:
+        new = _old_words(enc.build, enc.ext, table, _view(enc.build, enc.ext, table, record.name), new, enc.order)
     if enc.creating and isinstance(new, dict):  # ``60``: a record that is a curve may give its stored count
         _keys({k: 0 for k in old if k != "stored_count"}, {k: 0 for k in new if k != "stored_count"}, path)
     else:
@@ -1150,6 +1200,8 @@ class _Filler:
             self.refuse(path, "bad_json", "a record is an object")
             return zero
         view = _view(self.build, self.ext, table, name)
+        if not node:
+            new = _old_words(self.build, self.ext, table, view, new, build_order(self.build))
         curves = {curve.name: curve for curve in view.curves}
         own = curves.get("")  # the record is itself a curve
         extra = ("stored_count",) if own is not None and own.parts.get("count") is not None else ()

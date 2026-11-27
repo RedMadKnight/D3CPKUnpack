@@ -142,7 +142,7 @@ class OnePlace(unittest.TestCase):
     """AI3."""
 
     def test_table(self):
-        self.assertEqual(E.LAYOUT_TABLE, "f61_layouts.tsv")
+        self.assertIn(E.LAYOUT_TABLE, ("f61_layouts.tsv", "f62_layouts.tsv"))  # ``62``: f62 replaces f61
         self.assertTrue((DATA / "f58_layouts.tsv").is_file())
         rows = [r for r in E.leaf_table("ps3", "lit") if r.status == "curve header (PS3 rule, aligned on the files)"
                 and r.name.endswith("tHeader.nNodeCount")]

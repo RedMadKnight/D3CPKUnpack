@@ -729,6 +729,11 @@ def _json_round(document):
 # --- values (W22-3) ---------------------------------------------------------------------------------
 
 def _pack(code: str, value, path, order: str) -> bytes:
+    if code == "f" and isinstance(value, str):  # ``60``, ``62`` AJ1: a non-finite float as the export writes it
+        try:
+            return struct.pack(order + "I", export.float_text_bits(value))
+        except ValueError as error:
+            raise Refused(path, "value_out_of_range", str(error)) from None
     if code in "fe":
         if isinstance(value, bool) or not isinstance(value, (int, float)):
             raise Refused(path, "value_out_of_range", f"{value!r} is not a number")

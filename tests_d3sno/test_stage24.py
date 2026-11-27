@@ -31,6 +31,7 @@ GID = {ext: group_by_extension(ext).id for ext in ("acr", "app", "glo", "mat", "
 A1, A2, APP, GLO, MAT, TEX, RCP, GAM_ITEMS, GAM_AFFIX, ANS = 4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010
 PROJECTILE = 0x1025A  # actor tag "Projectile Sno" (AXETAGTYPE_ACTOR, group 1)
 SWORD, FIRE, LOST = "Sword_Of_Tests", "Fire_Affix", "No_Such_Row"
+MAT_LIST = {"switch": "ptMatTexList", "x360": "ptMatTexList", "ps3": "serMatTexList"}
 
 
 def row(build, ext, record, name):
@@ -75,12 +76,12 @@ def global_file(build, actors):
 
 def material(build, texture):
     tree = T.blank(build, "mat", MAT)
-    top = E._top_table_record(build, "mat")
-    lst = row(build, "mat", top, "tUberMaterial.ptMatTexList")
-    slot = slot_at(build, "mat", L.top_record(build, "mat"), lst.pair_offset)
+    # the texture list (``62`` AJ2: on PS3 it is ``serMatTexList`` of the nested ``UberMaterial``)
+    slot = next(s for s in L.pair_slots(build, "mat", L.top_record(build, "mat"))
+                if s.field.element == "MaterialTextureEntry")
     element = slot.field.element
     raw = bytearray(L.record_layout(build, "mat", element).size)
-    struct.pack_into(build_order(build) + "i", raw, row(build, "mat", lst.element, "tMatTex.snoTex").offset, texture)
+    struct.pack_into(build_order(build) + "i", raw, row(build, "mat", element, "tMatTex.snoTex").offset, texture)
     tree.top.pairs[slot.offset] = L.PairValue(L.Block(elements=[L.Record(element, raw)]))
     return L.write_tree(tree, derive=True)
 
@@ -133,7 +134,8 @@ def node(ext, handle):
 
 class Tables(unittest.TestCase):
     def test_f58(self):
-        self.assertIn(E.LAYOUT_TABLE, ("f58_layouts.tsv", "f61_layouts.tsv"))  # ``61``: f61 replaces f58
+        # ``61``: f61 replaces f58; ``62``: f62 replaces f61
+        self.assertIn(E.LAYOUT_TABLE, ("f58_layouts.tsv", "f61_layouts.tsv", "f62_layouts.tsv"))
         self.assertEqual(E.ENUM_TABLE, "f58_enums.tsv")
         for name in ("f55_layouts.tsv", "f56_layouts.tsv", "f57_layouts.tsv", "f57_enums.tsv", "f58_enums.tsv"):
             self.assertTrue((DATA / name).is_file(), name)
@@ -142,7 +144,8 @@ class Tables(unittest.TestCase):
             self.assertIn(ext, K.link_types())
 
     def test_link_rows(self):
-        """W24-1: 805 / 801 / 640 link rows, 388 of them open on PS3."""
+        """W24-1: 805 / 801 / 640 link rows, 388 of them open on PS3 (``62`` AJ2: 641 on PS3, with the material
+        texture handle)."""
         counts = {}
         for (build, ext), rows in E._rows().items():
             for leaf in rows:
@@ -150,7 +153,7 @@ class Tables(unittest.TestCase):
                 if kind in K.LINK_TYPES:
                     total, open_ = counts.get(build, (0, 0))
                     counts[build] = (total + 1, open_ + (leaf.offset is None))
-        self.assertEqual(counts, {"switch": (805, 0), "x360": (801, 0), "ps3": (640, 388)})
+        self.assertEqual(counts, {"switch": (805, 0), "x360": (801, 0), "ps3": (641, 388)})
 
     def test_gbid_rows_stay_numbers_in_effects(self):
         """A ``GBID`` row's ``sno_group`` is a balance type: the effects JSON keeps the number (stage 23)."""
@@ -202,11 +205,12 @@ class LinksOf(unittest.TestCase):
                           ("record.tBannerParams.arActorBases[2]", "array", node("acr", A2))])
 
     def test_element_record(self):
-        for build in ("switch", "x360"):  # the PS3 rows have no texture link (none placed)
+        for build in ("switch", "x360", "ps3"):  # ``62`` AJ2: the PS3 entry has its texture handle too
             with self.subTest(build=build):
                 found = K.links_of(material(build, TEX), "mat", build)
                 self.assertEqual([(l.path, l.kind, l.target) for l in found],
-                                 [("record.tUberMaterial.ptMatTexList[0].tMatTex.snoTex", "field", node("tex", TEX))])
+                                 [(f"record.tUberMaterial.{MAT_LIST[build]}[0].tMatTex.snoTex", "field",
+                                   node("tex", TEX))])
                 self.assertEqual(K.links_of(material(build, -1), "mat", build), [])
 
     def test_empty_and_filler(self):
@@ -486,11 +490,7 @@ class TestAssets(unittest.TestCase):
         if not materials:
             self.skipTest("no material in the generated test assets")
         for path in materials:
-            with self.subTest(path=str(path.relative_to(work))):
-                if "ps3" in {p.lower() for p in path.relative_to(work).parts}:
-                    # Repository note: the PS3 MaterialTextureEntry has no texture row in the layout table yet,
-                    # so a PS3 material links no texture (README, known limits). Open for the next corrections.
-                    continue
+            with self.subTest(path=path.name):
                 found = K.links_of(path.read_bytes(), "mat")
                 self.assertTrue([l for l in found if l.kind == "field" and l.target[:2] == ("sno", GID["tex"])],
                                 found)

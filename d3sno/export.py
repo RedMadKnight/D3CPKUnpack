@@ -117,9 +117,46 @@ def f32_text(value: float) -> str:
     return text_
 
 
+QUIET_NAN = 0x7FC00000  # ``62`` AJ1: the NaN written as plain ``"nan"``
+
+
+def nan_bits(value: float) -> int:
+    """``62`` AJ1: the float32 bits of a NaN read from a float32 (sign, exponent, the 23 fraction bits), taken from
+    the double's own bits, so the payload does not depend on how the runtime packs a NaN."""
+    bits = struct.unpack("<Q", struct.pack("<d", value))[0]
+    return (bits >> 63) << 31 | 0x7F800000 | (bits >> 29) & 0x7FFFFF
+
+
+def nan_text(value: float) -> str:
+    """``62`` AJ1: ``"nan"`` for the bits ``7FC00000``, else ``"nan:XXXXXXXX"`` (upper-case hex, sign bit first)."""
+    bits = nan_bits(value)
+    return "nan" if bits == QUIET_NAN else f"nan:{bits:08X}"
+
+
+def float_text_bits(text: str) -> int:
+    """``62`` AJ1: the float32 bits a non-finite float text stands for (``"nan"``, ``"nan:XXXXXXXX"``, ``"inf"``,
+    ``"-inf"``). Raises ``ValueError`` for any other text, for ``"nan:"`` not followed by 8 hex digits, and for bits
+    that are not a NaN."""
+    if text == "nan":
+        return QUIET_NAN
+    if text == "inf":
+        return 0x7F800000
+    if text == "-inf":
+        return 0xFF800000
+    if not text.startswith("nan:"):
+        raise ValueError(f"{text!r} is not a number")
+    digits = text[4:]
+    if len(digits) != 8 or any(c not in "0123456789abcdefABCDEF" for c in digits):
+        raise ValueError(f"{text!r}: a NaN is \"nan:\" and 8 hex digits")
+    bits = int(digits, 16)
+    if bits & 0x7F800000 != 0x7F800000 or not bits & 0x7FFFFF:
+        raise ValueError(f"{text!r}: the bits {bits:08X} are not a NaN")
+    return bits
+
+
 def _float(value: float):
     if not math.isfinite(value):
-        return "nan" if math.isnan(value) else ("inf" if value > 0 else "-inf")
+        return nan_text(value) if math.isnan(value) else ("inf" if value > 0 else "-inf")
     try:
         return float(f32_text(value))
     except OverflowError:  # above the float32 range: kept as the double it is
