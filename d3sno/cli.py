@@ -777,6 +777,111 @@ def cmd_add(args) -> int:
     return 0
 
 
+def _git_refused(paths, force: bool) -> bool:
+    from .export import in_git_tree
+
+    if force or not any(path is not None and in_git_tree(path) is not None for path in paths):
+        return False
+    print("error: the output is inside a git working tree; game content is never put into a repository "
+          "(pass --force to write there anyway)", file=sys.stderr)
+    return True
+
+
+def cmd_create(args) -> int:
+    """``60`` W25-7: a file of a table type from its JSON alone (``effects.create``); with ``--archive``, added to
+    the archive as a new SNO file with its index entries and Prefetch links (``effects.add_new``)."""
+    import json
+
+    from . import effects
+    from .json_import import Refused, path_text
+
+    try:
+        document = json.loads(Path(args.json).read_text(encoding="utf-8"))
+    except ValueError as exc:
+        print(f"error: {args.json}: not JSON ({exc})", file=sys.stderr)
+        return 2
+    tocs = list(args.toc or [])
+    inputs = [args.json] + ([args.archive] if args.archive else []) + tocs + ([args.prefetch] if args.prefetch else [])
+    if args.archive is None:
+        if args.out is None or args.out_dir is not None or args.name or tocs or args.prefetch:
+            print("error: give --out FILE, or --archive with --name, --toc and --out-dir", file=sys.stderr)
+            return 2
+        refuse_overwrite([args.out], inputs)
+        if _git_refused([args.out], args.force):
+            return 2
+    else:
+        if args.out is not None or not (args.name and tocs and args.out_dir):
+            print("error: --archive needs --name, --toc and --out-dir (and no --out)", file=sys.stderr)
+            return 2
+        names = [Path(args.archive).name] + [Path(t).name for t in tocs] + (
+            [Path(args.prefetch).name] if args.prefetch else [])
+        if len({n.lower() for n in names}) != len(names):
+            print("error: two inputs share a base name; --out-dir would write both to one file", file=sys.stderr)
+            return 2
+        outputs = [Path(args.out_dir) / n for n in names]
+        refuse_overwrite(outputs, inputs)
+        if _git_refused([args.out_dir], args.force):
+            return 2
+    try:
+        if args.archive is None:
+            data, warnings = effects.create_result(document, args.ext, args.build, pool=not args.no_pool)
+            Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+            Path(args.out).write_bytes(data)
+            for line in warnings:
+                _print(f"warning: {line}")
+            _print(f"wrote {args.out} ({len(data)} bytes)")
+            return 0
+        target = Path(args.out_dir)
+        target.mkdir(parents=True, exist_ok=True)
+        ext = args.name.rsplit(".", 1)[-1].lower() if "." in args.name else ""
+        if ext and ext != args.ext.lower().lstrip("."):
+            print(f"error: {args.name} is no .{args.ext} file", file=sys.stderr)
+            return 2
+        with _MappedArchive(args.archive) as cpk:
+            pack = args.pack
+            if cpk.header.build == "x360" and pack is None:
+                from . import index_write
+
+                pack = index_write.x360_pack(Path(args.archive).name, [Path(t).name for t in tocs])
+            result = effects.add_new(
+                cpk, args.name, document, tocs={Path(t).name: _read(t) for t in tocs},
+                prefetch={Path(args.prefetch).name: _read(args.prefetch)} if args.prefetch else None,
+                build=args.build, pool=not args.no_pool, pack=pack, out=str(target / Path(args.archive).name),
+                jobs=args.jobs, segment=args.segment)
+    except Refused as refusal:
+        for row in getattr(refusal, "refusals", [refusal]):
+            print(f"refused: {row.as_row()['path'] or '(file)'}: {row.reason}"
+                  + (f": {row.message}" if row.message else ""), file=sys.stderr)
+        return 2
+    for line in result.warnings:
+        _print(f"warning: {line}")
+    _print(f"wrote {target / Path(args.archive).name}")
+    for name, data in result.index_files.items():
+        (target / Path(name).name).write_bytes(data)
+        _print(f"wrote {target / Path(name).name}")
+    _print(f"added {args.name}: group {result.identity.group}, handle {result.identity.handle}")
+    deps = ", ".join(_dep_text(g, h) for g, h in result.depends) or "none"
+    _print(f"dependencies ({len(result.depends)}){'' if args.prefetch else ' (not written: no --prefetch)'}: {deps}")
+    for link in result.unresolved:
+        _print(f"unresolved: {link.path} -> {_dep_text(link.target[1], link.target[2])}")
+    for link in result.gbids:
+        _print(f"not checked (GBID): {link.path} -> gbid {link.target[1]}:{link.target[2]}")
+    _report_written(args, result.archive)
+    return 0
+
+
+def _dep_text(group: int, handle: int) -> str:
+    found = group_by_id(group)
+    return f"{found.extension if found else group}:{handle}"
+
+
+CREATE_NOTE = (
+    "JSON is the tree JSON of effects.decode (the export's form for the 31 groups of stage 23). Keys a hand-written "
+    "JSON leaves out stay zero; null links are -1. The output names the user's game files: inside a git working tree "
+    "it is refused without --force."
+)
+
+
 MESH_IMPORT_NOTE = (
     "To empty a draw from an editor, remove its primitive (or OBJ group) and import with "
     "--missing empty; a glTF primitive without indices and without extras.d3sno.no_indices is "
@@ -798,7 +903,7 @@ LINKS_NOTE = (
     "NAME is a CoreTOC name, a handle, EXT:NAME (e.g. acr:Wizard_Male) or a node id (sno:acr:123, gbid:2:-5)."
 )
 
-_WRITE_COMMANDS = ("export", "apply", "links", "texture-import", "mesh-import", "mesh-transplant", "replace", "add")
+_WRITE_COMMANDS = ("export", "apply", "links", "create", "texture-import", "mesh-import", "mesh-transplant", "replace", "add")
 
 
 def make_parser() -> argparse.ArgumentParser:
@@ -938,6 +1043,21 @@ def make_parser() -> argparse.ArgumentParser:
     sub.add_argument("--archives", nargs="+", metavar="PATTERN", help="archive base names, e.g. Act1* Common*")
     sub.add_argument("--force", action="store_true", help="write inside a git working tree anyway")
     add_build(sub)
+    sub = add("create", cmd_create)
+    sub.epilog = CREATE_NOTE
+    sub.add_argument("ext", metavar="EXT", help="the type, e.g. lit")
+    sub.add_argument("json", metavar="JSON", help="the file's tree JSON")
+    sub.add_argument("--out", metavar="FILE", help="write the file")
+    sub.add_argument("--archive", metavar="A.cpk", help="add the file to this archive as a new SNO file")
+    sub.add_argument("--name", metavar="GROUP\\NAME", help="--archive: the archive name of the new file")
+    sub.add_argument("--toc", nargs="+", metavar="TOC", help="--archive: CoreTOC.dat, or on x360 all six TOC files")
+    sub.add_argument("--prefetch", metavar="Prefetch.dat", help="--archive: give the file its Prefetch links")
+    sub.add_argument("--out-dir", metavar="D", help="--archive: folder for the new archive and index files")
+    sub.add_argument("--pack", help="x360: the pack (Common, Act1 .. Act5) when the archive name does not tell")
+    sub.add_argument("--no-pool", action="store_true", help="do not point equal blocks at one block (W25-3)")
+    sub.add_argument("--force", action="store_true", help="write inside a git working tree anyway")
+    add_build(sub)
+    _jobs_option(sub)
     sub = add("apply", cmd_apply)
     sub.epilog = APPLY_NOTE
     sub.add_argument("game_dir", metavar="GAME_DIR", help="the game folder that was exported")

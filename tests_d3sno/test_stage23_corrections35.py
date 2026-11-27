@@ -27,9 +27,9 @@ def row(build, ext, record, name):
 
 
 def set_outro_count(tree, build, count=3):
-    if build != "ps3":
-        at = row(build, "vib", "VibrationDefinition", f"{OUTRO}.tHeader.nNodeCount").offset
-        struct.pack_into(build_order(build) + "i", tree.top.raw, at, count)
+    # ``61`` AI3: PS3 inline curves have their count row too
+    at = row(build, "vib", "VibrationDefinition", f"{OUTRO}.tHeader.nNodeCount").offset
+    struct.pack_into(build_order(build) + "i", tree.top.raw, at, count)
 
 
 class Tables(unittest.TestCase):
@@ -220,15 +220,20 @@ class Ps3Curves(unittest.TestCase):
     """AF3: the PS3 curve forms of ``f56``."""
 
     def test_inline_curve(self):
-        """Header rows of the parent at the node pair - 28; no count (the table's word at - 32 is a plain leaf)."""
+        """Header rows of the parent at the node pair - 28; ``61`` AI3: the count at - 32 is the curve's count (a
+        stored count that differs is ``stored_count``)."""
         data = T.vib_file("ps3", count=7)
         found = E.decode_full(data, "vib", "ps3")
         curve = found.json["record"][CURVE]
         self.assertEqual(curve["loop"], [0.25, 0.75])
         self.assertEqual(curve["scalar"]["at_one"], 1.5)
         self.assertEqual(len(curve["nodes"]), 3)
-        self.assertNotIn("stored_count", curve)
-        self.assertEqual(found.json["record"][f"{CURVE}.tHeader.nNodeCount"], 7)
+        self.assertEqual(curve["stored_count"], 7)
+        self.assertNotIn(f"{CURVE}.tHeader.nNodeCount", found.json["record"])
+        count = row("ps3", "vib", "VibrationDefinition", f"{CURVE}.tHeader.nNodeCount")
+        self.assertEqual(count.offset, row("ps3", "vib", "VibrationDefinition", f"{CURVE}.ptArrayNodes").pair_offset - 32)
+        self.assertEqual(count.status, "curve header (PS3 rule, aligned on the files)")
+        self.assertNotIn("stored_count", E.decode(T.vib_file("ps3"), "vib", "ps3")["record"][CURVE])
         self.assertEqual(row("ps3", "vib", "VibrationDefinition", f"{CURVE}.tHeader.tLoopPointStart").status,
                          "curve header (PS3 rule, aligned on the files)")
 

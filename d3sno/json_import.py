@@ -152,7 +152,7 @@ def _same_json(a, b) -> bool:
     if isinstance(a, bool) or isinstance(b, bool):
         return type(a) is type(b) and a == b
     if isinstance(a, (int, float)) and isinstance(b, (int, float)):
-        return a == b
+        return a == b and _same_zero(a, b)
     if type(a) is not type(b):
         return False
     if isinstance(a, dict):
@@ -160,6 +160,14 @@ def _same_json(a, b) -> bool:
     if isinstance(a, list):
         return len(a) == len(b) and all(_same_json(x, y) for x, y in zip(a, b))
     return a == b
+
+
+def _same_zero(a, b) -> bool:
+    """``61`` AI2: two floats are the same value only when their float32 bits are equal, so 0.0 and -0.0 differ
+    (an integer 0 is +0)."""
+    if a == 0 and b == 0:
+        return math.copysign(1.0, a) == math.copysign(1.0, b)
+    return True
 
 
 def _close(a, b, tolerance: float = FLOAT_TOLERANCE) -> bool:
@@ -170,6 +178,8 @@ def _close(a, b, tolerance: float = FLOAT_TOLERANCE) -> bool:
         if isinstance(a, int) and isinstance(b, int):
             return a == b
         fa, fb = float(export.plain(float(a))), float(export.plain(float(b)))
+        if not _same_zero(fa, fb):
+            return False  # ``61`` AI2: the sign of a zero must match
         return fa == fb or abs(fa - fb) <= tolerance * max(1.0, abs(fa), abs(fb))
     if isinstance(a, dict) and isinstance(b, dict):
         return set(a) == set(b) and all(_close(a[k], b[k], tolerance) for k in a)
@@ -252,6 +262,8 @@ class TreePatch:
                     if value is not None and value.shared and value.block is owner:
                         record.pairs[slot] = L.PairValue(copy.deepcopy(owner), value.size, value.stored)
         if isinstance(holder, L.Record):
+            if rel + len(data) > len(holder.raw):  # ``61`` AI1: a record keeps its length
+                raise FormatError(f"a write of {len(data)} bytes at +{rel} runs past a {len(holder.raw)}-byte record")
             holder.raw[rel:rel + len(data)] = data
         else:
             raw = bytearray(holder.data)

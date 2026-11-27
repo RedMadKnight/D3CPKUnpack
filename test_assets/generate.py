@@ -7,6 +7,7 @@ derived from game files. The console files are built with the d3sno writers.
     python -I -B test_assets/generate.py sources          # rewrite test_assets/sources/
     python -I -B test_assets/generate.py check            # sources on disk equal the generated ones
     python -I -B test_assets/generate.py build OUT_DIR    # write the console files per build
+    python -I -B test_assets/generate.py OUT_DIR          # the same
 
 ``build`` writes ``OUT_DIR/<build>/<archive path>``, ``OUT_DIR/<build>/CoreTOC.dat`` and
 ``OUT_DIR/<build>/test_assets.cpk``. Keep OUT_DIR outside the repository (or under
@@ -349,6 +350,8 @@ def _write(path: str, data: bytes) -> None:
 
 def main(argv=None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
+    if len(args) == 1 and args[0] not in ("sources", "check", "build"):
+        args = ["build", args[0]]  # a lone folder: build into it
     if not args or args[0] not in ("sources", "check", "build") or (args[0] == "build") != (len(args) == 2):
         print(__doc__)
         return 2

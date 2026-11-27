@@ -191,11 +191,11 @@ class Curves(unittest.TestCase):
             self.assertIn(("record", CURVE), found.counts_differ)
             self.assertNotIn(f"{CURVE}.tHeader.nNodeCount", found.json["record"])
 
-    def test_ps3_has_no_stored_count(self):
-        """A PS3 table row of a node count is a plain leaf, never the curve's count."""
+    def test_ps3_stored_count(self):
+        """``61`` AI3 (corrects ``56`` AF3): the PS3 count row is the curve's count, as on every build."""
         found = E.decode_full(vib_file("ps3", count=5), "vib", "ps3")
-        self.assertNotIn("stored_count", found.json["record"][CURVE])
-        self.assertEqual(found.counts_differ, [])
+        self.assertEqual(found.json["record"][CURVE]["stored_count"], 5)
+        self.assertEqual(found.counts_differ, [("record", CURVE)])
 
     def test_colour_and_vector_nodes(self):
         """Colours are [r, g, b, a] in stored order; vectors [x, y, z]."""
@@ -278,8 +278,9 @@ class Lists(unittest.TestCase):
     def test_keys_stay_unique(self):
         """A leaf named as a tree pair: the pair's key takes its offset, and nothing is lost."""
         table = dict(E._rows())
-        extra = E.Leaf("ps3", "vib", "VibrationDefinition", f"{CURVE}.ptArrayNodes", 76, 4, "INT", "", "", "", None,
-                       "aligned by value")
+        free = E._view("ps3", "vib", "VibrationDefinition", L.top_record("ps3", "vib")).unnamed[0][0]
+        extra = E.Leaf("ps3", "vib", "VibrationDefinition", f"{CURVE}.ptArrayNodes", free, 4, "INT", "", "", "",
+                       None, "aligned by value")
         table[("ps3", "vib")] = table[("ps3", "vib")] + (extra,)
         caches = (E._by_record, E._view, E._top_table_record)
         for cache in caches:
@@ -287,7 +288,7 @@ class Lists(unittest.TestCase):
         self.addCleanup(lambda: [cache.cache_clear() for cache in caches])
         with mock.patch.object(E, "_rows", lambda: table):
             tree = L.parse_tree(vib_file("ps3"), "vib", "ps3")
-            struct.pack_into(">i", tree.top.raw, 76, 7)
+            struct.pack_into(">i", tree.top.raw, free, 7)
             data = L.write_tree(tree)
             record = doc(data, "vib", "ps3")["record"]
             self.assertEqual(record[f"{CURVE}.ptArrayNodes"], 7)
@@ -322,7 +323,10 @@ class Values(unittest.TestCase):
             group = rows(build, "lit", E._top_table_record(build, "lit"))["tMatTexProjected.snoTex"].group
             record = doc(lit_file(build, texture=-1), "lit", build)["record"]
             self.assertIsNone(record["tMatTexProjected.snoTex"])
-            self.assertIsNone(doc(lit_file(build, texture=0), "lit", build)["record"]["tMatTexProjected.snoTex"])
+            # ``60`` W25-2 corrects W23-5: a stored 0 keeps its value (null is -1); it is no link (W24-3)
+            self.assertEqual(doc(lit_file(build, texture=0), "lit", build)["record"]["tMatTexProjected.snoTex"],
+                             {"group": group_by_id(group).extension, "handle": 0})
+            self.assertEqual(E.decode_full(lit_file(build, texture=0), "lit", build).links, [])
             found = E.decode_full(lit_file(build, texture=TEX), "lit", build)
             self.assertEqual(found.json["record"]["tMatTexProjected.snoTex"],
                              {"group": group_by_id(group).extension, "handle": TEX})

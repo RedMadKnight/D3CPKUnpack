@@ -198,6 +198,9 @@ class PairValue:
     size: int | None = None  # the pair's own size when it differs from the block (W11-6)
     stored: tuple[int, int] = (0, 0)  # as parsed
     shared: bool = False  # points at the block of an earlier pair (W11-6)
+    # ``61`` AI4: the earlier block of another element type this pair points at; ``block`` then holds the same
+    # bytes read as this pair's own type (its element records' pairs are not read)
+    alias_of: "Block | None" = None
 
     def pair_size(self) -> int:
         return self.block.size() if self.size is None else self.size
@@ -261,6 +264,7 @@ class _Reader(_Walk):
         super().__init__(build, ext)
         self.data, self.order = data, build_order(build)
         self.seen: dict[int, Block] = {}
+        self.kinds: dict[int, tuple] = {}  # offset -> (kind, element) of the pair that first wrote it
         self.ends: list[int] = []
         self.notes: list[str] = []
 
@@ -276,6 +280,14 @@ class _Reader(_Walk):
             if not want_cursor and offset != 0:
                 self.notes.append(f"{where}: empty pair with offset 0x{offset:X} (W11-5 writes 0)")
             return
+        if offset in self.seen and self.kinds[offset] != (f.kind, f.element):
+            # ``61`` AI4: a block first written by a pair of another element type
+            start = BODY + offset
+            if start + size > len(self.data):
+                raise FormatError(f"{where}: block at 0x{start:X} size 0x{size:X} past the end", at)
+            record.pairs[slot.offset] = PairValue(self._block(f, start, size, None), None, (offset, size),
+                                                  shared=True, alias_of=self.seen[offset])
+            return
         if offset in self.seen:
             block = self.seen[offset]
             own = None if size == block.size() else size
@@ -285,24 +297,29 @@ class _Reader(_Walk):
         if start + size > len(self.data):
             raise FormatError(f"{where}: block at 0x{start:X} size 0x{size:X} past the end", at)
         self.ends.append(start + size)
-        if f.is_record_array:
-            inner = record_layout(self.build, self.ext, f.element)
-            count, rest = divmod(size, inner.size)
-            elements = [Record(inner.name, bytearray(self.data[start + i * inner.size:
-                                                              start + (i + 1) * inner.size]))
-                        for i in range(count)]
-            block = Block(elements=elements, extra=bytes(self.data[start + count * inner.size:start + size]),
-                          source=offset)
-            if rest:
-                self.notes.append(f"{where}: {rest} bytes after the last whole {inner.name}")
-        else:
-            block = Block(bytes(self.data[start:start + size]), source=offset)
+        block = self._block(f, start, size, offset)
+        if block.extra:
+            self.notes.append(f"{where}: {len(block.extra)} bytes after the last whole {f.element}")
         self.seen[offset] = block
+        self.kinds[offset] = (f.kind, f.element)
         record.pairs[slot.offset] = PairValue(block, None, (offset, size))
         if block.elements is not None:
             inner_size = record_layout(self.build, self.ext, f.element).size
             for i, element in enumerate(block.elements):
                 self.record(element, start + i * inner_size, f"{where}[{i}].")
+
+
+def _reader_block(self, f: LayoutField, start: int, size: int, offset: int | None) -> Block:
+    if f.is_record_array:
+        inner = record_layout(self.build, self.ext, f.element)
+        count = size // inner.size
+        elements = [Record(inner.name, bytearray(self.data[start + i * inner.size:start + (i + 1) * inner.size]))
+                    for i in range(count)]
+        return Block(elements=elements, extra=bytes(self.data[start + count * inner.size:start + size]), source=offset)
+    return Block(bytes(self.data[start:start + size]), source=offset)
+
+
+_Reader._block = _reader_block
 
 
 class _Writer(_Walk):
@@ -325,6 +342,10 @@ class _Writer(_Walk):
         at = pos + slot.offset
         value = record.pairs.get(slot.offset)
         block = value.block if value is not None else None
+        if value is not None and value.alias_of is not None and id(value.alias_of) in self.placed:
+            # ``61`` AI4: the place of a block of another element type with the same bytes
+            self._pair(at, self.placed[id(value.alias_of)], value.pair_size())
+            return
         if block is None or block.is_empty():
             if f.kind == "code":
                 self._align(CODE_ALIGN)
